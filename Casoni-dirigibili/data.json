@@ -35,14 +35,14 @@
       "id": 5,
       "src": "img/dirigibili/dirigibile (5).png",
       "category": "airships",
-      "tags": ["sea", "horizon", "ship", "nature", "sky"],
+      "tags": ["sea", "horizon", "nature", "sky"],
       "people": true,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 6,
       "src": "img/relitti/relitto (1).png",
       "category": "wreckage",
-      "tags": [ "metal", "structure", "nature", "sky"],
+      "tags": ["structure", "nature", "sky"],
       "people": true,
       "description": "Descrizione dell'immagine"    },
     {
@@ -120,6 +120,40 @@
       "category": "study models",
       "tags": ["men"],
       "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 17,
+      "src": "img/modelli/modello (5).png",
+      "category": "study models",
+      "tags": ["men"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 18,
+      "src": "img/modelli/modello (5).png",
+      "category": "study models",
+      "tags": ["men"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 19,
+      "src": "img/modelli/modello (5).png",
+      "category": "study models",
+      "tags": ["men"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 16,
+      "src": "img/modelli/modello (5).png",
+      "category": "study models",
+      "tags": ["men"],
+      "people": true,
       "description": "Descrizione dell'immagine"    }
+      
+    
   ]
 }
