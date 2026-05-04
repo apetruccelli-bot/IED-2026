@@ -27,7 +27,7 @@
     {
       "id": 5,
       "src": "img/radiografie/radiografie5.jpeg",
-      "tags": ["radiografia panoraica", "impianto dentale"],
+      "tags": ["radiografia panoramica", "impianto dentale"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 6,
@@ -74,7 +74,7 @@
     {
       "id": 13,
       "src": "img/radiografie/radiografie13.jpeg",
-      "tags": ["radiografia intraorale", "impianto dentale", "lightbox", "area di lavoro"],
+      "tags": ["radiografia intraorale", "impianto dentale", "lightbox", "piano di lavoro"],
       "description": "Descrizione dell'immagine"    
     },
     {
@@ -86,7 +86,7 @@
     {
       "id": 15,
       "src": "img/radiografie/radiografie15.jpeg",
-      "tags": ["serie di radiografie", "radiografie intraorale", "impianto dentale"],
+      "tags": ["serie di radiografie", "radiografia intraorale", "impianto dentale"],
       "description": "Descrizione dell'immagine"    
     },
     {
@@ -194,7 +194,7 @@
       {
         "id": 33,
         "src": "img/strumenti/strumenti13.jpeg",
-        "tags": ["protesi dentali"],
+        "tags": ["protesi dentale"],
         "description": "Descrizione dell'immagine"
       },
       {
@@ -246,4 +246,26 @@
         "description": "Descrizione dell'immagine"
       }
   ]
+  ,
+  "macroCategories": {
+    "strumentazione da lavoro": [
+      "protesi dentale",
+      "cartella clinica",
+      "strumenti chirurgici",
+      "flaconi",
+      "annotazioni"
+    ],
+    "radiografie": [
+      "impianto dentale",
+      "radiografia panoramica",
+      "radiografia intraorale",
+      "radiografia laterale",
+      "serie di radiografie",
+      "lightbox"
+    ],
+    "studio dentistico": [
+      "scaffali",
+      "piano di lavoro"
+    ]
+  }
 }

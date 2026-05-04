@@ -28,9 +28,25 @@ async function loadData() {
   const data = await res.json();
   // set the items and display items
   items = data.items;
+  // macro categories (optional in data.json)
+  window.macroCategories = data.macroCategories || {};
   displayItems = [...items];
+  buildMacroBar();
   buildTagsBar();
+  syncMacroStates();
   render();
+}
+
+function syncMacroStates() {
+  const macros = window.macroCategories || {};
+  const macroBar = document.getElementById('macro-bar');
+  if (!macroBar) return;
+  macroBar.querySelectorAll('.macro-btn').forEach(b => {
+    const m = b.dataset.macro;
+    const tlist = macros[m] || [];
+    const isActive = tlist.some(t => activeTags.has(t));
+    b.classList.toggle('active', isActive);
+  });
 }
 
 // ── Collect all unique tags ───────────────────────────────────────────────
@@ -51,6 +67,54 @@ function buildTagsBar() {
     btn.addEventListener('click', () => toggleTag(tag));
     tagsBar.appendChild(btn);
   });
+}
+
+// build the macro categories bar (above tags bar)
+function buildMacroBar() {
+  const macroBar = document.getElementById('macro-bar');
+  if (!macroBar) return;
+  macroBar.innerHTML = '';
+  const macros = window.macroCategories || {};
+  Object.keys(macros).forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'macro-btn';
+    btn.textContent = m;
+    btn.dataset.macro = m;
+    btn.addEventListener('click', () => toggleMacro(m));
+    macroBar.appendChild(btn);
+  });
+}
+
+// toggle a macro: selects/deselects all tags that belong to that macro
+function toggleMacro(macro) {
+  const macros = window.macroCategories || {};
+  const tags = macros[macro] || [];
+
+  // decide whether to activate or deactivate: if all tags already active, deactivate; otherwise activate all
+  const allActive = tags.every(t => activeTags.has(t));
+  if (allActive) {
+    tags.forEach(t => activeTags.delete(t));
+  } else {
+    tags.forEach(t => activeTags.add(t));
+  }
+
+  // sync UI for tag buttons
+  tagsBar.querySelectorAll('.tag-btn').forEach(btn => {
+    btn.classList.toggle('active', activeTags.has(btn.dataset.tag));
+  });
+
+  // sync UI for macro buttons: mark macro active if any of its tags is active
+  const macroBar = document.getElementById('macro-bar');
+  if (macroBar) {
+    macroBar.querySelectorAll('.macro-btn').forEach(b => {
+      const m = b.dataset.macro;
+      const tlist = macros[m] || [];
+      const isActive = tlist.some(t => activeTags.has(t));
+      b.classList.toggle('active', isActive);
+    });
+  }
+
+  render();
 }
 
 // ── Toggle a filter tag ───────────────────────────────────────────────────
