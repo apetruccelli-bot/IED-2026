@@ -1,485 +1,245 @@
 ﻿{
-    "items":  [
-                  {
-                      "id":  1,
-                      "src":  "img/taccuini/taccuini (12).jpg",
-                      "tags":  [
-                                   "natura",
-                                   "paesaggio",
-                                   "verde",
-                                   "estate",
-                                   "sole"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  2,
-                      "src":  "img/architettura/architettura (32).jpg",
-                      "tags":  [
-                                   "architettura",
-                                   "urbano",
-                                   "moderno",
-                                   "cemento",
-                                   "geometria"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  3,
-                      "src":  "img/architettura/architettura (29).jpg",
-                      "tags":  [
-                                   "ritratto",
-                                   "luce",
-                                   "ombra",
-                                   "volto",
-                                   "espressione"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  4,
-                      "src":  "img/architettura/architettura (28).jpg",
-                      "tags":  [
-                                   "astratto",
-                                   "texture",
-                                   "colore",
-                                   "composizione",
-                                   "dettaglio"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  5,
-                      "src":  "img/persone/persone (12).jpg",
-                      "tags":  [
-                                   "mare",
-                                   "orizzonte",
-                                   "acqua",
-                                   "luce",
-                                   "natura"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  6,
-                      "src":  "img/architettura/architettura (27).jpg",
-                      "tags":  [
-                                   "urbano",
-                                   "notturno",
-                                   "luci",
-                                   "città",
-                                   "movimento"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  7,
-                      "src":  "img/architettura/architettura (33).jpg",
-                      "tags":  [
-                                   "botanica",
-                                   "dettaglio",
-                                   "verde",
-                                   "natura",
-                                   "macro"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  8,
-                      "src":  "img/persone/persone (2).jpg",
-                      "tags":  [
-                                   "architettura",
-                                   "storico",
-                                   "materiale",
-                                   "pietra",
-                                   "tempo"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  9,
-                      "src":  "img/taccuini/taccuini (18).jpg",
-                      "tags":  [
-                                   "paesaggio",
-                                   "inverno",
-                                   "neve",
-                                   "freddo",
-                                   "silenzio"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  10,
-                      "src":  "img/taccuini/taccuini (14).jpg",
-                      "tags":  [
-                                   "astratto",
-                                   "industriale",
-                                   "metallo",
-                                   "struttura",
-                                   "geometria"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  11,
-                      "src":  "img/persone/persone (16).jpg",
-                      "tags":  [
-                                   "natura",
-                                   "bosco",
-                                   "foglie",
-                                   "luce",
-                                   "sentiero"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  12,
-                      "src":  "img/architettura/architettura (9).jpg",
-                      "tags":  [
-                                   "ritratto",
-                                   "sguardo",
-                                   "volto",
-                                   "espressione",
-                                   "dettaglio"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  13,
-                      "src":  "img/architettura/architettura (4).jpg",
-                      "tags":  [
-                                   "urbano",
-                                   "strada",
-                                   "movimento",
-                                   "notte",
-                                   "luci"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  14,
-                      "src":  "img/architettura/architettura (5).jpg",
-                      "tags":  [
-                                   "architettura",
-                                   "facciata",
-                                   "linee",
-                                   "simmetria",
-                                   "cemento"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  15,
-                      "src":  "img/architettura/architettura (18).jpg",
-                      "tags":  [
-                                   "mare",
-                                   "onde",
-                                   "orizzonte",
-                                   "vento",
-                                   "estate"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  16,
-                      "src":  "img/persone/persone (22).jpg",
-                      "tags":  [
-                                   "astratto",
-                                   "texture",
-                                   "contrasto",
-                                   "forma",
-                                   "materia"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  17,
-                      "src":  "img/architettura/architettura (25).jpg",
-                      "tags":  [
-                                   "natura",
-                                   "fiume",
-                                   "acqua",
-                                   "riflessi",
-                                   "sassi"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  18,
-                      "src":  "img/persone/persone (4).jpg",
-                      "tags":  [
-                                   "interni",
-                                   "finestra",
-                                   "ombra",
-                                   "luce",
-                                   "silenzio"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  19,
-                      "src":  "img/persone/persone (18).jpg",
-                      "tags":  [
-                                   "paesaggio",
-                                   "collina",
-                                   "nuvole",
-                                   "cielo",
-                                   "campo"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  20,
-                      "src":  "img/taccuini/taccuini (13).jpg",
-                      "tags":  [
-                                   "industriale",
-                                   "macchina",
-                                   "metallo",
-                                   "vite",
-                                   "dettaglio"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  21,
-                      "src":  "img/persone/persone (6).jpg",
-                      "tags":  [
-                                   "ritratto",
-                                   "profilo",
-                                   "luce",
-                                   "biancoenero",
-                                   "volto"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  22,
-                      "src":  "img/taccuini/taccuini (9).jpg",
-                      "tags":  [
-                                   "urbano",
-                                   "piazza",
-                                   "persone",
-                                   "quotidiano",
-                                   "vita"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  23,
-                      "src":  "img/architettura/architettura (3).jpg",
-                      "tags":  [
-                                   "natura",
-                                   "montagna",
-                                   "nebbia",
-                                   "alba",
-                                   "freddo"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  24,
-                      "src":  "img/architettura/architettura (10).jpg",
-                      "tags":  [
-                                   "architettura",
-                                   "scala",
-                                   "prospettiva",
-                                   "geometria",
-                                   "linee"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  25,
-                      "src":  "img/architettura/architettura (22).jpg",
-                      "tags":  [
-                                   "astratto",
-                                   "ombra",
-                                   "parete",
-                                   "segno",
-                                   "minimal"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  26,
-                      "src":  "img/taccuini/taccuini (10).jpg",
-                      "tags":  [
-                                   "mare",
-                                   "porto",
-                                   "barche",
-                                   "corde",
-                                   "acqua"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  27,
-                      "src":  "img/persone/persone (1).jpg",
-                      "tags":  [
-                                   "botanica",
-                                   "fiore",
-                                   "petali",
-                                   "macro",
-                                   "colore"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  28,
-                      "src":  "img/taccuini/taccuini (8).jpg",
-                      "tags":  [
-                                   "urbano",
-                                   "metrò",
-                                   "binari",
-                                   "attesa",
-                                   "movimento"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  29,
-                      "src":  "img/architettura/architettura (14).jpg",
-                      "tags":  [
-                                   "interni",
-                                   "cucina",
-                                   "oggetti",
-                                   "ordine",
-                                   "dettaglio"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  30,
-                      "src":  "img/persone/persone (19).jpg",
-                      "tags":  [
-                                   "paesaggio",
-                                   "tramonto",
-                                   "cielo",
-                                   "controluce",
-                                   "orizzonte"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  31,
-                      "src":  "img/architettura/architettura (12).jpg",
-                      "tags":  [
-                                   "architettura",
-                                   "arco",
-                                   "pietra",
-                                   "storico",
-                                   "tempo"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  32,
-                      "src":  "img/persone/persone (13).jpg",
-                      "tags":  [
-                                   "ritratto",
-                                   "mani",
-                                   "gesto",
-                                   "pelle",
-                                   "dettaglio"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  33,
-                      "src":  "img/persone/persone (5).jpg",
-                      "tags":  [
-                                   "natura",
-                                   "pioggia",
-                                   "gocce",
-                                   "vetro",
-                                   "riflessi"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  34,
-                      "src":  "img/taccuini/taccuini (5).jpg",
-                      "tags":  [
-                                   "industriale",
-                                   "fabbrica",
-                                   "tubi",
-                                   "acciaio",
-                                   "struttura"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  35,
-                      "src":  "img/architettura/architettura (23).jpg",
-                      "tags":  [
-                                   "astratto",
-                                   "pattern",
-                                   "ripetizione",
-                                   "ritmo",
-                                   "forma"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  36,
-                      "src":  "img/taccuini/taccuini (1).jpg",
-                      "tags":  [
-                                   "urbano",
-                                   "semaforo",
-                                   "incrocio",
-                                   "asfalto",
-                                   "notte"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  37,
-                      "src":  "img/persone/persone (23).jpg",
-                      "tags":  [
-                                   "natura",
-                                   "albero",
-                                   "corteccia",
-                                   "muschio",
-                                   "macro"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  38,
-                      "src":  "img/taccuini/taccuini (6).jpg",
-                      "tags":  [
-                                   "interni",
-                                   "scrivania",
-                                   "quaderno",
-                                   "studio",
-                                   "luce"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  39,
-                      "src":  "img/architettura/architettura (19).jpg",
-                      "tags":  [
-                                   "paesaggio",
-                                   "lago",
-                                   "riflesso",
-                                   "monti",
-                                   "calma"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  },
-                  {
-                      "id":  40,
-                      "src":  "img/architettura/architettura (13).jpg",
-                      "tags":  [
-                                   "architettura",
-                                   "ponte",
-                                   "struttura",
-                                   "fiume",
-                                   "prospettiva"
-                               ],
-                      "description":  "Descrizione dell'immagine"
-                  }
-              ]
+    "items": [
+        {
+            "id": 1,
+            "src": "img/taccuini/taccuini (12).jpg",
+            "tags": ["natura", "paesaggio"],
+            "description": "Foto 01 - Natura"
+        },
+        {
+            "id": 2,
+            "src": "img/architettura/architettura (32).jpg",
+            "tags": ["architettura", "urbano"],
+            "description": "Foto 02 - Architettura"
+        },
+        {
+            "id": 3,
+            "src": "img/architettura/architettura (29).jpg",
+            "tags": ["ritratto", "volto"],
+            "description": "Foto 03 - Ritratto"
+        },
+        {
+            "id": 4,
+            "src": "img/architettura/architettura (28).jpg",
+            "tags": ["astratto", "texture"],
+            "description": "Foto 04 - Astratto"
+        },
+        {
+            "id": 5,
+            "src": "img/persone/persone (12).jpg",
+            "tags": ["mare", "natura"],
+            "description": "Foto 05 - Mare"
+        },
+        {
+            "id": 6,
+            "src": "img/architettura/architettura (27).jpg",
+            "tags": ["urbano", "notturno"],
+            "description": "Foto 06 - Urbano"
+        },
+        {
+            "id": 7,
+            "src": "img/architettura/architettura (33).jpg",
+            "tags": ["botanica", "natura"],
+            "description": "Foto 07 - Botanica"
+        },
+        {
+            "id": 8,
+            "src": "img/persone/persone (2).jpg",
+            "tags": ["architettura", "storico"],
+            "description": "Foto 08 - Storico"
+        },
+        {
+            "id": 9,
+            "src": "img/taccuini/taccuini (18).jpg",
+            "tags": ["paesaggio", "inverno"],
+            "description": "Foto 09 - Paesaggio"
+        },
+        {
+            "id": 10,
+            "src": "img/taccuini/taccuini (14).jpg",
+            "tags": ["astratto", "industriale"],
+            "description": "Foto 10 - Industriale"
+        },
+        {
+            "id": 11,
+            "src": "img/persone/persone (16).jpg",
+            "tags": ["natura", "bosco"],
+            "description": "Foto 11 - Bosco"
+        },
+        {
+            "id": 12,
+            "src": "img/architettura/architettura (9).jpg",
+            "tags": ["ritratto", "volto"],
+            "description": "Foto 12 - Ritratto"
+        },
+        {
+            "id": 13,
+            "src": "img/architettura/architettura (4).jpg",
+            "tags": ["urbano", "strada"],
+            "description": "Foto 13 - Strada"
+        },
+        {
+            "id": 14,
+            "src": "img/architettura/architettura (5).jpg",
+            "tags": ["architettura", "facciata"],
+            "description": "Foto 14 - Facciata"
+        },
+        {
+            "id": 15,
+            "src": "img/architettura/architettura (18).jpg",
+            "tags": ["mare", "orizzonte"],
+            "description": "Foto 15 - Mare"
+        },
+        {
+            "id": 16,
+            "src": "img/persone/persone (22).jpg",
+            "tags": ["astratto", "materia"],
+            "description": "Foto 16 - Materia"
+        },
+        {
+            "id": 17,
+            "src": "img/architettura/architettura (25).jpg",
+            "tags": ["natura", "fiume"],
+            "description": "Foto 17 - Fiume"
+        },
+        {
+            "id": 18,
+            "src": "img/persone/persone (4).jpg",
+            "tags": ["interni", "luce"],
+            "description": "Foto 18 - Interni"
+        },
+        {
+            "id": 19,
+            "src": "img/persone/persone (18).jpg",
+            "tags": ["paesaggio", "collina"],
+            "description": "Foto 19 - Collina"
+        },
+        {
+            "id": 20,
+            "src": "img/taccuini/taccuini (13).jpg",
+            "tags": ["industriale", "macchina"],
+            "description": "Foto 20 - Macchina"
+        },
+        {
+            "id": 21,
+            "src": "img/persone/persone (6).jpg",
+            "tags": ["ritratto", "profilo"],
+            "description": "Foto 21 - Profilo"
+        },
+        {
+            "id": 22,
+            "src": "img/taccuini/taccuini (9).jpg",
+            "tags": ["urbano", "piazza"],
+            "description": "Foto 22 - Piazza"
+        },
+        {
+            "id": 23,
+            "src": "img/architettura/architettura (3).jpg",
+            "tags": ["paesaggio", "montagna"],
+            "description": "Foto 23 - Montagna"
+        },
+        {
+            "id": 24,
+            "src": "img/architettura/architettura (10).jpg",
+            "tags": ["architettura", "scala"],
+            "description": "Foto 24 - Scala"
+        },
+        {
+            "id": 25,
+            "src": "img/architettura/architettura (22).jpg",
+            "tags": ["astratto", "minimal"],
+            "description": "Foto 25 - Minimal"
+        },
+        {
+            "id": 26,
+            "src": "img/taccuini/taccuini (10).jpg",
+            "tags": ["mare", "porto"],
+            "description": "Foto 26 - Porto"
+        },
+        {
+            "id": 27,
+            "src": "img/persone/persone (1).jpg",
+            "tags": ["botanica", "fiore"],
+            "description": "Foto 27 - Fiore"
+        },
+        {
+            "id": 28,
+            "src": "img/taccuini/taccuini (8).jpg",
+            "tags": ["urbano", "metropolitana"],
+            "description": "Foto 28 - Metrò"
+        },
+        {
+            "id": 29,
+            "src": "img/architettura/architettura (14).jpg",
+            "tags": ["interni", "cucina"],
+            "description": "Foto 29 - Cucina"
+        },
+        {
+            "id": 30,
+            "src": "img/persone/persone (19).jpg",
+            "tags": ["paesaggio", "tramonto"],
+            "description": "Foto 30 - Tramonto"
+        },
+        {
+            "id": 31,
+            "src": "img/architettura/architettura (12).jpg",
+            "tags": ["architettura", "storico"],
+            "description": "Foto 31 - Arco"
+        },
+        {
+            "id": 32,
+            "src": "img/persone/persone (13).jpg",
+            "tags": ["ritratto", "mani"],
+            "description": "Foto 32 - Mani"
+        },
+        {
+            "id": 33,
+            "src": "img/persone/persone (5).jpg",
+            "tags": ["natura", "pioggia"],
+            "description": "Foto 33 - Pioggia"
+        },
+        {
+            "id": 34,
+            "src": "img/taccuini/taccuini (5).jpg",
+            "tags": ["industriale", "fabbrica"],
+            "description": "Foto 34 - Fabbrica"
+        },
+        {
+            "id": 35,
+            "src": "img/architettura/architettura (23).jpg",
+            "tags": ["astratto", "pattern"],
+            "description": "Foto 35 - Pattern"
+        },
+        {
+            "id": 36,
+            "src": "img/taccuini/taccuini (1).jpg",
+            "tags": ["urbano", "incrocio"],
+            "description": "Foto 36 - Semaforo"
+        },
+        {
+            "id": 37,
+            "src": "img/persone/persone (23).jpg",
+            "tags": ["natura", "albero"],
+            "description": "Foto 37 - Albero"
+        },
+        {
+            "id": 38,
+            "src": "img/taccuini/taccuini (6).jpg",
+            "tags": ["interni", "studio"],
+            "description": "Foto 38 - Scrivania"
+        },
+        {
+            "id": 39,
+            "src": "img/architettura/architettura (19).jpg",
+            "tags": ["paesaggio", "lago"],
+            "description": "Foto 39 - Lago"
+        },
+        {
+            "id": 40,
+            "src": "img/architettura/architettura (13).jpg",
+            "tags": ["architettura", "ponte"],
+            "description": "Foto 40 - Ponte"
+        }
+    ]
 }
 
