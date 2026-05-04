@@ -128,7 +128,7 @@
       {
         "id": 22,
         "src": "img/radiografie/radiografie22.jpg",
-        "tags": ["serie di radiografie", "radiografia intraorale", "impianto dentale"]
+        "tags": ["serie di radiografie", "radiografia intraorale", "impianto dentale"],
         "description": "Descrizione dell'immagine"    
       }, 
       {
@@ -298,6 +298,6 @@
         "src": "img/laboratorio/laboratorio7.jpg",
         "tags": ["laboratorio dentistico"],
         "description": "Descrizione dell'immagine"
-      },  
+      } 
   ]
 }
