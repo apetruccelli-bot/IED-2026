@@ -3,241 +3,321 @@
         {
             "id": 1,
             "src": "img/taccuini/taccuini (12).jpg",
-            "tags": ["natura", "paesaggio"],
+            "tags": ["dettagli", "note"],
+            "category": "taccuini",
+            "year": 1970,
             "description": "Note di campo, 1970, Carlo De Santis"
         },
         {
             "id": 2,
             "src": "img/architettura/architettura (32).jpg",
-            "tags": ["architettura", "urbano"],
+            "category": "architettura",
+            "tags": ["edifici", "dettagli", "degrado"],
+            "year": 1982,
             "description": "Serra Vasta, 1982, Franco Lamberti"
         },
         {
             "id": 3,
             "src": "img/architettura/architettura (29).jpg",
-            "tags": ["ritratto", "volto"],
+            "tags": ["edifici", "degrado", "silenzio"],
+            "category": "architettura",
+            "year": 1974,
             "description": "Valle Cupa, 1974, Lorenzo Fiore"
         },
         {
             "id": 4,
             "src": "img/architettura/architettura (28).jpg",
-            "tags": ["astratto", "texture"],
+            "tags": ["edifici", "vicoli", "silenzio"],
+            "category": "architettura",
+            "year": 1978,
             "description": "Vallefredda, 1978, Stefano Conti"
         },
         {
             "id": 5,
             "src": "img/persone/persone (12).jpg",
-            "tags": ["mare", "natura"],
+            "tags": ["presenza", "vicoli", "edifici", "silenzio"],
+            "category": "persone",
+            "year": 1970,
             "description": "Zagara, 1970, Pietro Scorza"
         },
         {
             "id": 6,
             "src": "img/architettura/architettura (27).jpg",
-            "tags": ["urbano", "notturno"],
+            "tags": ["edifici", "dettagli", "degrado"],
+            "category": "architettura",
+            "year": 1981,
             "description": "Fonte Secca, 1981, Alberto Neri"
         },
         {
             "id": 7,
             "src": "img/architettura/architettura (33).jpg",
-            "tags": ["botanica", "natura"],
+            "tags": ["edifici", "dettagli", "degrado"],
+            "category": "architettura",
+            "year": 1973,
             "description": "Colle Ombra, 1973, Davide Ferri"
         },
         {
             "id": 8,
             "src": "img/persone/persone (2).jpg",
-            "tags": ["architettura", "storico"],
+            "tags": ["presenza", "edifici", "dettagli", "silenzio"],
+            "category": "persone",
+            "year": 1971,
             "description": "Monteferro, 1971, Carlo De Santis"
         },
         {
             "id": 9,
             "src": "img/taccuini/taccuini (18).jpg",
-            "tags": ["paesaggio", "inverno"],
+            "tags": ["dettagli", "note"],
+            "category": "taccuini",
+            "year": 1964,
             "description": "Note di campo, 1964, Pietro Scorza"
         },
         {
             "id": 10,
             "src": "img/taccuini/taccuini (14).jpg",
-            "tags": ["astratto", "industriale"],
+            "tags": ["dettagli", "note"],
+            "category": "taccuini",
+            "year": 1968,
             "description": "Note di campo, 1968, Lorenzo Fiore"
         },
         {
             "id": 11,
             "src": "img/persone/persone (16).jpg",
-            "tags": ["natura", "bosco"],
+            "tags": ["presenza", "vicoli", "edifici", "silenzio"],
+            "category": "persone",
+            "year": 1980,
             "description": "San Velio, 1980, Roberto Gatti"
         },
         {
             "id": 12,
             "src": "img/architettura/architettura (9).jpg",
-            "tags": ["ritratto", "volto"],
+            "tags": ["edifici", "silenzio"],
+            "category": "architettura",
+            "year": 1975,
             "description": "Borgo Cupo, 1975, Simone De Luca"
         },
         {
             "id": 13,
             "src": "img/architettura/architettura (4).jpg",
-            "tags": ["urbano", "strada"],
+            "tags": ["edifici", "degrado", "dettagli"],
+            "category": "architettura",
+            "year": 1964,
             "description": "Rocca Secca, 1964, Emilio Varani"
         },
         {
             "id": 14,
             "src": "img/architettura/architettura (5).jpg",
-            "tags": ["architettura", "facciata"],
+            "tags": ["edifici", "degrado"],
+            "category": "architettura",
+            "year": 1979,
             "description": "Fonte Chiusa, 1979, Michele Orsini"
         },
         {
             "id": 15,
             "src": "img/architettura/architettura (18).jpg",
-            "tags": ["mare", "orizzonte"],
+            "tags": ["edifici", "vicoli", "silenzio"],
+            "category": "architettura",
+            "year": 1972,
             "description": "Riva Spenta, 1972, Luca Biagini"
         },
         {
             "id": 16,
             "src": "img/persone/persone (22).jpg",
-            "tags": ["astratto", "materia"],
+            "tags": ["presenza", "edifici", "degrado", "dettagli"],
+            "category": "persone",
+            "year": 1968,
             "description": "Santa Rena, 1968, Giulio Maffei"
         },
         {
             "id": 17,
             "src": "img/architettura/architettura (25).jpg",
-            "tags": ["natura", "fiume"],
+            "tags": ["edifici", "degrado"],
+            "category": "architettura",
+            "year": 1983,
             "description": "Castel Ruvo, 1983, Marco Leoni"
         },
         {
             "id": 18,
             "src": "img/persone/persone (4).jpg",
-            "tags": ["interni", "luce"],
+            "tags": ["presenza", "vicoli", "edifici", "silenzio"],
+            "category": "persone",
+            "year": 1967,
             "description": "Costa Nera, 1967, Paolo Rizzi"
         },
         {
             "id": 19,
             "src": "img/persone/persone (18).jpg",
-            "tags": ["paesaggio", "collina"],
+            "tags": ["presenza", "edifici", "dettagli", "silenzio"],
+            "category": "persone",
+            "year": 1985,
             "description": "Borgo Salso, 1985, Enrico Bellini"
         },
         {
             "id": 20,
             "src": "img/taccuini/taccuini (13).jpg",
-            "tags": ["industriale", "macchina"],
+            "tags": ["dettagli", "note"],
+            "category": "taccuini",
+            "year": 1976,
             "description": "Note di campo, 1976, Michele Orsini"
         },
         {
             "id": 21,
             "src": "img/persone/persone (6).jpg",
-            "tags": ["ritratto", "profilo"],
+            "tags": ["presenza", "edifici", "degrado", "silenzio"],
+            "category": "persone",
+            "year": 1969,
             "description": "Poggio Nero, 1969, Claudio Marchetti"
         },
         {
             "id": 22,
             "src": "img/taccuini/taccuini (9).jpg",
-            "tags": ["urbano", "piazza"],
+            "tags": ["dettagli", "silenzio"],
+            "category": "taccuini",
+            "year": 1966,
             "description": "Note di campo, 1966, Emilio Varani"
         },
         {
             "id": 23,
             "src": "img/architettura/architettura (3).jpg",
-            "tags": ["paesaggio", "montagna"],
+            "tags": ["edifici", "vicoli", "silenzio"],
+            "category": "architettura",
+            "year": 1976,
             "description": "Pietra Lenta, 1976, Andrea Colonna"
         },
         {
             "id": 24,
             "src": "img/architettura/architettura (10).jpg",
-            "tags": ["architettura", "scala"],
+            "tags": ["edifici", "dettagli", "degrado", "silenzio"],
+            "category": "architettura",
+            "year": 1966,
             "description": "Piana Morta, 1966, Antonio Greco"
         },
         {
             "id": 25,
             "src": "img/architettura/architettura (22).jpg",
-            "tags": ["astratto", "minimal"],
+            "tags": ["edifici", "degrado"],
+            "category": "architettura",
+            "year": 1986,
             "description": "Serra Antica, 1986, Giorgio Vitale"
         },
         {
             "id": 26,
             "src": "img/taccuini/taccuini (10).jpg",
-            "tags": ["mare", "porto"],
+            "tags": ["dettagli", "note"],
+            "category": "taccuini",
+            "year": 1973,
             "description": "Note di campo, 1973, Franco Lamberti"
         },
         {
             "id": 27,
             "src": "img/persone/persone (1).jpg",
-            "tags": ["botanica", "fiore"],
+            "tags": ["presenza", "vicoli", "edifici", "silenzio"],
+            "category": "persone",
+            "year": 1982,
             "description": "Serra Vasta, 1982, Franco Lamberti"
         },
         {
             "id": 28,
             "src": "img/taccuini/taccuini (8).jpg",
-            "tags": ["urbano", "metropolitana"],
+            "tags": ["dettagli", "note"],
+            "category": "taccuini",
+            "year": 1979,
             "description": "Note di campo, 1979, Davide Ferri"
         },
         {
             "id": 29,
             "src": "img/architettura/architettura (14).jpg",
-            "tags": ["interni", "cucina"],
+            "tags": ["edifici", "degrado"],
+            "category": "architettura",
+            "year": 1974,
             "description": "Valle Cupa, 1974, Lorenzo Fiore"
         },
         {
             "id": 30,
             "src": "img/persone/persone (19).jpg",
-            "tags": ["paesaggio", "tramonto"],
+            "tags": ["presenza", "vicoli", "edifici", "silenzio"],
+            "category": "persone",
+            "year": 1978,
             "description": "Vallefredda, 1978, Stefano Conti"
         },
         {
             "id": 31,
             "src": "img/architettura/architettura (12).jpg",
-            "tags": ["architettura", "storico"],
+            "tags": ["edifici", "silenzio"],
+            "category": "architettura",
+            "year": 1970,
             "description": "Zagara, 1970, Pietro Scorza"
         },
         {
             "id": 32,
             "src": "img/persone/persone (13).jpg",
-            "tags": ["ritratto", "mani"],
+            "tags": ["presenza", "edifici", "dettagli", "degrado"],
+            "category": "persone",
+            "year": 1981,
             "description": "Fonte Secca, 1981, Alberto Neri"
         },
         {
             "id": 33,
             "src": "img/persone/persone (5).jpg",
-            "tags": ["natura", "pioggia"],
+            "tags": ["presenza", "vicoli", "silenzio"],
+            "category": "persone",
+            "year": 1973,
             "description": "Colle Ombra, 1973, Davide Ferri"
         },
         {
             "id": 34,
             "src": "img/taccuini/taccuini (5).jpg",
-            "tags": ["industriale", "fabbrica"],
+            "tags": ["dettagli", "note"],
+            "category": "taccuini",
+            "year": 1982,
             "description": "Note di campo, 1982, Marco Leoni"
         },
         {
             "id": 35,
             "src": "img/architettura/architettura (23).jpg",
-            "tags": ["astratto", "pattern"],
+            "tags": ["edifici", "degrado"],
+            "category": "architettura",
+            "year": 1971,
             "description": "Monteferro, 1971, Carlo De Santis"
         },
         {
             "id": 36,
             "src": "img/taccuini/taccuini (1).jpg",
-            "tags": ["urbano", "incrocio"],
+            "tags": ["dettagli", "note"],
+            "category": "taccuini",
+            "year": 1984,
             "description": "Note di campo, 1984, Luca Biagini"
         },
         {
             "id": 37,
             "src": "img/persone/persone (23).jpg",
-            "tags": ["natura", "albero"],
+            "tags": ["presenza", "vicoli", "edifici", "silenzio"],
+            "category": "persone",
+            "year": 1980,
             "description": "San Velio, 1980, Roberto Gatti"
         },
         {
             "id": 38,
             "src": "img/taccuini/taccuini (6).jpg",
-            "tags": ["interni", "studio"],
+            "tags": ["dettagli", "note"],
+            "category": "taccuini",
+            "year": 1986,
             "description": "Note di campo, 1986, Claudio Marchetti"
         },
         {
             "id": 39,
             "src": "img/architettura/architettura (19).jpg",
-            "tags": ["paesaggio", "lago"],
+            "tags": ["edifici", "vicoli", "degrado", "silenzio"],
+            "category": "architettura",
+            "year": 1975,
             "description": "Borgo Cupo, 1975, Simone De Luca"
         },
         {
             "id": 40,
             "src": "img/architettura/architettura (13).jpg",
-            "tags": ["architettura", "ponte"],
+            "tags": ["edifici", "degrado", "dettagli"],
+            "category": "architettura",
+            "year": 1964,
             "description": "Rocca Secca, 1964, Emilio Varani"
         }
     ]
