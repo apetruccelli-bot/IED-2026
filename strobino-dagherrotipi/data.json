@@ -4,153 +4,153 @@
       "id": 1,
       "src": "img/fotocamere/fotocamere1.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
-      "anno": 1847
+      "anno": 1847,
       "description": "Descrizione dell'immagine"
     },
     {
       "id": 2,
       "src": "img/fotocamere/fotocamere2.jpg",
       "tags": ["fotocamera", "soffietto esteso"],
-      "anno":1844
+      "anno":1844,
       "description": "Descrizione dell'immagine"
     },
     {
       "id": 3,
       "src": "img/fotocamere/fotocamere3.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
-      "anno": 1847
+      "anno": 1847,
       "description": "Descrizione dell'immagine"
         },
     {
       "id": 4,
       "src": "img/fotocamere/fotocamere4.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
-      "anno": 1848
+      "anno": 1848,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 5,
       "src": "img/fotocamere/fotocamere5.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto retratto"],
-      "anno": 1843,
+      "anno": 1843,,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 6,
       "src": "img/fotocamere/fotocamere6.jpg",
       "tags": ["fotocamera", "soffietto esteso"],
-      "anno": 1844
+      "anno": 1844,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 7,
       "src": "img/fotocamere/fotocamere7.jpg",
       "tags": ["fotocamera","su cavalletto", "soffietto retratto"],
-      "anno": 1842
+      "anno": 1842,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 8,
       "src": "img/fotocamere/fotocamere8.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
-      "anno": 1849
+      "anno": 1849,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 9,
       "src": "img/fotocamere/fotocamere9.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
-      "anno": 1849
+      "anno": 1849,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 10,
       "src": "img/fotocamere/fotocamere10.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto retratto"],
-      "anno": 1843
+      "anno": 1843,
       "description": "Descrizione dell'immagine"    },
 
       "id": 11,
       "src": "img/fotocamere/fotocamere11.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
-      "anno": 1849
+      "anno": 1849,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 12,
       "src": "img/fotocamere/fotocamere12.jpg",
       "tags": ["fotocamera", "soffietto esteso"],
-      "anno": 1850
+      "anno": 1850,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 13,
       "src": "img/fotocamere/fotocamere13.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
-      "anno": 1846
+      "anno": 1846,
       "description": "Descrizione dell'immagine"    },
 
     {
       "id": 14,
       "src": "img/fotocamere/fotocamere14.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto retratto"],
-      "anno":1845
+      "anno":1845,
       "description": "Descrizione dell'immagine"    },
 
     {
       "id": 15,
       "src": "img/fotocamere/fotocamere15.jpg",
       "tags": ["fotocamera", "su cavalletto","soffietto esteso"],
-      "anno":1847
+      "anno":1847,
       "description": "Descrizione dell'immagine"    },
 
     {
       "id": 16,
       "src": "img/fotocamere/fotocamere16.jpg",
       "tags": ["fotocamera", "su cavalletto","soffietto esteso"],
-      "anno":1847
+      "anno":1847,
       "description": "Descrizione dell'immagine"    },
 
     {
       "id": 17,
       "src": "img/fotocamere/fotocamere17.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto retratto"],
-      "anno":1842
+      "anno":1842,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 18,
       "src": "img/fotocamere/fotocamere18.jpg",
       "tags": ["fotocamera", "soffietto esteso"],
-      "anno": 1844
+      "anno": 1844,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 19,
       "src": "img/fotocamere/fotocamere19.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso "],
-      "anno": 1849
+      "anno": 1849,
         "description": "Descrizione dell'immagine"    },
     {
       "id": 20,
       "src": "img/fotocamere/fotocamere20.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
-      "anno": 1849
+      "anno": 1849,
       "description": "Descrizione dell'immagine"    },
   
     {      "id": 21,
       "src": "img/fotocamere/fotocamere21.jpg",
       "tags": ["fotocamera", "soffietto esteso"],
-      "anno": 1843
+      "anno": 1843,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 22,
       "src": "img/fotocamere/fotocamere22.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
-      "anno": 1845
+      "anno": 1845,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 23,
       "src": "img/fotocamere/fotocamere23.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
-      "anno": 1849
+      "anno": 1849,
       "description": "Descrizione dell'immagine"    },
 
     {
       "id": 24,
       "src": "img/fotocamere/fotocamere24.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
-      "anno": 1849
+      "anno": 1849,
       "description": "Descrizione dell'immagine"    },
 
 
@@ -456,8 +456,8 @@
       "src": "img/dagherrotipi/dagherrotipo56.jpg",
       "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
       "description": "Descrizione dell'immagine"    },
-
-      {      "id": 81,
+    {     
+      "id": 81,
       "src": "img/dagherrotipi/dagherrotipo57.jpg",
       "tags": ["natura", "fiori", "colori", "primavera ", "bellezza"],
       "description": "Descrizione dell'immagine"    },
