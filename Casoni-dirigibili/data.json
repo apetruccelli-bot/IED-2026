@@ -2,56 +2,373 @@
   "items": [
     {
       "id": 1,
-      "src": "img/gray1.jpg",
-      "tags": ["natura", "paesaggio", "verde", "estate", "sole"],
+      "src": "img/dirigibili/dirigibile (1).png",
+      "category": "airships",
+      "tags": ["tower", "nature", "sky"],
+      "people": true,
       "description": "Descrizione dell'immagine"
     },
     {
       "id": 2,
-      "src": "img/gray2.jpg",
-      "tags": ["architettura", "urbano", "moderno", "cemento", "geometria"],
+      "src": "img/dirigibili/dirigibile (2).png",
+      "category": "airships",
+      "tags": ["tower", "flames", "explosion", "nature", "sky", "horizon"],
+      "people": false,
       "description": "Descrizione dell'immagine"
     },
     {
       "id": 3,
-      "src": "img/gray3.jpg",
-      "tags": ["ritratto", "luce", "ombra", "volto", "espressione"],
+      "src": "img/dirigibili/dirigibile (3).png",
+      "category": "airships",
+      "tags": ["tower", "nature", "sky"],
+      "people": true,
       "description": "Descrizione dell'immagine"
         },
     {
       "id": 4,
-      "src": "img/gray4.jpg",
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "src": "img/dirigibili/dirigibile (4).png",
+      "category": "airships",
+      "tags": ["tower", "flames", "explosion", "nature", "sky", "horizon"],
+      "people": false,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 5,
-      "src": "img/gray5.jpg",
-      "tags": ["mare", "orizzonte", "acqua", "luce", "natura"],
+      "src": "img/dirigibili/dirigibile (5).png",
+      "category": "airships",
+      "tags": ["sea", "horizon", "nature", "sky"],
+      "people": true,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 6,
-      "src": "img/gray1.jpg",
-      "tags": ["urbano", "notturno", "luci", "città", "movimento"],
+      "src": "img/relitti/relitto (1).png",
+      "category": "wreckage",
+      "tags": ["structure", "nature", "sky"],
+      "people": true,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 7,
-      "src": "img/gray2.jpg",
-      "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
+      "src": "img/relitti/relitto (2).png",
+      "category": "wreckage",
+      "tags": ["structure", "nature", "sky"],
+      "people": true,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 8,
-      "src": "img/gray3.jpg",
-      "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
+      "src": "img/relitti/relitto (3).png",
+      "category": "wreckage",
+      "tags": ["sea", "horizon", "nature", "sky", "smoke"],
+      "people": true,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 9,
-      "src": "img/gray4.jpg",
-      "tags": ["paesaggio", "inverno", "neve", "freddo", "silenzio"],
+      "src": "img/relitti/relitto (4).png",
+      "category": "wreckage",
+      "tags": ["mountains", "nature", "sky"],
+      "people": true,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 10,
-      "src": "img/gray5.jpg",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
+      "src": "img/relitti/relitto (5).png",
+      "category": "wreckage",
+      "tags": ["smoke", "flames", "nature"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (6).png",
+      "category": "wreckage",
+      "tags": ["smoke", "flames"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 12,
+      "src": "img/modelli/modello (1).png",
+      "category": "study models",
+      "tags": ["light", "men", "papers"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+      
+    {  
+      "id": 13,
+      "src": "img/modelli/modello (2).png",
+      "category": "study models",
+      "tags": ["men", "papers"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 14,
+      "src": "img/modelli/modello (3).png",
+      "category": "study models",
+      "tags": ["men", "women", "light" ],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 15,
+      "src": "img/modelli/modello (4).png",
+      "category": "study models",
+      "tags": ["men"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (5).png",
+      "category": "study models",
+      "tags": ["men"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 17,
+      "src": "img/giornali/giornale (1).png",
+      "category": "newspapers",
+      "tags": ["polish", "flames", "explosion", "smoke", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 18,
+      "src": "img/giornali/giornale (2).png",
+      "category": "newspapers",
+      "tags": ["english", "flames", "explosion", "smoke", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 19,
+      "src": "img/giornali/giornale (3).png",
+      "category": "newspapers",
+      "tags": ["spanish", "smoke", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 20,
+      "src": "img/giornali/giornale (4).png",
+      "category": "newspapers",
+      "tags": ["spanish", "flames", "sea", "smoke", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 21,
+      "src": "img/giornali/giornale (5).png",
+      "category": "newspapers",
+      "tags": ["polish", "structure", "horizon", "nature", "text"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 22,
+      "src": "img/giornali/giornale (6).png",
+      "category": "newspapers",
+      "tags": ["russian", "sky", "smoke", "horizon", "nature", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 23,
+      "src": "img/giornali/giornale (7).png",
+      "category": "newspapers",
+      "tags": ["russian", "flames", "sea", "smoke", "explosion", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 24,
+      "src": "img/giornali/giornale (8).png",
+      "category": "newspapers",
+      "tags": ["russian", "sky", "horizon", "nature", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 25,
+      "src": "img/giornali/giornale (9).png",
+      "category": "newspapers",
+      "tags": ["english", "flames", "smoke", "text"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 25,
+      "src": "img/giornali/giornale (10).png",
+      "category": "newspapers",
+      "tags": ["russian", "flames", "smoke", "explosion", "horizon", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 25,
+      "src": "img/giornali/giornale (11).png",
+      "category": "newspapers",
+      "tags": ["german", "horizon", "smoke", "sea", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 25,
+      "src": "img/giornali/giornale (12).png",
+      "category": "newspapers",
+      "tags": ["spanish", "flames", "smoke", "explosion", "sky", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 25,
+      "src": "img/giornali/giornale (13).png",
+      "category": "newspapers",
+      "tags": ["spanish", "flames", "smoke", "explosion", "horizon", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 25,
+      "src": "img/giornali/giornale (14).png",
+      "category": "newspapers",
+      "tags": ["english", "flames", "smoke", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 25,
+      "src": "img/giornali/giornale (15).png",
+      "category": "newspapers",
+      "tags": ["english", "flames", "smoke", "explosion", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 26,
+      "src": "img/disegni/disegno (1).png",
+      "category": "technical drawings",
+      "tags": ["text", "side view", "details"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 27,
+      "src": "img/disegni/disegno (2).png",
+      "category": "technical drawings",
+      "tags": ["front view"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 28,
+      "src": "img/disegni/disegno (3).png",
+      "category": "technical drawings",
+      "tags": ["text", "side view", "front view", "details"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 29,
+      "src": "img/disegni/disegno (4).png",
+      "category": "technical drawings",
+      "tags": ["details", "side view"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 30,
+      "src": "img/disegni/disegno (5).png",
+      "category": "technical drawings",
+      "tags": ["text", "side view"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 31,
+      "src": "img/disegni/disegno (6).png",
+      "category": "technical drawings",
+      "tags": ["text", "side view", "front view", "details"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 32,
+      "src": "img/disegni/disegno (7).png",
+      "category": "technical drawings",
+      "tags": ["text", "side view", "front view", "details"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 33,
+      "src": "img/disegni/disegno (8).png",
+      "category": "technical drawings",
+      "tags": ["text", "side view", "details"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 34,
+      "src": "img/disegni/disegno (9).png",
+      "category": "technical drawings",
+      "tags": ["side view", "details"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 35,
+      "src": "img/disegni/disegno (10).png",
+      "category": "technical drawings",
+      "tags": ["text", "side view"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+      
+    {
+      "id": 36,
+      "src": "img/disegni/disegno (11).png",
+      "category": "technical drawings",
+      "tags": ["text", "side view", "front view", "details"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 37,
+      "src": "img/disegni/disegno (12).png",
+      "category": "technical drawings",
+      "tags": [ "side view", "text"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 38,
+      "src": "img/disegni/disegno (13).png",
+      "category": "technical drawings",
+      "tags": ["text", "side view"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 39,
+      "src": "img/disegni/disegno (14).png",
+      "category": "technical drawings",
+      "tags": ["text", "side view", "details"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 40,
+      "src": "img/disegni/disegno (15).png",
+      "category": "technical drawings",
+      "tags": ["side view", "front view"],
+      "people": false,
       "description": "Descrizione dell'immagine"    }
+
+    
+
+
+      
+
+
+      
+    
   ]
 }
