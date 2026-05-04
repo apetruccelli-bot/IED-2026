@@ -2,56 +2,124 @@
   "items": [
     {
       "id": 1,
-      "src": "img/gray1.jpg",
-      "tags": ["natura", "paesaggio", "verde", "estate", "sole"],
+      "src": "img/dirigibili/dirigibile (1).png",
+      "category": "airships",
+      "tags": ["tower", "nature", "sky"],
+      "people": true,
       "description": "Descrizione dell'immagine"
     },
     {
       "id": 2,
-      "src": "img/gray2.jpg",
-      "tags": ["architettura", "urbano", "moderno", "cemento", "geometria"],
+      "src": "img/dirigibili/dirigibile (2).png",
+      "category": "airships",
+      "tags": ["tower", "flames", "explosion", "nature", "sky", "horizon"],
+      "people": false,
       "description": "Descrizione dell'immagine"
     },
     {
       "id": 3,
-      "src": "img/gray3.jpg",
-      "tags": ["ritratto", "luce", "ombra", "volto", "espressione"],
+      "src": "img/dirigibili/dirigibile (3).png",
+      "category": "airships",
+      "tags": ["tower", "nature", "sky"],
+      "people": true,
       "description": "Descrizione dell'immagine"
         },
     {
       "id": 4,
-      "src": "img/gray4.jpg",
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "src": "img/dirigibili/dirigibile (4).png",
+      "category": "airships",
+      "tags": ["tower", "flames", "explosion", "nature", "sky", "horizon"],
+      "people": false,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 5,
-      "src": "img/gray5.jpg",
-      "tags": ["mare", "orizzonte", "acqua", "luce", "natura"],
+      "src": "img/dirigibili/dirigibile (5).png",
+      "category": "airships",
+      "tags": ["sea", "horizon", "ship", "nature", "sky"],
+      "people": true,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 6,
-      "src": "img/gray1.jpg",
-      "tags": ["urbano", "notturno", "luci", "città", "movimento"],
+      "src": "img/relitti/relitto (1).png",
+      "category": "wreckage",
+      "tags": [ "metal", "structure", "nature", "sky"],
+      "people": true,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 7,
-      "src": "img/gray2.jpg",
-      "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
+      "src": "img/relitti/relitto (2).png",
+      "category": "wreckage",
+      "tags": ["structure", "nature", "sky"],
+      "people": true,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 8,
-      "src": "img/gray3.jpg",
-      "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
+      "src": "img/relitti/relitto (3).png",
+      "category": "wreckage",
+      "tags": ["sea", "horizon", "nature", "sky", "smoke"],
+      "people": true,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 9,
-      "src": "img/gray4.jpg",
-      "tags": ["paesaggio", "inverno", "neve", "freddo", "silenzio"],
+      "src": "img/relitti/relitto (4).png",
+      "category": "wreckage",
+      "tags": ["mountains", "nature", "sky"],
+      "people": true,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 10,
-      "src": "img/gray5.jpg",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
+      "src": "img/relitti/relitto (5).png",
+      "category": "wreckage",
+      "tags": ["smoke", "flames", "nature"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (6).png",
+      "category": "wreckage",
+      "tags": ["smoke", "flames"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 12,
+      "src": "img/modelli/modello (1).png",
+      "category": "study models",
+      "tags": ["light", "men", "papers"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+      
+    {  
+      "id": 13,
+      "src": "img/modelli/modello (2).png",
+      "category": "study models",
+      "tags": ["men", "papers"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 14,
+      "src": "img/modelli/modello (3).png",
+      "category": "study models",
+      "tags": ["men", "women", "light" ],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 15,
+      "src": "img/modelli/modello (4).png",
+      "category": "study models",
+      "tags": ["men"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (5).png",
+      "category": "study models",
+      "tags": ["men"],
+      "people": true,
       "description": "Descrizione dell'immagine"    }
   ]
 }
