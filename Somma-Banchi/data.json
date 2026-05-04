@@ -3,110 +3,107 @@
     {
       "id": 1,
       "src": "img/banconi(1).png",
-      "tags": ["natura", "paesaggio", "verde", "estate", "sole"],
-      "description": "Descrizione dell'immagine"
-    },
+      "tags": ["cartelloni", "vista frontale ravvicinata", "vendita", "banco piccolo", "struttura ricurva", "carne bovino adulto", "neon", "capellino"],
+      "description": "Banco di vendita di Alfredo, Ferrara, 1992"},
     {
       "id": 2,
       "src": "img/banconi(2).png",
-      "tags": ["architettura", "urbano", "moderno", "cemento", "geometria"],
-      "description": "Descrizione dell'immagine"
-    },
+      "tags": ["bilancia", "neon spenti", "batticarne", "carne suina", "banco squadrato", "vista frontale", "macellaio giovane"],
+      "description": "Banco di vendita di Antonio, Napoli, 1995"},
     {
       "id": 3,
       "src": "img/banconi(3).png",
-      "tags": ["ritratto", "luce", "ombra", "volto", "espressione"],
-      "description": "Descrizione dell'immagine"
-        },
+      "tags": ["banco a bauletto", "vetro alto", "macellaio donna", "neon caldi", "preparati di carne", "vista frontale lontana", "fettine di carne bovina"],
+      "description": "Banco di vendita di Angela, Bari, 1990"},
     {
       "id": 4,
       "src": "img/banconi(4).png",
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"    },
+      "tags": ["neoni forti", "riflesso neon", "banco squadrato", "vista frontale ravvicinata", "preparazione", "tagli di carne", "mattonelle bianche"],
+      "description": "Banco di vendita di Moa, Roma, 1992"},
     {
       "id": 5,
       "src": "img/banconi(5).png",
-      "tags": ["mare", "orizzonte", "acqua", "luce", "natura"],
-      "description": "Descrizione dell'immagine"    },
+      "tags": ["vista frontale ravvicinata", "due macellai", "neon spenti", "luce tenue", "preparati di carne", "vassoi", "secondi tagli di carne bovina"],
+      "description": "Banco di vendita di Leo, Milano, 1995"    },
     {
       "id": 6,
       "src": "img/banconi(6).png",
-      "tags": ["urbano", "notturno", "luci", "città", "movimento"],
-      "description": "Descrizione dell'immagine"    },
+      "tags": ["retro banco in legno", "neon caldi", "luce tenue", "preparati per padella", "vassoi bianchi", "vassoi in acciaio", "vista dettagliata", "banco squadrato"],
+      "description": "Banco di vendita di Luigi, Torino, 1989"    },
     {
       "id": 7,
       "src": "img/banconi(7).png",
-      "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
-      "description": "Descrizione dell'immagine"    },
+      "tags": ["lavorazione", "carne bovina", "prosciutti appesi", "pezzi di carne specifici", "neon spenti", "occhiali", "vista frontale ravvicinata"],
+      "description": "Banco di vendita di Sante e Francesco, Monza, 1993"    },
     {
       "id": 8,
       "src": "img/banconi(8).png",
-      "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
-      "description": "Descrizione dell'immagine"    },
+      "tags": ["neon caldi", "banco squadrato", "carne di bovino", "mattonelle bianche", "tritato di carne", "vista frontale ravvicinata"],
+      "description": "Banco di vendita di Paolo, Chieti, 1985"    },
     {
       "id": 9,
       "src": "img/banconi(9).png",
-      "tags": ["paesaggio", "inverno", "neve", "freddo", "silenzio"],
-      "description": "Descrizione dell'immagine"    },
+      "tags": ["banco in acciaio", "neon spenti", "camice da lavoro", "banco squadrato", "capocollo di maiale con osso", "vista molto ravvicinata"],
+      "description": "Banco di vendita di Giuseppe, Matera, 1990"    },
     {
       "id": 10,
       "src": "img/banconi(10).png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"    },
+      "tags": ["neon forti", "banco grande squadrato", "scaffalatura", "lavorazione", "carne bovina", "carne suina", "vassoi", "vaschette", "bigliettini ordini"],
+      "description": "Banco di vendita di Pino, Cerignola, 1994"    },
     {
       "id": 11,     
       "src": "img/banconi(11).png",
-      "tags": ["natura", "fiori", "colore", "primavera", "bellezza"],
-      "description": "Descrizione dell'immagine"    },
+      "tags": ["vista frontale lontana", "banco squadrato", "neon appesi", "neon forti", "barre led", "carne appesa", "vendita di vari tagli di carne"],
+      "description": "Banco di vendita di Lorenzo, Firenze, 1996"    },
     {
       "id": 12,
       "src": "img/banconi(12).png",
-      "tags": ["urbano", "architettura", "moderno", "linee", "città"],
-      "description": "Descrizione dell'immagine"    },
+      "tags": ["neon caldi", "banco a bauletto", "molta carne", "vassoi in acciaio", "scatole di cartone", "vista semi-laterale"],
+      "description": "Banco di vendita di Ruggiero, Barletta, 1990"    },
     {
       "id": 13,
       "src": "img/banconi(13).png",
-      "tags": ["ritratto", "espressione", "volto", "luce", "ombra"],
-      "description": "Descrizione dell'immagine"    },
+      "tags": ["bancone piccolo squadrato", "neon bianchi", "recipienti salse", "tagli di carne", "banco ad apertura scorrevole", "vista frontale ravvicinata"],
+      "description": "Banco di vendita di Lin, Marsiglia, 1997"    },
     {
       "id": 14,
       "src": "img/banconi(14).png",
       "tags": ["astratto", "colore", "composizione", "texture", "dettaglio"],
-      "description": "Descrizione dell'immagine"    },
+      "description": "Banco di vendita di Luca, Milano, 1998"    },
     {
       "id": 15,
       "src": "img/banconi(15).png",
       "tags": ["mare", "natura", "orizzonte", "acqua", "luce"],
-      "description": "Descrizione dell'immagine"    }, 
+      "description": "Banco di vendita di Giuseppe, Matera, 1990"    }, 
     {
       "id": 16, 
       "src": "img/banconi(16).png",
       "tags": ["urbano", "notturno", "luci", "città", "movimento"],
-      "description": "Descrizione dell'immagine"    },  
+      "description": "Banco di vendita di Marco, Bologna, 1996"    },  
     {
       "id": 17,
       "src": "img/banconi(17).png",
       "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
-      "description": "Descrizione dell'immagine"    },
+      "description": "Banco di vendita di Maria, Roma, 1999"    },
     {
       "id": 18,
       "src": "img/banconi(18).png",
       "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
-      "description": "Descrizione dell'immagine"    },        
+      "description": "Banco di vendita di Giovanni, Napoli, 1995"    },        
     {
       "id": 19,
       "src": "img/banconi(19).png",
       "tags": ["paesaggio", "inverno", "neve", "freddo", "silenzio"],
-      "description": "Descrizione dell'immagine"    },
+      "description": "Banco di vendita di Luca, Milano, 1998"    },
     {
       "id": 20,
       "src": "img/banconi(20).png",
       "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"    },
+      "description": "Banco di vendita di Anna, Firenze, 1997"    },
     {
       "id": 21,
       "src": "img/banconi(21).png",
       "tags": ["natura", "fiori", "colore", "primavera", "bellezza"],
-      "description": "Descrizione dell'immagine"    }
+      "description": "Banco di vendita di Anna, Firenze, 1997"    }
   ]
 }
