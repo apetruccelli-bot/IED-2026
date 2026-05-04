@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "src": "img/fotocamere/fotocamere1.jpg",
+      "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
+      "description": "Descrizione dell'immagine"
+    }
+  ]
+}
