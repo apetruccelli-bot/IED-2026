@@ -40,7 +40,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 6,
       "src": "img/dirigibili/dirigibile (6).png",
       "category": "airships",
       "tags": ["sea", "horizon", "nature", "sky"],
@@ -48,7 +48,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 7,
       "src": "img/dirigibili/dirigibile (7).png",
       "category": "airships",
       "tags": ["sea"],
@@ -56,7 +56,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 8,
       "src": "img/dirigibili/dirigibile (8).png",
       "category": "airships",
       "tags": ["flames", "explosion","smoke", "nature", "sky"],
@@ -64,7 +64,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 9,
       "src": "img/dirigibili/dirigibile (9).png",
       "category": "airships",
       "tags": ["mountains", "nature", "sky"],
@@ -72,7 +72,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 10,
       "src": "img/dirigibili/dirigibile (10).png",
       "category": "airships",
       "tags": ["mountains", "smoke", "nature"],
@@ -80,7 +80,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 11,
       "src": "img/dirigibili/dirigibile (11).png",
       "category": "airships",
       "tags": ["sea", "horizon", "nature", "flames", "smoke", "tower"],
@@ -88,7 +88,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 12,
       "src": "img/dirigibili/dirigibile (12).png",
       "category": "airships",
       "tags": ["smoke", "horizon", "nature", "flames"],
@@ -96,7 +96,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 13,
       "src": "img/dirigibili/dirigibile (13).png",
       "category": "airships",
       "tags": ["flames", "horizon", "structure", "smoke"],
@@ -104,7 +104,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 14,
       "src": "img/dirigibili/dirigibile (14).png",
       "category": "airships",
       "tags": ["sea", "horizon", "nature", "smoke", "flames"],
@@ -112,7 +112,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 15,
       "src": "img/dirigibili/dirigibile (15).png",
       "category": "airships",
       "tags": ["flames", "smoke", "tower"],
@@ -120,7 +120,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 16,
       "src": "img/dirigibili/dirigibile (16).png",
       "category": "airships",
       "tags": ["sea", "horizon", "nature", "sky", "smoke", "flames"],
@@ -128,7 +128,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 17,
       "src": "img/dirigibili/dirigibile (17).png",
       "category": "airships",
       "tags": ["structure", "horizon", "nature"],
@@ -136,7 +136,7 @@
       "description": "Descrizione dell'immagine"    },
 
      {
-      "id": 5,
+      "id": 18,
       "src": "img/dirigibili/dirigibile (18).png",
       "category": "airships",
       "tags": ["mountains", "structure", "nature", "smoke"],
@@ -145,35 +145,35 @@
 
 
     {
-      "id": 6,
+      "id": 19,
       "src": "img/relitti/relitto (1).png",
       "category": "wreckage",
       "tags": ["structure", "nature", "sky"],
       "people": true,
       "description": "Descrizione dell'immagine"    },
     {
-      "id": 7,
+      "id": 20,
       "src": "img/relitti/relitto (2).png",
       "category": "wreckage",
       "tags": ["structure", "nature", "sky"],
       "people": true,
       "description": "Descrizione dell'immagine"    },
     {
-      "id": 8,
+      "id": 21,
       "src": "img/relitti/relitto (3).png",
       "category": "wreckage",
       "tags": ["sea", "horizon", "nature", "sky", "smoke"],
       "people": true,
       "description": "Descrizione dell'immagine"    },
     {
-      "id": 9,
+      "id": 22,
       "src": "img/relitti/relitto (4).png",
       "category": "wreckage",
       "tags": ["mountains", "nature", "sky"],
       "people": true,
       "description": "Descrizione dell'immagine"    },
     {
-      "id": 10,
+      "id": 23,
       "src": "img/relitti/relitto (5).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "nature"],
@@ -181,7 +181,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 24,
       "src": "img/relitti/relitto (6).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "structure"],
@@ -189,7 +189,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 25,
       "src": "img/relitti/relitto (7).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "structure", "nature", "mountains"],
@@ -197,7 +197,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 26,
       "src": "img/relitti/relitto (8).png",
       "category": "wreckage",
       "tags": ["smoke", "horizon", "nature", "structure"],
@@ -205,7 +205,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 27,
       "src": "img/relitti/relitto (9).png",
       "category": "wreckage",
       "tags": ["nature", "structure"],
@@ -213,7 +213,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 28,
       "src": "img/relitti/relitto (10).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "structure"],
@@ -221,7 +221,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 29,
       "src": "img/relitti/relitto (11).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "nature", "structure", "horizon"],
@@ -229,7 +229,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 30,
       "src": "img/relitti/relitto (12).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "nature", "structure", "mountains"],
@@ -237,7 +237,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 31,
       "src": "img/relitti/relitto (13).png",
       "category": "wreckage",
       "tags": ["structure", "nature", "horizon"],
@@ -245,7 +245,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 32,
       "src": "img/relitti/relitto (14).png",
       "category": "wreckage",
       "tags": ["structure", "nature"],
@@ -253,7 +253,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 33,
       "src": "img/relitti/relitto (15).png",
       "category": "wreckage",
       "tags": ["structure"],
@@ -261,7 +261,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 34,
       "src": "img/relitti/relitto (16).png",
       "category": "wreckage",
       "tags": ["smoke", "structure", "sky"],
@@ -269,7 +269,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 35,
       "src": "img/relitti/relitto (17).png",
       "category": "wreckage",
       "tags": ["structure", "nature", "horizon"],
@@ -277,7 +277,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 36,
       "src": "img/relitti/relitto (18).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "nature", "structure", "mountains"],
@@ -285,7 +285,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 37,
       "src": "img/relitti/relitto (19).png",
       "category": "wreckage",
       "tags": ["structure", "nature", "horizon"],
@@ -293,7 +293,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 38,
       "src": "img/relitti/relitto (20).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "nature", "structure", "mountains"],
@@ -301,7 +301,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 11,
+      "id": 39,
       "src": "img/relitti/relitto (21).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "structure"],
@@ -309,7 +309,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 12,
+      "id": 40,
       "src": "img/modelli/modello (1).png",
       "category": "study models",
       "tags": ["light", "men", "papers"],
@@ -317,7 +317,7 @@
       "description": "Descrizione dell'immagine"    },
       
     {  
-      "id": 13,
+      "id": 41,
       "src": "img/modelli/modello (2).png",
       "category": "study models",
       "tags": ["men", "papers"],
@@ -325,7 +325,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 14,
+      "id": 42,
       "src": "img/modelli/modello (3).png",
       "category": "study models",
       "tags": ["men", "women", "light" ],
@@ -333,7 +333,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 15,
+      "id": 43,
       "src": "img/modelli/modello (4).png",
       "category": "study models",
       "tags": ["men"],
@@ -341,7 +341,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 16,
+      "id": 44,
       "src": "img/modelli/modello (5).png",
       "category": "study models",
       "tags": ["men"],
@@ -349,7 +349,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 16,
+      "id": 45,
       "src": "img/modelli/modello (6).png",
       "category": "study models",
       "tags": ["men", "light", "women", "papers"],
@@ -357,7 +357,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 16,
+      "id": 46,
       "src": "img/modelli/modello (7).png",
       "category": "study models",
       "tags": ["men", "women"],
@@ -365,7 +365,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 16,
+      "id": 47,
       "src": "img/modelli/modello (8).png",
       "category": "study models",
       "tags": ["men", "women"],
@@ -373,7 +373,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 16,
+      "id": 48,
       "src": "img/modelli/modello (9).png",
       "category": "study models",
       "tags": ["men", "demonstration"],
@@ -381,7 +381,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 16,
+      "id": 49,
       "src": "img/modelli/modello (10).png",
       "category": "study models",
       "tags": ["men", "demonstration", "women"],
@@ -389,7 +389,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 16,
+      "id": 50,
       "src": "img/modelli/modello (11).png",
       "category": "study models",
       "tags": ["men", "demonstration", "papers"],
@@ -397,7 +397,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 16,
+      "id": 51,
       "src": "img/modelli/modello (12).png",
       "category": "study models",
       "tags": ["men", "demonstration", "papers"],
@@ -405,7 +405,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 16,
+      "id": 52,
       "src": "img/modelli/modello (13).png",
       "category": "study models",
       "tags": ["men", "papers", "women"],
@@ -413,7 +413,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 16,
+      "id": 53,
       "src": "img/modelli/modello (14).png",
       "category": "study models",
       "tags": ["demonstration"],
@@ -421,7 +421,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 16,
+      "id": 54,
       "src": "img/modelli/modello (15).png",
       "category": "study models",
       "tags": ["men", "demonstration"],
@@ -429,7 +429,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 16,
+      "id": 55,
       "src": "img/modelli/modello (16).png",
       "category": "study models",
       "tags": ["men", "demonstration", "papers"],
@@ -437,7 +437,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 17,
+      "id": 56,
       "src": "img/giornali/giornale (1).png",
       "category": "newspapers",
       "tags": ["polish", "flames", "explosion", "smoke", "text"],
@@ -445,7 +445,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 18,
+      "id": 57,
       "src": "img/giornali/giornale (2).png",
       "category": "newspapers",
       "tags": ["english", "flames", "explosion", "smoke", "text"],
@@ -453,7 +453,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 19,
+      "id": 58,
       "src": "img/giornali/giornale (3).png",
       "category": "newspapers",
       "tags": ["spanish", "smoke", "text"],
@@ -461,7 +461,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 20,
+      "id": 59,
       "src": "img/giornali/giornale (4).png",
       "category": "newspapers",
       "tags": ["spanish", "flames", "sea", "smoke", "text"],
@@ -469,7 +469,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 21,
+      "id": 60,
       "src": "img/giornali/giornale (5).png",
       "category": "newspapers",
       "tags": ["polish", "structure", "horizon", "nature", "text"],
@@ -477,7 +477,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 22,
+      "id": 61,
       "src": "img/giornali/giornale (6).png",
       "category": "newspapers",
       "tags": ["russian", "sky", "smoke", "horizon", "nature", "text"],
@@ -485,7 +485,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 23,
+      "id": 62,
       "src": "img/giornali/giornale (7).png",
       "category": "newspapers",
       "tags": ["russian", "flames", "sea", "smoke", "explosion", "text"],
@@ -493,7 +493,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 24,
+      "id": 63,
       "src": "img/giornali/giornale (8).png",
       "category": "newspapers",
       "tags": ["russian", "sky", "horizon", "nature", "text"],
@@ -501,7 +501,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 25,
+      "id": 64,
       "src": "img/giornali/giornale (9).png",
       "category": "newspapers",
       "tags": ["english", "flames", "smoke", "text"],
@@ -509,7 +509,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 25,
+      "id": 65,
       "src": "img/giornali/giornale (10).png",
       "category": "newspapers",
       "tags": ["russian", "flames", "smoke", "explosion", "horizon", "text"],
@@ -517,7 +517,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 25,
+      "id": 66,
       "src": "img/giornali/giornale (11).png",
       "category": "newspapers",
       "tags": ["german", "horizon", "smoke", "sea", "text"],
@@ -525,7 +525,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 25,
+      "id": 67,
       "src": "img/giornali/giornale (12).png",
       "category": "newspapers",
       "tags": ["spanish", "flames", "smoke", "explosion", "sky", "text"],
@@ -533,7 +533,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 25,
+      "id": 68,
       "src": "img/giornali/giornale (13).png",
       "category": "newspapers",
       "tags": ["spanish", "flames", "smoke", "explosion", "horizon", "text"],
@@ -541,7 +541,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 25,
+      "id": 69,
       "src": "img/giornali/giornale (14).png",
       "category": "newspapers",
       "tags": ["english", "flames", "smoke", "text"],
@@ -549,7 +549,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 25,
+      "id": 70,
       "src": "img/giornali/giornale (15).png",
       "category": "newspapers",
       "tags": ["english", "flames", "smoke", "explosion", "text"],
@@ -557,7 +557,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 26,
+      "id": 71,
       "src": "img/disegni/disegno (1).png",
       "category": "technical drawings",
       "tags": ["text", "side view", "details"],
@@ -565,7 +565,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 27,
+      "id": 72,
       "src": "img/disegni/disegno (2).png",
       "category": "technical drawings",
       "tags": ["front view"],
@@ -573,7 +573,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 28,
+      "id": 73,
       "src": "img/disegni/disegno (3).png",
       "category": "technical drawings",
       "tags": ["text", "side view", "front view", "details"],
@@ -581,7 +581,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 29,
+      "id": 74,
       "src": "img/disegni/disegno (4).png",
       "category": "technical drawings",
       "tags": ["details", "side view"],
@@ -589,7 +589,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 30,
+      "id": 75,
       "src": "img/disegni/disegno (5).png",
       "category": "technical drawings",
       "tags": ["text", "side view"],
@@ -597,7 +597,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 31,
+      "id": 76,
       "src": "img/disegni/disegno (6).png",
       "category": "technical drawings",
       "tags": ["text", "side view", "front view", "details"],
@@ -605,7 +605,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 32,
+      "id": 77,
       "src": "img/disegni/disegno (7).png",
       "category": "technical drawings",
       "tags": ["text", "side view", "front view", "details"],
@@ -613,7 +613,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 33,
+      "id": 78,
       "src": "img/disegni/disegno (8).png",
       "category": "technical drawings",
       "tags": ["text", "side view", "details"],
@@ -621,7 +621,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 34,
+      "id": 79,
       "src": "img/disegni/disegno (9).png",
       "category": "technical drawings",
       "tags": ["side view", "details"],
@@ -629,7 +629,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 35,
+      "id": 80,
       "src": "img/disegni/disegno (10).png",
       "category": "technical drawings",
       "tags": ["text", "side view"],
@@ -637,7 +637,7 @@
       "description": "Descrizione dell'immagine"    },
       
     {
-      "id": 36,
+      "id": 81,
       "src": "img/disegni/disegno (11).png",
       "category": "technical drawings",
       "tags": ["text", "side view", "front view", "details"],
@@ -645,7 +645,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 37,
+      "id": 82,
       "src": "img/disegni/disegno (12).png",
       "category": "technical drawings",
       "tags": [ "side view", "text"],
@@ -653,7 +653,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 38,
+      "id": 83,
       "src": "img/disegni/disegno (13).png",
       "category": "technical drawings",
       "tags": ["text", "side view"],
@@ -661,7 +661,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 39,
+      "id": 84,
       "src": "img/disegni/disegno (14).png",
       "category": "technical drawings",
       "tags": ["text", "side view", "details"],
@@ -669,7 +669,7 @@
       "description": "Descrizione dell'immagine"    },
 
     {
-      "id": 40,
+      "id": 85,
       "src": "img/disegni/disegno (15).png",
       "category": "technical drawings",
       "tags": ["side view", "front view"],
