@@ -27,7 +27,7 @@
         {
             "id": 4,
             "src": "img/architettura/architettura (28).jpg",
-            "tags": ["edifici", "vicoli", "silenzio"],
+            "tags": ["edifici", "degrado", "silenzio"],
             "category": "architettura",
             "year": 1978,
             "description": "Vallefredda, 1978, Stefano Conti"
@@ -35,7 +35,7 @@
         {
             "id": 5,
             "src": "img/persone/persone (12).jpg",
-            "tags": ["presenza", "vicoli", "edifici", "silenzio"],
+            "tags": ["presenza", "vicoli", "edifici"],
             "category": "persone",
             "year": 1970,
             "description": "Zagara, 1970, Pietro Scorza"
@@ -59,7 +59,7 @@
         {
             "id": 8,
             "src": "img/persone/persone (2).jpg",
-            "tags": ["presenza", "edifici", "dettagli", "silenzio"],
+            "tags": ["presenza", "edifici", "dettagli"],
             "category": "persone",
             "year": 1971,
             "description": "Monteferro, 1971, Carlo De Santis"
@@ -83,7 +83,7 @@
         {
             "id": 11,
             "src": "img/persone/persone (16).jpg",
-            "tags": ["presenza", "vicoli", "edifici", "silenzio"],
+            "tags": ["presenza", "vicoli", "edifici"],
             "category": "persone",
             "year": 1980,
             "description": "San Velio, 1980, Roberto Gatti"
@@ -91,7 +91,7 @@
         {
             "id": 12,
             "src": "img/architettura/architettura (9).jpg",
-            "tags": ["edifici", "silenzio"],
+            "tags": ["edifici", "degrado", "silenzio"],
             "category": "architettura",
             "year": 1975,
             "description": "Borgo Cupo, 1975, Simone De Luca"
@@ -107,7 +107,7 @@
         {
             "id": 14,
             "src": "img/architettura/architettura (5).jpg",
-            "tags": ["edifici", "degrado"],
+            "tags": ["edifici", "degrado", "silenzio"],
             "category": "architettura",
             "year": 1979,
             "description": "Fonte Chiusa, 1979, Michele Orsini"
@@ -131,7 +131,7 @@
         {
             "id": 17,
             "src": "img/architettura/architettura (25).jpg",
-            "tags": ["edifici", "degrado"],
+            "tags": ["edifici", "vicoli", "silenzio"],
             "category": "architettura",
             "year": 1983,
             "description": "Castel Ruvo, 1983, Marco Leoni"
@@ -139,7 +139,7 @@
         {
             "id": 18,
             "src": "img/persone/persone (4).jpg",
-            "tags": ["presenza", "vicoli", "edifici", "silenzio"],
+            "tags": ["presenza", "vicoli", "edifici"],
             "category": "persone",
             "year": 1967,
             "description": "Costa Nera, 1967, Paolo Rizzi"
@@ -147,7 +147,7 @@
         {
             "id": 19,
             "src": "img/persone/persone (18).jpg",
-            "tags": ["presenza", "edifici", "dettagli", "silenzio"],
+            "tags": ["presenza", "edifici", "dettagli"],
             "category": "persone",
             "year": 1985,
             "description": "Borgo Salso, 1985, Enrico Bellini"
@@ -163,7 +163,7 @@
         {
             "id": 21,
             "src": "img/persone/persone (6).jpg",
-            "tags": ["presenza", "edifici", "degrado", "silenzio"],
+            "tags": ["presenza", "edifici", "degrado"],
             "category": "persone",
             "year": 1969,
             "description": "Poggio Nero, 1969, Claudio Marchetti"
@@ -171,7 +171,7 @@
         {
             "id": 22,
             "src": "img/taccuini/taccuini (9).jpg",
-            "tags": ["dettagli", "silenzio"],
+            "tags": ["dettagli", "note"],
             "category": "taccuini",
             "year": 1966,
             "description": "Note di campo, 1966, Emilio Varani"
@@ -179,7 +179,7 @@
         {
             "id": 23,
             "src": "img/architettura/architettura (3).jpg",
-            "tags": ["edifici", "vicoli", "silenzio"],
+            "tags": ["edifici", "silenzio", "degrado"],
             "category": "architettura",
             "year": 1976,
             "description": "Pietra Lenta, 1976, Andrea Colonna"
@@ -195,7 +195,7 @@
         {
             "id": 25,
             "src": "img/architettura/architettura (22).jpg",
-            "tags": ["edifici", "degrado"],
+            "tags": ["edifici", "degrado", "vicoli"],
             "category": "architettura",
             "year": 1986,
             "description": "Serra Antica, 1986, Giorgio Vitale"
@@ -211,7 +211,7 @@
         {
             "id": 27,
             "src": "img/persone/persone (1).jpg",
-            "tags": ["presenza", "vicoli", "edifici", "silenzio"],
+            "tags": ["presenza", "vicoli", "edifici"],
             "category": "persone",
             "year": 1982,
             "description": "Serra Vasta, 1982, Franco Lamberti"
@@ -227,7 +227,7 @@
         {
             "id": 29,
             "src": "img/architettura/architettura (14).jpg",
-            "tags": ["edifici", "degrado"],
+            "tags": ["edifici", "degrado", "silenzio"],
             "category": "architettura",
             "year": 1974,
             "description": "Valle Cupa, 1974, Lorenzo Fiore"
@@ -235,7 +235,7 @@
         {
             "id": 30,
             "src": "img/persone/persone (19).jpg",
-            "tags": ["presenza", "vicoli", "edifici", "silenzio"],
+            "tags": ["presenza", "vicoli", "edifici"],
             "category": "persone",
             "year": 1978,
             "description": "Vallefredda, 1978, Stefano Conti"
@@ -243,7 +243,7 @@
         {
             "id": 31,
             "src": "img/architettura/architettura (12).jpg",
-            "tags": ["edifici", "silenzio"],
+            "tags": ["edifici", "degrado", "silenzio"],
             "category": "architettura",
             "year": 1970,
             "description": "Zagara, 1970, Pietro Scorza"
@@ -275,7 +275,7 @@
         {
             "id": 35,
             "src": "img/architettura/architettura (23).jpg",
-            "tags": ["edifici", "degrado"],
+            "tags": ["edifici", "degrado", "silenzio"],
             "category": "architettura",
             "year": 1971,
             "description": "Monteferro, 1971, Carlo De Santis"
@@ -291,7 +291,7 @@
         {
             "id": 37,
             "src": "img/persone/persone (23).jpg",
-            "tags": ["presenza", "vicoli", "edifici", "silenzio"],
+            "tags": ["presenza", "vicoli", "edifici"],
             "category": "persone",
             "year": 1980,
             "description": "San Velio, 1980, Roberto Gatti"
@@ -307,7 +307,7 @@
         {
             "id": 39,
             "src": "img/architettura/architettura (19).jpg",
-            "tags": ["edifici", "vicoli", "degrado", "silenzio"],
+            "tags": ["edifici", "degrado", "silenzio"],
             "category": "architettura",
             "year": 1975,
             "description": "Borgo Cupo, 1975, Simone De Luca"
