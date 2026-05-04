@@ -38,6 +38,112 @@
       "tags": ["sea", "horizon", "nature", "sky"],
       "people": true,
       "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (6).png",
+      "category": "airships",
+      "tags": ["sea", "horizon", "nature", "sky"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (7).png",
+      "category": "airships",
+      "tags": ["sea"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (8).png",
+      "category": "airships",
+      "tags": ["flames", "explosion","smoke", "nature", "sky"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (9).png",
+      "category": "airships",
+      "tags": ["mountains", "nature", "sky"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (10).png",
+      "category": "airships",
+      "tags": ["mountains", "smoke", "nature"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (11).png",
+      "category": "airships",
+      "tags": ["sea", "horizon", "nature", "flames", "smoke", "tower"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (12).png",
+      "category": "airships",
+      "tags": ["smoke", "horizon", "nature", "flames"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (13).png",
+      "category": "airships",
+      "tags": ["flames", "horizon", "structure", "smoke"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (14).png",
+      "category": "airships",
+      "tags": ["sea", "horizon", "nature", "smoke", "flames"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (15).png",
+      "category": "airships",
+      "tags": ["flames", "smoke", "tower"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (16).png",
+      "category": "airships",
+      "tags": ["sea", "horizon", "nature", "sky", "smoke", "flames"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (17).png",
+      "category": "airships",
+      "tags": ["structure", "horizon", "nature"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+     {
+      "id": 5,
+      "src": "img/dirigibili/dirigibile (18).png",
+      "category": "airships",
+      "tags": ["mountains", "structure", "nature", "smoke"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+
     {
       "id": 6,
       "src": "img/relitti/relitto (1).png",
@@ -78,7 +184,127 @@
       "id": 11,
       "src": "img/relitti/relitto (6).png",
       "category": "wreckage",
-      "tags": ["smoke", "flames"],
+      "tags": ["smoke", "flames", "structure"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (7).png",
+      "category": "wreckage",
+      "tags": ["smoke", "flames", "structure", "nature", "mountains"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (8).png",
+      "category": "wreckage",
+      "tags": ["smoke", "horizon", "nature", "structure"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (9).png",
+      "category": "wreckage",
+      "tags": ["nature", "structure"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (10).png",
+      "category": "wreckage",
+      "tags": ["smoke", "flames", "structure"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (11).png",
+      "category": "wreckage",
+      "tags": ["smoke", "flames", "nature", "structure", "horizon"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (12).png",
+      "category": "wreckage",
+      "tags": ["smoke", "flames", "nature", "structure", "mountains"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (13).png",
+      "category": "wreckage",
+      "tags": ["structure", "nature", "horizon"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (14).png",
+      "category": "wreckage",
+      "tags": ["structure", "nature"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (15).png",
+      "category": "wreckage",
+      "tags": ["structure"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (16).png",
+      "category": "wreckage",
+      "tags": ["smoke", "structure", "sky"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (17).png",
+      "category": "wreckage",
+      "tags": ["structure", "nature", "horizon"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (18).png",
+      "category": "wreckage",
+      "tags": ["smoke", "flames", "nature", "structure", "mountains"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (19).png",
+      "category": "wreckage",
+      "tags": ["structure", "nature", "horizon"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (20).png",
+      "category": "wreckage",
+      "tags": ["smoke", "flames", "nature", "structure", "mountains"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 11,
+      "src": "img/relitti/relitto (21).png",
+      "category": "wreckage",
+      "tags": ["smoke", "flames", "structure"],
       "people": true,
       "description": "Descrizione dell'immagine"    },
 
@@ -119,6 +345,94 @@
       "src": "img/modelli/modello (5).png",
       "category": "study models",
       "tags": ["men"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (6).png",
+      "category": "study models",
+      "tags": ["men", "light", "women", "papers"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (7).png",
+      "category": "study models",
+      "tags": ["men", "women"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (8).png",
+      "category": "study models",
+      "tags": ["men", "women"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (9).png",
+      "category": "study models",
+      "tags": ["men", "demonstration"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (10).png",
+      "category": "study models",
+      "tags": ["men", "demonstration", "women"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (11).png",
+      "category": "study models",
+      "tags": ["men", "demonstration", "papers"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (12).png",
+      "category": "study models",
+      "tags": ["men", "demonstration", "papers"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (13).png",
+      "category": "study models",
+      "tags": ["men", "papers", "women"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (14).png",
+      "category": "study models",
+      "tags": ["demonstration"],
+      "people": false,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (15).png",
+      "category": "study models",
+      "tags": ["men", "demonstration"],
+      "people": true,
+      "description": "Descrizione dell'immagine"    },
+
+    {
+      "id": 16,
+      "src": "img/modelli/modello (16).png",
+      "category": "study models",
+      "tags": ["men", "demonstration", "papers"],
       "people": true,
       "description": "Descrizione dell'immagine"    },
 
@@ -361,14 +675,6 @@
       "tags": ["side view", "front view"],
       "people": false,
       "description": "Descrizione dell'immagine"    }
-
-    
-
-
-      
-
-
-      
     
   ]
 }
