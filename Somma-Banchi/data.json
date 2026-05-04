@@ -2,56 +2,111 @@
   "items": [
     {
       "id": 1,
-      "src": "img/gray1.jpg",
+      "src": "img/banconi(1).png",
       "tags": ["natura", "paesaggio", "verde", "estate", "sole"],
       "description": "Descrizione dell'immagine"
     },
     {
       "id": 2,
-      "src": "img/gray2.jpg",
+      "src": "img/banconi(2).png",
       "tags": ["architettura", "urbano", "moderno", "cemento", "geometria"],
       "description": "Descrizione dell'immagine"
     },
     {
       "id": 3,
-      "src": "img/gray3.jpg",
+      "src": "img/banconi(3).png",
       "tags": ["ritratto", "luce", "ombra", "volto", "espressione"],
       "description": "Descrizione dell'immagine"
         },
     {
       "id": 4,
-      "src": "img/gray4.jpg",
+      "src": "img/banconi(4).png",
       "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 5,
-      "src": "img/gray5.jpg",
+      "src": "img/banconi(5).png",
       "tags": ["mare", "orizzonte", "acqua", "luce", "natura"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 6,
-      "src": "img/gray1.jpg",
+      "src": "img/banconi(6).png",
       "tags": ["urbano", "notturno", "luci", "città", "movimento"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 7,
-      "src": "img/gray2.jpg",
+      "src": "img/banconi(7).png",
       "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 8,
-      "src": "img/gray3.jpg",
+      "src": "img/banconi(8).png",
       "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 9,
-      "src": "img/gray4.jpg",
+      "src": "img/banconi(9).png",
       "tags": ["paesaggio", "inverno", "neve", "freddo", "silenzio"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 10,
-      "src": "img/gray5.jpg",
+      "src": "img/banconi(10).png",
       "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
+      "description": "Descrizione dell'immagine"    },
+    {
+      "id": 11,     
+      "src": "img/banconi(11).png",
+      "tags": ["natura", "fiori", "colore", "primavera", "bellezza"],
+      "description": "Descrizione dell'immagine"    },
+    {
+      "id": 12,
+      "src": "img/banconi(12).png",
+      "tags": ["urbano", "architettura", "moderno", "linee", "città"],
+      "description": "Descrizione dell'immagine"    },
+    {
+      "id": 13,
+      "src": "img/banconi(13).png",
+      "tags": ["ritratto", "espressione", "volto", "luce", "ombra"],
+      "description": "Descrizione dell'immagine"    },
+    {
+      "id": 14,
+      "src": "img/banconi(14).png",
+      "tags": ["astratto", "colore", "composizione", "texture", "dettaglio"],
+      "description": "Descrizione dell'immagine"    },
+    {
+      "id": 15,
+      "src": "img/banconi(15).png",
+      "tags": ["mare", "natura", "orizzonte", "acqua", "luce"],
+      "description": "Descrizione dell'immagine"    }, 
+    {
+      "id": 16, 
+      "src": "img/banconi(16).png",
+      "tags": ["urbano", "notturno", "luci", "città", "movimento"],
+      "description": "Descrizione dell'immagine"    },  
+    {
+      "id": 17,
+      "src": "img/banconi(17).png",
+      "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
+      "description": "Descrizione dell'immagine"    },
+    {
+      "id": 18,
+      "src": "img/banconi(18).png",
+      "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
+      "description": "Descrizione dell'immagine"    },        
+    {
+      "id": 19,
+      "src": "img/banconi(19).png",
+      "tags": ["paesaggio", "inverno", "neve", "freddo", "silenzio"],
+      "description": "Descrizione dell'immagine"    },
+    {
+      "id": 20,
+      "src": "img/banconi(20).png",
+      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
+      "description": "Descrizione dell'immagine"    },
+    {
+      "id": 21,
+      "src": "img/banconi(21).png",
+      "tags": ["natura", "fiori", "colore", "primavera", "bellezza"],
       "description": "Descrizione dell'immagine"    }
   ]
 }
