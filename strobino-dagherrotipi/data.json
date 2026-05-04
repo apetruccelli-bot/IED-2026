@@ -10,8 +10,10 @@
     {
       "id": 2,
       "src": "img/fotocamere/fotocamere2.jpg",
+      "categoria": "fotocamere",
+      "tags-fotocamere": ["soffietto esteso", "su cavalletto", "soffietto retratto"],
       "tags": ["fotocamera", "soffietto esteso"],
-      "anno":1844,
+      "anno": 1844,
       "description": "Descrizione dell'immagine"
     },
     {
@@ -31,7 +33,7 @@
       "id": 5,
       "src": "img/fotocamere/fotocamere5.jpg",
       "tags": ["fotocamera", "su cavalletto", "soffietto retratto"],
-      "anno": 1843,,
+      "anno": 1843,
       "description": "Descrizione dell'immagine"    },
     {
       "id": 6,
@@ -152,13 +154,11 @@
       "tags": ["fotocamera", "su cavalletto", "soffietto esteso"],
       "anno": 1849,
       "description": "Descrizione dell'immagine"    },
-
-
-    {      "id": 25,
+    {      
+      "id": 25,
       "src": "img/dagherrotipi/dagherrotipo1.jpg",
       "tags": ["mare", "spiaggia", "acqua", "natura", "relax"],
       "description": "Descrizione dell'immagine"   },
-
     {
       "id": 26,
       "src": "img/dagherrotipi/dagherrotipo2.jpg",
@@ -476,129 +476,113 @@
       "src": "img/dagherrotipi/dagherrotipo60.jpg",
       "tags": ["astratto", "colore", "composizione", "dettaglio", "arte"],
       "description": "Descrizione dell'immagine"    },
-
-      {      "id": 85,
+    {      
+      "id": 85,
       "src": "img/dagherrotipi/dagherrotipo61.jpg",
       "tags": ["mare", "spiaggia", "acqua", "natura", "relax"],
       "description": "Descrizione dell'immagine"    },  
 
     {    
       "id": 86,
-      "src": "img/fotografi 2/fotografi1.jpg",
+      "src": "img/fotografi/fotografi1.jpg",
       "tags": ["urbano", "notturno", "luci", "città", "movimento"],
       "description": "Descrizione dell'immagine"    },  
 
     {
       "id": 87,
-      "src": "img/fotografi 2/fotografi2.jpg",
+      "src": "img/fotografi/fotografi2.jpg",
       "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 88,
-      "src": "img/fotografi 2/fotografi3.jpg",
+      "src": "img/fotografi/fotografi3.jpg",
       "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
       "description": "Descrizione dell'immagine"    },      
       
     {
       "id": 89,         
-      "src": "img/fotografi 2/fotografi4.jpg",
+      "src": "img/fotografi/fotografi4.jpg",
       "tags": ["paesaggio", "inverno", "neve", "freddo", "silenzio"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 90,
-      "src": "img/fotografi 2/fotografi5.jpg",
+      "src": "img/fotografi/fotografi5.jpg",
       "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
       "description": "Descrizione dell'immagine"    },
 
 
       {      "id": 91,
-      "src": "img/fotografi 2/fotografi6.jpg",        
+      "src": "img/fotografi/fotografi6.jpg",        
       "tags": ["natura", "fiori", "colori", "primavera", "bellezza"],   
       "description": "Descrizione dell'immagine"    },
 
     {
       "id": 92,
-      "src": "img/fotografi 2/fotografi7.jpg",
+      "src": "img/fotografi/fotografi7.jpg",
       "tags": ["urbano", "città", "strade", "movimento", "vita"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 93,
-      "src": "img/fotografi 2/fotografi8.jpg",    
+      "src": "img/fotografi/fotografi8.jpg",    
       "tags": ["ritratto", "emozione", "volto", "espressione", "intensità"],
       "description": "Descrizione dell'immagine"    },  
     {
       "id": 94,
-      "src": "img/fotografi 2/fotografi9.jpg",        
+      "src": "img/fotografi/fotografi9.jpg",        
       "tags": ["astratto", "colore", "composizione", "dettaglio", "arte"],  
       "description": "Descrizione dell'immagine"    },
 
       {      "id": 95,
-      "src": "img/fotografi 2/fotografi10.jpg",
+      "src": "img/fotografi/fotografi10.jpg",
       "tags": ["mare", "spiaggia", "acqua", "natura", "relax"],
       "description": "Descrizione dell'immagine"    },  
 
     {
       "id": 96,
-      "src": "img/fotografi 2/fotografi11.jpg",
+      "src": "img/fotografi/fotografi11.jpg",
       "tags": ["urbano", "notturno", "luci", "città", "movimento"],
       "description": "Descrizione dell'immagine"    },  
 
     {     
       "id": 97,
-      "src": "img/fotografi 2/fotografi12.jpg",
+      "src": "img/fotografi/fotografi12.jpg",
       "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 98,
-      "src": "img/fotografi 2/fotografi13.jpg",
+      "src": "img/fotografi/fotografi13.jpg",
       "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
       "description": "Descrizione dell'immagine"    },  
 
     {
       "id": 99,
-      "src": "img/fotografi 2/fotografi14.jpg",
+      "src": "img/fotografi/fotografi14.jpg",
       "tags": ["paesaggio", "inverno", "neve", "freddo", "silenzio"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 100,
-      "src": "img/fotografi 2/fotografi15.jpg",
+      "src": "img/fotografi/fotografi15.jpg",
       "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
       "description": "Descrizione dell'immagine"    },
 
       {      "id": 101, 
-      "src": "img/fotografi 2/fotografi16.jpg",     
+      "src": "img/fotografi/fotografi16.jpg",     
       "tags": ["natura", "fiori", "colori", "primavera", "bellezza"],
       "description": "Descrizione dell'immagine"    },    
     {
       "id": 102,
-      "src": "img/fotografi 2/fotografi17.jpg",       
+      "src": "img/fotografi/fotografi17.jpg",       
       "tags": ["urbano", "città", "strade", "movimento", "vita"],   
       "description": "Descrizione dell'immagine"    },
     {
       "id": 103,    
-      "src": "img/fotografi 2/fotografi18.jpg",
+      "src": "img/fotografi/fotografi18.jpg",
       "tags": ["ritratto", "emozione", "volto", " espressione", "intensità"],
       "description": "Descrizione dell'immagine"    },  
     {
       "id": 104,
-      "src": "img/fotografi 2/fotografi19.jpg",       
+      "src": "img/fotografi/fotografi19.jpg",       
       "tags": ["astratto", "colore", "composizione", "dettaglio", "arte"],    
-      "description": "Descrizione dell'immagine"    },
-
-      
-
-
-
-     
-      
-
-
-
-
-
-
-
-      
-
+      "description": "Descrizione dell'immagine"    }
   ]
 }
