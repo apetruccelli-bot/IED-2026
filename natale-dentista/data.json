@@ -2,56 +2,302 @@
   "items": [
     {
       "id": 1,
-      "src": "img/gray1.jpg",
-      "tags": ["natura", "paesaggio", "verde", "estate", "sole"],
+      "src": "img/radiografie/radiografie1.jpg",
+      "tags": ["radiografia intraorale", "impianto dentale"],
       "description": "Descrizione dell'immagine"
     },
     {
       "id": 2,
-      "src": "img/gray2.jpg",
-      "tags": ["architettura", "urbano", "moderno", "cemento", "geometria"],
+      "src": "img/radiografie/radiografie2.jpg",
+      "tags": ["laboratorio dentistico", "radiografia panoramica", "area di lavoro", "lightbox"],
       "description": "Descrizione dell'immagine"
     },
     {
       "id": 3,
-      "src": "img/gray3.jpg",
-      "tags": ["ritratto", "luce", "ombra", "volto", "espressione"],
+      "src": "img/radiografie/radiografie3.jpg",
+      "tags": ["serie di radiografie", "impianto dentale", "radiografia intraorale"],
       "description": "Descrizione dell'immagine"
         },
     {
       "id": 4,
-      "src": "img/gray4.jpg",
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"    },
+      "src": "img/radiografie/radiografie4.jpg",
+      "tags": ["serie di radiografie", "impianto dentale", "radiografia intraorale", "annotazioni"],
+      "description": "Descrizione dell'immagine"    
+    },
     {
       "id": 5,
-      "src": "img/gray5.jpg",
-      "tags": ["mare", "orizzonte", "acqua", "luce", "natura"],
+      "src": "img/radiografie/radiografie5.jpg",
+      "tags": ["radiografia intraorale", "impianto dentale"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 6,
-      "src": "img/gray1.jpg",
-      "tags": ["urbano", "notturno", "luci", "città", "movimento"],
-      "description": "Descrizione dell'immagine"    },
+      "src": "img/radiografie/radiografie6.jpg",
+      "tags": ["radiografia intraorale", "impianto dentale"],
+      "description": "Descrizione dell'immagine"   
+     },
     {
       "id": 7,
-      "src": "img/gray2.jpg",
-      "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
-      "description": "Descrizione dell'immagine"    },
+      "src": "img/radiografie/radiografie7.jpg",
+      "tags": ["radiografia panoramica", "impianto dentale"],
+      "description": "Descrizione dell'immagine"   
+     },
     {
       "id": 8,
-      "src": "img/gray3.jpg",
-      "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
-      "description": "Descrizione dell'immagine"    },
+      "src": "img/radiografie/radiografie8.jpg",
+      "tags": ["radiografia panoramica", "impianto dentale"],
+      "description": "Descrizione dell'immagine"    
+    },
     {
       "id": 9,
-      "src": "img/gray4.jpg",
-      "tags": ["paesaggio", "inverno", "neve", "freddo", "silenzio"],
-      "description": "Descrizione dell'immagine"    },
+      "src": "img/radiografie/radiografie9.jpg",
+      "tags": ["radiografia panoramica", "impianto dentale"],
+      "description": "Descrizione dell'immagine"    
+    },
     {
       "id": 10,
-      "src": "img/gray5.jpg",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"    }
+      "src": "img/radiografie/radiografie10.jpg",
+      "tags": ["radiografia panoramica", "impianto dentale"],
+      "description": "Descrizione dell'immagine"   
+     },
+    {
+      "id": 11,
+      "src": "img/radiografie/radiografie11.jpg",
+      "tags": ["radiografia intraorale", "impianto dentale"],
+      "description": "Descrizione dell'immagine"    
+    },
+    {
+      "id": 12,
+      "src": "img/radiografie/radiografie12.jpg",
+      "tags": ["radiografia intraorale", "impianto dentale"],
+      "description": "Descrizione dell'immagine"    
+    },
+    {
+      "id": 13,
+      "src": "img/radiografie/radiografie13.jpg",
+      "tags": ["radiografia panoramica", "impianto dentale"],
+      "description": "Descrizione dell'immagine"    
+    },
+    {
+      "id": 14,
+      "src": "img/radiografie/radiografie14.jpg",
+      "tags": ["radiografia panoramica", "impianto dentale"],
+      "description": "Descrizione dell'immagine"    
+    },
+    {
+      "id": 15,
+      "src": "img/radiografie/radiografie15.jpg",
+      "tags": ["radiografia panoramica", "impianto dentale"],
+      "description": "Descrizione dell'immagine"    
+    },
+    {
+      "id": 16,
+      "src": "img/radiografie/radiografie16.jpg",
+      "tags": ["radiografia intraorale", "impianto dentale"],
+      "description": "Descrizione dell'immagine"    
+    },
+    {
+      "id": 17,
+      "src": "img/radiografie/radiografie17.jpg",
+      "tags": ["radiografia laterale", "impianto dentale"],
+      "description": "Descrizione dell'immagine"    
+    },
+    {
+      "id": 18,
+      "src": "img/radiografie/radiografie18.jpg",
+      "tags": ["serie di radiografie", "impianto dentale", "radiografia intraorale"],
+      "description": "Descrizione dell'immagine"    
+    },
+    {
+      "id": 19,
+      "src": "img/radiografie/radiografie19.jpg",
+      "tags": ["radiografia intraorale", "impianto dentale", "serie di radiografie", "annotazioni"],
+      "description": "Descrizione dell'immagine"    
+    },
+    {
+      "id": 20,
+      "src": "img/radiografie/radiografie20.jpg",
+      "tags": ["radiografia intraorale", "impianto dentale", "lightbox"],
+      "description": "Descrizione dell'immagine"    
+     },
+      {
+        "id": 21,
+        "src": "img/radiografie/radiografie21.jpg",
+        "tags": ["radiografia laterale", "serie di radiografie", "annotazioni", "impianto dentale"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 22,
+        "src": "img/radiografie/radiografie22.jpg",
+        "tags": ["serie di radiografie", "radiografia intraorale", "impianto dentale"]
+        "description": "Descrizione dell'immagine"    
+      }, 
+      {
+        "id": 23,
+        "src": "img/radiografie/radiografie24.jpg",
+        "tags": ["serie di radiografie", "radiografia intraorale", "impianto dentale"],
+        "description": "Descrizione dell'immagine"    
+      },
+      {
+        "id": 24,
+        "src": "img/radiografie/radiografie25.jpg",
+        "tags": ["radiografia intraorale", "impianto dentale", "strumenti chirurgici"],
+        "description": "Descrizione dell'immagine"    
+      },
+      {
+        "id": 25,
+        "src": "img/radiografie/radiografie26.jpg",
+        "tags": ["serie di radiografie", "radiografia intraorale", "impianto dentale", "cartella clinica"],
+        "description": "Descrizione dell'immagine"    
+      },
+      {
+        "id": 26,
+        "src": "img/radiografie/radiografie27.jpg",
+        "tags": ["serie di radiografie", "radiografia panoramica", "impianto dentale"],
+        "description": "Descrizione dell'immagine"    
+      },
+      {
+        "id": 27,
+        "src": "img/radiografie/radiografie28.jpg",
+        "tags": ["radiografia panoramica", "impianto dentale", "annotazioni"],
+        "description": "Descrizione dell'immagine"    
+      },
+      {
+        "id": 28,
+        "src": "img/radiografie/radiografie29.jpg",
+        "tags": ["radiografia panoramica", "impianto dentale", "lightbox", "area di lavoro" ],
+        "description": "Descrizione dell'immagine"    
+      },
+      {
+        "id": 29,
+        "src": "img/strumenti/strumenti1.jpg",
+        "tags": ["annotazioni", "strumenti chirurgici", "flaconi" ],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 30,
+        "src": "img/strumenti/strumenti2.jpg",
+        "tags": ["scaffali", "protesi dentali", "flaconi"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 31,
+        "src": "img/strumenti/strumenti4.jpg",
+        "tags": ["flaconi", "protesi dentali", "area di lavoro"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 32,
+        "src": "img/strumenti/strumenti5.jpg",
+        "tags": ["area di lavoro", "strumenti chirurgici", "flaconi", "protesi dentali"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 33,
+        "src": "img/strumenti/strumenti6.jpg",
+        "tags": ["protesi dentali"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 34,
+        "src": "img/strumenti/strumenti7.jpg",
+        "tags": ["area di lavoro", "strumenti chirurgici", "flaconi"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 35,
+        "src": "img/strumenti/strumenti8.jpg",
+        "tags": ["laboratorio dentistico", "strumenti chirurgici", "area di lavoro"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 36,
+        "src": "img/strumenti/strumenti9.jpg",
+        "tags": ["area di lavoro", "strumenti chirurgici", "flaconi" ],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 37,
+        "src": "img/strumenti/strumenti10.jpg",
+        "tags": ["area di lavoro", "cartella clinica", "protesi dentali"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 38,
+        "src": "img/strumenti/strumenti11.jpg",
+        "tags": ["area di lavoro", "strumenti chirurgici", "flaconi"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 39,
+        "src": "img/strumenti/strumenti12.jpg",
+        "tags": ["area di lavoro", "protesi dentali"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 40,
+        "src": "img/strumenti/strumenti13.jpg",
+        "tags": ["protesi dentali"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 41,
+        "src": "img/strumenti/strumenti14.jpg",
+        "tags": ["protesi dentali"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 42,
+        "src": "img/strumenti/strumenti15.jpg",
+        "tags": ["area di lavoro", "strumenti chirurgici"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 43,
+        "src": "img/strumenti/strumenti16.jpg",
+        "tags": ["area di lavoro", "strumenti chirurgici", "flaconi"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 44,
+        "src": "img/laboratorio/laboratorio1.jpg",
+        "tags": ["laboratorio dentistico", "lightbox", "radiografia panoramica"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 45,
+        "src": "img/laboratorio/laboratorio2.jpg",
+        "tags": ["laboratorio dentistico"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 46,
+        "src": "img/laboratorio/laboratorio3.jpg",
+        "tags": ["laboratorio dentistico"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 47,
+        "src": "img/laboratorio/laboratorio4.jpg",
+        "tags": ["laboratorio dentistico", "scaffali"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 48,
+        "src": "img/laboratorio/laboratorio5.jpg",
+        "tags": ["laboratorio dentistico"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 49,
+        "src": "img/laboratorio/laboratorio6.jpg",
+        "tags": ["laboratorio dentistico", "lightbox", "radiografia panoramica"],
+        "description": "Descrizione dell'immagine"
+      },
+      {
+        "id": 50,
+        "src": "img/laboratorio/laboratorio7.jpg",
+        "tags": ["laboratorio dentistico"],
+        "description": "Descrizione dell'immagine"
+      },  
   ]
 }
