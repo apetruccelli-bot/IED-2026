@@ -448,7 +448,8 @@
       "id": 18,
       "src": "img/giornali/giornale (2).png",
       "category": "newspapers",
-      "tags": ["english", "flames", "explosion", "smoke", "text"],
+      "tags": ["flames", "explosion", "smoke", "text"],
+      "nationality": "english",
       "people": false,
       "description": "Descrizione dell'immagine"    },
 
@@ -456,7 +457,8 @@
       "id": 19,
       "src": "img/giornali/giornale (3).png",
       "category": "newspapers",
-      "tags": ["spanish", "smoke", "text"],
+      "tags": ["smoke", "text"],
+      "nationality": "spanish",
       "people": false,
       "description": "Descrizione dell'immagine"    },
 
