@@ -13,7 +13,7 @@
   --tag-active: #1a1a1a;
   --tag-active-text: #ffffff;
   --accent: #1a1a1a;
-  --radius: 0px;
+  --radius: 10px;
 }
 
 body {
