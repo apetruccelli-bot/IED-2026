@@ -1,0 +1,170 @@
+{
+  "items": [
+    {
+      "id": "1",
+      "src": "img/rock1.png",
+      "tags": ["parents", "wedding"],
+      "category": "parents",
+      "year": "1957",
+      "description": "parents getting married"
+    },
+    {
+      "id": 2,
+      "src": "img/rock2.png",
+      "tags": ["pregnancy", "sister"],
+      "category": "pregnancy",
+      "year": "1964",
+      "description": "mother pregnant"
+    },
+    {
+      "id": 3,
+      "src": "img/rock3.png",
+      "tags": ["hospital", "birth", "sister"],
+      "category": "birth",
+      "year": "1965",
+      "description": "Abby is born on august 26, 1965"
+    },
+    {
+      "id": 4,
+      "src": "img/rock4.png",
+      "tags": ["parents", "sister", "early childhood", "family"],
+      "category": "early childhood",
+      "year": "1966",
+      "description": "family out in the backyard"
+    },
+    {
+      "id": 5,
+      "src": "img/rock5.png",
+      "tags": ["abby", "parents", "family", "early childhood"],
+      "category": "early childhood",
+      "year": "1968",
+      "description": "Abby cooking with mom"
+    },
+    {
+      "id": 6,
+      "src": "img/rock6.png",
+      "tags": ["drawing", "early childhood"],
+      "year": "1967",
+      "description": "childhood drawing by Abby"    },
+    {
+      "id": 7,
+      "src": "img/rock7.png",
+      "tags": ["family","sister", "childhood"],
+      "year": "1975",
+      "description": "family at disnelyand"    },
+    {
+      "id": 8,
+      "src": "img/rock8.png",
+      "tags": ["first comunion", "dresses", "church", "family", "early childhood"],
+      "year": "1973",
+      "description": "Abby's first communion"    },
+    {
+      "id": 9,
+      "src": "img/rock9.png",
+      "tags": ["freinds", "late teens", "birthday"],
+      "year": "1983",
+      "description": "Abby's 18th birthday party"    },
+    {
+      "id": 10,
+      "src": "img/rock10.png",
+      "tags": ["birthday", "parents", "teens"],
+      "year": "1980",
+      "description": "Abby's 16th birthday party"    },
+    {
+      "id": 11,
+      "src": "img/rock11.png",
+      "tags": ["cobjects", "late teens"],
+      "year": "1985",
+      "description": "objects found in Abby's room"    },
+
+    {
+      "id": 12,
+      "src": "img/rock12.png",
+      "tags": ["drawing","early childhood"],
+      "year": "1967",
+      "description": "childhood drawing by Abby"    },
+
+    {
+      "id": 13,
+      "src": "img/rock13.png",
+      "tags": ["dresses","teens"],
+      "year": "1979",  
+      "description": "Abby's old dress" },
+
+    {
+      "id": 14,
+      "src": "img/rock14.png",
+      "tags": ["objects", "late teens"],
+      "year": "1984",
+      "description": "found in Abby's room" },
+
+   {
+      "id": 15,
+      "src": "img/rock15.png",
+      "tags": ["friends", "early 20s", "concerts"],
+      "year": "1986",
+      "description": "Abby wiht a friend at a concert" 
+     },
+     {
+        "id": 16,
+        "src": "img/rock16.png",
+        "tags": ["graduation", "late teens", "family"],
+        "year": "1983",
+        "description": "Abby's high school graduation" 
+       },
+       {
+          "id": 17,
+          "src": "img/rock17.png",
+          "tags": ["dresses", "early childhood", "sister"],
+          "year": "1968",
+          "description": "Abby's old dress" 
+        },
+        {
+          "id": 18,
+          "src": "img/rock18.png",
+          "tags": ["family", "childhood", "guitar"],
+          "year": "1976",
+          "description": "Abby performing for her parents"  
+        },
+        {
+          "id": 19,
+          "src": "img/rock19.png",
+          "tags": ["family", "childhood", "guitar"],
+          "year": "1975",
+          "description": "Abby performing at a school play"  
+        },
+        {
+          "id": 20,
+          "src": "img/rock20.png",
+          "tags": ["objects", "early 20s", "objects"],
+          "year": "1986",
+          "description": "Abby's magazine collection"  
+        },
+        {
+          "id": 21,
+          "src": "img/rock21.png",
+          "tags": ["objects", "early teens" ],
+          "year": "1986",
+          "description": "Abby's record player"  
+        },    
+  {                "id": 22,
+                    "src": "img/rock22.png",
+                    "tags": ["objects", "late teens" ],
+                    "year": "1986",
+                    "description": "Abby's nightstand"  },    
+                    
+  {                   "id": 23,
+                      "src": "img/rock23.png",
+                      "tags": ["portraits", "early teens" ],
+                      "year": "1979",
+                      "description": "Abby smiling at the camera"  
+  },  
+  {                   "id": 24,
+                      "src": "img/rock24.png",
+                      "tags": ["dresses", "early childhood" ],
+                      "year": "1983",
+                      "description": "Abby's old dress"
+  }               
+    
+  ]
+}
