@@ -251,6 +251,15 @@
       "tags": ["rocce", "sabbia", "acqua torbida", "sedimenti"],
       "category": "fotografia sottomarina",
       "description": "Fondale con coralli in primo piano e una creatura marina sfocata sullo sfondo, immersa nella nebbia."
+    },
+    {
+      "id": 37,
+      "src": "img/spettrogramma/spettrogramma1.jpg",
+      "tags-documenti": ["onde sonore", "movimenti tellurici", "topografia del fondale", "analisi acustica"],
+      "category": "documento",
+      "subcategory": "spettrogramma",
+      "area": "san francisco bay",
+      "description": "Spettrogramma che mostra l'analisi acustica del fondale marino."
     }
   ]
 }
