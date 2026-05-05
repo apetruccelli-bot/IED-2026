@@ -3,7 +3,9 @@
     {
       "id": 1,
       "src": "img/fumo/fumo1.png",
-      "tags": ["giorno", "lontano", "nebbia", "fumare"],
+      "category": "fotografie",
+      "year": 1960,
+      "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
       "description": "Descrizione dell'immagine"
     },
     {
@@ -26,7 +28,10 @@
     {
       "id": 5,
       "src": "img/pacchetti/pack1.png",
-      "tags": ["mare", "orizzonte", "acqua", "luce", "natura"],
+      "category": "pacchetti",
+      "year": 1960,
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
       "description": "Descrizione dell'immagine"    },
     {
       "id": 6,
