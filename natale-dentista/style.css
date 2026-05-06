@@ -114,6 +114,12 @@ header {
   color: var(--tag-active-text);
 }
 
+/* dim tags that are not part of the selected macro */
+.tag-btn.dimmed {
+  opacity: 0.6;
+  filter: grayscale(10%);
+}
+
 .tag-btn {
   padding: 4px 10px;
   background: var(--tag-bg);

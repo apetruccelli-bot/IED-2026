@@ -248,7 +248,7 @@
   ]
   ,
   "macroCategories": {
-    "strumentazione da lavoro": [
+    "strumenti": [
       "protesi dentale",
       "cartella clinica",
       "strumenti chirurgici",
@@ -263,7 +263,7 @@
       "serie di radiografie",
       "lightbox"
     ],
-    "studio dentistico": [
+    "studio": [
       "scaffali",
       "piano di lavoro"
     ]
