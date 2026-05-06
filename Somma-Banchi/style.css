@@ -1,21 +1,16 @@
 @font-face {
-  font-family: 'Diatype-Mono';
-  src: url('font/ABCDiatypeSemi-MonoCondensed-Regular-Trial.woff2') format('woff2');
+  font-family: 'Prophet Medium';
+  src: url('Somma-Banchi/font/ABCProphet-Medium-Trial.woff2') format('woff2');
   font-style: normal;
 }
 @font-face {
-  font-family: 'Diatype';
-  src: url('font/ABCDiatype-Regular-Trial.woff2') format('woff2');
+  font-family: 'Prophet Regular Italic';
+  src: url('Somma-Banchi/font/ABCProphet-RegularItalic-Trial.woff2') format('woff2');
   font-style: normal;
 }
 @font-face {
-  font-family: 'Diatype-Mono';
-  src: url('font/ABCDiatypeSemi-MonoCondensed-RegularItalic-Trial.woff2') format('woff2');
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Diatype';
-  src: url('font/ABCDiatype-RegularItalic-Trial.woff2') format('woff2');
+  font-family: 'Prophet Regular';
+  src: url('Somma-Banchi/font/ABCProphet-Regular-Trial.woff2') format('woff2');
   font-style: italic;
 }
 
@@ -25,7 +20,7 @@
 }
 
 .font-myTitle {
-  font-family: 'Diatype-Mono';
+  font-family: 'Prophet Medium';
   font-size: 25px;
   text-transform: uppercase;
   line-height: 100%;
