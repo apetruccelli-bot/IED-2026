@@ -1,21 +1,21 @@
 @font-face {
   font-family: 'Prophet Medium';
-  src: url('Somma-Banchi/font/ABCProphet-Medium-Trial.woff2') format('woff2');
+  src: url('font/ABCProphet-Medium-Trial.woff2') format('woff2');
   font-style: normal;
 }
 @font-face {
   font-family: 'Prophet Regular Italic';
-  src: url('Somma-Banchi/font/ABCProphet-RegularItalic-Trial.woff2') format('woff2');
+  src: url('font/ABCProphet-RegularItalic-Trial.woff2') format('woff2');
   font-style: normal;
 }
 @font-face {
   font-family: 'Prophet Regular';
-  src: url('Somma-Banchi/font/ABCProphet-Regular-Trial.woff2') format('woff2');
+  src: url('font/ABCProphet-Regular-Trial.woff2') format('woff2');
   font-style: italic;
 }
 
 *:not(.font-myTitle) {
-  font-family: 'Diatype', sans-serif  ;
+  font-family: 'Prophet Medium', sans-serif  ;
   font-size: 12px;
 }
 
