@@ -5,10 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Archivio di Camilla.</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-myBlack: #1E1E1E;
+        --color-myWhite: #FCFCFC;
+        --spacing-10px: 10px;
+      }
+    </style>
   </head>
   <body>
     <header>
-      <div class="header-inner">
+      <div class="header-inner bg-myBlack">
         <div class="header-row">
           <div class="search-wrap">
             <input
@@ -24,7 +32,7 @@
       </div>
     </header>
 
-    <p class="results-info" id="results-info"></p>
+    <p class="results-info font-myTitle" id="results-info"></p>
 
     <main class="grid" id="grid"></main>
 

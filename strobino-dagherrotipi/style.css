@@ -1,3 +1,33 @@
+@font-face {
+  font-family: 'Favorit';
+  src: url('font/ABCFavorit-Regular-Trial.woff2') format('woff2');
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Favorit';
+  src: url('font/ABCFavorit-RegularItalic-Trial.woff2') format('woff2');
+  font-style: italic;
+}
+
+
+*:not(.font-myTitle) {
+  font-family: 'Favorit', sans-serif  ;
+  font-size: 12px;
+}
+
+.font-myTitle {
+  font-family: 'Favorit';
+  font-size: 100px!important;
+  text-transform: uppercase;
+  line-height: 100%;
+  /* font-style: italic; */
+}
+
+
+
+
+
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -111,7 +141,7 @@ header {
   color: var(--tag-active-text);
   border-color: var(--tag-active);
 }
-
+ 
 button {
   border: none;
   background: none;
@@ -134,6 +164,10 @@ button {
   grid-template-columns: repeat(auto-fill, minmax(32%, 1fr));
   gap: 20px;
 }
+
+/* .header-inner {
+  background-color: red;
+} */
 
 /* ── CARD ── */
 .card {
