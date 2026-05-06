@@ -5,9 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Archivio</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-myBlack: #1E1E1E;
+        --color-myWhite: #FCFCFC;
+        --spacing-10px: 10px;
+      }
+    </style>
   </head>
   <body>
-    <header>
+
+    <div class="w-screen h-screen grid grid-cols-8 specialGrid">
+      <div class="col-start-1 col-end-3 p-10px bg-myBlack flex flex-col justify-between
+      text-myWhite">
+        <div class="flex flex-col">
+          <a href="/" class="font-myTitle">Città<br>interrotte</a>
+          <p class="">di Fondazione Scorza</p>
+        </div>
+        <div class="flex flex-col">
+          <a href="/" class="font-myTitle">Archivio</a>
+          <a href="/" class="font-myTitle">Storia</a>
+          <a href="/" class="font-myTitle">Statistiche</a>
+        </div>
+      </div>
+      <div class="col-start-3 col-end-9 bg-myWhite h-screen overflow-y-scroll">
+        <div class="sticky top-0 col-span-full p-10px grid grid-cols-6 h-40 bg-red-500"></div>
+        <div class="grid grid-cols-6 gap-10px p-10px">
+          <div class="col-span-3 flex flex-col">
+            <img src="..." alt="" class="w-full h-auto bg-red-500">
+            <p class="mt-10px font-myTitle">Titolo, autore, anno</p>
+            <p class="mt-10px leading-1">tag, tag, tag</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <header>
       <div class="header-inner">
         <div class="header-row">
           <div class="search-wrap">
@@ -42,6 +76,6 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js"></script> -->
   </body>
 </html>
