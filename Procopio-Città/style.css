@@ -332,7 +332,7 @@ button {
 
 .lb-info {
   color: #FCFCFC;
-  font-family: "Diatype", sans-serif;
+  font-family: "Diatype";
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -347,7 +347,7 @@ button {
   right: -5%;
   display: inline-block;
   color: var(--myWhite, #FCFCFC);
-  font-family: "Diatype", sans-serif;
+  font-family: "Diatype";
   font-size: 12px;
   letter-spacing: 0.04em;
   line-height: 1.4;
@@ -358,7 +358,7 @@ button {
   display: block;
   margin-top: 12px;
   color: var(--myWhite, #FCFCFC);
-  font-family: "Diatype", sans-serif;
+  font-family: "Diatype";
   font-size: 12px;
   letter-spacing: 0.04em;
   line-height: 1.4;
@@ -369,8 +369,17 @@ body.lightbox-open .sidebar-links {
   display: none;
 }
 
+#archive-rows a,
+#archive-rows span.p {
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+  color: var(--color-myBlack, #1E1E1E);
+}
 
-
+#archive-rows a:hover,
+#archive-rows span.p:hover {
+  opacity: 1;
+}
 
 
 
