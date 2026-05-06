@@ -13,12 +13,118 @@
         --spacing-10px: 10px;
       }
     </style>
+    <style>
+      .lightbox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .lightbox.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .lb-backdrop {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #1E1E1E;
+        opacity: 1;
+      }
+
+      .lb-content {
+        position: relative;
+        z-index: 1001;
+        background-color: #1E1E1E;
+        padding: 40px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        max-width: 80vw;
+        max-height: 90vh;
+        overflow: hidden;
+      }
+
+      .lb-img {
+        max-width: 100%;
+        max-height: 70vh;
+        object-fit: contain;
+        margin-bottom: 20px;
+      }
+
+      .lb-close, .lb-prev, .lb-next {
+        position: absolute;
+        z-index: 1002;
+        background: none;
+        border: none;
+        color: #FCFCFC;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 10px;
+      }
+
+      .lb-close {
+        top: 20px;
+        right: 20px;
+      }
+
+      .lb-prev {
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .lb-next {
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .lb-info {
+        color: #FCFCFC;
+        font-family: inherit;
+        text-align: center;
+      }
+
+      .lb-id {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .lb-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      body.lightbox-open {
+        overflow: hidden;
+      }
+
+      body.lightbox-open::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
   </head>
   <body>
 
     <div class="w-screen h-screen grid grid-cols-8 specialGrid">
-      <div class="col-start-1 col-end-3 p-10px bg-myBlack flex flex-col justify-between
-      text-myWhite">
+      <div class="col-start-1 col-end-3 p-10px bg-myBlack flex flex-col justify-between text-myWhite z-[1100]">
         <div class="flex flex-col">
           <a href="/" class="font-myTitle">Città<br>interrotte</a>
           <p class="">di Fondazione Scorza</p>
@@ -30,14 +136,26 @@
         </div>
       </div>
       <div class="col-start-3 col-end-9 bg-myWhite h-screen overflow-y-scroll">
-        <div class="sticky top-0 col-span-full p-10px grid grid-cols-6 h-40 bg-red-500"></div>
-        <div class="grid grid-cols-6 gap-10px p-10px">
-          <div class="col-span-3 flex flex-col">
-            <img src="..." alt="" class="w-full h-auto bg-red-500">
-            <p class="mt-10px font-myTitle">Titolo, autore, anno</p>
-            <p class="mt-10px leading-1">tag, tag, tag</p>
+        <div class="sticky top-0 z-20 col-span-full p-10px bg-myWhite ">
+          <div class="grid grid-cols-6">
+            <div class="p text-justify">Anno</div>
+            <div class="p text-justify">Autore</div>
+            <div class="p text-justify">Regione</div>
+            <div class="p text-justify">Abitanti</div>
+            <div class="p text-justify">Documento</div>
+            <form action="/" class="grid-cols-6" onsubmit="return false;">
+              <label for="search" class="sr-only">Ricerca</label>
+              <input
+                id="search"
+                type="search"
+                placeholder="Ricerca"
+                class="w-full border-b border-myBlack bg-transparent text-myBlack outline-none placeholder:text-myBlack"
+              />
+            </form>
           </div>
+            <div id="archive-rows" class="-mt-1 bg-myWhite"></div>
         </div>
+          <div id="archive-gallery" class="grid grid-cols-6 gap-[50px] mt-20px p-10px"></div>
       </div>
     </div>
 
@@ -62,6 +180,8 @@
 
     <main class="grid" id="grid"></main>
 
+    <script src="script.js"></script> -->
+
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
       <button class="lb-close" id="lb-close">✕</button>
@@ -76,6 +196,201 @@
       </div>
     </div>
 
-    <script src="script.js"></script> -->
+    <script>
+      const archiveRows = [
+        { anno: "1964", autore: "Scorza", regione: "Calabria", abitanti: "Meno di 10", documento: "Fotografia" },
+        { anno: "1965", autore: "Varani", regione: "Sicilia", abitanti: "Tra 10 e 100", documento: "Note di campo" },
+        { anno: "1966", autore: "Fiore", regione: "Puglia", abitanti: "Tra 100 e 1000", documento: "" },
+        { anno: "1967", autore: "Maffei", regione: "Campania", abitanti: "Piu di 1000", documento: "" },
+        { anno: "1968", autore: "Ferri", regione: "Molise", abitanti: "", documento: "" },
+      ];
+
+      const rowsHost = document.getElementById("archive-rows");
+      const galleryHost = document.getElementById("archive-gallery");
+      const searchInput = document.getElementById("search");
+      const lightbox = document.getElementById("lightbox");
+      const lbImg = document.getElementById("lb-img");
+      const lbId = document.getElementById("lb-id");
+      const lbTagsEl = document.getElementById("lb-tags");
+      const lbClose = document.getElementById("lb-close");
+      const lbPrev = document.getElementById("lb-prev");
+      const lbNext = document.getElementById("lb-next");
+      const lbBackdrop = document.getElementById("lb-backdrop");
+      
+      let enrichedRows = [];
+      let allItems = [];
+      let filteredGalleryItems = [];
+      let lbIndex = -1;
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      }
+
+      function normalize(value) {
+        return String(value)
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase();
+      }
+
+      function findBestImage(row, items) {
+        const targetYear = Number(row.anno);
+        const surname = normalize(row.autore);
+        return (
+          items.find((item) => item.year === targetYear && normalize(item.description).includes(surname)) ||
+          items.find((item) => item.year === targetYear) ||
+          null
+        );
+      }
+
+      async function hydrateRowsWithImages() {
+        const response = await fetch("data.json");
+        const data = await response.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+        allItems = items;
+
+        enrichedRows = archiveRows.map((row) => {
+          const match = findBestImage(row, items);
+          return {
+            ...row,
+            imageSrc: match?.src || "",
+            imageDescription: match?.description || "Immagine non disponibile",
+          };
+        });
+      }
+
+      function rowTemplate(row) {
+        const cells = [row.anno, row.autore, row.regione, row.abitanti, row.documento];
+        const href = row.imageSrc || "#";
+        const ricercaCell = `<span class="p text-justify block"></span>`;
+
+        return `
+          <div class="grid grid-cols-6 items-start">
+            ${cells
+              .map((cell) => `<a href="${escapeHtml(href)}" target="_blank" class="p text-justify block">${escapeHtml(cell || "")}</a>`)
+              .join("")}
+            ${ricercaCell}
+          </div>
+        `;
+      }
+
+      function galleryTemplate(row, index) {
+        if (!row.src) return "";
+        return `
+          <div data-gallery-index="${index}" class="col-span-3 flex flex-col cursor-pointer hover:opacity-80 transition-opacity">
+            <img src="${escapeHtml(row.src)}" alt="${escapeHtml(row.description || "Immagine archivio")}" class="w-full h-auto" loading="lazy">
+            <p class="mt-10px font-myTitle">${escapeHtml(row.description || "Senza descrizione")}</p>
+            <p class="mt-10px leading-1">${escapeHtml(row.tags?.join(", ") || "")}</p>
+          </div>
+        `;
+      }
+
+      function filterGalleryItems(term = "") {
+        const query = term.trim().toLowerCase();
+        if (!query) return allItems;
+        return allItems.filter((item) =>
+          [
+            item.description,
+            item.category,
+            item.year,
+            ...(Array.isArray(item.tags) ? item.tags : []),
+          ].some((value) => String(value || "").toLowerCase().includes(query))
+        );
+      }
+
+      function filterRows(term = "") {
+        const query = term.trim().toLowerCase();
+        if (!query) return enrichedRows;
+        return enrichedRows.filter((row) =>
+          Object.values(row).some((value) => String(value).toLowerCase().includes(query))
+        );
+      }
+
+      function render(term = "") {
+        const filtered = filterRows(term);
+        rowsHost.innerHTML = filtered.map(rowTemplate).join("");
+
+        filteredGalleryItems = filterGalleryItems(term);
+        const galleryMarkup = filteredGalleryItems.map((item, idx) => galleryTemplate(item, idx)).join("");
+        galleryHost.innerHTML = galleryMarkup || '<p class="col-span-6 p opacity-50">Nessuna immagine trovata.</p>';
+        
+        // Aggiungi event listener alle immagini della gallery
+        document.querySelectorAll('[data-gallery-index]').forEach(el => {
+          el.addEventListener('click', () => {
+            const index = parseInt(el.dataset.galleryIndex);
+            openLightbox(index);
+          });
+        });
+      }
+
+      function openLightbox(index) {
+        lbIndex = index;
+        const item = filteredGalleryItems[lbIndex];
+        
+        if (!item) return;
+
+        lbImg.src = item.src;
+        lbImg.alt = item.description || "Immagine archivio";
+        lbId.textContent = item.description || "Senza descrizione";
+
+        lbTagsEl.innerHTML = "";
+        if (Array.isArray(item.tags)) {
+          item.tags.forEach((tag) => {
+            const t = document.createElement("span");
+            t.className = "p text-sm bg-myBlack text-myWhite px-2 py-1 rounded";
+            t.textContent = tag;
+            lbTagsEl.appendChild(t);
+          });
+        }
+
+        lightbox.classList.add("open");
+        lightbox.setAttribute("aria-hidden", "false");
+        document.body.classList.add("lightbox-open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove("open");
+        lightbox.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("lightbox-open");
+        document.body.style.overflow = "";
+        lbImg.src = "";
+      }
+
+      function navigateLightbox(dir) {
+        let next = lbIndex + dir;
+        if (next >= filteredGalleryItems.length) next = 0;
+        if (next < 0) next = filteredGalleryItems.length - 1;
+        openLightbox(next);
+      }
+
+      lbClose.addEventListener("click", closeLightbox);
+      lbBackdrop.addEventListener("click", closeLightbox);
+      lbPrev.addEventListener("click", () => navigateLightbox(-1));
+      lbNext.addEventListener("click", () => navigateLightbox(+1));
+
+      document.addEventListener("keydown", (e) => {
+        if (!lightbox.classList.contains("open")) return;
+        if (e.key === "ArrowLeft") navigateLightbox(-1);
+        if (e.key === "ArrowRight") navigateLightbox(+1);
+        if (e.key === "Escape") closeLightbox();
+      });
+
+      searchInput.addEventListener("input", (event) => {
+        render(event.target.value);
+      });
+
+      hydrateRowsWithImages()
+        .then(() => render())
+        .catch(() => {
+          enrichedRows = [...archiveRows];
+          render();
+        });
+    </script>
   </body>
 </html>
