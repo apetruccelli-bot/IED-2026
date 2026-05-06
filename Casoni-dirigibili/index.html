@@ -3,11 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Archivio</title>
+    <title>AAA — Adler’s Aircraft Archive</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-myBlack: #1E1E1E;
+        --color-myWhite: #FCFCFC;
+        --spacing-10px: 10px;
+      }
+    </style>
   </head>
   <body>
-    <header>
+
+    <header class="opacity-0 h-0 overflow-hidden hidden">
       <div class="header-inner">
         <div class="header-row">
           <div class="search-wrap">
@@ -23,10 +32,8 @@
         <div class="tags-bar" id="tags-bar"></div>
       </div>
     </header>
-
-    <p class="results-info" id="results-info"></p>
-
-    <main class="grid" id="grid"></main>
+    <p class="results-info opacity-0 h-0 overflow-hidden hidden" id="results-info"></p>
+    <main class="grid opacity-0 h-0 overflow-hidden hidden" id="grid"></main>
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
@@ -42,6 +49,30 @@
       </div>
     </div>
 
+    <div class="w-screen h-screen grid two-rows-grid">
+      <div class="p-10px bg-myBlack flex flex-row justify-between text-myWhite z-[1100]">
+        <div class="flex flex-col">
+          <a href="/" class="font-myTitle">Adler’s Aircraft Archive</a>
+          <p class="">lorem ipsum dolor sit amet.</p>
+        </div>
+        <div class="flex flex-col">
+          <div class="">Filtro 1</div>
+          <div class="">Filtro 2</div>
+          <div class="">Filtro 3</div>
+        </div>
+      </div>
+      <div class="bg-myWhite h-screen overflow-y-scroll">
+        <div class="sticky top-0 z-20 col-span-full p-10px bg-myWhite ">
+          <div class="grid grid-cols-6">
+          </div>
+            <div id="archive-rows" class="-mt-1 bg-myWhite"></div>
+        </div>
+          <div id="archive-gallery" 
+          class="grid-results grid grid-cols-6 gap-[50px] mt-20px p-10px"></div>
+      </div>
+    </div>
+
     <script src="script.js"></script>
+
   </body>
 </html>

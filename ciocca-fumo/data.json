@@ -2,50 +2,55 @@
   "items": [
     {
       "id": 1,
-      "src": "img/gray1.jpg",
-      "tags": ["natura", "paesaggio", "verde", "estate", "sole"],
+      "src": "img/fumo/fumo1.png",
+      "category": "fotografie",
+      "year": 1960,
+      "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
       "description": "Descrizione dell'immagine"
     },
     {
       "id": 2,
-      "src": "img/gray2.jpg",
-      "tags": ["architettura", "urbano", "moderno", "cemento", "geometria"],
+      "src": "img/fumo/fumo2.png",
+      "tags": ["giorno", "vicino", "fumare"],
       "description": "Descrizione dell'immagine"
     },
     {
       "id": 3,
-      "src": "img/gray3.jpg",
+      "src": "img/fumo/fumo3.png",
       "tags": ["ritratto", "luce", "ombra", "volto", "espressione"],
       "description": "Descrizione dell'immagine"
         },
     {
       "id": 4,
-      "src": "img/gray4.jpg",
+      "src": "img/fumo/fumo.anziano6.png",
       "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 5,
-      "src": "img/gray5.jpg",
-      "tags": ["mare", "orizzonte", "acqua", "luce", "natura"],
+      "src": "img/pacchetti/pack1.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
       "description": "Descrizione dell'immagine"    },
     {
       "id": 6,
-      "src": "img/gray1.jpg",
+      "src": "img/pacchetti/pack2.png",
       "tags": ["urbano", "notturno", "luci", "città", "movimento"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 7,
-      "src": "img/gray2.jpg",
+      "src": "img/pacchetti/pack3.png",
       "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 8,
-      "src": "img/gray3.jpg",
+      "src": "img/pacchetti/pack4.png",
       "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 9,
-      "src": "img/gray4.jpg",
+      "src": "img/pacchetti/pack5.png",
       "tags": ["paesaggio", "inverno", "neve", "freddo", "silenzio"],
       "description": "Descrizione dell'immagine"    },
     {

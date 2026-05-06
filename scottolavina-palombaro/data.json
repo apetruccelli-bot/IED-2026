@@ -2,56 +2,264 @@
   "items": [
     {
       "id": 1,
-      "src": "img/gray1.jpg",
-      "tags": ["natura", "paesaggio", "verde", "estate", "sole"],
-      "description": "Descrizione dell'immagine"
+      "src": "img/palombari/palombaro2.jpg",
+      "tags": ["tuta da palombaro", "casco", "immersione"],
+      "category": "ritratto",
+      "description": "Un palombaro in tuta pesante e casco metallico cammina sul fondale marino. Intorno si vedono sedimenti e bolle d’aria che risalgono verso la superficie, creando un’atmosfera sospesa e silenziosa."
     },
     {
       "id": 2,
-      "src": "img/gray2.jpg",
-      "tags": ["architettura", "urbano", "moderno", "cemento", "geometria"],
-      "description": "Descrizione dell'immagine"
+      "src": "img/palombari/palombaro3.jpg",
+      "tags": ["casco", "nave", "equipaggio", "imbracatura", "gruppo"],
+      "category": "ritratto",
+      "description": "Due palombari in equipaggiamento completo si trovano sul ponte di una nave, affiancati da membri dell’equipaggio. La scena documenta un momento operativo o preparatorio prima o dopo un’immersione."
     },
     {
       "id": 3,
-      "src": "img/gray3.jpg",
-      "tags": ["ritratto", "luce", "ombra", "volto", "espressione"],
-      "description": "Descrizione dell'immagine"
-        },
+      "src": "img/palombari/palombaro4.jpg",
+      "tags": ["ritratto", "immersione"],
+      "category": "ritratti",
+      "description": "Un palombaro sott’acqua tiene tra le mani il tubo dell’aria collegato alla superficie. Il fondale è visibile sotto di lui, mentre bolle e particelle in sospensione riempiono l’acqua."
+    },
     {
       "id": 4,
-      "src": "img/gray4.jpg",
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"    },
+      "src": "img/palombari/palombaro5.jpg",
+      "tags": ["primo piano", "attrezzatura", "casco", "fotografia documentaria", "ritratto"],
+      "category": "ritratti",
+      "description": "Primo piano di un casco da palombaro con tubi e raccordi visibili. Le mani guantate dell’operatore interagiscono con l’attrezzatura, evidenziando i dettagli tecnici del dispositivo."
+    },
     {
       "id": 5,
-      "src": "img/gray5.jpg",
-      "tags": ["mare", "orizzonte", "acqua", "luce", "natura"],
-      "description": "Descrizione dell'immagine"    },
+      "src": "img/palombari/palombaro6.jpg",
+      "tags": ["azione immersione", "equipaggio", "tuta da palombaro", "casco", "mare","nave"],
+      "category": "fotografia documentaria",
+      "description": "Un palombaro seduto sul bordo di una barca viene assistito da un uomo in abiti da lavoro. La scena mostra un momento di supporto e verifica dell’equipaggiamento prima o dopo l’immersione."
+    },
     {
       "id": 6,
-      "src": "img/gray1.jpg",
-      "tags": ["urbano", "notturno", "luci", "città", "movimento"],
-      "description": "Descrizione dell'immagine"    },
+      "src": "img/palombari/palombaro7.jpg",
+      "tags": ["ponte", "fotografia documentaria", "attrezzatura", "superficie", "nave"],
+      "category": "fotografia documentaria",
+      "description": "Un palombaro sale una scala metallica per uscire dall’acqua e tornare sul ponte della nave. Tiene in mano una parte dell’attrezzatura mentre il mare si estende sullo sfondo."
+    },
     {
       "id": 7,
-      "src": "img/gray2.jpg",
-      "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
-      "description": "Descrizione dell'immagine"    },
+      "src": "img/palombari/palombaro8.jpg",
+      "tags": ["fondale marino", "immersione", "attrezzatura", "esplorazione"],
+      "category": "fotografia documentaria",
+      "description": "Un palombaro si muove sott’acqua con una bombola sulle spalle e un cavo di sicurezza collegato. Il corpo è inclinato in avanti mentre avanza vicino al fondale."
+    },
     {
       "id": 8,
-      "src": "img/gray3.jpg",
-      "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
-      "description": "Descrizione dell'immagine"    },
+      "src": "img/palombari/palombaro9.jpg",
+      "tags": ["reperto", "attrezzatura", "fotografia documentaria", "fondale marino", "acqua torbida", "immersione", "esplorazione"],
+      "category": "fotografia documentaria",
+      "description": "Un palombaro esplora una grande struttura sommersa, probabilmente parte di un relitto o di un macchinario. L’oggetto è coperto di incrostazioni marine, segno di lunga permanenza sott’acqua."
+    },
     {
       "id": 9,
-      "src": "img/gray4.jpg",
-      "tags": ["paesaggio", "inverno", "neve", "freddo", "silenzio"],
-      "description": "Descrizione dell'immagine"    },
+      "src": "img/palombari/palombaro10.jpg",
+      "tags": ["nave", "ponte", "equipaggio", "attrezzatura", "gruppo"],
+      "category": "fotografia documentaria",
+      "description": "Un gruppo di palombari in tuta e casco siede sul ponte di una nave. Sono disposti in fila, mostrando uniformità nell’equipaggiamento e suggerendo un’unità operativa pronta all’azione."
+    },
     {
       "id": 10,
-      "src": "img/gray5.jpg",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"    }
+      "src": "img/palombari/palombaro11.jpg",
+      "tags": ["immersione", "fondale marino", "esplorazione", "acqua torbida", "casco", "attrezzatura"],
+      "category": "fotografia documentaria",
+      "description": "Un palombaro in tuta pesante esplora il fondale marino utilizzando una torcia subacquea. Il fascio di luce illumina l’acqua torbida mentre bolle d’aria risalgono verso la superficie."
+    },
+    {
+      "id": 11,
+      "src": "img/palombari/palombaro12.jpg",
+      "tags": ["nave", "attrezzatura", "fotografia documentaria", "superficie"],
+      "category": "fotografia documentaria",
+      "description": "Un palombaro emerge dall’acqua accanto a una nave e si aggrappa a una scala metallica per risalire a bordo, tenendo parte dell’attrezzatura nella mano."
+    },
+    {
+      "id": 12,
+      "src": "img/palombari/palombaro13.jpg",
+      "tags": ["equipaggio", "attrezzatura", "nave", "superficie", "mare"],
+      "category": "fotografia documentaria",
+      "description": "Un palombaro seduto sul bordo della nave viene assistito da un operatore che controlla o regola l’equipaggiamento, con il mare sullo sfondo."
+    },
+    {
+      "id": 13,
+      "src": "img/palombari/palombaro14.jpg",
+      "tags": ["nave", "attrezzatura", "superficie", "ponte"],
+      "category": "fotografia documentaria",
+      "description": "Vista dall’alto di un palombaro sul ponte mentre maneggia un elemento dell’equipaggiamento, circondato da tubi e strutture metalliche della nave."
+    },
+    {
+      "id": 14,
+      "src": "img/palombari/palombaro15.jpg",
+      "tags": ["immersione", "attrezzatura", "fondale marino", "esplorazione"],
+      "category": "ritratto",
+      "description": "Un palombaro cammina lentamente sul fondale marino vicino a formazioni rocciose o coralline, con bolle d’aria che emergono dal casco."
+    },
+    {
+      "id": 15,
+      "src": "img/palombari/palombaro16.jpg",
+      "tags": ["immersione", "attrezzatura", "fondale marino", "casco", "esplorazione"],
+      "category": "fotografia documentaria",
+      "description": "Un palombaro avanza sul fondale tra formazioni rocciose, con un cavo collegato alla superficie che segue i suoi movimenti."
+    },
+    {
+      "id": 16,
+      "src": "img/palombari/palombaro17.jpg",
+      "tags": ["attrezzatura", "nave", "ponte"],
+      "category": "fotografia documentaria",
+      "description": "Un palombaro sul ponte della nave tiene un tubo dell’aria collegato all’equipaggiamento, in una fase operativa prima dell’immersione."
+    },
+    {
+      "id": 17,
+      "src": "img/palombari/palombaro18.jpg",
+      "tags": ["attrezzatura", "nave", "equipaggio", "fotografia documentaria", "ponte", "gruppo"],
+      "category": "fotografia documentaria",
+      "description": "Tre palombari in tuta e casco si trovano sul ponte della nave."
+    },
+    {
+      "id": 18,
+      "src": "img/palombari/palombaro19.jpg",
+      "tags": ["attrezzatura", "nave", "superficie", "ponte", "mare"],
+      "category": "fotografia documentaria",
+      "description": "Un palombaro inginocchiato sul ponte controlla o prepara l’attrezzatura accanto a un dispositivo metallico, probabilmente parte del sistema di immersione."
+    },
+    {
+      "id": 19,
+      "src": "img/palombari/palombaro20.jpg",
+      "tags": ["immersione", "attrezzatura", "fondale marino", "reperto", "esplorazione"],
+      "category": "ritratto",
+      "description": "Un palombaro esamina un reperto sul fondale, circondato da sedimenti e detriti marini."
+    },
+    {
+      "id": 20,
+      "src": "img/palombari/palombaro21.jpg",
+      "tags": ["immersione", "attrezzatura", "fondale marino", "casco", "tuta da palombaro", "esplorazione"],
+      "category": "fotografia documentaria",
+      "description": "Un palombaro si muove sul fondale mentre manipola un tubo o strumento, impegnato in un’attività tecnica subacquea."
+    },
+    {
+      "id": 21,
+      "src": "img/palombari/palombaro22.jpg",
+      "tags": ["immersione", "attrezzatura", "fondale marino", "casco", "tuta da palombaro", "esplorazione"],
+      "category": "fotografia documentaria",
+      "description": "Un palombaro esamina una creatura sul fondale marino"
+    },
+    {
+      "id": 22,
+      "src": "img/fondali/fondali1.jpg",
+      "tags": ["rocce","corallo","sabbia","acqua torbida"],
+      "category": "fotografia sottomarina",
+      "description": "Un canyon sottomarino stretto con pareti rocciose scure. Il fondale sabbioso è punteggiato da piccoli coralli e massi, mentre una luce diffusa filtra dall’alto creando un forte contrasto."
+    },
+    {
+      "id": 23,
+      "src": "img/fondali/fondali2.jpg",
+      "tags": ["creatura marina","silhouette", "rocce" ],
+      "category": "fotografia sottomarina",
+      "description": "Silhouette di un grande mammifero marino che nuota sopra un fondale corallino, illuminato da una luce soffusa dall’alto."
+    },
+    {
+      "id": 24,
+      "src": "img/fondali/fondali3.jpg",
+      "tags": ["corallo","primo piano", "rocce"],
+      "category": "fotografia sottomarina",
+      "description": "Primo piano di formazioni coralline dense e tondeggianti, con texture dettagliate e profondità marcata."
+    },
+    {
+      "id": 25,
+      "src": "img/fondali/fondali4.jpg",
+      "tags": ["sabbia","acqua torbida", "sedimenti", "rocce", "sabbia"],
+      "category": "fotografia sottomarina",
+      "description": "Un fondale sabbioso con sedimenti in sospensione che creano un’atmosfera torbida, con pochi elementi visibili oltre alla texture del fondo."
+    },
+    {
+      "id": 26,
+      "src": "img/fondali/fondali5.jpg",
+      "tags": ["creatura marina", "sabbia", "primo piano"],
+      "category": "fotografia sottomarina",
+      "description": "Vista ravvicinata del corpo di una grande creatura marina."
+    },
+    {
+      "id": 27,
+      "src": "img/fondali/fondali6.jpg",
+      "tags": ["corallo", "sabbia", "acqua torbida", "sedimenti"],
+      "category": "fotografia sottomarina",
+      "description": "Distesa piatta di coralli bassi che si estende verso l’orizzonte."
+    },
+    {
+      "id": 28,
+      "src": "img/fondali/fondali7.jpg",
+      "tags": ["creatura marina", "acqua torbida"],
+      "category": "fotografia sottomarina",
+      "description": "Banco di pesci in silhouette che nuotano verso la superficie, attraversando raggi di luce."
+    },
+    {
+      "id": 29,
+      "src": "img/fondali/fondali8.jpg",
+      "tags": ["fondale scuro", "silhouette"],
+      "category": "fotografia sottomarina",
+      "description": "Ambiente subacqueo molto scuro."
+    },
+    {
+      "id": 30,
+      "src": "img/fondali/fondali9.jpg",
+      "tags": ["silhouette","fondale scuro","creatura marina","fondale scuro"],
+      "category": "fotografia sottomarina",
+      "description": "Silhouette di una creatura marina che attraversa uno stretto passaggio roccioso illuminato dall’alto."
+    },
+    { 
+      "id": 31,
+      "src": "img/fondali/fondali10.jpg",
+      "tags": ["corallo", "sabbia", "acqua torbida", "sedimenti"],
+      "category": "fotografia sottomarina",
+      "description": "Fondale sabbioso con piccoli coralli sparsi e una luce circolare diffusa che illumina la scena."
+    },
+    {
+      "id": 32,
+      "src": "img/fondali/fondali11.jpg",
+      "tags": ["corallo", "sabbia", "acqua torbida", "sedimenti"],
+      "category": "fotografia sottomarina",
+      "description": "Paesaggio corallino con forte presenza di particelle sospese e grana, che crea un effetto quasi nevoso."
+    },
+    {
+      "id": 33,
+      "src": "img/fondali/fondali12.jpg",
+      "tags": ["creatura marina", "silhouette", "fondale scuro", "corallo", "rocce"],
+      "category": "fotografia sottomarina",
+      "description": "Silhouette di una creatura marina che nuota sopra una barriera corallina, con luce diffusa sullo sfondo."
+    },
+    {
+      "id": 34,
+      "src": "img/fondali/fondali13.jpg",
+      "tags": ["corallo", "primo piano"],
+      "category": "fotografia sottomarina",
+      "description": "Formazione corallina sporgente con dettagli ramificati, immersa in penombra."
+    },
+    {
+      "id": 35,
+      "src": "img/fondali/fondali14.jpg",
+      "tags": ["acqua torbida", "silhouette", "creatura marina"],
+      "category": "fotografia sottomarina",
+      "description": "Vista laterale di una scogliera corallina con fondale in discesa e visibilità ridotta."
+    },
+    {
+      "id": 36,
+      "src": "img/fondali/fondali15.jpg",
+      "tags": ["rocce", "sabbia", "acqua torbida", "sedimenti"],
+      "category": "fotografia sottomarina",
+      "description": "Fondale con coralli in primo piano e una creatura marina sfocata sullo sfondo, immersa nella nebbia."
+    },
+    {
+      "id": 37,
+      "src": "img/spettrogramma/spettrogramma1.jpg",
+      "tags-documenti": ["onde sonore", "movimenti tellurici", "topografia del fondale", "analisi acustica"],
+      "category": "documento",
+      "subcategory": "spettrogramma",
+      "area": "san francisco bay",
+      "description": "Spettrogramma che mostra l'analisi acustica del fondale marino."
+    }
   ]
 }

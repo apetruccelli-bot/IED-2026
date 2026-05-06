@@ -63,10 +63,6 @@ header {
   border: none;
 }
 
-.search-wrap input:focus {
-}
-
-
 
 .btn-random {
   padding: 5px 7px;
@@ -90,6 +86,38 @@ header {
   flex-wrap: wrap;
   gap: 6px;
   align-items: center;
+}
+
+/* Macro categories bar (above tags) */
+.macro-bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.macro-btn {
+  padding: 6px 12px;
+  background: #f5f5f5;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.12s, color 0.12s, transform 0.08s;
+}
+
+.macro-btn:hover { transform: translateY(-1px); }
+
+.macro-btn.active {
+  background: var(--tag-active);
+  color: var(--tag-active-text);
+}
+
+/* dim tags that are not part of the selected macro */
+.tag-btn.dimmed {
+  opacity: 0.6;
+  filter: grayscale(10%);
 }
 
 .tag-btn {
@@ -143,8 +171,6 @@ button {
   flex-direction: column;
 }
 
-.card:hover {
-}
 
 .card-img {
   width: 100%;

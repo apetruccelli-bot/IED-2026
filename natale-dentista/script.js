@@ -19,6 +19,15 @@ let activeTags = new Set();
 let searchQuery = '';
 let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
+let activeMacro = null;  // currently selected macro category (string)
+let macroFilterIds = null; // Set of ids to show when a macro is active
+
+// explicit mapping macro -> ids (provided by user)
+const macroToIds = {
+  "strumentazione da lavoro": [8,12,14,28,29,31,18,21,27,35,36,41,23,24,31,32,33,34,17,22,25,26,30,36].filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b),
+  "radiografie": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,37,39].filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b),
+  "studio dentistico": [23,24,9,13,16,18,20,22,25,26,27,28,29,35,36,37,38,39,40,41].filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b)
+};
 
 // ── Load data ──────────────────────────────────────────────────────────────
 async function loadData() {
@@ -28,9 +37,25 @@ async function loadData() {
   const data = await res.json();
   // set the items and display items
   items = data.items;
+  // macro categories (optional in data.json)
+  window.macroCategories = data.macroCategories || {};
   displayItems = [...items];
+  buildMacroBar();
   buildTagsBar();
+  syncMacroStates();
   render();
+}
+
+function syncMacroStates() {
+  const macros = window.macroCategories || {};
+  const macroBar = document.getElementById('macro-bar');
+  if (!macroBar) return;
+  macroBar.querySelectorAll('.macro-btn').forEach(b => {
+    const m = b.dataset.macro;
+    const tlist = macros[m] || [];
+    const isActive = tlist.some(t => activeTags.has(t));
+    b.classList.toggle('active', isActive);
+  });
 }
 
 // ── Collect all unique tags ───────────────────────────────────────────────
@@ -50,6 +75,87 @@ function buildTagsBar() {
     btn.dataset.tag = tag;
     btn.addEventListener('click', () => toggleTag(tag));
     tagsBar.appendChild(btn);
+  });
+  // ensure tag button states reflect any active macro
+  updateTagButtonStates();
+}
+
+// build the macro categories bar (above tags bar)
+function buildMacroBar() {
+  const macroBar = document.getElementById('macro-bar');
+  if (!macroBar) return;
+  macroBar.innerHTML = '';
+  const macros = window.macroCategories || {};
+  Object.keys(macros).forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'macro-btn';
+    btn.textContent = m;
+    btn.dataset.macro = m;
+    btn.addEventListener('click', () => toggleMacro(m));
+    // mark active if matches
+    if (activeMacro === m) btn.classList.add('active');
+    macroBar.appendChild(btn);
+  });
+}
+
+// toggle a macro: selects/deselects all tags that belong to that macro
+// TOGGLE MACROS E TAGS
+function toggleMacro(macro) {
+  const macros = window.macroCategories || {};
+  // toggle behavior: if clicking same macro, deactivate
+  if (activeMacro === macro) {
+    activeMacro = null;
+    macroFilterIds = null;
+    // restore display items to full set (respecting random state)
+    displayItems = isRandom ? shuffle(items) : [...items];
+  } else {
+    activeMacro = macro;
+    // prefer explicit IDs mapping from macroToIds, fallback to finding items by tags listed in data
+    const ids = macroToIds[macro] || (macros[macro] ? [] : []);
+    if (ids && ids.length > 0) {
+      macroFilterIds = new Set(ids);
+    } else if (macros[macro]) {
+      // build ids from items whose tags intersect macros[macro]
+      const allowed = new Set(macros[macro]);
+      macroFilterIds = new Set(items.filter(it => it.tags.some(t => allowed.has(t))).map(it => it.id));
+    } else {
+      macroFilterIds = null;
+    }
+    // set displayItems to only items in macroFilterIds (preserve random if active)
+    const base = items.filter(it => macroFilterIds ? macroFilterIds.has(it.id) : true);
+    displayItems = isRandom ? shuffle(base) : base;
+    // remove any active tags that are not part of this macro (they would be dimmed)
+    const allowedTags = new Set(macros[macro] || []);
+    activeTags.forEach(t => { if (!allowedTags.has(t)) activeTags.delete(t); });
+  }
+
+  // update UI states
+  // macro buttons
+  const macroBar = document.getElementById('macro-bar');
+  if (macroBar) {
+    macroBar.querySelectorAll('.macro-btn').forEach(b => b.classList.toggle('active', b.dataset.macro === activeMacro));
+  }
+
+  // tag buttons: mark active and dim those not in macro
+  updateTagButtonStates();
+
+  render();
+}
+
+function updateTagButtonStates() {
+  const macro = activeMacro;
+  const macros = window.macroCategories || {};
+  const allowed = macro ? new Set(macros[macro] || []) : null;
+  tagsBar.querySelectorAll('.tag-btn').forEach(btn => {
+    const tag = btn.dataset.tag;
+    // active state
+    btn.classList.toggle('active', activeTags.has(tag));
+    // dim if macro active and tag not in allowed set
+    if (macro && (!allowed || !allowed.has(tag))) {
+      btn.classList.add('dimmed');
+    } else {
+      btn.classList.remove('dimmed');
+    }
   });
 }
 

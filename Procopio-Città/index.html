@@ -5,39 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Archivio</title>
     <link rel="stylesheet" href="style.css" />
-  </head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-myBlack: #1E1E1E;
+        --color-myWhite: #FCFCFC;
+        --spacing-10px: 10px;
+        --spacing-30px: 30px;
+      }
+    </style>
+    </head>
   <body>
-    <header>
-      <div class="header-inner">
-        <div class="header-row">
-          <div class="search-wrap">
-            <input
-              id="search"
-              type="search"
-              placeholder="Cerca…"
-              autocomplete="off"
-            />
-          </div>
-          <button class="btn-random" id="btn-random">Random</button>
+
+    <div class="w-screen h-screen grid grid-cols-8 specialGrid">
+      <div class="col-start-1 col-end-3 p-10px bg-myBlack flex flex-col justify-between text-myWhite z-[1100]">
+        <div class="flex flex-col">
+          <a href="/" class="font-myTitle">Città<br>interrotte</a>
+          <p class="">di Fondazione Scorza</p>
         </div>
-        <div class="tags-bar" id="tags-bar"></div>
+        <div class="sidebar-links flex flex-col">
+          <a href="index.html" class="font-myTitle">Archivio</a>
+          <a href="storia.html" class="font-myTitle">Storia</a>
+          <a href="/" class="font-myTitle">Statistiche</a>
+        </div>
       </div>
-    </header>
-
-    <p class="results-info" id="results-info"></p>
-
-    <main class="grid" id="grid"></main>
+      <div class="col-start-3 col-end-9 bg-myWhite h-screen overflow-y-scroll">
+        <div class="sticky top-0 z-20 col-span-full pt-30px pl-10px pr-10px pb-30px bg-myWhite ">
+          <div class="grid grid-cols-6 mb-10px">
+            <div class="p text-justify">Anno</div>
+            <div class="p text-justify">Autore</div>
+            <div class="p text-justify">Regione</div>
+            <div class="p text-justify">Abitanti</div>
+            <div class="p text-justify">Documento</div>
+            <form action="/" class="grid-cols-6" onsubmit="return false;">
+              <label for="search" class="sr-only">Ricerca</label>
+              <input
+                id="search"
+                type="search"
+                placeholder="Ricerca"
+                class="w-full border-b border-myBlack bg-transparent text-myBlack outline-none placeholder:text-myBlack"
+              />
+            </form>
+          </div>
+            <div id="archive-rows" class="bg-myWhite"></div>
+        </div>
+          <div id="archive-gallery" class="grid grid-cols-6 gap-[50px] mt-20px p-10px"></div>
+      </div>
+    </div>
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
-      <button class="lb-close" id="lb-close">✕</button>
-      <button class="lb-prev" id="lb-prev">←</button>
-      <button class="lb-next" id="lb-next">→</button>
+      <button class="lb-close" id="lb-close" type="button">✕</button>
+      <button class="lb-prev" id="lb-prev" type="button">←</button>
+      <button class="lb-next" id="lb-next" type="button">→</button>
       <div class="lb-content">
         <img class="lb-img" id="lb-img" src="" alt="">
         <div class="lb-info">
           <span class="lb-id" id="lb-id"></span>
-          <div class="lb-tags" id="lb-tags"></div>
+          <div class="lb-desc" id="lb-desc"></div>
         </div>
       </div>
     </div>

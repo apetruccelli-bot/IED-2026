@@ -21,7 +21,7 @@
     {
       "id": 4,
       "src": "img/gray4.jpg",
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "tags": ["astratto", "texture", "colore", "composizione", ""],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 5,
@@ -31,17 +31,17 @@
     {
       "id": 6,
       "src": "img/gray1.jpg",
-      "tags": ["urbano", "notturno", "luci", "città", "movimento"],
+      "tags": ["urbano", "notturno", "luci", "città", ""],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 7,
       "src": "img/gray2.jpg",
-      "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
+      "tags": ["botanica", "", "verde", "natura", "macro"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 8,
       "src": "img/gray3.jpg",
-      "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
+      "tags": ["architettura", "", "materiale", "pietra", "tempo"],
       "description": "Descrizione dell'immagine"    },
     {
       "id": 9,

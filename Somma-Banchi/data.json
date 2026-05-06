@@ -130,6 +130,7 @@
       "id": 22,
       "src": "img/coltelli (1).png",
       "tags": ["vista frontale ravvicinata", "banco a bauletto", "neon forti"],
+      "tags-coltelli": ["manico in legno", "lama in acciaio", "precisione", "usurato"],
       "age": "macellaio giovane",   
       "description": "Banco di vendita di Carlo, Napoli, 1994"    },
     {
