@@ -1,263 +1,182 @@
-const grid = document.getElementById('grid');
+const rowsHost = document.getElementById('archive-rows');
+const galleryHost = document.getElementById('archive-gallery');
 const searchInput = document.getElementById('search');
-const tagsBar = document.getElementById('tags-bar');
-const resultsInfo = document.getElementById('results-info');
-const btnRandom = document.getElementById('btn-random');
-
-const lightbox   = document.getElementById('lightbox');
-const lbImg      = document.getElementById('lb-img');
-const lbId       = document.getElementById('lb-id');
-const lbTagsEl   = document.getElementById('lb-tags');
-const lbClose    = document.getElementById('lb-close');
-const lbPrev     = document.getElementById('lb-prev');
-const lbNext     = document.getElementById('lb-next');
+const lightbox = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+const lbId = document.getElementById('lb-id');
+const lbDesc = document.getElementById('lb-desc');
+const lbClose = document.getElementById('lb-close');
+const lbPrev = document.getElementById('lb-prev');
+const lbNext = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
 
-let items = [];          // original data from JSON
-let displayItems = [];   // current display order (may be shuffled)
-let activeTags = new Set();
-let searchQuery = '';
-let isRandom = false;
-let lbIndex = -1;        // current index in filteredItems() array
+const archiveRows = [
+  { anno: '1964', autore: 'Scorza', regione: 'Calabria', abitanti: 'Meno di 10', documento: 'Fotografia' },
+  { anno: '1965', autore: 'Varani', regione: 'Sicilia', abitanti: 'Tra 10 e 100', documento: 'Note di campo' },
+  { anno: '1966', autore: 'Fiore', regione: 'Puglia', abitanti: 'Tra 100 e 1000', documento: '' },
+  { anno: '1967', autore: 'Maffei', regione: 'Campania', abitanti: 'Piu di 1000', documento: '' },
+  { anno: '1968', autore: 'Ferri', regione: 'Molise', abitanti: '', documento: '' },
+];
 
-// ── Load data ──────────────────────────────────────────────────────────────
-async function loadData() {
-  // fetch data from data.json
-  const res = await fetch('data.json');
-  // parse the json
-  const data = await res.json();
-  // set the items and display items
-  items = data.items;
-  displayItems = [...items];
-  buildTagsBar();
-  render();
+let enrichedRows = [];
+let allItems = [];
+let filteredGalleryItems = [];
+let lbIndex = -1;
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
 }
 
-// ── Collect all unique tags ───────────────────────────────────────────────
-function allTags() {
-  const set = new Set();
-  items.forEach(item => item.tags.forEach(t => set.add(t)));
-  return [...set].sort();
+function normalize(value) {
+  return String(value)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
 }
 
-// ── Build the filter tags bar ─────────────────────────────────────────────
-function buildTagsBar() {
-  tagsBar.innerHTML = '';
-  allTags().forEach(tag => {
-    const btn = document.createElement('button');
-    btn.className = 'tag-btn';
-    btn.textContent = tag;
-    btn.dataset.tag = tag;
-    btn.addEventListener('click', () => toggleTag(tag));
-    tagsBar.appendChild(btn);
+function findBestImage(row, items) {
+  const targetYear = Number(row.anno);
+  const surname = normalize(row.autore);
+
+  return (
+    items.find((item) => item.year === targetYear && normalize(item.description).includes(surname)) ||
+    items.find((item) => item.year === targetYear) ||
+    null
+  );
+}
+
+async function hydrateRowsWithImages() {
+  const response = await fetch('data.json');
+  const data = await response.json();
+  const items = Array.isArray(data.items) ? data.items : [];
+
+  allItems = items;
+  enrichedRows = archiveRows.map((row) => {
+    const match = findBestImage(row, items);
+    return {
+      ...row,
+      imageSrc: match?.src || '',
+      imageDescription: match?.description || 'Immagine non disponibile',
+    };
   });
 }
 
-// ── Toggle a filter tag ───────────────────────────────────────────────────
-function toggleTag(tag) {
-  if (activeTags.has(tag)) {
-    activeTags.delete(tag);
-  } else {
-    activeTags.add(tag);
-  }
-  // sync button states
-  tagsBar.querySelectorAll('.tag-btn').forEach(btn => {
-    btn.classList.toggle('active', activeTags.has(btn.dataset.tag));
-  });
-  render();
+function rowTemplate(row) {
+  const cells = [row.anno, row.autore, row.regione, row.abitanti, row.documento];
+  const href = row.imageSrc || '#';
+
+  return `
+    <div class="grid grid-cols-6 items-start">
+      ${cells
+        .map((cell) => `<a href="${escapeHtml(href)}" target="_blank" class="p text-justify block">${escapeHtml(cell || '')}</a>`)
+        .join('')}
+      <span class="p text-justify block"></span>
+    </div>
+  `;
 }
 
-// ── Filter logic ──────────────────────────────────────────────────────────
-function filteredItems() {
+function galleryTemplate(item, index) {
+  if (!item.src) return '';
 
-  // get the search query
-  const q = searchQuery.toLowerCase().trim();
-  // filter the items
-  return displayItems.filter(item => {
-    // check if the item matches the tags
-    const matchesTags =
-      activeTags.size === 0 ||
-      [...activeTags].every(t => item.tags.includes(t));
-    const matchesSearch =
-      q === '' ||
-      item.description.toLowerCase().includes(q) ||
-      item.tags.some(t => t.toLowerCase().includes(q));
-    return matchesTags && matchesSearch;
-  });
+  return `
+    <div data-gallery-index="${index}" class="col-span-3 flex cursor-pointer flex-col transition-opacity hover:opacity-80">
+      <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.description || 'Immagine archivio')}" class="h-auto w-full" loading="lazy">
+      <p class="mt-10px font-myTitle">${escapeHtml(item.description || 'Senza descrizione')}</p>
+    </div>
+  `;
 }
 
-// ── Shuffle array (Fisher-Yates) ──────────────────────────────────────────
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
+function filterGalleryItems(term = '') {
+  const query = term.trim().toLowerCase();
+  if (!query) return allItems;
+
+  return allItems.filter((item) =>
+    [item.description, item.category, item.year].some((value) =>
+      String(value || '').toLowerCase().includes(query)
+    )
+  );
 }
 
-// ── Random button ─────────────────────────────────────────────────────────
-btnRandom.addEventListener('click', () => {
-  if (isRandom) {
-    // restore original order
-    displayItems = [...items];
-    btnRandom.textContent = 'Random';
-    isRandom = false;
-  } else {
-    displayItems = shuffle(items);
-    btnRandom.textContent = 'Reset';
-    isRandom = true;
-  }
-  render();
-});
+function filterRows(term = '') {
+  const query = term.trim().toLowerCase();
+  if (!query) return enrichedRows;
 
-// ── Search ────────────────────────────────────────────────────────────────
-searchInput.addEventListener('input', e => {
-  searchQuery = e.target.value;
-  render();
-});
+  return enrichedRows.filter((row) =>
+    Object.values(row).some((value) => String(value).toLowerCase().includes(query))
+  );
+}
 
-// ── Render cards ──────────────────────────────────────────────────────────
-function render() {
+function render(term = '') {
+  const filteredRows = filterRows(term);
+  rowsHost.innerHTML = filteredRows.map(rowTemplate).join('');
 
-  // get the visible items
-  const visible = filteredItems();
+  filteredGalleryItems = filterGalleryItems(term);
+  const galleryMarkup = filteredGalleryItems.map((item, index) => galleryTemplate(item, index)).join('');
+  galleryHost.innerHTML = galleryMarkup || '<p class="col-span-6 p opacity-50">Nessuna immagine trovata.</p>';
 
-  // set the results info
-  resultsInfo.textContent =
-    visible.length === items.length
-      ? `${items.length} items`
-      : `${visible.length} / ${items.length} items`;
-
-  // clear the grid
-  grid.innerHTML = '';
-
-  // if there are no visible items, show the empty state
-  if (visible.length === 0) {
-    const empty = document.createElement('div');
-    empty.className = 'empty';
-    empty.textContent = 'Nessun risultato.';
-    grid.appendChild(empty);
-    return;
-  }
-
-  // loop through the visible items and create a card for each item
-  visible.forEach((item, i) => {
-    const card = document.createElement('article');
-    card.className = 'card';
-    card.style.cursor = 'zoom-in';
-
-    // image
-    // create an image element
-    const img = document.createElement('img');
-    // set the class name
-    img.className = 'card-img';
-    // set the source
-    img.src = item.src;
-    // set the alt text
-    img.alt = `Item ${item.id}`;
-    // set the loading attribute
-    img.loading = 'lazy';
-    // append the image to the card
-    card.appendChild(img);
-
-    // body
-    const body = document.createElement('div');
-    body.className = 'card-body';
-
-    // id
-    const idEl = document.createElement('span');
-    idEl.className = 'card-id';
-    idEl.textContent = `#${String(item.id).padStart(2, '0')}`;
-    body.appendChild(idEl);
-
-    const desc = document.createElement('p');
-    desc.className = 'card-desc';
-    desc.textContent = item.description;
-    // body.appendChild(desc);
-
-    const tagsEl = document.createElement('div');
-    tagsEl.className = 'card-tags';
-    item.tags.forEach(tag => {
-      const t = document.createElement('span');
-      t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
-      t.textContent = tag;
-      t.addEventListener('click', e => { e.stopPropagation(); toggleTag(tag); });
-      tagsEl.appendChild(t);
+  document.querySelectorAll('[data-gallery-index]').forEach((element) => {
+    element.addEventListener('click', () => {
+      openLightbox(Number(element.dataset.galleryIndex));
     });
-    body.appendChild(tagsEl);
-
-    card.addEventListener('click', () => openLightbox(i));
-
-    card.appendChild(body);
-    grid.appendChild(card);
   });
 }
 
-// ── Lightbox ──────────────────────────────────────────────────────────────
 function openLightbox(index) {
-  // get the visible items
-  const visible = filteredItems();
-  // set the current index
   lbIndex = index;
-  // get the item
-  const item = visible[lbIndex];
+  const item = filteredGalleryItems[lbIndex];
+
+  if (!item) return;
 
   lbImg.src = item.src;
-  // set the alt text
-  lbImg.alt = `Item ${item.id}`;
-  // set the id
-  lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
-
-  lbTagsEl.innerHTML = '';
-  // loop through the tags and create a span for each tag
-  item.tags.forEach(tag => {
-    const t = document.createElement('span');
-    t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
-    t.textContent = tag;
-    t.addEventListener('click', () => { toggleTag(tag); closeLightbox(); });
-    lbTagsEl.appendChild(t);
-  });
-
+  lbImg.alt = item.description || 'Immagine archivio';
+  lbId.textContent = item.id != null ? `( ${item.id} )` : 'ID non disponibile';
+  lbDesc.textContent = item.description || 'Senza descrizione';
 
   lightbox.classList.add('open');
   lightbox.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('lightbox-open');
   document.body.style.overflow = 'hidden';
 }
 
 function closeLightbox() {
   lightbox.classList.remove('open');
   lightbox.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('lightbox-open');
   document.body.style.overflow = '';
   lbImg.src = '';
 }
 
-function navigateLightbox(dir) {
-  const visible = filteredItems();
-
-  // calcola il prossimo indice
-  let next = lbIndex + dir;
-
-  // se si va oltre l'ultimo, torna al primo
-  if (next >= visible.length) next = 0;
-
-  // se si va prima del primo, salta all'ultimo
-  if (next < 0) next = visible.length - 1;
-
-  openLightbox(next);
+function navigateLightbox(direction) {
+  let nextIndex = lbIndex + direction;
+  if (nextIndex >= filteredGalleryItems.length) nextIndex = 0;
+  if (nextIndex < 0) nextIndex = filteredGalleryItems.length - 1;
+  openLightbox(nextIndex);
 }
 
 lbClose.addEventListener('click', closeLightbox);
 lbBackdrop.addEventListener('click', closeLightbox);
 lbPrev.addEventListener('click', () => navigateLightbox(-1));
-lbNext.addEventListener('click', () => navigateLightbox(+1));
+lbNext.addEventListener('click', () => navigateLightbox(1));
 
-document.addEventListener('keydown', e => {
+document.addEventListener('keydown', (event) => {
   if (!lightbox.classList.contains('open')) return;
-  if (e.key === 'ArrowLeft')  navigateLightbox(-1);
-  if (e.key === 'ArrowRight') navigateLightbox(+1);
-  if (e.key === 'Escape')     closeLightbox();
+  if (event.key === 'ArrowLeft') navigateLightbox(-1);
+  if (event.key === 'ArrowRight') navigateLightbox(1);
+  if (event.key === 'Escape') closeLightbox();
 });
 
-// ── Init ──────────────────────────────────────────────────────────────────
-loadData();
+searchInput.addEventListener('input', (event) => {
+  render(event.target.value);
+});
+
+hydrateRowsWithImages()
+  .then(() => render())
+  .catch(() => {
+    enrichedRows = [...archiveRows];
+    render();
+  });

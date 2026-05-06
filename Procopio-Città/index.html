@@ -13,12 +13,11 @@
         --spacing-10px: 10px;
       }
     </style>
-  </head>
+    </head>
   <body>
 
     <div class="w-screen h-screen grid grid-cols-8 specialGrid">
-      <div class="col-start-1 col-end-3 p-10px bg-myBlack flex flex-col justify-between
-      text-myWhite">
+      <div class="col-start-1 col-end-3 p-10px bg-myBlack flex flex-col justify-between text-myWhite z-[1100]">
         <div class="flex flex-col">
           <a href="/" class="font-myTitle">Città<br>interrotte</a>
           <p class="">di Fondazione Scorza</p>
@@ -30,52 +29,43 @@
         </div>
       </div>
       <div class="col-start-3 col-end-9 bg-myWhite h-screen overflow-y-scroll">
-        <div class="sticky top-0 col-span-full p-10px grid grid-cols-6 h-40 bg-red-500"></div>
-        <div class="grid grid-cols-6 gap-10px p-10px">
-          <div class="col-span-3 flex flex-col">
-            <img src="..." alt="" class="w-full h-auto bg-red-500">
-            <p class="mt-10px font-myTitle">Titolo, autore, anno</p>
-            <p class="mt-10px leading-1">tag, tag, tag</p>
+        <div class="sticky top-0 z-20 col-span-full p-10px bg-myWhite ">
+          <div class="grid grid-cols-6">
+            <div class="p text-justify">Anno</div>
+            <div class="p text-justify">Autore</div>
+            <div class="p text-justify">Regione</div>
+            <div class="p text-justify">Abitanti</div>
+            <div class="p text-justify">Documento</div>
+            <form action="/" class="grid-cols-6" onsubmit="return false;">
+              <label for="search" class="sr-only">Ricerca</label>
+              <input
+                id="search"
+                type="search"
+                placeholder="Ricerca"
+                class="w-full border-b border-myBlack bg-transparent text-myBlack outline-none placeholder:text-myBlack"
+              />
+            </form>
           </div>
+            <div id="archive-rows" class="-mt-1 bg-myWhite"></div>
         </div>
+          <div id="archive-gallery" class="grid grid-cols-6 gap-[50px] mt-20px p-10px"></div>
       </div>
     </div>
 
-    <!-- <header>
-      <div class="header-inner">
-        <div class="header-row">
-          <div class="search-wrap">
-            <input
-              id="search"
-              type="search"
-              placeholder="Cerca…"
-              autocomplete="off"
-            />
-          </div>
-          <button class="btn-random" id="btn-random">Random</button>
-        </div>
-        <div class="tags-bar" id="tags-bar"></div>
-      </div>
-    </header>
-
-    <p class="results-info" id="results-info"></p>
-
-    <main class="grid" id="grid"></main>
-
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
-      <button class="lb-close" id="lb-close">✕</button>
-      <button class="lb-prev" id="lb-prev">←</button>
-      <button class="lb-next" id="lb-next">→</button>
+      <button class="lb-close" id="lb-close" type="button">✕</button>
+      <button class="lb-prev" id="lb-prev" type="button">←</button>
+      <button class="lb-next" id="lb-next" type="button">→</button>
       <div class="lb-content">
         <img class="lb-img" id="lb-img" src="" alt="">
         <div class="lb-info">
           <span class="lb-id" id="lb-id"></span>
-          <div class="lb-tags" id="lb-tags"></div>
+          <div class="lb-desc" id="lb-desc"></div>
         </div>
       </div>
     </div>
 
-    <script src="script.js"></script> -->
+    <script src="script.js"></script>
   </body>
 </html>

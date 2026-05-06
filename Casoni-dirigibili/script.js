@@ -1,4 +1,4 @@
-const grid = document.getElementById('grid');
+const grid = document.getElementById('archive-gallery');
 const searchInput = document.getElementById('search');
 const tagsBar = document.getElementById('tags-bar');
 const resultsInfo = document.getElementById('results-info');
@@ -30,6 +30,7 @@ async function loadData() {
   items = data.items;
   displayItems = [...items];
   buildTagsBar();
+  console.log('data loaded', items);
   render();
 }
 
@@ -64,6 +65,7 @@ function toggleTag(tag) {
   tagsBar.querySelectorAll('.tag-btn').forEach(btn => {
     btn.classList.toggle('active', activeTags.has(btn.dataset.tag));
   });
+  console.log('active tags', activeTags);
   render();
 }
 
@@ -108,17 +110,21 @@ btnRandom.addEventListener('click', () => {
     btnRandom.textContent = 'Reset';
     isRandom = true;
   }
+  console.log('display items', displayItems);
   render();
 });
 
 // ── Search ────────────────────────────────────────────────────────────────
 searchInput.addEventListener('input', e => {
   searchQuery = e.target.value;
+  console.log('search query', searchQuery);
   render();
 });
 
 // ── Render cards ──────────────────────────────────────────────────────────
 function render() {
+
+  console.log('Rendering...');
 
   // get the visible items
   const visible = filteredItems();
@@ -133,6 +139,7 @@ function render() {
   grid.innerHTML = '';
 
   // if there are no visible items, show the empty state
+  console.log('visible lenght', visible.length);
   if (visible.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'empty';
