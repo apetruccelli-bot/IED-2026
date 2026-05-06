@@ -39,7 +39,7 @@
 }
 
 body {
-  font-family: "Diatype", sans-serif;
+  font-family: "Diatype";
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -47,7 +47,7 @@ body {
 
 
 *:not(.font-myTitle) {
-  font-family: 'Diatype', sans-serif  ;
+  font-family: 'Diatype';
   font-size: 12px;
 }
 
