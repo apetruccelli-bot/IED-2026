@@ -86,6 +86,7 @@ function buildMacroBar() {
 }
 
 // toggle a macro: selects/deselects all tags that belong to that macro
+// TOGGLE MACROS E TAGS
 function toggleMacro(macro) {
   const macros = window.macroCategories || {};
   const tags = macros[macro] || [];
