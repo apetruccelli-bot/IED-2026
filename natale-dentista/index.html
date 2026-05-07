@@ -9,25 +9,26 @@
   <body>
     <header>
       <div class="header-inner">
-        <div class="header-row">
-          <div class="search-wrap">
-            <input
-              id="search"
-              type="search"
-              placeholder="Cerca…"
-              autocomplete="off"
-            />
-          </div>
-          <button class="btn-random" id="btn-random">Random</button>
+        <div class="archive-title">
+          <div class="line1">Dr. Whitaker’s</div>
+          <div class="line2">Aberrant Findings</div>
         </div>
-  <div class="macro-bar" id="macro-bar"></div>
-  <div class="tags-bar" id="tags-bar"></div>
+        <!-- header row removed (search + random) -->
+        <!-- macro/tags moved to left panel -->
       </div>
     </header>
 
-    <p class="results-info" id="results-info"></p>
-
+    
     <main class="grid" id="grid"></main>
+
+    <aside class="left-panel" id="left-panel">
+      <div class="panel-inner">
+        <div class="categories-list" id="categories-list"></div>
+      </div>
+    </aside>
+
+    <!-- right-side thumbnail rail -->
+    <div class="thumb-rail" id="thumb-rail" aria-hidden="false"></div>
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>

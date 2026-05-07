@@ -20,7 +20,7 @@ const archiveRows = [
 
 let enrichedRows = [];
 let allItems = [];
-let filteredGalleryItems = [];
+let activeTags = new Set();
 let lbIndex = -1;
 
 function escapeHtml(value) {
@@ -66,73 +66,111 @@ async function hydrateRowsWithImages() {
   });
 }
 
-function rowTemplate(row) {
-  const cells = [row.anno, row.autore, row.regione, row.abitanti, row.documento];
-  const href = row.imageSrc || '#';
+function renderFilters() {
+  if (!rowsHost) return;
 
-  return `
-    <div class="grid grid-cols-6 items-start">
-      ${cells
-        .map((cell) => `<a href="${escapeHtml(href)}" target="_blank" class="p text-justify block">${escapeHtml(cell || '')}</a>`)
-        .join('')}
-      <span class="p text-justify block"></span>
-    </div>
-  `;
+  const unique = (arr) => [...new Set(arr.filter(Boolean))];
+
+  const columns = [
+    unique(allItems.map((i) => String(i.year || ''))).sort(),
+    unique(enrichedRows.map((r) => r.autore)).sort(),
+    unique(enrichedRows.map((r) => r.regione)).sort(),
+    unique(enrichedRows.map((r) => r.abitanti)),
+    unique(enrichedRows.map((r) => r.documento)).sort(),
+    unique(allItems.map((i) => i.category)).sort(),
+  ];
+
+  rowsHost.innerHTML = columns
+    .map(
+      (values) => `
+      <div class="flex flex-col">
+        ${values
+          .map(
+            (v) =>
+              `<p class="text-justify cursor-pointer select-none" data-tag="${escapeHtml(v)}">${escapeHtml(v)}</p>`
+          )
+          .join('')}
+      </div>`
+    )
+    .join('');
+}
+
+function toggleTag(tag) {
+  if (activeTags.has(tag)) {
+    activeTags.delete(tag);
+  } else {
+    activeTags.add(tag);
+  }
+  // update visual state: if any tags active, dim unselected and highlight selected
+  document.querySelectorAll('[data-tag]').forEach((el) => {
+    if (activeTags.size === 0) {
+      el.classList.remove('opacity-50', 'opacity-100');
+    } else {
+      const isActive = activeTags.has(el.dataset.tag);
+      el.classList.toggle('opacity-100', isActive);
+      el.classList.toggle('opacity-50', !isActive);
+    }
+  });
+  filterVisible(searchInput?.value || '');
 }
 
 function galleryTemplate(item, index) {
   if (!item.src) return '';
 
   return `
-    <div data-gallery-index="${index}" class="col-span-3 flex cursor-pointer flex-col transition-opacity hover:opacity-80">
+    <div data-item-index="${index}" class="col-span-3 flex cursor-pointer flex-col transition-opacity hover:opacity-80 pb-12">
       <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.description || 'Immagine archivio')}" class="h-auto w-full" loading="lazy">
       <p class="mt-10px font-myTitle">${escapeHtml(item.description || 'Senza descrizione')}</p>
     </div>
   `;
 }
 
-function filterGalleryItems(term = '') {
-  const query = term.trim().toLowerCase();
-  if (!query) return allItems;
-
-  return allItems.filter((item) =>
-    [item.description, item.category, item.year].some((value) =>
-      String(value || '').toLowerCase().includes(query)
-    )
-  );
-}
-
-function filterRows(term = '') {
-  const query = term.trim().toLowerCase();
-  if (!query) return enrichedRows;
-
-  return enrichedRows.filter((row) =>
-    Object.values(row).some((value) => String(value).toLowerCase().includes(query))
-  );
-}
-
-function render(term = '') {
-  const filteredRows = filterRows(term);
+function renderAll() {
   if (rowsHost) {
-    rowsHost.innerHTML = filteredRows.map(rowTemplate).join('');
-  }
-
-  filteredGalleryItems = filterGalleryItems(term);
-  const galleryMarkup = filteredGalleryItems.map((item, index) => galleryTemplate(item, index)).join('');
-  if (galleryHost) {
-    galleryHost.innerHTML = galleryMarkup || '<p class="col-span-6 p opacity-50">Nessuna immagine trovata.</p>';
-  }
-
-  document.querySelectorAll('[data-gallery-index]').forEach((element) => {
-    element.addEventListener('click', () => {
-      openLightbox(Number(element.dataset.galleryIndex));
+    renderFilters();
+    rowsHost.addEventListener('click', (e) => {
+      const tag = e.target.dataset.tag;
+      if (tag) toggleTag(tag);
     });
+  }
+
+  if (galleryHost) {
+    galleryHost.innerHTML = allItems.map(galleryTemplate).join('') ||
+      '<p class="col-span-6 p opacity-50">Nessuna immagine trovata.</p>';
+  }
+
+  document.querySelectorAll('[data-item-index]').forEach((el) => {
+    el.addEventListener('click', () => openLightbox(Number(el.dataset.itemIndex)));
+  });
+}
+
+function filterVisible(term = '') {
+  const query = normalize(term.trim());
+
+  document.querySelectorAll('[data-item-index]').forEach((el) => {
+    const item = allItems[Number(el.dataset.itemIndex)];
+    const matchesSearch = !query || [item.description, item.category, item.year].some(
+      (v) => normalize(String(v || '')).includes(query)
+    );
+    const itemValues = [
+      ...(item.tags || []),
+      item.category,
+      String(item.year || ''),
+      item.autore,
+      item.regione,
+      item.abitanti,
+      item.documento,
+    ].filter(Boolean);
+    const matchesTags = activeTags.size === 0 || [...activeTags].every((tag) =>
+      itemValues.includes(tag)
+    );
+    el.classList.toggle('hidden', !matchesSearch || !matchesTags);
   });
 }
 
 function openLightbox(index) {
   lbIndex = index;
-  const item = filteredGalleryItems[lbIndex];
+  const item = allItems[lbIndex];
 
   if (!item) return;
 
@@ -156,10 +194,12 @@ function closeLightbox() {
 }
 
 function navigateLightbox(direction) {
-  let nextIndex = lbIndex + direction;
-  if (nextIndex >= filteredGalleryItems.length) nextIndex = 0;
-  if (nextIndex < 0) nextIndex = filteredGalleryItems.length - 1;
-  openLightbox(nextIndex);
+  const visible = [...document.querySelectorAll('[data-item-index]:not(.hidden)')];
+  const currentPos = visible.findIndex((el) => Number(el.dataset.itemIndex) === lbIndex);
+  let nextPos = currentPos + direction;
+  if (nextPos >= visible.length) nextPos = 0;
+  if (nextPos < 0) nextPos = visible.length - 1;
+  openLightbox(Number(visible[nextPos].dataset.itemIndex));
 }
 
 if (lbClose) lbClose.addEventListener('click', closeLightbox);
@@ -176,13 +216,13 @@ document.addEventListener('keydown', (event) => {
 
 if (searchInput) {
   searchInput.addEventListener('input', (event) => {
-    render(event.target.value);
+    filterVisible(event.target.value);
   });
 }
 
 hydrateRowsWithImages()
-  .then(() => render())
+  .then(() => renderAll())
   .catch(() => {
     enrichedRows = [...archiveRows];
-    render();
+    renderAll();
   });

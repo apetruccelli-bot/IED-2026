@@ -3,12 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Archivio di Camilla.</title>
+    <title>Archivio</title>
     <link rel="stylesheet" href="style.css" />
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-myBlack: #171717;
+        --color-myWhite: #ECECEC;
+        --spacing-10px: 10px;
+        --spacing-20px: 20px;
+      }
+    </style>
   </head>
   <body>
     <header>
-      <div class="header-inner">
+
+      <a href="/" class="font-myTitle">Les Secéssionistes</a>
+      <div class="flex flex-col">
+        <p class="">Autori</p>
+        <p class="">Banchi ottici</p>
+        <p class="">Dagherrotipi</p>
+      </div>
+
+      <!-- <div class="header-inner">
         <div class="header-row">
           <div class="search-wrap">
             <input
@@ -21,12 +38,39 @@
           <button class="btn-random" id="btn-random">Random</button>
         </div>
         <div class="tags-bar" id="tags-bar"></div>
-      </div>
+      </div -->
+
     </header>
 
-    <p class="results-info" id="results-info"></p>
+    <!-- <p class="results-info" id="results-info"></p> -->
+    
+    <div class="mainLayout fixed top-0 left-0 w-screen h-screen overflow-y-scroll
+    grid grid-cols-12 gap-10px">
+      <div class="descriptionAndFilters col-span-3 h-full flex flex-col justify-between pb-10px">
+        <div class="description flex flex-col gap-10px mt-auto">
+          <div class="english text-myGrey">A businessman bent down to pick up a cigarette butt as if to look for something inside it A
+            businessman bent down to pick up a cigarette butt as if to look for something inside it A businessman bent down to
+            pick up a cigarette butt as if to look for something inside it</div>
+        </div>
+        <!-- <div class="filters grid grid-cols-3 gap-10px mt-auto h-fit">
+          <div class="filter col-span-4 grid grid-cols-4 gap-10px h-fit">
+            <p class="col-span-1">Status</p>
+            <p class="col-span-3 flex flex-wrap gap-x-10px">
+              <span>Uomini d’affari</span>
+              <span>Anziani</span>
+              <span>Giovani</span>
+            </p>
+          </div>
+        </div> -->
+      </div>
+      <main id="grid" class="col-span-9 wireframe">
+        <div class="myColumn column-1"></div>
+        <div class="myColumn column-2 pt-24"></div>
+        <div class="myColumn column-3"></div>
+      </main>
+    </div>
 
-    <main class="grid" id="grid"></main>
+
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>

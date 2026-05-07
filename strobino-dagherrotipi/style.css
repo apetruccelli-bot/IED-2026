@@ -1,35 +1,68 @@
+@font-face {
+  font-family: 'Favorit';
+  src: url('font/ABCFavorit-Regular-Trial.woff2') format('woff2');
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Favorit';
+  src: url('font/ABCFavorit-RegularItalic-Trial.woff2') format('woff2');
+  font-style: italic;
+}
+
+*:not(.font-myTitle) {
+  font-family: 'Favorit', sans-serif  ;
+  font-size: 12px;
+  line-height: 120%;
+}
+
+.font-myTitle {
+  font-family: 'Favorit';
+  font-size: 24px!important;
+  line-height: 100%;
+  /* font-style: italic; */
+}
+
+
+
 *, *::before, *::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+ /* margin: 0;*/
+ /* padding: 0;*/
 }
 
 :root {
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --text: #1a1a1a;
+  --bg: #171717;
+  --surface: #FAFAFA;
+  --text: #ECECEC;
   --muted: #888880;
   --tag-bg: #ebebea;
-  --tag-active: #1a1a1a;
-  --tag-active-text: #ffffff;
-  --accent: #1a1a1a;
+  --tag-active: #ECECEC;
+  --tag-active-text: #171717;
+  --accent: #ECECEC;
   --radius: 0px;
 }
 
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Prophet Regular", sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
 }
+a {
+  transition: opacity .3s cubic-bezier(.8,0,.2,1);
+}
+a:hover {
+  opacity: .3;
+}
+
+
 
 /* ── HEADER ── */
 header {
-  position: sticky;
-  top: 0;
   z-index: 100;
-  background: var(--bg);
-  padding: 16px 24px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .header-inner {
@@ -86,10 +119,15 @@ header {
 
 /* ── TAGS BAR ── */
 .tags-bar {
+  position: fixed;
+  left: 10px;
+  top: 80px;
+  width: 290px;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 6px;
-  align-items: center;
+  align-items: flex-start;
+  z-index: 50;
 }
 
 .tag-btn {
@@ -128,11 +166,43 @@ button {
 }
 
 /* ── GRID ── */
-.grid {
+/*.grid {
   padding: 20px 24px 60px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(32%, 1fr));
   gap: 20px;
+} */
+
+/* .specialGrid {
+  grid-template-columns: 20rem auto;
+} */
+
+.two-rows-grid {
+  display: grid;
+  grid-template-columns: 15 rem auto;
+  gap: 20px;
+}
+
+/* ── WIREFRAME ── */
+.mainLayout {
+  /* padding-top: 10px; */
+  padding-left: 10px;
+  padding-right: 10px;
+  /* padding-bottom: 10px; */
+}
+.myColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wireframe {
+  /* display: grid;
+  grid-template-columns: repeat(4, 1fr); */
+  display: flex;
+  gap: 10px;
+  height: 100%;
+  overflow: scroll;
+
 }
 
 /* ── CARD ── */
@@ -141,6 +211,8 @@ button {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 0;
 }
 
 .card:hover {
@@ -148,15 +220,14 @@ button {
 
 .card-img {
   width: 100%;
-  aspect-ratio: 4 / 3;
   object-fit: cover;
   display: block;
   background: #ddd;
 }
 
 .card-body {
+  display: none;
   padding: 14px 0px 16px;
-  display: flex;
   flex-direction: column;
   gap: 10px;
   flex: 1;

@@ -1,9 +1,10 @@
-const grid = document.getElementById('grid');
+//const grid = document.getElementById('grid');
+const myColumns = document.getElementsByClassName('myColumn');
 const searchInput = document.getElementById('search');
 const tagsBar = document.getElementById('tags-bar');
 const resultsInfo = document.getElementById('results-info');
 const btnRandom = document.getElementById('btn-random');
-
+ 
 const lightbox   = document.getElementById('lightbox');
 const lbImg      = document.getElementById('lb-img');
 const lbId       = document.getElementById('lb-id');
@@ -28,20 +29,41 @@ async function loadData() {
   const data = await res.json();
   // set the items and display items
   items = data.items;
-  displayItems = [...items];
+  displayItems = shuffle([...items]);
   buildTagsBar();
   render();
+}
+
+const tagDagherrotipi = ['tags-dagherrotipi','dagh-esposizione','dagh-fissaggio','dagh-difetti-fisici','dagh-difetti-ottici','anno'];
+const tagFotocamere = ['tags-fotocamere','anno'];
+const tagFotografi = ['tags-fotografi'];
+
+// ── Get tags for a single item based on its categoria ───────────────────
+const categoryKeys = {
+  dagherrotipi: tagDagherrotipi,
+  fotocamere:   tagFotocamere,
+  fotografi:    tagFotografi,
+};
+function getItemTags(item) {
+  const keys = categoryKeys[item.categoria] || [];
+  return keys.flatMap(k => {
+    const v = item[k];
+    if (Array.isArray(v)) return v;
+    if (v != null) return [String(v)];
+    return [];
+  });
 }
 
 // ── Collect all unique tags ───────────────────────────────────────────────
 function allTags() {
   const set = new Set();
-  items.forEach(item => item.tags.forEach(t => set.add(t)));
+  items.forEach(item => getItemTags(item).forEach(t => set.add(t)));
   return [...set].sort();
 }
 
 // ── Build the filter tags bar ─────────────────────────────────────────────
 function buildTagsBar() {
+  return
   tagsBar.innerHTML = '';
   allTags().forEach(tag => {
     const btn = document.createElement('button');
@@ -77,11 +99,11 @@ function filteredItems() {
     // check if the item matches the tags
     const matchesTags =
       activeTags.size === 0 ||
-      [...activeTags].every(t => item.tags.includes(t));
+      [...activeTags].every(t => getItemTags(item).includes(t));
     const matchesSearch =
       q === '' ||
       item.description.toLowerCase().includes(q) ||
-      item.tags.some(t => t.toLowerCase().includes(q));
+      getItemTags(item).some(t => t.toLowerCase().includes(q));
     return matchesTags && matchesSearch;
   });
 }
@@ -97,7 +119,7 @@ function shuffle(arr) {
 }
 
 // ── Random button ─────────────────────────────────────────────────────────
-btnRandom.addEventListener('click', () => {
+btnRandom?.addEventListener('click', () => {
   if (isRandom) {
     // restore original order
     displayItems = [...items];
@@ -112,7 +134,7 @@ btnRandom.addEventListener('click', () => {
 });
 
 // ── Search ────────────────────────────────────────────────────────────────
-searchInput.addEventListener('input', e => {
+searchInput?.addEventListener('input', e => {
   searchQuery = e.target.value;
   render();
 });
@@ -124,20 +146,22 @@ function render() {
   const visible = filteredItems();
 
   // set the results info
-  resultsInfo.textContent =
-    visible.length === items.length
-      ? `${items.length} items`
-      : `${visible.length} / ${items.length} items`;
+  if(resultsInfo) {
+    resultsInfo.textContent =
+      visible.length === items.length
+        ? `${items.length} items`
+        : `${visible.length} / ${items.length} items`;
+  }
 
-  // clear the grid
-  grid.innerHTML = '';
+  // clear the columns
+  [...myColumns].forEach(col => col.innerHTML = '');
 
   // if there are no visible items, show the empty state
   if (visible.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'empty';
     empty.textContent = 'Nessun risultato.';
-    grid.appendChild(empty);
+    myColumns[0].appendChild(empty);
     return;
   }
 
@@ -178,7 +202,7 @@ function render() {
 
     const tagsEl = document.createElement('div');
     tagsEl.className = 'card-tags';
-    item.tags.forEach(tag => {
+    getItemTags(item).forEach(tag => {
       const t = document.createElement('span');
       t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
       t.textContent = tag;
@@ -190,7 +214,7 @@ function render() {
     card.addEventListener('click', () => openLightbox(i));
 
     card.appendChild(body);
-    grid.appendChild(card);
+    myColumns[i % myColumns.length].appendChild(card);
   });
 }
 
@@ -211,7 +235,7 @@ function openLightbox(index) {
 
   lbTagsEl.innerHTML = '';
   // loop through the tags and create a span for each tag
-  item.tags.forEach(tag => {
+  getItemTags(item).forEach(tag => {
     const t = document.createElement('span');
     t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
     t.textContent = tag;
