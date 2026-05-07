@@ -12,6 +12,7 @@ const lbClose    = document.getElementById('lb-close');
 const lbPrev     = document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
+const galleryScroll = document.querySelector('.gallery-scroll');
 
 let items = [];          // original data from JSON
 let displayItems = [];   // current display order (may be shuffled)
@@ -19,6 +20,17 @@ let activeTags = new Set();
 let searchQuery = '';
 let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
+
+if (galleryScroll) {
+  galleryScroll.addEventListener('wheel', (e) => {
+    const dominantDelta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+
+    if (dominantDelta === 0) return;
+
+    e.preventDefault();
+    galleryScroll.scrollLeft += dominantDelta;
+  }, { passive: false });
+}
 
 // ── Load data ──────────────────────────────────────────────────────────────
 async function loadData() {

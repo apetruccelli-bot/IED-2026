@@ -1,3 +1,32 @@
+@font-face {
+  font-family: 'Prophet Medium';
+  src: url('font/ABCProphet-Medium-Trial.woff2') format('woff2');
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Prophet Regular Italic';
+  src: url('font/ABCProphet-RegularItalic-Trial.woff2') format('woff2');
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Prophet Regular';
+  src: url('font/ABCProphet-Regular-Trial.woff2') format('woff2');
+  font-style: italic;
+}
+
+*:not(.font-myTitle) {
+  font-family: 'Prophet Medium', sans-serif  ;
+  font-size: 12px;
+}
+
+.font-myTitle {
+  font-family: 'Prophet Medium';
+  font-size: 25px;
+  text-transform: uppercase;
+  line-height: 100%;
+  letter-spacing: 0.02em;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;

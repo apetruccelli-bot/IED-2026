@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AAA — Adler’s Aircraft Archive</title>
+    <title>AAA — Adler’s Airship Archive</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
       @theme {
-        --color-myBlack: #1E1E1E;
-        --color-myWhite: #FCFCFC;
+        --color-myBlack: #080808;
+        --color-myWhite: #F3F3F3;
         --spacing-10px: 10px;
       }
     </style>
@@ -50,26 +50,54 @@
     </div>
 
     <div class="w-screen h-screen grid two-rows-grid">
-      <div class="p-10px bg-myBlack flex flex-row justify-between text-myWhite z-[1100]">
+      <div class="p-10px bg-myBlack flex flex-row justify-between items-start text-myWhite z-[1100]">
         <div class="flex flex-col">
-          <a href="/" class="font-myTitle">Adler’s Aircraft Archive</a>
-          <p class="">lorem ipsum dolor sit amet.</p>
-        </div>
-        <div class="flex flex-col">
-          <div class="">Filtro 1</div>
-          <div class="">Filtro 2</div>
-          <div class="">Filtro 3</div>
-        </div>
-      </div>
-      <div class="bg-myWhite h-screen overflow-y-scroll">
-        <div class="sticky top-0 z-20 col-span-full p-10px bg-myWhite ">
-          <div class="grid grid-cols-6">
+          <a href="/" class="font-myTitle">AAA — Adler’s Airship Archive</a>
+        <div class="box">
+          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
           </div>
-            <div id="archive-rows" class="-mt-1 bg-myWhite"></div>
         </div>
-          <div id="archive-gallery" 
-          class="grid-results grid grid-cols-6 gap-[50px] mt-20px p-10px"></div>
-      </div>
+        <div class="filters-panel w-[480px] text-myWhite">
+          <nav class="filters-nav flex justify-between mt-[15px] mb-[17px]">
+            <a href="#" class="filter-link">Airship</a>
+            <a href="#" class="filter-link">Wreckage</a>
+            <a href="#" class="filter-link">Models</a>
+            <a href="#" class="filter-link">Newspapers</a>
+            <a href="#" class="filter-link">Drawings</a>
+  </nav>
+
+  <div class="filter-row">
+    <div class="filter-label">Causes</div>
+  </div>
+
+  <div class="filter-row">
+    <div class="filter-label">Year</div>
+  </div>
+
+  <div class="filter-row">
+    <div class="filter-label">Country</div>
+  </div>
+
+  <div class="filter-row">
+    <div class="filter-label">Tags</div>
+  </div>
+
+  <div class="filter-row">
+    <div class="filter-label">People</div>
+  </div>
+
+  <div class="filter-row items-center">
+    <div class="filter-label">Victims</div>
+  </div>
+</div>
+    </div>
+      <div class="bg-myBlack overflow-hidden">
+      <div id="archive-rows" class=" bg-myBlack"></div>
+
+    <div class="gallery-scroll" >
+      <div id="archive-gallery" class="archive-gallery"></div>
+  </div>
+</div>
     </div>
 
     <script src="script.js"></script>
