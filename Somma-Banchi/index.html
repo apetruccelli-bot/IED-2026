@@ -8,13 +8,15 @@
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
       @theme {
-        --color-myBlack: #1E1E1E;
-        --color-myWhite: #FCFCFC;
+        --color-myBlack: #090909;
+        --color-myWhite: #FAFAFA;
         --spacing-10px: 10px;
       }
     </style>
   </head>
   <body>
+    <div class="tags-bar" id="tags-bar"></div>
+    
     <header>
       <div class="header-inner">
         <div class="header-row">
@@ -28,13 +30,12 @@
           </div>
           <button class="btn-random" id="btn-random">Random</button>
         </div>
-        <div class="tags-bar" id="tags-bar"></div>
       </div>
     </header>
 
     <p class="results-info" id="results-info"></p>
 
-    <main class="grid" id="grid"></main>
+    <main class="wireframe" id="grid"></main>
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
