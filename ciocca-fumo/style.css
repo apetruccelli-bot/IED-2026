@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'Favorit';
-  src: url('font/ABCFavorit-Regular-Trial.woff2') format('woff2');
+  src: url('font/ABCDailyScotchMono-Medium-Trial.woff2') format('woff2');
   font-style: normal;
 }
 @font-face {
   font-family: 'Favorit';
-  src: url('font/ABCFavorit-RegularItalic-Trial.woff2') format('woff2');
+  src: url('font/ABCDailyScotchMono-MediumItalic-Trial.woff2') format('woff2');
   font-style: italic;
 }
 

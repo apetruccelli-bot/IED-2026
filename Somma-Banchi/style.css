@@ -215,7 +215,7 @@ button {
 
 .card-img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  /* aspect-ratio: 4 / 3; */
   object-fit: cover;
   display: block;
   background: #ddd;
@@ -227,6 +227,8 @@ button {
   flex-direction: column;
   gap: 10px;
   flex: 1;
+  
+  display: none;
 }
 
 .card-id {
