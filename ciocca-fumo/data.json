@@ -205,141 +205,233 @@
     },
     {
       "id": 26,
-      "src": "img/pacchetti/pachetti2.png",
-      "tags": ["urbano", "notturno", "luci", "città", "movimento"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti2.png",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
     },
     {
       "id": 27,
       "src": "img/pacchetti/pacchetti3.png",
-      "tags": ["botanica", "dettaglio", "verde", "natura", "macro"],
-      "description": "Descrizione dell'immagine"    
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"  
     },
     {
       "id": 28,
-      "src": "img/pacchetti/pachetti4.png",
-      "tags": ["architettura", "storico", "materiale", "pietra", "tempo"],
-      "description": "Descrizione dell'immagine"    
+      "src": "img/pacchetti/pacchetti4.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"  
     },
     {
       "id": 29,
-      "src": "img/pacchetti/pachetti5.png",
-      "tags": ["paesaggio", "inverno", "neve", "freddo", "silenzio"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti5.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"  
      },
      {
       "id": 30,
-      "src": "img/pacchetti/pachetti6.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
+      "src": "img/pacchetti/pacchetti6.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
       "description": "Descrizione dell'immagine"   
      },
      {
       "id": 31,
-      "src": "img/pacchetti/pachetti7.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
+      "src": "img/pacchetti/pacchetti7.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
       "description": "Descrizione dell'immagine"   
      },
      {
       "id": 32,
-      "src": "img/pacchetti/pachetti8.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti8.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      },
      {
       "id": 33,
-      "src": "img/pacchetti/pachetti9.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti9.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"  
      },
      {
       "id": 34,
-      "src": "img/pacchetti/pachetti10.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti10.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      },
      {
       "id": 35,
-      "src": "img/pacchetti/pachetti11.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti11.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      },
      {
       "id": 36,
-      "src": "img/pacchetti/pachetti12.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti12.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"        
      },
      {
       "id": 37,
-      "src": "img/pacchetti/pachetti13.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti13.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine" 
      },
      {
       "id": 38,
-      "src": "img/pacchetti/pachetti14.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti14.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"  
      },
      {
       "id": 39,
-      "src": "img/pacchetti/pachetti15.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti15.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      },
      {
       "id": 40,
-      "src": "img/pacchetti/pachetti16.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti16.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      },
      {
       "id": 41,
-      "src": "img/pacchetti/pachetti17.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti17.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      },
      {
       "id": 42,
-      "src": "img/pacchetti/pachetti18.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti18.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      },
      {
       "id": 43,
-      "src": "img/pacchetti/pachetti19.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti19.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      },
      {
       "id": 44,
-      "src": "img/pacchetti/pachetti20.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti20.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      },
      {
       "id": 45,
-      "src": "img/pacchetti/pachetti21.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti21.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      },
      {
       "id": 46,
-      "src": "img/pacchetti/pachetti22.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti22.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      },
      {
       "id": 47,
-      "src": "img/pacchetti/pachetti23.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti23.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      },
      {
       "id": 48,
-      "src": "img/pacchetti/pachetti24.png",
-      "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
-      "description": "Descrizione dell'immagine"   
+      "src": "img/pacchetti/pacchetti24.png",
+      "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
      }
   ]
 }
