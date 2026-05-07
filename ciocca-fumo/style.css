@@ -96,6 +96,7 @@ header {
 }
 
 .search-wrap input:focus {
+  border-color: var(--text);
 }
 
 
@@ -184,6 +185,7 @@ button {
 }
 
 .card:hover {
+  opacity: 0.9;
 }
 
 .card-img {
