@@ -67,37 +67,21 @@ body {
 a {
   transition: opacity .3s cubic-bezier(.8,0,.2,1);
 }
-/* ── HEADER ── */
-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--bg);
-  padding: 16px 10px;
-}
 
 .archive-title {
+  position: fixed;
+  left: 18px;
+  top: 12px;
+  z-index: 220; /* above thumb rail and left panel */
   color: #fff;
   font-family: 'Serif';
   font-size: 36px !important;
   line-height: 1.0;
-  margin-bottom: 18px;
+  margin: 0;
+  pointer-events: auto;
 }
 .archive-title .line1 { font-weight: 600; font-size: 36px !important; }
 .archive-title .line2 { font-weight: 400; font-size: 36px !important; }
-
-.header-inner {
-  max-width: 1200px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.header-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
 
 
 .search-wrap {
@@ -132,14 +116,6 @@ header {
   background: var(--accent);
   color: #fff;
   border-color: var(--accent);
-}
-
-/* ── TAGS BAR ── */
-.tags-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
 }
 
 /* Macro categories bar (above tags) */
@@ -214,7 +190,8 @@ button {
   /* Masonry-like columns */
   /* leave space for fixed left panel and right thumb rail */
   /* move columns a bit to the right and tighten vertical padding so scroll reaches margins */
-  padding: 12px 24px 12px;
+  /* reserve vertical space for the fixed title (36px) + small gap */
+  padding: calc(12px + 56px) 24px 12px;
   padding-left: calc(var(--left-panel-w) + 48px);
   padding-right: calc(var(--thumb-rail-w) + 24px);
   column-count: 2;
@@ -297,12 +274,12 @@ button {
 
 .card-tag:hover {
   background: var(--accent);
-  color: #fff;
+  color: #ffffff00;
 }
 
 .card-tag.highlight {
   background: var(--accent);
-  color: #fff;
+  color: #ffffff00;
 }
 
 /* ── EMPTY STATE ── */
@@ -317,8 +294,8 @@ button {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 600px) {
-  header { padding: 12px 16px; }
-  .grid { padding: 16px 16px 40px; column-count: 1; }
+  .archive-title { left: 12px; top: 8px; font-size: 20px !important; }
+  .grid { padding: calc(16px + 48px) 16px 40px; column-count: 1; }
   .results-info { padding: 12px 16px 0; }
   h1 { font-size: 12px; }
 }
@@ -327,7 +304,7 @@ button {
 .lightbox {
   display: none;
   position: fixed;
-  inset: 0;
+  inset: 0; 
   z-index: 200;
   align-items: center;
   justify-content: center;
@@ -336,10 +313,10 @@ button {
 /* right thumbnail rail */
 .thumb-rail {
   position: fixed;
-  right: 12px;
-  top: 12px;
-  bottom: 12px;
-  width: calc(var(--thumb-rail-w) - 28px);
+  right: 10px;
+  top: 10px;
+  bottom: 10px;
+  width: calc(var(--thumb-rail-w) - 18px);
   z-index: 160;
   display: grid;
   grid-template-columns: repeat(2, 1fr);

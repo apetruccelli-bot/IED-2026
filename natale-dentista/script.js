@@ -46,8 +46,9 @@ function syncMacroStates() {
   if (!container) return;
   container.querySelectorAll('.cat-section').forEach(sec => {
     const title = sec.querySelector('.cat-title');
-    const m = title ? title.textContent.toLowerCase() : null;
-    const tlist = macros[m] || [];
+    const displayName = title ? title.textContent : null;
+    const m = displayName ? Object.keys(macros).find(k => k.toLowerCase() === displayName.toLowerCase()) : null;
+    const tlist = m ? (macros[m] || []) : [];
     const isActive = tlist.some(t => activeTags.has(t));
     if (title) title.classList.toggle('active', isActive);
   });
@@ -66,7 +67,17 @@ function buildCategoriesList() {
   if (!container) return;
   container.innerHTML = '';
   const macros = window.macroCategories || {};
-  Object.keys(macros).forEach(m => {
+  // desired display order to match the reference image (lowercase)
+  const desiredOrder = ['strumenti', 'radiografie', 'studio'];
+  // map available macro keys by lowercase -> original
+  const lowerMap = {};
+  Object.keys(macros).forEach(k => { lowerMap[k.toLowerCase()] = k; });
+  // build ordered list of original keys following desiredOrder, fall back to remaining keys
+  const keys = [];
+  desiredOrder.forEach(k => { if (k in lowerMap) keys.push(lowerMap[k]); });
+  Object.keys(macros).forEach(k => { if (!keys.includes(k)) keys.push(k); });
+
+  keys.forEach(m => {
     const section = document.createElement('div');
     section.className = 'cat-section';
     const h = document.createElement('div');
@@ -101,30 +112,30 @@ function capitalize(s) {
 // TOGGLE MACROS E TAGS
 function toggleMacro(macro) {
   const macros = window.macroCategories || {};
+  // resolve macro key case-insensitively against macros object
+  const canonical = Object.keys(macros).find(k => k.toLowerCase() === String(macro).toLowerCase()) || macro;
   // toggle behavior: if clicking same macro, deactivate
-  if (activeMacro === macro) {
+  if (activeMacro === canonical) {
     activeMacro = null;
     macroFilterIds = null;
-    // restore display items to full set (respecting random state)
+    // restore display items to full set
     displayItems = [...items];
   } else {
-    activeMacro = macro;
-    // prefer explicit IDs mapping from macroToIds, fallback to finding items by tags listed in data
-    const ids = macroToIds[macro] || (macros[macro] ? [] : []);
+    activeMacro = canonical;
+    // prefer explicit IDs mapping from macroToIds (keys in macroToIds are lowercase)
+    const ids = macroToIds[canonical.toLowerCase()] || [];
     if (ids && ids.length > 0) {
       macroFilterIds = new Set(ids);
-    } else if (macros[macro]) {
-      // build ids from items whose tags intersect macros[macro]
-      const allowed = new Set(macros[macro]);
+    } else if (macros[canonical]) {
+      const allowed = new Set(macros[canonical]);
       macroFilterIds = new Set(items.filter(it => it.tags.some(t => allowed.has(t))).map(it => it.id));
     } else {
       macroFilterIds = null;
     }
-    // set displayItems to only items in macroFilterIds (preserve random if active)
-    const base = items.filter(it => macroFilterIds ? macroFilterIds.has(it.id) : true);
-  displayItems = base;
+    // set displayItems to only items in macroFilterIds
+    displayItems = items.filter(it => macroFilterIds ? macroFilterIds.has(it.id) : true);
     // remove any active tags that are not part of this macro (they would be dimmed)
-    const allowedTags = new Set(macros[macro] || []);
+    const allowedTags = new Set(macros[canonical] || []);
     activeTags.forEach(t => { if (!allowedTags.has(t)) activeTags.delete(t); });
   }
 
