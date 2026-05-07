@@ -5,6 +5,7 @@
       "src": "img/fumo/fumo1.png",
       "category": "fotografie",
       "year": 1960,
+      "tags": ["urbano"],
       "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
       "description": "Descrizione dell'immagine"
     },
@@ -30,6 +31,7 @@
       "src": "img/pacchetti/pack1.png",
       "category": "pacchetti",
       "year": 1960,
+      "tags": ["urbano"],
       "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
       "paese-pacchetti": "Giappone",
       "description": "Descrizione dell'immagine"    },

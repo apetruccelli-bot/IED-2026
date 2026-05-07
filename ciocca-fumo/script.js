@@ -27,6 +27,8 @@ async function loadData() {
   // parse the json
   const data = await res.json();
   // set the items and display items
+  console.log('res', res);
+  console.log('data', data);
   items = data.items;
   displayItems = [...items];
   buildTagsBar();
@@ -36,6 +38,7 @@ async function loadData() {
 // ── Collect all unique tags ───────────────────────────────────────────────
 function allTags() {
   const set = new Set();
+  console.log('items', items);
   items.forEach(item => item.tags.forEach(t => set.add(t)));
   return [...set].sort();
 }
