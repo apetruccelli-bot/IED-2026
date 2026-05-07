@@ -1,3 +1,25 @@
+@font-face {
+  font-family: 'Diatype-Mono';
+  src: url('font/ABCDiatypeSemi-MonoCondensed-Regular-Trial.woff2') format('woff2');
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Diatype';
+  src: url('font/ABCDiatype-Regular-Trial.woff2') format('woff2');
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Diatype-Mono';
+  src: url('font/ABCDiatypeSemi-MonoCondensed-RegularItalic-Trial.woff2') format('woff2');
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Diatype';
+  src: url('font/ABCDiatype-RegularItalic-Trial.woff2') format('woff2');
+  font-style: italic;
+}
+
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -14,6 +36,19 @@
   --tag-active-text: #ffffff;
   --accent: #1a1a1a;
   --radius: 10px;
+}
+
+*:not(.font-myTitle) {
+  font-family: 'Diatype', sans-serif  ;
+  font-size: 12px;
+}
+
+.font-myTitle {
+  font-family: 'Diatype-Mono';
+  font-size: 25px;
+  text-transform: uppercase;
+  line-height: 100%;
+  letter-spacing: 0.02em;
 }
 
 body {
@@ -130,9 +165,11 @@ button {
 /* ── GRID ── */
 .grid {
   padding: 20px 24px 60px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(32%, 1fr));
+  display: flex;
+  flex-direction: row;
   gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
 }
 
 /* ── CARD ── */
@@ -141,6 +178,10 @@ button {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  min-width: 320px;
+  max-width: 340px;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
 }
 
 .card:hover {
