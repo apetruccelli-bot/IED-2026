@@ -4,7 +4,8 @@
       "id": 1,
       "src": "img/banconi (1).png",
       "tags": ["vista frontale ravvicinata", "banco a bauletto", "neon tenui"],
-      "description": "Banco di vendita di Alfredo, Maglie, 1992"},
+      "description": "Banco di vendita di Alfredo, Maglie, 1992",
+      "size": 3},
     {
       "id": 2,
       "src": "img/banconi (2).png",
