@@ -56,10 +56,13 @@ body {
 
 .font-myTitle {
   font-family: 'SchengenA Book', sans-serif;
+  display: inline-block;
   font-size: 32px;
   text-transform: uppercase;
   line-height: 100%;
   letter-spacing: 0.02em;
+  position: relative;
+  z-index: 10000;
 }
 
 a {
@@ -111,9 +114,6 @@ header {
   outline: none;
   transition: border-color 0.15s;
   border: none;
-}
-
-.search-wrap input:focus {
 }
 
 
@@ -197,8 +197,6 @@ button {
 
 /* ── CARD ── */
 
-.card:hover {
-}
 
 .card-img {
   width: 100%;
@@ -273,7 +271,7 @@ button {
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 1000;
+        z-index: 9999;
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
@@ -297,23 +295,22 @@ button {
 .lb-content {
         position: relative;
         z-index: 1001;
-        padding: 10px;
+        padding: 60px;
         border-radius: 8px;
         display: flex;
         flex-direction: column;
-        max-width: 80vw;
-        max-height: 90vh;
+        max-width: 50vw;
+        max-height: 100vh;
         
       }
 
 .lb-img {
         max-width: 100%;
-        max-height: 80vh;
+        max-height: 70vh;
         object-fit: contain;
       }
 
 .lb-close, .lb-prev, .lb-next {
-        position: absolute;
         background: none;
         border: none;
         color: #FCFCFC;
@@ -322,38 +319,75 @@ button {
       }
 
 .lb-close {
+  position: absolute;
         right: 10px;
         top: 0px;
       }
 
 .lb-prev {
-        left: 30%;
-        top: 50%;
-        transform: translateY(-50%);
+  padding: 0;
       }
 
 .lb-next {
-        right: 30%;
-        top: 50%;
-        transform: translateY(-50%);
+  padding: 0;
       }
 
 .lb-info {
         color: #FCFCFC;
         font-family: inherit;
-        justify-self: center;
+        display: flex;
+        flex-direction: column;
       }
 
 .lb-id {
         display: block;
         font-weight: bold;
-        margin-bottom: 10px;
+        margin-bottom: 0;
+        flex-shrink: 0;
+      }
+
+.lb-tags-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        flex-wrap: nowrap;
       }
 
 .lb-tags {
         display: flex;
-        flex-wrap: wrap;
+  flex-wrap: nowrap;
         gap: 10px;
+        flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+      }
+
+.lb-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+
+.lb-description {
+        margin-top: 10px;
+        margin-bottom: 0;
+        max-width: 60ch;
+        line-height: 1.4;
+      }
+
+.lb-meta {
+        margin-top: 10px;
+      }
+
+.lb-meta-row {
+        margin: 0;
+        line-height: 1.4;
+      }
+
+.lb-meta-label {
+  text-transform: none;
       }
 
 

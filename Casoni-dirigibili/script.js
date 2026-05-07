@@ -10,11 +10,63 @@ const lightbox   = document.getElementById('lightbox');
 const lbImg      = document.getElementById('lb-img');
 const lbId       = document.getElementById('lb-id');
 const lbTagsEl   = document.getElementById('lb-tags');
+const lbDescription = document.getElementById('lb-description');
+const lbMeta     = document.getElementById('lb-meta');
 const lbClose    = document.getElementById('lb-close');
 const lbPrev     = document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
 const galleryScroll = document.querySelector('.gallery-scroll');
+
+function formatMetaValue(key, value) {
+  if (key === 'causes') {
+    return Array.isArray(value) ? value.join(', ') : (value || '-');
+  }
+  if (value === undefined || value === null || value === '') {
+    return '-';
+  }
+  return String(value);
+}
+
+function renderLightboxMeta(item) {
+  if (!lbMeta) return;
+
+  const category = (item.category || '').toLowerCase();
+  const fullMetaCategories = new Set(['airships', 'wreckage', 'newspapers']);
+  const compactMetaCategories = new Set(['study models', 'technical drawings', 'models', 'drawings']);
+  const metaLabels = {
+    causes: 'Causes',
+    country: 'Country',
+    year: 'Year',
+    victims: 'Victims',
+  };
+
+  let fields = [];
+  if (fullMetaCategories.has(category)) {
+    fields = ['causes', 'country', 'year', 'victims'];
+  } else if (compactMetaCategories.has(category)) {
+    fields = ['year', 'country'];
+  }
+
+  lbMeta.innerHTML = '';
+  if (fields.length === 0) return;
+
+  fields.forEach(field => {
+    const row = document.createElement('p');
+    row.className = 'lb-meta-row';
+    const label = document.createElement('span');
+    label.className = 'lb-meta-label';
+    label.textContent = `${metaLabels[field] || field}: `;
+
+    const value = document.createElement('span');
+    value.className = 'lb-meta-value';
+    value.textContent = formatMetaValue(field, item[field]);
+
+    row.appendChild(label);
+    row.appendChild(value);
+    lbMeta.appendChild(row);
+  });
+}
 
 let items = [];          // original data from JSON
 let displayItems = [];   // current display order (may be shuffled)
@@ -247,6 +299,9 @@ function openLightbox(index) {
     t.addEventListener('click', () => { toggleTag(tag); closeLightbox(); });
     lbTagsEl.appendChild(t);
   });
+
+  lbDescription.textContent = item.description || '';
+  renderLightboxMeta(item);
 
 
   lightbox.classList.add('open');
