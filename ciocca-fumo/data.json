@@ -23,7 +23,7 @@
         },
     {
       "id": 4,
-      "src": "img/fumo/fumo.anziano6.png",
+      "src": "img/fumo/fumo-anziano6.png",
       "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
       "description": "Descrizione dell'immagine"    },
     {
@@ -57,7 +57,7 @@
       "description": "Descrizione dell'immagine"    },
     {
       "id": 10,
-      "src": "img/gray5.jpg",
+      "src": "img/pacchetti/pack5.png",
       "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
       "description": "Descrizione dell'immagine"    }
   ]
