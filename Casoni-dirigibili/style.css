@@ -196,12 +196,6 @@ button {
 }
 
 /* ── CARD ── */
-.card {
-  background: var(--surface);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
 
 .card:hover {
 }
@@ -364,7 +358,7 @@ button {
 
 
 .gallery-scroll {
-  width: 150vw;
+  width: 100vw;
   height: 100%;
   overflow-x: scroll;
   overflow-y: hidden;
@@ -375,22 +369,27 @@ button {
 .archive-gallery {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   gap: 10px;
-  height: calc(100vh - 15rem - 20px);
+  height: calc(100vh - 15rem);
+}
+.archive-gallery > .archive-row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  height: calc(calc(100% / 3) - 30px);
   align-content: flex-start;
 }
 
 .card {
   background: transparent;
-  width: 270px;
-  height: 180px;
+  width: auto;
+  height: 100%;
   overflow: hidden;
   flex: 0 0 auto;
 }
 
 .card-img {
-  width: 100%;
+  width: auto;
   height: 100%;
   object-fit: cover;
   display: block;
