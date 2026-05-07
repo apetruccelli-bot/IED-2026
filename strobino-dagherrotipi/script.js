@@ -3,7 +3,7 @@ const searchInput = document.getElementById('search');
 const tagsBar = document.getElementById('tags-bar');
 const resultsInfo = document.getElementById('results-info');
 const btnRandom = document.getElementById('btn-random');
-
+ 
 const lightbox   = document.getElementById('lightbox');
 const lbImg      = document.getElementById('lb-img');
 const lbId       = document.getElementById('lb-id');
@@ -33,10 +33,30 @@ async function loadData() {
   render();
 }
 
+const tagDagherrotipi = ['tags-dagherrotipi','dagh-esposizione','dagh-fissaggio','dagh-difetti-fisici','dagh-difetti-ottici','anno'];
+const tagFotocamere = ['tags-fotocamere','anno'];
+const tagFotografi = ['tags-fotografi'];
+
+// ── Get tags for a single item based on its categoria ───────────────────
+const categoryKeys = {
+  dagherrotipi: tagDagherrotipi,
+  fotocamere:   tagFotocamere,
+  fotografi:    tagFotografi,
+};
+function getItemTags(item) {
+  const keys = categoryKeys[item.categoria] || [];
+  return keys.flatMap(k => {
+    const v = item[k];
+    if (Array.isArray(v)) return v;
+    if (v != null) return [String(v)];
+    return [];
+  });
+}
+
 // ── Collect all unique tags ───────────────────────────────────────────────
 function allTags() {
   const set = new Set();
-  items.forEach(item => item.tags.forEach(t => set.add(t)));
+  items.forEach(item => getItemTags(item).forEach(t => set.add(t)));
   return [...set].sort();
 }
 
@@ -77,11 +97,11 @@ function filteredItems() {
     // check if the item matches the tags
     const matchesTags =
       activeTags.size === 0 ||
-      [...activeTags].every(t => item.tags.includes(t));
+      [...activeTags].every(t => getItemTags(item).includes(t));
     const matchesSearch =
       q === '' ||
       item.description.toLowerCase().includes(q) ||
-      item.tags.some(t => t.toLowerCase().includes(q));
+      getItemTags(item).some(t => t.toLowerCase().includes(q));
     return matchesTags && matchesSearch;
   });
 }
@@ -178,7 +198,7 @@ function render() {
 
     const tagsEl = document.createElement('div');
     tagsEl.className = 'card-tags';
-    item.tags.forEach(tag => {
+    getItemTags(item).forEach(tag => {
       const t = document.createElement('span');
       t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
       t.textContent = tag;
@@ -211,7 +231,7 @@ function openLightbox(index) {
 
   lbTagsEl.innerHTML = '';
   // loop through the tags and create a span for each tag
-  item.tags.forEach(tag => {
+  getItemTags(item).forEach(tag => {
     const t = document.createElement('span');
     t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
     t.textContent = tag;

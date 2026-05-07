@@ -1,4 +1,6 @@
-const grid = document.getElementById('archive-gallery');
+const gridRow1 = document.getElementsByClassName('archive-row')[0];
+const gridRow2 = document.getElementsByClassName('archive-row')[1];
+const gridRow3 = document.getElementsByClassName('archive-row')[2];
 const searchInput = document.getElementById('search');
 const tagsBar = document.getElementById('tags-bar');
 const resultsInfo = document.getElementById('results-info');
@@ -12,6 +14,7 @@ const lbClose    = document.getElementById('lb-close');
 const lbPrev     = document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
+const galleryScroll = document.querySelector('.gallery-scroll');
 
 let items = [];          // original data from JSON
 let displayItems = [];   // current display order (may be shuffled)
@@ -19,6 +22,17 @@ let activeTags = new Set();
 let searchQuery = '';
 let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
+
+if (galleryScroll) {
+  galleryScroll.addEventListener('wheel', (e) => {
+    const dominantDelta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+
+    if (dominantDelta === 0) return;
+
+    e.preventDefault();
+    galleryScroll.scrollLeft += dominantDelta;
+  }, { passive: false });
+}
 
 // ── Load data ──────────────────────────────────────────────────────────────
 async function loadData() {
@@ -136,7 +150,10 @@ function render() {
       : `${visible.length} / ${items.length} items`;
 
   // clear the grid
-  grid.innerHTML = '';
+  //grid.innerHTML = '';
+  // gridRow1.innerHTML = '';
+  // gridRow2.innerHTML = '';
+  // gridRow3.innerHTML = '';
 
   // if there are no visible items, show the empty state
   console.log('visible lenght', visible.length);
@@ -144,7 +161,10 @@ function render() {
     const empty = document.createElement('div');
     empty.className = 'empty';
     empty.textContent = 'Nessun risultato.';
-    grid.appendChild(empty);
+    //grid.appendChild(empty);
+    // gridRow1.appendChild(empty);
+    // gridRow2.appendChild(empty);
+    // gridRow3.appendChild(empty);
     return;
   }
 
@@ -197,7 +217,9 @@ function render() {
     card.addEventListener('click', () => openLightbox(i));
 
     card.appendChild(body);
-    grid.appendChild(card);
+    //grid.appendChild(card);
+    const rows = [gridRow1, gridRow2, gridRow3];
+    rows[i % 3].appendChild(card);
   });
 }
 

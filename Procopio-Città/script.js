@@ -113,11 +113,15 @@ function filterRows(term = '') {
 
 function render(term = '') {
   const filteredRows = filterRows(term);
-  rowsHost.innerHTML = filteredRows.map(rowTemplate).join('');
+  if (rowsHost) {
+    rowsHost.innerHTML = filteredRows.map(rowTemplate).join('');
+  }
 
   filteredGalleryItems = filterGalleryItems(term);
   const galleryMarkup = filteredGalleryItems.map((item, index) => galleryTemplate(item, index)).join('');
-  galleryHost.innerHTML = galleryMarkup || '<p class="col-span-6 p opacity-50">Nessuna immagine trovata.</p>';
+  if (galleryHost) {
+    galleryHost.innerHTML = galleryMarkup || '<p class="col-span-6 p opacity-50">Nessuna immagine trovata.</p>';
+  }
 
   document.querySelectorAll('[data-gallery-index]').forEach((element) => {
     element.addEventListener('click', () => {
@@ -158,10 +162,10 @@ function navigateLightbox(direction) {
   openLightbox(nextIndex);
 }
 
-lbClose.addEventListener('click', closeLightbox);
-lbBackdrop.addEventListener('click', closeLightbox);
-lbPrev.addEventListener('click', () => navigateLightbox(-1));
-lbNext.addEventListener('click', () => navigateLightbox(1));
+if (lbClose) lbClose.addEventListener('click', closeLightbox);
+if (lbBackdrop) lbBackdrop.addEventListener('click', closeLightbox);
+if (lbPrev) lbPrev.addEventListener('click', () => navigateLightbox(-1));
+if (lbNext) lbNext.addEventListener('click', () => navigateLightbox(1));
 
 document.addEventListener('keydown', (event) => {
   if (!lightbox.classList.contains('open')) return;
@@ -170,9 +174,11 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') closeLightbox();
 });
 
-searchInput.addEventListener('input', (event) => {
-  render(event.target.value);
-});
+if (searchInput) {
+  searchInput.addEventListener('input', (event) => {
+    render(event.target.value);
+  });
+}
 
 hydrateRowsWithImages()
   .then(() => render())

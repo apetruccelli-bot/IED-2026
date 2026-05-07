@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Archivio</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-myBlack: #1E1E1E;
+        --color-myWhite: #FCFCFC;
+        --spacing-10px: 10px;
+        --spacing-30px: 30px;
+      }
+    </style>
+    </head>
+  <body>
+    <div class="w-screen h-screen grid grid-cols-8 specialGrid">
+      <div class="col-start-1 col-end-3 p-10px bg-myBlack flex flex-col justify-between text-myWhite z-[1100]">
+        <div class="flex flex-col">
+          <a href="/" class="font-myTitle">Città<br>interrotte</a>
+          <p class="">di Fondazione Scorza</p>
+        </div>
+        <div class="sidebar-links flex flex-col">
+          <a href="index.html" class="font-myTitle">Archivio</a>
+          <a href="storia.html" class="font-myTitle">Storia</a>
+          <a href="/" class="font-myTitle">Statistiche</a>
+        </div>
+      </div>
+    <div class="col-start-3 col-end-9 bg-myWhite h-screen overflow-y-scroll">
+        <div class="sticky top-0 z-20 col-span-full pt-30px pl-10px pr-10px pb-30px bg-myWhite ">
+          <div class="grid grid-cols-6 mb-10px">
+            <div class="p text-justify">Sezione 1</div>
+            <div class="p text-justify">Sezione 2</div>
+            <div class="p text-justify">Sezione 3</div>
+            <div class="p text-justify">Sezione 4</div>
+            <div class="p text-justify">Sezione 5</div>
+            <div class="p text-justify">Sezione 6</div>
+          </div>
+        </div>
+    </div>
+
+   <script src="script.js"></script>
+  </body>
+</html>

@@ -5,6 +5,7 @@
       "src": "img/fumo/fumo1.png",
       "category": "fotografie",
       "year": 1960,
+      "tags": ["urbano"],
       "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
       "description": "Descrizione dell'immagine"
     },
@@ -22,7 +23,7 @@
         },
     {
       "id": 4,
-      "src": "img/fumo/fumo.anziano6.png",
+      "src": "img/fumo/fumo-anziano6.png",
       "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
       "description": "Descrizione dell'immagine"    },
     {
@@ -30,6 +31,7 @@
       "src": "img/pacchetti/pack1.png",
       "category": "pacchetti",
       "year": 1960,
+      "tags": ["urbano"],
       "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
       "paese-pacchetti": "Giappone",
       "description": "Descrizione dell'immagine"    },
@@ -55,7 +57,7 @@
       "description": "Descrizione dell'immagine"    },
     {
       "id": 10,
-      "src": "img/gray5.jpg",
+      "src": "img/pacchetti/pack5.png",
       "tags": ["astratto", "industriale", "metallo", "struttura", "geometria"],
       "description": "Descrizione dell'immagine"    }
   ]

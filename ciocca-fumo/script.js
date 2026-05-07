@@ -27,6 +27,8 @@ async function loadData() {
   // parse the json
   const data = await res.json();
   // set the items and display items
+  console.log('res', res);
+  console.log('data', data);
   items = data.items;
   displayItems = [...items];
   buildTagsBar();
@@ -36,12 +38,14 @@ async function loadData() {
 // ── Collect all unique tags ───────────────────────────────────────────────
 function allTags() {
   const set = new Set();
+  console.log('items', items);
   items.forEach(item => item.tags.forEach(t => set.add(t)));
   return [...set].sort();
 }
 
 // ── Build the filter tags bar ─────────────────────────────────────────────
 function buildTagsBar() {
+  return
   tagsBar.innerHTML = '';
   allTags().forEach(tag => {
     const btn = document.createElement('button');
@@ -97,7 +101,7 @@ function shuffle(arr) {
 }
 
 // ── Random button ─────────────────────────────────────────────────────────
-btnRandom.addEventListener('click', () => {
+btnRandom?.addEventListener('click', () => {
   if (isRandom) {
     // restore original order
     displayItems = [...items];
@@ -112,7 +116,7 @@ btnRandom.addEventListener('click', () => {
 });
 
 // ── Search ────────────────────────────────────────────────────────────────
-searchInput.addEventListener('input', e => {
+searchInput?.addEventListener('input', e => {
   searchQuery = e.target.value;
   render();
 });
@@ -124,10 +128,12 @@ function render() {
   const visible = filteredItems();
 
   // set the results info
-  resultsInfo.textContent =
+  if(resultsInfo) {
+    resultsInfo.textContent =
     visible.length === items.length
       ? `${items.length} items`
       : `${visible.length} / ${items.length} items`;
+  }
 
   // clear the grid
   grid.innerHTML = '';
