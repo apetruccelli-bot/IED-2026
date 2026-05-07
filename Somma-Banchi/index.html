@@ -11,12 +11,20 @@
         --color-myBlack: #090909;
         --color-myWhite: #FAFAFA;
         --spacing-10px: 10px;
+        --spacing-20px: 20px;
       }
     </style>
   </head>
   <body>
     <header>
-      <div class="header-inner">
+
+      <a href="/" class="font-myTitle">Macellerie</a>
+      <div class="flex gap-20px">
+        <a href="/" class="font-myTitle">Esplora</a>
+        <a href="/" class="font-myTitle">Storia</a>
+      </div>
+
+      <!-- <div class="header-inner">
         <div class="header-row">
           <div class="search-wrap">
             <input
@@ -29,12 +37,40 @@
           <button class="btn-random" id="btn-random">Random</button>
         </div>
         <div class="tags-bar" id="tags-bar"></div>
-      </div>
+      </div -->
+
     </header>
 
-    <p class="results-info" id="results-info"></p>
+    <!-- <p class="results-info" id="results-info"></p> -->
+    
+    <div class="mainLayout fixed top-0 left-0 w-screen h-screen overflow-y-scroll
+    grid grid-cols-15 gap-10px">
+      <div class="descriptionAndFilters col-span-3 h-full flex flex-col justify-between pb-10px">
+        <div class="description flex flex-col gap-10px">
+          <div class="english text-myGrey">A businessman bent down to pick up a cigarette butt as if to look for something inside it A
+            businessman bent down to pick up a cigarette butt as if to look for something inside it A businessman bent down to
+            pick up a cigarette butt as if to look for something inside it</div>
+        </div>
+        <div class="filters grid grid-cols-4 gap-10px mt-auto h-fit">
+          <div class="filter col-span-4 grid grid-cols-4 gap-10px h-fit">
+            <p class="col-span-1">Status</p>
+            <p class="col-span-3 flex flex-wrap gap-x-10px">
+              <span>Uomini d’affari</span>
+              <span>Anziani</span>
+              <span>Giovani</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <main id="grid" class="col-span-12 wireframe">
+        <div class="myColumn column-1"></div>
+        <div class="myColumn column-2"></div>
+        <div class="myColumn column-3"></div>
+        <div class="myColumn column-4"></div>
+      </main>
+    </div>
 
-    <main class="wireframe" id="grid"></main>
+
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>

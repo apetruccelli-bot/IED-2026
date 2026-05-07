@@ -1,4 +1,5 @@
-const grid = document.getElementById('grid');
+//const grid = document.getElementById('grid');
+const myColumns = document.getElementsByClassName('myColumn');
 const searchInput = document.getElementById('search');
 const tagsBar = document.getElementById('tags-bar');
 const resultsInfo = document.getElementById('results-info');
@@ -42,6 +43,7 @@ function allTags() {
 
 // ── Build the filter tags bar ─────────────────────────────────────────────
 function buildTagsBar() {
+  return
   tagsBar.innerHTML = '';
   allTags().forEach(tag => {
     const btn = document.createElement('button');
@@ -97,7 +99,7 @@ function shuffle(arr) {
 }
 
 // ── Random button ─────────────────────────────────────────────────────────
-btnRandom.addEventListener('click', () => {
+btnRandom?.addEventListener('click', () => {
   if (isRandom) {
     // restore original order
     displayItems = [...items];
@@ -112,7 +114,7 @@ btnRandom.addEventListener('click', () => {
 });
 
 // ── Search ────────────────────────────────────────────────────────────────
-searchInput.addEventListener('input', e => {
+searchInput?.addEventListener('input', e => {
   searchQuery = e.target.value;
   render();
 });
@@ -124,20 +126,22 @@ function render() {
   const visible = filteredItems();
 
   // set the results info
-  resultsInfo.textContent =
+  if (resultsInfo) {
+    resultsInfo.textContent =
     visible.length === items.length
       ? `${items.length} items`
       : `${visible.length} / ${items.length} items`;
+  }
 
-  // clear the grid
-  grid.innerHTML = '';
+  // clear the columns
+  [...myColumns].forEach(col => col.innerHTML = '');
 
   // if there are no visible items, show the empty state
   if (visible.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'empty';
     empty.textContent = 'Nessun risultato.';
-    grid.appendChild(empty);
+    myColumns[0].appendChild(empty);
     return;
   }
 
@@ -190,7 +194,7 @@ function render() {
     card.addEventListener('click', () => openLightbox(i));
 
     card.appendChild(body);
-    grid.appendChild(card);
+    myColumns[i % myColumns.length].appendChild(card);
   });
 }
 
