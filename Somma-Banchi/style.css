@@ -17,11 +17,12 @@
 *:not(.font-myTitle) {
   font-family: 'Prophet Regular', sans-serif  ;
   font-size: 12px;
+  line-height: 115%;
 }
 
 .font-myTitle {
   font-family: 'Prophet Medium';
-  font-size: 36px;
+  font-size: 28px;
   text-transform: uppercase;
   line-height: 100%;
   letter-spacing: 0.02em;
@@ -34,14 +35,14 @@
 }
 
 :root {
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --text: #1a1a1a;
+  --bg: #FAFAFA;
+  --surface: #FAFAFA;
+  --text: #090909;
   --muted: #888880;
   --tag-bg: #ebebea;
-  --tag-active: #1a1a1a;
-  --tag-active-text: #ffffff;
-  --accent: #1a1a1a;
+  --tag-active: #090909;
+  --tag-active-text: #FAFAFA;
+  --accent: #090909;
   --radius: 0px;
 }
 
@@ -66,7 +67,9 @@ header {
   top: 0;
   z-index: 100;
   background: var(--bg);
-  padding: 16px 24px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .header-inner {
@@ -188,13 +191,25 @@ button {
 }
 
 /* ── WIREFRAME ── */
-.wireframe {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+.mainLayout {
+  padding-top: 6rem;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* padding-bottom: 10px; */
+}
+.myColumn {
+  display: flex;
+  flex-direction: column;
   gap: 10px;
-  margin-left: 310px;
-  margin-right: 10px;
-  padding: 20px 0;
+}
+.wireframe {
+  /* display: grid;
+  grid-template-columns: repeat(4, 1fr); */
+  display: flex;
+  gap: 10px;
+  height: 100%;
+  overflow: scroll;
+
 }
 
 /* ── CARD ── */
@@ -203,6 +218,8 @@ button {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 0;
 }
 
 .card:hover {
@@ -216,8 +233,8 @@ button {
 }
 
 .card-body {
+  display: none;
   padding: 14px 0px 16px;
-  display: flex;
   flex-direction: column;
   gap: 10px;
   flex: 1;
