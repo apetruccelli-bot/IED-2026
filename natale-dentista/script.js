@@ -1,8 +1,5 @@
 const grid = document.getElementById('grid');
-const searchInput = document.getElementById('search');
 const tagsBar = document.getElementById('tags-bar');
-const resultsInfo = document.getElementById('results-info');
-const btnRandom = document.getElementById('btn-random');
 
 const lightbox   = document.getElementById('lightbox');
 const lbImg      = document.getElementById('lb-img');
@@ -14,19 +11,17 @@ const lbNext     = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
 
 let items = [];          // original data from JSON
-let displayItems = [];   // current display order (may be shuffled)
+let displayItems = [];
 let activeTags = new Set();
-let searchQuery = '';
-let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
 let activeMacro = null;  // currently selected macro category (string)
 let macroFilterIds = null; // Set of ids to show when a macro is active
 
-// explicit mapping macro -> ids (provided by user)
+// explicit mapping macro -> ids
 const macroToIds = {
-  "strumentazione da lavoro": [8,12,14,28,29,31,18,21,27,35,36,41,23,24,31,32,33,34,17,22,25,26,30,36].filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b),
+  "strumenti": [8,12,14,28,29,31,18,21,27,35,36,41,23,24,31,32,33,34,17,22,25,26,30,36].filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b),
   "radiografie": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,37,39].filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b),
-  "studio dentistico": [23,24,9,13,16,18,20,22,25,26,27,28,29,35,36,37,38,39,40,41].filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b)
+  "studio": [23,24,9,13,16,18,20,22,25,26,27,28,29,35,36,37,38,39,40,41].filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b)
 };
 
 // ── Load data ──────────────────────────────────────────────────────────────
@@ -40,21 +35,21 @@ async function loadData() {
   // macro categories (optional in data.json)
   window.macroCategories = data.macroCategories || {};
   displayItems = [...items];
-  buildMacroBar();
-  buildTagsBar();
+  buildCategoriesList();
   syncMacroStates();
   render();
 }
 
 function syncMacroStates() {
   const macros = window.macroCategories || {};
-  const macroBar = document.getElementById('macro-bar');
-  if (!macroBar) return;
-  macroBar.querySelectorAll('.macro-btn').forEach(b => {
-    const m = b.dataset.macro;
+  const container = document.getElementById('categories-list');
+  if (!container) return;
+  container.querySelectorAll('.cat-section').forEach(sec => {
+    const title = sec.querySelector('.cat-title');
+    const m = title ? title.textContent.toLowerCase() : null;
     const tlist = macros[m] || [];
     const isActive = tlist.some(t => activeTags.has(t));
-    b.classList.toggle('active', isActive);
+    if (title) title.classList.toggle('active', isActive);
   });
 }
 
@@ -66,36 +61,40 @@ function allTags() {
 }
 
 // ── Build the filter tags bar ─────────────────────────────────────────────
-function buildTagsBar() {
-  tagsBar.innerHTML = '';
-  allTags().forEach(tag => {
-    const btn = document.createElement('button');
-    btn.className = 'tag-btn';
-    btn.textContent = tag;
-    btn.dataset.tag = tag;
-    btn.addEventListener('click', () => toggleTag(tag));
-    tagsBar.appendChild(btn);
+function buildCategoriesList() {
+  const container = document.getElementById('categories-list');
+  if (!container) return;
+  container.innerHTML = '';
+  const macros = window.macroCategories || {};
+  Object.keys(macros).forEach(m => {
+    const section = document.createElement('div');
+    section.className = 'cat-section';
+    const h = document.createElement('div');
+    h.className = 'cat-title';
+    h.textContent = capitalize(m);
+    section.appendChild(h);
+
+    const list = document.createElement('div');
+    list.className = 'cat-list';
+    (macros[m] || []).forEach(tag => {
+      const btn = document.createElement('button');
+      btn.className = 'tag-btn';
+      btn.textContent = tag;
+      btn.dataset.tag = tag;
+      btn.addEventListener('click', () => toggleTag(tag));
+      list.appendChild(btn);
+    });
+    section.appendChild(list);
+    // macro click toggles the macro filter
+    h.addEventListener('click', () => toggleMacro(m));
+    container.appendChild(section);
   });
-  // ensure tag button states reflect any active macro
+  // sync states
   updateTagButtonStates();
 }
 
-// build the macro categories bar (above tags bar)
-function buildMacroBar() {
-  const macroBar = document.getElementById('macro-bar');
-  if (!macroBar) return;
-  macroBar.innerHTML = '';
-  const macros = window.macroCategories || {};
-  Object.keys(macros).forEach(m => {
-    const btn = document.createElement('button');
-    btn.className = 'macro-btn';
-    btn.textContent = m;
-    btn.dataset.macro = m;
-    btn.addEventListener('click', () => toggleMacro(m));
-    // mark active if matches
-    if (activeMacro === m) btn.classList.add('active');
-    macroBar.appendChild(btn);
-  });
+function capitalize(s) {
+  return String(s).charAt(0).toUpperCase() + String(s).slice(1);
 }
 
 // toggle a macro: selects/deselects all tags that belong to that macro
@@ -107,7 +106,7 @@ function toggleMacro(macro) {
     activeMacro = null;
     macroFilterIds = null;
     // restore display items to full set (respecting random state)
-    displayItems = isRandom ? shuffle(items) : [...items];
+    displayItems = [...items];
   } else {
     activeMacro = macro;
     // prefer explicit IDs mapping from macroToIds, fallback to finding items by tags listed in data
@@ -123,7 +122,7 @@ function toggleMacro(macro) {
     }
     // set displayItems to only items in macroFilterIds (preserve random if active)
     const base = items.filter(it => macroFilterIds ? macroFilterIds.has(it.id) : true);
-    displayItems = isRandom ? shuffle(base) : base;
+  displayItems = base;
     // remove any active tags that are not part of this macro (they would be dimmed)
     const allowedTags = new Set(macros[macro] || []);
     activeTags.forEach(t => { if (!allowedTags.has(t)) activeTags.delete(t); });
@@ -146,11 +145,11 @@ function updateTagButtonStates() {
   const macro = activeMacro;
   const macros = window.macroCategories || {};
   const allowed = macro ? new Set(macros[macro] || []) : null;
-  tagsBar.querySelectorAll('.tag-btn').forEach(btn => {
+  const container = document.getElementById('categories-list');
+  if (!container) return;
+  container.querySelectorAll('.tag-btn').forEach(btn => {
     const tag = btn.dataset.tag;
-    // active state
     btn.classList.toggle('active', activeTags.has(tag));
-    // dim if macro active and tag not in allowed set
     if (macro && (!allowed || !allowed.has(tag))) {
       btn.classList.add('dimmed');
     } else {
@@ -175,53 +174,12 @@ function toggleTag(tag) {
 
 // ── Filter logic ──────────────────────────────────────────────────────────
 function filteredItems() {
-
-  // get the search query
-  const q = searchQuery.toLowerCase().trim();
-  // filter the items
+  // filter the items by active tags only
   return displayItems.filter(item => {
-    // check if the item matches the tags
-    const matchesTags =
-      activeTags.size === 0 ||
-      [...activeTags].every(t => item.tags.includes(t));
-    const matchesSearch =
-      q === '' ||
-      item.description.toLowerCase().includes(q) ||
-      item.tags.some(t => t.toLowerCase().includes(q));
-    return matchesTags && matchesSearch;
+    const matchesTags = activeTags.size === 0 || [...activeTags].every(t => item.tags.includes(t));
+    return matchesTags;
   });
 }
-
-// ── Shuffle array (Fisher-Yates) ──────────────────────────────────────────
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-// ── Random button ─────────────────────────────────────────────────────────
-btnRandom.addEventListener('click', () => {
-  if (isRandom) {
-    // restore original order
-    displayItems = [...items];
-    btnRandom.textContent = 'Random';
-    isRandom = false;
-  } else {
-    displayItems = shuffle(items);
-    btnRandom.textContent = 'Reset';
-    isRandom = true;
-  }
-  render();
-});
-
-// ── Search ────────────────────────────────────────────────────────────────
-searchInput.addEventListener('input', e => {
-  searchQuery = e.target.value;
-  render();
-});
 
 // ── Render cards ──────────────────────────────────────────────────────────
 function render() {
@@ -229,11 +187,7 @@ function render() {
   // get the visible items
   const visible = filteredItems();
 
-  // set the results info
-  resultsInfo.textContent =
-    visible.length === items.length
-      ? `${items.length} items`
-      : `${visible.length} / ${items.length} items`;
+  // results info removed from UI; no-op here
 
   // clear the grid
   grid.innerHTML = '';
@@ -264,8 +218,11 @@ function render() {
     img.alt = `Item ${item.id}`;
     // set the loading attribute
     img.loading = 'lazy';
-    // append the image to the card
-    card.appendChild(img);
+  // append the image to the card
+  card.appendChild(img);
+
+  // add a data-delay to stagger animations slightly
+  img.style.transitionDelay = `${(i % 6) * 40}ms`;
 
     // body
     const body = document.createElement('div');
@@ -298,6 +255,49 @@ function render() {
     card.appendChild(body);
     grid.appendChild(card);
   });
+
+  // observe images for scroll-in animation
+  const imgs = document.querySelectorAll('.card-img');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(ent => {
+      if (ent.isIntersecting) {
+        ent.target.classList.add('in-view');
+      }
+    });
+  }, { threshold: 0.12 });
+  imgs.forEach(img => observer.observe(img));
+
+  // build/update thumbnail rail for visible items
+  const thumbRail = document.getElementById('thumb-rail');
+  if (thumbRail) {
+    thumbRail.innerHTML = '';
+    visible.forEach((item, idx) => {
+      const t = document.createElement('img');
+      t.className = 'thumb';
+      t.src = item.src;
+      t.alt = `#${item.id}`;
+      t.dataset.index = idx;
+      t.addEventListener('click', () => {
+        // scroll to corresponding card
+        const cards = document.querySelectorAll('.card');
+        const card = cards[idx];
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      thumbRail.appendChild(t);
+    });
+
+    // highlight active thumb based on which card is in viewport
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(ent => {
+        if (ent.isIntersecting) {
+          const cards = Array.from(document.querySelectorAll('.card'));
+          const index = cards.indexOf(ent.target);
+          thumbRail.querySelectorAll('.thumb').forEach((th, i) => th.classList.toggle('active', i === index));
+        }
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('.card').forEach(c => cardObserver.observe(c));
+  }
 }
 
 // ── Lightbox ──────────────────────────────────────────────────────────────
