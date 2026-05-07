@@ -4,7 +4,7 @@
   "id": 1,
   "src": "img/palombari/palombaro2.jpg",
   "tags": ["seabed", "dust", "rocks", "seaweed"],
-  "category": "Missions",
+  "category": "missions",
   "subcategory": "immersions",
   "area": "strait of Florida",
   "description": "A deep sea diver photographed on the ocean floor in the Strait of Florida, surrounded by sediment and marine life."
@@ -22,7 +22,7 @@
       "id": 3,
       "src": "img/palombari/palombaro4.jpg",
       "tags": ["dust", "seabed", "seaweed"],
-      "category": "Missions",
+      "category": "missions",
       "area": ["Aleutian Isalnds - Alaska"],
       "subcategory": "immersions",
       "description": "Un palombaro sott’acqua tiene tra le mani il tubo dell’aria collegato alla superficie. Il fondale è visibile sotto di lui, mentre bolle e particelle in sospensione riempiono l’acqua."
@@ -47,7 +47,7 @@
       "id": 6,
       "src": "img/palombari/palombaro7.jpg",
       "tags": ["surface", "crew"],
-      "category": "Missions",
+      "category": "missions",
       "subcategory": "deck operations",
       "description": "Un palombaro sale una scala metallica per uscire dall’acqua e tornare sul ponte della nave. Tiene in mano una parte dell’attrezzatura mentre il mare si estende sullo sfondo."
     },
@@ -55,7 +55,7 @@
       "id": 7,
       "src": "img/palombari/palombaro8.jpg",
       "tags": ["seabed", "dust", "rocks"],
-      "category": "Missions",
+      "category": "missions",
       "subcategory": "immersions",
       "description": "Un palombaro si muove sott’acqua con una bombola sulle spalle e un cavo di sicurezza collegato. Il corpo è inclinato in avanti mentre avanza vicino al fondale."
     },
@@ -63,7 +63,7 @@
       "id": 8,
       "src": "img/palombari/palombaro9.jpg",
       "tags": ["findings", "seabed", "dust"],
-      "category": "Missions",
+      "category": "missions",
       "subcategory": "immersions",
       "description": "Un palombaro esplora una grande struttura sommersa, probabilmente parte di un relitto o di un macchinario. L’oggetto è coperto di incrostazioni marine, segno di lunga permanenza sott’acqua."
     },
@@ -79,7 +79,7 @@
       "id": 10,
       "src": "img/palombari/palombaro11.jpg",
       "tags": ["seabed", "dust", "seaweed"],
-      "category": "Missions",
+      "category": "missions",
       "subcategory": "immersions",
       "description": "Un palombaro in tuta pesante esplora il seabed utilizzando una torcia subacquea. Il fascio di luce illumina l’acqua torbida mentre bolle d’aria risalgono verso la superficie."
     },
@@ -87,7 +87,7 @@
       "id": 11,
       "src": "img/palombari/palombaro12.jpg",
       "tags": ["surface", "crew"],
-      "category": "Missions",
+      "category": "missions",
       "subcategory": "deck operations",
       "description": "Un palombaro emerge dall’acqua accanto a una nave e si aggrappa a una scala metallica per risalire a bordo, tenendo parte dell’attrezzatura nella mano."
     },
@@ -111,7 +111,7 @@
       "id": 14,
       "src": "img/palombari/palombaro15.jpg",
       "tags": ["seabed", "dust", "rocks", "seaweed"],
-      "category": "Missions",
+      "category": "missions",
       "subcategory": "immersions",
       "description": "Un palombaro cammina lentamente sul seabed vicino a formazioni rocciose o coralline, con bolle d’aria che emergono dal casco."
     },
@@ -119,7 +119,7 @@
       "id": 15,
       "src": "img/palombari/palombaro16.jpg",
       "tags": ["seabed", "underwater canyon", "rocks"],
-      "category": "Missions",
+      "category": "missions",
       "subcategory": "immersions",
       "description": "Un palombaro avanza sul fondale tra formazioni rocciose, con un cavo collegato alla superficie che segue i suoi movimenti."
     },
@@ -151,7 +151,7 @@
       "id": 19,
       "src": "img/palombari/palombaro20.jpg",
       "tags": [ "seabed", "findings"],
-      "category": "Missions",
+      "category": "missions",
       "subcategory": "immersions",
       "description": "Un palombaro esamina un reperto sul fondale, circondato da sedimenti e detriti marini."
     },
@@ -159,7 +159,7 @@
       "id": 20,
       "src": "img/palombari/palombaro21.jpg",
       "tags": [ "seabed", "dust", "rocks"],
-      "category": "Missions",
+      "category": "missions",
       "subcategory": "immersions",
       "description": "Un palombaro si muove sul fondale mentre manipola un tubo o strumento, impegnato in un’attività tecnica subacquea."
     },
@@ -167,14 +167,14 @@
       "id": 21,
       "src": "img/palombari/palombaro22.jpg",
       "tags": [ "seabed", "findings", "marine creature"],
-      "category": "Missions",
+      "category": "missions",
       "subcategory": "immersions",
       "description": "A deep sea diver inspecting a creature on the seabed"
     },
     {"id": 22,
       "src": "img/palombari/palombaro23.jpg",
       "tags": ["seabed", "rocks", "findings"],
-      "category": "Missions",
+      "category": "missions",
       "subcategory": "immersions",
       "description": "Un palombaro si muove sul fondale con un cavo collegato alla superficie, mentre bolle d’aria emergono dal casco."
     },
@@ -189,7 +189,7 @@
       "id": 24,
       "src": "img/fondali/fondali1.jpg",
       "tags": ["rocks","coral","dust", "underwater canyon"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory":"landscapes",
       "description": "Un canyon sottomarino stretto con pareti rocciose scure. Il fondale sabbioso è punteggiato da piccoli coralli e massi, mentre una luce diffusa filtra dall’alto creando un forte contrasto."
     },
@@ -197,7 +197,7 @@
       "id": 25,
       "src": "img/fondali/fondali2.jpg",
       "tags": ["marine creature", "rocks" ],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory":"sea creatures",
       "description": "Silhouette di un grande mammifero marino che nuota sopra un fondale corallino, illuminato da una luce soffusa dall’alto."
     },
@@ -205,7 +205,7 @@
       "id": 26,
       "src": "img/fondali/fondali3.jpg",
       "tags": ["coral", "rocks"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "landscapes",
       "description": "Primo piano di formazioni coralline dense e tondeggianti, con texture dettagliate e profondità marcata."
     },
@@ -213,7 +213,7 @@
       "id": 27,
       "src": "img/fondali/fondali4.jpg",
       "tags": ["dust", "sediments", "rocks", "sand"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "landscapes",
       "description": "Un fondale sabbioso con sedimenti in sospensione che creano un’atmosfera torbida, con pochi elementi visibili oltre alla texture del fondo."
     },
@@ -221,7 +221,7 @@
       "id": 28,
       "src": "img/fondali/fondali5.jpg",
       "tags": ["marine creature", "seabed", "rocks"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "sea creatures",
       "description": "Vista ravvicinata del corpo di una grande marine creature."
     },
@@ -229,7 +229,7 @@
       "id": 29,
       "src": "img/fondali/fondali6.jpg",
       "tags": ["coral", "dust", "sediments"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "landscapes",
       "description": "Distesa piatta di coralli bassi che si estende verso l’orizzonte."
     },
@@ -237,7 +237,7 @@
       "id": 30,
       "src": "img/fondali/fondali7.jpg",
       "tags": ["marine creature", "dust"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "sea creatures",
       "description": "Banco di pesci in silhouette che nuotano verso la superficie, attraversando raggi di luce."
     },
@@ -245,7 +245,7 @@
       "id": 31,
       "src": "img/fondali/fondali8.jpg",
       "tags": ["underwater canyon", "seaweed"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "landscapes",
       "description": "Ambiente subacqueo molto scuro."
     },
@@ -253,7 +253,7 @@
       "id": 32,
       "src": "img/fondali/fondali9.jpg",
       "tags": ["marine creature", "rocks", "underwater canyon"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "sea creatures",
       "description": "Silhouette di una marine creature che attraversa uno stretto passaggio roccioso illuminato dall’alto."
     },
@@ -261,7 +261,7 @@
       "id": 33,
       "src": "img/fondali/fondali10.jpg",
       "tags": ["coral",  "dust", "sediments"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "landscapes",
       "description": "Fondale sabbioso con piccoli coralli sparsi e una luce circolare diffusa che illumina la scena."
     },
@@ -269,7 +269,7 @@
       "id": 34,
       "src": "img/fondali/fondali11.jpg",
       "tags": ["coral",  "dust", "sediments"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "landscapes",
       "description": "Paesaggio corallino con forte presenza di particelle sospese e grana, che crea un effetto quasi nevoso."
     },
@@ -277,7 +277,7 @@
       "id": 35,
       "src": "img/fondali/fondali12.jpg",
       "tags": ["marine creature", "coral", "rocks"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "sea creatures",
       "description": "Silhouette di una marine creature che nuota sopra una barriera corallina, con luce diffusa sullo sfondo."
     },
@@ -285,7 +285,7 @@
       "id": 36,
       "src": "img/fondali/fondali13.jpg",
       "tags": ["coral", "rocks"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "formations",
       "description": "Formazione corallina sporgente con dettagli ramificati, immersa in penombra."
     },
@@ -293,7 +293,7 @@
       "id": 37,
       "src": "img/fondali/fondali14.jpg",
       "tags": ["dust", "marine creature", "coral"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "sea creatures",
       "description": "Vista laterale di una scogliera corallina con fondale in discesa e visibilità ridotta."
     },
@@ -301,7 +301,7 @@
       "id": 38,
       "src": "img/fondali/fondali15.jpg",
       "tags": ["rocks", "dust", "sediments", "underwater canyon"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "formations",
       "description": "Fondale con coralli in primo piano e una marine creature sfocata sullo sfondo, immersa nella nebbia."
     },
@@ -309,7 +309,7 @@
       "id": 39,
       "src": "img/fondali/fondali16.jpg",
       "tags": ["coral", "rocks", "seabed", "sand"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "landscapes",
       "description": "Formazione corallina con dettagli intricati, illuminata da una luce diffusa che evidenzia le texture."
     },
@@ -317,7 +317,7 @@
       "id": 40,
       "src": "img/fondali/fondali17.jpg",
       "tags": ["marine creature", "underwater canyon", "seaweed"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "sea creatures",
       "description": "Fondale sabbioso con piccoli coralli e una luce circolare diffusa che illumina la scena."
     },
@@ -325,14 +325,14 @@
       "id": 41,
       "src": "img/fondali/fondali18.jpg",
       "tags": ["seaweed",  "dust", "underwater canyon", "rocks"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "formations",
       "description": "Paesaggio corallino con forte presenza di particelle sospese e grana, che crea un effetto quasi nevoso."
     },
     {"id": 42,
       "src": "img/fondali/fondali19.jpg",
       "tags": ["rocks", "underwater canyon", "coral", "seabed"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "formations",
       "description": "Silhouette di una marine creature che nuota sopra una barriera corallina, con luce diffusa sullo sfondo."
     },
@@ -340,7 +340,7 @@
       "id": 43,
       "src": "img/fondali/fondali20.jpg",
       "tags": ["coral",  "dust", "sediments", "seabed"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "landscapes",
       "description": "Formazione corallina sporgente con dettagli ramificati, immersa in penombra."
     },
@@ -348,7 +348,7 @@
       "id": 44,
       "src": "img/fondali/fondali21.jpg",
       "tags": ["dust", "marine creature", "coral"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "sea creatures",
       "description": "Vista laterale di una scogliera corallina con fondale in discesa e visibilità ridotta."
     },
@@ -356,7 +356,7 @@
       "id": 45,
       "src": "img/fondali/fondali22.jpg",
       "tags": ["rocks", "dust", "sediments", "underwater canyon"],
-      "category": "Sea Depths",
+      "category": "sea depths",
       "subcategory": "formations",
       "description": "Fondale con coralli in primo piano e una marine creature sfocata sullo sfondo, immersa nella nebbia."
     }

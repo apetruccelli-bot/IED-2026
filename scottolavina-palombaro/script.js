@@ -49,24 +49,51 @@ async function loadData() {
   render();
 }
 
-// ── Collect all unique tags ───────────────────────────────────────────────
-function allTags() {
-  const set = new Set();
-  items.forEach(item => item.tags.forEach(t => set.add(t)));
-  return [...set].sort();
-}
-
-// ── Build the filter tags bar ─────────────────────────────────────────────
+// ── Build the filter tags bar (categories + subcategories) ───────────────
 function buildTagsBar() {
   tagsBar.innerHTML = '';
-  allTags().forEach(tag => {
-    const btn = document.createElement('button');
-    btn.className = 'tag-btn';
-    btn.textContent = tag;
-    btn.dataset.tag = tag;
-    btn.addEventListener('click', () => toggleTag(tag));
-    tagsBar.appendChild(btn);
+
+  // normalize category/subcategory which may be strings or single-item arrays
+  const normalize = v => (Array.isArray(v) ? v[0] : v) ?? '';
+
+  // collect unique subcategories per category, preserving insertion order
+  const catMap = new Map();
+  items.forEach(item => {
+    const cat = normalize(item.category);
+    const sub = normalize(item.subcategory);
+    if (!cat) return;
+    if (!catMap.has(cat)) catMap.set(cat, new Set());
+    if (sub) catMap.get(cat).add(sub);
   });
+
+  catMap.forEach((subs, cat) => {
+    const catBlock = document.createElement('div');
+    catBlock.className = 'cat-block';
+
+    const catBtn = document.createElement('button');
+    catBtn.className = 'tag-btn cat-btn';
+    catBtn.textContent = cat;
+    catBtn.dataset.tag = cat;
+    catBtn.addEventListener('click', () => toggleTag(cat));
+    catBlock.appendChild(catBtn);
+
+    if (subs.size > 0) {
+      const subsWrap = document.createElement('div');
+      subsWrap.className = 'sub-wrap';
+      subs.forEach(sub => {
+        const subBtn = document.createElement('button');
+        subBtn.className = 'tag-btn sub-btn';
+        subBtn.textContent = sub;
+        subBtn.dataset.tag = sub;
+        subBtn.addEventListener('click', () => toggleTag(sub));
+        subsWrap.appendChild(subBtn);
+      });
+      catBlock.appendChild(subsWrap);
+    }
+
+    tagsBar.appendChild(catBlock);
+  });
+
   syncTagButtonStates();
 }
 
@@ -153,19 +180,20 @@ function toggleTag(tag) {
 
 // ── Filter logic ──────────────────────────────────────────────────────────
 function filteredItems() {
-
-  // get the search query
+  const normalize = v => (Array.isArray(v) ? v[0] : v) ?? '';
   const q = searchQuery.toLowerCase().trim();
-  // filter the items
   return displayItems.filter(item => {
-    // check if the item matches the tags
+    const cat = normalize(item.category);
+    const sub = normalize(item.subcategory);
     const matchesTags =
       activeTags.size === 0 ||
-      [...activeTags].every(t => item.tags.includes(t));
+      [...activeTags].every(t => cat === t || sub === t || item.tags.includes(t));
     const matchesSearch =
       q === '' ||
       item.description.toLowerCase().includes(q) ||
-      item.tags.some(t => t.toLowerCase().includes(q));
+      item.tags.some(t => t.toLowerCase().includes(q)) ||
+      cat.toLowerCase().includes(q) ||
+      sub.toLowerCase().includes(q);
     return matchesTags && matchesSearch;
   });
 }
