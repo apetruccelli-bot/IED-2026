@@ -8,16 +8,29 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
       @theme {
-        --color-myBlack: #1E1E1E;
-        --color-myWhite: #FCFCFC;
+        --color-myBlack: #3A3A3A;
+        --color-myWhite: #E5E5E5;
+        --color-myGrey: #FFFFFF80;
         --spacing-10px: 10px;
+        --spacing-20px: 20px;
       }
     </style>
   </head>
-  <body>
+  <body class="bg-myBlack text-myWhite">
     <header>
-      <div class="header-inner bg-myBlack">
-        <div class="header-row">
+      <div class="header-inner ">
+
+        <a href="/" class="col-span-2">禁煙 Vietato fumare</a>
+
+        <div class="flex gap-20px col-span-10">
+          <p class="">タバコの箱  Pacchetti</p>
+          <p class="">吸殻  Ritratti</p>
+          <p class="">広告  Pubblicità</p>
+
+          <p class="ml-auto">アーカイブについて About the Archive</p>
+        </div>
+        
+        <!-- <div class="header-row">
           <div class="search-wrap">
             <input
               id="search"
@@ -27,14 +40,55 @@
             />
           </div>
           <button class="btn-random" id="btn-random">Random</button>
-        </div>
-        <div class="tags-bar" id="tags-bar"></div>
+        </div> -->
+        <!-- <div class="tags-bar" id="tags-bar"></div> -->
+
       </div>
     </header>
 
-    <p class="results-info font-myTitle" id="results-info"></p>
+    <!-- <p class="results-info font-myTitle" id="results-info"></p> -->
 
-    <main class="grid" id="grid"></main>
+    <div class="mainLayout bg-myBlack fixed top-0 left-0 w-screen h-screen overflow-y-scroll
+    grid grid-cols-12 gap-10px">
+      <div class="descriptionAndFilters col-span-4 h-full flex flex-col justify-between">
+        <div class="description flex flex-col gap-10px">
+          <div class="japanese">ある実業家が、まるでその中を探そうとするかのように、
+            腰をかがめて吸い殻を拾い上げた ある実業家が、まるでその中を探そうとするかのように、
+            腰をかがめて吸い殻を拾い上げた ある実業家が、まるでその中を探そうとするかのように、
+            腰をかがめて</div>
+          <div class="english text-myGrey">A businessman bent down to pick up a cigarette butt as if to look for something inside it A
+            businessman bent down to pick up a cigarette butt as if to look for something inside it A businessman bent down to
+            pick up a cigarette butt as if to look for something inside it</div>
+        </div>
+        <div class="filters grid grid-cols-4 gap-10px mt-auto h-fit">
+          <div class="filter col-span-4 grid grid-cols-4 gap-10px h-fit">
+            <p class="col-span-1">状態 Status</p>
+            <p class="col-span-3 flex flex-wrap gap-x-10px">
+              <span>ビジネスマン Uomini d’affari</span>
+              <span>お年寄り Anziani</span>
+              <span>若者 Giovani</span>
+            </p>
+          </div>
+          <div class="filter col-span-4 grid grid-cols-4 gap-10px h-fit">
+            <p class="col-span-1">状態 Status</p>
+            <p class="col-span-3 flex flex-wrap gap-x-10px">
+              <span>ビジネスマン Uomini d’affari</span>
+              <span>お年寄り Anziani</span>
+              <span>若者 Giovani</span>
+            </p>
+          </div>
+          <div class="filter col-span-4 grid grid-cols-4 gap-10px h-fit">
+            <p class="col-span-1">状態 Status</p>
+            <p class="col-span-3 flex flex-wrap gap-x-10px">
+              <span>ビジネスマン Uomini d’affari</span>
+              <span>お年寄り Anziani</span>
+              <span>若者 Giovani</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <main id="grid" class="myPhotos"></main>
+    </div>
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
