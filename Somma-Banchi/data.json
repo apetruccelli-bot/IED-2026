@@ -5,12 +5,23 @@
       "src": "img/banconi (1).png",
       "tags": ["vista frontale ravvicinata", "banco a bauletto", "neon tenui"],
       "description": "Banco di vendita di Alfredo, Maglie, 1992",
+      "category": "negozi",
+      "negozi-anno": 1992,
+      "negozi-provincia": "Lecce",
+      "negozi-specializzazione": "carne equina",
+      "negozi-stato": "aperto",
       "size": 3},
     {
       "id": 2,
       "src": "img/banconi (2).png",
       "tags": ["vista frontale ravvicinata", "banco squadrato", "neon tenui"],
-      "description": "Banco di vendita di Antonio, Cerignola, 1995"},
+      "description": "Banco di vendita di Antonio, Cerignola, 1995",
+      "category": "negozi",
+      "negozi-anno": 1995,
+      "negozi-provincia": "Cerignola",
+      "negozi-specializzazione": "",
+      "negozi-stato": "chiuso"
+    },
     {
       "id": 3,
       "src": "img/banconi (3).png",
@@ -118,8 +129,12 @@
       "src": "img/coltelli (1).png",
       "tags": ["vista frontale ravvicinata", "banco a bauletto", "neon forti"],
       "tags-coltelli": ["manico in legno", "lama in acciaio", "precisione", "usurato"],
-      "age": "macellaio giovane",   
-      "description": "Banco di vendita di Carlo, Napoli, 1994"    },
+      "age": "macellaio giovane",
+      "description": "Banco di vendita di Carlo, Napoli, 1994",
+      "category": "coltelli",
+      "coltelli-funzione": "disossare",
+      "coltelli-usura": "usurato"
+    },
     {
       "id": 23,
       "src": "img/coltelli (2).png",
@@ -179,7 +194,10 @@
       "src": "img/tagli  (1).png",
       "tags": ["vista frontale ravvicinata", "banco a bauletto", "neon forti"],
       "age": "macellaio giovane",
-      "description": "Banco di vendita di Luca, Torino, 1993"    },
+      "description": "Banco di vendita di Luca, Torino, 1993",
+      "category": "tagli",
+      "tagli-lavorazione": "sfilettatura"
+    },
     {
       "id": 33,
       "src": "img/tagli  (2).png",
