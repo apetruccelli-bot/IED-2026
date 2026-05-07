@@ -10,6 +10,7 @@
       @theme {
         --color-myBlack: #1E1E1E;
         --color-myWhite: #FCFCFC;
+        --color-myGrey: #888880;
         --spacing-10px: 10px;
       }
     </style>
@@ -17,24 +18,29 @@
   <body>
     <header>
       <div class="header-inner">
-        <div class="header-row">
-          <div class="search-wrap">
-            <input
-              id="search"
-              type="search"
-              placeholder="Cerca…"
-              autocomplete="off"
-            />
-          </div>
-          <button class="btn-random" id="btn-random">Random</button>
+
+        <div class="flex flex-col gap-10px">
+          <a href="/" class="font-myTitle">Abigail’s Archive. Timeline of a transformation.</a>
+          <a href="/" class="font-mySubtitle text-myGrey">Read our Story</a>
         </div>
-        <div class="tags-bar" id="tags-bar"></div>
+        <div class="tags-bar w-160 max-w-160" id="tags-bar"></div>
+
       </div>
     </header>
 
-    <p class="results-info" id="results-info"></p>
+    <!-- <p class="results-info" id="results-info"></p> -->
 
-    <main class="grid" id="grid"></main>
+    <div class="gridParent">
+
+      <p id="myYear"
+      class="absolute font-myYear z-30 top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">1965</p>
+
+      <div class="beforeGrid"></div>
+      <main class="grid" id="grid"></main>
+      <div class="afterGrid"></div>
+
+      <div class="allYears" id="allYears"></div>
+    </div>
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
@@ -50,6 +56,7 @@
       </div>
     </div>
 
+    <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

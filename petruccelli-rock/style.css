@@ -1,22 +1,45 @@
 @font-face {
-  font-family: 'Diatype-Mono';
-  src: url('font/ABCDiatypeSemi-MonoCondensed-Regular-Trial.woff2') format('woff2');
+  font-family: 'Social';
+  src: url('font/ABCSocial-Regular-Trial.woff2') format('woff2');
   font-style: normal;
 }
 @font-face {
-  font-family: 'Diatype';
-  src: url('font/ABCDiatype-Regular-Trial.woff2') format('woff2');
+  font-family: 'Repro';
+  src: url('font/ABCReproMono-Regular-Trial.woff2') format('woff2');
   font-style: normal;
 }
-@font-face {
-  font-family: 'Diatype-Mono';
-  src: url('font/ABCDiatypeSemi-MonoCondensed-RegularItalic-Trial.woff2') format('woff2');
-  font-style: italic;
+
+*:not(.font-myTitle) {
+  font-family: 'Repro', sans-serif  ;
+  font-size: 14px;
+  line-height: 130%;
 }
-@font-face {
-  font-family: 'Diatype';
-  src: url('font/ABCDiatype-RegularItalic-Trial.woff2') format('woff2');
-  font-style: italic;
+.font-myYear {
+  font-family: 'Repro';
+  font-size: 80px;
+  line-height: 100%;
+  letter-spacing: -0.02em;
+}
+.font-myTitle {
+  font-family: 'Social';
+  font-size: 32px;
+  line-height: 100%;
+  letter-spacing: 0.02em;
+}
+.font-mySubtitle {
+  font-family: 'Social';
+  font-size: 22px;
+  line-height: 100%;
+  letter-spacing: 0.02em;
+}
+
+/* HIDE SCROLLBARS */
+*::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 
@@ -27,6 +50,9 @@
 }
 
 :root {
+  --myWhite: #FCFCFC;
+  --myBlack: #1E1E1E;
+  --mySpecialWhite: #FCFCFC;
   --bg: #fffff;
   --surface: #ffffff;
   --text: #1a1a1a;
@@ -38,18 +64,7 @@
   --radius: 10px;
 }
 
-*:not(.font-myTitle) {
-  font-family: 'Diatype', sans-serif  ;
-  font-size: 12px;
-}
 
-.font-myTitle {
-  font-family: 'Diatype-Mono';
-  font-size: 25px;
-  text-transform: uppercase;
-  line-height: 100%;
-  letter-spacing: 0.02em;
-}
 
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -68,10 +83,9 @@ header {
 }
 
 .header-inner {
-  max-width: 1200px;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  gap: 40px;
+  justify-content: space-between;
 }
 
 .header-row {
@@ -123,15 +137,19 @@ header {
 .tags-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
+  column-gap: 6px;
+  row-gap: 0px;
+  align-items: start;
+  height: fit-content;
 }
 
 .tag-btn {
-  padding: 4px 10px;
+  /* padding: 4px 10px;
   background: var(--tag-bg);
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 500; */
+  font-family: 'Social';
+  text-transform: capitalize;
   letter-spacing: 0.04em;
   cursor: pointer;
   transition: background 0.12s, color 0.12s, border-color 0.12s;
@@ -147,11 +165,38 @@ header {
   border-color: var(--tag-active);
 }
 
-button {
-  border: none;
-  background: none;
-  cursor: pointer;
+.allYears {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 1rem;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: min(100rem, 90vw);
 }
+
+.year-btn {
+  cursor: pointer;
+  font-family: 'Repro', sans-serif;
+  font-size: 14px;
+  background: none;
+  border: none;
+  padding: 0;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+}
+
+.year-btn:hover {
+  opacity: 1;
+}
+
+.year-btn.active {
+  opacity: 1;
+}
+
 /* ── RESULTS COUNT ── */
 .results-info {
   max-width: 1200px;
@@ -163,13 +208,46 @@ button {
 }
 
 /* ── GRID ── */
+.gridParent {
+  position: absolute;
+  bottom: 0;
+  padding-bottom: 10vh;
+}
+
 .grid {
-  padding: 20px 24px 60px;
+  position: relative;
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 20px;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  height: 100%;
+  padding-left: 35vw;
+  padding-right: 35vw;
+}
+.beforeGrid {
+  content: '';
+  position: absolute;
+  width: 20rem;
+  height: 100%;
+  background: linear-gradient(to right, var(--mySpecialWhite), transparent);
+  display: block;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+.afterGrid {
+  content: '';
+  position: absolute;
+  width: 20rem;
+  height: 100%;
+  background: linear-gradient(to left, var(--mySpecialWhite), transparent);
+  display: block;
+  right: 0;
+  top: 0;
+  z-index: 10;
+  pointer-events: none;
 }
 
 /* ── CARD ── */
@@ -178,26 +256,22 @@ button {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-width: 320px;
-  max-width: 340px;
   flex: 0 0 auto;
-  scroll-snap-align: start;
 }
 
 .card:hover {
 }
 
 .card-img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
   display: block;
-  background: #ddd;
+  max-height: calc(100vh - 160px);
+  width: auto;
+  max-width: 100%;
 }
 
 .card-body {
   padding: 14px 0px 16px;
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 10px;
   flex: 1;

@@ -1,4 +1,74 @@
 const grid = document.getElementById('grid');
+const myYear = document.getElementById('myYear');
+const allYearsEl = document.getElementById('allYears');
+
+let lenis = null;
+
+function updateYear() {
+  if (!grid || !myYear) return;
+  const gridCenter = grid.getBoundingClientRect().left + grid.offsetWidth / 2;
+  const cards = [...grid.querySelectorAll('.card')];
+  let closest = null;
+  let minDist = Infinity;
+  cards.forEach((card) => {
+    const rect = card.getBoundingClientRect();
+    const cardCenter = rect.left + rect.width / 2;
+    const dist = Math.abs(cardCenter - gridCenter);
+    if (dist < minDist) {
+      minDist = dist;
+      closest = card;
+    }
+  });
+  if (closest) {
+    const year = closest.dataset.year || '';
+    myYear.textContent = year;
+    if (allYearsEl) {
+      allYearsEl.querySelectorAll('.year-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.year === year);
+      });
+    }
+  }
+}
+
+function updateBg() {
+  if (!grid) return;
+  const progress = grid.scrollLeft / (grid.scrollWidth - grid.offsetWidth);
+  const t = Math.max(0, Math.min(1, progress || 0));
+  // #FCFCFC → #888880
+  const r = Math.round(0xFC + (0x88 - 0xFC) * t);
+  const g = Math.round(0xFC + (0x88 - 0xFC) * t);
+  const b = Math.round(0xFC + (0x80 - 0xFC) * t);
+  const color = `rgb(${r},${g},${b})`;
+  document.body.style.backgroundColor = color;
+  document.documentElement.style.setProperty('--mySpecialWhite', color);
+}
+
+if (grid) {
+  lenis = new Lenis({
+    wrapper: grid,
+    content: grid,
+    orientation: 'horizontal',
+    smoothWheel: true,
+    syncTouch: true,
+    gestureOrientation: 'both',
+    lerp: 0.2,
+  });
+
+  lenis.on('scroll', () => { updateYear(); updateBg(); });
+
+  // Intercept all wheel events and route them into Lenis as horizontal scroll
+  grid.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    lenis.scrollTo(lenis.scroll + delta, { immediate: false });
+  }, { passive: false });
+
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+}
 const searchInput = document.getElementById('search');
 const tagsBar = document.getElementById('tags-bar');
 const resultsInfo = document.getElementById('results-info');
@@ -27,10 +97,34 @@ async function loadData() {
   // parse the json
   const data = await res.json();
   // set the items and display items
-  items = data.items;
+  items = data.items.sort((a, b) => Number(a.year) - Number(b.year));
   displayItems = [...items];
   buildTagsBar();
   render();
+  buildYearsBar();
+  requestAnimationFrame(updateYear);
+}
+
+// ── Build the years bar ───────────────────────────────────────────────────
+function buildYearsBar() {
+  if (!allYearsEl) return;
+  const years = [...new Set(items.map(item => String(item.year)))]; // already sorted
+  allYearsEl.innerHTML = '';
+  years.forEach(year => {
+    const btn = document.createElement('button');
+    btn.className = 'year-btn';
+    btn.textContent = year;
+    btn.dataset.year = year;
+    btn.addEventListener('click', () => {
+      const target = grid.querySelector(`.card[data-year="${year}"]`);
+      if (!target || !lenis) return;
+      const gridRect = grid.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const offset = (targetRect.left - gridRect.left) + grid.scrollLeft - (grid.offsetWidth / 2 - target.offsetWidth / 2);
+      lenis.scrollTo(offset);
+    });
+    allYearsEl.appendChild(btn);
+  });
 }
 
 // ── Collect all unique tags ───────────────────────────────────────────────
@@ -97,7 +191,7 @@ function shuffle(arr) {
 }
 
 // ── Random button ─────────────────────────────────────────────────────────
-btnRandom.addEventListener('click', () => {
+btnRandom?.addEventListener('click', () => {
   if (isRandom) {
     // restore original order
     displayItems = [...items];
@@ -112,7 +206,7 @@ btnRandom.addEventListener('click', () => {
 });
 
 // ── Search ────────────────────────────────────────────────────────────────
-searchInput.addEventListener('input', e => {
+searchInput?.addEventListener('input', e => {
   searchQuery = e.target.value;
   render();
 });
@@ -124,10 +218,12 @@ function render() {
   const visible = filteredItems();
 
   // set the results info
-  resultsInfo.textContent =
-    visible.length === items.length
-      ? `${items.length} items`
-      : `${visible.length} / ${items.length} items`;
+  if(resultsInfo) {
+    resultsInfo.textContent =
+      visible.length === items.length
+        ? `${items.length} items`
+        : `${visible.length} / ${items.length} items`;
+  }
 
   // clear the grid
   grid.innerHTML = '';
@@ -146,6 +242,7 @@ function render() {
     const card = document.createElement('article');
     card.className = 'card';
     card.style.cursor = 'zoom-in';
+    card.dataset.year = item.year || '';
 
     // image
     // create an image element
