@@ -28,6 +28,14 @@
 }
 
 a {
+  color: #E4E4E4;
+  text-decoration: none;
+}
+a:hover {
+  opacity: 0.4;
+}
+
+a {
   transition: opacity .3s cubic-bezier(.8,0,.2,1);
 }
 :root {
@@ -62,10 +70,6 @@ body {
   text-transform: uppercase;
   line-height: 100%;
   letter-spacing: 0.02em;
-}
-
-a {
-  transition: opacity .3s cubic-bezier(.8,0,.2,1);
 }
 
 .archive-title {
