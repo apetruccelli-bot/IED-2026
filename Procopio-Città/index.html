@@ -30,8 +30,8 @@
         </div>
       </div>
       <div class="col-start-3 col-end-9 bg-myWhite h-screen overflow-y-scroll">
-        <div class="sticky top-0 z-20 col-span-full pt-30px pl-10px pr-10px pb-30px bg-myWhite ">
-          <div class="grid grid-cols-6 mb-10px">
+        <div class="sticky top-0 z-20 col-span-full pt-30px pl-10px pr-10px pb-30px bg-myWhite max-h-60 overflow-hidden">
+          <div class="grid grid-cols-6 mb-10px gap-10px">
             <div class="p text-justify">Anno</div>
             <div class="p text-justify">Autore</div>
             <div class="p text-justify">Regione</div>
@@ -47,9 +47,10 @@
               />
             </form>
           </div>
-            <div id="archive-rows" class="bg-myWhite"></div>
+            <div id="archive-rows" class="bg-myWhite grid grid-cols-6 gap-10px mt-20px"></div>
         </div>
-          <div id="archive-gallery" class="grid grid-cols-6 gap-[10px] mt-20px p-10px"></div>
+          <div id="archive-gallery" 
+          class="grid max-xl:grid-cols-6 grid-cols-9 gap-10px mt-20px p-10px"></div>
       </div>
     </div>
 
