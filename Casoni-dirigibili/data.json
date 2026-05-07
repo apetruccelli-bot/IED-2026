@@ -467,7 +467,7 @@
     {
       "id": 40,
       "src": "img/modelli/modello (1).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["light", "men", "papers"],
       "country": "Italy",
       "year": "1935",
@@ -477,7 +477,7 @@
     {  
       "id": 41,
       "src": "img/modelli/modello (2).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men", "papers"],
       "country": "Poland",
       "year": "1933",
@@ -487,7 +487,7 @@
     {
       "id": 42,
       "src": "img/modelli/modello (3).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men", "women", "light" ],
       "country": "Russia",
       "year": "1934",
@@ -497,7 +497,7 @@
     {
       "id": 43,
       "src": "img/modelli/modello (4).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men"],
       "country": "USA",
       "year": "1935",
@@ -507,7 +507,7 @@
     {
       "id": 44,
       "src": "img/modelli/modello (5).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men"],
       "country": "Spain",
       "year": "1937",
@@ -517,7 +517,7 @@
     {
       "id": 45,
       "src": "img/modelli/modello (6).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men", "light", "women", "papers"],
       "country": "Russia",
       "year": "1934",
@@ -527,7 +527,7 @@
     {
       "id": 46,
       "src": "img/modelli/modello (7).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men", "women"],
       "country": "Russia",
       "year": "1927",
@@ -537,7 +537,7 @@
     {
       "id": 47,
       "src": "img/modelli/modello (8).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men", "women"],
       "country": "Germany",
       "year": "1928",
@@ -547,7 +547,7 @@
     {
       "id": 48,
       "src": "img/modelli/modello (9).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men", "demonstration"],
       "country": "Germany",
       "year": "1928",
@@ -557,7 +557,7 @@
     {
       "id": 49,
       "src": "img/modelli/modello (10).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men", "demonstration", "women"],
       "country": "Spain",
       "year": "1928",
@@ -567,7 +567,7 @@
     {
       "id": 50,
       "src": "img/modelli/modello (11).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men", "demonstration", "papers"],
       "country": "Germany",
       "year": "1928",
@@ -577,7 +577,7 @@
     {
       "id": 51,
       "src": "img/modelli/modello (12).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men", "demonstration", "papers"],
       "country": "Spain",
       "year": "1928",
@@ -587,7 +587,7 @@
     {
       "id": 52,
       "src": "img/modelli/modello (13).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men", "papers", "women"],
       "country": "Poland",
       "year": "1930",
@@ -597,7 +597,7 @@
     {
       "id": 53,
       "src": "img/modelli/modello (14).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["demonstration"],
       "country": "USA",
       "year": "1935",
@@ -607,7 +607,7 @@
     {
       "id": 54,
       "src": "img/modelli/modello (15).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men", "demonstration"],
       "country": "Italy",
       "year": "1935",
@@ -617,7 +617,7 @@
     {
       "id": 55,
       "src": "img/modelli/modello (16).png",
-      "category": "study models",
+      "category": "models",
       "tags": ["men", "demonstration", "papers"],
       "country": "Italy",
       "year": "1936",
@@ -807,7 +807,7 @@
     {
       "id": 71,
       "src": "img/disegni/disegno (1).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["text", "side view", "details"],
       "country": "USA",
       "year": "1929",
@@ -817,7 +817,7 @@
     {
       "id": 72,
       "src": "img/disegni/disegno (2).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["front view"],
       "country": "Russia",
       "year": "1927",
@@ -827,7 +827,7 @@
     {
       "id": 73,
       "src": "img/disegni/disegno (3).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["text", "side view", "front view", "details"],
       "country": "Russia",
       "year": "1927",
@@ -837,7 +837,7 @@
     {
       "id": 74,
       "src": "img/disegni/disegno (4).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["details", "side view"],
       "country": "Spain",
       "year": "1927",
@@ -847,7 +847,7 @@
     {
       "id": 75,
       "src": "img/disegni/disegno (5).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["text", "side view"],
       "country": "Italy",
       "year": "1928",
@@ -857,7 +857,7 @@
     {
       "id": 76,
       "src": "img/disegni/disegno (6).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["text", "side view", "front view", "details"],
       "country": "Italy",
       "year": "1926",
@@ -867,7 +867,7 @@
     {
       "id": 77,
       "src": "img/disegni/disegno (7).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["text", "side view", "front view", "details"],
       "country": "Italy",
       "year": "1926",
@@ -877,7 +877,7 @@
     {
       "id": 78,
       "src": "img/disegni/disegno (8).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["text", "side view", "details"],
       "country": "Poland",
       "year": "1926",
@@ -887,7 +887,7 @@
     {
       "id": 79,
       "src": "img/disegni/disegno (9).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["side view", "details"],
       "country": "Poland",
       "year": "1934",
@@ -897,7 +897,7 @@
     {
       "id": 80,
       "src": "img/disegni/disegno (10).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["text", "side view"],
       "country": "Germany",
       "year": "1930",
@@ -907,7 +907,7 @@
     {
       "id": 81,
       "src": "img/disegni/disegno (11).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["text", "side view", "front view", "details"],
       "country": "Germany",
       "year": "1937",
@@ -917,7 +917,7 @@
     {
       "id": 82,
       "src": "img/disegni/disegno (12).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": [ "side view", "text"],
       "country": "USA",
       "year": "1929",
@@ -927,7 +927,7 @@
     {
       "id": 83,
       "src": "img/disegni/disegno (13).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["text", "side view"],
       "country": "USA",
       "year": "1936",
@@ -937,7 +937,7 @@
     {
       "id": 84,
       "src": "img/disegni/disegno (14).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["text", "side view", "details"],
       "country": "Spain",
       "year": "1936",
@@ -947,7 +947,7 @@
     {
       "id": 85,
       "src": "img/disegni/disegno (15).png",
-      "category": "technical drawings",
+      "category": "drawings",
       "tags": ["side view", "front view"],
       "country": "Poland",
       "year": "1933",

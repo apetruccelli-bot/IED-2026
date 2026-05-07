@@ -11,6 +11,7 @@
         --color-myBlack: #080808;
         --color-myWhite: #F3F3F3;
         --spacing-10px: 10px;
+        --spacing-20px: 20px;
       }
     </style>
   </head>
@@ -39,14 +40,12 @@
       <div class="lb-backdrop" id="lb-backdrop"></div>
       <button class="lb-close" id="lb-close">✕</button>
       <div class="lb-content">
-        <img class="lb-img" id="lb-img" src="" alt="">
+        <img class="lb-img select-none" id="lb-img" src="" alt="">
         <div class="lb-info">
           <div class="lb-tags-row">
             <span class="lb-id" id="lb-id"></span>
             <div class="lb-tags" id="lb-tags"></div>
             <div class="lb-actions">
-              <button class="lb-prev" id="lb-prev"><</button>
-              <button class="lb-next" id="lb-next">></button>
             </div>
           </div>
           <p class="lb-description" id="lb-description"></p>
@@ -56,7 +55,7 @@
     </div>
 
     <div class="w-screen h-screen grid two-rows-grid">
-      <div class="p-10px bg-myBlack flex flex-row justify-between items-start text-myWhite">
+      <div class="p-10px bg-myBlack flex flex-row justify-between items-start text-myWhite gap-20px">
         <div class="flex flex-col">
           <div class="flex flex-row items-baseline gap-4">
             <a href="/" class="font-myTitle">AAA — Adler’s Airship Archive</a>
@@ -67,37 +66,43 @@
           Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
           </div>
         </div>
-        <div class="filters-panel w-[480px] text-myWhite">
+        <div class="filters-panel max-w-[45rem] text-myWhite">
           <nav class="filters-nav flex justify-between mt-[15px] mb-[17px]">
-            <a href="#" class="filter-link">Airship</a>
-            <a href="#" class="filter-link">Wreckage</a>
-            <a href="#" class="filter-link">Models</a>
-            <a href="#" class="filter-link">Newspapers</a>
-            <a href="#" class="filter-link">Drawings</a>
+            <button class="filter-link" data-category="airships">Airship</button>
+            <button class="filter-link" data-category="wreckage">Wreckage</button>
+            <button class="filter-link" data-category="models">Models</button>
+            <button class="filter-link" data-category="newspapers">Newspapers</button>
+            <button class="filter-link" data-category="drawings">Drawings</button>
   </nav>
 
   <div class="filter-row">
     <div class="filter-label">Causes</div>
+    <div class="filter-row-inside"></div>
   </div>
 
   <div class="filter-row">
     <div class="filter-label">Year</div>
+    <div class="filter-row-inside"></div>
   </div>
 
   <div class="filter-row">
     <div class="filter-label">Country</div>
+    <div class="filter-row-inside"></div>
   </div>
 
   <div class="filter-row">
     <div class="filter-label">Tags</div>
+    <div class="filter-row-inside"></div>
   </div>
 
   <div class="filter-row">
     <div class="filter-label">People</div>
+    <div class="filter-row-inside"></div>
   </div>
 
   <div class="filter-row items-center">
     <div class="filter-label">Victims</div>
+    <div class="filter-row-inside"></div>
   </div>
 </div>
     </div>
