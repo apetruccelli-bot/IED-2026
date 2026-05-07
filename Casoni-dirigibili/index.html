@@ -38,21 +38,31 @@
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
       <button class="lb-close" id="lb-close">✕</button>
-      <button class="lb-prev" id="lb-prev"><</button>
-      <button class="lb-next" id="lb-next">></button>
       <div class="lb-content">
         <img class="lb-img" id="lb-img" src="" alt="">
         <div class="lb-info">
-          <span class="lb-id" id="lb-id"></span>
-          <div class="lb-tags" id="lb-tags"></div>
-        </div>
+          <div class="lb-tags-row">
+            <span class="lb-id" id="lb-id"></span>
+            <div class="lb-tags" id="lb-tags"></div>
+            <div class="lb-actions">
+              <button class="lb-prev" id="lb-prev"><</button>
+              <button class="lb-next" id="lb-next">></button>
+            </div>
+          </div>
+          <p class="lb-description" id="lb-description"></p>
+          <div class="lb-meta" id="lb-meta"></div>
+         </div>
       </div>
     </div>
 
     <div class="w-screen h-screen grid two-rows-grid">
-      <div class="p-10px bg-myBlack flex flex-row justify-between items-start text-myWhite z-[1100]">
+      <div class="p-10px bg-myBlack flex flex-row justify-between items-start text-myWhite">
         <div class="flex flex-col">
-          <a href="/" class="font-myTitle">AAA — Adler’s Airship Archive</a>
+          <div class="flex flex-row items-baseline gap-4">
+            <a href="/" class="font-myTitle">AAA — Adler’s Airship Archive</a>
+            <a href="#" class="not(.font-myTitle)">About</a>
+            <a href="#" class="not(.font-myTitle)">Explore</a>
+          </div>
         <div class="box">
           Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
           </div>
