@@ -146,13 +146,6 @@ button {
 .card:hover {
 }
 
-.card-img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  display: block;
-  background: #ddd;
-}
 
 .card-body {
   padding: 14px 0px 16px;
@@ -320,4 +313,46 @@ button {
 .lb-next:disabled {
   opacity: 0.2;
   cursor: default;
+}
+/* ── RIGHT AREA BAR ── */
+
+.area-bar {
+  position: fixed;
+  right: 24px;
+  top: 100px;
+  width: 220px;
+  z-index: 1000;
+  font-family: 'ABCFavorit-Mono', monospace;
+}
+
+.area-item {
+  cursor: pointer;
+  margin-bottom: 6px;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.area-item.dimmed {
+  opacity: 0.25;
+}
+
+.area-title {
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.area-story {
+  display: none;
+  margin-top: 50px;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.area-item.active .area-story {
+  display: block;
+}
+
+/* make space for right sidebar */
+.grid {
+  margin-right: 260px;
 }

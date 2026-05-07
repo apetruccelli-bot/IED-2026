@@ -1,35 +1,51 @@
 const grid = document.getElementById('grid');
 const searchInput = document.getElementById('search');
 const tagsBar = document.getElementById('tags-bar');
+const areaBar = document.getElementById('area-bar');
 const resultsInfo = document.getElementById('results-info');
-const btnRandom = document.getElementById('btn-random');
 
 const lightbox   = document.getElementById('lightbox');
 const lbImg      = document.getElementById('lb-img');
-const lbId       = document.getElementById('lb-id');
 const lbTagsEl   = document.getElementById('lb-tags');
 const lbClose    = document.getElementById('lb-close');
 const lbPrev     = document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
 
+const labels = {
+  missions: "Missions",
+  "deck-operations": "Deck Operations"
+};
+
+
 let items = [];          // original data from JSON
-let displayItems = [];   // current display order (may be shuffled)
+let displayItems = [];   // current display order
 let activeTags = new Set();
+let activeArea = null;
 let searchQuery = '';
-let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
+
+
+// ── Utility: shuffle items ───────────────────────────────────────────────
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+
 
 // ── Load data ──────────────────────────────────────────────────────────────
 async function loadData() {
-  // fetch data from data.json
   const res = await fetch('data.json');
-  // parse the json
   const data = await res.json();
-  // set the items and display items
   items = data.items;
-  displayItems = [...items];
+  displayItems = shuffleArray(items);
   buildTagsBar();
+  buildAreaBar();
   render();
 }
 
@@ -51,6 +67,77 @@ function buildTagsBar() {
     btn.addEventListener('click', () => toggleTag(tag));
     tagsBar.appendChild(btn);
   });
+  syncTagButtonStates();
+}
+
+function syncTagButtonStates() {
+  if (!tagsBar) return;
+
+  const hasSelection = activeTags.size > 0;
+  tagsBar.querySelectorAll('.tag-btn').forEach(btn => {
+    const isActive = activeTags.has(btn.dataset.tag);
+    btn.classList.toggle('active', isActive);
+    btn.classList.toggle('dimmed', hasSelection && !isActive);
+  });
+}
+
+function normalizeArea(area) {
+  if (Array.isArray(area)) {
+    return area.join(', ');
+  }
+  return area ?? '';
+}
+
+function buildAreaBar() {
+  if (!areaBar) return;
+
+  areaBar.innerHTML = '';
+
+  const areas = [...new Map(
+    items.map(item => [
+      normalizeArea(item.area),
+      {
+        area: normalizeArea(item.area),
+        story: item.story
+      }
+    ])
+  ).values()];
+
+  areas.forEach(areaData => {
+    const areaItem = document.createElement('div');
+    areaItem.className = 'area-item';
+    areaItem.dataset.area = areaData.area;
+
+    const title = document.createElement('div');
+    title.className = 'area-title';
+    title.textContent = areaData.area;
+
+    const story = document.createElement('div');
+    story.className = 'area-story';
+    story.textContent = areaData.story;
+
+    areaItem.appendChild(title);
+    areaItem.appendChild(story);
+
+    areaItem.addEventListener('click', () => {
+      activeArea = activeArea === areaData.area ? null : areaData.area;
+      syncAreaButtonStates();
+    });
+
+    areaBar.appendChild(areaItem);
+  });
+
+  syncAreaButtonStates();
+}
+
+function syncAreaButtonStates() {
+  if (!areaBar) return;
+
+  areaBar.querySelectorAll('.area-item').forEach(el => {
+    const isActive = el.dataset.area === activeArea;
+    el.classList.toggle('active', isActive);
+    el.classList.toggle('dimmed', Boolean(activeArea) && !isActive);
+  });
 }
 
 // ── Toggle a filter tag ───────────────────────────────────────────────────
@@ -60,10 +147,7 @@ function toggleTag(tag) {
   } else {
     activeTags.add(tag);
   }
-  // sync button states
-  tagsBar.querySelectorAll('.tag-btn').forEach(btn => {
-    btn.classList.toggle('active', activeTags.has(btn.dataset.tag));
-  });
+  syncTagButtonStates();
   render();
 }
 
@@ -85,31 +169,6 @@ function filteredItems() {
     return matchesTags && matchesSearch;
   });
 }
-
-// ── Shuffle array (Fisher-Yates) ──────────────────────────────────────────
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-// ── Random button ─────────────────────────────────────────────────────────
-btnRandom.addEventListener('click', () => {
-  if (isRandom) {
-    // restore original order
-    displayItems = [...items];
-    btnRandom.textContent = 'Random';
-    isRandom = false;
-  } else {
-    displayItems = shuffle(items);
-    btnRandom.textContent = 'Reset';
-    isRandom = true;
-  }
-  render();
-});
 
 // ── Search ────────────────────────────────────────────────────────────────
 searchInput.addEventListener('input', e => {
@@ -165,12 +224,6 @@ function render() {
     const body = document.createElement('div');
     body.className = 'card-body';
 
-    // id
-    const idEl = document.createElement('span');
-    idEl.className = 'card-id';
-    idEl.textContent = `#${String(item.id).padStart(2, '0')}`;
-    body.appendChild(idEl);
-
     const desc = document.createElement('p');
     desc.className = 'card-desc';
     desc.textContent = item.description;
@@ -206,8 +259,6 @@ function openLightbox(index) {
   lbImg.src = item.src;
   // set the alt text
   lbImg.alt = `Item ${item.id}`;
-  // set the id
-  lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
 
   lbTagsEl.innerHTML = '';
   // loop through the tags and create a span for each tag
@@ -222,12 +273,14 @@ function openLightbox(index) {
 
   lightbox.classList.add('open');
   lightbox.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('lightbox-open');
   document.body.style.overflow = 'hidden';
 }
 
 function closeLightbox() {
   lightbox.classList.remove('open');
   lightbox.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('lightbox-open');
   document.body.style.overflow = '';
   lbImg.src = '';
 }
