@@ -442,6 +442,30 @@
       "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
       "paese-pacchetti": "Giappone",
       "description": "Descrizione dell'immagine"
-    }
+    },
+ {
+       "id": 49,
+       "src": "img/pubblicità/advertising1.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+  },
+  {
+       "id": 50,
+       "src": "img/pubblicità/advertising2.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+  },
+  {
+       "id": 51,
+       "src": "img/pubblicità/advertising3.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+  }
   ]
 }
