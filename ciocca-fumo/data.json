@@ -212,66 +212,6 @@
       "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
       "paese-pacchetti": "Giappone",
       "description": "Descrizione dell'immagine"
-    },
-    {
-      "id": 27,
-      "src": "img/pacchetti/pack3.jpg",
-      "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"  
-    },
-    {
-      "id": 28,
-      "src": "img/pacchetti/pack4.jpg",
-      "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"  
-    },
-    {
-      "id": 29,
-      "src": "img/pacchetti/pack5.jpg",
-      "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"  
-     },
-     {
-      "id": 30,
-      "src": "img/pacchetti/pack6.jpg",
-      "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"   
-     },
-     {
-      "id": 31,
-      "src": "img/pacchetti/pack7.jpg",
-      "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"   
-     },
-     {
-      "id": 32,
-      "src": "img/pacchetti/pack8.jpg",
-      "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-     }
+    }
   ]
 }
