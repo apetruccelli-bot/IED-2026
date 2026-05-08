@@ -17,31 +17,12 @@
   </head>
   <body>
     <header>
-
       <a href="./" class="font-myTitle">Di Macelleria in Macelleria</a>
       <div class="flex gap-20px">
-        <a href="./" class="font-myTitle">Esplora</a>
+        <span onclick="openExploreModal()" class="font-myTitle" style="cursor:pointer;">Esplora</span>
         <a href="./" class="font-myTitle">Storia</a>
       </div>
-
-      <!-- <div class="header-inner">
-        <div class="header-row">
-          <div class="search-wrap">
-            <input
-              id="search"
-              type="search"
-              placeholder="Cerca…"
-              autocomplete="off"
-            />
-          </div>
-          <button class="btn-random" id="btn-random">Random</button>
-        </div>
-        <div class="tags-bar" id="tags-bar"></div>
-      </div -->
-
     </header>
-
-    <!-- <p class="results-info" id="results-info"></p> -->
     
     <div class="mainLayout fixed top-0 left-0 w-screen h-screen overflow-y-scroll
     grid grid-cols-15 gap-10px">
@@ -60,8 +41,6 @@
       </main>
     </div>
 
-
-
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
       <button class="lb-close" id="lb-close">✕</button>
@@ -76,6 +55,29 @@
       </div>
     </div>
 
+    <!-- Explore modal -->
+    <div id="explore-modal" class="explore-modal">
+      <button onclick="closeExploreModal()" class="explore-close">✕</button>
+
+      <!-- Webcam preview top-right -->
+      <div class="explore-webcam-wrap">
+        <video id="explore-webcam" class="explore-webcam" autoplay muted playsinline></video>
+        <div id="explore-hand-status" class="explore-hand-status">
+          <span id="explore-detect-label" class="explore-detect-label">nessuna mano</span><br>
+          <span id="explore-angle-label" class="explore-angle-label">angolo: —</span>
+        </div>
+      </div>
+
+      <div id="explore-square" class="explore-square"></div>
+      <div id="explore-status" class="explore-status">Caricamento modello…</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+    <script src="somma-lm.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
