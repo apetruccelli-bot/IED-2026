@@ -257,12 +257,12 @@ hydrateRowsWithImages()
     const btn = document.getElementById('toggle-sidebar');
     const sidebar = document.querySelector('.sidebar-links');
     if (!btn || !sidebar) return;
-    btn.addEventListener('click', function(){
+    /* btn.addEventListener('click', function(){
       const open = sidebar.classList.toggle('open');
       btn.setAttribute('aria-expanded', open);
       // switch symbol between + and ×
       btn.textContent = open ? '×' : '+';
-    });
+    }); */
   });
 })();
 
@@ -279,16 +279,10 @@ hydrateRowsWithImages()
 
       const map = new mapboxgl.Map({
         container: 'home-map',
-        style: 'mapbox://styles/mapbox/streets-v11',
+        style: 'mapbox://styles/martiinaprocopio/cmowrladb001p01saaambdxq8',
         center: [9.11, 45.07], // example: Torino
         zoom: 11,
-        interactive: false
       });
-      // disable drag/pan if interactive=false not honored
-      map.scrollZoom.disable();
-      map.boxZoom.disable();
-      map.doubleClickZoom.disable();
-      map.touchZoomRotate.disable();
       // keep map resized if layout changes
       window.addEventListener('resize', () => {
         mapEl.style.height = window.innerHeight + 'px';

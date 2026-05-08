@@ -355,9 +355,6 @@ header {
   text-align: center;
 }
 
-body.lightbox-open .sidebar-links {
-  display: none;
-}
 
 #archive-rows a,
 #archive-rows span.p {
@@ -412,9 +409,9 @@ body.lightbox-open .sidebar-links {
 }
 
 /* Home page: toggle sidebar-links with + button */
-.home-page .sidebar-links {
+/* .home-page .sidebar-links {
   display: none;
-}
+} */
 .home-page .sidebar-links.open {
   display: flex;
 }
@@ -451,7 +448,7 @@ body.lightbox-open .sidebar-links {
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: -2;
+  z-index: 1;
 }
 .home-map::after {
   content: '';

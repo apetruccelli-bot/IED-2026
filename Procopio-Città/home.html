@@ -18,24 +18,29 @@
     </style>
     </head>
   <body class="home-page">
-    <div class="w-screen h-screen grid grid-cols-8 specialGrid">
-    <div class="col-start-1 col-end-3 p-10px flex flex-col justify-between text-myBlack z-[1100]">
-        <button id="toggle-sidebar" class="toggle-btn" aria-expanded="false" aria-label="Apri menu">+</button>
-        <div class="flex flex-col">
+
+    <div id="home-map" class="home-map col-span-1" aria-hidden="true"></div>
+
+    <div class="w-screen h-screen grid grid-cols-8 specialGrid fixed top-0 left-0 h-screen z-50
+    pointer-events-none">
+      <div class="col-start-1 col-end-3 p-10px flex flex-col justify-between text-myBlack z-[1100]">
+        <!-- <button id="toggle-sidebar" class="toggle-btn" aria-expanded="false" aria-label="Apri menu">+</button> -->
+        <div class="flex flex-col pointer-events-auto">
           <a href="home.html" class="font-myTitle">Città<br>interrotte</a>
           <p class="">di Fondazione Scorza</p>
         </div>
-          <div class="sidebar-links flex flex-col">
-            <a href="index.html" class="font-myTitle">Archivio</a>
-            <a href="storia.html" class="font-myTitle">Storia</a>
-            <a href="/" class="font-myTitle">Statistiche</a>
-          </div>
+        <div class="sidebar-links flex flex-col pointer-events-auto">
+          <a href="index.html" class="font-myTitle">Archivio</a>
+          <a href="storia.html" class="font-myTitle">Storia</a>
+          <a href="/" class="font-myTitle">Statistiche</a>
+        </div>
 
-    <div class="w-screen h-screen grid grid-cols-8 specialGrid">
-
-     <div id="home-map" class="home-map col-span-1" aria-hidden="true"></div>
+        <!-- <div class="w-screen h-screen grid grid-cols-8 specialGrid">
+          <div id="home-map" class="home-map col-span-1" aria-hidden="true"></div>
+        </div> -->
+      </div>
     </div>
 
-        <script src="script.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
