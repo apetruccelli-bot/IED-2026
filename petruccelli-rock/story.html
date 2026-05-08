@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Story - Abigail’s Archive</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header style="padding: 24px 32px 0 32px; display: flex; justify-content: flex-end;">
+      <a href="index.html" class="font-myTitle" style="font-size: 16px; text-decoration: none;">Back to Archive</a>
+    </header>
+    <main class="story-main">
+      <div class="story-title-block">
+        <h1 class="font-myTitle story-title">our story</h1>
+        <div class="font-mySubtitle story-subtitle">Abigail’s Archive. Timeline of a transformation.</div>
+      </div>
+      <div class="story-images">
+  <img src="img/rock1.png" class="story-img img1" alt="1"
+       data-title="Our wedding"
+       data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor." 
+       data-modal-width="520px"
+       data-modal-left="50%"
+       data-modal-top="50%"/>
+
+  <img src="img/rock2.png" class="story-img img2" alt="2"
+       data-title="A quiet moment"
+       data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue." 
+       data-modal-width="520px"
+       data-modal-left="50%"
+       data-modal-top="50%"/>
+
+  <img src="img/rock3.png" class="story-img img3" alt="3"
+       data-title="At the hospital"
+       data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae libero ac risus egestas placerat." 
+       data-modal-width="520px"
+       data-modal-left="50%"
+       data-modal-top="50%"/>
+
+  <img src="img/rock4.png" class="story-img img4" alt="4"
+       data-title="Family lunch"
+       data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum commodo felis quis tortor." 
+       data-modal-width="520px"
+       data-modal-left="50%"
+       data-modal-top="50%"/>
+
+  <img src="img/rock5.png" class="story-img img5" alt="5"
+       data-title="Cooking together"
+       data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut aliquam sollicitudin leo." 
+       data-modal-width="520px"
+       data-modal-left="50%"
+       data-modal-top="50%"/>
+
+  <img src="img/rock6.png" class="story-img img6" alt="6"
+       data-title="A drawing"
+       data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis ultricies nulla." 
+       data-modal-width="520px"
+       data-modal-left="50%"
+       data-modal-top="50%"/>
+
+  <img src="img/rock7.png" class="story-img img7" alt="7"
+       data-title="At the fair"
+       data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis dui at dolor tempor interdum." 
+       data-modal-width="520px"
+       data-modal-left="50%"
+       data-modal-top="50%"/>
+
+  <img src="img/rock8.png" class="story-img img8" alt="8"
+       data-title="First communion"
+       data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus molestie gravida turpis." 
+       data-modal-width="520px"
+       data-modal-left="50%"
+       data-modal-top="50%"/>
+
+  <img src="img/rock9.png" class="story-img img9" alt="9"
+       data-title="Birthday"
+       data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis lorem at ipsum semper sagittis." 
+       data-modal-width="520px"
+       data-modal-left="50%"
+       data-modal-top="50%"/>
+
+  <img src="img/rock10.png" class="story-img img10" alt="10"
+       data-title="Garden memory"
+       data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam convallis pellentesque nisl." 
+       data-modal-width="520px"
+       data-modal-left="50%"
+       data-modal-top="50%"/>
+</div>
+<div class="story-modal" id="storyModal">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose">×</button>
+
+    <div class="modal-image-wrap">
+      <img src="" alt="" id="modalImage" class="modal-image" />
+    </div>
+
+    <div class="modal-text">
+      <h2 id="modalTitle">Our wedding</h2>
+      <p id="modalDescription">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </p>
+    </div>
+  </div>
+</div>
+    </main>
+    <style>
+      html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: #fff;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.story-main {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.story-title-block {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.story-title {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+.story-subtitle {
+  font-size: 1.1rem;
+  color: #888;
+  font-family: 'Repro', monospace;
+  letter-spacing: 0.08em;
+}
+
+.story-images {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.story-img {
+  position: absolute;
+  background: transparent;
+  opacity: 1;
+  border-radius: 0;
+  box-shadow: none;
+  height: auto;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.15s ease-out;
+}.img1 {
+  left: 4vw;
+  top: 4vh;
+  width: 200px;
+}
+
+.img2 {
+  left: 24vw;
+  top: 0vh;
+  width: 200px;
+}
+
+.img3 {
+  left: 60vw;
+  top: 7vh;
+  width: 200px;
+}
+
+.img4 {
+  left: 75vw;
+  top: 20vh;
+  width: 200px;
+}
+
+.img5 {
+  left: 68vw;
+  top: 50vh;
+  width: 200px;
+}
+
+.img6 {
+  left: 8vw;
+  top: 60vh;
+  width: 200px;
+}
+
+.img7 {
+  left: 32vw;
+  top: 38vh;
+  width: 200px;
+}
+
+.img8 {
+  left: 49vw;
+  top: 40vh;
+  width: 200px;
+}
+
+.img9 {
+  left: 0vw;
+  top: 32vh;
+  width: 200px;
+}
+
+.img10 {
+  left: 40vw;
+  top: 65vh;
+  width: 230px;
+}
+
+@media (max-width: 600px) {
+  .story-title {
+    font-size: 1.2rem;
+  }
+
+  .story-subtitle {
+    font-size: 0.9rem;
+  }
+}
+    .story-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(2px);
+}
+
+.story-modal.active {
+  display: flex;
+}
+
+.modal-card {
+  position: relative;
+  width: 86vw;
+  height: 78vh;
+  background: rgba(255, 198, 198, 0.72);
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 64px;
+  padding: 48px;
+  box-sizing: border-box;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.08);
+}
+
+.modal-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.modal-image {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 80%;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+}
+
+.modal-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #111;
+}
+
+.modal-text h2 {
+  font-family: 'social', monospace;
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin: 0 0 32px 0;
+}
+
+.modal-text p {
+  font-family: 'Repro', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  max-width: 420px;
+  margin: 0;
+}
+
+.modal-close {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  border: none;
+  background: transparent;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  color: #111;
+  z-index: 2;
+}  
+    </style>
+    <script>
+  const images = document.querySelectorAll('.story-img');
+  const titleBlock = document.querySelector('.story-title-block');
+
+  const modal = document.getElementById('storyModal');
+  const modalImage = document.getElementById('modalImage');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDescription = document.getElementById('modalDescription');
+  const modalClose = document.getElementById('modalClose');
+
+  document.addEventListener('mousemove', (event) => {
+    if (modal.classList.contains('active')) return;
+
+    const x = (event.clientX / window.innerWidth - 0.5) * 2;
+    const y = (event.clientY / window.innerHeight - 0.5) * 2;
+
+    images.forEach((img, index) => {
+      const movement = (index + 1) * 1.2;
+
+      img.style.transform = `
+        translate(${x * movement}px, ${y * movement}px)
+      `;
+    });
+
+    titleBlock.style.transform = `
+      translate(${x * -6}px, ${y * -6}px)
+    `;
+  });
+
+  images.forEach((img) => {
+    img.addEventListener('click', () => {
+      modalImage.src = img.src;
+      modalImage.alt = img.alt;
+
+      modalTitle.textContent = img.dataset.title;
+      modalDescription.textContent = img.dataset.description;
+
+      modalImage.style.width = img.dataset.modalWidth || '80%';
+      modalImage.style.height = img.dataset.modalHeight || 'auto';
+      modalImage.style.left = img.dataset.modalLeft || '50%';
+      modalImage.style.top = img.dataset.modalTop || '50%';
+
+      modal.classList.add('active');
+    });
+  });
+
+  function closeModal() {
+    modal.classList.remove('active');
+  }
+
+  modalClose.addEventListener('click', closeModal);
+
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeModal();
+    }
+  });
+</script>
+  </body>
+</html>

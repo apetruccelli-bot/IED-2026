@@ -10,7 +10,7 @@
 }
 
 *:not(.font-myTitle) {
-  font-family: 'Repro', sans-serif  ;
+  font-family: 'Social', sans-serif  ;
   font-size: 14px;
   line-height: 130%;
 }
@@ -27,7 +27,7 @@
   letter-spacing: 0.02em;
 }
 .font-mySubtitle {
-  font-family: 'Social';
+  font-family: 'Repro';
   font-size: 22px;
   line-height: 100%;
   letter-spacing: 0.02em;
