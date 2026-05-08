@@ -8,7 +8,7 @@
       "category": "negozi",
       "negozi-anno": 1992,
       "negozi-provincia": "Lecce",
-      "negozi-specializzazione": "equina",
+      "negozi-specializzazione": ["equina"],
       "negozi-stato": "aperto"
       },
     {
@@ -19,7 +19,7 @@
       "category": "negozi",
       "negozi-anno": 1995,
       "negozi-provincia": "Foggia",
-      "negozi-specializzazione": "bovina e suina",
+      "negozi-specializzazione": ["bovina", "suina"],
       "negozi-stato": "chiuso"
     },
     {
@@ -30,7 +30,7 @@
       "category": "negozi",
       "negozi-anno": 1990,
       "negozi-provincia": "Bari",
-      "negozi-specializzazione": "bovina e suina",
+      "negozi-specializzazione": ["bovina", "suina"],
       "negozi-stato": "chiuso"
     },
     {
@@ -41,7 +41,7 @@
       "category": "negozi",
       "negozi-anno": 1984,
       "negozi-provincia": "Foggia",
-      "negozi-specializzazione": "Equina",
+      "negozi-specializzazione": ["equina"],
       "negozi-stato": "chiuso"},
     {
       "id": 5,
@@ -51,7 +51,7 @@
       "category": "negozi",
       "negozi-anno": 1995,
       "negozi-provincia": "Bari",
-      "negozi-specializzazione": "bovina e ovina",
+      "negozi-specializzazione": ["bovina", "ovina"],
       "negozi-stato": "aperto"    },
     {
       "id": 6,
@@ -61,7 +61,7 @@
       "category": "negozi",
       "negozi-anno": 1989,
       "negozi-provincia": "Lecce",
-      "negozi-specializzazione": "bovina",
+      "negozi-specializzazione": ["bovina"],
       "negozi-stato": "chiuso"    },
     {
       "id": 7,
@@ -71,7 +71,7 @@
       "category": "negozi",
       "negozi-anno": 1993,
       "negozi-provincia": "Bari",
-      "negozi-specializzazione": "equina",
+      "negozi-specializzazione": ["equina"],
       "negozi-stato": "aperto"    },
     {
       "id": 8,
@@ -81,7 +81,7 @@
       "category": "negozi",
       "negozi-anno": 1985,
       "negozi-provincia": "Lecce",
-      "negozi-specializzazione": "ovina",
+      "negozi-specializzazione": ["ovina"],
       "negozi-stato": "chiuso"    },
     {
       "id": 9,
@@ -91,7 +91,7 @@
       "category": "negozi",
       "negozi-anno": 1990,
       "negozi-provincia": "Taranto",
-      "negozi-specializzazione": "equina",
+      "negozi-specializzazione": ["equina"],
       "negozi-stato": "aperto"    },
     {
       "id": 10,
@@ -101,7 +101,7 @@
       "category": "negozi",
       "negozi-anno": 1989,
       "negozi-provincia": "Bari",
-      "negozi-specializzazione": "bovina e suina",
+      "negozi-specializzazione": ["bovina", "suina"],
       "negozi-stato": "aperto"    },
     {
       "id": 11,     
@@ -111,7 +111,7 @@
       "category": "negozi",
       "negozi-anno": 1988,
       "negozi-provincia": "Barletta-Andria-Trani",
-      "negozi-specializzazione": "bovina e suina",
+      "negozi-specializzazione": ["bovina", "suina"],
       "negozi-stato": "chiuso"    },
     {
       "id": 12,
@@ -121,7 +121,7 @@
       "category": "negozi",
       "negozi-anno": 1990,
       "negozi-provincia": "Barletta-Andria-Trani",
-      "negozi-specializzazione": "bovina",
+      "negozi-specializzazione": ["bovina"],
       "negozi-stato": "aperto"    },
     {
       "id": 13,
@@ -131,7 +131,7 @@
       "category": "negozi",
       "negozi-anno": 1997,
       "negozi-provincia": "Lecce",
-      "negozi-specializzazione": "bovina e suina",
+      "negozi-specializzazione": ["bovina", "suina"],
       "negozi-stato": "aperto"    },
     {
       "id": 14,
@@ -141,7 +141,7 @@
       "category": "negozi",
       "negozi-anno": 1992,
       "negozi-provincia": "Barletta-Andria-Trani",
-      "negozi-specializzazione": "ovina",
+      "negozi-specializzazione": ["ovina"],
       "negozi-stato": "chiuso"    },
     {
       "id": 15,
@@ -152,7 +152,7 @@
       "category": "negozi",
       "negozi-anno": 1980,
       "negozi-provincia": "Brindisi",
-      "negozi-specializzazione": "equina",
+      "negozi-specializzazione": ["equina"],
       "negozi-stato": "aperto"    }, 
     {
       "id": 16, 
@@ -163,7 +163,7 @@
       "category": "negozi",
       "negozi-anno": 1996,
       "negozi-provincia": "Bari",
-      "negozi-specializzazione": "bovina",
+      "negozi-specializzazione": ["bovina"],
       "negozi-stato": "aperto"    },  
     {
       "id": 17,
@@ -174,7 +174,7 @@
       "category": "negozi",
       "negozi-anno": 1989,
       "negozi-provincia": "Taranto",
-      "negozi-specializzazione": "bovina e ovina",
+      "negozi-specializzazione": ["bovina", "ovina"],
       "negozi-stato": "chiuso"    },
     {
       "id": 18,
@@ -185,7 +185,7 @@
       "category": "negozi",
       "negozi-anno": 1995,
       "negozi-provincia": "Bari",
-      "negozi-specializzazione": "bovina e suina",
+      "negozi-specializzazione": ["bovina", "suina"],
       "negozi-stato": "chiuso"    },        
     {
       "id": 19,
@@ -196,7 +196,7 @@
       "category": "negozi",
       "negozi-anno": 1998,
       "negozi-provincia": "Taranto",
-      "negozi-specializzazione": "equina",
+      "negozi-specializzazione": ["equina"],
       "negozi-stato": "chiuso"    },
     {
       "id": 20,
@@ -207,7 +207,7 @@
       "category": "negozi",
       "negozi-anno": 1997,
       "negozi-provincia": "Brindisi",
-      "negozi-specializzazione": "bovina e suina",
+      "negozi-specializzazione": ["bovina", "suina"],
       "negozi-stato": "aperto"    },
     {
       "id": 21,
@@ -218,7 +218,7 @@
       "category": "negozi",
       "negozi-anno": 1989,
       "negozi-provincia": "Brindisi",
-      "negozi-specializzazione": "bovina",
+      "negozi-specializzazione": ["bovina"],
       "negozi-stato": "chiuso"    }, 
     {
       "id": 22,
@@ -426,13 +426,15 @@
       "tagli-lavorazione": "separazione"
     },
     {
-      "id": 44,
+      "id": 46,
       "src": "img/tagli  (4).png",
       "tags-tagli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category":"tagli",
       "tagli-lavorazione": "prima apertura"
-    },
+    }
+  ]
+}
     
 
 

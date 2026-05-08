@@ -8,7 +8,7 @@ const btnRandom = document.getElementById('btn-random');
 const lightbox   = document.getElementById('lightbox');
 const lbImg      = document.getElementById('lb-img');
 const lbId       = document.getElementById('lb-id');
-const lbTagsEl   = document.getElementById('lb-tags');
+//const lbTagsEl   = document.getElementById('lb-tags');
 const lbClose    = document.getElementById('lb-close');
 const lbPrev     = document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lb-next');
@@ -153,7 +153,10 @@ function render() {
     card.className = 'card';
     card.style.cursor = 'zoom-in';
     card.dataset.itemId = item.id;
-    const matchesFilters = activeFilters.size === 0 || [...activeFilters.entries()].every(([k, v]) => String(item[k] ?? '') === v);
+    const matchesFilters = activeFilters.size === 0 || [...activeFilters.entries()].every(([k, v]) => {
+      const field = item[k];
+      return Array.isArray(field) ? field.map(String).includes(v) : String(field ?? '') === v;
+    });
     card.classList.toggle('active-img', matchesFilters);
 
     // image
@@ -224,7 +227,9 @@ function buildFilters() {
     catEl.appendChild(catTitle);
     subKeys.forEach(subKey => {
       const values = [...new Set(
-        items.filter(i => i.category === cat && i[subKey] != null).map(i => String(i[subKey]))
+        items.filter(i => i.category === cat && i[subKey] != null).flatMap(i =>
+          Array.isArray(i[subKey]) ? i[subKey].map(String) : [String(i[subKey])]
+        )
       )].sort();
       const subEl = document.createElement('div');
       subEl.className = 'filter-sub grid grid-cols-4 ';
@@ -310,7 +315,10 @@ function updateActiveImg() {
     if (!item) return;
     const matches = !hasFilters || (
       activeCategories.has(item.category) &&
-      [...activeFilters.entries()].every(([k, v]) => String(item[k] ?? '') === v)
+      [...activeFilters.entries()].every(([k, v]) => {
+        const field = item[k];
+        return Array.isArray(field) ? field.map(String).includes(v) : String(field ?? '') === v;
+      })
     );
     card.classList.toggle('active-img', matches);
   });
@@ -329,17 +337,17 @@ function openLightbox(index) {
   // set the alt text
   lbImg.alt = `Item ${item.id}`;
   // set the id
-  lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
+  //lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
 
-  lbTagsEl.innerHTML = '';
+  //lbTagsEl.innerHTML = '';
   // loop through the tags and create a span for each tag
-  item.tags.forEach(tag => {
+  /* item.tags.forEach(tag => {
     const t = document.createElement('span');
     t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
     t.textContent = tag;
     t.addEventListener('click', () => { toggleTag(tag); closeLightbox(); });
     lbTagsEl.appendChild(t);
-  });
+  }); */
 
 
   lightbox.classList.add('open');
