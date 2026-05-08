@@ -104,6 +104,16 @@ body {
 }
 
 
+/* ── ABOUT ── */
+.imgInsideAbout {
+  width:min(60vw,80vh);
+  height:min(60vw,80vh);
+  background:#FF0000;
+  border-radius:6px;
+  transition: filter 0.9s ease, opacity 0.9s ease, background-color 0.3s ease;
+}
+
+
 
 /* ── HEADER ── */
 header {

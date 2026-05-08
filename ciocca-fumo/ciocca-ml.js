@@ -51,7 +51,7 @@ document.getElementById('explore-modal').addEventListener('click', function (e) 
 
 // ── SQUARE BLUR / REVEAL ──
 function setSquareBlurred(blurred) {
-  const square = document.getElementById('explore-square');
+  const square = document.querySelector('.explore-square');
   if (!square) return;
   if (blurred) {
     square.style.filter  = 'blur(16px)';
@@ -74,11 +74,11 @@ function triggerReveal() {
   setSquareBlurred(false);
   reblurTimeout = setTimeout(() => {
     setSquareBlurred(true);
-    const status = document.getElementById('explore-status');
+    const status = document.querySelector('.explore-status');
     if (status) status.textContent = 'blow or puff your cheeks!';
   }, 3000);
 
-  const status = document.getElementById('explore-status');
+  const status = document.querySelector('.explore-status');
   if (status) status.textContent = 'revealed — re-blurs in 3s…';
 }
 
@@ -132,7 +132,7 @@ function loopMicDetection() {
 
 // ── FACE MODEL INIT ──
 async function initExplore() {
-  const status = document.getElementById('explore-status');
+  const status = document.querySelector('.explore-status');
   if (!exploreDetector && !exploreModelLoading) {
     exploreModelLoading = true;
     status.textContent = 'Loading face detection model…';
@@ -150,7 +150,7 @@ async function initExplore() {
       );
       exploreModelLoading = false;
     } catch (err) {
-      status.textContent = 'Error loading model: ' + err.message;
+      if (status) status.textContent = 'Error loading model: ' + err.message;
       exploreModelLoading = false;
       return;
     }
@@ -165,7 +165,7 @@ async function initExplore() {
 
 async function startExploreCamera() {
   const video  = document.getElementById('explore-webcam');
-  const status = document.getElementById('explore-status');
+  const status = document.querySelector('.explore-status');
   try {
     exploreStream = await navigator.mediaDevices.getUserMedia({
       video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' }
@@ -186,7 +186,7 @@ async function detectExploreFace() {
   if (!exploreIsDetecting || !exploreDetector) return;
 
   const video       = document.getElementById('explore-webcam');
-  const status      = document.getElementById('explore-status');
+  const status      = document.querySelector('.explore-status');
   const detectLabel = document.getElementById('explore-detect-label');
   const angleLabel  = document.getElementById('explore-angle-label');
 
@@ -213,9 +213,7 @@ async function detectExploreFace() {
           status.textContent = 'blow or puff your cheeks!';
         }
       } else {
-        // 7% wider than baseline = cheeks puffed
-        //const puffed = ratio > cheekBaseline * 1.07;
-        const puffed = ratio > cheekBaseline * 1.05;
+        const puffed = ratio.toFixed(2) > (cheekBaseline.toFixed(2) + 5);
         if (puffed) triggerReveal();
         angleLabel.textContent = `cheeks: ${ratio.toFixed(2)} / base: ${cheekBaseline.toFixed(2)}`;
         angleLabel.style.color = puffed ? 'rgba(0,220,120,0.9)' : 'rgba(255,255,255,0.3)';
