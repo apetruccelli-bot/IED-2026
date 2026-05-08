@@ -41,6 +41,36 @@
       </div>
     </div>
 
+    <!-- Marker modal -->
+    <div id="marker-modal" class="marker-modal" aria-hidden="true">
+      <div class="marker-modal-backdrop" id="marker-modal-backdrop"></div>
+      <div class="marker-modal-content">
+        <button class="marker-modal-close" id="marker-modal-close">✕</button>
+        <img class="marker-modal-img" id="marker-modal-img" src="" alt="">
+        <p class="marker-modal-desc" id="marker-modal-desc"></p>
+      </div>
+    </div>
+
     <script src="script.js"></script>
+
+    <!-- Face + Hand preview panel -->
+    <div class="face-preview-panel">
+      <video id="face-webcam" class="face-webcam-preview" autoplay muted playsinline></video>
+      <div class="face-status-panel">
+        <div id="face-status-label" class="face-status-bold">loading model…</div>
+        <div>proximity: <span id="face-prox-label">&mdash;</span></div>
+        <div>hand zoom: <span id="hand-size-label">&mdash;</span></div>
+        <div id="face-calib-label"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+    <script src="procopio-ml.js"></script>
   </body>
 </html>
