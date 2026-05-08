@@ -29,7 +29,7 @@ async function loadData() {
   const data = await res.json();
   // set the items and display items
   items = data.items;
-  displayItems = [...items];
+  displayItems = shuffle([...items]);
   buildTagsBar();
   render();
 }
