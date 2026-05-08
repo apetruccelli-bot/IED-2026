@@ -64,6 +64,23 @@ async function hydrateRowsWithImages() {
       imageDescription: match?.description || 'Immagine non disponibile',
     };
   });
+  // populate filters UI when rows are hydrated
+  renderFilters();
+}
+
+function renderFilters() {
+  if (!rowsHost) return;
+
+  const unique = (arr) => [...new Set(arr.filter(Boolean))];
+
+  const columns = [
+    unique(allItems.map((i) => String(i.year || ''))).sort(),
+    unique(enrichedRows.map((r) => r.autore)).sort(),
+    unique(enrichedRows.map((r) => r.regione)).sort(),
+    unique(enrichedRows.map((r) => r.abitanti)).sort(),
+    unique(enrichedRows.map((r) => r.documento)).sort(),
+    unique(allItems.map((i) => i.category)).sort(),
+  ];
 
   rowsHost.innerHTML = columns
     .map(
