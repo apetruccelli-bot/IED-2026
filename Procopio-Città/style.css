@@ -434,15 +434,42 @@ header {
   opacity: 0.6;
 }
 
-.mapboxgl-ctrl-attrib-inner
-  {
-    display: none !important;
-  }
 
-.mapboxgl-ctrl-logo
-  {
-    display: none !important;
-  }
+/* MAPBOX */
+.mapboxgl-canvas {
+  transition: opacity 0.6s cubic-bezier(.8,0,.2,1);
+}
+body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
+  opacity: 0.2;
+}
+
+.mapboxgl-ctrl-attrib-inner{display: none !important;}
+.mapboxgl-ctrl-logo {display: none !important;}
+.custom-marker {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.marker-content img {
+  border: 2px solid white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+.marker-content img:hover {
+  transform: scale(1.2);
+}
+.marker-label {
+  background: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+
+
 /* Rotate the toggle when menu is open */
 .toggle-btn {
   transition: transform 0.2s ease, opacity 0.12s ease;
@@ -473,4 +500,94 @@ header {
 }
 .home-page .specialGrid {
   background: transparent;
+}
+
+/* ── Face/Hand preview panel ────────────────────────────────────── */
+.face-preview-panel {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  font-family: monospace;
+  font-size: 11px;
+  pointer-events: none;
+}
+.face-webcam-preview {
+  width: 180px;
+  height: 135px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.15);
+  transform: scaleX(-1);
+}
+.face-status-panel {
+  text-align: right;
+  line-height: 1.7;
+  color: #333;
+  background: rgba(255,255,255,0.75);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.face-status-bold {
+  font-weight: bold;
+}
+
+/* Marker blur transition */
+.custom-marker {
+  transition: filter 0.3s ease;
+}
+
+/* ── Marker modal ────────────────────────────────────────────────── */
+.marker-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+.marker-modal.open {
+  display: flex;
+}
+.marker-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  cursor: pointer;
+}
+.marker-modal-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 80vw;
+}
+.marker-modal-close {
+  position: absolute;
+  top: -36px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+}
+.marker-modal-img {
+  width: 80vw;
+  height: 70vh;
+  object-fit: contain;
+  display: block;
+}
+.marker-modal-desc {
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  max-width: 60ch;
 }
