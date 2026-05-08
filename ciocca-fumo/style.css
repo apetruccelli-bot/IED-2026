@@ -66,6 +66,45 @@ body {
   min-height: 100vh;
 }
 
+
+
+/* ── LANDING ANIMATION ── */
+@keyframes landing-content-in {
+  0%   { opacity: 0; filter: blur(60px); }
+  100% { opacity: 1; filter: blur(0px); }
+}
+@keyframes landing-content-out {
+  0%   { opacity: 1; filter: blur(0px); }
+  100% { opacity: 0; filter: blur(60px); }
+}
+@keyframes landing-modal-out {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes body-unblur {
+  0%   { filter: blur(40px); }
+  100% { filter: blur(0px); }
+}
+
+.landing-content-enter {
+  animation: landing-content-in 3s cubic-bezier(.8,0,.2,1) forwards;
+}
+.landing-content-leave {
+  animation: landing-content-out 2s cubic-bezier(.8,0,.2,1) forwards;
+}
+#landing-modal.landing-modal-hide {
+  animation: landing-modal-out 0.8s cubic-bezier(.8,0,.2,1) forwards;
+  pointer-events: none;
+}
+.all-blurred {
+  filter: blur(40px);
+}
+.all-unblurring {
+  animation: body-unblur 1.4s ease-out forwards;
+}
+
+
+
 /* ── HEADER ── */
 header {
   position: fixed;

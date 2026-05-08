@@ -16,52 +16,77 @@
       }
     </style>
   </head>
-  <body class="bg-myBlack text-myWhite">
+  <body class="bg-myBlack text-myWhite ">
 
 
-    <div id="landing-modal" class="fixed top-0 left-0 bg-myBlack w-screen h-screen z-40">
-      <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center flex flex-col gap-1">
+    <div id="landing-modal" 
+    class="fixed top-0 left-0 bg-myBlack w-screen h-screen z-[999]" 
+    style="cursor:pointer;">
+      <div id="landing-content" 
+      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center flex flex-col gap-1 
+      landing-content-enter">
         <p class="font-mySubtitle">Hiroshi Tanaka</p>
         <p class="font-myTitle">禁煙 No smoking</p>
         <p class="font-mySubtitle">Osaka 1985–1990</p>
       </div>
     </div>
 
+    <script>
+      (function () {
+        const modal   = document.getElementById('landing-modal');
+        const content = document.getElementById('landing-content');
+        let leaving = false;
 
-    <header>
+        function startLeave() {
+          if (leaving) return;
+          leaving = true;
+          content.classList.remove('landing-content-enter');
+          content.classList.add('landing-content-leave');
+          content.addEventListener('animationend', () => {
+            modal.classList.add('landing-modal-hide');
+            modal.addEventListener('animationend', () => {
+              modal.style.opacity = '0';
+              modal.style.pointerEvents = 'none';
+              document.querySelectorAll('.initially-blurred').forEach(el => {
+                el.classList.remove('all-blurred');
+                el.classList.add('all-unblurring');
+                el.addEventListener('animationend', () => {
+                  el.classList.remove('all-unblurring');
+                }, { once: true });
+              });
+            }, { once: true });
+          }, { once: true });
+        }
+
+        // auto-leave after 2s blur-in + 2s blur-out
+        content.addEventListener('animationend', () => {
+          if (!leaving) setTimeout(startLeave, 2000);
+        }, { once: true });
+
+        // click to skip
+        modal.addEventListener('click', startLeave);
+      })();
+    </script>
+
+
+    <header class="initially-blurred all-blurred">
       <div class="header-inner ">
-
         <a href="/" class="col-span-2">禁煙 Vietato fumare</a>
-
         <div class="flex gap-20px col-span-10">
           <div class="flex gap-20px">
             <p class="">タバコの箱  Pacchetti</p>
             <p class="">吸殻  Ritratti</p>
             <p class="">広告  Pubblicità</p>
           </div>
-
-          <p class="ml-auto">アーカイブについて About the Archive</p>
+          <p onclick="openExploreModal()" class="ml-auto cursor-pointer">アーカイブについて About the Archive</p>
         </div>
-        
-        <!-- <div class="header-row">
-          <div class="search-wrap">
-            <input
-              id="search"
-              type="search"
-              placeholder="Cerca…"
-              autocomplete="off"
-            />
-          </div>
-          <button class="btn-random" id="btn-random">Random</button>
-        </div> -->
-        <!-- <div class="tags-bar" id="tags-bar"></div> -->
-
       </div>
     </header>
 
     <!-- <p class="results-info font-myTitle" id="results-info"></p> -->
 
-    <div class="mainLayout bg-myBlack fixed top-0 left-0 w-screen h-screen overflow-y-scroll
+    <div class="mainLayout initially-blurred all-blurred
+    bg-myBlack fixed top-0 left-0 w-screen h-screen overflow-y-scroll
     grid grid-cols-12 gap-10px">
       <div class="descriptionAndFilters col-span-4 h-full flex flex-col justify-between pt-[10rem]">
         <div class="description flex flex-col gap-10px">
@@ -117,6 +142,46 @@
       </div>
     </div>
 
+    <!-- About Modal -->
+    <div id="explore-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.95); align-items:center; justify-content:center; flex-direction:column; gap:20px;">
+      <button onclick="closeExploreModal()" style="position:absolute; top:20px; right:20px; background:none; border:none; color:white; font-size:28px; cursor:pointer; line-height:1;">✕</button>
+
+      <!-- Webcam preview top-right -->
+      <div style="position:absolute; top:20px; right:70px; display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+        <video id="explore-webcam" autoplay muted playsinline style="width:200px; height:150px; object-fit:cover; border-radius:6px; border:2px solid rgba(255,255,255,0.15); transform:scaleX(-1);"></video>
+        <div id="explore-hand-status" style="font-family:monospace; font-size:11px; text-align:right; line-height:1.5;">
+          <span id="explore-detect-label" style="display:inline-block; padding:2px 8px; border-radius:3px; background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.4);">no face detected</span><br>
+          <span id="explore-angle-label" style="color:rgba(255,255,255,0.3);">—</span>
+        </div>
+        <!-- Mic level indicator -->
+        <div style="width:200px; font-family:monospace; font-size:10px; color:rgba(255,255,255,0.35);">
+          <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+            <span>mic</span>
+            <span id="explore-mic-value">0</span>
+          </div>
+          <div style="position:relative; height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:visible;">
+            <!-- threshold marker -->
+            <div id="explore-mic-threshold-marker" style="position:absolute; top:-3px; width:2px; height:12px; background:rgba(255,255,255,0.5); border-radius:1px; left:43%;">
+              <span style="position:absolute; top:-14px; left:50%; transform:translateX(-50%); font-size:9px; color:rgba(255,255,255,0.4); white-space:nowrap;">110</span>
+            </div>
+            <!-- level bar -->
+            <div id="explore-mic-bar" style="height:100%; width:0%; background:rgba(255,255,255,0.4); border-radius:3px; transition:width 0.05s linear;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="explore-square" style="width:min(60vw,80vh); height:min(60vw,80vh); background:#FF0000; border-radius:6px; transition: filter 0.9s ease, opacity 0.9s ease, background-color 0.3s ease;"></div>
+      <div id="explore-status" style="color:rgba(255,255,255,0.35); font-size:12px; font-family:monospace;">Loading model...</div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2"></script>
+
+    <script src="ciocca-ml.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
