@@ -6,24 +6,39 @@
     <title>Archivio di Giorgia.</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
-      :root {
+    <style type="text/tailwindcss">
+      @theme {
         --color-myBlack: #3A3A3A;
         --color-myWhite: #E5E5E5;
         --color-myGrey: #FFFFFF80;
+        --spacing-10px: 10px;
+        --spacing-20px: 20px;
       }
     </style>
   </head>
   <body class="bg-myBlack text-myWhite">
+
+
+    <div id="landing-modal" class="fixed top-0 left-0 bg-myBlack w-screen h-screen z-40">
+      <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center flex flex-col gap-1">
+        <p class="font-mySubtitle">Hiroshi Tanaka</p>
+        <p class="font-myTitle">禁煙 No smoking</p>
+        <p class="font-mySubtitle">Osaka 1985–1990</p>
+      </div>
+    </div>
+
+
     <header>
       <div class="header-inner ">
 
         <a href="/" class="col-span-2">禁煙 Vietato fumare</a>
 
         <div class="flex gap-20px col-span-10">
-          <p class="">タバコの箱  Pacchetti</p>
-          <p class="">吸殻  Ritratti</p>
-          <p class="">広告  Pubblicità</p>
+          <div class="flex gap-20px">
+            <p class="">タバコの箱  Pacchetti</p>
+            <p class="">吸殻  Ritratti</p>
+            <p class="">広告  Pubblicità</p>
+          </div>
 
           <p class="ml-auto">アーカイブについて About the Archive</p>
         </div>
@@ -48,7 +63,7 @@
 
     <div class="mainLayout bg-myBlack fixed top-0 left-0 w-screen h-screen overflow-y-scroll
     grid grid-cols-12 gap-10px">
-      <div class="descriptionAndFilters col-span-4 h-full flex flex-col justify-between">
+      <div class="descriptionAndFilters col-span-4 h-full flex flex-col justify-between pt-[10rem]">
         <div class="description flex flex-col gap-10px">
           <div class="japanese">ある実業家が、まるでその中を探そうとするかのように、
             腰をかがめて吸い殻を拾い上げた ある実業家が、まるでその中を探そうとするかのように、
