@@ -434,6 +434,15 @@ header {
   opacity: 0.6;
 }
 
+.mapboxgl-ctrl-attrib-inner
+  {
+    display: none !important;
+  }
+
+.mapboxgl-ctrl-logo
+  {
+    display: none !important;
+  }
 /* Rotate the toggle when menu is open */
 .toggle-btn {
   transition: transform 0.2s ease, opacity 0.12s ease;

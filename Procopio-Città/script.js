@@ -280,10 +280,20 @@ hydrateRowsWithImages()
 
       const map = new mapboxgl.Map({
         container: 'home-map',
+<<<<<<< Updated upstream
         //style: 'mapbox://styles/mapbox/streets-v12',
         style: 'mapbox://styles/martiinaprocopio/cmowrladb001p01saaambdxq8',
         center: [9.11, 45.07], // example: Torino
         zoom: 11,
+=======
+        style: 'mapbox://styles/martiinaprocopio/cmowvc4ao001n01r5g7ad3t1i',
+        center: [13, 39.5], // Catanzaro, Calabria
+        zoom: 6.3,
+      });
+      console.log('Mapbox map initialized successfully');
+      map.on('error', (e) => {
+        console.error('Map error:', e.error);
+>>>>>>> Stashed changes
       });
 
       // ADD THIS: Log errors to the console
@@ -301,8 +311,7 @@ hydrateRowsWithImages()
         map.resize();
       });
     } catch (e) {
-      // ignore map init errors
-      console.warn('Mapbox init failed', e);
+      console.error('Mapbox init failed:', e.message);
     }
   });
 })();
