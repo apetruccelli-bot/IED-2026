@@ -19,6 +19,8 @@ let activeTags = new Set();
 let searchQuery = '';
 let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
+let activeCategory = null; // 'fotografie' | 'pacchetti' | 'pubblicità' | null
+let activeYear = null;     // e.g. 1985 | null
 
 // ── Load data ──────────────────────────────────────────────────────────────
 async function loadData() {
@@ -32,6 +34,7 @@ async function loadData() {
   items = data.items;
   displayItems = [...items];
   buildTagsBar();
+  buildYearFilter();
   render();
 }
 
@@ -73,12 +76,9 @@ function toggleTag(tag) {
 
 // ── Filter logic ──────────────────────────────────────────────────────────
 function filteredItems() {
-
-  // get the search query
   const q = searchQuery.toLowerCase().trim();
-  // filter the items
   return displayItems.filter(item => {
-    // check if the item matches the tags
+    const matchesCategory = !activeCategory || item.category === activeCategory;
     const matchesTags =
       activeTags.size === 0 ||
       [...activeTags].every(t => item.tags.includes(t));
@@ -86,8 +86,21 @@ function filteredItems() {
       q === '' ||
       item.description.toLowerCase().includes(q) ||
       item.tags.some(t => t.toLowerCase().includes(q));
-    return matchesTags && matchesSearch;
+    return matchesCategory && matchesTags && matchesSearch;
   });
+}
+
+// ── Category filter ───────────────────────────────────────────────────────
+function setCategory(cat) {
+  activeCategory = activeCategory === cat ? null : cat;
+  document.querySelectorAll('[data-category]').forEach(el => {
+    el.style.opacity = (!activeCategory || el.dataset.category === activeCategory) ? '1' : '0.35';
+  });
+  // apply layout class to grid
+  grid.classList.remove('layout-fotografie', 'layout-pacchetti', 'layout-pubblicita');
+  if (activeCategory === 'pacchetti')  grid.classList.add('layout-pacchetti');
+  if (activeCategory === 'pubblicità') grid.classList.add('layout-pubblicita');
+  render();
 }
 
 // ── Shuffle array (Fisher-Yates) ──────────────────────────────────────────
@@ -152,6 +165,8 @@ function render() {
     const card = document.createElement('article');
     card.className = 'card';
     card.style.cursor = 'zoom-in';
+    card.dataset.itemYear = item.year;
+    if (!activeYear || item.year === activeYear) card.classList.add('activeImg');
 
     // image
     // create an image element
@@ -265,5 +280,36 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape')     closeLightbox();
 });
 
+// ── Category buttons ──────────────────────────────────────────────────────
+document.querySelectorAll('[data-category]').forEach(el => {
+  el.addEventListener('click', () => setCategory(el.dataset.category));
+});
+// ── Year filter ───────────────────────────────────────────────────────────
+function buildYearFilter() {
+  const container = document.getElementById('year-filter-list');
+  if (!container) return;
+  const years = [...new Set(items.map(i => i.year).filter(Boolean))].sort();
+  container.innerHTML = '';
+  years.forEach(year => {
+    const span = document.createElement('span');
+    span.className = 'cursor-pointer';
+    span.dataset.year = year;
+    span.textContent = `${year}年`;
+    span.addEventListener('click', () => setYear(year));
+    container.appendChild(span);
+  });
+}
+
+function setYear(year) {
+  activeYear = activeYear === year ? null : year;
+  grid.classList.toggle('year-filtered', !!activeYear);
+  document.querySelectorAll('[data-year]').forEach(el => {
+    el.style.opacity = (!activeYear || Number(el.dataset.year) === activeYear) ? '1' : '0.35';
+  });
+  document.querySelectorAll('.card[data-item-year]').forEach(card => {
+    const match = !activeYear || Number(card.dataset.itemYear) === activeYear;
+    card.classList.toggle('activeImg', match);
+  });
+}
 // ── Init ──────────────────────────────────────────────────────────────────
 loadData();
