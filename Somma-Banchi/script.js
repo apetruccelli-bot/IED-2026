@@ -395,7 +395,31 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape')     closeLightbox();
 });
 
+// ── Storia modal ────────────────────────────────────────────────────
+ function openStoriaModal() {
+  document.getElementById('storia-modal').classList.add('open');
+  document.querySelector('.mainLayout').classList.add('storia-dimmed');
+}
+
+function closeStoriaModal() {
+  document.getElementById('storia-modal').classList.remove('open');
+  document.querySelector('.mainLayout').classList.remove('storia-dimmed');
+}
+
 // ── Explore mode ─────────────────────────────────────────────────────────
+function fadeGrid(fn) {
+  const grid = document.getElementById('grid');
+  grid.classList.add('grid-fading');
+  setTimeout(() => {
+    fn();
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        grid.classList.remove('grid-fading');
+      });
+    });
+  }, 200); // matches transition duration
+}
+
 function openExploreMode() {
   isExploreMode = true;
   exploreSubcat = null;
@@ -408,7 +432,7 @@ function openExploreMode() {
   document.getElementById('explore-description-panel').style.display = 'flex';
   const navEl = document.getElementById('nav-cerca-coltelli');
   if (navEl) { navEl.classList.remove('opacity-20'); navEl.classList.add('opacity-100'); }
-  render();
+  fadeGrid(() => render());
   initSommaExplore();
 }
 
@@ -420,7 +444,7 @@ function closeExploreMode() {
   document.querySelectorAll('.explore-description').forEach(el => el.classList.remove('active'));
   const navEl = document.getElementById('nav-cerca-coltelli');
   if (navEl) { navEl.classList.remove('opacity-100'); navEl.classList.add('opacity-20'); }
-  render();
+  fadeGrid(() => render());
   if (typeof sommaIsDetecting !== 'undefined') sommaIsDetecting = false;
   if (typeof sommaStream !== 'undefined' && sommaStream) {
     sommaStream.getTracks().forEach(t => t.stop());
@@ -440,7 +464,6 @@ function setExploreGesture(funzione) {
   } else {
     activeFilters.clear();
   }
-  render();
   updateActiveImg();
 }
 

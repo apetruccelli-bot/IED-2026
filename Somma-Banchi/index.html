@@ -10,6 +10,7 @@
       @theme {
         --color-myBlack: #090909;
         --color-myWhite: #FAFAFA;
+        --color-lightGrey: #EBEBEA;
         --spacing-10px: 10px;
         --spacing-20px: 20px;
       }
@@ -17,11 +18,12 @@
   </head>
   <body>
     <header>
-      <a href="./" class="font-myTitle">Di Macelleria in Macelleria</a>
+      <span onclick="closeStoriaModal(); closeExploreMode();" class="font-myTitle cursor-pointer">Di Macelleria in Macelleria</span>
       <div class="flex gap-20px">
         <span id="nav-cerca-coltelli" onclick="openExploreMode()" 
         class="font-myTitle cursor-pointer opacity-20 hover:opacity-100 transition-opacity" >Cerca coltelli</span>
-        <span class="font-myTitle cursor-pointer">Storia</span>
+        <span id="nav-storia" onclick="openStoriaModal()"
+        class="font-myTitle cursor-pointer">Storia</span>
       </div>
     </header>
     
@@ -59,6 +61,17 @@
         <div class="myColumn column-3"></div>
         <div class="myColumn column-4"></div>
       </main>
+    </div>
+
+    <!-- Storia modal -->
+    <div id="storia-modal" class="storia-modal">
+      <div class="storia-modal-bar">
+        <span class="font-myTitle">Storia</span>
+        <span onclick="closeStoriaModal()" class="font-myTitle cursor-pointer">Close</span>
+      </div>
+      <div class="storia-modal-content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
     </div>
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
