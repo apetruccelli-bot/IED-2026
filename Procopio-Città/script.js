@@ -64,6 +64,8 @@ async function hydrateRowsWithImages() {
       imageDescription: match?.description || 'Immagine non disponibile',
     };
   });
+  // populate filters UI when rows are hydrated
+  renderFilters();
 }
 
 function renderFilters() {
@@ -75,7 +77,7 @@ function renderFilters() {
     unique(allItems.map((i) => String(i.year || ''))).sort(),
     unique(enrichedRows.map((r) => r.autore)).sort(),
     unique(enrichedRows.map((r) => r.regione)).sort(),
-    unique(enrichedRows.map((r) => r.abitanti)),
+    unique(enrichedRows.map((r) => r.abitanti)).sort(),
     unique(enrichedRows.map((r) => r.documento)).sort(),
     unique(allItems.map((i) => i.category)).sort(),
   ];
@@ -226,3 +228,69 @@ hydrateRowsWithImages()
     enrichedRows = [...archiveRows];
     renderAll();
   });
+
+
+// Handle smooth scrolling inside the main scroll container for section anchors
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const container = document.getElementById('main-scroll');
+    if (!container) return;
+    const headerOffset = 80; // keep in sync with CSS
+    document.querySelectorAll('a[href^="#sezione_"]').forEach(a => {
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        const id = this.getAttribute('href').slice(1);
+        const target = document.getElementById(id);
+        if (!target) return;
+        const containerRect = container.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+        const scrollTop = container.scrollTop + (targetRect.top - containerRect.top) - headerOffset;
+        container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+      });
+    });
+  });
+})();
+
+// Toggle sidebar-links on pages that include the toggle button
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById('toggle-sidebar');
+    const sidebar = document.querySelector('.sidebar-links');
+    if (!btn || !sidebar) return;
+    /* btn.addEventListener('click', function(){
+      const open = sidebar.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open);
+      // switch symbol between + and ×
+      btn.textContent = open ? '×' : '+';
+    }); */
+  });
+})();
+
+// Initialize Mapbox background on home page
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const mapEl = document.getElementById('home-map');
+    if (!mapEl || typeof mapboxgl === 'undefined') return;
+    try {
+      mapboxgl.accessToken = 'pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cG4wYjkwMzhuNDhzZW9nbG84NjZyIn0.AqkBWyL51ozeXHUJR2snXg'; // <-- replace with your token
+      // ensure the map container has a visible height before init
+      mapEl.style.display = 'block';
+      mapEl.style.height = window.innerHeight + 'px';
+
+      const map = new mapboxgl.Map({
+        container: 'home-map',
+        style: 'mapbox://styles/martiinaprocopio/cmowrladb001p01saaambdxq8',
+        center: [9.11, 45.07], // example: Torino
+        zoom: 11,
+      });
+      // keep map resized if layout changes
+      window.addEventListener('resize', () => {
+        mapEl.style.height = window.innerHeight + 'px';
+        map.resize();
+      });
+    } catch (e) {
+      // ignore map init errors
+      console.warn('Mapbox init failed', e);
+    }
+  });
+})();
