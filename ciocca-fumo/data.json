@@ -12,7 +12,7 @@
     {
       "id": 2,
       "src": "img/fumo/giovani19.png",
-       "year": 1960,
+       "year": 1961,
       "tags": ["urbano"],
       "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
       "description": "Descrizione dell'immagine"
@@ -20,7 +20,7 @@
     {
       "id": 3,
       "src": "img/fumo/anziano1.png",
-       "year": 1960,
+       "year": 1962,
       "tags": ["urbano"],
       "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
       "description": "Descrizione dell'immagine"
@@ -29,7 +29,7 @@
       "id": 4,
       "src": "img/fumo/businessman8.png",
       "category": "fotografie",
-      "year": 1960,
+      "year": 1963,
       "tags": ["ritratto", "luce", "ombra", "volto", "espressione"],
       "description": "Descrizione dell'immagine"
         },
@@ -37,7 +37,7 @@
       "id": 5,
       "src": "img/fumo/businessman9.png",
       "category": "fotografie",
-      "year": 1960,
+      "year": 1964,
       "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
       "description": "Descrizione dell'immagine"
        },
