@@ -8,7 +8,7 @@ const btnRandom = document.getElementById('btn-random');
 const lightbox   = document.getElementById('lightbox');
 const lbImg      = document.getElementById('lb-img');
 const lbId       = document.getElementById('lb-id');
-const lbTagsEl   = document.getElementById('lb-tags');
+//const lbTagsEl   = document.getElementById('lb-tags');
 const lbClose    = document.getElementById('lb-close');
 const lbPrev     = document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lb-next');
@@ -20,6 +20,7 @@ let activeTags = new Set();
 let searchQuery = '';
 let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
+const activeFilters = new Map(); // subcategoryKey → value
 
 // ── Load data ──────────────────────────────────────────────────────────────
 async function loadData() {
@@ -32,6 +33,7 @@ async function loadData() {
   displayItems = shuffle([...items]);
   buildTagsBar();
   render();
+  buildFilters();
 }
 
 // ── Collect all unique tags ───────────────────────────────────────────────
@@ -150,6 +152,12 @@ function render() {
     const card = document.createElement('article');
     card.className = 'card';
     card.style.cursor = 'zoom-in';
+    card.dataset.itemId = item.id;
+    const matchesFilters = activeFilters.size === 0 || [...activeFilters.entries()].every(([k, v]) => {
+      const field = item[k];
+      return Array.isArray(field) ? field.map(String).includes(v) : String(field ?? '') === v;
+    });
+    card.classList.toggle('active-img', matchesFilters);
 
     // image
     // create an image element
@@ -198,6 +206,124 @@ function render() {
   });
 }
 
+// ── Filters ───────────────────────────────────────────────────────────────
+function buildFilters() {
+  const container = document.getElementById('filters-container');
+  if (!container) return;
+  const categories = [...new Set(items.map(i => i.category).filter(Boolean))];
+  container.innerHTML = '';
+  categories.forEach(cat => {
+    const prefix = cat + '-';
+    const subKeys = new Set();
+    items.filter(i => i.category === cat).forEach(item => {
+      Object.keys(item).forEach(k => { if (k.startsWith(prefix)) subKeys.add(k); });
+    });
+    const catEl = document.createElement('div');
+    catEl.className = 'filter-category flex flex-col gap-10px';
+    catEl.dataset.filterCategory = cat;
+    const catTitle = document.createElement('p');
+    catTitle.className = 'filter-category-title font-myTitle';
+    catTitle.textContent = cat;
+    catEl.appendChild(catTitle);
+    subKeys.forEach(subKey => {
+      const values = [...new Set(
+        items.filter(i => i.category === cat && i[subKey] != null).flatMap(i =>
+          Array.isArray(i[subKey]) ? i[subKey].map(String) : [String(i[subKey])]
+        )
+      )].sort();
+      const subEl = document.createElement('div');
+      subEl.className = 'filter-sub grid grid-cols-4 ';
+      const label = document.createElement('p');
+      label.className = 'col-span-full opacity-40';
+      label.textContent = subKey.replace(prefix, '');
+      subEl.appendChild(label);
+      const valuesEl = document.createElement('p');
+      valuesEl.className = 'col-span-full flex flex-wrap gap-x-10px';
+      values.forEach(val => {
+        const span = document.createElement('span');
+        span.className = 'cursor-pointer';
+        span.textContent = val;
+        span.dataset.filterKey = subKey;
+        span.dataset.filterVal = val;
+        span.addEventListener('click', () => toggleFilter(subKey, val));
+        valuesEl.appendChild(span);
+      });
+      subEl.appendChild(valuesEl);
+      catEl.appendChild(subEl);
+    });
+    container.appendChild(catEl);
+  });
+}
+
+function toggleFilter(key, val) {
+  const clickedCat = key.split('-')[0];
+  const currentCats = new Set([...activeFilters.keys()].map(k => k.split('-')[0]));
+
+  // If clicking a different category, clear all previous filters first
+  if (currentCats.size > 0 && !currentCats.has(clickedCat)) {
+    activeFilters.clear();
+  }
+
+  if (activeFilters.get(key) === val) {
+    activeFilters.delete(key);
+  } else {
+    activeFilters.set(key, val);
+  }
+
+  const activeCategories = new Set([...activeFilters.keys()].map(k => k.split('-')[0]));
+  const hasAnyFilter = activeFilters.size > 0;
+
+  // Reset all classes
+  document.querySelectorAll('[data-filter-key]').forEach(el => {
+    el.classList.remove('not-active-filter');
+    el.style.fontWeight = '';
+  });
+  document.querySelectorAll('.filter-category[data-filter-category]').forEach(catEl => {
+    catEl.classList.remove('not-active-filter');
+  });
+
+  if (hasAnyFilter) {
+    // Dim entire category sections that don't have an active filter
+    document.querySelectorAll('.filter-category[data-filter-category]').forEach(catEl => {
+      if (!activeCategories.has(catEl.dataset.filterCategory)) {
+        catEl.classList.add('not-active-filter');
+      }
+    });
+
+    // Within active categories, dim siblings in the same subkey that aren't selected
+    document.querySelectorAll('[data-filter-key]').forEach(el => {
+      const catOfKey = el.dataset.filterKey.split('-')[0];
+      if (!activeCategories.has(catOfKey)) return; // parent section handles dimming
+      const isActive = activeFilters.get(el.dataset.filterKey) === el.dataset.filterVal;
+      const keyHasFilter = activeFilters.has(el.dataset.filterKey);
+      if (keyHasFilter && !isActive) el.classList.add('not-active-filter');
+      if (isActive) el.style.fontWeight = 'bold';
+    });
+  }
+
+  updateActiveImg();
+}
+
+function updateActiveImg() {
+  const hasFilters = activeFilters.size > 0;
+  const activeCategories = new Set([...activeFilters.keys()].map(k => k.split('-')[0]));
+  const grid = document.getElementById('grid');
+  if (grid) grid.classList.toggle('has-filter', hasFilters);
+  document.querySelectorAll('.card[data-item-id]').forEach(card => {
+    const id = Number(card.dataset.itemId);
+    const item = items.find(i => i.id === id);
+    if (!item) return;
+    const matches = !hasFilters || (
+      activeCategories.has(item.category) &&
+      [...activeFilters.entries()].every(([k, v]) => {
+        const field = item[k];
+        return Array.isArray(field) ? field.map(String).includes(v) : String(field ?? '') === v;
+      })
+    );
+    card.classList.toggle('active-img', matches);
+  });
+}
+
 // ── Lightbox ──────────────────────────────────────────────────────────────
 function openLightbox(index) {
   // get the visible items
@@ -211,17 +337,17 @@ function openLightbox(index) {
   // set the alt text
   lbImg.alt = `Item ${item.id}`;
   // set the id
-  lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
+  //lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
 
-  lbTagsEl.innerHTML = '';
+  //lbTagsEl.innerHTML = '';
   // loop through the tags and create a span for each tag
-  item.tags.forEach(tag => {
+  /* item.tags.forEach(tag => {
     const t = document.createElement('span');
     t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
     t.textContent = tag;
     t.addEventListener('click', () => { toggleTag(tag); closeLightbox(); });
     lbTagsEl.appendChild(t);
-  });
+  }); */
 
 
   lightbox.classList.add('open');
