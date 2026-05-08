@@ -272,6 +272,7 @@ hydrateRowsWithImages()
     const mapEl = document.getElementById('home-map');
     if (!mapEl || typeof mapboxgl === 'undefined') return;
     try {
+      //mapboxgl.accessToken = 'pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cTBtdnQwZHd1MnJyMW95Mmk0cjNqIn0.RO2i7KN9XgFmNMMVz_iInQ'; // <-- replace with your token
       mapboxgl.accessToken = 'pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cG4wYjkwMzhuNDhzZW9nbG84NjZyIn0.AqkBWyL51ozeXHUJR2snXg'; // <-- replace with your token
       // ensure the map container has a visible height before init
       mapEl.style.display = 'block';
@@ -279,10 +280,21 @@ hydrateRowsWithImages()
 
       const map = new mapboxgl.Map({
         container: 'home-map',
+        //style: 'mapbox://styles/mapbox/streets-v12',
         style: 'mapbox://styles/martiinaprocopio/cmowrladb001p01saaambdxq8',
         center: [9.11, 45.07], // example: Torino
         zoom: 11,
       });
+
+      // ADD THIS: Log errors to the console
+      map.on('error', (e) => {
+        console.error('Mapbox specific error:', e.error.message);
+      });
+
+      map.on('load', () => {
+        console.log('Map loaded successfully!');
+      });
+
       // keep map resized if layout changes
       window.addEventListener('resize', () => {
         mapEl.style.height = window.innerHeight + 'px';
