@@ -196,12 +196,14 @@ button {
   padding-top: 6rem;
   padding-left: 10px;
   padding-right: 10px;
-  /* padding-bottom: 10px; */
 }
 .myColumn {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+.myColumn > article:last-child {
+  padding-bottom: 10px;
 }
 .wireframe {
   /* display: grid;
@@ -419,3 +421,46 @@ button {
 #grid.has-filter .card { opacity: 0.2; }
 #grid.has-filter .card.active-img { opacity: 1; }
 .not-active-filter { opacity: 0.2; transition: opacity 0.2s; }
+
+/* ── Explore mode ────────────────────────────────────────────────────────── */
+#explore-description-panel {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+  padding-bottom: 10px;
+}
+
+.explore-webcam {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  transform: scaleX(-1);
+  border-radius: 4px;
+  background: #111;
+}
+
+.explore-description {
+  display: none;
+}
+
+.explore-description.active {
+  display: block;
+}
+
+.explore-close-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+}
+
+.explore-close-btn:hover {
+  opacity: 1;
+}

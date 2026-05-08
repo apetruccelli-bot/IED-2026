@@ -19,8 +19,9 @@
     <header>
       <a href="./" class="font-myTitle">Di Macelleria in Macelleria</a>
       <div class="flex gap-20px">
-        <span onclick="openExploreModal()" class="font-myTitle" style="cursor:pointer;">Esplora</span>
-        <a href="./" class="font-myTitle">Storia</a>
+        <span id="nav-cerca-coltelli" onclick="openExploreMode()" 
+        class="font-myTitle cursor-pointer opacity-20 hover:opacity-100 transition-opacity" >Cerca coltelli</span>
+        <span class="font-myTitle cursor-pointer">Storia</span>
       </div>
     </header>
     
@@ -30,6 +31,25 @@
         <div class="description flex flex-col gap-10px">
           <div class="english text-myGrey">Lorem ipsum dolor sit amet.</div>
         </div>
+
+        <!-- Explore mode panel -->
+        <div id="explore-description-panel" class="explore-description-panel">
+          <button onclick="closeExploreMode()" class="explore-close-btn">✕ Torna all'archivio</button>
+          <video id="explore-webcam" class="explore-webcam" autoplay muted playsinline></video>
+          <div class="explore-description disossare">
+            <p>Disossare</p>
+            <p>descrizione di dissosare</p>
+          </div>
+          <div class="explore-description tagliare">
+            <p>Tagliare</p>
+            <p>descrizione di tagliare</p>
+          </div>
+          <div class="explore-description tagliare-e-affettare">
+            <p>Tagliare e Affettare</p>
+            <p>descrizione di tagliare e affettare</p>
+          </div>
+        </div>
+
         <div id="filters-container" 
         class="filters flex flex-col gap-12 mt-auto h-fit"></div>
       </div>
@@ -55,22 +75,7 @@
       </div>
     </div>
 
-    <!-- Explore modal -->
-    <div id="explore-modal" class="explore-modal">
-      <button onclick="closeExploreModal()" class="explore-close">✕</button>
 
-      <!-- Webcam preview top-right -->
-      <div class="explore-webcam-wrap">
-        <video id="explore-webcam" class="explore-webcam" autoplay muted playsinline></video>
-        <div id="explore-hand-status" class="explore-hand-status">
-          <span id="explore-detect-label" class="explore-detect-label">nessuna mano</span><br>
-          <span id="explore-angle-label" class="explore-angle-label">angolo: —</span>
-        </div>
-      </div>
-
-      <div id="explore-square" class="explore-square"></div>
-      <div id="explore-status" class="explore-status">Caricamento modello…</div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>

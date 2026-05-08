@@ -3,31 +3,9 @@ let sommaIsDetecting = false;
 let sommaStream = null;
 let sommaModelLoading = false;
 
-function openExploreModal() {
-  const modal = document.getElementById('explore-modal');
-  modal.style.display = 'flex';
-  initSommaExplore();
-}
-
-function closeExploreModal() {
-  const modal = document.getElementById('explore-modal');
-  modal.style.display = 'none';
-  sommaIsDetecting = false;
-  if (sommaStream) {
-    sommaStream.getTracks().forEach(t => t.stop());
-    sommaStream = null;
-  }
-}
-
-document.getElementById('explore-modal').addEventListener('click', function (e) {
-  if (e.target === this) closeExploreModal();
-});
-
 async function initSommaExplore() {
-  const status = document.getElementById('explore-status');
   if (!sommaDetector && !sommaModelLoading) {
     sommaModelLoading = true;
-    status.textContent = 'Caricamento modello…';
     try {
       await tf.setBackend('webgl');
       await tf.ready();
@@ -42,7 +20,7 @@ async function initSommaExplore() {
       );
       sommaModelLoading = false;
     } catch (err) {
-      status.textContent = 'Errore: ' + err.message;
+      console.error('Hand model error:', err);
       sommaModelLoading = false;
       return;
     }
@@ -55,7 +33,6 @@ async function initSommaExplore() {
 
 async function startSommaCamera() {
   const video = document.getElementById('explore-webcam');
-  const status = document.getElementById('explore-status');
   try {
     sommaStream = await navigator.mediaDevices.getUserMedia({
       video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' }
@@ -63,11 +40,10 @@ async function startSommaCamera() {
     video.srcObject = sommaStream;
     video.addEventListener('loadeddata', () => {
       sommaIsDetecting = true;
-      status.textContent = 'Mostra la tua mano!';
       detectSommaHands();
     }, { once: true });
   } catch (err) {
-    status.textContent = 'Errore camera: ' + err.message;
+    console.error('Camera error:', err);
   }
 }
 
@@ -88,57 +64,37 @@ function classifyGesture(kp) {
   const curlCount = tipIdx.filter((ti, i) => dist2D(kp[ti], wrist) < dist2D(kp[pipIdx[i]], wrist)).length;
   const isFist = curlCount >= 3;
 
-  // Red: vertical fist pointing sideways (knuckles to the side), angle ~90°
-  if (isFist && angle >= 45 && angle <= 135)
-    return { color: '#C0392B', label: 'Pugno laterale → rosso', angle };
+  // "Directed to webcam": hand is face-on — wrist-to-MCP depth is short
+  // compared to the knuckle width (index MCP kp[5] to pinky MCP kp[17])
+  const knuckleWidth = dist2D(kp[5], kp[17]);
+  const wristToMcp   = dist2D(wrist, mcp);
+  const isFacingCam  = !isFist && (wristToMcp / knuckleWidth) < 1.2;
 
-  // Blue: fist pointing down (knuckles up), angle near 180°
-  if (isFist && angle > 135)
-    return { color: '#2980B9', label: 'Pugno verso il basso → blu', angle };
+  // Fist (any orientation) → Disossare
+  if (isFist)
+    return { funzione: 'disossare', angle };
 
-  // Green: open hand held sideways, 45–135°
-  if (!isFist && angle >= 45 && angle <= 135)
-    return { color: '#27AE60', label: 'Mano aperta laterale → verde', angle };
+  // Open hand facing webcam → Tagliare e Affettare
+  if (isFacingCam)
+    return { funzione: 'tagliare e affettare', angle };
+
+  // Open hand sideways (30°–150°) → Tagliare
+  if (angle >= 30 && angle <= 150)
+    return { funzione: 'tagliare', angle };
 
   return null; // no recognised gesture
 }
 
 async function detectSommaHands() {
   if (!sommaIsDetecting || !sommaDetector) return;
-  const video  = document.getElementById('explore-webcam');
-  const square = document.getElementById('explore-square');
-  const status = document.getElementById('explore-status');
-  const detectLabel = document.getElementById('explore-detect-label');
-  const angleLabel  = document.getElementById('explore-angle-label');
+  const video = document.getElementById('explore-webcam');
 
   try {
     const hands = await sommaDetector.estimateHands(video, { flipHorizontal: true });
     if (hands.length > 0) {
-      const kp = hands[0].keypoints;
-      const result = classifyGesture(kp);
-      const wrist = kp[0], mcp = kp[9];
-      const angle = Math.abs(Math.atan2(mcp.x - wrist.x, -(mcp.y - wrist.y)) * 180 / Math.PI);
-      detectLabel.textContent = '✓ mano rilevata';
-      detectLabel.style.background = 'rgba(0,220,120,0.2)';
-      detectLabel.style.color = 'rgba(0,220,120,0.9)';
-      angleLabel.textContent = 'angolo: ' + angle.toFixed(1) + '°';
-      if (result) {
-        square.style.backgroundColor = result.color;
-        status.textContent = result.label;
-        angleLabel.style.color = result.color;
-      } else {
-        square.style.backgroundColor = '#111';
-        status.textContent = 'gesto non riconosciuto';
-        angleLabel.style.color = 'rgba(255,255,255,0.3)';
-      }
-    } else {
-      square.style.backgroundColor = '#111';
-      status.textContent = 'Mostra la tua mano alla camera';
-      detectLabel.textContent = 'nessuna mano';
-      detectLabel.style.background = 'rgba(255,255,255,0.1)';
-      detectLabel.style.color = 'rgba(255,255,255,0.4)';
-      angleLabel.textContent = 'angolo: —';
-      angleLabel.style.color = 'rgba(255,255,255,0.3)';
+      const result = classifyGesture(hands[0].keypoints);
+      if (result) setExploreGesture(result.funzione);
+      // no hand or unrecognised gesture → keep last state
     }
   } catch (e) { /* ignore per-frame errors */ }
 

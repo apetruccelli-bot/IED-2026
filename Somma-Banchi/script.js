@@ -21,6 +21,8 @@ let searchQuery = '';
 let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
 const activeFilters = new Map(); // subcategoryKey → value
+let isExploreMode = false;
+let exploreSubcat = null; // 'disossare' | 'tagliare' | 'tagliare e affettare' | null
 
 // ── Load data ──────────────────────────────────────────────────────────────
 async function loadData() {
@@ -73,6 +75,10 @@ function toggleTag(tag) {
 
 // ── Filter logic ──────────────────────────────────────────────────────────
 function filteredItems() {
+  if (isExploreMode) {
+    // Always show all coltelli items; gesture controls dimming via activeFilters
+    return displayItems.filter(i => i.category === 'coltelli');
+  }
 
   // get the search query
   const q = searchQuery.toLowerCase().trim();
@@ -388,6 +394,55 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') navigateLightbox(+1);
   if (e.key === 'Escape')     closeLightbox();
 });
+
+// ── Explore mode ─────────────────────────────────────────────────────────
+function openExploreMode() {
+  isExploreMode = true;
+  exploreSubcat = null;
+  activeFilters.clear();
+  const grid = document.getElementById('grid');
+  if (grid) grid.classList.remove('has-filter');
+  document.querySelectorAll('[data-filter-key]').forEach(el => el.classList.remove('not-active-filter'));
+  document.querySelectorAll('.filter-category[data-filter-category]').forEach(el => el.classList.remove('not-active-filter'));
+  document.getElementById('filters-container').style.display = 'none';
+  document.getElementById('explore-description-panel').style.display = 'flex';
+  const navEl = document.getElementById('nav-cerca-coltelli');
+  if (navEl) { navEl.classList.remove('opacity-20'); navEl.classList.add('opacity-100'); }
+  render();
+  initSommaExplore();
+}
+
+function closeExploreMode() {
+  isExploreMode = false;
+  exploreSubcat = null;
+  document.getElementById('filters-container').style.display = '';
+  document.getElementById('explore-description-panel').style.display = 'none';
+  document.querySelectorAll('.explore-description').forEach(el => el.classList.remove('active'));
+  const navEl = document.getElementById('nav-cerca-coltelli');
+  if (navEl) { navEl.classList.remove('opacity-100'); navEl.classList.add('opacity-20'); }
+  render();
+  if (typeof sommaIsDetecting !== 'undefined') sommaIsDetecting = false;
+  if (typeof sommaStream !== 'undefined' && sommaStream) {
+    sommaStream.getTracks().forEach(t => t.stop());
+    sommaStream = null;
+  }
+}
+
+function setExploreGesture(funzione) {
+  if (funzione === exploreSubcat) return; // nothing changed, skip re-render
+  exploreSubcat = funzione;
+  document.querySelectorAll('.explore-description').forEach(el => el.classList.remove('active'));
+  if (funzione) {
+    const cls = funzione.replace(/ /g, '-');
+    const el = document.querySelector('.explore-description.' + cls);
+    if (el) el.classList.add('active');
+    activeFilters.set('coltelli-funzione', funzione);
+  } else {
+    activeFilters.clear();
+  }
+  render();
+  updateActiveImg();
+}
 
 // ── Init ──────────────────────────────────────────────────────────────────
 loadData();
