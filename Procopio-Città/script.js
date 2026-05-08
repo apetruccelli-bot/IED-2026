@@ -272,7 +272,7 @@ hydrateRowsWithImages()
     const mapEl = document.getElementById('home-map');
     if (!mapEl || typeof mapboxgl === 'undefined') return;
     try {
-      mapboxgl.accessToken = 'pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cTBtdnQwZHd1MnJyMW95Mmk0cjNqIn0.RO2i7KN9XgFmNMMVz_iInQ'; // <-- replace with your token
+      mapboxgl.accessToken = 'pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cG4wYjkwMzhuNDhzZW9nbG84NjZyIn0.AqkBWyL51ozeXHUJR2snXg'; // <-- replace with your token
       // ensure the map container has a visible height before init
       mapEl.style.display = 'block';
       mapEl.style.height = window.innerHeight + 'px';
