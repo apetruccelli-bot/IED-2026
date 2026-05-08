@@ -466,6 +466,54 @@
       "year": 1960,
       "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
       "description": "Descrizione dell'immagine"
-  }
+  }, 
+  {
+       "id": 53,
+       "src": "img/about/about1.png",
+      "category": "about archive",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+   },
+   {
+       "id": 54,
+       "src": "img/about/about2.jpg",
+      "category": "about archive",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+   },
+   {
+       "id": 55,
+       "src": "img/about/about3.png",
+      "category": "about archive",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+   },
+   {
+       "id": 56,
+       "src": "img/about/about4.png",
+      "category": "about archive",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+   },
+   {
+       "id": 57,
+       "src": "img/about/about5.jpg",
+      "category": "about archive",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+   },
+   {
+       "id": 58,
+       "src": "img/about/about6.png",
+      "category": "about archive",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+   }
   ]
 }
