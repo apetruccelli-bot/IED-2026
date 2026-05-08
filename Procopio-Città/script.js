@@ -292,6 +292,8 @@ hydrateRowsWithImages()
         style: 'mapbox://styles/martiinaprocopio/cmowvc4ao001n01r5g7ad3t1i',
         center: [13, 39.5],
         zoom: 6.3,
+        /* maxZoom: 8,
+        minZoom: 5, */
         maxBounds: bounds
       });
       window.procopioMap = map;
