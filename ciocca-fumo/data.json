@@ -195,7 +195,7 @@
        }, 
    {     
       "id": 25,
-      "src": "img/pacchetti/pack1.png",
+      "src": "img/pacchetti/pack1.jpg",
       "category": "pacchetti",
       "year": 1960,
       "tags": ["urbano"],
@@ -205,7 +205,7 @@
     },
     {
       "id": 26,
-      "src": "img/pacchetti/pack2.png",
+      "src": "img/pacchetti/pack2.jpg",
      "category": "pacchetti",
       "year": 1960,
       "tags": ["urbano"],
@@ -215,7 +215,7 @@
     },
     {
       "id": 27,
-      "src": "img/pacchetti/pack3.png",
+      "src": "img/pacchetti/pack3.jpg",
       "category": "pacchetti",
       "year": 1960,
       "tags": ["urbano"],
@@ -225,7 +225,7 @@
     },
     {
       "id": 28,
-      "src": "img/pacchetti/pack4.png",
+      "src": "img/pacchetti/pack4.jpg",
       "category": "pacchetti",
       "year": 1960,
       "tags": ["urbano"],
@@ -235,7 +235,7 @@
     },
     {
       "id": 29,
-      "src": "img/pacchetti/pack5.png",
+      "src": "img/pacchetti/pack5.jpg",
       "category": "pacchetti",
       "year": 1960,
       "tags": ["urbano"],
@@ -245,7 +245,7 @@
      },
      {
       "id": 30,
-      "src": "img/pacchetti/pack6.png",
+      "src": "img/pacchetti/pack6.jpg",
       "category": "pacchetti",
       "year": 1960,
       "tags": ["urbano"],
@@ -255,7 +255,7 @@
      },
      {
       "id": 31,
-      "src": "img/pacchetti/pack7.png",
+      "src": "img/pacchetti/pack7.jpg",
       "category": "pacchetti",
       "year": 1960,
       "tags": ["urbano"],
@@ -265,7 +265,7 @@
      },
      {
       "id": 32,
-      "src": "img/pacchetti/pack8.png",
+      "src": "img/pacchetti/pack8.jpg",
       "category": "pacchetti",
       "year": 1960,
       "tags": ["urbano"],
