@@ -459,9 +459,68 @@ button {
   row-gap: 3px;
 }
 
+.filter-row.is-disabled .filter-label,
+.filter-row.is-disabled .filter-chip {
+  opacity: 0.4;
+}
+
+.filter-row.is-disabled {
+  pointer-events: none;
+}
+
+.filter-row.is-disabled .filter-label,
+.filter-row.is-disabled .filter-chip {
+  pointer-events: none;
+}
+
+.victims-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.victims-slider {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--myWhite);
+}
+
+.victims-stops {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 4px;
+  align-items: start;
+}
+
+.victims-stop {
+  font-size: 10px;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: var(--myWhite);
+  opacity: 0.55;
+  user-select: none;
+}
+
+.victims-stop.active {
+  opacity: 1;
+  font-weight: 800;
+}
+
+.filter-row.is-disabled .victims-slider,
+.filter-row.is-disabled .victims-stops,
+.filter-row.is-disabled .victims-stop {
+  opacity: 0.4;
+}
+
 .filter-link {
   cursor: pointer;
   transition: font-weight 0.1s, opacity 0.2s;
+}
+
+.filters-panel.has-active-category .filter-link:not(.active) {
+  opacity: 0.4;
 }
 
 .filter-link.active {
@@ -495,7 +554,7 @@ button {
 }
 
 .card.card-dim {
-  opacity: 0.4;
+  opacity: 0.2;
 }
 
 
