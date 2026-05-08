@@ -182,7 +182,7 @@ function render() {
 
     const tagsEl = document.createElement('div');
     tagsEl.className = 'card-tags';
-    item.tags.forEach(tag => {
+    item.tags?.forEach(tag => {
       const t = document.createElement('span');
       t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
       t.textContent = tag;
