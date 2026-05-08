@@ -3,6 +3,9 @@ let exploreIsDetecting = false;
 let exploreStream = null;
 let exploreModelLoading = false;
 
+let images_left = ['red', 'green', 'blue', 'yellow', 'cyan'];
+let images_right = ['magenta', 'orange', 'purple', 'brown', 'pink'];
+
 function openExploreModal() {
   const modal = document.getElementById('explore-modal');
   modal.style.display = 'flex';
@@ -81,17 +84,23 @@ async function detectExploreHands() {
     const detectLabel = document.getElementById('explore-detect-label');
     const angleLabel  = document.getElementById('explore-angle-label');
     if (hands.length > 0) {
-      const wrist = hands[0].keypoints[0];  // Wrist
-      const mcp   = hands[0].keypoints[9];  // Middle MCP
-      // Angle from vertical: 0° = hand pointing straight up, 90° = horizontal
+      const hand  = hands[0];
+      const wrist = hand.keypoints[0];  // Wrist
+      const mcp   = hand.keypoints[9];  // Middle MCP
+      // Angle from vertical: 0° = hand pointing straight up, 180° = pointing down
       const angle = Math.abs(Math.atan2(mcp.x - wrist.x, -(mcp.y - wrist.y)) * 180 / Math.PI);
-      square.style.backgroundColor = inclToColor(angle);
-      status.textContent = 'inclination: ' + angle.toFixed(1) + '°';
-      detectLabel.textContent = '✓ hand detected';
+      // Map 0–180° onto 5 equal segments (each 36°)
+      const segmentIndex = Math.min(Math.floor(angle / 36), 4);
+      const handedness = hand.handedness || 'Right';
+      const colorArray = handedness === 'Left' ? images_left : images_right;
+      const color = colorArray[segmentIndex];
+      square.style.backgroundColor = color;
+      status.textContent = handedness.toLowerCase() + ' hand — ' + angle.toFixed(1) + '° (segment ' + (segmentIndex + 1) + '/5)';
+      detectLabel.textContent = '✓ ' + handedness + ' hand';
       detectLabel.style.background = 'rgba(0,220,120,0.2)';
       detectLabel.style.color = 'rgba(0,220,120,0.9)';
-      angleLabel.textContent = 'angle: ' + angle.toFixed(1) + '°';
-      angleLabel.style.color = inclToColor(angle);
+      angleLabel.textContent = 'angle: ' + angle.toFixed(1) + '° → ' + color;
+      angleLabel.style.color = color;
     } else {
       status.textContent = 'show your hand to the camera';
       detectLabel.textContent = 'no hand detected';
