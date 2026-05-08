@@ -18,6 +18,7 @@
   font-family: 'Prophet Regular', sans-serif  ;
   font-size: 12px;
   line-height: 115%;
+  text-transform: capitalize;
 }
 
 .font-myTitle {
@@ -62,7 +63,8 @@ a:hover {
 
 /* ── HEADER ── */
 header {
-  position: sticky;
+  position: fixed;
+  width: 100vw;
   top: 0;
   z-index: 100;
   background: var(--bg);
@@ -411,3 +413,9 @@ button {
   opacity: 0.2;
   cursor: default;
 }
+
+/* ── Filter dimming ─────────────────────────────────────────────────────── */
+.card { transition: opacity 0.3s cubic-bezier(.8,0,.2,1); }
+#grid.has-filter .card { opacity: 0.2; }
+#grid.has-filter .card.active-img { opacity: 1; }
+.not-active-filter { opacity: 0.2; transition: opacity 0.2s; }
