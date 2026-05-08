@@ -402,7 +402,7 @@
     },
     {
       "id": 43,
-      "src": "img/tagli  (12).png",
+      "src": "img/tagli  (1).png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category": "coltelli",
@@ -411,12 +411,28 @@
     },
     {
       "id": 44,
-      "src": "img/tagli  (13).png",
-      "tags": ["vista frontale ravvicinata", "banco a bauletto", "neon forti"],
-      "age": "macellaio giovane",
-      "description": "Banco di vendita di Andrea, Milano, 1995"    }
+      "src": "img/tagli  (2).png",
+      "tags-tagli": ["manico in legno", "lama fine", "precisione", "usurato"],
+      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "category": "tagli",
+      "tagli-lavorazione": "sfiletattura"
+    },
+    {
+      "id": 45,
+      "src": "img/tagli  (3).png",
+      "tags-tagli": ["manico in legno", "lama fine", "precisione", "usurato"],
+      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "category": "tagli",
+      "tagli-lavorazione": "separazione"
+    },
+    {
+      "id": 44,
+      "src": "img/tagli  (4).png",
+      "tags-tagli": ["manico in legno", "lama fine", "precisione", "usurato"],
+      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "category":"tagli",
+      "tagli-lavorazione": "prima apertura"
+    },
     
-  ]
-}
 
 
