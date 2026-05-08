@@ -40,6 +40,17 @@
       </div>
     </div>
 
+    <!-- Questi script sono necessari a far funzionare i modelli ml -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+
+    <!-- 1. Crea un nuovo file nella tua cartella e chiamalo "tuocognome-lm.js" (vedi esempio altri progetti) -->
+    <!-- 2. Dentro quel file prepara un'interazione con la webcam (puoi prendere spunto dagli altri progetti o dai 4 esempi dentro la cartella "machine-learning") -->
+    <!-- 3. Modifica la riga qui sotto affinché non sia commentata, in modo che il tuo file "index.html" usi il tuo file "tuocognome-lm.js" -->
+    <!-- <script src="tuocognome-lm.js"></script> -->
     <script src="script.js"></script>
   </body>
 </html>
