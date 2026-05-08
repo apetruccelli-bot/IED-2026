@@ -30,6 +30,11 @@
 }
 
 :root {
+  --color-my-black: #080808;
+  --color-my-white: #f3f3f3;
+  --spacing-10px: 10px;
+  --spacing-20px: 20px;
+
   --bg: #ffffff;
   --surface: #ffffff;
   --text: #1a1a1a;
