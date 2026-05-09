@@ -91,6 +91,7 @@ body {
 }
 .archive-title .line1 { font-weight: 600; font-size: 36px !important; }
 .archive-title .line2 { font-weight: 400; font-size: 36px !important; }
+.about-title .line1 { font-weight: 400; font-size: 36px !important; }
 
 /* links under the title (About / Book appointment) */
 .title-links {
@@ -541,3 +542,17 @@ button {
   opacity: 0.2;
   cursor: default;
 }
+
+/* back to gallery link for About page */
+.back-to-gallery {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 260;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  background: transparent;
+  padding: 8px 10px;
+}
+.back-to-gallery:hover { opacity: 0.8; }
