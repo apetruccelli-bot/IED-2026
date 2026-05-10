@@ -6,8 +6,8 @@
     <title>Archivio</title>
     <link rel="stylesheet" href="style.css" />
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
-      @theme {
+    <style>
+      :root {
         --color-myBlack: #171717;
         --color-myWhite: #ECECEC;
         --spacing-10px: 10px;
@@ -19,13 +19,13 @@
     <header>
 
       <a href="/" class="font-myTitle">Les Secéssionistes</a>
-      <div class="flex flex-col">
+        <div class="flex flex-col mt-4">
         <p class="">Autori</p>
         <p class="">Banchi ottici</p>
         <p class="">Dagherrotipi</p>
       </div>
 
-      <!-- <div class="header-inner">
+      <div class="header-inner">
         <div class="header-row">
           <div class="search-wrap">
             <input
@@ -38,19 +38,20 @@
           <button class="btn-random" id="btn-random">Random</button>
         </div>
         <div class="tags-bar" id="tags-bar"></div>
-      </div -->
+      </div>
 
     </header>
 
-    <!-- <p class="results-info" id="results-info"></p> -->
+    <p class="results-info" id="results-info"></p>
     
     <div class="mainLayout fixed top-0 left-0 w-screen h-screen overflow-y-scroll
     grid grid-cols-12 gap-10px">
+      <div class="col-span-12 flex justify-end items-center mt-8 mb-2 pr-10">
+        <span class="text-lg font-semibold">About</span>
+      </div>
       <div class="descriptionAndFilters col-span-3 h-full flex flex-col justify-between pb-10px">
         <div class="description flex flex-col gap-10px mt-auto">
-          <div class="english text-myGrey">A businessman bent down to pick up a cigarette butt as if to look for something inside it A
-            businessman bent down to pick up a cigarette butt as if to look for something inside it A businessman bent down to
-            pick up a cigarette butt as if to look for something inside it</div>
+          <p class="text-lg">Un archivio digitale di 1500 dagherrotipi del XIX secolo, con metadati e tag associati.</p>  
         </div>
         <!-- <div class="filters grid grid-cols-3 gap-10px mt-auto h-fit">
           <div class="filter col-span-4 grid grid-cols-4 gap-10px h-fit">
@@ -63,7 +64,7 @@
           </div>
         </div> -->
       </div>
-      <main id="grid" class="col-span-9 wireframe">
+      <main id="grid" class="col-span-9 wireframe mt-8">
         <div class="myColumn column-1"></div>
         <div class="myColumn column-2 pt-24"></div>
         <div class="myColumn column-3"></div>
