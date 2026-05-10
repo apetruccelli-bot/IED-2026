@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "src": "img/taccuini/taccuini (6).jpg",
+      "label": "Milano",
+      "coordinates": [9.19, 45.46],
+      "description": "Lorem ipsum dolor sit amet."
+    },
+    {
+      "id": 2,
+      "src": "img/taccuini/taccuini (12).jpg",
+      "label": "Torino",
+      "coordinates": [7.68, 45.07],
+      "description": "Lorem ipsum dolor sit amet."
+    }
+  ]
+}

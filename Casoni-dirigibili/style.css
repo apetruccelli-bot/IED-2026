@@ -29,7 +29,19 @@
    margin-top: 18px;
 }
 
+.box2 {
+  width: 552px;
+  margin-top: 0px;
+  color: var(--myWhite);
+  margin-left: 10px;
+}
+
 :root {
+  --color-my-black: #080808;
+  --color-my-white: #f3f3f3;
+  --spacing-10px: 10px;
+  --spacing-20px: 20px;
+
   --bg: #ffffff;
   --surface: #ffffff;
   --text: #1a1a1a;
@@ -39,6 +51,10 @@
   --tag-active-text: #ffffff;
   --accent: #1a1a1a;
   --radius: 0px;
+
+  --rowHeight: calc(100% / 3);
+  --myWhite: #F3F3F3;
+  --myBlack: #080808;
 }
 
 body {
@@ -56,10 +72,15 @@ body {
 
 .font-myTitle {
   font-family: 'SchengenA Book', sans-serif;
+  display: inline-block;
   font-size: 32px;
   text-transform: uppercase;
   line-height: 100%;
   letter-spacing: 0.02em;
+  position: relative;
+  z-index: 10000;
+  white-space: normal;
+  width: fit-content;
 }
 
 a {
@@ -111,9 +132,6 @@ header {
   outline: none;
   transition: border-color 0.15s;
   border: none;
-}
-
-.search-wrap input:focus {
 }
 
 
@@ -197,8 +215,6 @@ button {
 
 /* ── CARD ── */
 
-.card:hover {
-}
 
 .card-img {
   width: 100%;
@@ -273,7 +289,7 @@ button {
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 1000;
+        z-index: 9999;
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
@@ -297,23 +313,22 @@ button {
 .lb-content {
         position: relative;
         z-index: 1001;
-        padding: 10px;
+        padding: 60px;
         border-radius: 8px;
         display: flex;
         flex-direction: column;
-        max-width: 80vw;
-        max-height: 90vh;
+        max-width: 50vw;
+        max-height: 100vh;
         
       }
 
 .lb-img {
-        max-width: 100%;
-        max-height: 80vh;
-        object-fit: contain;
-      }
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+}
 
 .lb-close, .lb-prev, .lb-next {
-        position: absolute;
         background: none;
         border: none;
         color: #FCFCFC;
@@ -322,38 +337,108 @@ button {
       }
 
 .lb-close {
+  position: absolute;
         right: 10px;
         top: 0px;
       }
 
 .lb-prev {
-        left: 30%;
-        top: 50%;
-        transform: translateY(-50%);
+  padding: 0;
       }
 
 .lb-next {
-        right: 30%;
-        top: 50%;
-        transform: translateY(-50%);
+  padding: 0;
       }
 
 .lb-info {
         color: #FCFCFC;
         font-family: inherit;
-        justify-self: center;
+        display: flex;
+        flex-direction: column;
       }
 
 .lb-id {
         display: block;
         font-weight: bold;
-        margin-bottom: 10px;
+        margin-bottom: 0;
+        flex-shrink: 0;
+      }
+
+.lb-tags-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        flex-wrap: nowrap;
       }
 
 .lb-tags {
         display: flex;
-        flex-wrap: wrap;
+  flex-wrap: nowrap;
         gap: 10px;
+        flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+      }
+
+.lb-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+
+.lb-description {
+        margin-top: 10px;
+        margin-bottom: 0;
+        max-width: 60ch;
+        line-height: 1.4;
+      }
+
+.lb-meta {
+        margin-top: 10px;
+      }
+
+/* Horizontal scroll container about */
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 10px;
+  padding: 10px;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(243, 243, 243, 0.3);
+  border-radius: 4px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(243, 243, 243, 0.6);
+}
+
+.scroll-img {
+  flex: 0 0 auto;
+  height: 100%;
+  object-fit: contain;
+  max-width: 400px;
+}
+
+.lb-meta-row {
+        margin: 0;
+        line-height: 1.4;
+      }
+
+.lb-meta-label {
+  text-transform: none;
       }
 
 
@@ -370,13 +455,13 @@ button {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: calc(100vh - 15rem);
+  height: calc(100vh - 21rem);
 }
 .archive-gallery > .archive-row {
   display: flex;
   flex-direction: row;
   gap: 10px;
-  height: calc(calc(100% / 3) - 30px);
+  height: var(--rowHeight);
   align-content: flex-start;
 }
 
@@ -398,6 +483,118 @@ button {
 
 .card-body {
   display: none;
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: 8rem auto;
+  items-center: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.filter-row-inside {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 5px;
+  row-gap: 3px;
+}
+
+.filter-row.is-disabled .filter-label,
+.filter-row.is-disabled .filter-chip {
+  opacity: 0.4;
+}
+
+.filter-row.is-disabled {
+  pointer-events: none;
+}
+
+.filter-row.is-disabled .filter-label,
+.filter-row.is-disabled .filter-chip {
+  pointer-events: none;
+}
+
+.victims-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.victims-slider {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--myWhite);
+}
+
+.victims-stops {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 4px;
+  align-items: start;
+}
+
+.victims-stop {
+  font-size: 10px;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: var(--myWhite);
+  opacity: 0.55;
+  user-select: none;
+}
+
+.victims-stop.active {
+  opacity: 1;
+  font-weight: 800;
+}
+
+.filter-row.is-disabled .victims-slider,
+.filter-row.is-disabled .victims-stops,
+.filter-row.is-disabled .victims-stop {
+  opacity: 0.4;
+}
+
+.filter-link {
+  cursor: pointer;
+  transition: font-weight 0.1s, opacity 0.2s;
+}
+
+.filters-panel.has-active-category .filter-link:not(.active) {
+  opacity: 0.4;
+}
+
+.filter-link.active {
+  font-weight: 800;
+}
+
+.filter-chip {
+  cursor: pointer;
+  transition: opacity 0.15s, font-weight 0.1s;
+  white-space: nowrap;
+  background-color: var(--myWhite);
+  padding: 2px 3px;
+  color: var(--myBlack);
+  font-size: 10px;
+}
+
+.filter-chip:hover {
+  opacity: 0.8;
+}
+
+.filter-chip.active {
+  opacity: 1;
+}
+
+.filters-panel:has(.filter-chip.active) .filter-chip:not(.active) {
+  opacity: 0.4;
+}
+
+.card {
+  transition: opacity 0.2s;
+}
+
+.card.card-dim {
+  opacity: 0.2;
 }
 
 

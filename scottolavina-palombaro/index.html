@@ -5,20 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Archivio</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-myBlack: #1E1E1E;
+        --color-myWhite: #FCFCFC;
+        --spacing-10px: 10px;
+      }
+    </style>
   </head>
   <body>
     <header>
+      <div class="topbar">
+        <a href="./index.html" class="topbar-left font-myTitle">
+          THE ABYSSAL DESCENT ARCHIVE
+        </a>
+        <div class="topbar-right">
+          <a href="#">ARCHIVE</a>
+          <a href="#">MAP</a>
+          <a href="./about.html">ABOUT</a>
+        </div>
+      </div>
+
       <div class="header-inner">
         <div class="header-row">
           <div class="search-wrap">
             <input
               id="search"
               type="search"
-              placeholder="Cerca…"
+              placeholder="Search..."
               autocomplete="off"
             />
           </div>
-          <button class="btn-random" id="btn-random">Random</button>
         </div>
         <div class="tags-bar" id="tags-bar"></div>
       </div>
@@ -28,6 +46,8 @@
 
     <main class="grid" id="grid"></main>
 
+    <aside class="area-bar" id="area-bar"></aside>
+
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
       <button class="lb-close" id="lb-close">✕</button>
@@ -36,12 +56,23 @@
       <div class="lb-content">
         <img class="lb-img" id="lb-img" src="" alt="">
         <div class="lb-info">
-          <span class="lb-id" id="lb-id"></span>
           <div class="lb-tags" id="lb-tags"></div>
         </div>
       </div>
     </div>
 
+    <!-- Questi script sono necessari a far funzionare i modelli ml -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+
+    <!-- 1. Crea un nuovo file nella tua cartella e chiamalo "tuocognome-lm.js" (vedi esempio altri progetti) -->
+    <!-- 2. Dentro quel file prepara un'interazione con la webcam (puoi prendere spunto dagli altri progetti o dai 4 esempi dentro la cartella "machine-learning") -->
+    <!-- 3. Modifica la riga qui sotto affinché non sia commentata, in modo che il tuo file "index.html" usi il tuo file "tuocognome-lm.js" -->
+    <!-- <script src="tuocognome-lm.js"></script> -->
     <script src="script.js"></script>
+    
   </body>
 </html>

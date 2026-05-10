@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Archivio</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+    <style type="text/tailwindcss">
+      @theme {
+        --color-myBlack: #1E1E1E;
+        --color-myWhite: #FCFCFC;
+        --spacing-10px: 10px;
+        --spacing-30px: 30px;
+      }
+    </style>
+    </head>
+  <body class="home-page">
+
+    <div id="home-map" class="home-map" aria-hidden="false"></div>
+
+    <div class="w-screen h-screen grid grid-cols-8 specialGrid fixed top-0 left-0 h-screen z-50
+    pointer-events-none">
+      <div class="col-start-1 col-end-3 p-10px flex flex-col justify-between text-myBlack z-[1100]">
+        <!-- <button id="toggle-sidebar" class="toggle-btn" aria-expanded="false" aria-label="Apri menu">+</button> -->
+        <div class="flex flex-col pointer-events-auto">
+          <a href="home.html" class="font-myTitle">Città<br>interrotte</a>
+          <p class="">di Fondazione Scorza</p>
+        </div>
+        <div class="sidebar-links flex flex-col pointer-events-auto">
+          <a href="index.html" class="font-myTitle">Archivio</a>
+          <a href="storia.html" class="font-myTitle">Storia</a>
+          <a href="/" class="font-myTitle">Statistiche</a>
+        </div>
+
+        <!-- <div class="w-screen h-screen grid grid-cols-8 specialGrid">
+          <div id="home-map" class="home-map col-span-1" aria-hidden="true"></div>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- Marker modal -->
+    <div id="marker-modal" class="marker-modal" aria-hidden="true">
+      <div class="marker-modal-backdrop" id="marker-modal-backdrop"></div>
+      <div class="marker-modal-content">
+        <button class="marker-modal-close" id="marker-modal-close">✕</button>
+        <img class="marker-modal-img" id="marker-modal-img" src="" alt="">
+        <p class="marker-modal-desc" id="marker-modal-desc"></p>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <!-- Face + Hand preview panel -->
+    <div class="face-preview-panel">
+      <video id="face-webcam" class="face-webcam-preview" autoplay muted playsinline></video>
+      <div class="face-status-panel">
+        <div id="face-status-label" class="face-status-bold">loading model…</div>
+        <div>proximity: <span id="face-prox-label">&mdash;</span></div>
+        <div>hand zoom: <span id="hand-size-label">&mdash;</span></div>
+        <div id="face-calib-label"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+    <script src="procopio-ml.js"></script>
+  </body>
+</html>

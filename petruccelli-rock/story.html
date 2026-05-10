@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Story - Abigail’s Archive</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header style="padding: 24px 32px 0 32px; display: flex; justify-content: flex-end;">
+      <a href="index.html" class="font-myTitle" style="font-size: 16px; text-decoration: none;">Back to Archive</a>
+    </header>
+    <main class="story-main">
+      <div class="story-title-block">
+        <h1 class="font-myTitle story-title">our story</h1>
+        <div class="font-mySubtitle story-subtitle">Abigail’s Archive. Timeline of a transformation.</div>
+      </div>
+      <div class="story-images">
+        <img src="img/rock1.png" class="story-img img1 img-s" alt="1"
+            data-title="Our wedding"
+            data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor." 
+            data-modal-width="520px"
+            data-modal-left="50%"
+            data-modal-top="50%"/>
+
+        <img src="img/rock2.png" class="story-img img2 img-m" alt="2"
+            data-title="A quiet moment"
+            data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue." 
+            data-modal-width="520px"
+            data-modal-left="50%"
+            data-modal-top="50%"/>
+
+        <img src="img/rock3.png" class="story-img img3 img-l" alt="3"
+            data-title="At the hospital"
+            data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae libero ac risus egestas placerat." 
+            data-modal-width="520px"
+            data-modal-left="50%"
+            data-modal-top="50%"/>
+
+        <img src="img/rock4.png" class="story-img img4 img-s" alt="4"
+            data-title="Family lunch"
+            data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum commodo felis quis tortor." 
+            data-modal-width="520px"
+            data-modal-left="50%"
+            data-modal-top="50%"/>
+
+        <img src="img/rock5.png" class="story-img img5 img-m" alt="5"
+            data-title="Cooking together"
+            data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut aliquam sollicitudin leo." 
+            data-modal-width="520px"
+            data-modal-left="50%"
+            data-modal-top="50%"/>
+
+        <img src="img/rock6.png" class="story-img img6 img-l" alt="6"
+            data-title="A drawing"
+            data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis ultricies nulla." 
+            data-modal-width="520px"
+            data-modal-left="50%"
+            data-modal-top="50%"/>
+
+        <img src="img/rock7.png" class="story-img img7 img-s" alt="7"
+            data-title="At the fair"
+            data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis dui at dolor tempor interdum." 
+            data-modal-width="520px"
+            data-modal-left="50%"
+            data-modal-top="50%"/>
+
+        <img src="img/rock8.png" class="story-img img8 img-m" alt="8"
+            data-title="First communion"
+            data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus molestie gravida turpis." 
+            data-modal-width="520px"
+            data-modal-left="50%"
+            data-modal-top="50%"/>
+
+        <img src="img/rock9.png" class="story-img img9 img-l" alt="9"
+            data-title="Birthday"
+            data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis lorem at ipsum semper sagittis." 
+            data-modal-width="520px"
+            data-modal-left="50%"
+            data-modal-top="50%"/>
+
+        <img src="img/rock10.png" class="story-img img10 img-m" alt="10"
+            data-title="Garden memory"
+            data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam convallis pellentesque nisl." 
+            data-modal-width="520px"
+            data-modal-left="50%"
+            data-modal-top="50%"/>
+      </div>
+    <div class="story-modal" id="storyModal">
+      <div class="modal-card">
+        <!-- <button class="modal-close" id="modalClose">×</button> -->
+
+        <div class="modal-image-wrap">
+          <img src="" alt="" id="modalImage" class="modal-image" />
+        </div>
+
+        <!-- <img src="" alt="" id="modalImage" class="modal-image" /> -->
+
+        <div class="modal-text">
+          <h2 id="modalTitle">Our wedding</h2>
+          <p id="modalDescription">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      body {
+        background: #fff;
+      }
+
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10;
+      }
+
+      .story-main {
+        height: 100vh;
+        width: 100vw;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .story-title-block {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.8s cubic-bezier(.8,0,.2,1);
+      }
+
+      .story-title {
+        font-size: 2rem;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+      }
+
+      .story-subtitle {
+        font-size: 1.1rem;
+        color: #888;
+        font-family: 'Repro', monospace;
+        letter-spacing: 0.08em;
+      }
+
+      .story-images {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .story-img {
+        position: absolute;
+        background: transparent;
+        opacity: 1;
+        border-radius: 0;
+        box-shadow: none;
+        height: auto;
+        cursor: pointer;
+        pointer-events: auto;
+        will-change: transform;
+        transition: opacity 0.6s cubic-bezier(.8,0,.2,1), filter 0.6s cubic-bezier(.8,0,.2,1);
+      }
+
+      .story-img.img-s {width: 16vw; z-index: 10; filter: blur(1px)}
+      .story-img.img-m {width: 19vw; z-index: 20; filter: blur(.5px)}
+      .story-img.img-l {width: 24vw; z-index: 30;}
+
+      .img1 {
+        left: 4vw;
+        top: 4vh;
+      }
+
+      .img2 {
+        left: 24vw;
+        top: 0vh;
+      }
+
+      .img3 {
+        left: 60vw;
+        top: 7vh;
+      }
+
+      .img4 {
+        left: 75vw;
+        top: 20vh;
+      }
+
+      .img5 {
+        left: 68vw;
+        top: 50vh;
+      }
+
+      .img6 {
+        left: 8vw;
+        top: 60vh;
+      }
+
+      .img7 {
+        left: 32vw;
+        top: 38vh;
+      }
+
+      .img8 {
+        left: 49vw;
+        top: 40vh;
+      }
+
+      .img9 {
+        left: 0vw;
+        top: 32vh;
+      }
+
+      .img10 {
+        left: 40vw;
+        top: 65vh;
+      }
+
+      @media (max-width: 600px) {
+        .story-title {
+          font-size: 1.2rem;
+        }
+
+        .story-subtitle {
+          font-size: 0.9rem;
+        }
+      }
+      .story-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(2px);
+      }
+
+      .story-modal.active {
+        display: flex;
+      }
+
+      .modal-card {
+        position: relative;
+        /* width: 86vw;
+        height: 78vh; */
+
+        min-width: 50vw;
+        min-height: 50vh;
+
+        width: auto;
+        height: auto;
+        /* background: rgba(255, 255, 255, 0.65); */
+        display: block;
+        /* gap: 64px; */
+        /* padding: 48px; */
+        box-sizing: border-box;
+        box-shadow: 0 20px 80px rgba(0, 0, 0, 0.08);
+      }
+
+      .modal-image-wrap {
+        background-color: white;
+      }
+
+      .modal-image {
+        display: block;
+        min-width: 50vw;
+        min-height: 50vh;
+        width: auto;
+        height: auto;
+        max-width: none;
+        max-height: none;
+        object-fit: contain;
+        transition: opacity 0.8s cubic-bezier(.8,0,.2,1);
+      }
+
+      .modal-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #111;
+        opacity: 0.2;
+        transition: opacity 0.8s cubic-bezier(.8,0,.2,1);
+      }
+
+      .modal-text h2 {
+        font-family: 'social', monospace;
+        font-size: 1.4rem;
+        font-weight: 400;
+        margin: 0 0 32px 0;
+      }
+
+      .modal-text p {
+        font-family: 'Repro', monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        max-width: 420px;
+        margin: 0;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 18px;
+        right: 24px;
+        border: none;
+        background: transparent;
+        font-size: 32px;
+        line-height: 1;
+        cursor: pointer;
+        color: #111;
+        z-index: 2;
+      }  
+  </style>
+  <script>
+    const images = document.querySelectorAll('.story-img');
+    const titleBlock = document.querySelector('.story-title-block');
+
+    const modal = document.getElementById('storyModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalClose = document.getElementById('modalClose');
+
+    // ── Smooth parallax via lerp + rAF ──
+    // Uses faceTargetX/Y set by petruccelli-ml.js when face is tracked;
+    // falls back to mouse when no face is detected.
+    let targetX = 0, targetY = 0;
+    let currentX = 0, currentY = 0;
+    const LERP = 0.06;
+
+    document.addEventListener('mousemove', (event) => {
+      // Only use mouse if face tracking hasn't moved the target recently
+      if (typeof faceTargetX === 'undefined') {
+        targetX = (event.clientX / window.innerWidth  - 0.5) * 2;
+        targetY = (event.clientY / window.innerHeight - 0.5) * 2;
+      }
+    });
+
+    function animateParallax() {
+      // Prefer face target if available
+      const tx = (typeof faceTargetX !== 'undefined') ? faceTargetX : targetX;
+      const ty = (typeof faceTargetY !== 'undefined') ? faceTargetY : targetY;
+      currentX += (tx - currentX) * LERP;
+      currentY += (ty - currentY) * LERP;
+
+      if (!modal.classList.contains('active')) {
+        images.forEach((img) => {
+          const movement = img.classList.contains('img-l') ? 24
+                         : img.classList.contains('img-m') ? 16
+                         : 8;
+          img.style.transform = `translate(${currentX * 10 * movement}px, ${currentY * 10 * movement}px)`;
+        });
+        titleBlock.style.transform = `translate(${currentX * -6}px, ${currentY * -6}px)`;
+      }
+
+      requestAnimationFrame(animateParallax);
+    }
+
+    animateParallax();
+
+    images.forEach((img) => {
+      img.addEventListener('click', () => {
+        modalImage.src = img.src;
+        modalImage.alt = img.alt;
+
+        modalTitle.textContent = img.dataset.title;
+        modalDescription.textContent = img.dataset.description;
+
+        modalImage.style.width = img.dataset.modalWidth || '80%';
+        modalImage.style.height = img.dataset.modalHeight || 'auto';
+        modalImage.style.left = img.dataset.modalLeft || '50%';
+        modalImage.style.top = img.dataset.modalTop || '50%';
+
+        modal.classList.add('active');
+      });
+    });
+
+    function closeModal() {
+      modal.classList.remove('active');
+    }
+
+    //modalClose.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2"></script>
+
+  <!-- Face tracking webcam preview (top-right) -->
+  <div id="face-preview-panel" style="position:fixed; top:16px; right:16px; z-index:999; display:flex; flex-direction:column; align-items:flex-end; gap:6px; font-family:monospace; font-size:11px;">
+    <video id="face-webcam" autoplay muted playsinline style="width:180px; height:135px; object-fit:cover; border-radius:6px; border:1px solid rgba(0,0,0,0.15); transform:scaleX(-1);"></video>
+    <div style="text-align:right; line-height:1.7; color:#333; background:rgba(255,255,255,0.7); padding:4px 8px; border-radius:4px;">
+      <div id="face-status-label" style="font-weight:bold;">loading model…</div>
+      <div>pos: <span id="face-pos-label">&mdash;</span></div>
+      <div>proximity: <span id="face-prox-label">&mdash;</span></div>
+      <div>calib: <span id="face-calib-label">&mdash;</span></div>
+    </div>
+  </div>
+
+  <script src="petruccelli-ml.js"></script>
+</body>
+</html>

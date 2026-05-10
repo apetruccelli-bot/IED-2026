@@ -11,6 +11,7 @@
         --color-myBlack: #080808;
         --color-myWhite: #F3F3F3;
         --spacing-10px: 10px;
+        --spacing-20px: 20px;
       }
     </style>
   </head>
@@ -38,72 +39,124 @@
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
       <button class="lb-close" id="lb-close">✕</button>
-      <button class="lb-prev" id="lb-prev"><</button>
-      <button class="lb-next" id="lb-next">></button>
       <div class="lb-content">
-        <img class="lb-img" id="lb-img" src="" alt="">
+        <img class="lb-img select-none" id="lb-img" src="" alt="">
         <div class="lb-info">
-          <span class="lb-id" id="lb-id"></span>
-          <div class="lb-tags" id="lb-tags"></div>
-        </div>
+          <div class="lb-tags-row">
+            <span class="lb-id" id="lb-id"></span>
+            <div class="lb-tags" id="lb-tags"></div>
+            <div class="lb-actions">
+            </div>
+          </div>
+          <p class="lb-description" id="lb-description"></p>
+          <div class="lb-meta" id="lb-meta"></div>
+         </div>
       </div>
     </div>
 
     <div class="w-screen h-screen grid two-rows-grid">
-      <div class="p-10px bg-myBlack flex flex-row justify-between items-start text-myWhite z-[1100]">
+      <div class="p-10px bg-myBlack flex flex-row justify-between items-start text-myWhite gap-20px">
         <div class="flex flex-col">
-          <a href="/" class="font-myTitle">AAA — Adler’s Airship Archive</a>
+          <div class="flex flex-row items-baseline gap-4">
+            <a href="./" class="font-myTitle">AAA — Adler’s Airship Archive</a>
+            <a href="./about.html" class="not(.font-myTitle)">About</a>
+            <p onclick="openExploreModal()" class="not(.font-myTitle)" style="cursor:pointer;">Explore</p>
+          </div>
         <div class="box">
           Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
           </div>
         </div>
-        <div class="filters-panel w-[480px] text-myWhite">
+        <div class="filters-panel max-w-[45rem] text-myWhite">
           <nav class="filters-nav flex justify-between mt-[15px] mb-[17px]">
-            <a href="#" class="filter-link">Airship</a>
-            <a href="#" class="filter-link">Wreckage</a>
-            <a href="#" class="filter-link">Models</a>
-            <a href="#" class="filter-link">Newspapers</a>
-            <a href="#" class="filter-link">Drawings</a>
-  </nav>
+            <button class="filter-link" data-category="airships">Airship</button>
+            <button class="filter-link" data-category="wreckage">Wreckage</button>
+            <button class="filter-link" data-category="models">Models</button>
+            <button class="filter-link" data-category="newspapers">Newspapers</button>
+            <button class="filter-link" data-category="drawings">Drawings</button>
+          </nav>
 
-  <div class="filter-row">
-    <div class="filter-label">Causes</div>
-  </div>
+          <div class="filter-row">
+            <div class="filter-label">Causes</div>
+            <div class="filter-row-inside"></div>
+          </div>
 
-  <div class="filter-row">
-    <div class="filter-label">Year</div>
-  </div>
+          <div class="filter-row">
+            <div class="filter-label">Year</div>
+            <div class="filter-row-inside"></div>
+          </div>
 
-  <div class="filter-row">
-    <div class="filter-label">Country</div>
-  </div>
+          <div class="filter-row">
+            <div class="filter-label">Country</div>
+            <div class="filter-row-inside"></div>
+          </div>
 
-  <div class="filter-row">
-    <div class="filter-label">Tags</div>
-  </div>
+          <div class="filter-row">
+            <div class="filter-label">Tags</div>
+            <div class="filter-row-inside"></div>
+          </div>
 
-  <div class="filter-row">
-    <div class="filter-label">People</div>
-  </div>
+          <div class="filter-row">
+            <div class="filter-label">People</div>
+            <div class="filter-row-inside"></div>
+          </div>
 
-  <div class="filter-row items-center">
-    <div class="filter-label">Victims</div>
-  </div>
-</div>
-    </div>
-      <div class="bg-myBlack overflow-hidden">
-      <div id="archive-rows" class=" bg-myBlack"></div>
-
-    <div class="gallery-scroll" >
-      <div id="archive-gallery" class="archive-gallery">
-        <div class="archive-row row-1"></div>
-        <div class="archive-row row-2"></div>
-        <div class="archive-row row-3"></div>
+          <div class="filter-row items-center">
+            <div class="filter-label">Victims</div>
+            <div class="filter-row-inside"></div>
+          </div>
+        </div>
       </div>
-  </div>
-</div>
+      <div class="bg-myBlack overflow-hidden">
+        <div id="archive-rows" class=" bg-myBlack"></div>
+
+        <div class="gallery-scroll" >
+          <div id="archive-gallery" class="archive-gallery">
+            <div class="archive-row row-1"></div>
+            <div class="archive-row row-2"></div>
+            <div class="archive-row row-3"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <!-- Explore Modal -->
+    <div id="explore-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.95); align-items:center; justify-content:center; flex-direction:column; gap:20px;">
+      <button onclick="closeExploreModal()" style="position:absolute; top:20px; right:20px; background:none; border:none; color:white; font-size:28px; cursor:pointer; line-height:1;">✕</button>
+
+      <!-- Webcam preview top-right -->
+      <div style="position:absolute; top:20px; right:70px; display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+        <video id="explore-webcam" autoplay muted playsinline style="width:200px; height:150px; object-fit:cover; border-radius:6px; border:2px solid rgba(255,255,255,0.15); transform:scaleX(-1);"></video>
+        <div id="explore-hand-status" style="font-family:monospace; font-size:11px; text-align:right; line-height:1.5;">
+          <span id="explore-detect-label" style="display:inline-block; padding:2px 8px; border-radius:3px; background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.4);">no hand detected</span><br>
+          <span id="explore-angle-label" style="color:rgba(255,255,255,0.3);">angle: —</span>
+        </div>
+      </div>
+
+      <div id="explore-square" style="width:min(60vw,80vh); height:min(60vw,80vh); background:#333; border-radius:6px; transition: background-color 0.05s ease; position:relative; overflow:hidden;">
+        <img id="explore-art-dirigibile-19" src="img/dirigibili/dirigibile (19).png" alt="dirigibile (19)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-1" src="img/dirigibili/dirigibile (1).png" alt="dirigibile (1)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-2" src="img/dirigibili/dirigibile (2).png" alt="airship (2)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-4" src="img/dirigibili/dirigibile (4).png" alt="airship (4)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-10" src="img/dirigibili/dirigibile (10).png" alt="airship (10)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-17" src="img/dirigibili/dirigibile (17).png" alt="dirigibile (17)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-18" src="img/dirigibili/dirigibile (18).png" alt="dirigibile (18)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-16" src="img/dirigibili/dirigibile (16).png" alt="dirigibile (16)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-airship-16" src="img/dirigibili/dirigibile (16).png" alt="airship (16)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-relitto-4" src="img/relitti/relitto (4).png" alt="relitto (4)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-relitto-7" src="img/relitti/relitto (7).png" alt="relitto (7)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-relitto-21" src="img/relitti/relitto (21).png" alt="relitto (21)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-9" src="img/dirigibili/dirigibile (9).png" alt="dirigibile (9)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+      </div>
+      <div id="explore-status" style="color:rgba(255,255,255,0.35); font-size:12px; font-family:monospace;">Loading model...</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+
+    <script src="casoni-lm.js"></script>
     <script src="script.js"></script>
 
   </body>

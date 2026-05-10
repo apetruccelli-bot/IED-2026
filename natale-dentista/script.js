@@ -13,6 +13,7 @@ const lbBackdrop = document.getElementById('lb-backdrop');
 let items = [];          // original data from JSON
 let displayItems = [];
 let activeTags = new Set();
+let activeTagFilter = null; // single tag selected from cat-list for opacity dimming
 let lbIndex = -1;        // current index in filteredItems() array
 let activeMacro = null;  // currently selected macro category (string)
 let macroFilterIds = null; // Set of ids to show when a macro is active
@@ -46,8 +47,9 @@ function syncMacroStates() {
   if (!container) return;
   container.querySelectorAll('.cat-section').forEach(sec => {
     const title = sec.querySelector('.cat-title');
-    const m = title ? title.textContent.toLowerCase() : null;
-    const tlist = macros[m] || [];
+    const displayName = title ? title.textContent : null;
+    const m = displayName ? Object.keys(macros).find(k => k.toLowerCase() === displayName.toLowerCase()) : null;
+    const tlist = m ? (macros[m] || []) : [];
     const isActive = tlist.some(t => activeTags.has(t));
     if (title) title.classList.toggle('active', isActive);
   });
@@ -66,7 +68,17 @@ function buildCategoriesList() {
   if (!container) return;
   container.innerHTML = '';
   const macros = window.macroCategories || {};
-  Object.keys(macros).forEach(m => {
+  // desired display order to match the reference image (lowercase)
+  const desiredOrder = ['strumenti', 'radiografie', 'studio'];
+  // map available macro keys by lowercase -> original
+  const lowerMap = {};
+  Object.keys(macros).forEach(k => { lowerMap[k.toLowerCase()] = k; });
+  // build ordered list of original keys following desiredOrder, fall back to remaining keys
+  const keys = [];
+  desiredOrder.forEach(k => { if (k in lowerMap) keys.push(lowerMap[k]); });
+  Object.keys(macros).forEach(k => { if (!keys.includes(k)) keys.push(k); });
+
+  keys.forEach(m => {
     const section = document.createElement('div');
     section.className = 'cat-section';
     const h = document.createElement('div');
@@ -81,7 +93,7 @@ function buildCategoriesList() {
       btn.className = 'tag-btn';
       btn.textContent = tag;
       btn.dataset.tag = tag;
-      btn.addEventListener('click', () => toggleTag(tag));
+      btn.addEventListener('click', () => toggleCatTag(tag));
       list.appendChild(btn);
     });
     section.appendChild(list);
@@ -101,30 +113,30 @@ function capitalize(s) {
 // TOGGLE MACROS E TAGS
 function toggleMacro(macro) {
   const macros = window.macroCategories || {};
+  // resolve macro key case-insensitively against macros object
+  const canonical = Object.keys(macros).find(k => k.toLowerCase() === String(macro).toLowerCase()) || macro;
   // toggle behavior: if clicking same macro, deactivate
-  if (activeMacro === macro) {
+  if (activeMacro === canonical) {
     activeMacro = null;
     macroFilterIds = null;
-    // restore display items to full set (respecting random state)
+    // restore display items to full set
     displayItems = [...items];
   } else {
-    activeMacro = macro;
-    // prefer explicit IDs mapping from macroToIds, fallback to finding items by tags listed in data
-    const ids = macroToIds[macro] || (macros[macro] ? [] : []);
+    activeMacro = canonical;
+    // prefer explicit IDs mapping from macroToIds (keys in macroToIds are lowercase)
+    const ids = macroToIds[canonical.toLowerCase()] || [];
     if (ids && ids.length > 0) {
       macroFilterIds = new Set(ids);
-    } else if (macros[macro]) {
-      // build ids from items whose tags intersect macros[macro]
-      const allowed = new Set(macros[macro]);
+    } else if (macros[canonical]) {
+      const allowed = new Set(macros[canonical]);
       macroFilterIds = new Set(items.filter(it => it.tags.some(t => allowed.has(t))).map(it => it.id));
     } else {
       macroFilterIds = null;
     }
-    // set displayItems to only items in macroFilterIds (preserve random if active)
-    const base = items.filter(it => macroFilterIds ? macroFilterIds.has(it.id) : true);
-  displayItems = base;
+    // set displayItems to only items in macroFilterIds
+    displayItems = items.filter(it => macroFilterIds ? macroFilterIds.has(it.id) : true);
     // remove any active tags that are not part of this macro (they would be dimmed)
-    const allowedTags = new Set(macros[macro] || []);
+    const allowedTags = new Set(macros[canonical] || []);
     activeTags.forEach(t => { if (!allowedTags.has(t)) activeTags.delete(t); });
   }
 
@@ -138,6 +150,16 @@ function toggleMacro(macro) {
   // tag buttons: mark active and dim those not in macro
   updateTagButtonStates();
 
+  // update macro title underline state in the left categories list
+  const container = document.getElementById('categories-list');
+  if (container) {
+    container.querySelectorAll('.cat-title').forEach(titleEl => {
+      const displayName = titleEl.textContent || '';
+      const key = Object.keys(macros).find(k => k.toLowerCase() === displayName.toLowerCase());
+      titleEl.classList.toggle('macro-active', Boolean(activeMacro && key && key.toLowerCase() === String(activeMacro).toLowerCase()));
+    });
+  }
+
   render();
 }
 
@@ -149,11 +171,45 @@ function updateTagButtonStates() {
   if (!container) return;
   container.querySelectorAll('.tag-btn').forEach(btn => {
     const tag = btn.dataset.tag;
-    btn.classList.toggle('active', activeTags.has(tag));
-    if (macro && (!allowed || !allowed.has(tag))) {
-      btn.classList.add('dimmed');
+    const isActive = activeTags.has(tag);
+    const isFilter = activeTagFilter === tag;
+    // when a macro is active, dim all tags (40%) except the ones explicitly selected
+    if (macro) {
+      // consider either the activeTags (global filters) or the local activeTagFilter
+      const shouldBeUndimmed = isActive || isFilter;
+      btn.classList.toggle('active', shouldBeUndimmed);
+      btn.classList.toggle('dimmed', !shouldBeUndimmed);
     } else {
+      // no macro: restore normal state (no forced dimming)
+      btn.classList.toggle('active', isActive);
       btn.classList.remove('dimmed');
+    }
+  });
+}
+
+// ── Toggle tag from cat-list (opacity-based, no re-render) ───────────────
+function toggleCatTag(tag) {
+  activeTagFilter = activeTagFilter === tag ? null : tag;
+  // update button active state
+  const container = document.getElementById('categories-list');
+  if (container) {
+    container.querySelectorAll('.tag-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tag === activeTagFilter);
+    });
+  }
+  applyTagOpacity();
+}
+
+function applyTagOpacity() {
+  document.querySelectorAll('.card').forEach(card => {
+    if (!activeTagFilter) {
+      card.style.opacity = '';
+    } else {
+      const idx = parseInt(card.dataset.index ?? -1);
+      const visible = filteredItems();
+      const item = visible[idx];
+      const matches = item && item.tags.includes(activeTagFilter);
+      card.style.opacity = matches ? '1' : '0.3';
     }
   });
 }
@@ -206,6 +262,7 @@ function render() {
     const card = document.createElement('article');
     card.className = 'card';
     card.style.cursor = 'zoom-in';
+    card.dataset.index = i;
 
     // image
     // create an image element
@@ -256,6 +313,8 @@ function render() {
     grid.appendChild(card);
   });
 
+  applyTagOpacity();
+
   // observe images for scroll-in animation
   const imgs = document.querySelectorAll('.card-img');
   const observer = new IntersectionObserver((entries) => {
@@ -271,6 +330,14 @@ function render() {
   const thumbRail = document.getElementById('thumb-rail');
   if (thumbRail) {
     thumbRail.innerHTML = '';
+
+    const col1 = document.createElement('div');
+    const col2 = document.createElement('div');
+    col1.className = 'thumb-col';
+    col2.className = 'thumb-col';
+
+    const mid = Math.ceil(visible.length / 2);
+
     visible.forEach((item, idx) => {
       const t = document.createElement('img');
       t.className = 'thumb';
@@ -278,24 +345,47 @@ function render() {
       t.alt = `#${item.id}`;
       t.dataset.index = idx;
       t.addEventListener('click', () => {
-        // scroll to corresponding card
         const cards = document.querySelectorAll('.card');
         const card = cards[idx];
         if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
-      thumbRail.appendChild(t);
+      (idx < mid ? col1 : col2).appendChild(t);
     });
 
-    // highlight active thumb based on which card is in viewport
+    thumbRail.appendChild(col1);
+    thumbRail.appendChild(col2);
+
+    // highlight active thumbs based on which cards are in viewport
+    const visibleCardIndices = new Set();
     const cardObserver = new IntersectionObserver((entries) => {
+      const cards = Array.from(document.querySelectorAll('.card'));
       entries.forEach(ent => {
-        if (ent.isIntersecting) {
-          const cards = Array.from(document.querySelectorAll('.card'));
-          const index = cards.indexOf(ent.target);
-          thumbRail.querySelectorAll('.thumb').forEach((th, i) => th.classList.toggle('active', i === index));
-        }
+        const index = cards.indexOf(ent.target);
+        if (index === -1) return;
+        if (ent.isIntersecting) visibleCardIndices.add(index);
+        else visibleCardIndices.delete(index);
       });
-    }, { threshold: 0.6 });
+
+      const allThumbs = Array.from(thumbRail.querySelectorAll('.thumb'));
+      allThumbs.forEach((th, i) => th.classList.toggle('active', visibleCardIndices.has(i)));
+
+      // scroll rail to keep first active thumb visible
+      if (visibleCardIndices.size > 0) {
+        const firstActive = Math.min(...visibleCardIndices);
+        const activeTh = allThumbs[firstActive];
+        if (activeTh) {
+          const railRect = thumbRail.getBoundingClientRect();
+          const thRect = activeTh.getBoundingClientRect();
+          const thTopInRail = thRect.top - railRect.top + thumbRail.scrollTop;
+          const thBottomInRail = thTopInRail + thRect.height;
+          if (thBottomInRail > thumbRail.scrollTop + thumbRail.clientHeight) {
+            thumbRail.scrollTop = thBottomInRail - thumbRail.clientHeight + 8;
+          } else if (thTopInRail < thumbRail.scrollTop) {
+            thumbRail.scrollTop = thTopInRail - 8;
+          }
+        }
+      }
+    }, { threshold: 0.5 });
     document.querySelectorAll('.card').forEach(c => cardObserver.observe(c));
   }
 }
