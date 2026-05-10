@@ -355,6 +355,7 @@ button {
         font-family: inherit;
         display: flex;
         flex-direction: column;
+        margin-top: 10px;
       }
 
 .lb-id {
@@ -455,6 +456,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding-top: 20px;
   height: calc(100vh - 21rem);
 }
 .archive-gallery > .archive-row {
@@ -464,6 +466,8 @@ button {
   height: var(--rowHeight);
   align-content: flex-start;
 }
+
+
 
 .card {
   background: transparent;
@@ -516,7 +520,7 @@ button {
 .victims-control {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   width: 100%;
 }
 
@@ -524,6 +528,45 @@ button {
   width: 100%;
   margin: 0;
   accent-color: var(--myWhite);
+  height: 10px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+.victims-slider:focus {
+  outline: none;
+}
+
+.victims-slider::-webkit-slider-runnable-track {
+  height: 2px;
+  background: rgba(243, 243, 243, 0.5);
+  border-radius: 999px;
+}
+
+.victims-slider::-moz-range-track {
+  height: 2px;
+  background: rgba(243, 243, 243, 0.5);
+  border: none;
+  border-radius: 999px;
+}
+
+.victims-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--myWhite);
+  margin-top: -5px;
+}
+
+.victims-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: var(--myWhite);
 }
 
 .victims-stops {
@@ -539,8 +582,9 @@ button {
   letter-spacing: 0.02em;
   text-align: center;
   color: var(--myWhite);
-  opacity: 0.55;
+  opacity: 0.4;
   user-select: none;
+  padding: 6px 4px;
 }
 
 .victims-stop.active {
