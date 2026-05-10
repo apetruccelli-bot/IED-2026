@@ -29,6 +29,13 @@
    margin-top: 18px;
 }
 
+.box2 {
+  width: 552px;
+  margin-top: 0px;
+  color: var(--myWhite);
+  margin-left: 10px;
+}
+
 :root {
   --color-my-black: #080808;
   --color-my-white: #f3f3f3;
@@ -391,6 +398,39 @@ button {
 .lb-meta {
         margin-top: 10px;
       }
+
+/* Horizontal scroll container about */
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 10px;
+  padding: 10px;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(243, 243, 243, 0.3);
+  border-radius: 4px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(243, 243, 243, 0.6);
+}
+
+.scroll-img {
+  flex: 0 0 auto;
+  height: 100%;
+  object-fit: contain;
+  max-width: 400px;
+}
 
 .lb-meta-row {
         margin: 0;

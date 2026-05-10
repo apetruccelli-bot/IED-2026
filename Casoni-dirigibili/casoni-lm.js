@@ -209,13 +209,12 @@ async function detectExploreHands() {
         square.style.backgroundImage = 'none';
         setExploreArtVisible('explore-art-dirigibile-19');
       } else if (showLeftAirshipRange) {
-        if (!exploreLeftAirshipWasActive || !exploreLeftAirshipCurrentId) {
-          exploreLeftAirshipCurrentId = pickExploreAirshipId(exploreLeftAirshipLastId);
-        }
+        // Always show only 'airship (1)' when left hand angle is between 31° and 50°
+        exploreLeftAirshipCurrentId = 'explore-art-dirigibile-1';
         exploreLeftAirshipWasActive = true;
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        setExploreArtVisible(exploreLeftAirshipCurrentId);
+        setExploreArtVisible('explore-art-dirigibile-1');
       } else if (showDirigibile17) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
