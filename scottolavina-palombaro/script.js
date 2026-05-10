@@ -25,6 +25,19 @@ let activeArea = null;
 let searchQuery = '';
 let lbIndex = -1;        // current index in filteredItems() array
 
+function normalizeKey(value) {
+  if (Array.isArray(value)) {
+    return String(value[0] ?? '').trim().toLowerCase();
+  }
+  return String(value ?? '').trim().toLowerCase();
+}
+
+function labelText(value) {
+  if (Array.isArray(value)) {
+    return String(value[0] ?? '').trim();
+  }
+  return String(value ?? '').trim();
+}
 
 // ── Utility: shuffle items ───────────────────────────────────────────────
 function shuffleArray(array) {
@@ -53,39 +66,42 @@ async function loadData() {
 function buildTagsBar() {
   tagsBar.innerHTML = '';
 
-  // normalize category/subcategory which may be strings or single-item arrays
-  const normalize = v => (Array.isArray(v) ? v[0] : v) ?? '';
-
   // collect unique subcategories per category, preserving insertion order
   const catMap = new Map();
   items.forEach(item => {
-    const cat = normalize(item.category);
-    const sub = normalize(item.subcategory);
-    if (!cat) return;
-    if (!catMap.has(cat)) catMap.set(cat, new Set());
-    if (sub) catMap.get(cat).add(sub);
+    const catKey = normalizeKey(item.category);
+    const subKey = normalizeKey(item.subcategory);
+    const catLabel = labelText(item.category);
+    const subLabel = labelText(item.subcategory);
+    if (!catKey) return;
+    if (!catMap.has(catKey)) {
+      catMap.set(catKey, { label: catLabel || catKey, subs: new Map() });
+    }
+    if (subKey) {
+      catMap.get(catKey).subs.set(subKey, subLabel || subKey);
+    }
   });
 
-  catMap.forEach((subs, cat) => {
+  catMap.forEach((entry, catKey) => {
     const catBlock = document.createElement('div');
     catBlock.className = 'cat-block';
 
     const catBtn = document.createElement('button');
     catBtn.className = 'tag-btn cat-btn';
-    catBtn.textContent = cat;
-    catBtn.dataset.tag = cat;
-    catBtn.addEventListener('click', () => toggleTag(cat));
+    catBtn.textContent = entry.label;
+    catBtn.dataset.tag = catKey;
+    catBtn.addEventListener('click', () => toggleTag(catKey));
     catBlock.appendChild(catBtn);
 
-    if (subs.size > 0) {
+    if (entry.subs.size > 0) {
       const subsWrap = document.createElement('div');
       subsWrap.className = 'sub-wrap';
-      subs.forEach(sub => {
+      entry.subs.forEach((subLabel, subKey) => {
         const subBtn = document.createElement('button');
         subBtn.className = 'tag-btn sub-btn';
-        subBtn.textContent = sub;
-        subBtn.dataset.tag = sub;
-        subBtn.addEventListener('click', () => toggleTag(sub));
+        subBtn.textContent = subLabel;
+        subBtn.dataset.tag = subKey;
+        subBtn.addEventListener('click', () => toggleTag(subKey));
         subsWrap.appendChild(subBtn);
       });
       catBlock.appendChild(subsWrap);
@@ -102,7 +118,8 @@ function syncTagButtonStates() {
 
   const hasSelection = activeTags.size > 0;
   tagsBar.querySelectorAll('.tag-btn').forEach(btn => {
-    const isActive = activeTags.has(btn.dataset.tag);
+    const tagKey = normalizeKey(btn.dataset.tag);
+    const isActive = activeTags.has(tagKey);
     btn.classList.toggle('active', isActive);
     btn.classList.toggle('dimmed', hasSelection && !isActive);
   });
@@ -149,6 +166,7 @@ function buildAreaBar() {
     areaItem.addEventListener('click', () => {
       activeArea = activeArea === areaData.area ? null : areaData.area;
       syncAreaButtonStates();
+      render();
     });
 
     areaBar.appendChild(areaItem);
@@ -169,10 +187,11 @@ function syncAreaButtonStates() {
 
 // ── Toggle a filter tag ───────────────────────────────────────────────────
 function toggleTag(tag) {
-  if (activeTags.has(tag)) {
-    activeTags.delete(tag);
+  const key = normalizeKey(tag);
+  if (activeTags.has(key)) {
+    activeTags.delete(key);
   } else {
-    activeTags.add(tag);
+    activeTags.add(key);
   }
   syncTagButtonStates();
   render();
@@ -180,21 +199,15 @@ function toggleTag(tag) {
 
 // ── Filter logic ──────────────────────────────────────────────────────────
 function filteredItems() {
-  const normalize = v => (Array.isArray(v) ? v[0] : v) ?? '';
   const q = searchQuery.toLowerCase().trim();
   return displayItems.filter(item => {
-    const cat = normalize(item.category);
-    const sub = normalize(item.subcategory);
-    const matchesTags =
-      activeTags.size === 0 ||
-      [...activeTags].every(t => cat === t || sub === t || item.tags.includes(t));
     const matchesSearch =
       q === '' ||
       item.description.toLowerCase().includes(q) ||
       item.tags.some(t => t.toLowerCase().includes(q)) ||
-      cat.toLowerCase().includes(q) ||
-      sub.toLowerCase().includes(q);
-    return matchesTags && matchesSearch;
+      normalizeKey(item.category).includes(q) ||
+      normalizeKey(item.subcategory).includes(q);
+    return matchesSearch;
   });
 }
 
@@ -230,9 +243,24 @@ function render() {
 
   // loop through the visible items and create a card for each item
   visible.forEach((item, i) => {
+    const itemTags = [
+      normalizeKey(item.category),
+      normalizeKey(item.subcategory),
+      ...item.tags.map(tag => normalizeKey(tag))
+    ].filter(Boolean);
+    const matchesTags =
+      activeTags.size === 0 ||
+      [...activeTags].every(tag => itemTags.includes(tag));
+    const matchesArea =
+      !activeArea || normalizeArea(item.area) === activeArea;
+    const shouldDim =
+      (activeTags.size > 0 && !matchesTags) ||
+      (activeArea && !matchesArea);
+
     const card = document.createElement('article');
     card.className = 'card';
     card.style.cursor = 'zoom-in';
+    card.classList.toggle('dimmed', shouldDim);
 
     // image
     // create an image element
@@ -244,7 +272,13 @@ function render() {
     // set the alt text
     img.alt = `Item ${item.id}`;
     // set the loading attribute
-    img.loading = 'lazy';
+    // Keep loading predictable across browsers: avoid lazy edge-cases
+    img.loading = 'eager';
+    img.decoding = 'sync';
+    img.addEventListener('error', () => {
+      card.classList.add('image-error');
+      console.error('Image failed to load:', item.src, 'ID:', item.id);
+    });
     // append the image to the card
     card.appendChild(img);
 
@@ -260,10 +294,11 @@ function render() {
     const tagsEl = document.createElement('div');
     tagsEl.className = 'card-tags';
     item.tags.forEach(tag => {
+      const tagKey = normalizeKey(tag);
       const t = document.createElement('span');
-      t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
+      t.className = 'card-tag' + (activeTags.has(tagKey) ? ' highlight' : '');
       t.textContent = tag;
-      t.addEventListener('click', e => { e.stopPropagation(); toggleTag(tag); });
+      t.addEventListener('click', e => { e.stopPropagation(); toggleTag(tagKey); });
       tagsEl.appendChild(t);
     });
     body.appendChild(tagsEl);
@@ -291,10 +326,11 @@ function openLightbox(index) {
   lbTagsEl.innerHTML = '';
   // loop through the tags and create a span for each tag
   item.tags.forEach(tag => {
+    const tagKey = normalizeKey(tag);
     const t = document.createElement('span');
-    t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
+    t.className = 'card-tag' + (activeTags.has(tagKey) ? ' highlight' : '');
     t.textContent = tag;
-    t.addEventListener('click', () => { toggleTag(tag); closeLightbox(); });
+    t.addEventListener('click', () => { toggleTag(tagKey); closeLightbox(); });
     lbTagsEl.appendChild(t);
   });
 
@@ -315,9 +351,6 @@ function closeLightbox() {
 
 function navigateLightbox(dir) {
   const visible = filteredItems();
-
-  // calcola il prossimo indice
-  let next = lbIndex + dir;
 
   // se si va oltre l'ultimo, torna al primo
   if (next >= visible.length) next = 0;
