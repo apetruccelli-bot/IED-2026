@@ -21,11 +21,11 @@
 
     <div id="home-map" class="home-map" aria-hidden="false"></div>
 
-    <div class="w-screen h-screen grid grid-cols-8 specialGrid fixed top-0 left-0 h-screen z-50
+    <div class="w-screen h-screen grid grid-cols-8 specialGrid fixed top-0 left-0 h-screen z-[2000]
     pointer-events-none">
       <div class="col-start-1 col-end-3 p-10px flex flex-col justify-between text-myBlack z-[1100]">
         <!-- <button id="toggle-sidebar" class="toggle-btn" aria-expanded="false" aria-label="Apri menu">+</button> -->
-        <div class="flex flex-col pointer-events-auto">
+        <div class="home-brand flex flex-col pointer-events-auto">
           <a href="home.html" class="font-myTitle">Città<br>interrotte</a>
           <p class="">di Fondazione Scorza</p>
         </div>
@@ -44,10 +44,15 @@
     <!-- Marker modal -->
     <div id="marker-modal" class="marker-modal" aria-hidden="true">
       <div class="marker-modal-backdrop" id="marker-modal-backdrop"></div>
-      <div class="marker-modal-content">
-        <button class="marker-modal-close" id="marker-modal-close">✕</button>
-        <img class="marker-modal-img" id="marker-modal-img" src="" alt="">
-        <p class="marker-modal-desc" id="marker-modal-desc"></p>
+      <button class="lb-close" id="marker-modal-close" type="button">✕</button>
+      <button class="lb-prev" id="marker-modal-prev" type="button">←</button>
+      <button class="lb-next" id="marker-modal-next" type="button">→</button>
+      <div class="lb-content">
+        <img class="lb-img" id="marker-modal-img" src="" alt="">
+        <div class="lb-info">
+          <span class="lb-id" id="marker-modal-id"></span>
+          <div class="lb-desc" id="marker-modal-desc"></div>
+        </div>
       </div>
     </div>
 

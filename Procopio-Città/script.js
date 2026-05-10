@@ -9,6 +9,14 @@ const lbClose = document.getElementById('lb-close');
 const lbPrev = document.getElementById('lb-prev');
 const lbNext = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
+const markerModal = document.getElementById('marker-modal');
+const markerModalImg = document.getElementById('marker-modal-img');
+const markerModalId = document.getElementById('marker-modal-id');
+const markerModalDesc = document.getElementById('marker-modal-desc');
+const markerModalClose = document.getElementById('marker-modal-close');
+const markerModalPrev = document.getElementById('marker-modal-prev');
+const markerModalNext = document.getElementById('marker-modal-next');
+const markerModalBackdrop = document.getElementById('marker-modal-backdrop');
 
 const archiveRows = [
   { anno: '1964', autore: 'Scorza', regione: 'Calabria', abitanti: 'Meno di 10', documento: 'Fotografia' },
@@ -20,8 +28,10 @@ const archiveRows = [
 
 let enrichedRows = [];
 let allItems = [];
+let mapItems = [];
 let activeTags = new Set();
 let lbIndex = -1;
+let markerIndex = -1;
 
 function escapeHtml(value) {
   return String(value)
@@ -120,9 +130,8 @@ function galleryTemplate(item, index) {
   if (!item.src) return '';
 
   return `
-    <div data-item-index="${index}" class="col-span-3 flex cursor-pointer flex-col transition-opacity hover:opacity-80 pb-12">
+    <div data-item-index="${index}" class="col-span-3 flex cursor-pointer flex-col transition-opacity hover:opacity-80">
       <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.description || 'Immagine archivio')}" class="h-auto w-full" loading="lazy">
-      <p class="mt-10px font-myTitle">${escapeHtml(item.description || 'Senza descrizione')}</p>
     </div>
   `;
 }
@@ -193,6 +202,43 @@ function closeLightbox() {
   document.body.classList.remove('lightbox-open');
   document.body.style.overflow = '';
   lbImg.src = '';
+}
+
+function openMarkerModal(index) {
+  if (!markerModal || !markerModalImg || !markerModalDesc) return;
+
+  const item = mapItems[index];
+  if (!item) return;
+
+  markerIndex = index;
+  markerModalImg.src = item.src;
+  markerModalImg.alt = item.label || 'Immagine marker';
+  if (markerModalId) {
+    markerModalId.textContent = item.id != null ? `( ${item.id} )` : 'ID non disponibile';
+  }
+  markerModalDesc.textContent = item.description || '';
+
+  markerModal.classList.add('open');
+  markerModal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMarkerModal() {
+  if (!markerModal) return;
+
+  markerModal.classList.remove('open');
+  markerModal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  if (markerModalImg) markerModalImg.src = '';
+}
+
+function navigateMarkerModal(direction) {
+  if (!mapItems.length) return;
+
+  let nextIndex = markerIndex + direction;
+  if (nextIndex >= mapItems.length) nextIndex = 0;
+  if (nextIndex < 0) nextIndex = mapItems.length - 1;
+  openMarkerModal(nextIndex);
 }
 
 function navigateLightbox(direction) {
@@ -282,8 +328,8 @@ hydrateRowsWithImages()
       mapEl.style.height = window.innerHeight + 'px';
 
       const bounds = [
-        [7, 43], // Southwest coordinates
-        [9, 47] // Northeast coordinates
+        [12, 36], // Southwest coordinates
+        [19.5, 42.5] // Northeast coordinates
       ];
 
 
@@ -291,7 +337,7 @@ hydrateRowsWithImages()
         container: 'home-map',
         style: 'mapbox://styles/martiinaprocopio/cmowvc4ao001n01r5g7ad3t1i',
         center: [13, 39.5],
-        zoom: 6.3,
+        zoom: 4.3,
         /* maxZoom: 8,
         minZoom: 5, */
         maxBounds: bounds
@@ -311,8 +357,9 @@ hydrateRowsWithImages()
           const response = await fetch('map-data.json');
           if (!response.ok) throw new Error('Network response was not ok');
           const mapData = await response.json();
+          mapItems = Array.isArray(mapData.items) ? mapData.items : [];
 
-          mapData.items.forEach(item => {
+          mapItems.forEach((item, index) => {
             // Create element
             const el = document.createElement('div');
             el.className = 'custom-marker pointer-events-auto'; // Tailwind helper
@@ -332,28 +379,20 @@ hydrateRowsWithImages()
             // Interaction
             el.addEventListener('click', (e) => {
               e.stopPropagation();
-              const modal    = document.getElementById('marker-modal');
-              const modalImg = document.getElementById('marker-modal-img');
-              const modalDesc = document.getElementById('marker-modal-desc');
-              modalImg.src = item.src;
-              modalImg.alt = item.label;
-              modalDesc.textContent = item.description || '';
-              modal.classList.add('open');
-              modal.setAttribute('aria-hidden', 'false');
+              openMarkerModal(index);
             });
           });
 
-          // Close modal
-          const markerModalClose    = document.getElementById('marker-modal-close');
-          const markerModalBackdrop = document.getElementById('marker-modal-backdrop');
-          function closeMarkerModal() {
-            const modal = document.getElementById('marker-modal');
-            modal.classList.remove('open');
-            modal.setAttribute('aria-hidden', 'true');
-          }
-          if (markerModalClose)    markerModalClose.addEventListener('click', closeMarkerModal);
+          if (markerModalClose) markerModalClose.addEventListener('click', closeMarkerModal);
+          if (markerModalPrev) markerModalPrev.addEventListener('click', () => navigateMarkerModal(-1));
+          if (markerModalNext) markerModalNext.addEventListener('click', () => navigateMarkerModal(1));
           if (markerModalBackdrop) markerModalBackdrop.addEventListener('click', closeMarkerModal);
-          document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMarkerModal(); });
+          document.addEventListener('keydown', (e) => {
+            if (!markerModal || !markerModal.classList.contains('open')) return;
+            if (e.key === 'ArrowLeft') navigateMarkerModal(-1);
+            if (e.key === 'ArrowRight') navigateMarkerModal(1);
+            if (e.key === 'Escape') closeMarkerModal();
+          });
         } catch (err) {
           console.error('Error loading markers:', err);
         }
