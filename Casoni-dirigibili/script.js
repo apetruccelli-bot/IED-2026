@@ -97,6 +97,26 @@ let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
 let activeRowFilters = {};
 
+const disabledRowLabels = new Set(['Causes', 'Victims']);
+const categoryDisablesRows = new Set(['models', 'drawings', 'study models', 'technical drawings']);
+const victimStops = ['<10', '20', '30', '40', '50', '60', '70', '80', '90', '>100'];
+
+function getVictimsLabelFromIndex(index) {
+  return victimStops[Math.max(0, Math.min(victimStops.length - 1, index))];
+}
+
+function getVictimsIndexFromLabel(label) {
+  return victimStops.indexOf(label);
+}
+
+function matchesVictimsFilter(victims, label) {
+  if (victims == null) return false;
+  if (label === '<10') return victims < 10;
+  if (label === '>100') return victims > 100;
+  const target = Number(label);
+  return Number.isFinite(target) && victims >= target - 5 && victims <= target + 5;
+}
+
 if (galleryScroll) {
   galleryScroll.addEventListener('wheel', (e) => {
     const dominantDelta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
@@ -150,26 +170,180 @@ function buildFilterRows() {
     const inside = row.querySelector('.filter-row-inside');
     if (!def || !inside) return;
 
+    if (label === 'Victims') {
+      inside.innerHTML = '';
+
+      const wrap = document.createElement('div');
+      wrap.className = 'victims-control';
+
+      const slider = document.createElement('input');
+      slider.className = 'victims-slider';
+      slider.type = 'range';
+      slider.min = '0';
+      slider.max = String(victimStops.length - 1);
+      slider.step = '1';
+      slider.value = '4';
+      slider.setAttribute('aria-label', 'Victims filter');
+
+      const stops = document.createElement('div');
+      stops.className = 'victims-stops';
+
+      victimStops.forEach((stop, index) => {
+        const stopEl = document.createElement('span');
+        stopEl.className = 'victims-stop';
+        stopEl.textContent = stop;
+        stopEl.dataset.index = String(index);
+        stops.appendChild(stopEl);
+      });
+
+      slider.addEventListener('input', () => {
+        const stopLabel = getVictimsLabelFromIndex(Number(slider.value));
+        activeRowFilters[label] = stopLabel;
+        syncVictimsRow(row);
+        applyRowFilters();
+      });
+
+      stops.addEventListener('click', e => {
+        const stopEl = e.target.closest('.victims-stop');
+        if (!stopEl) return;
+        const index = Number(stopEl.dataset.index);
+        slider.value = String(index);
+        const stopLabel = getVictimsLabelFromIndex(index);
+        activeRowFilters[label] = stopLabel;
+        syncVictimsRow(row);
+        applyRowFilters();
+      });
+
+      wrap.appendChild(slider);
+      wrap.appendChild(stops);
+      inside.appendChild(wrap);
+
+      row.dataset.controlType = 'victims';
+      syncVictimsRow(row);
+      return;
+    }
+
     def.values(items).forEach(val => {
       const chip = document.createElement('button');
       chip.className = 'filter-chip';
+      chip.type = 'button';
       chip.textContent = val;
       chip.dataset.value = val;
+      chip.dataset.rowLabel = label;
       chip.addEventListener('click', () => {
-        if (activeRowFilters[label] === val) {
-          // deselect
-          activeRowFilters[label] = null;
-          chip.classList.remove('active');
+        if (chip.disabled || inside.closest('.filter-row')?.classList.contains('is-disabled')) return;
+
+        const isTagsRow = label === 'Tags';
+        if (isTagsRow) {
+          // Tags: allow multiple selections
+          if (!(activeRowFilters[label] instanceof Set)) {
+            activeRowFilters[label] = new Set();
+          }
+          const tagSet = activeRowFilters[label];
+          if (tagSet.has(val)) {
+            tagSet.delete(val);
+            chip.classList.remove('active');
+            if (tagSet.size === 0) {
+              activeRowFilters[label] = null;
+            }
+          } else {
+            tagSet.add(val);
+            chip.classList.add('active');
+          }
         } else {
-          // deselect previous in same row
-          inside.querySelectorAll('.filter-chip.active').forEach(c => c.classList.remove('active'));
-          activeRowFilters[label] = val;
-          chip.classList.add('active');
+          // Other rows: single selection
+          if (activeRowFilters[label] === val) {
+            // deselect
+            activeRowFilters[label] = null;
+            chip.classList.remove('active');
+          } else {
+            // deselect previous in same row
+            inside.querySelectorAll('.filter-chip.active').forEach(c => c.classList.remove('active'));
+            activeRowFilters[label] = val;
+            chip.classList.add('active');
+          }
         }
         applyRowFilters();
       });
       inside.appendChild(chip);
     });
+  });
+
+  updateDisabledFilterRows();
+}
+
+function syncVictimsRow(row) {
+  const slider = row.querySelector('.victims-slider');
+  const stops = row.querySelectorAll('.victims-stop');
+  if (!slider || stops.length === 0) return;
+
+  const activeValue = activeRowFilters.Victims;
+  const activeIndex = activeValue ? getVictimsIndexFromLabel(activeValue) : -1;
+  stops.forEach((stopEl, index) => {
+    stopEl.classList.toggle('active', index === activeIndex);
+  });
+  if (activeIndex >= 0) {
+    slider.value = String(activeIndex);
+  }
+}
+
+function isCategoryDisablingRows() {
+  if (!activeCategory) return false;
+  return categoryDisablesRows.has(String(activeCategory).toLowerCase());
+}
+
+function updateDisabledFilterRows() {
+  const shouldDisable = isCategoryDisablingRows();
+
+  document.querySelectorAll('.filter-row').forEach(row => {
+    const label = row.querySelector('.filter-label')?.textContent.trim();
+    const isTargetRow = disabledRowLabels.has(label);
+    const disableRow = shouldDisable && isTargetRow;
+
+    row.classList.toggle('is-disabled', disableRow);
+
+    row.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.disabled = disableRow;
+      chip.setAttribute('aria-disabled', disableRow ? 'true' : 'false');
+    });
+
+    const victimsSlider = row.querySelector('.victims-slider');
+    if (victimsSlider) {
+      victimsSlider.disabled = disableRow;
+    }
+
+    if (disableRow && activeRowFilters[label]) {
+      activeRowFilters[label] = null;
+      row.querySelectorAll('.filter-chip.active').forEach(chip => chip.classList.remove('active'));
+    }
+
+    if (row.dataset.controlType === 'victims') {
+      syncVictimsRow(row);
+    }
+  });
+
+  applyRowFilters();
+}
+
+function matchesRowFilters(item) {
+  return Object.entries(activeRowFilters).every(([label, val]) => {
+    if (!val) return true;
+
+    if (label === 'Tags' && val instanceof Set) {
+      // Multiple tags: item must have all of the selected tags
+      if (val.size === 0) return true;
+      return [...val].every(tag => item.tags.includes(tag));
+    }
+
+    switch (label) {
+      case 'Causes':  return (item.causes ?? []).includes(val);
+      case 'Year':    return item.year === val;
+      case 'Country': return item.country === val;
+      case 'Tags':    return item.tags.includes(val);
+      case 'People':  return (val === 'Yes') === item.people;
+      case 'Victims': return matchesVictimsFilter(item.victims, val);
+      default: return true;
+    }
   });
 }
 
@@ -177,25 +351,16 @@ function buildFilterRows() {
 function applyRowFilters() {
   const hasAny = Object.values(activeRowFilters).some(v => v);
   document.querySelectorAll('.card').forEach(card => {
-    if (!hasAny) { card.classList.remove('card-dim'); return; }
     const item = items.find(i => String(i.id) === card.dataset.id);
     if (!item) return;
-    const match = Object.entries(activeRowFilters).every(([label, val]) => {
-      if (!val) return true;
-      switch (label) {
-        case 'Causes':  return (item.causes ?? []).includes(val);
-        case 'Year':    return item.year === val;
-        case 'Country': return item.country === val;
-        case 'Tags':    return item.tags.includes(val);
-        case 'People':  return (val === 'Yes') === item.people;
-        case 'Victims': {
-          const [lo, hi] = val.split('–').map(Number);
-          return item.victims != null && item.victims >= lo && item.victims <= hi;
-        }
-        default: return true;
-      }
-    });
-    card.classList.toggle('card-dim', !match);
+
+    const categoryDim = activeCategory && item.category !== activeCategory;
+    if (!hasAny) {
+      card.classList.toggle('card-dim', categoryDim);
+      return;
+    }
+    const match = matchesRowFilters(item);
+    card.classList.toggle('card-dim', categoryDim || !match);
   });
 }
 
@@ -250,6 +415,15 @@ function filteredItems() {
       item.description.toLowerCase().includes(q) ||
       item.tags.some(t => t.toLowerCase().includes(q));
     return matchesTags && matchesSearch;
+  });
+}
+
+function lightboxItems() {
+  const visible = filteredItems();
+  return visible.filter(item => {
+    const matchesCategory = !activeCategory || item.category === activeCategory;
+    const matchesFilters = matchesRowFilters(item);
+    return matchesCategory && matchesFilters;
   });
 }
 
@@ -362,7 +536,7 @@ function render() {
     });
     body.appendChild(tagsEl);
 
-    card.addEventListener('click', () => openLightbox(i));
+    card.addEventListener('click', () => openLightbox(item.id));
 
     card.appendChild(body);
     if (activeCategory && item.category !== activeCategory) card.classList.add('card-dim');
@@ -373,12 +547,12 @@ function render() {
 }
 
 // ── Lightbox ──────────────────────────────────────────────────────────────
-function openLightbox(index) {
-  // get the visible items
-  const visible = filteredItems();
-  // set the current index
-  lbIndex = index;
-  // get the item
+function openLightbox(itemId) {
+  const visible = lightboxItems();
+  const nextIndex = visible.findIndex(item => String(item.id) === String(itemId));
+  if (nextIndex === -1) return;
+
+  lbIndex = nextIndex;
   const item = visible[lbIndex];
 
   lbImg.src = item.src;
@@ -414,7 +588,8 @@ function closeLightbox() {
 }
 
 function navigateLightbox(dir) {
-  const visible = filteredItems();
+  const visible = lightboxItems();
+  if (visible.length === 0) return;
 
   // calcola il prossimo indice
   let next = lbIndex + dir;
@@ -425,7 +600,7 @@ function navigateLightbox(dir) {
   // se si va prima del primo, salta all'ultimo
   if (next < 0) next = visible.length - 1;
 
-  openLightbox(next);
+  openLightbox(visible[next].id);
 }
 
 lbClose.addEventListener('click', closeLightbox);
@@ -450,6 +625,7 @@ document.addEventListener('keydown', e => {
 
 // ── Category filter links ────────────────────────────────────────────────
 let activeCategory = null;
+const filtersPanel = document.querySelector('.filters-panel');
 document.querySelectorAll('.filter-link').forEach(btn => {
   btn.addEventListener('click', () => {
     const cat = btn.dataset.category;
@@ -467,6 +643,12 @@ document.querySelectorAll('.filter-link').forEach(btn => {
         c.classList.toggle('card-dim', c.dataset.category !== cat)
       );
     }
+
+    if (filtersPanel) {
+      filtersPanel.classList.toggle('has-active-category', !!activeCategory);
+    }
+
+    updateDisabledFilterRows();
   });
 });
 

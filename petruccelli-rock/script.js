@@ -39,8 +39,15 @@ function updateBg() {
   const g = Math.round(0xFC + (0x88 - 0xFC) * t);
   const b = Math.round(0xFC + (0x80 - 0xFC) * t);
   const color = `rgb(${r},${g},${b})`;
+
+  const r2 = Math.round(0xFC + (0x88 - 0xFC) * t);
+  const g2 = Math.round(0xFC + (0x88 - 0xFC) * t);
+  const b2 = Math.round(0xFC + (0x80 - 0xFC) * t);
+  const color2 = `rgb(${r2},${g2},${b2})`;
+
   document.body.style.backgroundColor = color;
   document.documentElement.style.setProperty('--mySpecialWhite', color);
+  document.documentElement.style.setProperty('--mySpecialGrey', color2);
 }
 
 if (grid) {

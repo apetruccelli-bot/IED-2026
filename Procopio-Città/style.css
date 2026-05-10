@@ -19,6 +19,12 @@
   font-style: italic;
 }
 
+      html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+    /* Ensure anchored sections are offset below the sticky header */
+    [id^="sezione_"] {
+      scroll-margin-top: 80px;
+    }
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -143,31 +149,6 @@ header {
   align-items: center;
 }
 
-.tag-btn {
-  padding: 4px 10px;
-  background: var(--tag-bg);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: background 0.12s, color 0.12s, border-color 0.12s;
-}
-
-.tag-btn:hover {
-  border-color: var(--accent);
-}
-
-.tag-btn.active {
-  background: var(--tag-active);
-  color: var(--tag-active-text);
-  border-color: var(--tag-active);
-}
-
-button {
-  border: none;
-  background: none;
-  cursor: pointer;
-}
 /* ── RESULTS COUNT ── */
 .results-info {
   max-width: 1200px;
@@ -374,9 +355,6 @@ button {
   text-align: center;
 }
 
-body.lightbox-open .sidebar-links {
-  display: none;
-}
 
 #archive-rows a,
 #archive-rows span.p {
@@ -428,4 +406,188 @@ body.lightbox-open .sidebar-links {
   .grid { padding: 16px 16px 40px; }
   .results-info { padding: 12px 16px 0; }
   h1 { font-size: 12px; } */
+}
+
+/* Home page: toggle sidebar-links with + button */
+/* .home-page .sidebar-links {
+  display: none;
+} */
+.home-page .sidebar-links.open {
+  display: flex;
+}
+.toggle-btn {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  font-size: 36px;
+  font-weight: lighter;
+  background: none;
+  color: var(--myBlack);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+}
+
+.toggle-btn:hover {
+  opacity: 0.6;
+}
+
+
+/* MAPBOX */
+.mapboxgl-canvas {
+  transition: opacity 0.6s cubic-bezier(.8,0,.2,1);
+}
+body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
+  opacity: 0.2;
+}
+
+.mapboxgl-ctrl-attrib-inner{display: none !important;}
+.mapboxgl-ctrl-logo {display: none !important;}
+.custom-marker {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.marker-content img {
+  border: 2px solid white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+.marker-content img:hover {
+  transform: scale(1.2);
+}
+.marker-label {
+  background: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+
+
+/* Rotate the toggle when menu is open */
+.toggle-btn {
+  transition: transform 0.2s ease, opacity 0.12s ease;
+}
+.toggle-btn[aria-expanded="true"] {
+  transform: rotate(45deg);
+}
+
+/* Fullscreen background map for home */
+.home-map {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.home-map::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.25); /* light overlay to improve contrast */
+  pointer-events: none;
+}
+
+/* Make page background transparent on home so map shows through */
+.home-page {
+  background: transparent;
+}
+.home-page .specialGrid {
+  background: transparent;
+}
+
+/* ── Face/Hand preview panel ────────────────────────────────────── */
+.face-preview-panel {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  font-family: monospace;
+  font-size: 11px;
+  pointer-events: none;
+}
+.face-webcam-preview {
+  width: 180px;
+  height: 135px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.15);
+  transform: scaleX(-1);
+}
+.face-status-panel {
+  text-align: right;
+  line-height: 1.7;
+  color: #333;
+  background: rgba(255,255,255,0.75);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.face-status-bold {
+  font-weight: bold;
+}
+
+/* Marker blur transition */
+.custom-marker {
+  transition: filter 0.3s ease;
+}
+
+/* ── Marker modal ────────────────────────────────────────────────── */
+.marker-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+.marker-modal.open {
+  display: flex;
+}
+.marker-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  cursor: pointer;
+}
+.marker-modal-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 80vw;
+}
+.marker-modal-close {
+  position: absolute;
+  top: -36px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+}
+.marker-modal-img {
+  width: 80vw;
+  height: 70vh;
+  object-fit: contain;
+  display: block;
+}
+.marker-modal-desc {
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  max-width: 60ch;
 }

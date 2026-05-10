@@ -64,6 +64,8 @@ async function hydrateRowsWithImages() {
       imageDescription: match?.description || 'Immagine non disponibile',
     };
   });
+  // populate filters UI when rows are hydrated
+  renderFilters();
 }
 
 function renderFilters() {
@@ -75,7 +77,7 @@ function renderFilters() {
     unique(allItems.map((i) => String(i.year || ''))).sort(),
     unique(enrichedRows.map((r) => r.autore)).sort(),
     unique(enrichedRows.map((r) => r.regione)).sort(),
-    unique(enrichedRows.map((r) => r.abitanti)),
+    unique(enrichedRows.map((r) => r.abitanti)).sort(),
     unique(enrichedRows.map((r) => r.documento)).sort(),
     unique(allItems.map((i) => i.category)).sort(),
   ];
@@ -207,12 +209,12 @@ if (lbBackdrop) lbBackdrop.addEventListener('click', closeLightbox);
 if (lbPrev) lbPrev.addEventListener('click', () => navigateLightbox(-1));
 if (lbNext) lbNext.addEventListener('click', () => navigateLightbox(1));
 
-document.addEventListener('keydown', (event) => {
+/* document.addEventListener('keydown', (event) => {
   if (!lightbox.classList.contains('open')) return;
   if (event.key === 'ArrowLeft') navigateLightbox(-1);
   if (event.key === 'ArrowRight') navigateLightbox(1);
   if (event.key === 'Escape') closeLightbox();
-});
+}); */
 
 if (searchInput) {
   searchInput.addEventListener('input', (event) => {
@@ -226,3 +228,139 @@ hydrateRowsWithImages()
     enrichedRows = [...archiveRows];
     renderAll();
   });
+
+
+// Handle smooth scrolling inside the main scroll container for section anchors
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const container = document.getElementById('main-scroll');
+    if (!container) return;
+    const headerOffset = 80; // keep in sync with CSS
+    document.querySelectorAll('a[href^="#sezione_"]').forEach(a => {
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        const id = this.getAttribute('href').slice(1);
+        const target = document.getElementById(id);
+        if (!target) return;
+        const containerRect = container.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+        const scrollTop = container.scrollTop + (targetRect.top - containerRect.top) - headerOffset;
+        container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+      });
+    });
+  });
+})();
+
+// Toggle sidebar-links on pages that include the toggle button
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById('toggle-sidebar');
+    const sidebar = document.querySelector('.sidebar-links');
+    if (!btn || !sidebar) return;
+    /* btn.addEventListener('click', function(){
+      const open = sidebar.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open);
+      // switch symbol between + and ×
+      btn.textContent = open ? '×' : '+';
+    }); */
+  });
+})();
+
+
+
+
+//pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cG4wYjkwMzhuNDhzZW9nbG84NjZyIn0.AqkBWyL51ozeXHUJR2snXg
+// Initialize Mapbox background on home page
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    const mapEl = document.getElementById('home-map');
+    if (!mapEl || typeof mapboxgl === 'undefined') return;
+
+    try {
+      mapboxgl.accessToken = 'pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cG4wYjkwMzhuNDhzZW9nbG84NjZyIn0.AqkBWyL51ozeXHUJR2snXg';
+      mapEl.style.display = 'block';
+      mapEl.style.height = window.innerHeight + 'px';
+
+      const bounds = [
+        [7, 43], // Southwest coordinates
+        [9, 47] // Northeast coordinates
+      ];
+
+
+      const map = new mapboxgl.Map({
+        container: 'home-map',
+        style: 'mapbox://styles/martiinaprocopio/cmowvc4ao001n01r5g7ad3t1i',
+        center: [13, 39.5],
+        zoom: 6.3,
+        /* maxZoom: 8,
+        minZoom: 5, */
+        maxBounds: bounds
+      });
+      window.procopioMap = map;
+
+      // Handle resize
+      window.addEventListener('resize', () => {
+        mapEl.style.height = window.innerHeight + 'px';
+        map.resize();
+      });
+
+      // Logic for markers must be INSIDE the same block or passed the map variable
+      map.on('load', async () => {
+        console.log('Map loaded, fetching markers...');
+        try {
+          const response = await fetch('map-data.json');
+          if (!response.ok) throw new Error('Network response was not ok');
+          const mapData = await response.json();
+
+          mapData.items.forEach(item => {
+            // Create element
+            const el = document.createElement('div');
+            el.className = 'custom-marker pointer-events-auto'; // Tailwind helper
+            el.innerHTML = `
+              <div class="marker-content flex flex-col items-center">
+                <img src="${item.src}" alt="${item.label}" 
+                     style="width:100px; height:100px; object-fit:cover; border: 2px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <span class="marker-label bg-white px-2 py-1 rounded text-xs font-bold mt-1 shadow-sm">${item.label}</span>
+              </div>
+            `;
+
+            // Add to map
+            new mapboxgl.Marker(el)
+              .setLngLat(item.coordinates)
+              .addTo(map);
+
+            // Interaction
+            el.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const modal    = document.getElementById('marker-modal');
+              const modalImg = document.getElementById('marker-modal-img');
+              const modalDesc = document.getElementById('marker-modal-desc');
+              modalImg.src = item.src;
+              modalImg.alt = item.label;
+              modalDesc.textContent = item.description || '';
+              modal.classList.add('open');
+              modal.setAttribute('aria-hidden', 'false');
+            });
+          });
+
+          // Close modal
+          const markerModalClose    = document.getElementById('marker-modal-close');
+          const markerModalBackdrop = document.getElementById('marker-modal-backdrop');
+          function closeMarkerModal() {
+            const modal = document.getElementById('marker-modal');
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+          }
+          if (markerModalClose)    markerModalClose.addEventListener('click', closeMarkerModal);
+          if (markerModalBackdrop) markerModalBackdrop.addEventListener('click', closeMarkerModal);
+          document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMarkerModal(); });
+        } catch (err) {
+          console.error('Error loading markers:', err);
+        }
+      });
+
+    } catch (e) {
+      console.error('Mapbox initialization failed:', e);
+    }
+  });
+})();
