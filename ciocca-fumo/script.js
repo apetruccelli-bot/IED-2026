@@ -12,6 +12,39 @@ const lbClose    = document.getElementById('lb-close');
 const lbPrev     = document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
+const categoryTexts = {
+  fotografie: {
+    japanese: `ある実業家がまるでその中を探そうとするかのように
+腰をかがめて吸い殻を拾い上げた。`,
+    english: `Portraits collects photographs of people smoking in Osaka between 1985 and 1990. These images show smoking as a daily gesture, part of work, waiting, conversation and urban life.`
+  },
+
+  pacchetti: {
+    japanese: `タバコの箱は、色、文字、場所によって集められた
+小さな記憶の断片である。`,
+    english: `Cigarette packs presents the visual archive of tobacco packaging: colors, lettering and graphic details collected between Osaka, Tokyo, Kyoto and Nara.`
+  },
+
+  pubblicità: {
+    japanese: `広告は、喫煙が日常の中でどのように語られ、
+見せられていたかを記録している。`,
+    english: `Advertisements shows how cigarettes were represented through commercial images, slogans and visual culture.`
+  }
+};
+
+function updateCategoryText(category) {
+  const japaneseText = document.getElementById("category-japanese-text");
+  const englishText = document.getElementById("category-english-text");
+
+  if (!japaneseText || !englishText) return;
+
+  const text = categoryTexts[category] || categoryTexts.fotografie;
+
+  japaneseText.textContent = text.japanese;
+  englishText.textContent = text.english;
+}
+
+
 
 let items = [];          // original data from JSON
 let displayItems = [];   // current display order (may be shuffled)
@@ -21,6 +54,8 @@ let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
 let activeCategory = null; // 'fotografie' | 'pacchetti' | 'pubblicità' | null
 let activeYear = null;     // e.g. 1985 | null
+let activeFilter = null;
+let activeFilterType = null;
 
 // ── Load data ──────────────────────────────────────────────────────────────
 async function loadData() {
@@ -76,31 +111,150 @@ function toggleTag(tag) {
 
 // ── Filter logic ──────────────────────────────────────────────────────────
 function filteredItems() {
-  const q = searchQuery.toLowerCase().trim();
   return displayItems.filter(item => {
     const matchesCategory = !activeCategory || item.category === activeCategory;
-    const matchesTags =
-      activeTags.size === 0 ||
-      [...activeTags].every(t => item.tags.includes(t));
-    const matchesSearch =
-      q === '' ||
-      item.description.toLowerCase().includes(q) ||
-      item.tags.some(t => t.toLowerCase().includes(q));
-    return matchesCategory && matchesTags && matchesSearch;
+
+    let matchesCustomFilter = true;
+
+    if (activeFilter && activeFilterType === "year") {
+      matchesCustomFilter = Number(item.year) === Number(activeFilter);
+    }
+
+    if (activeFilter && activeFilterType === "tag") {
+      matchesCustomFilter =
+        item.tags?.includes(activeFilter) ||
+        item["tags-fotografie"]?.includes(activeFilter) ||
+        item["tags-pacchetti"]?.includes(activeFilter);
+    }
+
+    if (activeFilter && activeFilterType === "luogo") {
+      matchesCustomFilter =
+        item["luogo-pacchetti"]?.toLowerCase() === activeFilter.toLowerCase() ||
+        item.tags?.includes(activeFilter.toLowerCase());
+    }
+
+    return matchesCategory && matchesCustomFilter;
   });
 }
 
 // ── Category filter ───────────────────────────────────────────────────────
 function setCategory(cat) {
   activeCategory = activeCategory === cat ? null : cat;
+  updateCategoryText(activeCategory || "fotografie");
+
+  activeFilter = null;
+  activeFilterType = null;
+
   document.querySelectorAll('[data-category]').forEach(el => {
     el.style.opacity = (!activeCategory || el.dataset.category === activeCategory) ? '1' : '0.35';
   });
-  // apply layout class to grid
+
   grid.classList.remove('layout-fotografie', 'layout-pacchetti', 'layout-pubblicita');
-  if (activeCategory === 'pacchetti')  grid.classList.add('layout-pacchetti');
+
+  if (activeCategory === 'pacchetti') grid.classList.add('layout-pacchetti');
   if (activeCategory === 'pubblicità') grid.classList.add('layout-pubblicita');
+
+  renderCategoryFilters(activeCategory || "fotografie");
   render();
+}
+const filtersByCategory = {
+  fotografie: [
+    {
+      title: "状態 Status",
+      type: "tag",
+      values: ["day", "evening", "far away", "close by"]
+    },
+    {
+      title: "人々 People",
+      type: "tag",
+      values: ["肖像 portrait", "集合写真 group", "先輩 senpai", "様 sama", "君 kun"]
+    },
+    {
+      title: "年 Year",
+      type: "year",
+      values: [1985, 1986, 1987, 1988, 1989, 1990]
+    }
+  ],
+
+  pacchetti: [
+    {
+      title: "色 Color",
+      type: "tag",
+      values: ["青 blue", "白 white", "赤 red", "黄 yellow", "緑 green"]
+    },
+    {
+      title: "年 Year",
+      type: "year",
+      values: [1985, 1986, 1987, 1988, 1989, 1990]
+    },
+    {
+      title: "場所 Place",
+      type: "luogo",
+      values: ["大阪 Osaka", "東京 Tokyo", "京都 Kyoto", "奈良 Nara"]
+    }
+  ],
+
+  pubblicità: [
+    {
+      title: "年 Year",
+      type: "year",
+      values: [1985, 1986, 1987, 1988, 1989, 1990]
+    }
+  ]
+};
+
+function renderCategoryFilters(category) {
+  const panel = document.getElementById("filters-panel");
+  if (!panel) return;
+
+  panel.innerHTML = "";
+
+  const filters = filtersByCategory[category] || [];
+
+  filters.forEach(group => {
+    const div = document.createElement("div");
+    div.className = "filter col-span-4 grid grid-cols-4 gap-x-10px gap-y-5px h-fit";
+
+    div.innerHTML = `
+      <p class="col-span-1">${group.title}</p>
+      <p class="col-span-3 flex flex-wrap gap-x-10px">
+        ${group.values.map(value => `
+          <span class="cursor-pointer filter-option"
+                data-filter-type="${group.type}"
+                data-filter-value="${value}">
+            ${value}
+          </span>
+        `).join("")}
+      </p>
+    `;
+
+    panel.appendChild(div);
+  });
+
+  document.querySelectorAll(".filter-option").forEach(option => {
+    option.addEventListener("click", () => {
+      const value = option.dataset.filterValue;
+      const type = option.dataset.filterType;
+
+      if (activeFilter === value && activeFilterType === type) {
+        activeFilter = null;
+        activeFilterType = null;
+      } else {
+        activeFilter = value;
+        activeFilterType = type;
+      }
+
+      document.querySelectorAll(".filter-option").forEach(el => {
+        el.style.opacity =
+          activeFilter === el.dataset.filterValue &&
+          activeFilterType === el.dataset.filterType
+            ? "1"
+            : "0.35";
+      });
+
+      render();
+    });
+  });
 }
 
 // ── Shuffle array (Fisher-Yates) ──────────────────────────────────────────
@@ -313,3 +467,5 @@ function setYear(year) {
 }
 // ── Init ──────────────────────────────────────────────────────────────────
 loadData();
+renderCategoryFilters("fotografie");
+setCategory("fotografie");

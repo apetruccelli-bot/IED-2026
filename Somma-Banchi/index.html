@@ -18,7 +18,7 @@
   </head>
   <body>
     <header>
-      <span onclick="closeStoriaModal(); closeExploreMode();" class="font-myTitle cursor-pointer">Di Macelleria in Macelleria</span>
+      <span onclick="closeStoriaModal(); closeExploreMode();" class="font-myTitle cursor-pointer">De veciariìe</span>
       <div class="flex gap-20px">
         <span id="nav-cerca-coltelli" onclick="openExploreMode()" 
         class="font-myTitle cursor-pointer opacity-20 hover:opacity-100 transition-opacity" >Cerca coltelli</span>
@@ -31,7 +31,7 @@
     grid grid-cols-15 gap-10px">
       <div class="descriptionAndFilters col-span-3 h-full flex flex-col justify-between pb-10px">
         <div class="description flex flex-col gap-10px">
-          <div class="english text-myGrey">Lorem ipsum dolor sit amet.</div>
+          
         </div>
 
         <!-- Explore mode panel -->
@@ -70,7 +70,10 @@
         <span onclick="closeStoriaModal()" class="font-myTitle cursor-pointer">Close</span>
       </div>
       <div class="storia-modal-content">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div style="display: flex; gap: 20px; align-items: stretch;">
+          <img src="img/b17.png" alt="Banco di vendita di Gigi, Martina Franca, 1989" style="width: 8%; height: 60%; flex-shrink: 0; object-fit: cover;">
+          <p>De Veciariìe, termine del dialetto barese che sta per "Macellerie", è l'archivio nato dall'idea di Ruggiero Somma che voleva rendere omaggio al suo mestiere. Ruggiero era un macellaio originario di Barletta that aveva trovato a Bari la sua casa e la sua bottega. Per lui, il mestiere non era solo vendere carne, era una cultura fatta di gesti precisi, di utensili e di rapporti umani. Così, tra gli anni 80 e 90,  con una macchina fotografica sempre a portata di mano, iniziò a documentare tutto quello che vedeva durante i suoi viaggi in giro per la Puglia. Fotografava le collezioni di coltelli dei suoi colleghi, quasi fossero reliquie, e poi i banchi da lavoro, le insegne colorate dei negozi di paese, le saracinesche pesanti e i tagli di carne eseguiti a regola d'arte. Il suo obiettivo era creare una raccolta che rimanesse nel tempo, una sorta di eredità che potesse trasmettere quello che c'era dietro il suo mestiere. Voleva che chi sarebbe venuto dopo di lui potesse vedere com'era la vita nelle botteghe pugliesi in quegli anni di benessere. Ma proprio mentre l'archivio prendeva la sua forma definitiva, la realtà prese una piega diversa. L'arrivo della "Mucca Pazza" in Italia non fu solo una crisi sanitaria, ma un terremoto sociale che distrusse la fiducia della gente e svuotò le macellerie. La Macelleria Somma, che doveva essere la custode di questa memoria, fu costretta a chiudere i battenti, e con lei sparirono molti dei negozi che Ruggiero aveva fotografato con tanta cura in tutta la regione. Così, quello che doveva essere l'orgoglioso album di una categoria vincente si trasformò, quasi per ironia della sorte, nel documento di un fallimento collettivo. Senza volerlo, Ruggiero aveva creato l'unica testimonianza rimasta di un mondo cancellato da un'emergenza sanitaria e sociale. Oggi, sfogliare De Veciariìe non significa solo guardare tagli di carne o vecchi negozi, ma immergersi nel racconto malinconico di un uomo che voleva far scoprire al mondo la bellezza del suo mestiere, finendo per consegnarci la cronaca di una scomparsa.</p>
+        </div>
       </div>
     </div>
 
@@ -82,6 +85,7 @@
       <div class="lb-content">
         <img class="lb-img" id="lb-img" src="" alt="">
         <div class="lb-info">
+          <p class="lb-description" id="lb-description"></p>
           <!-- <span class="lb-id" id="lb-id"></span>
           <div class="lb-tags" id="lb-tags"></div> -->
         </div>
