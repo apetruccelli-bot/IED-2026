@@ -1,13 +1,13 @@
 {
   "items": [
     {
-      "id": 1,
-      "src": "img/fumo/businessman7.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
-      "description": "Descrizione dell'immagine"
+  "id": 1,
+  "src": "img/fumo/businessman7.png",
+  "category": "fotografie",
+  "year": 1987,
+  "tags": ["urbano", "business", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "strada", "ritratto", "fumare"],
+  "description": "Uomo in abito elegante fuma una sigaretta lungo una strada urbana di Osaka."
     },
     {
       "id": 2,
@@ -18,37 +18,41 @@
       "description": "Descrizione dell'immagine"
     },
     {
-      "id": 3,
-      "src": "img/fumo/anziano1.png",
-       "year": 1962,
-      "tags": ["urbano"],
-      "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
-      "description": "Descrizione dell'immagine"
-    },
+  "id": 3,
+  "src": "img/fumo/fumo.anziano1.png",
+  "category": "fotografie",
+  "year": 1985,
+  "tags": ["urbano", "anziano", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "seduto", "fumo", "ritratto"],
+  "description": "Anziano seduto lungo la strada fuma osservando la vita urbana di Osaka."
+},
     {
-      "id": 4,
-      "src": "img/fumo/businessman8.png",
-      "category": "fotografie",
-      "year": 1963,
-      "tags": ["ritratto", "luce", "ombra", "volto", "espressione"],
-      "description": "Descrizione dell'immagine"
-        },
+  "id": 4,
+  "src": "img/fumo/businessman8.png",
+  "category": "fotografie",
+  "year": 1988,
+  "tags": ["urbano", "lavoro", "osaka", "giappone"],
+  "tags-fotografie": ["interno", "gruppo", "fumo", "attesa"],
+  "description": "Gruppo di uomini in abiti formali fuma in uno spazio interno affollato a Osaka."
+},
     {
-      "id": 5,
-      "src": "img/fumo/businessman9.png",
-      "category": "fotografie",
-      "year": 1964,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 3,
+  "src": "img/fumo/businessman9.png",
+  "category": "fotografie",
+  "year": 1989,
+  "tags": ["urbano", "ritratto", "osaka", "giappone"],
+  "tags-fotografie": ["profilo", "interno", "fumare", "luci artificiali"],
+  "description": "Primo piano laterale di un uomo che fuma in un ambiente urbano affollato a Osaka."
+},
     {
-      "id": 6,
-      "src": "img/fumo/anziano2.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 6,
+  "src": "img/fumo/fumo.anziano2.png",
+  "category": "fotografie",
+  "year": 1987,
+  "tags": ["urbano", "anziano", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "esterno", "fumo", "quotidiano"],
+  "description": "Anziano fuma seduto davanti a un negozio in una strada di Osaka."
+},
     {
       "id": 7,
       "src": "img/fumo/giovani20.png",
@@ -58,21 +62,23 @@
       "description": "Descrizione dell'immagine"
     },
     {
-      "id": 8,
-      "src": "img/fumo/businessman10.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 8,
+  "src": "img/fumo/businessman10.png",
+  "category": "fotografie",
+  "year": 1986,
+  "tags": ["urbano", "strada", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "vicolo", "azione", "accendere sigaretta"],
+  "description": "Uomo in abito accende una sigaretta in un vicolo della città di Osaka."
+},
     {
-      "id": 9,
-      "src": "img/fumo/businessman11.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 9,
+  "src": "img/fumo/businessman11.png",
+  "category": "fotografie",
+  "year": 1987,
+  "tags": ["urbano", "atmosfera", "osaka", "giappone"],
+  "tags-fotografie": ["nebbia", "sera", "strada", "fumare"],
+  "description": "Uomo fuma in una strada stretta e nebbiosa tra insegne luminose a Osaka."
+},
     {
       "id": 10, 
        "src": "img/fumo/giovani21.png",
@@ -82,37 +88,41 @@
       "description": "Descrizione dell'immagine"
        },
     {
-      "id": 11,
-      "src": "img/fumo/anziano3.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 11,
+  "src": "img/fumo/fumo.anziano3.png",
+  "category": "fotografie",
+  "year": 1989,
+  "tags": ["urbano", "anziano", "osaka", "giappone"],
+  "tags-fotografie": ["ritratto", "fumo", "primo piano", "giorno"],
+  "description": "Primo piano di un anziano che accende una sigaretta tra la folla a Osaka."
+},
     {
-      "id": 12,
-      "src": "img/fumo/businessman12.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 12,
+  "src": "img/fumo/businessman12.png",
+  "category": "fotografie",
+  "year": 1986,
+  "tags": ["urbano", "lavoro", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "dettaglio", "sigaretta", "mani"],
+  "description": "Dettaglio di un uomo in abito mentre accende una sigaretta tra la folla a Osaka."
+},
     {
-      "id": 13,
-      "src": "img/fumo/businessman13.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 13,
+  "src": "img/fumo/businessman13.png",
+  "category": "fotografie",
+  "year": 1990,
+  "tags": ["urbano", "notturno", "osaka", "giappone"],
+  "tags-fotografie": ["sera", "luci", "strada", "fumare"],
+  "description": "Uomo fuma in una strada illuminata da insegne al neon nella Osaka notturna."
+},
     {
-      "id": 14,
-      "src": "img/fumo/anziano4.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-    },
+  "id": 14,
+  "src": "img/fumo/fumo.anziano4.png",
+  "category": "fotografie",
+  "year": 1986,
+  "tags": ["urbano", "anziano", "osaka", "giappone"],
+  "tags-fotografie": ["seduto", "strada", "fumo", "conversazione"],
+  "description": "Due anziani seduti fumano e conversano lungo una strada di Osaka."
+},
     {
       "id": 15,
       "src": "img/fumo/giovani22.png",
@@ -122,21 +132,23 @@
       "description": "Descrizione dell'immagine"
        },
     {
-      "id": 16,
-      "src": "img/fumo/businessman14.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 16,
+  "src": "img/fumo/businessman14.png",
+  "category": "fotografie",
+  "year": 1988,
+  "tags": ["urbano", "incontro", "osaka", "giappone"],
+  "tags-fotografie": ["strada", "dialogo", "fumare", "nebbia"],
+  "description": "Due uomini si incontrano in strada mentre uno fuma in un contesto urbano di Osaka."
+},
     {
-      "id": 17,
-      "src": "img/fumo/businessman15.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 17,
+  "src": "img/fumo/businessman15.png",
+  "category": "fotografie",
+  "year": 1989,
+  "tags": ["urbano", "movimento", "osaka", "giappone"],
+  "tags-fotografie": ["strada", "camminare", "fumare", "giorno"],
+  "description": "Uomo in giacca cammina lungo una strada cittadina fumando a Osaka."
+},
     {
       "id": 18,
       "src": "img/fumo/giovani23.png",
@@ -146,21 +158,23 @@
       "description": "Descrizione dell'immagine"
        },   
     {
-       "id": 19,
-      "src": "img/fumo/anziano5.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
-    {   
-      "id": 20,
-      "src": "img/fumo/businessman16.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       }, 
+  "id": 19,
+  "src": "img/fumo/fumo.anziano5.png",
+  "category": "fotografie",
+  "year": 1988,
+  "tags": ["urbano", "anziano", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "dettaglio", "fumo", "oggetti"],
+  "description": "Anziano fuma tenendo una tazza, seduto vicino a oggetti in vendita a Osaka."
+},
+    {
+  "id": 20,
+  "src": "img/fumo/businessman16.png",
+  "category": "fotografie",
+  "year": 1985,
+  "tags": ["urbano", "lavoro", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "accovacciato", "sigaretta", "pausa"],
+  "description": "Uomo in abito accovacciato sul marciapiede durante una pausa lavoro a Osaka."
+}, 
     {
        "id": 21,
       "src": "img/fumo/businessman17.png",
