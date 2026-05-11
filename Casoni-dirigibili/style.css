@@ -16,7 +16,14 @@
   font-style: normal;
 }
 
-
+/* HIDE SCROLLBAR */
+*::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -33,7 +40,6 @@
   width: 552px;
   margin-top: 0px;
   color: var(--myWhite);
-  margin-left: 10px;
 }
 
 :root {
@@ -68,6 +74,7 @@ body {
 *:not(.font-myTitle) {
   font-family: 'SchengenA Regular', sans-serif;
   font-size: 12px;
+  line-height: 120%;
 }
 
 .font-myTitle {
@@ -406,7 +413,8 @@ button {
   overflow-x: auto;
   overflow-y: hidden;
   gap: 10px;
-  padding: 10px;
+  height: 100%;
+  align-items: stretch;
 }
 
 .horizontal-scroll::-webkit-scrollbar {
@@ -429,8 +437,11 @@ button {
 .scroll-img {
   flex: 0 0 auto;
   height: 100%;
+  width: auto;
   object-fit: contain;
   max-width: 400px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
 }
 
 .lb-meta-row {
@@ -450,6 +461,32 @@ button {
   overflow-y: hidden;
   background: #080808;
   padding: 10px;
+}
+
+.gallery-scroll-about {
+  width: 100vw;
+  height: clamp(110px, 12vh, 180px);
+  display: flex;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  background: #080808;
+  padding: 8px 10px;
+}
+
+/* Right column main image (about page) — make it smaller */
+.right-column-img {
+  max-width: 90%;
+  width: auto;
+  max-height: 70%;
+  height: auto;
+}
+
+.right-column-caption {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--myWhite);
+  opacity: 0.9;
+  text-align: left;
 }
 
 .archive-gallery {
@@ -492,7 +529,7 @@ button {
 .filter-row {
   display: grid;
   grid-template-columns: 8rem auto;
-  items-center: center;
+  align-items: center;
   gap: 10px;
   margin-bottom: 4px;
 }
