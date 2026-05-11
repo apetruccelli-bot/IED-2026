@@ -10,6 +10,7 @@
       @theme {
         --color-myBlack: #090909;
         --color-myWhite: #FAFAFA;
+        --color-lightGrey: #EBEBEA;
         --spacing-10px: 10px;
         --spacing-20px: 20px;
       }
@@ -17,31 +18,14 @@
   </head>
   <body>
     <header>
-
-      <a href="./" class="font-myTitle">Di Macelleria in Macelleria</a>
+      <span onclick="closeStoriaModal(); closeExploreMode();" class="font-myTitle cursor-pointer">Di Macelleria in Macelleria</span>
       <div class="flex gap-20px">
-        <a href="./" class="font-myTitle">Esplora</a>
-        <a href="./" class="font-myTitle">Storia</a>
+        <span id="nav-cerca-coltelli" onclick="openExploreMode()" 
+        class="font-myTitle cursor-pointer opacity-20 hover:opacity-100 transition-opacity" >Cerca coltelli</span>
+        <span id="nav-storia" onclick="openStoriaModal()"
+        class="font-myTitle cursor-pointer">Storia</span>
       </div>
-
-      <!-- <div class="header-inner">
-        <div class="header-row">
-          <div class="search-wrap">
-            <input
-              id="search"
-              type="search"
-              placeholder="Cerca…"
-              autocomplete="off"
-            />
-          </div>
-          <button class="btn-random" id="btn-random">Random</button>
-        </div>
-        <div class="tags-bar" id="tags-bar"></div>
-      </div -->
-
     </header>
-
-    <!-- <p class="results-info" id="results-info"></p> -->
     
     <div class="mainLayout fixed top-0 left-0 w-screen h-screen overflow-y-scroll
     grid grid-cols-15 gap-10px">
@@ -49,6 +33,25 @@
         <div class="description flex flex-col gap-10px">
           <div class="english text-myGrey">Lorem ipsum dolor sit amet.</div>
         </div>
+
+        <!-- Explore mode panel -->
+        <div id="explore-description-panel" class="explore-description-panel">
+          <button onclick="closeExploreMode()" class="explore-close-btn">✕ Torna all'archivio</button>
+          <video id="explore-webcam" class="explore-webcam" autoplay muted playsinline></video>
+          <div class="explore-description disossare">
+            <p>Disossare</p>
+            <p>descrizione di dissosare</p>
+          </div>
+          <div class="explore-description tagliare">
+            <p>Tagliare</p>
+            <p>descrizione di tagliare</p>
+          </div>
+          <div class="explore-description tagliare-e-affettare">
+            <p>Tagliare e Affettare</p>
+            <p>descrizione di tagliare e affettare</p>
+          </div>
+        </div>
+
         <div id="filters-container" 
         class="filters flex flex-col gap-12 mt-auto h-fit"></div>
       </div>
@@ -60,7 +63,16 @@
       </main>
     </div>
 
-
+    <!-- Storia modal -->
+    <div id="storia-modal" class="storia-modal">
+      <div class="storia-modal-bar">
+        <span class="font-myTitle">Storia</span>
+        <span onclick="closeStoriaModal()" class="font-myTitle cursor-pointer">Close</span>
+      </div>
+      <div class="storia-modal-content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+    </div>
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
@@ -76,6 +88,14 @@
       </div>
     </div>
 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+    <script src="somma-lm.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

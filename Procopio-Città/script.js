@@ -9,6 +9,14 @@ const lbClose = document.getElementById('lb-close');
 const lbPrev = document.getElementById('lb-prev');
 const lbNext = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
+const markerModal = document.getElementById('marker-modal');
+const markerModalImg = document.getElementById('marker-modal-img');
+const markerModalId = document.getElementById('marker-modal-id');
+const markerModalDesc = document.getElementById('marker-modal-desc');
+const markerModalClose = document.getElementById('marker-modal-close');
+const markerModalPrev = document.getElementById('marker-modal-prev');
+const markerModalNext = document.getElementById('marker-modal-next');
+const markerModalBackdrop = document.getElementById('marker-modal-backdrop');
 
 const archiveRows = [
   { anno: '1964', autore: 'Scorza', regione: 'Calabria', abitanti: 'Meno di 10', documento: 'Fotografia' },
@@ -20,8 +28,10 @@ const archiveRows = [
 
 let enrichedRows = [];
 let allItems = [];
+let mapItems = [];
 let activeTags = new Set();
 let lbIndex = -1;
+let markerIndex = -1;
 
 function escapeHtml(value) {
   return String(value)
@@ -120,9 +130,8 @@ function galleryTemplate(item, index) {
   if (!item.src) return '';
 
   return `
-    <div data-item-index="${index}" class="col-span-3 flex cursor-pointer flex-col transition-opacity hover:opacity-80 pb-12">
+    <div data-item-index="${index}" class="col-span-3 flex cursor-pointer flex-col transition-opacity hover:opacity-80">
       <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.description || 'Immagine archivio')}" class="h-auto w-full" loading="lazy">
-      <p class="mt-10px font-myTitle">${escapeHtml(item.description || 'Senza descrizione')}</p>
     </div>
   `;
 }
@@ -195,6 +204,43 @@ function closeLightbox() {
   lbImg.src = '';
 }
 
+function openMarkerModal(index) {
+  if (!markerModal || !markerModalImg || !markerModalDesc) return;
+
+  const item = mapItems[index];
+  if (!item) return;
+
+  markerIndex = index;
+  markerModalImg.src = item.src;
+  markerModalImg.alt = item.label || 'Immagine marker';
+  if (markerModalId) {
+    markerModalId.textContent = item.id != null ? `( ${item.id} )` : 'ID non disponibile';
+  }
+  markerModalDesc.textContent = item.description || '';
+
+  markerModal.classList.add('open');
+  markerModal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMarkerModal() {
+  if (!markerModal) return;
+
+  markerModal.classList.remove('open');
+  markerModal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  if (markerModalImg) markerModalImg.src = '';
+}
+
+function navigateMarkerModal(direction) {
+  if (!mapItems.length) return;
+
+  let nextIndex = markerIndex + direction;
+  if (nextIndex >= mapItems.length) nextIndex = 0;
+  if (nextIndex < 0) nextIndex = mapItems.length - 1;
+  openMarkerModal(nextIndex);
+}
+
 function navigateLightbox(direction) {
   const visible = [...document.querySelectorAll('[data-item-index]:not(.hidden)')];
   const currentPos = visible.findIndex((el) => Number(el.dataset.itemIndex) === lbIndex);
@@ -209,12 +255,12 @@ if (lbBackdrop) lbBackdrop.addEventListener('click', closeLightbox);
 if (lbPrev) lbPrev.addEventListener('click', () => navigateLightbox(-1));
 if (lbNext) lbNext.addEventListener('click', () => navigateLightbox(1));
 
-document.addEventListener('keydown', (event) => {
+/* document.addEventListener('keydown', (event) => {
   if (!lightbox.classList.contains('open')) return;
   if (event.key === 'ArrowLeft') navigateLightbox(-1);
   if (event.key === 'ArrowRight') navigateLightbox(1);
   if (event.key === 'Escape') closeLightbox();
-});
+}); */
 
 if (searchInput) {
   searchInput.addEventListener('input', (event) => {
@@ -266,43 +312,94 @@ hydrateRowsWithImages()
   });
 })();
 
+
+
+
+//pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cG4wYjkwMzhuNDhzZW9nbG84NjZyIn0.AqkBWyL51ozeXHUJR2snXg
 // Initialize Mapbox background on home page
-(function(){
-  document.addEventListener('DOMContentLoaded', function(){
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
     const mapEl = document.getElementById('home-map');
     if (!mapEl || typeof mapboxgl === 'undefined') return;
+
     try {
-      //mapboxgl.accessToken = 'pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cTBtdnQwZHd1MnJyMW95Mmk0cjNqIn0.RO2i7KN9XgFmNMMVz_iInQ'; // <-- replace with your token
-      mapboxgl.accessToken = 'pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cG4wYjkwMzhuNDhzZW9nbG84NjZyIn0.AqkBWyL51ozeXHUJR2snXg'; // <-- replace with your token
-      // ensure the map container has a visible height before init
+      mapboxgl.accessToken = 'pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cG4wYjkwMzhuNDhzZW9nbG84NjZyIn0.AqkBWyL51ozeXHUJR2snXg';
       mapEl.style.display = 'block';
       mapEl.style.height = window.innerHeight + 'px';
 
+      const bounds = [
+        [12, 36], // Southwest coordinates
+        [19.5, 42.5] // Northeast coordinates
+      ];
+
+
       const map = new mapboxgl.Map({
         container: 'home-map',
-        //style: 'mapbox://styles/mapbox/streets-v12',
-        style: 'mapbox://styles/martiinaprocopio/cmowrladb001p01saaambdxq8',
-        center: [9.11, 45.07], // example: Torino
-        zoom: 11,
+        style: 'mapbox://styles/martiinaprocopio/cmowvc4ao001n01r5g7ad3t1i',
+        center: [13, 39.5],
+        zoom: 4.3,
+        /* maxZoom: 8,
+        minZoom: 5, */
+        maxBounds: bounds
       });
+      window.procopioMap = map;
 
-      // ADD THIS: Log errors to the console
-      map.on('error', (e) => {
-        console.error('Mapbox specific error:', e.error.message);
-      });
-
-      map.on('load', () => {
-        console.log('Map loaded successfully!');
-      });
-
-      // keep map resized if layout changes
+      // Handle resize
       window.addEventListener('resize', () => {
         mapEl.style.height = window.innerHeight + 'px';
         map.resize();
       });
+
+      // Logic for markers must be INSIDE the same block or passed the map variable
+      map.on('load', async () => {
+        console.log('Map loaded, fetching markers...');
+        try {
+          const response = await fetch('map-data.json');
+          if (!response.ok) throw new Error('Network response was not ok');
+          const mapData = await response.json();
+          mapItems = Array.isArray(mapData.items) ? mapData.items : [];
+
+          mapItems.forEach((item, index) => {
+            // Create element
+            const el = document.createElement('div');
+            el.className = 'custom-marker pointer-events-auto'; // Tailwind helper
+            el.innerHTML = `
+              <div class="marker-content flex flex-col items-center">
+                <img src="${item.src}" alt="${item.label}" 
+                     style="width:100px; height:100px; object-fit:cover; border: 2px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <span class="marker-label bg-white px-2 py-1 rounded text-xs font-bold mt-1 shadow-sm">${item.label}</span>
+              </div>
+            `;
+
+            // Add to map
+            new mapboxgl.Marker(el)
+              .setLngLat(item.coordinates)
+              .addTo(map);
+
+            // Interaction
+            el.addEventListener('click', (e) => {
+              e.stopPropagation();
+              openMarkerModal(index);
+            });
+          });
+
+          if (markerModalClose) markerModalClose.addEventListener('click', closeMarkerModal);
+          if (markerModalPrev) markerModalPrev.addEventListener('click', () => navigateMarkerModal(-1));
+          if (markerModalNext) markerModalNext.addEventListener('click', () => navigateMarkerModal(1));
+          if (markerModalBackdrop) markerModalBackdrop.addEventListener('click', closeMarkerModal);
+          document.addEventListener('keydown', (e) => {
+            if (!markerModal || !markerModal.classList.contains('open')) return;
+            if (e.key === 'ArrowLeft') navigateMarkerModal(-1);
+            if (e.key === 'ArrowRight') navigateMarkerModal(1);
+            if (e.key === 'Escape') closeMarkerModal();
+          });
+        } catch (err) {
+          console.error('Error loading markers:', err);
+        }
+      });
+
     } catch (e) {
-      // ignore map init errors
-      console.warn('Mapbox init failed', e);
+      console.error('Mapbox initialization failed:', e);
     }
   });
 })();

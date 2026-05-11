@@ -10,14 +10,77 @@ const exploreRelittoImage = 'img/relitti/relitto (4).png';
 const exploreRelittoImage7 = 'img/relitti/relitto (7).png';
 const exploreRelittoImage21 = 'img/relitti/relitto (21).png';
 const exploreDirigibileImage9 = 'img/dirigibili/dirigibile (9).png';
-const exploreGiornaleImage8 = 'img/giornali/giornale (8).png';
+const exploreDirigibileImage19 = 'img/dirigibili/dirigibile (19).png';
 const exploreDirigibileImage1 = 'img/dirigibili/dirigibile (1).png';
 const exploreDirigibileImage17 = 'img/dirigibili/dirigibile (17).png';
 const exploreDirigibileImage18 = 'img/dirigibili/dirigibile (18).png';
 const exploreDirigibileImage16 = 'img/dirigibili/dirigibile (16).png';
 
+const exploreArtIds = [
+  'explore-art-dirigibile-19',
+  'explore-art-dirigibile-1',
+  'explore-art-dirigibile-2',
+  'explore-art-dirigibile-4',
+  'explore-art-dirigibile-10',
+  'explore-art-dirigibile-17',
+  'explore-art-dirigibile-18',
+  'explore-art-dirigibile-16',
+  'explore-art-airship-16',
+  'explore-art-relitto-4',
+  'explore-art-relitto-7',
+  'explore-art-relitto-21',
+  'explore-art-dirigibile-9',
+];
+
+const exploreLeftAirshipOptions = [
+  'explore-art-dirigibile-1',
+  'explore-art-dirigibile-2',
+  'explore-art-dirigibile-4',
+  'explore-art-dirigibile-10',
+];
+
+let exploreLeftAirshipCurrentId = null;
+let exploreLeftAirshipLastId = null;
+let exploreLeftAirshipWasActive = false;
+
+function setExploreArtVisible(activeId) {
+  exploreArtIds.forEach(id => {
+    const img = document.getElementById(id);
+    if (img) img.style.opacity = id === activeId ? '1' : '0';
+  });
+}
+
+function pickExploreAirshipId(previousId) {
+  const candidates = exploreLeftAirshipOptions.filter(id => id !== previousId);
+  const pool = candidates.length > 0 ? candidates : exploreLeftAirshipOptions;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function getExploreArtLabelById(id) {
+  switch (id) {
+    case 'explore-art-dirigibile-19': return 'dirigibile (19)';
+    case 'explore-art-dirigibile-1': return 'airship (1)';
+    case 'explore-art-dirigibile-2': return 'airship (2)';
+    case 'explore-art-dirigibile-4': return 'airship (4)';
+    case 'explore-art-dirigibile-10': return 'airship (10)';
+    case 'explore-art-dirigibile-17': return 'dirigibile (17)';
+    case 'explore-art-dirigibile-18': return 'dirigibile (18)';
+    case 'explore-art-dirigibile-16': return 'dirigibile (16)';
+    case 'explore-art-airship-16': return 'airship (16)';
+    case 'explore-art-relitto-4': return 'relitto (4)';
+    case 'explore-art-relitto-7': return 'relitto (7)';
+    case 'explore-art-relitto-21': return 'relitto (21)';
+    case 'explore-art-dirigibile-9': return 'dirigibile (9)';
+    default: return '';
+  }
+}
+
 function openExploreModal() {
   const modal = document.getElementById('explore-modal');
+  setExploreArtVisible(null);
+  exploreLeftAirshipCurrentId = null;
+  exploreLeftAirshipLastId = null;
+  exploreLeftAirshipWasActive = false;
   modal.style.display = 'flex';
   initExplore();
 }
@@ -26,6 +89,8 @@ function closeExploreModal() {
   const modal = document.getElementById('explore-modal');
   modal.style.display = 'none';
   exploreIsDetecting = false;
+  setExploreArtVisible(null);
+  exploreLeftAirshipWasActive = false;
   if (exploreStream) {
     exploreStream.getTracks().forEach(t => t.stop());
     exploreStream = null;
@@ -122,8 +187,8 @@ async function detectExploreHands() {
       const isLeftHand = String(handedness).toLowerCase() === 'left';
       const colorArray = isLeftHand ? images_left : images_right;
       const color = colorArray[segmentIndex];
-      const showGiornale8 = isLeftHand && segmentIndex === 0;
-      const showDirigibile1 = isLeftHand && segmentIndex === 1;
+      const showDirigibile19 = isLeftHand && segmentIndex === 0;
+      const showLeftAirshipRange = isLeftHand && segmentIndex === 1;
       const showDirigibile17 = isLeftHand && segmentIndex === 2;
       const showDirigibile18 = isLeftHand && segmentIndex === 3;
       const showDirigibile16 = isLeftHand && segmentIndex === 4;
@@ -132,57 +197,66 @@ async function detectExploreHands() {
       const showRelitto7 = isRightHand && segmentIndex === 2;
       const showRelitto21 = isRightHand && segmentIndex === 3;
       const showDirigibile9 = isRightHand && segmentIndex === 4;
-      if (showGiornale8) {
+      if (!showLeftAirshipRange && exploreLeftAirshipWasActive && exploreLeftAirshipCurrentId) {
+        exploreLeftAirshipLastId = exploreLeftAirshipCurrentId;
+      }
+      if (!showLeftAirshipRange) {
+        exploreLeftAirshipWasActive = false;
+        exploreLeftAirshipCurrentId = null;
+      }
+      if (showDirigibile19) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        square.innerHTML = '<img src="' + exploreGiornaleImage8 + '" alt="giornale (8)" style="display:block; width:auto; height:auto; max-width:100%; max-height:100%; margin:auto;">';
-      } else if (showDirigibile1) {
+        setExploreArtVisible('explore-art-dirigibile-19');
+      } else if (showLeftAirshipRange) {
+        // Always show only 'airship (1)' when left hand angle is between 31° and 50°
+        exploreLeftAirshipCurrentId = 'explore-art-dirigibile-1';
+        exploreLeftAirshipWasActive = true;
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        square.innerHTML = '<img src="' + exploreDirigibileImage1 + '" alt="dirigibile (1)" style="display:block; width:auto; height:auto; max-width:100%; max-height:100%; margin:auto;">';
+        setExploreArtVisible('explore-art-dirigibile-1');
       } else if (showDirigibile17) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        square.innerHTML = '<img src="' + exploreDirigibileImage17 + '" alt="dirigibile (17)" style="display:block; width:auto; height:auto; max-width:100%; max-height:100%; margin:auto;">';
+        setExploreArtVisible('explore-art-dirigibile-17');
       } else if (showDirigibile18) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        square.innerHTML = '<img src="' + exploreDirigibileImage18 + '" alt="dirigibile (18)" style="display:block; width:auto; height:auto; max-width:100%; max-height:100%; margin:auto;">';
+        setExploreArtVisible('explore-art-dirigibile-18');
       } else if (showDirigibile16) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        square.innerHTML = '<img src="' + exploreDirigibileImage16 + '" alt="dirigibile (16)" style="display:block; width:auto; height:auto; max-width:100%; max-height:100%; margin:auto;">';
+        setExploreArtVisible('explore-art-dirigibile-16');
       } else if (showAirship) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        square.innerHTML = '<img src="' + exploreAirshipImage + '" alt="airship (16)" style="display:block; width:auto; height:auto; max-width:100%; max-height:100%; margin:auto;">';
+        setExploreArtVisible('explore-art-airship-16');
       } else if (showRelitto) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        square.innerHTML = '<img src="' + exploreRelittoImage + '" alt="relitto (4)" style="display:block; width:auto; height:auto; max-width:100%; max-height:100%; margin:auto;">';
+        setExploreArtVisible('explore-art-relitto-4');
       } else if (showRelitto7) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        square.innerHTML = '<img src="' + exploreRelittoImage7 + '" alt="relitto (7)" style="display:block; width:auto; height:auto; max-width:100%; max-height:100%; margin:auto;">';
+        setExploreArtVisible('explore-art-relitto-7');
       } else if (showRelitto21) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        square.innerHTML = '<img src="' + exploreRelittoImage21 + '" alt="relitto (21)" style="display:block; width:auto; height:auto; max-width:100%; max-height:100%; margin:auto;">';
+        setExploreArtVisible('explore-art-relitto-21');
       } else if (showDirigibile9) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        square.innerHTML = '<img src="' + exploreDirigibileImage9 + '" alt="dirigibile (9)" style="display:block; width:auto; height:auto; max-width:100%; max-height:100%; margin:auto;">';
+        setExploreArtVisible('explore-art-dirigibile-9');
       } else {
-        square.innerHTML = '';
-        square.style.backgroundImage = 'none';
+        setExploreArtVisible(null);
         square.style.backgroundColor = color;
       }
       status.textContent = handedness.toLowerCase() + ' hand — ' + angle.toFixed(1) + '° (segment ' + (segmentIndex + 1) + '/5)';
       detectLabel.textContent = '✓ ' + handedness + ' hand';
       detectLabel.style.background = 'rgba(0,220,120,0.2)';
       detectLabel.style.color = 'rgba(0,220,120,0.9)';
-      angleLabel.textContent = showGiornale8 ? 'angle: ' + angle.toFixed(1) + '° → giornale (8)' : showDirigibile1 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (1)' : showDirigibile17 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (17)' : showDirigibile18 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (18)' : showDirigibile16 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (16)' : showAirship ? 'angle: ' + angle.toFixed(1) + '° → airship (16)' : showRelitto ? 'angle: ' + angle.toFixed(1) + '° → relitto (4)' : showRelitto7 ? 'angle: ' + angle.toFixed(1) + '° → relitto (7)' : showRelitto21 ? 'angle: ' + angle.toFixed(1) + '° → relitto (21)' : showDirigibile9 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (9)' : 'angle: ' + angle.toFixed(1) + '° → ' + color;
-      angleLabel.style.color = showGiornale8 || showDirigibile1 || showDirigibile17 || showDirigibile18 || showDirigibile16 || showAirship || showRelitto || showRelitto7 || showRelitto21 || showDirigibile9 ? 'rgba(255,255,255,0.9)' : color;
+      angleLabel.textContent = showDirigibile19 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (19)' : showLeftAirshipRange ? 'angle: ' + angle.toFixed(1) + '° → ' + getExploreArtLabelById(exploreLeftAirshipCurrentId) : showDirigibile17 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (17)' : showDirigibile18 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (18)' : showDirigibile16 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (16)' : showAirship ? 'angle: ' + angle.toFixed(1) + '° → airship (16)' : showRelitto ? 'angle: ' + angle.toFixed(1) + '° → relitto (4)' : showRelitto7 ? 'angle: ' + angle.toFixed(1) + '° → relitto (7)' : showRelitto21 ? 'angle: ' + angle.toFixed(1) + '° → relitto (21)' : showDirigibile9 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (9)' : 'angle: ' + angle.toFixed(1) + '° → ' + color;
+      angleLabel.style.color = showDirigibile19 || showLeftAirshipRange || showDirigibile17 || showDirigibile18 || showDirigibile16 || showAirship || showRelitto || showRelitto7 || showRelitto21 || showDirigibile9 ? 'rgba(255,255,255,0.9)' : color;
     } else {
       status.textContent = 'show your hand to the camera';
       detectLabel.textContent = 'no hand detected';

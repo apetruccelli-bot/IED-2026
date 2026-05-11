@@ -4,25 +4,27 @@
   font-style: normal;
 }
 @font-face {
-  font-family: 'Serif';
-  src: url('font/ABCOtto-MediumItalic-Trial.woff2') format('woff2');
-  font-style: italic;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
+.card-tag {
+  /* remove the boxed background so tags appear inline */
   padding: 0;
-}
-*:not(.font-myTitle) {
-  font-family: 'Serif';
-  font-size: 18px;
+  background: transparent;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  cursor: pointer;
+  transition: color 0.12s, text-decoration 0.12s;
 }
 
-.font-myTitle {
-  font-family: 'Serif';
-  font-size: 25px;
-  text-transform: uppercase;
+.card-tag:hover {
+  /* subtle underline on hover instead of filled box */
+  text-decoration: underline;
+  color: var(--text);
+}
+
+.card-tag.highlight {
+  font-weight: 600;
+  color: var(--text);
+}
   line-height: 100%;
   letter-spacing: 0.02em;
 }
@@ -41,11 +43,11 @@ a {
 :root {
   --bg: #1e1e1e;
   --surface: #ffffff;
-  --text: #1a1a1a;
-  --muted: #888880;
+  --text: #E4E4E4;
+  --muted: #E4E4E4;
   --tag-bg: #ebebea;
   --tag-active: #1a1a1a;
-  --tag-active-text: #ffffff;
+  --tag-active-text: #E4E4E4;
   --accent: #1a1a1a;
   --radius: 0px;
   /* layout spacers for fixed panels */
@@ -77,15 +79,38 @@ body {
   left: 18px;
   top: 12px;
   z-index: 220; /* above thumb rail and left panel */
-  color: #fff;
+  color: var(--text);
   font-family: 'Serif';
   font-size: 36px !important;
   line-height: 1.0;
   margin: 0;
   pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ensure children align to the first letter */
 }
 .archive-title .line1 { font-weight: 600; font-size: 36px !important; }
 .archive-title .line2 { font-weight: 400; font-size: 36px !important; }
+.about-title .line1 { font-weight: 400; font-size: 36px !important; }
+
+/* links under the title (About / Book appointment) */
+.title-links {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* align left edges */
+  gap: 10px;
+}
+.title-btn {
+  display: inline-block;
+  padding: 0; /* remove left padding so it lines up with title */
+  background: transparent;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+.title-btn:hover { opacity: 0.6; }
 
 
 .search-wrap {
@@ -118,7 +143,7 @@ body {
 
 .btn-random:hover {
   background: var(--accent);
-  color: #fff;
+  color: var(--text);
   border-color: var(--accent);
 }
 
@@ -150,8 +175,8 @@ body {
 
 /* dim tags that are not part of the selected macro */
 .tag-btn.dimmed {
-  opacity: 0.6;
-  filter: grayscale(10%);
+  opacity: 0.4;
+  filter: none;
 }
 
 .tag-btn {
@@ -172,6 +197,7 @@ body {
   background: var(--tag-active);
   color: var(--tag-active-text);
   border-color: var(--tag-active);
+  opacity: 1 !important;
 }
 
 button {
@@ -270,23 +296,24 @@ button {
 }
 
 .card-tag {
-  padding: 3px 8px;
-  background: var(--tag-bg);
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  color: var(--muted);
+  background: transparent;
+  padding: 0;
+  margin-right: 8px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--text);
   cursor: pointer;
-  transition: background 0.1s, color 0.1s;
+  transition: color 0.12s;
 }
 
 .card-tag:hover {
-  background: var(--accent);
-  color: #ffffff00;
+  text-decoration: none;
+  color: var(--text);
 }
 
 .card-tag.highlight {
-  background: var(--accent);
-  color: #ffffff00;
+  font-weight: 600;
+  color: var(--text);
 }
 
 /* ── EMPTY STATE ── */
@@ -364,12 +391,12 @@ button {
   bottom: 18px;
   width: calc(var(--left-panel-w) - 40px);
   max-height: calc(100vh - 36px);
-  background: rgba(20,20,20,0.95);
-  color: #ddd;
+ 
+  color: var(--text);
   z-index: 150;
   padding: 18px;
   overflow: auto;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+
 }
 .left-panel .macro-bar,
 .left-panel .tags-bar {
@@ -381,13 +408,13 @@ button {
 .left-panel .macro-btn {
   display: inline-block;
   margin: 6px 8px 6px 0;
-  color: rgba(255,255,255,0.75);
+  color: rgba(228,228,228,0.9);
   background: transparent;
 }
 
 .left-panel .tag-btn.active,
 .left-panel .macro-btn.active {
-  color: #fff;
+  color: var(--text);
 }
 
 /* categories-list specific */
@@ -397,19 +424,26 @@ button {
 .categories-list .cat-title {
   font-size: 16px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   margin-bottom: 8px;
   cursor: pointer;
 }
+
+/* underline the macro title when selected */
+.categories-list .cat-title.macro-active {
+  text-decoration: underline;
+  text-decoration-color: var(--text);
+  text-underline-offset: 4px;
+}
 .categories-list .cat-list {
   display: block;
-  color: rgba(255,255,255,0.75);
+  color: rgba(228,228,228,0.9);
 }
 .categories-list .cat-list .tag-btn {
   margin: 4px 10px 6px 0;
   padding: 0;
   background: transparent;
-  color: rgba(255,255,255,0.65);
+  color: rgba(228,228,228,0.85);
   font-size: 13px;
 }
 .categories-list .cat-list .tag-btn.dimmed {
@@ -455,7 +489,7 @@ button {
 
 .lb-id {
   font-size: 10px;
-  color: rgba(255,255,255,0.4);
+  color: var(--muted);
   letter-spacing: 0.08em;
   flex-shrink: 0;
 }
@@ -468,14 +502,14 @@ button {
 }
 
 .lb-tags .card-tag {
-  color: rgba(255,255,255,0.55);
-  background: rgba(255,255,255,0.08);
+  color: var(--text);
+  background: rgba(228,228,228,0.08);
 }
 
 .lb-tags .card-tag:hover,
 .lb-tags .card-tag.highlight {
   background: #fff;
-  color: #1a1a1a;
+  color: var(--text);
 }
 
 .lb-close,
@@ -485,7 +519,7 @@ button {
   z-index: 2;
   background: none;
   border: none;
-  color: rgba(255,255,255,0.7);
+  color: var(--text);
   font-size: 18px;
   cursor: pointer;
   padding: 12px;
@@ -496,7 +530,7 @@ button {
 .lb-close:hover,
 .lb-prev:hover,
 .lb-next:hover {
-  color: #fff;
+  color: var(--text);
 }
 
 .lb-close { top: 16px; right: 20px; font-size: 16px; }
@@ -508,3 +542,17 @@ button {
   opacity: 0.2;
   cursor: default;
 }
+
+/* back to gallery link for About page */
+.back-to-gallery {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 260;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  background: transparent;
+  padding: 8px 10px;
+}
+.back-to-gallery:hover { opacity: 0.8; }

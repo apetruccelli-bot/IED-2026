@@ -150,6 +150,16 @@ function toggleMacro(macro) {
   // tag buttons: mark active and dim those not in macro
   updateTagButtonStates();
 
+  // update macro title underline state in the left categories list
+  const container = document.getElementById('categories-list');
+  if (container) {
+    container.querySelectorAll('.cat-title').forEach(titleEl => {
+      const displayName = titleEl.textContent || '';
+      const key = Object.keys(macros).find(k => k.toLowerCase() === displayName.toLowerCase());
+      titleEl.classList.toggle('macro-active', Boolean(activeMacro && key && key.toLowerCase() === String(activeMacro).toLowerCase()));
+    });
+  }
+
   render();
 }
 
@@ -161,10 +171,17 @@ function updateTagButtonStates() {
   if (!container) return;
   container.querySelectorAll('.tag-btn').forEach(btn => {
     const tag = btn.dataset.tag;
-    btn.classList.toggle('active', activeTags.has(tag));
-    if (macro && (!allowed || !allowed.has(tag))) {
-      btn.classList.add('dimmed');
+    const isActive = activeTags.has(tag);
+    const isFilter = activeTagFilter === tag;
+    // when a macro is active, dim all tags (40%) except the ones explicitly selected
+    if (macro) {
+      // consider either the activeTags (global filters) or the local activeTagFilter
+      const shouldBeUndimmed = isActive || isFilter;
+      btn.classList.toggle('active', shouldBeUndimmed);
+      btn.classList.toggle('dimmed', !shouldBeUndimmed);
     } else {
+      // no macro: restore normal state (no forced dimming)
+      btn.classList.toggle('active', isActive);
       btn.classList.remove('dimmed');
     }
   });

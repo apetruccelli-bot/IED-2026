@@ -149,6 +149,7 @@ body.lightbox-open .tags-bar {
 }
 
 .area-title {
+  font-size: 11px;
   line-height: 1.4;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -232,12 +233,21 @@ button {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+.card.dimmed {
+  opacity: 0.25;
+}
+
 .card-img {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
   display: block;
   background: #ddd;
+}
+
+.card.image-error .card-img {
+  background: #f1f1f1;
+  outline: 1px dashed #999;
 }
 
 .card-desc {
