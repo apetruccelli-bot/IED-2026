@@ -128,10 +128,19 @@ function toggleTag(tag) {
 
 function galleryTemplate(item, index) {
   if (!item.src) return '';
+  const rawCaption = item.description || 'Immagine archivio';
+  const parts = rawCaption.split(',').map((part) => part.trim()).filter(Boolean);
+  const author = parts.length > 1 ? parts[parts.length - 1] : '';
+  const mainTitle = parts.length > 1 ? parts.slice(0, -1).join(', ') : rawCaption;
 
   return `
-    <div data-item-index="${index}" class="col-span-3 flex cursor-pointer flex-col transition-opacity hover:opacity-80">
-      <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.description || 'Immagine archivio')}" class="h-auto w-full" loading="lazy">
+    <div data-item-index="${index}" class="group relative mb-10px inline-block w-full break-inside-avoid cursor-pointer">
+      <img src="${escapeHtml(item.src)}" alt="${escapeHtml(rawCaption)}" class="gallery-image block h-auto w-full" loading="lazy">
+      <div class="gallery-title-wrap pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div class="gallery-title font-myTitle text-myBlack text-center px-4">
+          ${escapeHtml(mainTitle)}${author ? `<br>${escapeHtml(author)}` : ''}
+        </div>
+      </div>
     </div>
   `;
 }
@@ -147,7 +156,7 @@ function renderAll() {
 
   if (galleryHost) {
     galleryHost.innerHTML = allItems.map(galleryTemplate).join('') ||
-      '<p class="col-span-6 p opacity-50">Nessuna immagine trovata.</p>';
+      '<p class="mb-10px block opacity-50">Nessuna immagine trovata.</p>';
   }
 
   document.querySelectorAll('[data-item-index]').forEach((el) => {
@@ -275,6 +284,32 @@ hydrateRowsWithImages()
     renderAll();
   });
 
+function normalizeNavPath(pathname) {
+  const raw = String(pathname || '').trim().toLowerCase();
+  if (!raw) return 'home.html';
+  if (raw === 'stat') return 'stat.html';
+  return raw;
+}
+
+function applyActiveSidebarLink() {
+  const currentPage = normalizeNavPath(window.location.pathname.split('/').pop());
+
+  document.querySelectorAll('.sidebar-links a[href]').forEach((link) => {
+    const href = link.getAttribute('href') || '';
+    const targetPage = normalizeNavPath(href.split('#')[0].split('/').pop());
+    const isActive = currentPage === targetPage;
+
+    link.classList.toggle('is-active', isActive);
+    if (isActive) {
+      link.setAttribute('aria-current', 'page');
+    } else {
+      link.removeAttribute('aria-current');
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', applyActiveSidebarLink);
+
 
 // Handle smooth scrolling inside the main scroll container for section anchors
 (function(){
@@ -337,7 +372,7 @@ hydrateRowsWithImages()
         container: 'home-map',
         style: 'mapbox://styles/martiinaprocopio/cmowvc4ao001n01r5g7ad3t1i',
         center: [13, 39.5],
-        zoom: 4.3,
+        zoom: 5,
         /* maxZoom: 8,
         minZoom: 5, */
         maxBounds: bounds

@@ -84,6 +84,11 @@ a:hover {
   opacity: .3;
 }
 
+.sidebar-links a.is-active,
+.sidebar-links a.is-active:hover {
+  opacity: .3;
+}
+
 
 /* ── HEADER ── */
 header {
@@ -355,6 +360,26 @@ header {
   text-align: center;
 }
 
+/* Story page: keep the main text blocks within 70ch */
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .font-myTitle,
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .font-myText,
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .space-y-30px,
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-1.pt-30px,
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-1.text-right,
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-2.pt-30px,
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-2.space-y-30px {
+  max-width: 70ch;
+}
+
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .font-myTitle,
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .space-y-30px,
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-1.pt-30px,
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-1.text-right,
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-2.pt-30px,
+#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-2.space-y-30px {
+  margin-right: auto;
+}
+
 
 #archive-rows a,
 #archive-rows span.p {
@@ -446,6 +471,7 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 .mapboxgl-ctrl-attrib-inner{display: none !important;}
 .mapboxgl-ctrl-logo {display: none !important;}
 .custom-marker {
+  transition: opacity 0.35s linear, filter 0.3s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -501,6 +527,33 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 }
 .home-page .specialGrid {
   background: transparent;
+}
+
+.face-far-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 30, 30, 0.96);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.face-far-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.face-far-message {
+  color: #FCFCFC;
+  text-align: center;
+  font-size: clamp(24px, 4.2vw, 56px);
+  line-height: 1.05;
+  letter-spacing: 0.03em;
+  max-width: min(90vw, 900px);
 }
 
 /* ── Face/Hand preview panel ────────────────────────────────────── */
@@ -617,4 +670,27 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 
 body.home-page:has(#marker-modal.open) .home-brand {
   color: #FCFCFC;
+}
+
+/* ── Gallery Hover Effects ────────────────────────────────────── */
+.gallery-image {
+  transition: opacity 0.3s cubic-bezier(.22, 1, .36, 1);
+}
+
+.group:hover .gallery-image {
+  opacity: 0.3;
+}
+
+.gallery-title-wrap {
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(.22, 1, .36, 1);
+}
+
+.group:hover .gallery-title-wrap {
+  opacity: 1;
+}
+
+.gallery-title {
+  white-space: normal;
+  font-size: clamp(18px, 2vw, 25px);
 }
