@@ -489,3 +489,247 @@ header {
   position: relative;
   z-index: 1;
 }
+
+/* ── INTRO ANIMATION ── */
+body:not(.intro-page) *:not(.font-myTitle) {
+  font-size: 12px;
+}
+
+.text-box,
+.text-box .line,
+.text-box .word,
+.text-box .redact {
+  font-size: 60px;
+}
+
+nav a {
+  font-size: 14px;
+}
+
+.intro {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  /* move the whole text block */
+  transform: translate(120px, -120px);
+}
+
+.text-box {
+  font-size: 20px;
+  line-height: 1.35;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  max-width: 1000px;
+  position: relative;
+  text-align: center;
+}
+
+.intro .line,
+.intro .word,
+.intro .redact {
+  font-size: inherit;
+}
+
+.line {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.word {
+  position: relative;
+  display: inline-block;
+}
+
+.redact::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  width: 100%;
+  height: 1em;
+  background: #000;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: redact 1s forwards;
+}
+
+.redact:nth-of-type(1)::after {
+  animation-delay: 6s;
+}
+
+.redact:nth-of-type(2)::after {
+  animation-delay: 6s;
+}
+
+.redact:nth-of-type(3)::after {
+  animation-delay: 6s;
+}
+
+.redact:nth-of-type(4)::after {
+  animation-delay: 6s;
+}
+
+.redact:nth-of-type(5)::after {
+  animation-delay: 6s;
+}
+
+@keyframes redact {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+nav {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+  z-index: 500;
+}
+
+nav.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+nav a {
+  color: #111;
+  text-decoration: none;
+  margin: 0 18px;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Scroll reveal for long-form text pages */
+.scroll-reveal {
+  --reveal-progress: 0;
+  opacity: clamp(0.22, calc(0.22 + (var(--reveal-progress) * 0.78)), 1) !important;
+  transform: translateY(calc((1 - var(--reveal-progress)) * 28px));
+  filter: blur(calc((1 - var(--reveal-progress)) * 8px));
+  will-change: opacity, transform, filter;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* About page left-side section list */
+body.about-page {
+  padding-left: 280px;
+  padding-right: 32px;
+}
+
+body.about-page header {
+  position: static;
+  left: auto;
+  top: auto;
+  width: auto;
+  padding: 0;
+  background: transparent;
+}
+
+.about-section-nav {
+  position: fixed;
+  top: 116px;
+  left: 24px;
+  width: 220px;
+  max-height: calc(100vh - 136px);
+  overflow-y: auto;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.about-section-link {
+  display: block;
+  position: relative;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  padding: 3px 0;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.12s, opacity 0.12s;
+  border-bottom: 1px solid transparent;
+}
+
+.about-section-link::before {
+  content: "";
+  position: absolute;
+  inset: -0.08em -0.25em -0.08em -0.25em;
+  background: #000;
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 0.55s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.about-section-link.is-revealed::before {
+  transform: scaleX(0);
+}
+
+.about-section-link:hover {
+  color: var(--accent);
+  border-bottom-color: transparent;
+}
+
+.about-section-link.active {
+  color: var(--muted);
+  border-bottom-color: transparent;
+}
+
+body.about-page .about-section-link:hover {
+  border-bottom-color: transparent;
+}
+
+.about-main {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-bottom: 36vh;
+}
+
+@media (max-width: 900px) {
+  .about-section-nav {
+    position: static;
+    width: auto;
+    max-height: none;
+    margin: 0 16px 8px;
+    padding-top: 12px;
+    gap: 8px;
+  }
+
+  .about-main {
+    margin-left: 0;
+    max-width: none;
+  }
+
+  .about-main {
+    padding-bottom: 24vh;
+  }
+
+  body.about-page {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

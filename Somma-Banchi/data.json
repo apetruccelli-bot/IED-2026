@@ -209,17 +209,7 @@
       "negozi-provincia": "Brindisi",
       "negozi-specializzazione": ["bovina", "suina"],
       "negozi-stato": "aperto"    },
-    {
-      "id": 21,
-      "src": "img/b21.png",
-      "tags": ["vista frontale ravvicinata", "banco squadrato", "neon bianchi"],
-      "age": "macellaio anziano",
-      "description": "Banco di vendita di Remo, Ostuni, 1989",
-      "category": "negozi",
-      "negozi-anno": 1989,
-      "negozi-provincia": "Brindisi",
-      "negozi-specializzazione": ["bovina"],
-      "negozi-stato": "chiuso"    }, 
+ 
     {
       "id": 22,
       "src": "img/col1.png",
@@ -383,17 +373,9 @@
       "coltelli-usura": "usurato"
     },
     {
-      "id": 41,
-      "src": "img/col20.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
-      "category": "coltelli",
-      "coltelli-funzione": "tagliare e affettare",
-      "coltelli-usura": "usurato"
-    },
-    {
+
       "id": 42,
-      "src": "img/tagli 1.png",
+      "src": "img/tagli  (1).png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category": "coltelli",
@@ -402,7 +384,7 @@
     },
     {
       "id": 43,
-      "src": "img/tagli  (1).png",
+      "src": "img/tagli  (2).png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category": "coltelli",
@@ -432,9 +414,85 @@
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category":"tagli",
       "tagli-lavorazione": "prima apertura"
+    },
+    {
+      "id": 49,
+      "src": "img/tagli  (5).png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 50,
+      "src": "img/tagli  (6).png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 51,
+      "src": "img/tagli  (7).png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 52,
+      "src": "img/tagli  (8).png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 53,
+      "src": "img/tagli  (9).png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 54,
+      "src": "img/tagli  (10).png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 55,
+      "src": "img/tagli  (11).png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 56,
+      "src": "img/tagli  (12).png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 57,
+      "src": "img/tagli  (13).png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 58,
+      "src": "img/s1 (1).png",
+      "tags": [],
+      "description": "Dettaglio archivio",
+      "category": "archivio"
+    },
+    {
+      "id": 59,
+      "src": "img/s1 (2).png",
+      "tags": [],
+      "description": "Dettaglio archivio",
+      "category": "archivio"
     }
   ]
 }
-    
 
 

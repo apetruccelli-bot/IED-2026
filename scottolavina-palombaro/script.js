@@ -11,19 +11,29 @@ const lbClose    = document.getElementById('lb-close');
 const lbPrev     = document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
+const nav        = document.getElementById('site-nav');
+
+if (nav) {
+  setTimeout(() => {
+    nav.classList.add('show');
+  }, 7000);
+}
 
 const labels = {
   missions: "Missions",
   "deck-operations": "Deck Operations"
 };
 
-
-let items = [];          // original data from JSON
-let displayItems = [];   // current display order
+let items = [];
+let displayItems = [];
 let activeTags = new Set();
 let activeArea = null;
 let searchQuery = '';
-let lbIndex = -1;        // current index in filteredItems() array
+let lbIndex = -1;
+
+if (!grid) {
+  // archive DOM not found — nothing to initialize on this page
+} else {
 
 function normalizeKey(value) {
   if (Array.isArray(value)) {
@@ -212,10 +222,12 @@ function filteredItems() {
 }
 
 // ── Search ────────────────────────────────────────────────────────────────
-searchInput.addEventListener('input', e => {
-  searchQuery = e.target.value;
-  render();
-});
+if (searchInput) {
+  searchInput.addEventListener('input', e => {
+    searchQuery = e.target.value;
+    render();
+  });
+}
 
 // ── Render cards ──────────────────────────────────────────────────────────
 function render() {
@@ -361,17 +373,22 @@ function navigateLightbox(dir) {
   openLightbox(next);
 }
 
-lbClose.addEventListener('click', closeLightbox);
-lbBackdrop.addEventListener('click', closeLightbox);
-lbPrev.addEventListener('click', () => navigateLightbox(-1));
-lbNext.addEventListener('click', () => navigateLightbox(+1));
+if (lbClose) lbClose.addEventListener('click', closeLightbox);
+if (lbBackdrop) lbBackdrop.addEventListener('click', closeLightbox);
+if (lbPrev) lbPrev.addEventListener('click', () => navigateLightbox(-1));
+if (lbNext) lbNext.addEventListener('click', () => navigateLightbox(+1));
 
-document.addEventListener('keydown', e => {
-  if (!lightbox.classList.contains('open')) return;
-  if (e.key === 'ArrowLeft')  navigateLightbox(-1);
-  if (e.key === 'ArrowRight') navigateLightbox(+1);
-  if (e.key === 'Escape')     closeLightbox();
-});
-
+if (lightbox) {
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'ArrowLeft')  navigateLightbox(-1);
+    if (e.key === 'ArrowRight') navigateLightbox(+1);
+    if (e.key === 'Escape')     closeLightbox();
+  });
+}
 // ── Init ──────────────────────────────────────────────────────────────────
-loadData();
+if (grid) {
+  loadData();
+}
+
+}

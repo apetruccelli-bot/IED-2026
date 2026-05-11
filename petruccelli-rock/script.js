@@ -30,6 +30,7 @@ function updateYear() {
   }
 }
 
+
 function updateBg() {
   if (!grid) return;
   const progress = grid.scrollLeft / (grid.scrollWidth - grid.offsetWidth);
@@ -48,6 +49,18 @@ function updateBg() {
   document.body.style.backgroundColor = color;
   document.documentElement.style.setProperty('--mySpecialWhite', color);
   document.documentElement.style.setProperty('--mySpecialGrey', color2);
+
+  // Update 'Read our Story' text color from grey to white
+  const storyLink = document.getElementById('read-our-story');
+  if (storyLink) {
+    // Interpolate from #888880 (grey) to #FFFFFF (white)
+    const grey = [0x88, 0x88, 0x80];
+    const white = [0xFF, 0xFF, 0xFF];
+    const r = Math.round(grey[0] + (white[0] - grey[0]) * t);
+    const g = Math.round(grey[1] + (white[1] - grey[1]) * t);
+    const b = Math.round(grey[2] + (white[2] - grey[2]) * t);
+    storyLink.style.color = `rgb(${r},${g},${b})`;
+  }
 }
 
 if (grid) {
@@ -307,11 +320,12 @@ function openLightbox(index) {
   // get the item
   const item = visible[lbIndex];
 
+
   lbImg.src = item.src;
   // set the alt text
   lbImg.alt = `Item ${item.id}`;
-  // set the id
-  lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
+  // set the year instead of id
+  lbId.textContent = item.year ? item.year : '';
 
   lbTagsEl.innerHTML = '';
   // loop through the tags and create a span for each tag
