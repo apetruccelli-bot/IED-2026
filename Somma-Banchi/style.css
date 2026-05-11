@@ -354,10 +354,20 @@ button {
 
 .lb-info {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
+  max-width: 80%;
+}
+
+.lb-description {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.4;
+  margin: 0;
 }
 
 .lb-id {
@@ -458,6 +468,10 @@ button {
   flex: 1;
   overflow-y: auto;
   padding: 10px;
+}
+
+.storia-modal-content p {
+  text-transform: none;
 }
 
 .mainLayout.storia-dimmed {

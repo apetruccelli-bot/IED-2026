@@ -8,6 +8,7 @@ const btnRandom = document.getElementById('btn-random');
 const lightbox   = document.getElementById('lightbox');
 const lbImg      = document.getElementById('lb-img');
 const lbId       = document.getElementById('lb-id');
+const lbDescription = document.getElementById('lb-description');
 //const lbTagsEl   = document.getElementById('lb-tags');
 const lbClose    = document.getElementById('lb-close');
 const lbPrev     = document.getElementById('lb-prev');
@@ -268,6 +269,14 @@ function toggleFilter(key, val) {
   // If clicking a different category, clear all previous filters first
   if (currentCats.size > 0 && !currentCats.has(clickedCat)) {
     activeFilters.clear();
+    // Reset all visual states
+    document.querySelectorAll('[data-filter-key]').forEach(el => {
+      el.classList.remove('not-active-filter');
+      el.style.fontWeight = '';
+    });
+    document.querySelectorAll('.filter-category[data-filter-category]').forEach(catEl => {
+      catEl.classList.remove('not-active-filter');
+    });
   }
 
   if (activeFilters.get(key) === val) {
@@ -342,6 +351,8 @@ function openLightbox(index) {
   lbImg.src = item.src;
   // set the alt text
   lbImg.alt = `Item ${item.id}`;
+  // set the description
+  lbDescription.textContent = item.description || '';
   // set the id
   //lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
 
@@ -439,6 +450,9 @@ function openExploreMode() {
 function closeExploreMode() {
   isExploreMode = false;
   exploreSubcat = null;
+  activeFilters.clear();
+  document.querySelectorAll('[data-filter-key]').forEach(el => el.classList.remove('not-active-filter'));
+  document.querySelectorAll('.filter-category[data-filter-category]').forEach(el => el.classList.remove('not-active-filter'));
   document.getElementById('filters-container').style.display = '';
   document.getElementById('explore-description-panel').style.display = 'none';
   document.querySelectorAll('.explore-description').forEach(el => el.classList.remove('active'));
@@ -465,6 +479,9 @@ function setExploreGesture(funzione) {
     activeFilters.clear();
   }
   updateActiveImg();
+  // Scroll to top to show first images of the selected category
+  const mainLayout = document.querySelector('.mainLayout');
+  if (mainLayout) mainLayout.scrollTop = 0;
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────

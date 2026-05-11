@@ -1,78 +1,86 @@
 {
   "items": [
     {
-      "id": 1,
-      "src": "img/fumo/businessman7.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
-      "description": "Descrizione dell'immagine"
+  "id": 1,
+  "src": "img/fumo/businessman7.png",
+  "category": "fotografie",
+  "year": 1987,
+  "tags": ["urbano", "business", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "strada", "ritratto", "fumare"],
+  "description": "Uomo in abito elegante fuma una sigaretta lungo una strada urbana di Osaka."
     },
     {
-      "id": 2,
-      "src": "img/fumo/giovani19.png",
-       "year": 1961,
-      "tags": ["urbano"],
-      "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
-      "description": "Descrizione dell'immagine"
-    },
+  "id": 2,
+  "src": "img/fumo/giovani19.png",
+  "category": "fotografie",
+  "year": 1961,
+  "tags": ["urbano"],
+  "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
+  "description": "Descrizione dell'immagine"
+},
     {
-      "id": 3,
-      "src": "img/fumo/anziano1.png",
-       "year": 1962,
-      "tags": ["urbano"],
-      "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
-      "description": "Descrizione dell'immagine"
-    },
+  "id": 3,
+  "src": "img/fumo/anziano1.png",
+  "category": "fotografie",
+  "year": 1985,
+  "tags": ["urbano", "anziano", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "seduto", "fumo", "ritratto"],
+  "description": "Anziano seduto lungo la strada fuma osservando la vita urbana di Osaka."
+},
     {
-      "id": 4,
-      "src": "img/fumo/businessman8.png",
-      "category": "fotografie",
-      "year": 1963,
-      "tags": ["ritratto", "luce", "ombra", "volto", "espressione"],
-      "description": "Descrizione dell'immagine"
-        },
+  "id": 4,
+  "src": "img/fumo/businessman8.png",
+  "category": "fotografie",
+  "year": 1988,
+  "tags": ["urbano", "lavoro", "osaka", "giappone"],
+  "tags-fotografie": ["interno", "gruppo", "fumo", "attesa"],
+  "description": "Gruppo di uomini in abiti formali fuma in uno spazio interno affollato a Osaka."
+},
+  {
+  "id": 5,
+  "src": "img/fumo/businessman9.png",
+  "category": "fotografie",
+  "year": 1989,
+  "tags": ["urbano", "ritratto", "osaka", "giappone"],
+  "tags-fotografie": ["profilo", "interno", "fumare", "luci artificiali"],
+  "description": "Primo piano laterale di un uomo che fuma in un ambiente urbano affollato a Osaka."
+},
     {
-      "id": 5,
-      "src": "img/fumo/businessman9.png",
-      "category": "fotografie",
-      "year": 1964,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 6,
+  "src": "img/fumo/anziano2.png",
+  "category": "fotografie",
+  "year": 1987,
+  "tags": ["urbano", "anziano", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "esterno", "fumo", "quotidiano"],
+  "description": "Anziano fuma seduto davanti a un negozio in una strada di Osaka."
+},
+   {
+  "id": 7,
+  "src": "img/fumo/giovani20.png",
+  "category": "fotografie",
+  "year": 1960,
+  "tags": ["urbano"],
+  "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
+  "description": "Descrizione dell'immagine"
+},
     {
-      "id": 6,
-      "src": "img/fumo/anziano2.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 8,
+  "src": "img/fumo/businessman10.png",
+  "category": "fotografie",
+  "year": 1986,
+  "tags": ["urbano", "strada", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "vicolo", "azione", "accendere sigaretta"],
+  "description": "Uomo in abito accende una sigaretta in un vicolo della città di Osaka."
+},
     {
-      "id": 7,
-      "src": "img/fumo/giovani20.png",
-       "year": 1960,
-      "tags": ["urbano"],
-      "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
-      "description": "Descrizione dell'immagine"
-    },
-    {
-      "id": 8,
-      "src": "img/fumo/businessman10.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
-    {
-      "id": 9,
-      "src": "img/fumo/businessman11.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 9,
+  "src": "img/fumo/businessman11.png",
+  "category": "fotografie",
+  "year": 1987,
+  "tags": ["urbano", "atmosfera", "osaka", "giappone"],
+  "tags-fotografie": ["nebbia", "sera", "strada", "fumare"],
+  "description": "Uomo fuma in una strada stretta e nebbiosa tra insegne luminose a Osaka."
+},
     {
       "id": 10, 
        "src": "img/fumo/giovani21.png",
@@ -82,37 +90,41 @@
       "description": "Descrizione dell'immagine"
        },
     {
-      "id": 11,
-      "src": "img/fumo/anziano3.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 11,
+  "src": "img/fumo/anziano3.png",
+  "category": "fotografie",
+  "year": 1989,
+  "tags": ["urbano", "anziano", "osaka", "giappone"],
+  "tags-fotografie": ["ritratto", "fumo", "primo piano", "giorno"],
+  "description": "Primo piano di un anziano che accende una sigaretta tra la folla a Osaka."
+},
     {
-      "id": 12,
-      "src": "img/fumo/businessman12.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 12,
+  "src": "img/fumo/businessman12.png",
+  "category": "fotografie",
+  "year": 1986,
+  "tags": ["urbano", "lavoro", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "dettaglio", "sigaretta", "mani"],
+  "description": "Dettaglio di un uomo in abito mentre accende una sigaretta tra la folla a Osaka."
+},
     {
-      "id": 13,
-      "src": "img/fumo/businessman13.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 13,
+  "src": "img/fumo/businessman13.png",
+  "category": "fotografie",
+  "year": 1990,
+  "tags": ["urbano", "notturno", "osaka", "giappone"],
+  "tags-fotografie": ["sera", "luci", "strada", "fumare"],
+  "description": "Uomo fuma in una strada illuminata da insegne al neon nella Osaka notturna."
+},
     {
-      "id": 14,
-      "src": "img/fumo/anziano4.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-    },
+  "id": 14,
+  "src": "img/fumo/anziano4.png",
+  "category": "fotografie",
+  "year": 1986,
+  "tags": ["urbano", "anziano", "osaka", "giappone"],
+  "tags-fotografie": ["seduto", "strada", "fumo", "conversazione"],
+  "description": "Due anziani seduti fumano e conversano lungo una strada di Osaka."
+},
     {
       "id": 15,
       "src": "img/fumo/giovani22.png",
@@ -122,21 +134,23 @@
       "description": "Descrizione dell'immagine"
        },
     {
-      "id": 16,
-      "src": "img/fumo/businessman14.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 16,
+  "src": "img/fumo/businessman14.png",
+  "category": "fotografie",
+  "year": 1988,
+  "tags": ["urbano", "incontro", "osaka", "giappone"],
+  "tags-fotografie": ["strada", "dialogo", "fumare", "nebbia"],
+  "description": "Due uomini si incontrano in strada mentre uno fuma in un contesto urbano di Osaka."
+},
     {
-      "id": 17,
-      "src": "img/fumo/businessman15.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
+  "id": 17,
+  "src": "img/fumo/businessman15.png",
+  "category": "fotografie",
+  "year": 1989,
+  "tags": ["urbano", "movimento", "osaka", "giappone"],
+  "tags-fotografie": ["strada", "camminare", "fumare", "giorno"],
+  "description": "Uomo in giacca cammina lungo una strada cittadina fumando a Osaka."
+},
     {
       "id": 18,
       "src": "img/fumo/giovani23.png",
@@ -146,21 +160,23 @@
       "description": "Descrizione dell'immagine"
        },   
     {
-       "id": 19,
-      "src": "img/fumo/anziano5.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
-    {   
-      "id": 20,
-      "src": "img/fumo/businessman16.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       }, 
+  "id": 19,
+  "src": "img/fumo/anziano5.png",
+  "category": "fotografie",
+  "year": 1988,
+  "tags": ["urbano", "anziano", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "dettaglio", "fumo", "oggetti"],
+  "description": "Anziano fuma tenendo una tazza, seduto vicino a oggetti in vendita a Osaka."
+},
+    {
+  "id": 20,
+  "src": "img/fumo/businessman16.png",
+  "category": "fotografie",
+  "year": 1985,
+  "tags": ["urbano", "lavoro", "osaka", "giappone"],
+  "tags-fotografie": ["giorno", "accovacciato", "sigaretta", "pausa"],
+  "description": "Uomo in abito accovacciato sul marciapiede durante una pausa lavoro a Osaka."
+}, 
     {
        "id": 21,
       "src": "img/fumo/businessman17.png",
@@ -193,258 +209,217 @@
       "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
       "description": "Descrizione dell'immagine"
        }, 
-   {     
-      "id": 25,
-      "src": "img/pacchetti/pack1.jpg",
-      "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"    
-    },
     {
-      "id": 26,
-      "src": "img/pacchetti/pack2.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-  {
-      "id": 26,
-      "src": "img/pacchetti/pack2.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-      "id": 27,
-      "src": "img/pacchetti/pack3.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-      "id": 28,
-      "src": "img/pacchetti/pack4.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-      "id": 29,
-      "src": "img/pacchetti/pack5.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 30,
-       "src": "img/pacchetti/pack6.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-      "id": 31,
-      "src": "img/pacchetti/pack7.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-      "id": 32,
-      "src": "img/pacchetti/pack8.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 33,
-       "src": "img/pacchetti/pack9.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 34,
-       "src": "img/pacchetti/pack10.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-      "id": 35,
-      "src": "img/pacchetti/pack11.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 36,
-       "src": "img/pacchetti/pack12.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-      "id": 37,
-      "src": "img/pacchetti/pack13.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 38,
-       "src": "img/pacchetti/pack14.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 39,
-       "src": "img/pacchetti/pack15.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 40,
-       "src": "img/pacchetti/pack16.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 41,
-       "src": "img/pacchetti/pack17.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 42,
-       "src": "img/pacchetti/pack18.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 43,
-       "src": "img/pacchetti/pack19.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 44,
-       "src": "img/pacchetti/pack20.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 45,
-       "src": "img/pacchetti/pack21.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 46,
-       "src": "img/pacchetti/pack22.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 47,
-       "src": "img/pacchetti/pack23.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
-    {
-       "id": 48,
-       "src": "img/pacchetti/pack24.jpg",
-     "category": "pacchetti",
-      "year": 1960,
-      "tags": ["urbano"],
-      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
-      "paese-pacchetti": "Giappone",
-      "description": "Descrizione dell'immagine"
-    },
+  "id": 25,
+  "src": "img/pacchetti/pack1.jpg",
+  "category": "pacchetti",
+  "year": 1985,
+  "tags": ["blu", "osaka"],
+  "tags-pacchetti": ["blu", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Osaka",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+  }
+   {
+  "id": 26,
+  "src": "img/pacchetti/pack2.jpg",
+  "category": "pacchetti",
+  "year": 1988,
+  "tags": ["verde", "tokyo"],
+  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Tokyo",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+}
+{
+  "id": 27,
+  "src": "img/pacchetti/pack3.jpg",
+  "category": "pacchetti",
+  "year": 1989,
+  "tags": ["bianco", "nara"],
+  "tags-pacchetti": ["bianco", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Nara",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+}
+{
+  "id": 28,
+  "src": "img/pacchetti/pack4.jpg",
+  "category": "pacchetti",
+  "year": 1990,
+  "tags": ["rosso", "kyoto"],
+  "tags-pacchetti": ["rosso", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Kyoto",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+}
+{
+  "id": 29,
+  "src": "img/pacchetti/pack5.jpg",
+  "category": "pacchetti",
+  "year": 1988,
+  "tags": ["verde", "tokyo"],
+  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Tokyo",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+}
+{
+  "id": 30,
+  "src": "img/pacchetti/pack6.jpg",
+  "category": "pacchetti",
+  "year": 1996,
+  "tags": ["blu", "osaka"],
+  "tags-pacchetti": ["blu", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Osaka",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+}
+{
+  "id": 31,
+  "src": "img/pacchetti/pack7.jpg",
+  "category": "pacchetti",
+  "year": 1990,
+  "tags": ["rosso", "nara"],
+  "tags-pacchetti": ["rosso", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Nara",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+}
+{
+  "id": 32,
+  "src": "img/pacchetti/pack8.jpg",
+  "category": "pacchetti",
+  "year": 1985,
+  "tags": ["bianco", "kyoto"],
+  "tags-pacchetti": ["bianco", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Kyoto",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+},
+{
+  "id": 33,
+  "src": "img/pacchetti/pack9.jpg",
+  "category": "pacchetti",
+  "year": 1986,
+  "tags": ["blu", "tokyo"],
+  "tags-pacchetti": ["blu", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Tokyo",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+},
  {
-       "id": 49,
+  "id": 34,
+  "src": "img/pacchetti/pack10.jpg",
+  "category": "pacchetti",
+  "year": 1985,
+  "tags": ["blu", "osaka"],
+  "tags-pacchetti": ["blu", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Osaka",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+  },
+{
+  "id": 35,
+  "src": "img/pacchetti/pack11.jpg",
+  "category": "pacchetti",
+  "year": 1988,
+  "tags": ["verde", "tokyo"],
+  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Tokyo",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+},
+{
+  "id": 36,
+  "src": "img/pacchetti/pack12.jpg",
+  "category": "pacchetti",
+  "year": 1989,
+  "tags": ["bianco", "nara"],
+  "tags-pacchetti": ["bianco", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Nara",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+},
+{
+  "id": 37,
+  "src": "img/pacchetti/pack13.jpg",
+  "category": "pacchetti",
+  "year": 1990,
+  "tags": ["rosso", "kyoto"],
+  "tags-pacchetti": ["rosso", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Kyoto",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+},
+{
+  "id": 38,
+  "src": "img/pacchetti/pack14.jpg",
+  "category": "pacchetti",
+  "year": 1988,
+  "tags": ["verde", "tokyo"],
+  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Tokyo",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+},
+{
+  "id": 39,
+  "src": "img/pacchetti/pack15.jpg",
+  "category": "pacchetti",
+  "year": 1996,
+  "tags": ["blu", "osaka"],
+  "tags-pacchetti": ["blu", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Osaka",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+},
+{
+  "id": 40,
+  "src": "img/pacchetti/pack16.jpg",
+  "category": "pacchetti",
+  "year": 1990,
+  "tags": ["rosso", "nara"],
+  "tags-pacchetti": ["rosso", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Nara",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+},
+{
+  "id": 41,
+  "src": "img/pacchetti/pack17.jpg",
+  "category": "pacchetti",
+  "year": 1985,
+  "tags": ["bianco", "kyoto"],
+  "tags-pacchetti": ["bianco", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Kyoto",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+},
+{
+  "id": 42,
+  "src": "img/pacchetti/pack18.jpg",
+  "category": "pacchetti",
+  "year": 1986,
+  "tags": ["blu", "tokyo"],
+  "tags-pacchetti": ["blu", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Tokyo",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+},
+{
+  "id": 43,
+  "src": "img/pacchetti/pack19.jpg",
+  "category": "pacchetti",
+  "year": 1988,
+  "tags": ["verde", "nara"],
+  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
+  "luogo-pacchetti": "Nara",
+  "paese-pacchetti": "Giappone",
+  "description": "Descrizione dell'immagine"
+},
+{
+       "id": 44,
        "src": "img/pubblicità/advertising1.png",
       "category": "pubblicità",
       "year": 1960,
@@ -452,7 +427,7 @@
       "description": "Descrizione dell'immagine"
   },
   {
-       "id": 50,
+       "id": 45,
        "src": "img/pubblicità/advertising2.png",
       "category": "pubblicità",
       "year": 1960,
@@ -460,7 +435,7 @@
       "description": "Descrizione dell'immagine"
   },
   {
-       "id": 51,
+       "id": 46,
        "src": "img/pubblicità/advertising3.png",
       "category": "pubblicità",
       "year": 1960,
@@ -468,7 +443,7 @@
       "description": "Descrizione dell'immagine"
   }, 
   {
-       "id": 53,
+       "id": 47,
        "src": "img/about/about1.png",
       "category": "about archive",
       "year": 1960,
@@ -476,7 +451,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 54,
+       "id": 48,
        "src": "img/about/about2.jpg",
       "category": "about archive",
       "year": 1960,
@@ -484,7 +459,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 55,
+       "id": 49,
        "src": "img/about/about3.png",
       "category": "about archive",
       "year": 1960,
@@ -492,7 +467,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 56,
+       "id": 50,
        "src": "img/about/about4.png",
       "category": "about archive",
       "year": 1960,
@@ -500,7 +475,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 57,
+       "id": 51,
        "src": "img/about/about5.jpg",
       "category": "about archive",
       "year": 1960,
@@ -508,7 +483,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 58,
+       "id": 52,
        "src": "img/about/about6.png",
       "category": "about archive",
       "year": 1960,
