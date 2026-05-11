@@ -74,6 +74,42 @@
 
       // Load data and set up image click handlers
       let imageData = {};
+      let autoRotateTimer;
+      let currentImageIndex = 0; // Index into the scroll images array
+      let scrollImages = [];
+
+      function updateImage(imageId) {
+        const item = imageData[imageId];
+        const rightColumnImg = document.querySelector('.right-column-img');
+        const rightColumnCaption = document.querySelector('.right-column-caption');
+
+        if (item) {
+          rightColumnImg.src = item.src;
+          rightColumnCaption.textContent = item.description;
+
+          // Update opacity of all scroll images
+          scrollImages.forEach((scrollImg, index) => {
+            if (parseInt(scrollImg.getAttribute('data-id')) === imageId) {
+              scrollImg.style.opacity = '1';
+              currentImageIndex = index;
+            } else {
+              scrollImg.style.opacity = '0.4';
+            }
+          });
+        }
+      }
+
+      function autoRotateNext() {
+        currentImageIndex = (currentImageIndex + 1) % scrollImages.length;
+        const nextImageId = parseInt(scrollImages[currentImageIndex].getAttribute('data-id'));
+        updateImage(nextImageId);
+        resetAutoRotate();
+      }
+
+      function resetAutoRotate() {
+        clearTimeout(autoRotateTimer);
+        autoRotateTimer = setTimeout(autoRotateNext, 6000);
+      }
 
       fetch('data.json')
         .then(response => response.json())
@@ -83,49 +119,23 @@
             imageData[item.id] = item;
           });
 
+          // Get all scroll images
+          scrollImages = document.querySelectorAll('.scroll-img');
+
           // Set initial image and description (id 2)
-          const rightColumnImg = document.querySelector('.right-column-img');
-          const rightColumnCaption = document.querySelector('.right-column-caption');
-          const initialItem = imageData[2];
-          if (initialItem) {
-            rightColumnCaption.textContent = initialItem.description;
-          }
+          updateImage(2);
 
           // Add click handlers to all scroll images
-          const scrollImages = document.querySelectorAll('.scroll-img');
           scrollImages.forEach(img => {
             img.addEventListener('click', (e) => {
               const imageId = parseInt(img.getAttribute('data-id'));
-              const item = imageData[imageId];
-
-              if (item) {
-                // Update right column image and caption
-                rightColumnImg.src = item.src;
-                rightColumnCaption.textContent = item.description;
-
-                // Update opacity of all scroll images
-                scrollImages.forEach(scrollImg => {
-                  if (scrollImg === img) {
-                    scrollImg.style.opacity = '1';
-                  } else {
-                    scrollImg.style.opacity = '0.4';
-                  }
-                });
-              }
+              updateImage(imageId);
+              resetAutoRotate();
             });
           });
 
-          // Set initial opacity for first image (dirigibile 2)
-          const firstImage = document.querySelector('.scroll-img[data-id="2"]');
-          if (firstImage) {
-            firstImage.style.opacity = '1';
-            // Set all others to 0.4
-            scrollImages.forEach(img => {
-              if (img !== firstImage) {
-                img.style.opacity = '0.4';
-              }
-            });
-          }
+          // Start auto-rotation
+          resetAutoRotate();
         })
         .catch(error => console.error('Error loading data:', error));
     </script>
