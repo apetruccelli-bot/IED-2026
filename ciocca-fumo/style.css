@@ -111,6 +111,8 @@ body {
   background:#FF0000;
   border-radius:6px;
   transition: filter 0.9s ease, opacity 0.9s ease, background-color 0.3s ease;
+  flex-grow: 1;
+  flex-shrink: 0;
 }
 
 
