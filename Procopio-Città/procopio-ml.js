@@ -1,6 +1,7 @@
 // procopio-ml.js — Face + Hand tracking for home.html
 // Face proximity  → blur on .custom-marker (20px far → 0px close)
 // Hand palm size  → map zoom (hand closer = zoom in, farther = zoom out)
+// Hand position   → map center (hand moves → map moves within bounds)
 
 let procopioFaceDetector = null;
 let procopioHandDetector = null;
@@ -20,6 +21,24 @@ const HAND_CALIB_FRAMES = 40;
 // Map zoom range
 const ZOOM_MIN = 5.0;
 const ZOOM_MAX = 10.5;
+const ZOOM_DEADZONE = 0.03;
+const CENTER_DEADZONE = 0.0008;
+const MAP_UPDATE_INTERVAL_MS = 120;
+const HAND_RATIO_SMOOTH_ALPHA = 0.15;
+const HAND_CENTER_SMOOTH_ALPHA = 0.12;
+
+let filteredHandRatio = null;
+let filteredLng = null;
+let filteredLat = null;
+let lastMapUpdateAt = 0;
+
+// Map bounds (matching maxBounds in script.js)
+const MAP_BOUNDS = {
+  west: 12,      // min longitude
+  east: 19.5,    // max longitude
+  south: 36,     // min latitude
+  north: 42.5    // max latitude
+};
 
 function dist2D(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
@@ -123,13 +142,15 @@ async function detectLoop() {
     }
   } catch (e) { /* ignore per-frame errors */ }
 
-  // ── HAND → map zoom ──────────────────────────────────────────────────────
+  // ── HAND → map zoom + center ────────────────────────────────────────────
   try {
     const hands = await procopioHandDetector.estimateHands(video, { flipHorizontal: true });
     if (hands.length > 0) {
       const kp        = hands[0].keypoints;
       // Palm width: index MCP (5) → pinky MCP (17)
       const palmWidth = dist2D(kp[5], kp[17]);
+      // Hand center: wrist position (landmark 0)
+      const handCenter = kp[0];
 
       if (handSizeSamples.length < HAND_CALIB_FRAMES) {
         handSizeSamples.push(palmWidth);
@@ -138,12 +159,51 @@ async function detectLoop() {
         }
       } else {
         // ratio > 1.5 (hand close) → zoom in; ratio < 0.5 (hand far) → zoom out
-        const ratio      = palmWidth / handSizeBaseline;
-        const zoomT      = Math.max(0, Math.min(1, (ratio - 0.5) / (1.5 - 0.5)));
+        const ratio = palmWidth / handSizeBaseline;
+        if (filteredHandRatio == null) filteredHandRatio = ratio;
+        filteredHandRatio += (ratio - filteredHandRatio) * HAND_RATIO_SMOOTH_ALPHA;
+
+        const zoomT = Math.max(0, Math.min(1, (filteredHandRatio - 0.5) / (1.5 - 0.5)));
         const targetZoom = ZOOM_MIN + zoomT * (ZOOM_MAX - ZOOM_MIN);
-        if (handEl) handEl.textContent = `hand: ${ratio.toFixed(2)}× → zoom ${targetZoom.toFixed(1)}`;
+        
+        // Hand position: normalize video coordinates (0-640, 0-480) to map bounds
+        // x: 0 (left) → MAP_BOUNDS.west, 640 (right) → MAP_BOUNDS.east
+        // y: 0 (top) → MAP_BOUNDS.north, 480 (bottom) → MAP_BOUNDS.south
+        const normalizedX = Math.max(0, Math.min(1, handCenter.x / video.videoWidth));
+        const normalizedY = Math.max(0, Math.min(1, handCenter.y / video.videoHeight));
+
+        const rawLng = MAP_BOUNDS.west + normalizedX * (MAP_BOUNDS.east - MAP_BOUNDS.west);
+        const rawLat = MAP_BOUNDS.north - normalizedY * (MAP_BOUNDS.north - MAP_BOUNDS.south);
+
+        if (filteredLng == null || filteredLat == null) {
+          filteredLng = rawLng;
+          filteredLat = rawLat;
+        }
+        filteredLng += (rawLng - filteredLng) * HAND_CENTER_SMOOTH_ALPHA;
+        filteredLat += (rawLat - filteredLat) * HAND_CENTER_SMOOTH_ALPHA;
+        
+        if (handEl) handEl.textContent = `hand: ${filteredHandRatio.toFixed(2)}× → zoom ${targetZoom.toFixed(2)}, pos [${filteredLng.toFixed(2)}, ${filteredLat.toFixed(2)}]`;
+        
         const map = window.procopioMap;
-        if (map) map.easeTo({ zoom: targetZoom, duration: 300 });
+        if (map) {
+          const now = performance.now();
+          const currentZoom = map.getZoom();
+          const currentCenter = map.getCenter();
+          const zoomDelta = Math.abs(targetZoom - currentZoom);
+          const centerDelta = Math.hypot(filteredLng - currentCenter.lng, filteredLat - currentCenter.lat);
+
+          if (zoomDelta < ZOOM_DEADZONE && centerDelta < CENTER_DEADZONE) {
+            // Ignore tiny fluctuations from the hand detector.
+          } else if (now - lastMapUpdateAt >= MAP_UPDATE_INTERVAL_MS) {
+            lastMapUpdateAt = now;
+          map.easeTo({
+              center: [filteredLng, filteredLat],
+            zoom: targetZoom,
+              duration: 220,
+              essential: true
+            });
+          }
+        }
       }
     } else {
       if (handEl) handEl.textContent = 'no hand';

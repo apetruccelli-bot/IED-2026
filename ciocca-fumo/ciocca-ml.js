@@ -98,20 +98,41 @@ async function startMicDetection() {
   }
 }
 
-const MIC_THRESHOLD = 110;
+const MIC_THRESHOLD  = 60;   // minimum energy to even consider (0-255)
+const FLATNESS_THRESHOLD = 0.18; // min spectral flatness to count as noise/blow
 
 function loopMicDetection() {
   if (!audioDetecting || !analyser) return;
   const data = new Uint8Array(analyser.frequencyBinCount);
   analyser.getByteFrequencyData(data);
 
-  // Blowing lives in ~200–3000 Hz: broad burst of turbulent air
+  // Blowing lives in ~100–4000 Hz: broad burst of turbulent air
   const binHz = (audioContext.sampleRate / 2) / analyser.frequencyBinCount;
-  const lo = Math.floor(200  / binHz);
-  const hi = Math.ceil(3000 / binHz);
+  const lo = Math.floor(100  / binHz);
+  const hi = Math.ceil(4000 / binHz);
+  const bins = hi - lo + 1;
+
   let sum = 0;
-  for (let i = lo; i <= hi; i++) sum += data[i];
-  const avg = sum / (hi - lo + 1);
+  let logSum = 0;
+  let zeroes = 0;
+  for (let i = lo; i <= hi; i++) {
+    const v = data[i];
+    sum += v;
+    if (v > 0) logSum += Math.log(v);
+    else zeroes++;
+  }
+  const avg = sum / bins;
+
+  // Spectral flatness = geometric mean / arithmetic mean
+  // A blow is broadband noise → flatness near 1
+  // Speech/tapping is tonal  → flatness near 0
+  const effectiveBins = bins - zeroes;
+  const geoMean = effectiveBins > 0
+    ? Math.exp(logSum / effectiveBins) * (effectiveBins / bins) // penalise silent bins
+    : 0;
+  const flatness = avg > 1 ? geoMean / avg : 0;
+
+  const isBlow = avg >= MIC_THRESHOLD && flatness >= FLATNESS_THRESHOLD;
 
   // Update mic bar UI
   const bar     = document.getElementById('explore-mic-bar');
@@ -120,12 +141,12 @@ function loopMicDetection() {
   if (bar) {
     const pct = Math.min(avg / 255 * 100, 100);
     bar.style.width = pct + '%';
-    bar.style.background = avg >= MIC_THRESHOLD ? 'rgba(0,220,120,0.8)' : 'rgba(255,255,255,0.4)';
+    bar.style.background = isBlow ? 'rgba(0,220,120,0.8)' : 'rgba(255,255,255,0.4)';
   }
-  if (valEl)  valEl.textContent  = Math.round(avg);
+  if (valEl)  valEl.textContent  = `${Math.round(avg)} / f:${flatness.toFixed(2)}`;
   if (marker) marker.style.left  = (MIC_THRESHOLD / 255 * 100).toFixed(1) + '%';
 
-  if (avg > MIC_THRESHOLD) triggerReveal();
+  if (isBlow) triggerReveal();
 
   requestAnimationFrame(loopMicDetection);
 }

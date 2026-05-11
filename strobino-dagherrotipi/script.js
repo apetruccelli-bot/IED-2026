@@ -61,9 +61,21 @@ function allTags() {
   return [...set].sort();
 }
 
+// ── Fade images on scroll ───────────────────────────────────────────────
+function updateImageFade() {
+  const imgs = document.querySelectorAll('.card-img');
+  if (window.scrollY > 10) {
+    imgs.forEach(img => img.classList.add('faded'));
+  } else {
+    imgs.forEach(img => img.classList.remove('faded'));
+  }
+}
+window.addEventListener('scroll', updateImageFade);
+window.addEventListener('DOMContentLoaded', updateImageFade);
+
 // ── Build the filter tags bar ─────────────────────────────────────────────
 function buildTagsBar() {
-  return
+  if (!tagsBar) return;
   tagsBar.innerHTML = '';
   allTags().forEach(tag => {
     const btn = document.createElement('button');
@@ -216,6 +228,7 @@ function render() {
     card.appendChild(body);
     myColumns[i % myColumns.length].appendChild(card);
   });
+  updateImageFade();
 }
 
 // ── Lightbox ──────────────────────────────────────────────────────────────
@@ -226,6 +239,7 @@ function openLightbox(index) {
   lbIndex = index;
   // get the item
   const item = visible[lbIndex];
+  if (!item) return;
 
   lbImg.src = item.src;
   // set the alt text

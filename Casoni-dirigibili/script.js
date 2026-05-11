@@ -207,9 +207,14 @@ function buildFilterRows() {
         const stopEl = e.target.closest('.victims-stop');
         if (!stopEl) return;
         const index = Number(stopEl.dataset.index);
-        slider.value = String(index);
         const stopLabel = getVictimsLabelFromIndex(index);
-        activeRowFilters[label] = stopLabel;
+
+        if (activeRowFilters[label] === stopLabel) {
+          activeRowFilters[label] = null;
+        } else {
+          slider.value = String(index);
+          activeRowFilters[label] = stopLabel;
+        }
         syncVictimsRow(row);
         applyRowFilters();
       });
