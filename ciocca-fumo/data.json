@@ -12,7 +12,7 @@
     {
       "id": 2,
       "src": "img/fumo/giovani19.png",
-       "year": 1960,
+       "year": 1961,
       "tags": ["urbano"],
       "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
       "description": "Descrizione dell'immagine"
@@ -20,7 +20,7 @@
     {
       "id": 3,
       "src": "img/fumo/anziano1.png",
-       "year": 1960,
+       "year": 1962,
       "tags": ["urbano"],
       "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
       "description": "Descrizione dell'immagine"
@@ -29,7 +29,7 @@
       "id": 4,
       "src": "img/fumo/businessman8.png",
       "category": "fotografie",
-      "year": 1960,
+      "year": 1963,
       "tags": ["ritratto", "luce", "ombra", "volto", "espressione"],
       "description": "Descrizione dell'immagine"
         },
@@ -37,7 +37,7 @@
       "id": 5,
       "src": "img/fumo/businessman9.png",
       "category": "fotografie",
-      "year": 1960,
+      "year": 1964,
       "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
       "description": "Descrizione dell'immagine"
        },
@@ -212,6 +212,308 @@
       "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
       "paese-pacchetti": "Giappone",
       "description": "Descrizione dell'immagine"
-    }
+    },
+  {
+      "id": 26,
+      "src": "img/pacchetti/pack2.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+      "id": 27,
+      "src": "img/pacchetti/pack3.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+      "id": 28,
+      "src": "img/pacchetti/pack4.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+      "id": 29,
+      "src": "img/pacchetti/pack5.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 30,
+       "src": "img/pacchetti/pack6.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+      "id": 31,
+      "src": "img/pacchetti/pack7.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+      "id": 32,
+      "src": "img/pacchetti/pack8.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 33,
+       "src": "img/pacchetti/pack9.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 34,
+       "src": "img/pacchetti/pack10.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+      "id": 35,
+      "src": "img/pacchetti/pack11.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 36,
+       "src": "img/pacchetti/pack12.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+      "id": 37,
+      "src": "img/pacchetti/pack13.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 38,
+       "src": "img/pacchetti/pack14.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 39,
+       "src": "img/pacchetti/pack15.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 40,
+       "src": "img/pacchetti/pack16.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 41,
+       "src": "img/pacchetti/pack17.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 42,
+       "src": "img/pacchetti/pack18.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 43,
+       "src": "img/pacchetti/pack19.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 44,
+       "src": "img/pacchetti/pack20.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 45,
+       "src": "img/pacchetti/pack21.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 46,
+       "src": "img/pacchetti/pack22.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 47,
+       "src": "img/pacchetti/pack23.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+    {
+       "id": 48,
+       "src": "img/pacchetti/pack24.jpg",
+     "category": "pacchetti",
+      "year": 1960,
+      "tags": ["urbano"],
+      "tags-pacchetti": ["illustrazioni", "lettering", "colori accesi"],
+      "paese-pacchetti": "Giappone",
+      "description": "Descrizione dell'immagine"
+    },
+ {
+       "id": 49,
+       "src": "img/pubblicità/advertising1.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+  },
+  {
+       "id": 50,
+       "src": "img/pubblicità/advertising2.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+  },
+  {
+       "id": 51,
+       "src": "img/pubblicità/advertising3.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+  }, 
+  {
+       "id": 53,
+       "src": "img/about/about1.png",
+      "category": "about archive",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+   },
+   {
+       "id": 54,
+       "src": "img/about/about2.jpg",
+      "category": "about archive",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+   },
+   {
+       "id": 55,
+       "src": "img/about/about3.png",
+      "category": "about archive",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+   },
+   {
+       "id": 56,
+       "src": "img/about/about4.png",
+      "category": "about archive",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+   },
+   {
+       "id": 57,
+       "src": "img/about/about5.jpg",
+      "category": "about archive",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+   },
+   {
+       "id": 58,
+       "src": "img/about/about6.png",
+      "category": "about archive",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description": "Descrizione dell'immagine"
+   }
   ]
 }

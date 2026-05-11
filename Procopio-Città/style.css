@@ -355,9 +355,6 @@ header {
   text-align: center;
 }
 
-body.lightbox-open .sidebar-links {
-  display: none;
-}
 
 #archive-rows a,
 #archive-rows span.p {
@@ -412,9 +409,9 @@ body.lightbox-open .sidebar-links {
 }
 
 /* Home page: toggle sidebar-links with + button */
-.home-page .sidebar-links {
+/* .home-page .sidebar-links {
   display: none;
-}
+} */
 .home-page .sidebar-links.open {
   display: flex;
 }
@@ -437,6 +434,43 @@ body.lightbox-open .sidebar-links {
   opacity: 0.6;
 }
 
+
+/* MAPBOX */
+.mapboxgl-canvas {
+  transition: opacity 0.6s cubic-bezier(.8,0,.2,1);
+}
+body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
+  opacity: 0.2;
+}
+
+.mapboxgl-ctrl-attrib-inner{display: none !important;}
+.mapboxgl-ctrl-logo {display: none !important;}
+.custom-marker {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.marker-content img {
+  border: none !important;
+  transition: transform 0.2s;
+}
+.marker-content img:hover {
+  transform: scale(1.2);
+}
+.marker-label {
+  background: var(--myBlack);
+  border-radius: 0px !important;
+  margin-top: 4px;
+  color: var(--myWhite);
+  font-weight: 100;
+  font-family: "Diatype";
+  font-style: normal;
+  font-size: 12px;
+}
+
+
+
 /* Rotate the toggle when menu is open */
 .toggle-btn {
   transition: transform 0.2s ease, opacity 0.12s ease;
@@ -451,7 +485,7 @@ body.lightbox-open .sidebar-links {
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: -2;
+  z-index: 1;
 }
 .home-map::after {
   content: '';
@@ -467,4 +501,120 @@ body.lightbox-open .sidebar-links {
 }
 .home-page .specialGrid {
   background: transparent;
+}
+
+/* ── Face/Hand preview panel ────────────────────────────────────── */
+.face-preview-panel {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  font-family: monospace;
+  font-size: 11px;
+  pointer-events: none;
+}
+.face-webcam-preview {
+  width: 180px;
+  height: 135px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.15);
+  transform: scaleX(-1);
+}
+.face-status-panel {
+  text-align: right;
+  line-height: 1.7;
+  color: #333;
+  background: rgba(255,255,255,0.75);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.face-status-bold {
+  font-weight: bold;
+}
+
+/* Marker blur transition */
+.custom-marker {
+  transition: filter 0.3s ease;
+}
+
+/* ── Marker modal ────────────────────────────────────────────────── */
+.marker-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.marker-modal.open {
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
+}
+.marker-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #1E1E1E;
+  opacity: 1;
+  cursor: pointer;
+}
+.marker-modal-content {
+  position: relative;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background-color: #1E1E1E;
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 80vw;
+  max-height: 90vh;
+}
+.marker-modal-close {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  line-height: 1;
+}
+.marker-modal-img {
+  position: relative;
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  display: block;
+}
+.marker-modal-desc {
+  display: block;
+  margin-top: 12px;
+  color: var(--myWhite, #FCFCFC);
+  font-family: "Diatype";
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  text-align: center;
+  max-width: 60ch;
+}
+
+body.home-page:has(#marker-modal.open) .home-brand {
+  color: #FCFCFC;
 }

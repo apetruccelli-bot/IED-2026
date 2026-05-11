@@ -104,6 +104,18 @@ body {
 }
 
 
+/* ── ABOUT ── */
+.imgInsideAbout {
+  width:min(60vw,80vh);
+  height:min(60vw,80vh);
+  background:#FF0000;
+  border-radius:6px;
+  transition: filter 0.9s ease, opacity 0.9s ease, background-color 0.3s ease;
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
+
 
 /* ── HEADER ── */
 header {
@@ -233,9 +245,52 @@ button {
   padding-top: 10rem;
 }
 
+.myPhotos.year-filtered .card {
+  transition: opacity 0.3s cubic-bezier(.8,0,.2,1), filter 0.3s cubic-bezier(.8,0,.2,1);
+}
+.myPhotos.year-filtered .card:not(.activeImg) {
+  opacity: 0.2;
+  filter: blur(2px);
+}
+
+/* Cigarette packs: horizontal rows of h-40 images */
+.myPhotos.layout-pacchetti {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+.myPhotos.layout-pacchetti .card {
+  height: 10rem;
+  width: auto;
+  flex-direction: row;
+  flex-shrink: 0;
+}
+.myPhotos.layout-pacchetti .card-img {
+  width: auto;
+  height: 100%;
+  aspect-ratio: unset;
+  object-fit: cover;
+}
+
+/* Advertisements: full-width stacked column */
+.myPhotos.layout-pubblicita {
+  display: flex;
+  flex-direction: column;
+}
+.myPhotos.layout-pubblicita .card {
+  width: 100%;
+}
+.myPhotos.layout-pubblicita .card-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: unset;
+  object-fit: contain;
+}
+
 /* ── CARD ── */
 .card {
-  background: var(--surface);
+  /* background: var(--surface); */
   /* overflow: hidden; */
   display: flex;
   flex-direction: column;
