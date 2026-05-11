@@ -352,7 +352,7 @@ header {
 .lb-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.88);
+  background: rgba(255, 255, 255, 0.98);
   cursor: zoom-out;
 }
 
@@ -404,15 +404,16 @@ header {
   justify-content: center;
 }
 
+
 .lb-tags .card-tag {
-  color: rgba(255,255,255,0.55);
-  background: rgba(255,255,255,0.08);
+  color: #1a1a1a;
+  background: rgba(0,0,0,0.08);
 }
 
 .lb-tags .card-tag:hover,
 .lb-tags .card-tag.highlight {
-  background: #fff;
-  color: #1a1a1a;
+  background: #1a1a1a;
+  color: #fff;
 }
 
 .lb-close,
