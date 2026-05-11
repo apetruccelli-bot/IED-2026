@@ -19,7 +19,7 @@
     },
     {
   "id": 3,
-  "src": "img/fumo/fumo.anziano1.png",
+  "src": "img/fumo/anziano1.png",
   "category": "fotografie",
   "year": 1985,
   "tags": ["urbano", "anziano", "osaka", "giappone"],
@@ -46,7 +46,7 @@
 },
     {
   "id": 6,
-  "src": "img/fumo/fumo.anziano2.png",
+  "src": "img/fumo/anziano2.png",
   "category": "fotografie",
   "year": 1987,
   "tags": ["urbano", "anziano", "osaka", "giappone"],
@@ -89,7 +89,7 @@
        },
     {
   "id": 11,
-  "src": "img/fumo/fumo.anziano3.png",
+  "src": "img/fumo/anziano3.png",
   "category": "fotografie",
   "year": 1989,
   "tags": ["urbano", "anziano", "osaka", "giappone"],
@@ -116,7 +116,7 @@
 },
     {
   "id": 14,
-  "src": "img/fumo/fumo.anziano4.png",
+  "src": "img/fumo/anziano4.png",
   "category": "fotografie",
   "year": 1986,
   "tags": ["urbano", "anziano", "osaka", "giappone"],
@@ -159,7 +159,7 @@
        },   
     {
   "id": 19,
-  "src": "img/fumo/fumo.anziano5.png",
+  "src": "img/fumo/anziano5.png",
   "category": "fotografie",
   "year": 1988,
   "tags": ["urbano", "anziano", "osaka", "giappone"],
