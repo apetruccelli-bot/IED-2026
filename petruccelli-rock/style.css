@@ -356,22 +356,30 @@ header {
   cursor: zoom-out;
 }
 
+
 .lb-content {
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: min(90vw, 960px);
-  max-height: 90vh;
-  gap: 14px;
+  max-width: 100vw;
+  max-height: 100vh;
+  gap: 0;
+  padding: 0;
+  margin: 0;
 }
+
 
 .lb-img {
   display: block;
-  max-width: 100%;
-  max-height: calc(90vh - 60px);
+  max-width: 100vw;
+  max-height: 100vh;
+  width: auto;
+  height: auto;
   object-fit: contain;
+  margin: 0;
+  padding: 0;
 }
 
 .lb-info {

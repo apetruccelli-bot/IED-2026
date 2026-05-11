@@ -20,8 +20,8 @@ const CALIB_FRAMES   = 50;
 
 // ── tune these ──
 const BLUR_NEAR   = 0;     // blur when face fills baseline (very close)
-const BLUR_FAR    = 14;    // blur when face = 0.4× baseline (far)
-const FADE_THRESH = 0.6;  // ratio below which images fade & title appears
+const BLUR_FAR    = 6;    // blur when face = 0.4× baseline (far)
+const FADE_THRESH = 0.85;  // ratio below which images fade & title appears
 const MODAL_FADE_THRESH = 2.5; // ratio above which modal image fades (close)
 
 async function initFaceTracking() {
@@ -151,16 +151,18 @@ async function detectFaceLoop() {
         }
 
         // ── MODAL behavior ──
-        if (modalActive) {
-          const modalImage = document.getElementById('modalImage');
-          const modalText  = document.querySelector('.modal-text');
-          // close (ratio > MODAL_FADE_THRESH) → image fades, text prominent
-          const modalFadeT = Math.max(0, Math.min(1, (ratio - 1.0) / (MODAL_FADE_THRESH - 1.0)));
-          //if (modalImage) modalImage.style.opacity = (1 - modalFadeT * 0.8).toFixed(2);
-          //if (modalText)  modalText.style.opacity  = (0.2 + modalFadeT * 0.8).toFixed(2);
-          if (modalImage) modalImage.style.opacity = modalFadeT > 0.1 ? '0.2' : '1';
-          if (modalText)  modalText.style.opacity  = modalFadeT > 0.1 ? '1' : '0.2';
-        }
+        // ── MODAL behavior ──
+if (modalActive) {
+  const modalImage = document.getElementById('modalImage');
+  const modalText  = document.querySelector('.modal-text');
+
+  const MODAL_TEXT_TRIGGER = 0.9;
+
+  const showModalText = ratio > MODAL_TEXT_TRIGGER;
+
+  if (modalImage) modalImage.style.opacity = showModalText ? '0.2' : '1';
+  if (modalText)  modalText.style.opacity  = showModalText ? '1' : '0.2';
+}
       }
     } else {
       if (statusLabel) statusLabel.textContent = 'no face — look at camera';
