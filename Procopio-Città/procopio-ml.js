@@ -7,11 +7,19 @@ let procopioFaceDetector = null;
 let procopioHandDetector = null;
 let procopioIsDetecting  = false;
 let procopioStream       = null;
+let procopioFadeLastTickAt = null;
+let procopioLastNavigationActivityAt = 0;
+let procopioFadeLoopRunning = false;
+let procopioFadeStepIndex = 0;
+let procopioFadeStepElapsedMs = 0;
 
 // Face calibration
 let faceSizeSamples  = [];
 let faceSizeBaseline = null;
 const FACE_CALIB_FRAMES = 50;
+const FACE_TOO_FAR_RATIO = 0.62;
+const FACE_RETURN_RATIO = 0.68;
+let faceTooFar = false;
 
 // Hand calibration
 let handSizeSamples  = [];
@@ -24,7 +32,7 @@ const ZOOM_MAX = 10.5;
 const ZOOM_DEADZONE = 0.03;
 const CENTER_DEADZONE = 0.0008;
 const MAP_UPDATE_INTERVAL_MS = 120;
-const HAND_RATIO_SMOOTH_ALPHA = 0.15;
+const HAND_RATIO_SMOOTH_ALPHA = 0.10;
 const HAND_CENTER_SMOOTH_ALPHA = 0.12;
 
 let filteredHandRatio = null;
@@ -40,8 +48,101 @@ const MAP_BOUNDS = {
   north: 42.5    // max latitude
 };
 
+const MARKER_FADE_DURATION_MS = 30 * 1000;
+const NAVIGATION_SLOWDOWN_WINDOW_MS = 8000;
+const NAVIGATION_SLOWDOWN_FACTOR = 0.25;
+
 function dist2D(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
+function setFaceFarOverlayVisible(visible) {
+  const overlayEl = document.getElementById('face-far-overlay');
+  if (!overlayEl) return;
+  overlayEl.classList.toggle('open', visible);
+  overlayEl.setAttribute('aria-hidden', visible ? 'false' : 'true');
+}
+
+function markProcopioNavigationActivity() {
+  procopioLastNavigationActivityAt = performance.now();
+}
+
+function isProcopioTimerPaused() {
+  const lightboxOpen = document.body.classList.contains('lightbox-open') || !!document.querySelector('.lightbox.open');
+  const markerModalOpen = !!document.querySelector('#marker-modal.open');
+  return lightboxOpen || markerModalOpen;
+}
+
+function getProcopioTimerSpeed(now) {
+  if (isProcopioTimerPaused()) return 0;
+  if (!procopioLastNavigationActivityAt) return 1;
+  return now - procopioLastNavigationActivityAt < NAVIGATION_SLOWDOWN_WINDOW_MS
+    ? NAVIGATION_SLOWDOWN_FACTOR
+    : 1;
+}
+
+function updateProcopioMarkerFade(now) {
+  if (!procopioFadeLoopRunning) return;
+
+  const markerEls = document.querySelectorAll('.custom-marker');
+  if (!markerEls.length) {
+    procopioFadeLastTickAt = now;
+    requestAnimationFrame(updateProcopioMarkerFade);
+    return;
+  }
+
+  if (procopioFadeLastTickAt == null) {
+    procopioFadeLastTickAt = now;
+  }
+
+  const deltaMs = now - procopioFadeLastTickAt;
+  procopioFadeLastTickAt = now;
+
+  const speed = getProcopioTimerSpeed(now);
+  if (speed > 0) {
+    procopioFadeStepElapsedMs += deltaMs * speed;
+  }
+
+  if (procopioFadeStepIndex >= markerEls.length) {
+    return;
+  }
+
+  markerEls.forEach((markerEl, index) => {
+    if (index < procopioFadeStepIndex) {
+      markerEl.style.opacity = '0';
+      return;
+    }
+
+    if (index > procopioFadeStepIndex) {
+      markerEl.style.opacity = '1';
+      return;
+    }
+
+    const markerProgress = Math.max(0, Math.min(1, procopioFadeStepElapsedMs / MARKER_FADE_DURATION_MS));
+    const opacity = Math.max(0, 1 - markerProgress);
+    markerEl.style.opacity = opacity.toFixed(4);
+  });
+
+  if (procopioFadeStepElapsedMs >= MARKER_FADE_DURATION_MS) {
+    procopioFadeStepIndex += 1;
+    procopioFadeStepElapsedMs = 0;
+    if (procopioFadeStepIndex < markerEls.length) {
+      markerEls[procopioFadeStepIndex].style.opacity = '1';
+    }
+  }
+
+  if (procopioFadeStepIndex < markerEls.length) {
+    requestAnimationFrame(updateProcopioMarkerFade);
+  }
+}
+
+function startProcopioMarkerFadeTimer() {
+  if (procopioFadeLoopRunning) return;
+  procopioFadeLoopRunning = true;
+  procopioFadeLastTickAt = null;
+  procopioFadeStepIndex = 0;
+  procopioFadeStepElapsedMs = 0;
+  requestAnimationFrame(updateProcopioMarkerFade);
 }
 
 async function initProcopioTracking() {
@@ -79,6 +180,15 @@ async function initProcopioTracking() {
     if (statusEl) statusEl.textContent = 'error: ' + err.message;
   }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const recordActivity = () => markProcopioNavigationActivity();
+  document.addEventListener('pointerdown', recordActivity, true);
+  document.addEventListener('wheel', recordActivity, { passive: true, capture: true });
+  document.addEventListener('keydown', recordActivity, true);
+  window.addEventListener('scroll', recordActivity, { passive: true });
+  startProcopioMarkerFadeTimer();
+});
 
 async function startProcopioCamera() {
   const video    = document.getElementById('face-webcam');
@@ -122,6 +232,8 @@ async function detectLoop() {
 
       if (faceSizeSamples.length < FACE_CALIB_FRAMES) {
         faceSizeSamples.push(faceWidth);
+        setFaceFarOverlayVisible(false);
+        faceTooFar = false;
         if (calibEl) calibEl.textContent = `calib: ${faceSizeSamples.length}/${FACE_CALIB_FRAMES}`;
         if (faceSizeSamples.length === FACE_CALIB_FRAMES) {
           faceSizeBaseline = faceSizeSamples.reduce((a, b) => a + b) / FACE_CALIB_FRAMES;
@@ -130,6 +242,14 @@ async function detectLoop() {
       } else {
         const ratio = faceWidth / faceSizeBaseline;
         if (proxEl) proxEl.textContent = `${ratio.toFixed(2)}×`;
+
+        if (faceTooFar) {
+          if (ratio > FACE_RETURN_RATIO) faceTooFar = false;
+        } else if (ratio < FACE_TOO_FAR_RATIO) {
+          faceTooFar = true;
+        }
+        setFaceFarOverlayVisible(faceTooFar);
+
         // ratio 1.4+ (very close) → 0px blur; ratio 0.4 (very far) → 20px blur
         const blurT   = Math.max(0, Math.min(1, (ratio - 0.4) / (1.4 - 0.4)));
         const blurAmt = 20 * (1 - blurT);
@@ -139,6 +259,8 @@ async function detectLoop() {
       }
     } else {
       if (statusEl) statusEl.textContent = 'no face';
+      setFaceFarOverlayVisible(false);
+      faceTooFar = false;
     }
   } catch (e) { /* ignore per-frame errors */ }
 
