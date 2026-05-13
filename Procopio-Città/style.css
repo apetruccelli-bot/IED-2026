@@ -269,6 +269,29 @@ header {
   pointer-events: auto;
 }
 
+.lb-title {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #FCFCFC;
+  z-index: 9999;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.lb-title a {
+  color: #FCFCFC;
+  text-decoration: none;
+  line-height: 100%;
+}
+
+.lb-title p {
+  font-size: 12px;
+  margin-top: 0px;
+  line-height: 120%;
+}
+
 .lb-backdrop {
   position: absolute;
   top: 0;
