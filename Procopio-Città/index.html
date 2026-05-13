@@ -18,7 +18,7 @@
   <body>
 
     <div class="w-screen h-screen grid grid-cols-8 specialGrid">
-      <div class="col-start-1 col-end-3 p-10px bg-myBlack flex flex-col justify-between text-myWhite z-[1100]">
+      <div class="col-start-1 col-end-3 p-10px bg-myBlack flex flex-col justify-between text-myWhite z-[2100]">
         <div class="flex flex-col">
           <a href="home.html" class="font-myTitle">Città<br>interrotte</a>
           <p class="">di Fondazione Scorza</p>
@@ -40,7 +40,7 @@
             <form action="/" class="grid-cols-6" onsubmit="return false;">
               <label for="search" class="sr-only">Ricerca</label>
               <input
-                id="search"
+                id="searc
                 type="search"
                 placeholder="Ricerca"
                 class="w-full border-b border-myBlack bg-transparent text-myBlack outline-none placeholder:text-myBlack"
@@ -54,7 +54,8 @@
       </div>
     </div>
 
-    <div class="lightbox" id="lightbox" aria-hidden="true">
+    <!-- Lightbox modal -->
+    <div id="lightbox" class="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
       <button class="lb-close" id="lb-close" type="button">✕</button>
       <button class="lb-prev" id="lb-prev" type="button">←</button>

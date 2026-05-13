@@ -258,7 +258,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 5000;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -281,18 +281,22 @@ header {
 
 .lb-content {
   position: relative;
-  z-index: 1001;
+  z-index: 2001;
   background-color: #1E1E1E;
   padding: 10px;
   border-radius: 8px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
   align-items: center;
-  max-width: 80vw;
+  gap: 10px;
+  max-width: 90vw;
   max-height: 90vh;
 }
 
 .lb-img {
+  grid-column: 2;
+  grid-row: 1;
   position: relative;
   max-width: 100%;
   max-height: 80vh;
@@ -300,32 +304,48 @@ header {
 }
 
 .lb-close, .lb-prev, .lb-next {
-  position: absolute;
   background: none;
   border: none;
   color: #FCFCFC;
   font-size: 30px;
   cursor: pointer;
+  padding: 5px;
 }
 
 .lb-close {
+  position: absolute;
   right: 10px;
   top: 0px;
+  z-index: 1002;
 }
 
 .lb-prev {
-  left: 28%;
+  position: absolute;
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  z-index: 9999;
 }
 
 .lb-next {
-  right: 28%;
+  position: absolute;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  z-index: 2002;
 }
 
 .lb-info {
+  grid-column: 1 / -1;
+  grid-row: 2;
   color: #FCFCFC;
   font-family: "Diatype";
   text-align: center;
@@ -415,7 +435,7 @@ header {
   position: absolute;
   top: 3.5rem;
   left: 0;
-  width: 100%;
+  width: calc((100% - 50px) / 6);
   height: 4rem;
   background: linear-gradient(to bottom, var(--myWhite), transparent);
   z-index: 99;

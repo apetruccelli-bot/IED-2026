@@ -29,9 +29,17 @@ const archiveRows = [
 let enrichedRows = [];
 let allItems = [];
 let mapItems = [];
-let activeTags = new Set();
+let activeFilters = new Set();
 let lbIndex = -1;
 let markerIndex = -1;
+
+const regionGroups = {
+  Calabria: ['Serra Vasta', 'Valle Cupa', 'Zagara', 'San Velio', 'Fonte Chiusa', 'Santa Rena', 'Costa Nera', 'Pietra Lenta'],
+  Basilicata: ['Fonte Secca', 'Monteferro', 'Poggio Nero', 'Piana Morta'],
+  Campania: ['Vallefredda', 'Rocca Secca', 'Serra Antica'],
+  Puglia: ['Borgo Cupo', 'Castel Ruvo', 'Borgo Salso'],
+  Sicilia: ['Colle Ombra', 'Riva Spenta'],
+};
 
 function escapeHtml(value) {
   return String(value)
@@ -49,6 +57,10 @@ function normalize(value) {
     .toLowerCase();
 }
 
+function normalizeComparable(value) {
+  return normalize(value).replace(/\s+/g, ' ').trim();
+}
+
 function findBestImage(row, items) {
   const targetYear = Number(row.anno);
   const surname = normalize(row.autore);
@@ -58,6 +70,26 @@ function findBestImage(row, items) {
     items.find((item) => item.year === targetYear) ||
     null
   );
+}
+
+function getItemField(item, key) {
+  if (!item) return '';
+  if (key === 'year') return String(item.year || '');
+  if (key === 'tags') return Array.isArray(item.tags) ? item.tags : [];
+  return String(item[key] || '');
+}
+
+function buildFilterColumns() {
+  const unique = (arr) => [...new Set(arr.filter(Boolean))];
+  const abitantiOrder = ['Meno di 10', 'Tra 10 e 100', 'Tra 100 e 1000', 'Piu di 1000'];
+
+  return [
+    { key: 'year', label: 'anno', values: unique(allItems.map((item) => String(item.year || ''))).sort() },
+    { key: 'autore', label: 'autore', values: unique(allItems.map((item) => item.autore)).sort() },
+    { key: 'regione', label: 'regione', values: unique(allItems.map((item) => item.regione)).sort() },
+    { key: 'abitanti', label: 'abitanti', values: unique(allItems.map((item) => item.abitanti)).sort((a, b) => abitantiOrder.indexOf(a) - abitantiOrder.indexOf(b)) },
+    { key: 'documento', label: 'documento', values: unique(allItems.map((item) => item.documento)).sort() },
+  ];
 }
 
 async function hydrateRowsWithImages() {
@@ -81,49 +113,94 @@ async function hydrateRowsWithImages() {
 function renderFilters() {
   if (!rowsHost) return;
 
-  const unique = (arr) => [...new Set(arr.filter(Boolean))];
-
-  const columns = [
-    unique(allItems.map((i) => String(i.year || ''))).sort(),
-    unique(enrichedRows.map((r) => r.autore)).sort(),
-    unique(enrichedRows.map((r) => r.regione)).sort(),
-    unique(enrichedRows.map((r) => r.abitanti)).sort(),
-    unique(enrichedRows.map((r) => r.documento)).sort(),
-    unique(allItems.map((i) => i.category)).sort(),
-  ];
+  const columns = buildFilterColumns();
 
   rowsHost.innerHTML = columns
     .map(
-      (values) => `
+      ({ key, label, values }) => `
       <div class="flex flex-col">
-        ${values
-          .map(
-            (v) =>
-              `<p class="text-justify cursor-pointer select-none" data-tag="${escapeHtml(v)}">${escapeHtml(v)}</p>`
-          )
-          .join('')}
+        ${key === 'regione'
+          ? values
+              .map((v) => {
+                const towns = regionGroups[v] || [];
+                return `
+                  <div class="region-group">
+                    <button
+                      type="button"
+                      class="w-full text-left text-justify cursor-pointer select-none"
+                      data-filter-key="${escapeHtml(key)}"
+                      data-filter-value="${escapeHtml(v)}"
+                      data-region-toggle="${escapeHtml(v)}"
+                      aria-expanded="false"
+                    >
+                      ${escapeHtml(v)}
+                    </button>
+                    <div class="region-towns hidden pl-10px pt-10px pb-10px" data-region-town-list="${escapeHtml(v)}">
+                      ${towns.map((town) => `<p class="text-justify opacity-50 cursor-pointer select-none" data-filter-key="paese" data-filter-value="${escapeHtml(town)}">${escapeHtml(town)}</p>`).join('')}
+                    </div>
+                  </div>
+                `;
+              })
+              .join('')
+          : values
+              .map(
+                (v) =>
+                  `<p class="text-justify cursor-pointer select-none" data-filter-key="${escapeHtml(key)}" data-filter-value="${escapeHtml(v)}">${escapeHtml(v)}</p>`
+              )
+              .join('')}
       </div>`
     )
     .join('');
+
+  rowsHost.querySelectorAll('[data-filter-key][data-filter-value]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const key = el.dataset.filterKey;
+      const value = el.dataset.filterValue;
+      if (key && value) toggleFilter(key, value);
+    });
+  });
 }
 
-function toggleTag(tag) {
-  if (activeTags.has(tag)) {
-    activeTags.delete(tag);
+function toggleFilter(key, value) {
+  const token = `${key}::${normalizeComparable(value)}`;
+
+  if (activeFilters.has(token)) {
+    activeFilters.delete(token);
   } else {
-    activeTags.add(tag);
+    [...activeFilters].forEach((activeToken) => {
+      if (activeToken.startsWith(`${key}::`)) {
+        activeFilters.delete(activeToken);
+      }
+    });
+    activeFilters.add(token);
   }
   // update visual state: if any tags active, dim unselected and highlight selected
-  document.querySelectorAll('[data-tag]').forEach((el) => {
-    if (activeTags.size === 0) {
+  document.querySelectorAll('[data-filter-key][data-filter-value]').forEach((el) => {
+    const currentToken = `${el.dataset.filterKey}::${normalizeComparable(el.dataset.filterValue)}`;
+
+    if (activeFilters.size === 0) {
       el.classList.remove('opacity-50', 'opacity-100');
     } else {
-      const isActive = activeTags.has(el.dataset.tag);
+      const isActive = activeFilters.has(currentToken);
       el.classList.toggle('opacity-100', isActive);
       el.classList.toggle('opacity-50', !isActive);
     }
   });
+  syncRegionExpansion();
   filterVisible(searchInput?.value || '');
+}
+
+function syncRegionExpansion() {
+  document.querySelectorAll('[data-region-toggle]').forEach((button) => {
+    const value = button.dataset.regionToggle || '';
+    const isExpanded = activeFilters.has(`regione::${normalizeComparable(value)}`);
+    const details = document.querySelector(`[data-region-town-list="${CSS.escape(value)}"]`);
+
+    button.setAttribute('aria-expanded', String(isExpanded));
+    if (details) {
+      details.classList.toggle('hidden', !isExpanded);
+    }
+  });
 }
 
 function galleryTemplate(item, index) {
@@ -148,10 +225,6 @@ function galleryTemplate(item, index) {
 function renderAll() {
   if (rowsHost) {
     renderFilters();
-    rowsHost.addEventListener('click', (e) => {
-      const tag = e.target.dataset.tag;
-      if (tag) toggleTag(tag);
-    });
   }
 
   if (galleryHost) {
@@ -172,19 +245,26 @@ function filterVisible(term = '') {
     const matchesSearch = !query || [item.description, item.category, item.year].some(
       (v) => normalize(String(v || '')).includes(query)
     );
-    const itemValues = [
-      ...(item.tags || []),
-      item.category,
-      String(item.year || ''),
-      item.autore,
-      item.regione,
-      item.abitanti,
-      item.documento,
-    ].filter(Boolean);
-    const matchesTags = activeTags.size === 0 || [...activeTags].every((tag) =>
-      itemValues.includes(tag)
-    );
-    el.classList.toggle('hidden', !matchesSearch || !matchesTags);
+    const matchesTags =
+      activeFilters.size === 0 ||
+      [...activeFilters].every((token) => {
+        const [key, value] = token.split('::');
+        const field = getItemField(item, key);
+
+        if (key === 'tags') {
+          return Array.isArray(field) && field.some((tag) => normalizeComparable(tag) === value);
+        }
+
+        if (key === 'paese') {
+          const itemTown = String(item.description || '').split(',')[0].trim();
+          return normalizeComparable(itemTown) === value;
+        }
+
+        return normalizeComparable(field) === value;
+      });
+    const shouldHide = !matchesSearch || !matchesTags;
+    el.classList.toggle('hidden', shouldHide);
+    el.style.display = shouldHide ? 'none' : '';
   });
 }
 
@@ -203,6 +283,8 @@ function openLightbox(index) {
   lightbox.setAttribute('aria-hidden', 'false');
   document.body.classList.add('lightbox-open');
   document.body.style.overflow = 'hidden';
+  const sidebarLinks = document.querySelector('.sidebar-links');
+  if (sidebarLinks) sidebarLinks.style.visibility = 'hidden';
 }
 
 function closeLightbox() {
@@ -211,6 +293,8 @@ function closeLightbox() {
   document.body.classList.remove('lightbox-open');
   document.body.style.overflow = '';
   lbImg.src = '';
+  const sidebarLinks = document.querySelector('.sidebar-links');
+  if (sidebarLinks) sidebarLinks.style.visibility = 'visible';
 }
 
 function openMarkerModal(index) {
@@ -230,6 +314,8 @@ function openMarkerModal(index) {
   markerModal.classList.add('open');
   markerModal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  const sidebarLinks = document.querySelector('.sidebar-links');
+  if (sidebarLinks) sidebarLinks.style.visibility = 'hidden';
 }
 
 function closeMarkerModal() {
@@ -239,6 +325,8 @@ function closeMarkerModal() {
   markerModal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
   if (markerModalImg) markerModalImg.src = '';
+  const sidebarLinks = document.querySelector('.sidebar-links');
+  if (sidebarLinks) sidebarLinks.style.visibility = 'visible';
 }
 
 function navigateMarkerModal(direction) {
