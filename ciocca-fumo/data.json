@@ -220,7 +220,7 @@
   "paese-pacchetti": "Giappone",
   "description": "Descrizione dell'immagine"
   }
-   {
+   ,{
   "id": 26,
   "src": "img/pacchetti/pack2.jpg",
   "category": "pacchetti",
@@ -230,7 +230,7 @@
   "luogo-pacchetti": "Tokyo",
   "paese-pacchetti": "Giappone",
   "description": "Descrizione dell'immagine"
-}
+},
 {
   "id": 27,
   "src": "img/pacchetti/pack3.jpg",
@@ -241,7 +241,7 @@
   "luogo-pacchetti": "Nara",
   "paese-pacchetti": "Giappone",
   "description": "Descrizione dell'immagine"
-}
+},
 {
   "id": 28,
   "src": "img/pacchetti/pack4.jpg",
