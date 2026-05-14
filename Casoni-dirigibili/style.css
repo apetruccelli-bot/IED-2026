@@ -746,13 +746,14 @@ button {
 
 .landing-column span {
   font-family: 'SchengenA Regular', sans-serif;
-  font-size: 20px;
+  font-size: clamp(11px, 1.25vw, 18px);
   line-height: 100%;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--myWhite);
   z-index: 3;
-  transform: translateY(150px);
+
+  transform: translateY(clamp(45px, 14vh, 150px));
 }
 
 /* AAA grandi */
@@ -765,7 +766,10 @@ button {
   width: max-content;
   height: 100vh;
   pointer-events: none;
+  animation: none;
+}
 
+.landing-modal.landing-active .landing-aaa-track {
   animation-name: landing-aaa-scroll-right;
   animation-duration: 15s;
   animation-timing-function: linear;
@@ -789,6 +793,12 @@ button {
   white-space: nowrap;
 }
 
+.landing-hidden {
+  display: none;
+}
+
+
+
 /* responsive */
 @media (max-width: 600px) {
   .landing-content {
@@ -811,4 +821,20 @@ button {
   .grid { padding: 16px 16px 40px; }
   .results-info { padding: 12px 16px 0; }
   h1 { font-size: 12px; } */
+}
+
+@media (max-width: 600px) {
+  .landing-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
+  }
+
+  .landing-column span {
+    font-size: clamp(11px, 3.5vw, 16px);
+    transform: translateY(0);
+  }
+
+  .landing-aaa {
+    font-size: 140vh;
+  }
 }

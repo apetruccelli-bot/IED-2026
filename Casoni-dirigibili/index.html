@@ -18,7 +18,7 @@
   <body>
 
     <!-- LANDING PAGE -->
-  <div id="landing-modal" class="landing-modal">
+  <div id="landing-modal" class="landing-modal landing-hidden">
     <div class="landing-aaa-track">
     <div class="landing-aaa">AAAA</div>
   </div>
@@ -178,20 +178,45 @@
     <script src="casoni-lm.js"></script>
     <script src="script.js"></script>
 
-    <script>
+<script>
   (function () {
     const modal = document.getElementById('landing-modal');
     const aaaTrack = document.querySelector('.landing-aaa-track');
 
-    aaaTrack.addEventListener('animationend', () => {
-      setTimeout(() => {
-        modal.classList.add('landing-modal-hide');
+    if (!modal || !aaaTrack) return;
 
-        modal.addEventListener('animationend', () => {
-          modal.remove();
-        }, { once: true });
-      }, 1000);
+    const navigationEntry = performance.getEntriesByType('navigation')[0];
+    const isReload = navigationEntry && navigationEntry.type === 'reload';
+
+    if (!isReload) {
+      modal.remove();
+      return;
+    }
+
+    modal.classList.remove('landing-hidden');
+
+    requestAnimationFrame(() => {
+      modal.classList.add('landing-active');
+    });
+
+    let isLeaving = false;
+
+    function closeLanding() {
+      if (isLeaving) return;
+      isLeaving = true;
+
+      modal.classList.add('landing-modal-hide');
+
+      modal.addEventListener('animationend', () => {
+        modal.remove();
+      }, { once: true });
+    }
+
+    aaaTrack.addEventListener('animationend', () => {
+      setTimeout(closeLanding, 1000);
     }, { once: true });
+
+    modal.addEventListener('click', closeLanding);
   })();
 </script>
 
