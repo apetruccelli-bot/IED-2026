@@ -234,55 +234,34 @@ searchInput?.addEventListener('input', e => {
 // ── Render cards ──────────────────────────────────────────────────────────
 function render() {
 
-  // get the visible items
-  const visible = filteredItems();
-
+  // Instead of filtering, show all items but style them based on tag activity
+  const anyTagActive = activeTags.size > 0;
   // set the results info
   if(resultsInfo) {
-    resultsInfo.textContent =
-      visible.length === items.length
-        ? `${items.length} items`
-        : `${visible.length} / ${items.length} items`;
+    resultsInfo.textContent = `${items.length} items`;
   }
 
   // clear the grid
   grid.innerHTML = '';
 
-  // if there are no visible items, show the empty state
-  if (visible.length === 0) {
-    const empty = document.createElement('div');
-    empty.className = 'empty';
-    empty.textContent = 'Nessun risultato.';
-    grid.appendChild(empty);
-    return;
-  }
-
-  // loop through the visible items and create a card for each item
-  visible.forEach((item, i) => {
+  items.forEach((item, i) => {
     const card = document.createElement('article');
     card.className = 'card';
     card.style.cursor = 'zoom-in';
     card.dataset.year = item.year || '';
 
     // image
-    // create an image element
     const img = document.createElement('img');
-    // set the class name
     img.className = 'card-img';
-    // set the source
     img.src = item.src;
-    // set the alt text
     img.alt = `Item ${item.id}`;
-    // set the loading attribute
     img.loading = 'lazy';
-    // append the image to the card
     card.appendChild(img);
 
     // body
     const body = document.createElement('div');
     body.className = 'card-body';
 
-    // id
     const idEl = document.createElement('span');
     idEl.className = 'card-id';
     idEl.textContent = `#${String(item.id).padStart(2, '0')}`;
@@ -305,6 +284,27 @@ function render() {
     body.appendChild(tagsEl);
 
     card.addEventListener('click', () => openLightbox(i));
+
+    // Style based on tag activity
+    if (anyTagActive) {
+      const hasActiveTag = item.tags.some(tag => activeTags.has(tag));
+      if (hasActiveTag) {
+        card.style.opacity = '1';
+        card.style.transform = 'scale(1.08)';
+        card.style.zIndex = '2';
+        card.style.transition = 'opacity 0.2s, transform 0.2s';
+      } else {
+        card.style.opacity = '0.25';
+        card.style.transform = 'scale(1)';
+        card.style.zIndex = '1';
+        card.style.transition = 'opacity 0.2s, transform 0.2s';
+      }
+    } else {
+      card.style.opacity = '1';
+      card.style.transform = 'scale(1)';
+      card.style.zIndex = '1';
+      card.style.transition = 'opacity 0.2s, transform 0.2s';
+    }
 
     card.appendChild(body);
     grid.appendChild(card);
