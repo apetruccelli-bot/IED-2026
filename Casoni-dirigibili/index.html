@@ -17,6 +17,25 @@
   </head>
   <body>
 
+    <!-- LANDING PAGE -->
+  <div id="landing-modal" class="landing-modal">
+    <div class="landing-aaa-track">
+    <div class="landing-aaa">AAAA</div>
+  </div>
+
+  <div class="landing-content">
+    <div class="landing-column">
+      <span>ADLER’S</span>
+    </div>
+    <div class="landing-column">
+      <span>AIRSHIP</span>
+    </div>
+    <div class="landing-column">
+      <span>ARCHIVE</span>
+    </div>
+  </div>
+</div>
+
     <header class="opacity-0 h-0 overflow-hidden hidden">
       <div class="header-inner">
         <div class="header-row">
@@ -158,6 +177,23 @@
 
     <script src="casoni-lm.js"></script>
     <script src="script.js"></script>
+
+    <script>
+  (function () {
+    const modal = document.getElementById('landing-modal');
+    const aaaTrack = document.querySelector('.landing-aaa-track');
+
+    aaaTrack.addEventListener('animationend', () => {
+      setTimeout(() => {
+        modal.classList.add('landing-modal-hide');
+
+        modal.addEventListener('animationend', () => {
+          modal.remove();
+        }, { once: true });
+      }, 1000);
+    }, { once: true });
+  })();
+</script>
 
   </body>
 </html>
