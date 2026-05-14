@@ -383,31 +383,49 @@ header {
 }
 
 .lb-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: block;
+  text-align: center;
+  margin-top: 1cm;
 }
 
 .lb-id {
-  font-size: 10px;
-  color: rgba(255,255,255,0.4);
+  display: inline-block;
+  vertical-align: middle;
+  font-family: 'Repro', 'ABCReproMono-Regular-Trial', monospace;
+  background: #888880;
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 15px;
   letter-spacing: 0.08em;
-  flex-shrink: 0;
+  margin-bottom: 0;
+  margin-right: 0;
+  margin-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .lb-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 0;
 }
 
 
 .lb-tags .card-tag {
-  color: #1a1a1a;
-  background: rgba(0,0,0,0.08);
+  display: inline-block;
+  vertical-align: middle;
+  font-family: 'Repro', 'ABCReproMono-Regular-Trial', monospace;
+  background: #888880;
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 15px;
+  margin-bottom: 0;
+  margin-left: 2.5mm;
+  margin-right: 2.5mm;
+  letter-spacing: 0.04em;
+  transition: background 0.15s, color 0.15s;
 }
 
 .lb-tags .card-tag:hover,

@@ -21,8 +21,8 @@
           THE ABYSSAL DESCENT ARCHIVE
         </a>
         <div class="topbar-right">
-          <a href="#">ARCHIVE</a>
-          <a href="#">MAP</a>
+          <a href="./archive.html">ARCHIVE</a>
+          <a href="./map.html">MAP</a>
           <a href="./about.html">ABOUT</a>
         </div>
       </div>
@@ -328,6 +328,14 @@
       let activeIndex = 0;
       let bestDistance = Number.POSITIVE_INFINITY;
       const revealThreshold = 160;
+      const viewportH = window.innerHeight || document.documentElement.clientHeight;
+      const scrollBottom = window.scrollY + viewportH;
+      const documentBottom = document.documentElement.scrollHeight;
+      const isAtPageEnd = scrollBottom >= documentBottom - 24;
+
+      if (isAtPageEnd) {
+        highestRevealedIndex = sectionItems.length - 1;
+      }
 
       sectionItems.forEach((item, index) => {
         const distance = Math.abs(item.section.getBoundingClientRect().top - 140);
@@ -339,7 +347,7 @@
 
       sectionItems.forEach((item, index) => {
         const sectionTop = item.section.getBoundingClientRect().top;
-        if (sectionTop <= revealThreshold) {
+        if (sectionTop <= revealThreshold || isAtPageEnd) {
           highestRevealedIndex = Math.max(highestRevealedIndex, index);
         }
 
