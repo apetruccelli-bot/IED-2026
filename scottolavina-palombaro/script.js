@@ -390,5 +390,43 @@ if (lightbox) {
 if (grid) {
   loadData();
 }
-
 }
+mapboxgl.accessToken = "sk.eyJ1IjoibS1zY290dG9sYXZpbmEiLCJhIjoiY21wMTN3eWZvMDEzaDJxc2Q1czZueWhjdyJ9.kXAKMLM98LJ-Xo-fgUL_Eg";
+
+const archiveLocations = [
+  {
+    title: "Strait of Florida",
+    latitude: 25.0,
+    longitude: -79.75,
+  },
+  {
+    title: "Monterey Submarine Canyon, CA",
+    latitude: 36.666667,
+    longitude: -122.083333,
+  },
+  {
+    title: "Aleutian Trench, AK",
+    latitude: 54.0,
+    longitude: 170.0,
+  },
+];
+
+const map = new mapboxgl.Map({
+  container: "map",
+  style: "mapbox://styles/mapbox/satellite-streets-v12",
+  center: [-130, 38],
+  zoom: 2.1,
+});
+
+map.addControl(new mapboxgl.NavigationControl(), "top-right");
+
+archiveLocations.forEach((location) => {
+  new mapboxgl.Marker()
+    .setLngLat([location.longitude, location.latitude])
+    .setPopup(
+      new mapboxgl.Popup().setHTML(`
+        <strong>${location.title}</strong>
+      `)
+    )
+    .addTo(map);
+});

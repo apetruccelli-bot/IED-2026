@@ -220,7 +220,7 @@
   "paese-pacchetti": "Giappone",
   "description": "Descrizione dell'immagine"
   }
-   {
+   ,{
   "id": 26,
   "src": "img/pacchetti/pack2.jpg",
   "category": "pacchetti",
@@ -230,7 +230,7 @@
   "luogo-pacchetti": "Tokyo",
   "paese-pacchetti": "Giappone",
   "description": "Descrizione dell'immagine"
-}
+},
 {
   "id": 27,
   "src": "img/pacchetti/pack3.jpg",
@@ -241,7 +241,7 @@
   "luogo-pacchetti": "Nara",
   "paese-pacchetti": "Giappone",
   "description": "Descrizione dell'immagine"
-}
+},
 {
   "id": 28,
   "src": "img/pacchetti/pack4.jpg",
@@ -252,7 +252,7 @@
   "luogo-pacchetti": "Kyoto",
   "paese-pacchetti": "Giappone",
   "description": "Descrizione dell'immagine"
-}
+},
 {
   "id": 29,
   "src": "img/pacchetti/pack5.jpg",
@@ -263,7 +263,7 @@
   "luogo-pacchetti": "Tokyo",
   "paese-pacchetti": "Giappone",
   "description": "Descrizione dell'immagine"
-}
+},
 {
   "id": 30,
   "src": "img/pacchetti/pack6.jpg",
@@ -274,7 +274,7 @@
   "luogo-pacchetti": "Osaka",
   "paese-pacchetti": "Giappone",
   "description": "Descrizione dell'immagine"
-}
+},
 {
   "id": 31,
   "src": "img/pacchetti/pack7.jpg",
@@ -285,7 +285,7 @@
   "luogo-pacchetti": "Nara",
   "paese-pacchetti": "Giappone",
   "description": "Descrizione dell'immagine"
-}
+},
 {
   "id": 32,
   "src": "img/pacchetti/pack8.jpg",
