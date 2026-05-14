@@ -14,31 +14,7 @@
       }
     </style>
   </head>
- <!doctype html>
-<html lang="it">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Archivio</title>
-
-    <!-- Your CSS -->
-    <link rel="stylesheet" href="style.css" />
-
-    <!-- Tailwind -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
-      @theme {
-        --color-myBlack: #1E1E1E;
-        --color-myWhite: #FCFCFC;
-        --spacing-10px: 10px;
-      }
-    </style>
-
-    <!-- Mapbox -->
-    <link href="https://api.mapbox.com/mapbox-gl-js/v3.11.0/mapbox-gl.css" rel="stylesheet">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v3.11.0/mapbox-gl.js"></script>
-  </head>
+  
   <body>
     <header>
       <div class="topbar">
@@ -51,7 +27,7 @@
           <a href="./about.html">ABOUT</a>
         </div>
       </div>
-      <div id="map"></div>
+
       <div class="header-inner">
         <div class="header-row">
           <div class="search-wrap">
@@ -73,30 +49,25 @@
 
     <aside class="area-bar" id="area-bar"></aside>
 
-    <div class="lightbox" id="lightbox" aria-hidden="true">
-      <div class="lb-backdrop" id="lb-backdrop"></div>
-      <button class="lb-close" id="lb-close">✕</button>
-      <button class="lb-prev" id="lb-prev">←</button>
-      <button class="lb-next" id="lb-next">→</button>
-      <div class="lb-content">
-        <img class="lb-img" id="lb-img" src="" alt="">
-        <div class="lb-info">
-          <div class="lb-tags" id="lb-tags"></div>
-        </div>
-      </div>
+    <div id="lightbox" class="lightbox" aria-hidden="true">
+  <div id="lbBackdrop" class="lightbox-backdrop"></div>
+
+  <div class="lightbox-content">
+    <button id="lbPrev" class="lightbox-nav lightbox-prev" aria-label="Previous image">‹</button>
+    <button id="lbClose" class="lightbox-close">×</button>
+    <button id="lbNext" class="lightbox-nav lightbox-next" aria-label="Next image">›</button>
+
+    <div class="lightbox-main">
+      <img id="lbImg" class="lightbox-img" src="" alt="">
     </div>
 
-    <!-- Questi script sono necessari a far funzionare i modelli ml -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+    <div class="lightbox-see-also">
+      <p class="lightbox-see-also-title">See also...</p>
+      <div id="lbSimilar" class="lightbox-similar-grid"></div>
+    </div>
+  </div>
+</div>
 
-    <!-- 1. Crea un nuovo file nella tua cartella e chiamalo "tuocognome-lm.js" (vedi esempio altri progetti) -->
-    <!-- 2. Dentro quel file prepara un'interazione con la webcam (puoi prendere spunto dagli altri progetti o dai 4 esempi dentro la cartella "machine-learning") -->
-    <!-- 3. Modifica la riga qui sotto affinché non sia commentata, in modo che il tuo file "index.html" usi il tuo file "tuocognome-lm.js" -->
-    <!-- <script src="tuocognome-lm.js"></script> -->
     <script src="script.js"></script>
     
   </body>
