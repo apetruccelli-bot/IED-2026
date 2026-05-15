@@ -48,7 +48,7 @@ function allTags() {
 
 // ── Build the filter tags bar ─────────────────────────────────────────────
 function buildTagsBar() {
-  return
+  if (!tagsBar) return;
   tagsBar.innerHTML = '';
   allTags().forEach(tag => {
     const btn = document.createElement('button');
@@ -405,17 +405,6 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') navigateLightbox(+1);
   if (e.key === 'Escape')     closeLightbox();
 });
-
-// ── Storia modal ────────────────────────────────────────────────────
- function openStoriaModal() {
-  document.getElementById('storia-modal').classList.add('open');
-  document.querySelector('.mainLayout').classList.add('storia-dimmed');
-}
-
-function closeStoriaModal() {
-  document.getElementById('storia-modal').classList.remove('open');
-  document.querySelector('.mainLayout').classList.remove('storia-dimmed');
-}
 
 // ── Explore mode ─────────────────────────────────────────────────────────
 function fadeGrid(fn) {
