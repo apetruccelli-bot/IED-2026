@@ -756,5 +756,48 @@ window.addEventListener('resize', () => {
   }
 });
 
+// ── Infinite scroll for gallery ────────────────────────────────────────────
+function enableInfiniteScroll() {
+  if (!galleryScroll) return;
+  
+  const gallery = document.querySelector('.archive-gallery');
+  if (!gallery) return;
+  
+  // Get original rows before cloning
+  const originalRows = [...gallery.querySelectorAll('.archive-row')];
+  
+  // Duplicate content 3 times for seamless looping
+  for (let i = 0; i < 3; i++) {
+    originalRows.forEach(row => {
+      const clone = row.cloneNode(true);
+      gallery.appendChild(clone);
+    });
+  }
+  
+  // Calculate original content width
+  let originalWidth = 0;
+  originalRows.forEach(row => {
+    originalWidth += row.scrollWidth;
+  });
+  
+  let isResetting = false;
+  
+  galleryScroll.addEventListener('scroll', () => {
+    if (isResetting) return;
+    
+    const scrollLeft = galleryScroll.scrollLeft;
+    const scrollWidth = galleryScroll.scrollWidth;
+    const clientWidth = galleryScroll.clientWidth;
+    
+    // Reset when we've scrolled through the original content
+    if (scrollLeft > originalWidth) {
+      isResetting = true;
+      galleryScroll.scrollLeft = scrollLeft - originalWidth;
+      setTimeout(() => { isResetting = false; }, 30);
+    }
+  }, { passive: true });
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────
 loadData();
+enableInfiniteScroll();
