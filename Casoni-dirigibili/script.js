@@ -200,7 +200,7 @@ function buildFilterRows() {
         const stopLabel = getVictimsLabelFromIndex(Number(slider.value));
         activeRowFilters[label] = stopLabel;
         syncVictimsRow(row);
-        applyRowFilters();
+        applyRowFilters({ autoScroll: true });
       });
 
       stops.addEventListener('click', e => {
@@ -216,7 +216,7 @@ function buildFilterRows() {
           activeRowFilters[label] = stopLabel;
         }
         syncVictimsRow(row);
-        applyRowFilters();
+        applyRowFilters({ autoScroll: true });
       });
 
       wrap.appendChild(slider);
@@ -268,7 +268,7 @@ function buildFilterRows() {
             chip.classList.add('active');
           }
         }
-        applyRowFilters();
+        applyRowFilters({ autoScroll: true });
       });
       inside.appendChild(chip);
     });
@@ -352,8 +352,66 @@ function matchesRowFilters(item) {
   });
 }
 
+function getActiveGalleryCards() {
+  return [...document.querySelectorAll('.card:not(.card-dim)')];
+}
+
+function getCardVisibilityRatioInGallery(card) {
+  if (!galleryScroll || !card) return 0;
+
+  const galleryRect = galleryScroll.getBoundingClientRect();
+  const cardRect = card.getBoundingClientRect();
+
+  const visibleLeft = Math.max(cardRect.left, galleryRect.left);
+  const visibleRight = Math.min(cardRect.right, galleryRect.right);
+
+  const visibleWidth = Math.max(0, visibleRight - visibleLeft);
+
+  if (cardRect.width === 0) return 0;
+
+  return visibleWidth / cardRect.width;
+}
+
+// scroll sulla immagine illuminata se non è visibile
+function isCardVisibleEnoughInGallery(card) {
+  return getCardVisibilityRatioInGallery(card) >= 0.5;
+}
+
+function scrollToFirstActiveCardIfNeeded() {
+  if (!galleryScroll) return;
+
+  const activeCards = getActiveGalleryCards();
+
+  if (activeCards.length === 0) return;
+
+  const hasActiveCardVisibleEnough = activeCards.some(card => {
+    return isCardVisibleEnoughInGallery(card);
+  });
+
+  if (hasActiveCardVisibleEnough) return;
+
+  const firstActiveCard = activeCards.reduce((first, card) => {
+    return card.offsetLeft < first.offsetLeft ? card : first;
+  }, activeCards[0]);
+
+  const targetScrollLeft = Math.max(firstActiveCard.offsetLeft - 10, 0);
+
+  galleryScroll.scrollTo({
+    left: targetScrollLeft,
+    behavior: 'smooth'
+  });
+}
+
+function scheduleScrollToFirstActiveCardIfNeeded() {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      scrollToFirstActiveCardIfNeeded();
+    });
+  });
+}
+
 // ── Apply row filters to cards ────────────────────────────────────────────
-function applyRowFilters() {
+function applyRowFilters(options = {}) {
   const hasAny = Object.values(activeRowFilters).some(v => v);
   document.querySelectorAll('.card').forEach(card => {
     const item = items.find(i => String(i.id) === card.dataset.id);
@@ -367,6 +425,10 @@ function applyRowFilters() {
     const match = matchesRowFilters(item);
     card.classList.toggle('card-dim', categoryDim || !match);
   });
+
+    if (options.autoScroll) {
+    scheduleScrollToFirstActiveCardIfNeeded();
+  }
 }
 
 // ── Collect all unique tags ───────────────────────────────────────────────
@@ -583,6 +645,32 @@ function openLightbox(itemId) {
   lightbox.classList.add('open');
   lightbox.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+
+  // ensure description width matches the displayed image width
+  function updateLightboxDescriptionWidth() {
+    if (!lbImg || !lbDescription) return;
+    const rect = lbImg.getBoundingClientRect();
+    if (rect.width > 0) {
+      lbDescription.style.maxWidth = Math.floor(rect.width) + 'px';
+    }
+  }
+
+  // call when image loads (handles async image sizing)
+  lbImg.addEventListener('load', updateLightboxDescriptionWidth, { once: true });
+  // if image already loaded from cache
+  if (lbImg.complete) updateLightboxDescriptionWidth();
+
+  // update on window resize while lightbox is open
+  const _resizeHandler = () => {
+    if (lightbox.classList.contains('open')) updateLightboxDescriptionWidth();
+  };
+  window.addEventListener('resize', _resizeHandler);
+  // remove the resize listener when lightbox closes
+  const _removeResizeOnClose = () => {
+    window.removeEventListener('resize', _resizeHandler);
+    lightbox.removeEventListener('transitionend', _removeResizeOnClose);
+  };
+  lightbox.addEventListener('transitionend', _removeResizeOnClose);
 }
 
 function closeLightbox() {
@@ -654,6 +742,7 @@ document.querySelectorAll('.filter-link').forEach(btn => {
     }
 
     updateDisabledFilterRows();
+    scheduleScrollToFirstActiveCardIfNeeded();
   });
 });
 
