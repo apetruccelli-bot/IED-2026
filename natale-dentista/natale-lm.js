@@ -1,15 +1,23 @@
+const dentaturaFrontale = new Image();
+// asset effects removed: do not load external image for xray overlay
+// dentaturaFrontale.src = "asset/dentatura-frontale.jpeg";
+
+const otturazione = new Image();
+// asset effects removed: do not load external restoration image
+// otturazione.src = "asset/otturazione.jpeg";
  
 const video = document.getElementById("webcam");
  const canvas = document.getElementById("canvas");
  const ctx = canvas.getContext("2d");
  const status = document.getElementById("status");
- const cameraToggle = document.getElementById('cameraToggle');
+ const startBtn = document.getElementById("startBtn");
+ const faceList = document.getElementById("faceList");
+ const handList = document.getElementById("handList");
+ const toggleNumbers = document.getElementById("toggleNumbers");
 
  let detector = null;
  let isDetecting = false;
  let showNumbers = true;  // Toggle for showing numbers
-// Master flag to enable/disable all canvas overlays (set false to remove drawings)
-const showOverlays = false;
 let handModel = null;
 let hands = [];
 let handDetector = null;
@@ -46,7 +54,6 @@ function getDistance(p1, p2) {
 }
 
 function drawHandBoundingBox(keypoints, color, label) {
-    if (!showOverlays) return;
     const xs = keypoints.map(p => p.x);
     const ys = keypoints.map(p => p.y);
     const minX = Math.min(...xs);
@@ -64,7 +71,6 @@ function drawHandBoundingBox(keypoints, color, label) {
 }
 
 function drawHandLandmarks(keypoints, color) {
-    if (!showOverlays) return;
     // draw points
     keypoints.forEach((p, i) => {
         ctx.beginPath();
@@ -118,7 +124,7 @@ function drawHandLandmarks(keypoints, color) {
  // Load the Face Landmarks Detection model
  async function loadModel() {
      try {
-    if (status) status.textContent = "Loading face detection model...";
+         status.textContent = "Loading face detection model...";
          
          await tf.setBackend('webgl');
          await tf.ready();
@@ -133,13 +139,13 @@ function drawHandLandmarks(keypoints, color) {
              }
          );
          
-         if (status) status.textContent = "Model loaded! Use 'Enable Camera'";
-         if (cameraToggle) cameraToggle.disabled = false;
-         // model loaded
+         status.textContent = "Model loaded! Click 'Start Camera'";
+         startBtn.disabled = false;
+         console.log("Face detection model loaded successfully!");
         // try to load hand model (optional)
         try {
             handModel = await handpose.load();
-            // handpose loaded
+            console.log('Handpose model loaded');
         } catch (e) {
             console.warn('Handpose model not available:', e && e.message);
             handModel = null;
@@ -156,16 +162,16 @@ function drawHandLandmarks(keypoints, color) {
                         maxHands: 4
                     }
                 );
-                // MediaPipe Hands detector loaded
+                console.log('MediaPipe Hands detector loaded');
             }
         } catch (e) {
             console.warn('Hand detector not available:', e && e.message);
             handDetector = null;
         }
-    } catch (error) {
-        if (status) status.textContent = "Error loading model: " + error.message;
-        console.error(error);
-    }
+     } catch (error) {
+         status.textContent = "Error loading model: " + error.message;
+         console.error(error);
+     }
  }
 
  // Start the webcam
@@ -192,6 +198,7 @@ function drawHandLandmarks(keypoints, color) {
              video.width = videoWidth;
              video.height = videoHeight;
              
+             console.log(`Video dimensions: ${videoWidth}x${videoHeight}`);
             // Ensure the displayed video and overlay canvas are not visually mirrored.
             try {
                 // Explicitly clear any CSS transform that may have been applied inline or by other scripts
@@ -199,22 +206,22 @@ function drawHandLandmarks(keypoints, color) {
                 video.style.webkitTransform = 'none';
                 canvas.style.transform = 'none';
                 canvas.style.webkitTransform = 'none';
-                // computed transforms logged only when needed
+                // Log computed transforms for debugging if needed
+                console.debug('Computed video transform:', getComputedStyle(video).transform);
+                console.debug('Computed canvas transform:', getComputedStyle(canvas).transform);
                 // Reset canvas 2D transform matrix to identity
                 ctx.setTransform(1, 0, 0, 1, 0, 0);
             } catch (e) {
                 console.warn('Could not reset transforms:', e && e.message);
             }
              
-             if (status) status.textContent = "Detecting faces...";
-             if (cameraToggle) {
-                 cameraToggle.textContent = "Disable Camera";
-                 cameraToggle.disabled = false;
-             }
+             status.textContent = "Detecting faces...";
+             startBtn.textContent = "Camera Running";
+             startBtn.disabled = true;
              detectFaces();
          });
      } catch (error) {
-         if (status) status.textContent = "Error accessing camera: " + error.message;
+         status.textContent = "Error accessing camera: " + error.message;
          console.error(error);
      }
  }
@@ -241,7 +248,6 @@ function drawHandLandmarks(keypoints, color) {
 
  // Draw bounding box around face
  function drawBoundingBox(keypoints, color) {
-    if (!showOverlays) return;
      const xs = keypoints.map(p => p.x);
      const ys = keypoints.map(p => p.y);
      
@@ -325,13 +331,13 @@ function drawHandLandmarks(keypoints, color) {
                     const hand = hands[0];
                     const indexTip = hand.annotations && hand.annotations.indexFinger ? hand.annotations.indexFinger[3] : null;
                     // handpose returns 3D points in pixels [x,y,z]
-                        if (indexTip) {
-                            const fingerPoint = { x: indexTip[0], y: indexTip[1] };
-                            if (isFingerInsideMouth(fingerPoint, face.keypoints)) {
-                                const mapped = mapFingerToOverlay(fingerPoint, face.keypoints, mouthOverlay);
-                                if (showOverlays) drawFillingOnPoint(mapped, face.keypoints);
-                            }
+                    if (indexTip) {
+                        const fingerPoint = { x: indexTip[0], y: indexTip[1] };
+                        if (isFingerInsideMouth(fingerPoint, face.keypoints)) {
+                            const mapped = mapFingerToOverlay(fingerPoint, face.keypoints, mouthOverlay);
+                            drawFillingOnPoint(mapped, face.keypoints);
                         }
+                    }
                 }
             }
 
@@ -356,7 +362,7 @@ function drawHandLandmarks(keypoints, color) {
          infoHTML = "<div>No faces detected - look at the camera!</div>";
      }
 
-    // textual tracking info removed from UI per request
+    faceList.innerHTML = infoHTML;
 
     // Render hand info list
     let handHTML = '';
@@ -377,27 +383,25 @@ function drawHandLandmarks(keypoints, color) {
     } else {
         handHTML = '<div>No hands detected - show your hands to the camera!</div>';
     }
-    // textual hand info removed from UI per request
+    if (handList) handList.innerHTML = handHTML;
 
     // Draw hands on canvas (over the faces overlays)
     if (hands && hands.length > 0) {
         hands.forEach((h, i) => {
             const color = handColors[i % handColors.length];
-                if (h.keypoints && h.keypoints.length > 0) {
-                    if (showOverlays) {
-                        drawHandBoundingBox(h.keypoints, color, h.handedness || 'Hand');
-                        drawHandLandmarks(h.keypoints, color);
-                    }
+            if (h.keypoints && h.keypoints.length > 0) {
+                drawHandBoundingBox(h.keypoints, color, h.handedness || 'Hand');
+                drawHandLandmarks(h.keypoints, color);
 
                 // if hand is near mouth of any detected face, we can map fingertip to overlay
                 // try index fingertip (8)
                 const tip = h.keypoints[8];
-                    if (tip && faces && faces.length > 0) {
+                if (tip && faces && faces.length > 0) {
                     faces.forEach(face => {
                         if (isMouthOpen(face.keypoints) && isFingerInsideMouth(tip, face.keypoints)) {
-                                const mouthOverlay = drawXrayMouth(face.keypoints);
-                                const mapped = mapFingerToOverlay(tip, face.keypoints, mouthOverlay);
-                                if (showOverlays) drawFillingOnPoint(mapped, face.keypoints);
+                            const mouthOverlay = drawXrayMouth(face.keypoints);
+                            const mapped = mapFingerToOverlay(tip, face.keypoints, mouthOverlay);
+                            drawFillingOnPoint(mapped, face.keypoints);
                         }
                     });
                 }
@@ -411,43 +415,16 @@ function drawHandLandmarks(keypoints, color) {
      }
  }
 
-// Event listeners: wire the single camera toggle button
-if (cameraToggle) {
-    cameraToggle.addEventListener('click', async () => {
-        try {
-            cameraToggle.disabled = true;
-            if (!isDetecting) {
-                await startCamera();
-            } else {
-                stopCamera();
-            }
-        } finally {
-            if (cameraToggle) cameraToggle.disabled = false;
-        }
-    });
-}
+ // Event listeners
+ startBtn.addEventListener("click", startCamera);
+ 
+ toggleNumbers.addEventListener("click", () => {
+     showNumbers = !showNumbers;
+     toggleNumbers.textContent = showNumbers ? "Hide Numbers" : "Show Numbers";
+ });
 
  // Load model when page loads
  loadModel();
-
-// Safe stop camera implementation (added to support single cameraToggle UI)
-function stopCamera() {
-    try {
-        isDetecting = false;
-        if (video && video.srcObject) {
-            const tracks = video.srcObject.getTracks ? video.srcObject.getTracks() : [];
-            tracks.forEach(t => { try { t.stop(); } catch (e) {} });
-            try { video.srcObject = null; } catch (e) {}
-        }
-        if (ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (cameraToggle) {
-            cameraToggle.textContent = "Enable Camera";
-            cameraToggle.disabled = false;
-        }
-    } catch (e) {
-        console.warn('stopCamera failed', e && e.message);
-    }
-}
 
  function drawXrayMouth(face) {
     const left = face[61];
@@ -522,7 +499,6 @@ function mapFingerToOverlay(fingerPoint, keypoints, overlayBox) {
 
 // Draw all facial landmarks (points + optional numbers) and small circles
 function drawFaceLandmarks(keypoints, color) {
-    if (!showOverlays) return;
     // keypoints are already in pixel coordinates (x,y). Draw points and optional indices
     keypoints.forEach((point, index) => {
         ctx.beginPath();
@@ -547,7 +523,6 @@ function drawFaceLandmarks(keypoints, color) {
 }
 
 function drawFillingOnPoint(mappedPoint, face) {
-    if (!showOverlays) return;
     // mappedPoint: { x, y, relX, relY } in overlay pixel coords
     if (!mappedPoint) return;
 
@@ -571,7 +546,7 @@ function drawFillingOnPoint(mappedPoint, face) {
     ctx.fill();
     ctx.restore();
 
-    if (status) status.textContent = "Restoration (marker)";
+    status.textContent = "Restoration (marker)";
 }
  
  
