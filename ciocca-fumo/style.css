@@ -102,6 +102,13 @@ body {
 .all-unblurring {
   animation: body-unblur 1.4s ease-out forwards;
 }
+.smoking-gesture #status {
+  color: red;
+}
+
+.smoking-gesture #container {
+  filter: contrast(1.3) blur(1px);
+}
 
 
 /* ── ABOUT ── */
