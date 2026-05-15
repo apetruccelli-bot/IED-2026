@@ -116,7 +116,7 @@
       "year": "1936",
       "victims": 43,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Fire developing beneath the envelope during ground operation; initial spread concentrated along the lower hull."    },
 
      {
       "id": 11,
@@ -128,7 +128,7 @@
       "year": "1936",
       "victims": 61,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Rear structure exposed by fire; internal frame visible and envelope still partially intact."    },
 
      {
       "id": 12,
@@ -140,7 +140,7 @@
       "year": "1937",
       "victims": 83,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Envelope engulfed by flames on landing field; more advanced development of case 11."    },
 
      {
       "id": 13,
@@ -152,7 +152,7 @@
       "year": "1929",
       "victims": 88,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Extended fire during night operation; progressive collapse of the upper structure."    },
 
      {
       "id": 14,
@@ -164,7 +164,7 @@
       "year": "1929",
       "victims": 39,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Detached tail section smoking on the water surface; fracture line suggests structural separation after impact."    },
 
      {
       "id": 15,
@@ -176,7 +176,7 @@
       "year": "1926",
       "victims": 67,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Envelope engulfed by flames on landing field; more advanced development of case 13."    },
 
      {
       "id": 16,
@@ -188,7 +188,7 @@
       "year": "1937",
       "victims": 52,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Hull descending in flames over open water; smoke column rising from the rear section."    },
 
      {
       "id": 17,
@@ -200,7 +200,7 @@
       "year": "1937",
       "victims": 25,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Ground wreckage under inspection; torn side panels and exposed internal frame."    },
 
      {
       "id": 18,
@@ -225,8 +225,9 @@
       "year": "1935",
       "victims": 49,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Airship held at steep angle near mooring mast; instability recorded during ground handling."    },
     {
+
       "id": 20,
       "src": "img/relitti/relitto (2).png",
       "category": "wreckage",
@@ -236,7 +237,7 @@
       "year": "1932",
       "victims": 36,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Smoke emerging from the lower forward section; probable engine-area ignition during field operation."    },
     {
       "id": 21,
       "src": "img/relitti/relitto (3).png",
@@ -247,7 +248,7 @@
       "year": "1932",
       "victims": 24,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Airship rising at abnormal angle with smoke from lower hull; incident comparable to case 20."    },
     {
       "id": 22,
       "src": "img/relitti/relitto (4).png",
