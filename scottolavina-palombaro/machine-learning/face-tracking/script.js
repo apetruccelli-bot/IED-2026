@@ -11,6 +11,8 @@
  let isDetecting = false;
  let showNumbers = true;  // Toggle for showing numbers
 
+ 
+
  // Colors for different faces
  const faceColors = [
      "#FF0000",  // Red

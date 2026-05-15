@@ -8,13 +8,6 @@
     <link rel="stylesheet" href="style.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
-      @theme {
-        --color-myBlack: #1E1E1E;
-        --color-myWhite: #FCFCFC;
-        --spacing-10px: 10px;
-      }
-    </style>
 
     <link
   href="https://api.mapbox.com/mapbox-gl-js/v3.11.0/mapbox-gl.css"
@@ -24,7 +17,7 @@
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.11.0/mapbox-gl.js"></script>
   </head>
 
-  <body>
+  <body class="map-page-body">
     <header>
       <div class="topbar">
         <a href="./index.html" class="topbar-left font-myTitle">
@@ -43,15 +36,23 @@
       <div id="gallery" class="map-gallery" aria-live="polite"></div>
     </main>
 
-    <style>
-      .map-page { position:relative; }
-      #map { width:100%; height:70vh; }
-      .map-gallery { display:flex; gap:8px; padding:12px; background:rgba(0,0,0,0.7); color:#fff; overflow-x:auto; }
-      .map-gallery img{ height:80px; object-fit:cover; border-radius:4px; cursor:pointer; opacity:0.95; transition:opacity .15s; }
-      .map-gallery img:hover{ opacity:1; transform:scale(1.02); }
-      .map-gallery .empty{ opacity:0.6 }
-    </style>
-
     <script src="map.js"></script>
+
+    <!-- Hand-tracking overlay and libs -->
+    <div id="ml-overlay" style="position: fixed; top: 12px; right: 12px; z-index: 1100;">
+      <div id="ml-container" style="position: relative; width:240px; height:180px;">
+        <video id="webcam" autoplay muted playsinline style="width:240px; height:180px; object-fit:cover; border-radius:6px; transform:scaleX(-1); display:block;"></video>
+        <canvas id="canvas" width="240" height="180" style="position:absolute; left:0; top:0; width:240px; height:180px; pointer-events:none;"></canvas>
+      </div>
+      <div id="status" style="color:#fff; font-size:12px; margin-top:6px;">Loading model...</div>
+    </div>
+
+    <!-- ML libs (TensorFlow + MediaPipe + hand-pose-detection) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+    <script src="machine-learning/hand-tracking/script.js"></script>
   </body>
 </html>
