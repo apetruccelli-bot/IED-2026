@@ -5,35 +5,41 @@ const areaBar = document.getElementById('area-bar');
 const resultsInfo = document.getElementById('results-info');
 
 const lightbox   = document.getElementById('lightbox');
-const lbImg      = document.getElementById('lb-img');
-const lbTagsEl   = document.getElementById('lb-tags');
-const lbClose    = document.getElementById('lb-close');
-const lbPrev     = document.getElementById('lb-prev');
-const lbNext     = document.getElementById('lb-next');
-const lbBackdrop = document.getElementById('lb-backdrop');
-const nav        = document.getElementById('site-nav');
-
-if (nav) {
-  setTimeout(() => {
-    nav.classList.add('show');
-  }, 7000);
-}
+const lbImg      = document.getElementById('lbImg') || document.getElementById('lb-img');
+const lbTagsEl   = document.getElementById('lbTags') || document.getElementById('lb-tags');
+const lbSimilarEl = document.getElementById('lbSimilar') || document.getElementById('lb-similar');
+const lbClose    = document.getElementById('lbClose') || document.getElementById('lb-close');
+const lbPrev     = document.getElementById('lbPrev') || document.getElementById('lb-prev');
+const lbNext     = document.getElementById('lbNext') || document.getElementById('lb-next');
+const lbBackdrop = document.getElementById('lbBackdrop') || document.getElementById('lb-backdrop');
 
 const labels = {
   missions: "Missions",
   "deck-operations": "Deck Operations"
 };
 
-let items = [];
-let displayItems = [];
+const areaMeta = {
+  "Strait of Florida, FL": {
+    title: "Strait of Florida",
+    story: "The Strait of Florida was among the earliest ORA deep-sector testing sites referenced in the archive. Records from this location describe controlled descent procedures, hydrophone calibration, and preliminary communication trials conducted in relatively stable conditions. Minor signal distortion was noted during several operations, though early summaries attributed these irregularities to current activity, mineral interference, or equipment sensitivity."
+  },
+  "Monterey submarine Canyon, CA": {
+    title: "Monterey Submarine Canyon, California",
+    story: "Operations in Monterey Submarine Canyon appear to have marked an expansion of ORA’s deep-water survey program. The canyon’s steep walls and complex acoustic environment made it suitable for extended signal testing and submerged instrument placement. Surviving logs describe repeated interruptions in surface contact, including brief connection losses followed by incomplete telemetry returns. These events were formally categorized as temporary transmission instability."
+  },
+  "Aleutian Trench, AK": {
+    title: "Aleutian Trench, Alaska",
+    story: "The Aleutian Trench materials are more fragmentary than those from earlier ORA sites. Surviving excerpts reference extreme pressure conditions, irregular current movement, and repeated failure of depth-linked transmission equipment. Several records mention signal activity recorded after associated instruments had been marked inactive. No complete technical explanation for these discrepancies is preserved within the archive."
+  }
+};
+
+
+let items = [];          // original data from JSON
+let displayItems = [];   // current display order
 let activeTags = new Set();
 let activeArea = null;
 let searchQuery = '';
-let lbIndex = -1;
-
-if (!grid) {
-  // archive DOM not found — nothing to initialize on this page
-} else {
+let lbIndex = -1;        // current index in filteredItems() array
 
 function normalizeKey(value) {
   if (Array.isArray(value)) {
@@ -152,7 +158,8 @@ function buildAreaBar() {
       normalizeArea(item.area),
       {
         area: normalizeArea(item.area),
-        story: item.story
+        story: areaMeta[normalizeArea(item.area)]?.story || item.story || '',
+        title: areaMeta[normalizeArea(item.area)]?.title || normalizeArea(item.area)
       }
     ])
   ).values()];
@@ -164,7 +171,7 @@ function buildAreaBar() {
 
     const title = document.createElement('div');
     title.className = 'area-title';
-    title.textContent = areaData.area;
+    title.textContent = areaData.title;
 
     const story = document.createElement('div');
     story.className = 'area-story';
@@ -324,28 +331,18 @@ function render() {
 
 // ── Lightbox ──────────────────────────────────────────────────────────────
 function openLightbox(index) {
-  // get the visible items
+  if (!lightbox || !lbImg || !lbSimilarEl) return;
+
   const visible = filteredItems();
-  // set the current index
+
   lbIndex = index;
-  // get the item
+
   const item = visible[lbIndex];
+  if (!item) return;
 
   lbImg.src = item.src;
-  // set the alt text
   lbImg.alt = `Item ${item.id}`;
-
-  lbTagsEl.innerHTML = '';
-  // loop through the tags and create a span for each tag
-  item.tags.forEach(tag => {
-    const tagKey = normalizeKey(tag);
-    const t = document.createElement('span');
-    t.className = 'card-tag' + (activeTags.has(tagKey) ? ' highlight' : '');
-    t.textContent = tag;
-    t.addEventListener('click', () => { toggleTag(tagKey); closeLightbox(); });
-    lbTagsEl.appendChild(t);
-  });
-
+  renderSimilarImages(item, visible);
 
   lightbox.classList.add('open');
   lightbox.setAttribute('aria-hidden', 'false');
@@ -353,21 +350,103 @@ function openLightbox(index) {
   document.body.style.overflow = 'hidden';
 }
 
+function renderLightboxTags(item) {
+  if (!lbTagsEl) return;
+
+  lbTagsEl.innerHTML = '';
+
+  item.tags.forEach(tag => {
+    const tagKey = normalizeKey(tag);
+
+    const t = document.createElement('span');
+    t.className = 'card-tag' + (activeTags.has(tagKey) ? ' highlight' : '');
+    t.textContent = tag;
+
+    t.addEventListener('click', () => {
+      toggleTag(tagKey);
+      closeLightbox();
+    });
+
+    lbTagsEl.appendChild(t);
+  });
+}
+
+function renderSimilarImages(currentItem, visibleItems) {
+  if (!lbSimilarEl) return;
+
+  lbSimilarEl.innerHTML = '';
+
+  const currentTags = new Set((currentItem.tags || []).map(normalizeKey));
+  const currentCategory = normalizeKey(currentItem.category);
+  const currentSubcategory = normalizeKey(currentItem.subcategory);
+  const currentArea = normalizeArea(currentItem.area);
+
+  let similarItems = visibleItems
+    .filter(item => item.id !== currentItem.id)
+    .map(item => {
+      const itemTags = (item.tags || []).map(normalizeKey);
+      const scoreByTags = itemTags.filter(tag => currentTags.has(tag)).length;
+      const scoreByCategory = normalizeKey(item.category) === currentCategory ? 3 : 0;
+      const scoreBySubcategory = normalizeKey(item.subcategory) === currentSubcategory ? 2 : 0;
+      const scoreByArea = normalizeArea(item.area) === currentArea ? 1 : 0;
+      const score = scoreByTags + scoreByCategory + scoreBySubcategory + scoreByArea;
+
+      return {
+        item,
+        score
+      };
+    })
+    .filter(result => result.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map(result => result.item);
+
+  if (similarItems.length < 3) {
+    const existingIds = new Set(similarItems.map(item => item.id));
+    existingIds.add(currentItem.id);
+
+    const fallbackItems = visibleItems
+      .filter(item => !existingIds.has(item.id))
+      .slice(0, 3 - similarItems.length);
+
+    similarItems = [...similarItems, ...fallbackItems];
+  }
+
+  similarItems.forEach((item) => {
+    const thumb = document.createElement('button');
+    thumb.className = 'lightbox-similar-item';
+    thumb.type = 'button';
+    thumb.setAttribute('aria-label', `Open item ${item.id}`);
+
+    thumb.innerHTML = `<img src="${item.src}" alt="Item ${item.id}">`;
+
+    thumb.addEventListener('click', () => {
+      const newIndex = visibleItems.findIndex(visibleItem => visibleItem.id === item.id);
+      openLightbox(newIndex);
+    });
+
+    lbSimilarEl.appendChild(thumb);
+  });
+}
+
 function closeLightbox() {
+  if (!lightbox || !lbImg || !lbSimilarEl) return;
+
   lightbox.classList.remove('open');
   lightbox.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('lightbox-open');
   document.body.style.overflow = '';
+
   lbImg.src = '';
+  lbSimilarEl.innerHTML = '';
 }
 
 function navigateLightbox(dir) {
   const visible = filteredItems();
 
-  // se si va oltre l'ultimo, torna al primo
-  if (next >= visible.length) next = 0;
+  let next = lbIndex + dir;
 
-  // se si va prima del primo, salta all'ultimo
+  if (next >= visible.length) next = 0;
   if (next < 0) next = visible.length - 1;
 
   openLightbox(next);
@@ -381,52 +460,14 @@ if (lbNext) lbNext.addEventListener('click', () => navigateLightbox(+1));
 if (lightbox) {
   document.addEventListener('keydown', e => {
     if (!lightbox.classList.contains('open')) return;
-    if (e.key === 'ArrowLeft')  navigateLightbox(-1);
+
+    if (e.key === 'ArrowLeft') navigateLightbox(-1);
     if (e.key === 'ArrowRight') navigateLightbox(+1);
-    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'Escape') closeLightbox();
   });
 }
+
 // ── Init ──────────────────────────────────────────────────────────────────
-if (grid) {
+if (grid && tagsBar && areaBar && resultsInfo) {
   loadData();
 }
-}
-mapboxgl.accessToken = "sk.eyJ1IjoibS1zY290dG9sYXZpbmEiLCJhIjoiY21wMTN3eWZvMDEzaDJxc2Q1czZueWhjdyJ9.kXAKMLM98LJ-Xo-fgUL_Eg";
-
-const archiveLocations = [
-  {
-    title: "Strait of Florida",
-    latitude: 25.0,
-    longitude: -79.75,
-  },
-  {
-    title: "Monterey Submarine Canyon, CA",
-    latitude: 36.666667,
-    longitude: -122.083333,
-  },
-  {
-    title: "Aleutian Trench, AK",
-    latitude: 54.0,
-    longitude: 170.0,
-  },
-];
-
-const map = new mapboxgl.Map({
-  container: "map",
-  style: "mapbox://styles/mapbox/satellite-streets-v12",
-  center: [-130, 38],
-  zoom: 2.1,
-});
-
-map.addControl(new mapboxgl.NavigationControl(), "top-right");
-
-archiveLocations.forEach((location) => {
-  new mapboxgl.Marker()
-    .setLngLat([location.longitude, location.latitude])
-    .setPopup(
-      new mapboxgl.Popup().setHTML(`
-        <strong>${location.title}</strong>
-      `)
-    )
-    .addTo(map);
-});

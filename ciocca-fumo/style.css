@@ -102,6 +102,13 @@ body {
 .all-unblurring {
   animation: body-unblur 1.4s ease-out forwards;
 }
+.smoking-gesture #status {
+  color: red;
+}
+
+.smoking-gesture #container {
+  filter: contrast(1.3) blur(1px);
+}
 
 
 /* ── ABOUT ── */
@@ -253,12 +260,13 @@ button {
   filter: blur(2px);
 }
 
-/* Cigarette packs: horizontal rows of h-40 images */
+/* Cigarette packs */
 .myPhotos.layout-pacchetti {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
+  gap: 10px;
   align-content: flex-start;
+  align-items: flex-start;
 }
 .myPhotos.layout-pacchetti .card {
   height: 10rem;
@@ -353,6 +361,13 @@ button {
 .card-tag.highlight {
   background: var(--accent);
   color: #fff;
+}
+
+.myPhotos.layout-pacchetti .card-img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
 
 /* ── EMPTY STATE ── */

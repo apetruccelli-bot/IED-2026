@@ -32,10 +32,28 @@
     </div>
   </main>
 
-  <nav id="site-nav">
-    <a href="archive.html">Enter Site</a>
-  </nav>
+  <a class="enter-site-link" href="archive.html">Enter Site</a>
 
   <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const enterLink = document.querySelector('.enter-site-link');
+      const redactWords = Array.from(document.querySelectorAll('.intro .redact'));
+
+      if (!enterLink || redactWords.length === 0) return;
+
+      let completedAnimations = 0;
+
+      redactWords.forEach(word => {
+        word.addEventListener('animationend', () => {
+          completedAnimations += 1;
+
+          if (completedAnimations === redactWords.length) {
+            enterLink.classList.add('is-visible');
+          }
+        }, { once: true });
+      });
+    });
+  </script>
 </body>
 </html>
