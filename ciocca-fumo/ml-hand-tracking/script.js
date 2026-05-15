@@ -178,6 +178,22 @@ function isSmokingGesture(hand) {
     ctx.stroke();
   });
 
+  let smokingDetected = false;
+
+hands.forEach(hand => {
+  if (isSmokingGesture(hand)) {
+    smokingDetected = true;
+  }
+});
+
+if (smokingDetected) {
+  document.body.classList.add("smoking-gesture");
+  handList.innerHTML = "Gesto del fumare rilevato";
+} else {
+  document.body.classList.remove("smoking-gesture");
+  handList.innerHTML = "Mano rilevata, ma nessun gesto del fumare";
+}
+
 function getDistance(p1, p2) {
   return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
 }
