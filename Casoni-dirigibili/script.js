@@ -645,6 +645,32 @@ function openLightbox(itemId) {
   lightbox.classList.add('open');
   lightbox.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+
+  // ensure description width matches the displayed image width
+  function updateLightboxDescriptionWidth() {
+    if (!lbImg || !lbDescription) return;
+    const rect = lbImg.getBoundingClientRect();
+    if (rect.width > 0) {
+      lbDescription.style.maxWidth = Math.floor(rect.width) + 'px';
+    }
+  }
+
+  // call when image loads (handles async image sizing)
+  lbImg.addEventListener('load', updateLightboxDescriptionWidth, { once: true });
+  // if image already loaded from cache
+  if (lbImg.complete) updateLightboxDescriptionWidth();
+
+  // update on window resize while lightbox is open
+  const _resizeHandler = () => {
+    if (lightbox.classList.contains('open')) updateLightboxDescriptionWidth();
+  };
+  window.addEventListener('resize', _resizeHandler);
+  // remove the resize listener when lightbox closes
+  const _removeResizeOnClose = () => {
+    window.removeEventListener('resize', _resizeHandler);
+    lightbox.removeEventListener('transitionend', _removeResizeOnClose);
+  };
+  lightbox.addEventListener('transitionend', _removeResizeOnClose);
 }
 
 function closeLightbox() {

@@ -34,14 +34,28 @@
 }
 
 .box {
-  width: 552px;
-   margin-top: 18px;
+  width: auto;
+  max-width: 552px;
+  margin-top: 18px;
+  overflow-wrap: normal;
+  word-break: normal;
+  opacity: 1;
+  transition: opacity 0.4s ease;
 }
+
+@media (max-width: 880px) {
+  .box {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
 
 .box2 {
   width: 552px;
   margin-top: 0px;
   color: var(--myWhite);
+ 
 }
 
 :root {
@@ -837,4 +851,12 @@ button {
   .landing-aaa {
     font-size: 140vh;
   }
+}
+
+.home-title {
+  white-space: normal;
+  width: auto;
+  max-width: 100%;
+  overflow-wrap: normal;
+  word-break: normal;
 }
