@@ -40,12 +40,27 @@
   --radius: 0px;
 }
 
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
 body {
   font-family: 'ABCFavoritMono', monospace;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
   padding-right: 280px;
+}
+
+body.map-page-body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* ── HEADER ── */
@@ -864,43 +879,168 @@ body.about-page .about-section-link:hover {
     padding-left: 0;
     padding-right: 0;
   }
-}.map-page {
-  padding: 24px;
-}
+}/* ── mappa ── */
 
-#map {
-  width: 100%;
-  height: 75vh;
-  border-radius: 12px;
-  overflow: hidden;
-}html,
-body {
+body.map-page-body {
   margin: 0;
-  width: 100%;
-  height: 100%;
-}
-
-
-/* ── mappa ── */
-
-.map-page {
-  width: 100%;
-  height: calc(100vh - 80px); /* adjust if your header is taller/shorter */
-}
-
-#map {
-  width: 100%;
-  height: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
   background: #0b0b0c;
 }
 
-.custom-marker {
-  width: 26px;
-  height: 26px;
-  background-color: #ffffff;
-  border: 3px solid #1e1e1e;
-  border-radius: 50%;
+body.map-page-body header {
+  position: relative !important;
+  flex-shrink: 0;
+  z-index: 200 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  width: 100%;
+  left: auto !important;
+  top: auto !important;
+}
+
+body.map-page-body .topbar {
+  display: flex !important;
+  position: relative !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 1.2rem 2rem !important;
+  border-bottom: 2px solid #333;
+  background: #ffffff !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  left: auto !important;
+  top: auto !important;
+  height: auto !important;
+  z-index: 200 !important;
+}
+
+body.map-page-body .topbar-left {
+  color: #1a1a1a !important;
+  text-decoration: none !important;
+  font-size: 14px !important;
+  font-family: 'ABCFavoritMono', monospace !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  display: block !important;
+}
+
+body.map-page-body .topbar-right {
+  display: flex !important;
+  gap: 20px !important;
+  align-items: center !important;
+}
+
+body.map-page-body .topbar-right a {
+  color: #1a1a1a !important;
+  text-decoration: none !important;
+  font-size: 12px !important;
+  letter-spacing: 0.08em !important;
+  font-family: 'ABCFavoritMono', monospace !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+  padding: 4px 8px !important;
+  opacity: 1 !important;
+}
+
+body.map-page-body .topbar-right a:hover {
+  opacity: 0.6 !important;
+  text-decoration: underline !important;
+}
+
+.map-page {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+#map {
+  width: 100%;
+  flex: 1;
+  background: #0b0b0c;
+  overflow: hidden;
+  position: relative;
+}
+
+.map-gallery {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  overflow-x: auto;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.map-gallery img {
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
   cursor: pointer;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18);
-  transform: translate(-50%, -50%);
+  opacity: 0.95;
+  transition: opacity 0.15s;
+}
+
+.map-gallery img:hover {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+.map-gallery .empty {
+  opacity: 0.6;
+}
+
+.map-location-label {
+  font-family: 'ABCFavoritMono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  padding: 8px 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  text-align: center;
+  pointer-events: auto;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid #e0e0e0;
+  display: inline-block;
+}
+
+.map-photo-marker {
+  display: block;
+  width: 54px;
+  height: 48px;
+  border: 1px solid rgba(252, 252, 252, 0.8);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  transform: rotate(calc(-2deg + 4deg * var(--tilt, 0.5)));
+  transition: transform 0.18s ease, opacity 0.18s ease;
+  opacity: 0.94;
+  background: #111;
+  border-radius: 2px;
+}
+
+.map-photo-marker:hover {
+  opacity: 1;
+  transform: scale(1.08) rotate(calc(-2deg + 4deg * var(--tilt, 0.5)));
+}
+
+.map-photo-marker img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
