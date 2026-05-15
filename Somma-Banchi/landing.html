@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>De veciariìe - Landing</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-myBlack: #090909;
+        --color-myWhite: #FAFAFA;
+        --color-lightGrey: #EBEBEA;
+        --spacing-10px: 10px;
+        --spacing-20px: 20px;
+      }
+    </style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #f5e6e6;
+        font-family: inherit;
+        overflow-x: hidden;
+      }
+
+      /* Header sticky - stesso stile della homepage */
+      .landing-header {
+        position: fixed;
+        width: 100vw;
+        top: 0;
+        z-index: 100;
+        background: #FAFAFA;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .landing-header.visible {
+        opacity: 1;
+      }
+
+      /* Container di scroll */
+      .landing-container {
+        min-height: 300vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      /* Sezione hero con immagini sovrapposte */
+      .hero-section {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .images-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      /* Immagini sovrapposte */
+      .overlay-image {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background-size: cover;
+        background-position: center;
+        opacity: 0.8;
+        filter: grayscale(30%);
+      }
+
+      .overlay-image:nth-child(1) {
+        width: 250px;
+        height: 250px;
+        top: 20%;
+        left: 30%;
+        background-image: url('img/col1.png');
+        z-index: 5;
+      }
+
+      .overlay-image:nth-child(2) {
+        width: 320px;
+        height: 320px;
+        top: 35%;
+        left: 50%;
+        background-image: url('img/col2.png');
+        z-index: 4;
+      }
+
+      .overlay-image:nth-child(3) {
+        width: 280px;
+        height: 280px;
+        top: 25%;
+        right: 25%;
+        background-image: url('img/col3.png');
+        z-index: 3;
+      }
+
+      .overlay-image:nth-child(4) {
+        width: 260px;
+        height: 260px;
+        bottom: 30%;
+        left: 35%;
+        background-image: url('img/col4.png');
+        z-index: 2;
+      }
+
+      .overlay-image:nth-child(5) {
+        width: 290px;
+        height: 290px;
+        bottom: 25%;
+        right: 30%;
+        background-image: url('img/col5.png');
+        z-index: 1;
+      }
+
+      /* Sezione di transizione */
+      .transition-section {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+
+
+      /* Ultimo contenuto - homepage */
+      .homepage-preview {
+        width: 100%;
+        height: 100vh;
+        background-color: #FAFAFA;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .homepage-preview h1 {
+        font-size: 48px;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        color: #090909;
+      }
+    </style>
+</head>
+<body>
+    <!-- Header sticky -->
+    <header class="landing-header">
+        <span>De veciariìe</span>
+    </header> class="font-myTitle cursor-pointer"
+
+    <!-- Container principale -->
+    <div class="landing-container">
+        <!-- Sezione hero con immagini -->
+        <section class="hero-section">
+            <div class="images-container">
+                <div class="overlay-image"></div>
+                <div class="overlay-image"></div>
+                <div class="overlay-image"></div>
+                <div class="overlay-image"></div>
+                <div class="overlay-image"></div>
+            </div>
+        </section>
+
+        <!-- Sezione di transizione -->
+        <section class="transition-section"></section>
+
+        <!-- Preview homepage -->
+        <section class="homepage-preview">
+            <h1>Archivio De veciariìe</h1>
+        </section>
+    </div>
+
+    <script>
+        const header = document.querySelector('.landing-header');
+        const images = document.querySelectorAll('.overlay-image');
+        const homepagePreview = document.querySelector('.homepage-preview');
+
+        window.addEventListener('scroll', () => {
+            const scrollPercentage = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            const heroScrollPercentage = (window.scrollY / window.innerHeight) * 100;
+
+            // Header visibility
+            header.classList.toggle('visible', scrollPercentage > 5);
+
+            // Immagini: allargamento e fade out durante il primo 100vh
+            if (heroScrollPercentage < 100) {
+                const progress = heroScrollPercentage / 100;
+                
+                images.forEach((img, index) => {
+                    // Allargamento
+                    const scaleAmount = 1 + (progress * 2); // Da 1 a 3
+                    const xOffset = (Math.random() - 0.5) * progress * 200;
+                    const yOffset = (Math.random() - 0.5) * progress * 200;
+                    
+                    img.style.transform = `scale(${scaleAmount}) translate(${xOffset}px, ${yOffset}px)`;
+                    
+                    // Fade out
+                    img.style.opacity = Math.max(0, 0.8 - progress * 1.2);
+                });
+            } else {
+                images.forEach(img => {
+                    img.style.opacity = '0';
+                });
+            }
+
+            // Reindirizza a index.html quando raggiungi il fondo della landing
+            if (scrollPercentage >= 95) {
+                localStorage.setItem('landingCompleted', 'true');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Prevent scrollbar from appearing on load
+        window.addEventListener('load', () => {
+            window.scrollTo(0, 0);
+        });
+    </script>
+</body>
+</html>
