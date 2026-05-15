@@ -144,6 +144,22 @@
           // Get all scroll images
           scrollImages = document.querySelectorAll('.scroll-img');
 
+          // Duplicate scroll images for infinite loop (3 times total)
+          const originalImages = [...scrollImages];
+          for (let i = 0; i < 2; i++) {
+            originalImages.forEach(img => {
+              const clone = img.cloneNode(true);
+              img.parentElement.appendChild(clone);
+            });
+          }
+          scrollImages = document.querySelectorAll('.scroll-img');
+          
+          // Calculate original content width
+          let originalWidth = 0;
+          originalImages.forEach(img => {
+            originalWidth += img.scrollWidth;
+          });
+
           // Set initial image and description (id 2)
           updateImage(2);
 
@@ -158,6 +174,21 @@
 
           // Start auto-rotation
           resetAutoRotate();
+
+          // Enable infinite scroll with seamless looping
+          let isResetting = false;
+          horizontalScrollContainer.addEventListener('scroll', () => {
+            if (isResetting) return;
+            
+            const scrollLeft = horizontalScrollContainer.scrollLeft;
+            
+            // Reset when we've scrolled through the original content
+            if (scrollLeft > originalWidth) {
+              isResetting = true;
+              horizontalScrollContainer.scrollLeft = scrollLeft - originalWidth;
+              setTimeout(() => { isResetting = false; }, 30);
+            }
+          }, { passive: true });
         })
         .catch(error => console.error('Error loading data:', error));
     </script>
