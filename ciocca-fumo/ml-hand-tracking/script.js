@@ -6,6 +6,7 @@ const status = document.getElementById("status");
 const startBtn = document.getElementById("startBtn");
 const handList = document.getElementById("handList");
 const toggleNumbers = document.getElementById("toggleNumbers");
+const hands = await detector.estimateHands(video);
 
 let detector = null;
 let isDetecting = false;
@@ -139,26 +140,29 @@ async function startCamera() {
   }
 }
 
-// Draw hand landmarks
-function drawHandLandmarks(keypoints, color, handedness) {
-  // Draw all keypoints with numbers
-  keypoints.forEach((point, index) => {
-    // Draw the point
-    ctx.beginPath();
-    ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
-    ctx.fillStyle = color;
-    ctx.fill();
-    ctx.strokeStyle = "#FFFFFF";
-    ctx.lineWidth = 2;
-    ctx.stroke();
+function distance(a, b) {
+  return Math.hypot(a.x - b.x, a.y - b.y);
+}
 
-    // Draw the number next to the point (if enabled)
-    if (showNumbers) {
-      ctx.fillStyle = color;
-      ctx.font = "10px Arial";
-      ctx.fillText(index, point.x + 8, point.y - 8);
-    }
-  });
+function isSmokingGesture(hand) {
+  const keypoints = hand.keypoints;
+
+  const thumbTip = keypoints[4];
+  const indexTip = keypoints[8];
+  const middleTip = keypoints[12];
+  const wrist = keypoints[0];
+
+  const pinchDistance = distance(thumbTip, indexTip);
+
+  const indexMiddleDistance = distance(indexTip, middleTip);
+
+  const handIsNearMouthArea = indexTip.y < canvas.height * 0.55;
+
+  const fingersPinched = pinchDistance < 35;
+  const cigaretteShape = indexMiddleDistance < 45;
+
+  return fingersPinched && cigaretteShape && handIsNearMouthArea;
+};
 
   // Draw hand skeleton connections
   ctx.strokeStyle = color;
@@ -173,6 +177,21 @@ function drawHandLandmarks(keypoints, color, handedness) {
     ctx.lineTo(endPoint.x, endPoint.y);
     ctx.stroke();
   });
+
+  let smokingDetected = false;
+
+hands.forEach(hand => {
+  if (isSmokingGesture(hand)) {
+    smokingDetected = true;
+  }
+});
+
+if (smokingDetected) {
+  document.body.classList.add("smoking-gesture");
+  handList.innerHTML = "Gesto del fumare rilevato";
+} else {
+  document.body.classList.remove("smoking-gesture");
+  handList.innerHTML = "Mano rilevata, ma nessun gesto del fumare";
 }
 
 function getDistance(p1, p2) {
