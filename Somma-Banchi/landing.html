@@ -25,6 +25,7 @@
         background-color: #f5e6e6;
         font-family: inherit;
         overflow-x: hidden;
+        overflow-y: auto;
       }
 
       /* Header sticky - stesso stile della homepage */
@@ -63,7 +64,7 @@
         align-items: center;
         justify-content: center;
         position: relative;
-        overflow: hidden;
+        overflow: visible;
       }
 
       .images-container {
@@ -77,7 +78,7 @@
 
       /* Immagini sovrapposte */
       .overlay-image {
-        position: absolute;
+        position: fixed;
         width: 300px;
         height: 300px;
         background-size: cover;
@@ -87,48 +88,53 @@
       }
 
       .overlay-image:nth-child(1) {
-        width: 250px;
-        height: 250px;
-        top: 20%;
-        left: 30%;
+        width: 200px;
+        height: 280px;
+        top: 10%;
+        left: 5%;
         background-image: url('img/col1.png');
         z-index: 5;
+        transform: rotate(-12deg);
       }
 
       .overlay-image:nth-child(2) {
-        width: 320px;
-        height: 320px;
-        top: 35%;
-        left: 50%;
+        width: 180px;
+        height: 260px;
+        top: 25%;
+        left: 18%;
         background-image: url('img/col2.png');
         z-index: 4;
+        transform: rotate(8deg);
       }
 
       .overlay-image:nth-child(3) {
-        width: 280px;
-        height: 280px;
-        top: 25%;
-        right: 25%;
+        width: 220px;
+        height: 300px;
+        top: 35%;
+        left: 32%;
         background-image: url('img/col3.png');
         z-index: 3;
+        transform: rotate(-15deg);
       }
 
       .overlay-image:nth-child(4) {
-        width: 260px;
-        height: 260px;
-        bottom: 30%;
-        left: 35%;
+        width: 190px;
+        height: 270px;
+        top: 48%;
+        left: 45%;
         background-image: url('img/col4.png');
         z-index: 2;
+        transform: rotate(10deg);
       }
 
       .overlay-image:nth-child(5) {
-        width: 290px;
+        width: 210px;
         height: 290px;
-        bottom: 25%;
-        right: 30%;
+        top: 20%;
+        left: 56%;
         background-image: url('img/col5.png');
         z-index: 1;
+        transform: rotate(-8deg);
       }
 
       /* Sezione di transizione */
@@ -167,7 +173,7 @@
     <!-- Header sticky -->
     <header class="landing-header">
         <span>De veciariìe</span>
-    </header> class="font-myTitle cursor-pointer"
+    </header>
 
     <!-- Container principale -->
     <div class="landing-container">
@@ -192,9 +198,12 @@
     </div>
 
     <script>
+        // Resetta il flag di landing completata per testare
+        localStorage.removeItem('landingCompleted');
+    </script>
+    <script>
         const header = document.querySelector('.landing-header');
         const images = document.querySelectorAll('.overlay-image');
-        const homepagePreview = document.querySelector('.homepage-preview');
 
         window.addEventListener('scroll', () => {
             const scrollPercentage = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
@@ -203,24 +212,19 @@
             // Header visibility
             header.classList.toggle('visible', scrollPercentage > 5);
 
-            // Immagini: allargamento e fade out durante il primo 100vh
-            if (heroScrollPercentage < 100) {
-                const progress = heroScrollPercentage / 100;
+            // Immagini: movimento lieve durante lo scroll con sovrapposizione
+            if (heroScrollPercentage < 150) {
+                const progress = Math.min(heroScrollPercentage / 100, 1);
                 
                 images.forEach((img, index) => {
-                    // Allargamento
-                    const scaleAmount = 1 + (progress * 2); // Da 1 a 3
-                    const xOffset = (Math.random() - 0.5) * progress * 200;
-                    const yOffset = (Math.random() - 0.5) * progress * 200;
+                    // Movimento minimo e lieve durante scroll
+                    const yMove = progress * 100;
+                    const xMove = (Math.sin(index) * progress * 50);
                     
-                    img.style.transform = `scale(${scaleAmount}) translate(${xOffset}px, ${yOffset}px)`;
-                    
-                    // Fade out
-                    img.style.opacity = Math.max(0, 0.8 - progress * 1.2);
-                });
-            } else {
-                images.forEach(img => {
-                    img.style.opacity = '0';
+                    // Fade out lieve
+                    img.style.opacity = Math.max(0, 0.8 - progress * 0.3);
+                    img.style.transform = img.style.transform.replace(/translate\([^)]*\)/, '').trim();
+                    img.style.transform = `translate(${xMove}px, ${yMove}px) ${img.style.transform}`;
                 });
             }
 
