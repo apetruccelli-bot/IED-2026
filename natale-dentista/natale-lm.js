@@ -21,6 +21,24 @@ const video = document.getElementById("webcam");
 let handModel = null;
 let hands = [];
 let handDetector = null;
+const PREVIEW_IS_MIRRORED = true;
+
+// MediaPipe handedness is from camera perspective; swap for selfie-view UI labels.
+function normalizeHandednessLabel(label) {
+    if (label === 'Left') return 'Right';
+    if (label === 'Right') return 'Left';
+    return label || 'Unknown';
+}
+
+function mirrorPointX(point) {
+    if (!PREVIEW_IS_MIRRORED || !point) return point;
+    return { ...point, x: canvas.width - point.x };
+}
+
+function mirrorKeypointsX(keypoints) {
+    if (!PREVIEW_IS_MIRRORED || !Array.isArray(keypoints)) return keypoints;
+    return keypoints.map(mirrorPointX);
+}
 
 // Colors for different hands
 const handColors = [
@@ -268,9 +286,12 @@ function drawHandLandmarks(keypoints, color) {
      isDetecting = true;
 
      // Detect faces
-     const faces = await detector.estimateFaces(video, {
+    const rawFaces = await detector.estimateFaces(video, {
          flipHorizontal: false
      });
+    const faces = PREVIEW_IS_MIRRORED
+        ? rawFaces.map(face => ({ ...face, keypoints: mirrorKeypointsX(face.keypoints) }))
+        : rawFaces;
 
     // detect hands: prefer the newer handDetector (MediaPipe Hands) if available
     hands = [];
@@ -279,8 +300,9 @@ function drawHandLandmarks(keypoints, color) {
             const raw = await handDetector.estimateHands(video, { flipHorizontal: false });
             // normalize to { keypoints: [{x,y,z}], handedness, score }
             hands = raw.map(h => {
-                const kps = (h.keypoints || h.landmarks || []).map(p => ({ x: p.x, y: p.y, z: p.z || 0 }));
-                return { keypoints: kps, handedness: (h.handedness && h.handedness[0] && h.handedness[0].label) || h.handedness || (h.handednessLabel || 'Unknown'), score: h.score || (h.handInViewConfidence || 1) };
+                const kps = mirrorKeypointsX((h.keypoints || h.landmarks || []).map(p => ({ x: p.x, y: p.y, z: p.z || 0 })));
+                const rawLabel = (h.handedness && h.handedness[0] && h.handedness[0].label) || h.handedness || (h.handednessLabel || 'Unknown');
+                return { keypoints: kps, handedness: normalizeHandednessLabel(rawLabel), score: h.score || (h.handInViewConfidence || 1) };
             });
         } catch (e) {
             console.warn('handDetector error', e && e.message);
@@ -291,8 +313,8 @@ function drawHandLandmarks(keypoints, color) {
             const raw = await handModel.estimateHands(video, true);
             // handpose returns objects with landmarks: array of [x,y,z] and annotations
             hands = raw.map(h => {
-                const kps = (h.landmarks || []).map(p => ({ x: p[0], y: p[1], z: p[2] || 0 }));
-                return { keypoints: kps, annotations: h.annotations || {}, handedness: h.handedness || 'Unknown', score: h.score || 1 };
+                const kps = mirrorKeypointsX((h.landmarks || []).map(p => ({ x: p[0], y: p[1], z: p[2] || 0 })));
+                return { keypoints: kps, annotations: h.annotations || {}, handedness: normalizeHandednessLabel(h.handedness || 'Unknown'), score: h.score || 1 };
             });
         } catch (e) {
             hands = [];
@@ -329,10 +351,9 @@ function drawHandLandmarks(keypoints, color) {
                 if (hands && hands.length > 0) {
                     // map first hand's index finger tip
                     const hand = hands[0];
-                    const indexTip = hand.annotations && hand.annotations.indexFinger ? hand.annotations.indexFinger[3] : null;
-                    // handpose returns 3D points in pixels [x,y,z]
+                    const indexTip = hand.keypoints && hand.keypoints[8] ? hand.keypoints[8] : null;
                     if (indexTip) {
-                        const fingerPoint = { x: indexTip[0], y: indexTip[1] };
+                        const fingerPoint = { x: indexTip.x, y: indexTip.y };
                         if (isFingerInsideMouth(fingerPoint, face.keypoints)) {
                             const mapped = mapFingerToOverlay(fingerPoint, face.keypoints, mouthOverlay);
                             drawFillingOnPoint(mapped, face.keypoints);
