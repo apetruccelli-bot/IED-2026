@@ -15,6 +15,18 @@ const video = document.getElementById("webcam");
  const handList = document.getElementById("handList");
  const toggleNumbers = document.getElementById("toggleNumbers");
 
+// Helper: intentionally keep any status UI blank to hide tracking info
+function setStatus(_msg) {
+    try {
+        if (status) {
+            // intentionally blank: do not show tracking/status messages in the UI
+            status.textContent = "";
+        }
+    } catch (e) {
+        // ignore
+    }
+}
+
  let detector = null;
  let isDetecting = false;
  let showNumbers = true;  // Toggle for showing numbers
@@ -124,7 +136,7 @@ function drawHandLandmarks(keypoints, color) {
  // Load the Face Landmarks Detection model
  async function loadModel() {
      try {
-         status.textContent = "Loading face detection model...";
+         setStatus("Loading face detection model...");
          
          await tf.setBackend('webgl');
          await tf.ready();
@@ -139,7 +151,7 @@ function drawHandLandmarks(keypoints, color) {
              }
          );
          
-         status.textContent = "Model loaded! Click 'Start Camera'";
+         setStatus("Model loaded! Click 'Start Camera'");
          startBtn.disabled = false;
          console.log("Face detection model loaded successfully!");
         // try to load hand model (optional)
@@ -169,7 +181,7 @@ function drawHandLandmarks(keypoints, color) {
             handDetector = null;
         }
      } catch (error) {
-         status.textContent = "Error loading model: " + error.message;
+         setStatus("Error loading model: " + (error && error.message));
          console.error(error);
      }
  }
@@ -215,13 +227,13 @@ function drawHandLandmarks(keypoints, color) {
                 console.warn('Could not reset transforms:', e && e.message);
             }
              
-             status.textContent = "Detecting faces...";
-             startBtn.textContent = "Camera Running";
+             setStatus("Detecting faces...");
+             if (startBtn) startBtn.textContent = "Camera Running";
              startBtn.disabled = true;
              detectFaces();
          });
      } catch (error) {
-         status.textContent = "Error accessing camera: " + error.message;
+         setStatus("Error accessing camera: " + (error && error.message));
          console.error(error);
      }
  }
@@ -308,29 +320,19 @@ function drawHandLandmarks(keypoints, color) {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-     // Draw each face with different color
-     let infoHTML = "";
+    // Process faces for interaction (mouth detection & finger mapping) but do not build HTML UI
+    if (faces && faces.length > 0) {
+        faces.forEach((face, index) => {
+            const color = faceColors[index % faceColors.length];
 
-     if (faces.length > 0) {
-         infoHTML = `<div style="margin-bottom: 10px;"><strong>Tracking ${faces.length} face(s)</strong></div>`;
-
-         faces.forEach((face, index) => {
-             const color = faceColors[index % faceColors.length];
-             
-            // Tracking visuals hidden (bounding box and landmarks removed)
-
-            // MOUTH DETECTION: check if mouth is open, draw xray overlay if so
+            // MOUTH DETECTION: check if mouth is open, compute overlay and map finger interactions
             const mouthOpen = isMouthOpen(face.keypoints);
             if (mouthOpen) {
-                // draw the xray overlay aligned to mouth
                 const mouthOverlay = drawXrayMouth(face.keypoints);
 
-                // if there are hands detected, handle finger -> tooth interaction
                 if (hands && hands.length > 0) {
-                    // map first hand's index finger tip
                     const hand = hands[0];
                     const indexTip = hand.annotations && hand.annotations.indexFinger ? hand.annotations.indexFinger[3] : null;
-                    // handpose returns 3D points in pixels [x,y,z]
                     if (indexTip) {
                         const fingerPoint = { x: indexTip[0], y: indexTip[1] };
                         if (isFingerInsideMouth(fingerPoint, face.keypoints)) {
@@ -340,50 +342,12 @@ function drawHandLandmarks(keypoints, color) {
                     }
                 }
             }
-
-             // Add info for this face
-             const confidence = face.box ? 
-                 `${(face.box.probability * 100).toFixed(1)}%` : 
-                 "High confidence";
-
-             infoHTML += `<div class="face-info" style="border-color: ${color};">`;
-             infoHTML += `<strong>Face ${index + 1}</strong><br>`;
-             infoHTML += `<div style="margin: 5px 0;">`;
-             infoHTML += `<span class="feature-info">✓ Left Eye</span>`;
-             infoHTML += `<span class="feature-info">✓ Right Eye</span>`;
-             infoHTML += `<span class="feature-info">✓ Nose</span>`;
-             infoHTML += `<span class="feature-info">✓ Mouth</span>`;
-             infoHTML += `<span class="feature-info">✓ Eyebrows</span>`;
-             infoHTML += `<span class="feature-info">✓ Face Contour</span>`;
-             infoHTML += `</div>`;
-             infoHTML += `</div>`;
-         });
-     } else {
-         infoHTML = "<div>No faces detected - look at the camera!</div>";
-     }
-
-    faceList.innerHTML = infoHTML;
-
-    // Render hand info list
-    let handHTML = '';
-    if (hands && hands.length > 0) {
-        handHTML = `<div style="margin-bottom:10px"><strong>Tracking ${hands.length} hand(s)</strong></div>`;
-        hands.forEach((h, i) => {
-            const color = handColors[i % handColors.length];
-            const label = h.handedness || 'Hand';
-            handHTML += `<div class="hand-info" style="border-left:4px solid ${color}; padding:6px; margin-bottom:6px;">`;
-            handHTML += `<strong>${label}</strong> — ${h.keypoints ? h.keypoints.length : 0} pts`;
-            handHTML += `<div style="font-size:12px; margin-top:6px;">Detection: ${h.score ? (h.score*100).toFixed(1)+'%' : 'n/a'}</div>`;
-            if (showNumbers && h.keypoints) {
-                const keys = [0,4,8,12,16,20].map(idx => `${idx}:${LANDMARK_NAMES[idx] || idx}`).join(' &nbsp; ');
-                handHTML += `<div style="font-size:11px; margin-top:6px;">${keys}</div>`;
-            }
-            handHTML += `</div>`;
         });
-    } else {
-        handHTML = '<div>No hands detected - show your hands to the camera!</div>';
     }
-    if (handList) handList.innerHTML = handHTML;
+
+    // Ensure face/hand info areas remain empty on this minimal page
+    if (faceList) faceList.innerHTML = "";
+    if (handList) handList.innerHTML = "";
 
     // Draw hands on canvas (over the faces overlays)
     if (hands && hands.length > 0) {
@@ -546,7 +510,7 @@ function drawFillingOnPoint(mappedPoint, face) {
     ctx.fill();
     ctx.restore();
 
-    status.textContent = "Restoration (marker)";
+    setStatus("Restoration (marker)");
 }
  
  
