@@ -48,7 +48,7 @@ const MAP_BOUNDS = {
   north: 42.5    // max latitude
 };
 
-const MARKER_FADE_DURATION_MS = 30 * 1000;
+const MARKER_FADE_DURATION_MS = 8 * 1000;
 const NAVIGATION_SLOWDOWN_WINDOW_MS = 8000;
 const NAVIGATION_SLOWDOWN_FACTOR = 0.25;
 
@@ -149,8 +149,16 @@ async function initProcopioTracking() {
   const statusEl = document.getElementById('face-status-label');
   if (statusEl) statusEl.textContent = 'loading models…';
   try {
-    await tf.setBackend('webgl');
-    await tf.ready();
+    // Try WebGL first, fallback to CPU if not available
+    try {
+      await tf.setBackend('webgl');
+      await tf.ready();
+    } catch (webglErr) {
+      console.warn('WebGL backend failed, falling back to CPU:', webglErr);
+      await tf.setBackend('cpu');
+      await tf.ready();
+      if (statusEl) statusEl.textContent = 'loading models… (CPU mode)';
+    }
 
     // Load face detector
     procopioFaceDetector = await faceLandmarksDetection.createDetector(
@@ -224,6 +232,11 @@ async function detectLoop() {
 
   // ── FACE → .custom-marker blur ───────────────────────────────────────────
   try {
+    // Check if video is ready before processing
+    if (video.readyState !== video.HAVE_ENOUGH_DATA) {
+      if (procopioIsDetecting) requestAnimationFrame(detectLoop);
+      return;
+    }
     const faces = await procopioFaceDetector.estimateFaces(video, { flipHorizontal: true });
     if (faces.length > 0) {
       if (statusEl) statusEl.textContent = '✓ face';
@@ -262,10 +275,20 @@ async function detectLoop() {
       setFaceFarOverlayVisible(false);
       faceTooFar = false;
     }
-  } catch (e) { /* ignore per-frame errors */ }
+  } catch (e) { 
+    if (e.message && e.message.includes('WebGL')) {
+      console.error('WebGL error during face detection:', e);
+      if (statusEl) statusEl.textContent = 'WebGL error - see console';
+    }
+  }
 
   // ── HAND → map zoom + center ────────────────────────────────────────────
   try {
+    // Check if video is ready before processing
+    if (video.readyState !== video.HAVE_ENOUGH_DATA) {
+      if (procopioIsDetecting) requestAnimationFrame(detectLoop);
+      return;
+    }
     const hands = await procopioHandDetector.estimateHands(video, { flipHorizontal: true });
     if (hands.length > 0) {
       const kp        = hands[0].keypoints;
@@ -330,7 +353,11 @@ async function detectLoop() {
     } else {
       if (handEl) handEl.textContent = 'no hand';
     }
-  } catch (e) { /* ignore per-frame errors */ }
+  } catch (e) { 
+    if (e.message && e.message.includes('WebGL')) {
+      console.error('WebGL error during hand detection:', e);
+    }
+  }
 
   if (procopioIsDetecting) requestAnimationFrame(detectLoop);
 }

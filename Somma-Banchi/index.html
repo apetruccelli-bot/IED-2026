@@ -18,12 +18,12 @@
   </head>
   <body>
     <header>
-      <span onclick="closeStoriaModal(); closeExploreMode();" class="font-myTitle cursor-pointer">De veciariìe</span>
+      <span onclick="closeExploreMode();" class="font-myTitle cursor-pointer">De veciariìe</span>
       <div class="flex gap-20px">
         <span id="nav-cerca-coltelli" onclick="openExploreMode()" 
         class="font-myTitle cursor-pointer opacity-20 hover:opacity-100 transition-opacity" >Cerca coltelli</span>
-        <span id="nav-storia" onclick="openStoriaModal()"
-        class="font-myTitle cursor-pointer">Storia</span>
+        <a href="storia.html"
+        class="font-myTitle cursor-pointer">Storia</a>
       </div>
     </header>
     
@@ -40,15 +40,15 @@
           <video id="explore-webcam" class="explore-webcam" autoplay muted playsinline></video>
           <div class="explore-description disossare">
             <p>Disossare</p>
-            <p>descrizione di dissosare</p>
+            <p>Separare la carne dall'osso con precisione, seguendo le venature naturali. Perfetto per rifinire tagli delicati e rimuovere le cartilagini senza sprecare la carne.</p>
           </div>
           <div class="explore-description tagliare">
             <p>Tagliare</p>
-            <p>descrizione di tagliare</p>
+            <p>Tagli quotidiani e decisivi al banco. Divide porzioni consistenti, rompe piccole ossa e prepara i pezzi da vendita con colpi netti e controllati sul ceppo.</p>
           </div>
           <div class="explore-description tagliare-e-affettare">
             <p>Tagliare e Affettare</p>
-            <p>descrizione di tagliare e affettare</p>
+            <p>Lavorazioni precise e pulite. Affetta porzioni sottili, ritaglia tagli di carne e rifinisce i bordi con controllo, seguendo le linee naturali del pezzo.</p>
           </div>
         </div>
 
@@ -61,20 +61,6 @@
         <div class="myColumn column-3"></div>
         <div class="myColumn column-4"></div>
       </main>
-    </div>
-
-    <!-- Storia modal -->
-    <div id="storia-modal" class="storia-modal">
-      <div class="storia-modal-bar">
-        <span class="font-myTitle">Storia</span>
-        <span onclick="closeStoriaModal()" class="font-myTitle cursor-pointer">Close</span>
-      </div>
-      <div class="storia-modal-content">
-        <div style="display: flex; gap: 20px; align-items: stretch;">
-          <img src="img/b17.png" alt="Banco di vendita di Gigi, Martina Franca, 1989" style="width: 8%; height: 60%; flex-shrink: 0; object-fit: cover;">
-          <p>De Veciariìe, termine del dialetto barese che sta per "Macellerie", è l'archivio nato dall'idea di Ruggiero Somma che voleva rendere omaggio al suo mestiere. Ruggiero era un macellaio originario di Barletta that aveva trovato a Bari la sua casa e la sua bottega. Per lui, il mestiere non era solo vendere carne, era una cultura fatta di gesti precisi, di utensili e di rapporti umani. Così, tra gli anni 80 e 90,  con una macchina fotografica sempre a portata di mano, iniziò a documentare tutto quello che vedeva durante i suoi viaggi in giro per la Puglia. Fotografava le collezioni di coltelli dei suoi colleghi, quasi fossero reliquie, e poi i banchi da lavoro, le insegne colorate dei negozi di paese, le saracinesche pesanti e i tagli di carne eseguiti a regola d'arte. Il suo obiettivo era creare una raccolta che rimanesse nel tempo, una sorta di eredità che potesse trasmettere quello che c'era dietro il suo mestiere. Voleva che chi sarebbe venuto dopo di lui potesse vedere com'era la vita nelle botteghe pugliesi in quegli anni di benessere. Ma proprio mentre l'archivio prendeva la sua forma definitiva, la realtà prese una piega diversa. L'arrivo della "Mucca Pazza" in Italia non fu solo una crisi sanitaria, ma un terremoto sociale che distrusse la fiducia della gente e svuotò le macellerie. La Macelleria Somma, che doveva essere la custode di questa memoria, fu costretta a chiudere i battenti, e con lei sparirono molti dei negozi che Ruggiero aveva fotografato con tanta cura in tutta la regione. Così, quello che doveva essere l'orgoglioso album di una categoria vincente si trasformò, quasi per ironia della sorte, nel documento di un fallimento collettivo. Senza volerlo, Ruggiero aveva creato l'unica testimonianza rimasta di un mondo cancellato da un'emergenza sanitaria e sociale. Oggi, sfogliare De Veciariìe non significa solo guardare tagli di carne o vecchi negozi, ma immergersi nel racconto malinconico di un uomo che voleva far scoprire al mondo la bellezza del suo mestiere, finendo per consegnarci la cronaca di una scomparsa.</p>
-        </div>
-      </div>
     </div>
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
