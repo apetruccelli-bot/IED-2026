@@ -4,8 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Storia - De Veciariìe</title>
+
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
     <style type="text/tailwindcss">
       @theme {
         --color-myBlack: #090909;
@@ -15,26 +17,388 @@
         --spacing-20px: 20px;
       }
     </style>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: #f5d7df; /* same pink as landing */
+        color: #090909;
+        overflow-x: hidden;
+      }
+
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 50;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        background: transparent; /* remove black bar */
+        color: #090909;
+      }
+
+      header a,
+      header span {
+        font-size: 34px;
+        line-height: 1;
+      }
+
+     .history-wrapper {
+       position: relative;
+       display: grid;
+       grid-template-columns: 190px 1fr;
+       min-height: 560vh;
+       padding-top: 70px;
+      }
+
+      .city-sidebar {
+        position: sticky;
+        top: 70px;
+        height: calc(100vh - 70px);
+        padding-left: 12px;
+        z-index: 20;
+      }
+
+      .city-list {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+        font-size: 13px;
+        line-height: 1;
+      }
+
+      .city-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 120px;
+        min-height: 14px;
+        opacity: 1;
+        transition: font-size 0.25s ease, font-weight 0.25s ease;
+      }
+
+      .city-item::after {
+        content: "";
+        width: 21px;
+        height: 1px;
+        background: #090909;
+        margin-left: auto;
+      }
+
+      .city-item.active {
+        font-size: 26px;
+        font-weight: 700;
+      }
+
+      .city-item.active::after {
+        opacity: 0;
+      }
+      
+      .city-end-step {
+       width: 90px;
+       height: 36px;
+      }
+
+      .city-dot {
+        position: absolute;
+        left: 110px;
+        top: 0;
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
+        background: #090909;
+        transform: translateY(0);
+        transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+        pointer-events: none;
+      }
+
+      .history-stage {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: grid;
+        grid-template-columns: minmax(320px, 590px) minmax(320px, 560px);
+        align-items: center;
+        gap: 36px;
+        padding: 70px 40px 40px 70px;
+      }
+
+      .image-frame {
+        width: 100%;
+        max-width: 590px;
+        aspect-ratio: 1 / 1;
+        position: relative;
+      }
+
+      .history-image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 0.45s ease;
+      }
+
+      .history-image.active {
+        opacity: 1;
+      }
+
+      .history-text {
+        max-width: 520px;
+        font-size: 26px;
+        line-height: 0.97;
+        letter-spacing: 0.01em;
+      }
+
+      .story-part {
+        display: none;
+      }
+
+      .story-part.active {
+        display: block;
+      }
+
+      .scroll-section {
+        height: 0;
+        pointer-events: none;
+      }
+
+      @media (max-width: 900px) {
+        header a,
+        header span {
+          font-size: 26px;
+        }
+
+        .history-wrapper {
+          grid-template-columns: 120px 1fr;
+        }
+
+        .city-item {
+          width: 90px;
+          font-size: 11px;
+        }
+
+        .city-item.active {
+          font-size: 19px;
+        }
+
+        .city-dot {
+          left: 88px;
+          width: 15px;
+          height: 15px;
+        }
+
+        .history-stage {
+          grid-template-columns: 1fr;
+          align-content: center;
+          gap: 24px;
+          padding: 70px 18px 30px 35px;
+        }
+
+        .image-frame {
+          max-width: 100%;
+          aspect-ratio: 1 / 1;
+        }
+
+        .history-text {
+          font-size: 20px;
+          line-height: 1.05;
+        }
+      }
+    </style>
   </head>
+
   <body>
     <header>
-      <a href="index.html" class="font-myTitle cursor-pointer">De veciariìe</a>
+      <a href="index.html" class="font-myTitle cursor-pointer opacity-20 hover:opacity-100 transition-opacity">
+        De veciariìe
+      </a>
+
       <div class="flex gap-20px">
-        <a href="index.html" class="font-myTitle cursor-pointer opacity-20 hover:opacity-100 transition-opacity">Archivio</a>
-        <span class="font-myTitle cursor-pointer">Storia</span>
+        <a href="index.html" class="font-myTitle cursor-pointer opacity-20 hover:opacity-100 transition-opacity">
+          Esplora
+        </a>
+        <span class="font-myTitle cursor-pointer">
+          Storia
+        </span>
       </div>
     </header>
 
-    <main style="padding-top: 6rem; padding-left: 10px; padding-right: 10px; padding-bottom: 40px;">
-      <div class="storia-page">
-        <h1 class="font-myTitle" style="margin-bottom: 20px;">Storia</h1>
-        <div style="display: flex; gap: 20px; align-items: flex-start;">
-          <img src="img/b17.png" alt="Banco di vendita di Gigi, Martina Franca, 1989" style="width: 15%; min-width: 150px; flex-shrink: 0; object-fit: cover;">
-          <div>
-            <p style="text-transform: none; line-height: 1.8; font-size: 14px;">De Veciariìe, termine del dialetto barese che sta per "Macellerie", è l'archivio nato dall'idea di Ruggiero Somma che voleva rendere omaggio al suo mestiere. Ruggiero era un macellaio originario di Barletta that aveva trovato a Bari la sua casa e la sua bottega. Per lui, il mestiere non era solo vendere carne, era una cultura fatta di gesti precisi, di utensili e di rapporti umani. Così, tra gli anni 80 e 90,  con una macchina fotografica sempre a portata di mano, iniziò a documentare tutto quello che vedeva durante i suoi viaggi in giro per la Puglia. Fotografava le collezioni di coltelli dei suoi colleghi, quasi fossero reliquie, e poi i banchi da lavoro, le insegne colorate dei negozi di paese, le saracinesche pesanti e i tagli di carne eseguiti a regola d'arte. Il suo obiettivo era creare una raccolta che rimanesse nel tempo, una sorta di eredità che potesse trasmettere quello che c'era dietro il suo mestiere. Voleva che chi sarebbe venuto dopo di lui potesse vedere com'era la vita nelle botteghe pugliesi in quegli anni di benessere. Ma proprio mentre l'archivio prendeva la sua forma definitiva, la realtà prese una piega diversa. L'arrivo della "Mucca Pazza" in Italia non fu solo una crisi sanitaria, ma un terremoto sociale che distrusse la fiducia della gente e svuotò le macellerie. La Macelleria Somma, che doveva essere la custode di questa memoria, fu costretta a chiudere i battenti, e con lei sparirono molti dei negozi che Ruggiero aveva fotografato con tanta cura in tutta la regione. Così, quello che doveva essere l'orgoglioso album di una categoria vincente si trasformò, quasi per ironia della sorte, nel documento di un fallimento collettivo. Senza volerlo, Ruggiero aveva creato l'unica testimonianza rimasta di un mondo cancellato da un'emergenza sanitaria e sociale. Oggi, sfogliare De Veciariìe non significa solo guardare tagli di carne o vecchi negozi, ma immergersi nel racconto malinconico di un uomo che voleva far scoprire al mondo la bellezza del suo mestiere, finendo per consegnarci la cronaca di una scomparsa.</p>
-          </div>
+    <main class="history-wrapper">
+      <aside class="city-sidebar">
+        <nav class="city-list" id="cityList">
+          <div class="city-item" data-step="0">Cerignola</div>
+          <div class="city-item" data-step="0">Foggia</div>
+
+          <div class="city-item active" data-step="0" id="city-baretta">Barletta</div>
+          <div class="city-item" data-step="0">Bisceglie</div>
+          <div class="city-item" data-step="0">Andria</div>
+          <div class="city-item" data-step="0">Bitonto</div>
+          <div class="city-item" data-step="0">Modugno</div>
+          <div class="city-item" data-step="0">Toritto</div>
+
+          <div class="city-item" data-step="1" id="city-bari">Bari</div>
+
+          <div class="city-item" data-step="1">Conversano</div>
+          <div class="city-item" data-step="1">Noci</div>
+          <div class="city-item" data-step="1">Martina<br />Franca</div>
+          <div class="city-item" data-step="1">Faggiano</div>
+          <div class="city-item" data-step="1">Taranto</div>
+          <div class="city-item" data-step="1">Francavilla<br />Fontana</div>
+          <div class="city-item" data-step="1">Carovigno</div>
+          <div class="city-item" data-step="1">Maglie</div>
+          <div class="city-item" data-step="1">Nardò</div>
+          <div class="city-item" data-step="1">Melpignano</div>
+          
+          <div class="city-item" data-step="2">San Foca</div>
+          
+          <span class="city-end-step" id="city-finale"></span>
+
+          <span class="city-dot" id="cityDot"></span>
+
+        </nav>
+      </aside>
+
+      <section class="history-stage">
+        <div class="image-frame">
+          <!-- massimo 5 immagini -->
+          <img class="history-image active" src="img/a3.png" alt="Macelleria Somma a Barletta" />
+          <img class="history-image" src="img/a2.png" alt="Macelleria Somma a Bari" />
+          <img class="history-image" src="img/a1.png" alt="Fine" />
         </div>
-      </div>
+
+        <div class="history-text">
+          <p class="story-part active">
+            De veciariìe, è l’eredità di Ruggiero Somma, macellaio nato a Barletta.
+            Il suo lavoro ereditato da diverse generazioni, era per lui qualcosa che
+            andava raccontato, per far vedere cosa c’è dietro un semplice banco di vendita
+            o una saracinesca alzata.
+            Nasce e impara i segreti del mestiere nella macelleria di suo nonno a Barletta.
+          </p>
+
+          <p class="story-part">
+            Durante gli anni ’60 Ruggiero decide di mandare avanti la sua attività a Bari.
+            La bottega diventa casa, luogo di lavoro e punto d’incontro.
+            Con il tempo inizia a fotografare colleghi, banchi, coltelli, insegne,
+            saracinesche e piccoli gesti quotidiani, trasformando il mestiere in memoria.
+          </p>
+
+          <p class="story-part">
+            Quello che doveva essere l’album orgoglioso di una categoria diventa,
+            con la crisi della Mucca Pazza, il documento malinconico di un mondo che
+            stava scomparendo. De veciariìe rimane oggi come archivio visivo di quelle
+            macellerie pugliesi, delle loro persone e della loro cultura materiale.
+          </p>
+        </div>
+      </section>
+
+      <!-- sezioni invisibili che comandano lo scroll -->
+      <section class="scroll-section" data-step="0"></section>
+      <section class="scroll-section" data-step="1"></section>
+      <section class="scroll-section" data-step="2"></section>
     </main>
+
+    <script>
+      const cityItems = document.querySelectorAll(".city-item");
+      const dot = document.getElementById("cityDot");
+      const storyParts = document.querySelectorAll(".story-part");
+      const images = document.querySelectorAll(".history-image");
+      const wrapper = document.querySelector(".history-wrapper");
+
+      const activeStops = [
+        document.getElementById("city-barletta"),
+        document.getElementById("city-bari"),
+        document.getElementById("city-finale")
+      ];
+
+      let currentStep = -1;
+      let ticking = false;
+
+      function moveDotToStop(stop) {
+        if (!stop || !dot) return;
+        const y = stop.offsetTop + stop.offsetHeight / 2 - dot.offsetHeight / 2;
+        dot.style.transform = `translateY(${y}px)`;
+      }
+
+      function setActiveStep(step) {
+        if (step === currentStep) return;
+
+        currentStep = step;
+
+        cityItems.forEach((item) => {
+          item.classList.remove("active");
+        });
+
+        const currentStop = activeStops[step];
+
+        if (currentStop && currentStop.classList.contains("city-item")) {
+          currentStop.classList.add("active");
+        }
+
+        storyParts.forEach((part, index) => {
+          part.classList.toggle("active", index === step);
+        });
+
+        images.forEach((img, index) => {
+          img.classList.toggle("active", index === step);
+        });
+
+        moveDotToStop(currentStop);
+      }
+
+      function getStepFromScroll() {
+        const rect = wrapper.getBoundingClientRect();
+        const scrollableDistance = wrapper.offsetHeight - window.innerHeight;
+        const scrolledInsideWrapper = Math.min(
+          Math.max(-rect.top, 0),
+          scrollableDistance
+        );
+        const progress = scrolledInsideWrapper / scrollableDistance;
+
+        if (progress < 0.38) {
+          return 0;
+        }
+        if (progress < 0.74) {
+          return 1;
+        }
+        return 2;
+      }
+
+      function updateOnScroll() {
+        const step = getStepFromScroll();
+        setActiveStep(step);
+        ticking = false;
+      }
+
+      function requestUpdate() {
+        if (!ticking) {
+          window.requestAnimationFrame(updateOnScroll);
+          ticking = true;
+        }
+      }
+
+      window.addEventListener("scroll", requestUpdate, { passive: true });
+      window.addEventListener("resize", () => {
+        currentStep = -1;
+        requestUpdate();
+      });
+      window.addEventListener("load", () => {
+        setActiveStep(0);
+        requestUpdate();
+      });
+    </script>
   </body>
 </html>
