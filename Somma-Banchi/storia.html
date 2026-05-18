@@ -329,8 +329,17 @@
 
       function moveDotToStop(stop) {
         if (!stop || !dot) return;
-        const y = stop.offsetTop + stop.offsetHeight / 2 - dot.offsetHeight / 2;
-        dot.style.transform = `translateY(${y}px)`;
+        const listRect = document.getElementById('cityList').getBoundingClientRect();
+        const stopRect = stop.getBoundingClientRect();
+        const dotRect = dot.getBoundingClientRect();
+
+        // vertical center relative to the list container
+        const y = (stopRect.top - listRect.top) + stopRect.height / 2 - dotRect.height / 2;
+
+        // horizontal: position the dot at the right edge of the item, centered
+        const x = (stopRect.right - listRect.left) - dotRect.width / 2;
+
+        dot.style.transform = `translate(${x}px, ${y}px)`;
       }
 
       function setActiveStep(step) {
