@@ -186,31 +186,7 @@
       "description": "Descrizione dell'immagine"
        }, 
     {
-      "id": 22,
-      "src": "img/fumo/anziano6.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       }, 
-    {
-       "id": 23,
-      "src": "img/fumo/giovani24.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       }, 
-    {
-       "id": 24,
-      "src": "img/fumo/businessman18.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       }, 
-    {
-  "id": 25,
+  "id": 22,
   "src": "img/pacchetti/pack1.png",
   "category": "pacchetti",
   "year": 1985,
@@ -221,7 +197,7 @@
   "description": "Descrizione dell'immagine"
   }
    ,{
-  "id": 26,
+  "id": 23,
   "src": "img/pacchetti/pack2.png",
   "category": "pacchetti",
   "year": 1988,
@@ -232,7 +208,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 27,
+  "id": 24,
   "src": "img/pacchetti/pack3.png",
   "category": "pacchetti",
   "year": 1989,
@@ -243,7 +219,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 28,
+  "id": 25,
   "src": "img/pacchetti/pack4.png",
   "category": "pacchetti",
   "year": 1990,
@@ -254,7 +230,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 29,
+  "id": 26,
   "src": "img/pacchetti/pack5.png",
   "category": "pacchetti",
   "year": 1988,
@@ -265,7 +241,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 30,
+  "id": 27,
   "src": "img/pacchetti/pack6.png",
   "category": "pacchetti",
   "year": 1996,
@@ -276,7 +252,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 31,
+  "id": 28,
   "src": "img/pacchetti/pack7.png",
   "category": "pacchetti",
   "year": 1990,
@@ -287,7 +263,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 32,
+  "id": 29,
   "src": "img/pacchetti/pack8.png",
   "category": "pacchetti",
   "year": 1985,
@@ -298,7 +274,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 33,
+  "id": 30,
   "src": "img/pacchetti/pack9.jpg",
   "category": "pacchetti",
   "year": 1986,
@@ -309,7 +285,7 @@
   "description": "Descrizione dell'immagine"
 },
  {
-  "id": 34,
+  "id": 31,
   "src": "img/pacchetti/pack10.png",
   "category": "pacchetti",
   "year": 1985,
@@ -320,7 +296,7 @@
   "description": "Descrizione dell'immagine"
   },
 {
-  "id": 35,
+  "id": 32,
   "src": "img/pacchetti/pack11.png",
   "category": "pacchetti",
   "year": 1988,
@@ -331,7 +307,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 36,
+  "id": 33,
   "src": "img/pacchetti/pack12.png",
   "category": "pacchetti",
   "year": 1989,
@@ -342,7 +318,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 37,
+  "id": 34,
   "src": "img/pacchetti/pack13.png",
   "category": "pacchetti",
   "year": 1990,
@@ -353,7 +329,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 38,
+  "id": 35,
   "src": "img/pacchetti/pack14.png",
   "category": "pacchetti",
   "year": 1988,
@@ -364,7 +340,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 39,
+  "id": 36,
   "src": "img/pacchetti/pack15.png",
   "category": "pacchetti",
   "year": 1996,
@@ -375,7 +351,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 40,
+  "id": 37,
   "src": "img/pacchetti/pack16.png",
   "category": "pacchetti",
   "year": 1990,
@@ -386,7 +362,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 41,
+  "id": 38,
   "src": "img/pacchetti/pack17.png",
   "category": "pacchetti",
   "year": 1985,
@@ -397,7 +373,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 42,
+  "id": 39,
   "src": "img/pacchetti/pack18.png",
   "category": "pacchetti",
   "year": 1986,
@@ -408,7 +384,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 43,
+  "id": 40,
   "src": "img/pacchetti/pack19.png",
   "category": "pacchetti",
   "year": 1988,
@@ -419,7 +395,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 44,
+  "id": 41,
   "src": "img/pacchetti/pack20.png",
   "category": "pacchetti",
   "year": 1988,
@@ -430,7 +406,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 45,
+  "id": 42,
   "src": "img/pacchetti/pack21.png",
   "category": "pacchetti",
   "year": 1988,
@@ -441,7 +417,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 46,
+  "id": 43,
   "src": "img/pacchetti/pack22.png",
   "category": "pacchetti",
   "year": 1988,
@@ -452,7 +428,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 47,
+  "id": 44,
   "src": "img/pacchetti/pack23.png",
   "category": "pacchetti",
   "year": 1988,
@@ -463,7 +439,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 48,
+  "id": 45,
   "src": "img/pacchetti/pack24.png",
   "category": "pacchetti",
   "year": 1988,
@@ -474,7 +450,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 49,
+  "id": 46,
   "src": "img/pacchetti/pack25.png",
   "category": "pacchetti",
   "year": 1988,
@@ -485,7 +461,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 50,
+  "id": 47,
   "src": "img/pacchetti/pack26.png",
   "category": "pacchetti",
   "year": 1988,
@@ -496,7 +472,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 51,
+  "id": 48,
   "src": "img/pacchetti/pack27.png",
   "category": "pacchetti",
   "year": 1988,
@@ -507,7 +483,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 52,
+  "id": 49,
   "src": "img/pacchetti/pack28.png",
   "category": "pacchetti",
   "year": 1988,
@@ -518,7 +494,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 53,
+  "id": 50,
   "src": "img/pacchetti/pack29.png",
   "category": "pacchetti",
   "year": 1988,
@@ -529,7 +505,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 54,
+  "id": 51,
   "src": "img/pacchetti/pack30.png",
   "category": "pacchetti",
   "year": 1988,
@@ -540,7 +516,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 55,
+  "id": 52,
   "src": "img/pacchetti/pack31.png",
   "category": "pacchetti",
   "year": 1988,
@@ -551,7 +527,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 56,
+  "id": 53,
   "src": "img/pacchetti/pack32.png",
   "category": "pacchetti",
   "year": 1988,
@@ -562,7 +538,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 57,
+  "id": 54,
   "src": "img/pacchetti/pack33.png",
   "category": "pacchetti",
   "year": 1988,
@@ -573,7 +549,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 58,
+  "id": 55,
   "src": "img/pacchetti/pack34.png",
   "category": "pacchetti",
   "year": 1988,
@@ -584,7 +560,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 59,
+  "id": 56,
   "src": "img/pacchetti/pack35.png",
   "category": "pacchetti",
   "year": 1988,
@@ -595,7 +571,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 60,
+  "id": 57,
   "src": "img/pacchetti/pack36.png",
   "category": "pacchetti",
   "year": 1988,
@@ -606,7 +582,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 61,
+  "id": 58,
   "src": "img/pacchetti/pack37.png",
   "category": "pacchetti",
   "year": 1988,
@@ -617,7 +593,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 62,
+  "id": 59,
   "src": "img/pacchetti/pack38.png",
   "category": "pacchetti",
   "year": 1988,
@@ -628,7 +604,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 63,
+  "id": 60,
   "src": "img/pacchetti/pack39.png",
   "category": "pacchetti",
   "year": 1988,
@@ -639,7 +615,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-  "id": 64,
+  "id": 61,
   "src": "img/pacchetti/pack40.png",
   "category": "pacchetti",
   "year": 1988,
@@ -650,7 +626,7 @@
   "description": "Descrizione dell'immagine"
 },
 {
-       "id": 65,
+       "id": 62,
        "src": "img/pubblicità/advertising1.png",
       "category": "pubblicità",
       "year": 1960,
@@ -658,7 +634,7 @@
       "description": "Descrizione dell'immagine"
   },
   {
-       "id": 66,
+       "id": 63,
        "src": "img/pubblicità/advertising2.png",
       "category": "pubblicità",
       "year": 1960,
@@ -666,7 +642,7 @@
       "description": "Descrizione dell'immagine"
   },
   {
-       "id": 67,
+       "id": 64,
        "src": "img/pubblicità/advertising3.png",
       "category": "pubblicità",
       "year": 1960,
@@ -674,7 +650,7 @@
       "description": "Descrizione dell'immagine"
   }, 
   {
-       "id": 68,
+       "id": 65,
        "src": "img/about/about1.png",
       "category": "about archive",
       "year": 1960,
@@ -682,7 +658,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 69,
+       "id": 66,
        "src": "img/about/about2.jpg",
       "category": "about archive",
       "year": 1960,
@@ -690,7 +666,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 70,
+       "id": 67,
        "src": "img/about/about3.png",
       "category": "about archive",
       "year": 1960,
@@ -698,7 +674,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 71,
+       "id": 68,
        "src": "img/about/about4.png",
       "category": "about archive",
       "year": 1960,
@@ -706,7 +682,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 72,
+       "id": 69,
        "src": "img/about/about5.jpg",
       "category": "about archive",
       "year": 1960,
@@ -714,7 +690,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 73,
+       "id": 70,
        "src": "img/about/about6.png",
       "category": "about archive",
       "year": 1960,
