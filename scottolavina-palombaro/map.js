@@ -16,7 +16,7 @@ const locations = [
   },
 ];
 
-mapboxgl.accessToken = "pk.eyJ1IjoibS1zY290dG9sYXZpbmEiLCJhIjoiY21wM3N3b3d6MGYxMTJ0c2NxMnZzOG80dCJ9.M3V6x1Xasc2_64AmPzNpGw";
+mapboxgl.accessToken = "pk.eyJ1IjoibS1zY290dG9sYXZpbmEiLCJhIjoiY21wMTNsZzAyMDExdjJzczl4cnZsaWdyeiJ9.CtMmob3AiGfgsuflTXlWIQ";
 
 const mapContainer = document.getElementById("map");
 const locationPlacement = {
@@ -373,6 +373,9 @@ if (mapContainer && typeof mapboxgl !== "undefined") {
   }, 1600);
 }
     function navigateMapWithHand(handX, handY, videoWidth, videoHeight, movementScale = 1) {
+  // If a location detail is open, skip hand-driven panning
+  if (window.locationIsOpen) return;
+
   // Defensive defaults
   const vw = videoWidth || window.innerWidth;
   const vh = videoHeight || window.innerHeight;
@@ -427,7 +430,6 @@ if (mapContainer && typeof mapboxgl !== "undefined") {
 
     function closeLocationDetail() {
       window.locationIsOpen = false;
-      window.navigationNeedsRearm = true;
       
       // Clear gallery
       const gallery = document.getElementById('gallery');

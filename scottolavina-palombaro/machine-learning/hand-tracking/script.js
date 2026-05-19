@@ -22,16 +22,19 @@ let cameraStartRequested = false;
 let lastSelectTime = 0;
 let currentGesture = "none";
 let lastNavigationTime = 0;
-let navigationNeedsRearm = false;
-let lastZoomOutTime = 0;
-let wasThumbIndexSeparated = false;
 let lastPinchTime = 0;
 let wasThumbIndexPinched = false;
-let pinchDetectionEnabled = true;
-let navigationDisabled = false;
-let locationIsOpen = false;
-let selectionBlocked = false;
 let wasOpenPalm = false;
+
+// Gesture stabilization: require N consecutive frames with same gesture before triggering action
+const GESTURE_STABILITY_THRESHOLD = 8; // frames
+let lastDetectedGesture = "none";
+let gestureStabilityCount = 0;
+let stableGesture = "none";
+
+let lastDetectedPinch = false;
+let pinchStabilityCount = 0;
+let stablePinch = false;
 
 function isFingerExtended(keypoints, tipIndex, pipIndex, mcpIndex) {
   const tip = keypoints[tipIndex];
@@ -89,9 +92,33 @@ function getHandCenter(keypoints) {
   const wrist = keypoints[0];
   const middleMcp = keypoints[9];
 
+  // raw center in video/canvas coordinates
+  const x = (wrist.x + middleMcp.x) / 2;
+  const y = (wrist.y + middleMcp.y) / 2;
+
+  // determine canvas/video center (fallback to window size)
+  const vw = canvas ? canvas.width : window.innerWidth;
+  const vh = canvas ? canvas.height : window.innerHeight;
+  const cx = vw / 2;
+  const cy = vh / 2;
+
+  // normalized vector from camera center to hand: range approximately [-1, 1]
+  const nx = (x - cx) / cx;
+  // invert Y so that up is positive (more intuitive for navigation vectors)
+  const ny = -((y - cy) / cy);
+
+  const distance = Math.sqrt(nx * nx + ny * ny);
+  const angle = Math.atan2(ny, nx); // radians
+  const angleDeg = Math.round((angle * 180) / Math.PI);
+
   return {
-    x: (wrist.x + middleMcp.x) / 2,
-    y: (wrist.y + middleMcp.y) / 2,
+    x,
+    y,
+    nx,
+    ny,
+    distance,
+    angle,
+    angleDeg,
   };
 }
 
@@ -131,103 +158,91 @@ function handleMapGesture(hand) {
 
   const gesture = getGesture(hand.keypoints);
   const handCenter = getHandCenter(hand.keypoints);
-
-  currentGesture = gesture;
-
   const now = Date.now();
-  const thumbIndexSeparated = isThumbIndexSeparated(hand.keypoints);
   const thumbIndexPinched = isThumbIndexPinched(hand.keypoints);
 
-  // Pinch gesture to restore normal view
-  if (thumbIndexPinched && !wasThumbIndexPinched && now - lastPinchTime > 480 && window.locationIsOpen && pinchDetectionEnabled) {
+  currentGesture = gesture;
+  status.textContent = `Gesture: ${gesture} | stab:${gestureStabilityCount}/${GESTURE_STABILITY_THRESHOLD} | x:${Math.round(handCenter.x)} y:${Math.round(handCenter.y)} | nx:${handCenter.nx.toFixed(2)} ny:${handCenter.ny.toFixed(2)} | open:${!!window.locationIsOpen}`;
+
+  // ═══════════════════════════════════════════════════════════════════
+  // GESTURE STABILIZATION: count consecutive frames with same gesture
+  // ═══════════════════════════════════════════════════════════════════
+  if (gesture === lastDetectedGesture) {
+    gestureStabilityCount++;
+  } else {
+    gestureStabilityCount = 1;
+    lastDetectedGesture = gesture;
+  }
+
+  // Gesture is "stable" only after GESTURE_STABILITY_THRESHOLD consecutive frames
+  if (gestureStabilityCount >= GESTURE_STABILITY_THRESHOLD) {
+    stableGesture = gesture;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // PINCH STABILIZATION: count consecutive frames with pinch
+  // ═══════════════════════════════════════════════════════════════════
+  if (thumbIndexPinched === lastDetectedPinch) {
+    pinchStabilityCount++;
+  } else {
+    pinchStabilityCount = 1;
+    lastDetectedPinch = thumbIndexPinched;
+  }
+
+  // Pinch is "stable" only after GESTURE_STABILITY_THRESHOLD consecutive frames
+  if (pinchStabilityCount >= GESTURE_STABILITY_THRESHOLD) {
+    stablePinch = thumbIndexPinched;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // RULE 1: PINCH (stable thumb-index close) → CLOSE location
+  // ═══════════════════════════════════════════════════════════════════
+  if (stablePinch && !wasThumbIndexPinched && now - lastPinchTime > 480 && window.locationIsOpen) {
+    console.debug('[HAND] PINCH STABLE detected → closeLocationDetail');
     if (window.oceanMapControls && typeof window.oceanMapControls.closeLocationDetail === "function") {
       window.oceanMapControls.closeLocationDetail();
       window.locationIsOpen = false;
-      navigationDisabled = true;
-      lastPinchTime = now;
-      pinchDetectionEnabled = false;
-      
-      // Re-enable navigation after closure animation completes
-      setTimeout(() => {
-        navigationDisabled = false;
-      }, 1000);
-      
-      // Re-enable pinch detection after 1200ms
-      setTimeout(() => {
-        pinchDetectionEnabled = true;
-      }, 1200);
     }
+    lastPinchTime = now;
+    // Reset pinch counter to avoid re-trigger
+    pinchStabilityCount = 0;
+    stablePinch = false;
   }
-  wasThumbIndexPinched = thumbIndexPinched;
-  wasThumbIndexSeparated = thumbIndexSeparated;
+  wasThumbIndexPinched = stablePinch;
 
-  status.textContent = `Gesture: ${gesture} | x: ${Math.round(handCenter.x)} y: ${Math.round(handCenter.y)}`;
-
-  if (gesture === "closedFist") {
-    if (window.locationIsOpen) {
-      if (window.oceanMapControls && typeof window.oceanMapControls.closeLocationDetail === "function") {
-        window.oceanMapControls.closeLocationDetail();
-      }
-
-      window.locationIsOpen = false;
-      navigationDisabled = true;
-      selectionBlocked = true;
-      wasOpenPalm = false;
-
-      setTimeout(() => {
-        navigationDisabled = false;
-      }, 1000);
-
-      return;
-    }
-
-    // Check if we need to rearm navigation first
-    if ((navigationNeedsRearm || window.navigationNeedsRearm) && !navigationDisabled) {
-      navigationNeedsRearm = false;
-      window.navigationNeedsRearm = false;
-      navigationDisabled = true;
-      
-      if (window.oceanMapControls && typeof window.oceanMapControls.resetToInitialView === "function") {
-        window.oceanMapControls.resetToInitialView();
-      }
-      status.textContent = `Initial view restored | x: ${Math.round(handCenter.x)} y: ${Math.round(handCenter.y)}`;
-      
-      // Re-enable navigation after map animation completes
-      setTimeout(() => {
-        navigationDisabled = false;
-      }, 1000);
-      return;
-    }
-
-    // Skip navigation if disabled (during rearm)
-    if (navigationDisabled) return;
-
-    // throttle navigation only to avoid over-updating the map every frame
+  // ═══════════════════════════════════════════════════════════════════
+  // RULE 2: CLOSED FIST (stable) → NAVIGATE map
+  // ═══════════════════════════════════════════════════════════════════
+  if (stableGesture === "closedFist") {
+    // Throttle navigation to avoid excessive updates
     if (now - lastNavigationTime < 35) return;
 
-    window.oceanMapControls.navigateMapWithHand(
-      handCenter.x,
-      handCenter.y,
-      canvas ? canvas.width : window.innerWidth,
-      canvas ? canvas.height : window.innerHeight,
-      1
-    );
-
+    console.debug('[HAND] CLOSED FIST STABLE → navigateMapWithVector', { nx: handCenter.nx.toFixed(2), ny: handCenter.ny.toFixed(2) });
+    if (window.oceanMapControls && typeof window.oceanMapControls.navigateMapWithVector === "function") {
+      window.oceanMapControls.navigateMapWithVector(handCenter.nx, handCenter.ny, handCenter.distance);
+    } else {
+      // Fallback to pixel-based handler
+      window.oceanMapControls.navigateMapWithHand(
+        handCenter.x,
+        handCenter.y,
+        canvas ? canvas.width : window.innerWidth,
+        canvas ? canvas.height : window.innerHeight,
+        1
+      );
+    }
     lastNavigationTime = now;
   }
 
-  if (gesture === "openPalm") {
-    if (!selectionBlocked && !wasOpenPalm && now - lastSelectTime > 700) {
-      window.oceanMapControls.selectNearestLocation();
-      lastSelectTime = now;
-    }
+  // ═══════════════════════════════════════════════════════════════════
+  // RULE 3: OPEN PALM (stable transition) → SELECT nearest location
+  // ═══════════════════════════════════════════════════════════════════
+  if (stableGesture === "openPalm" && !wasOpenPalm && now - lastSelectTime > 700) {
+    console.debug('[HAND] OPEN PALM STABLE → selectNearestLocation');
+    window.oceanMapControls.selectNearestLocation();
+    lastSelectTime = now;
   }
 
-  if (gesture !== "openPalm" && selectionBlocked && !window.locationIsOpen) {
-    selectionBlocked = false;
-  }
-
-  wasOpenPalm = gesture === "openPalm";
+  wasOpenPalm = stableGesture === "openPalm";
 }
 
 // Colors for different hands
