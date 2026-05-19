@@ -23,8 +23,24 @@ let lastSelectTime = 0;
 let currentGesture = "none";
 let lastNavigationTime = 0;
 let lastPinchTime = 0;
+let lastGalleryScrollTime = 0;
+let lastGalleryScrollX = null;
+let lastGalleryGesture = "none";
 let wasThumbIndexPinched = false;
 let wasOpenPalm = false;
+
+// Hand motion tracking for swipe detection
+let handPositionHistory = []; // Array of { x, y, timestamp }
+const MAX_HISTORY_SIZE = 5; // Keep 5 recent positions (~150ms at 30fps)
+const MIN_SWIPE_DISTANCE = 0.15; // Minimum normalized distance to qualify as swipe
+const MAX_SWIPE_TIME = 300; // Maximum time window for swipe (ms)
+
+// Hand rotation tracking for gallery navigation
+let handRotationHistory = []; // Array of { angle, timestamp }
+const MAX_ROTATION_HISTORY = 8; // Keep 8 recent angles (~240ms at 30fps)
+const MIN_ROTATION_DELTA = 25; // Minimum angle change (degrees) to trigger action
+const MAX_ROTATION_TIME = 400; // Maximum time window for rotation detection (ms)
+let lastRotationActionTime = 0;
 
 // Gesture stabilization: require N consecutive frames with same gesture before triggering action
 const GESTURE_STABILITY_THRESHOLD = 8; // frames
@@ -102,6 +118,19 @@ function getHandCenter(keypoints) {
   const cx = vw / 2;
   const cy = vh / 2;
 
+  // Safety check: prevent division by zero
+  if (cx === 0 || cy === 0) {
+    return {
+      x: x || 0,
+      y: y || 0,
+      nx: 0,
+      ny: 0,
+      distance: 0,
+      angle: 0,
+      angleDeg: 0,
+    };
+  }
+
   // normalized vector from camera center to hand: range approximately [-1, 1]
   const nx = (x - cx) / cx;
   // invert Y so that up is positive (more intuitive for navigation vectors)
@@ -148,6 +177,24 @@ function isThumbIndexPinched(keypoints) {
   return pinchDistance < palmSize * 0.50;
 }
 
+function normalizeAngle(angle) {
+  // Normalize angle to 0-360 range
+  while (angle < 0) angle += 360;
+  while (angle >= 360) angle -= 360;
+  return angle;
+}
+
+function getAngleDelta(angle1, angle2) {
+  // Calculate shortest angle difference between two angles
+  let delta = angle2 - angle1;
+  
+  // Normalize to -180 to 180
+  if (delta > 180) delta -= 360;
+  if (delta < -180) delta += 360;
+  
+  return delta;
+}
+
 function handleMapGesture(hand) {
   if (!window.oceanMapControls) {
     if (status) status.textContent = "Map controls not ready";
@@ -156,13 +203,20 @@ function handleMapGesture(hand) {
 
   if (!hand || !hand.keypoints || hand.keypoints.length < 21) return;
 
-  const gesture = getGesture(hand.keypoints);
-  const handCenter = getHandCenter(hand.keypoints);
-  const now = Date.now();
-  const thumbIndexPinched = isThumbIndexPinched(hand.keypoints);
+  try {
+    const gesture = getGesture(hand.keypoints);
+    const handCenter = getHandCenter(hand.keypoints);
+    const now = Date.now();
+    const thumbIndexPinched = isThumbIndexPinched(hand.keypoints);
 
-  currentGesture = gesture;
-  status.textContent = `Gesture: ${gesture} | stab:${gestureStabilityCount}/${GESTURE_STABILITY_THRESHOLD} | x:${Math.round(handCenter.x)} y:${Math.round(handCenter.y)} | nx:${handCenter.nx.toFixed(2)} ny:${handCenter.ny.toFixed(2)} | open:${!!window.locationIsOpen}`;
+    // Safety check: ensure handCenter has valid values
+    if (!handCenter || isNaN(handCenter.nx) || isNaN(handCenter.ny)) {
+      console.warn('[HAND] Invalid hand center values detected, skipping frame');
+      return;
+    }
+
+    currentGesture = gesture;
+    status.textContent = `Gesture: ${gesture} | stab:${gestureStabilityCount}/${GESTURE_STABILITY_THRESHOLD} | x:${Math.round(handCenter.x)} y:${Math.round(handCenter.y)} | nx:${handCenter.nx.toFixed(2)} ny:${handCenter.ny.toFixed(2)} | open:${!!window.locationIsOpen}`;
 
   // ═══════════════════════════════════════════════════════════════════
   // GESTURE STABILIZATION: count consecutive frames with same gesture
@@ -234,15 +288,149 @@ function handleMapGesture(hand) {
   }
 
   // ═══════════════════════════════════════════════════════════════════
-  // RULE 3: OPEN PALM (stable transition) → SELECT nearest location
+  // RULE 4a: HAND ROTATION (location open) → FLIP THROUGH GALLERY
+  // Track hand angle rotation for clockwise/counter-clockwise navigation
   // ═══════════════════════════════════════════════════════════════════
-  if (stableGesture === "openPalm" && !wasOpenPalm && now - lastSelectTime > 700) {
+  let rotationDetected = false;
+  if (window.locationIsOpen && gesture === "openPalm") {
+    // Add current hand angle to rotation history
+    handRotationHistory.push({
+      angle: handCenter.angleDeg,
+      timestamp: now
+    });
+
+    // Keep only recent history (remove old entries)
+    if (handRotationHistory.length > MAX_ROTATION_HISTORY) {
+      handRotationHistory.shift();
+    }
+
+    // Detect rotation: check if hand has rotated significantly within time window
+    if (handRotationHistory.length >= 3) {
+      const oldest = handRotationHistory[0];
+      const newest = handRotationHistory[handRotationHistory.length - 1];
+      const timeDelta = newest.timestamp - oldest.timestamp;
+
+      // Only consider rotations within the time window
+      if (timeDelta <= MAX_ROTATION_TIME && timeDelta > 0) {
+        const angleDelta = getAngleDelta(oldest.angle, newest.angle);
+        const absRotation = Math.abs(angleDelta);
+
+        // Throttle rotation actions
+        const canRotate = now - lastRotationActionTime > 400;
+
+        // Detect significant rotation (clockwise or counter-clockwise)
+        if (canRotate && absRotation > MIN_ROTATION_DELTA) {
+          // Positive = counter-clockwise rotation → next image
+          // Negative = clockwise rotation → previous image
+          const direction = angleDelta > 0 ? 1 : -1;
+          
+          console.debug('[HAND] HAND ROTATION → stepGallery', {
+            direction,
+            angleDelta: angleDelta.toFixed(1),
+            timeDelta,
+            oldAngle: oldest.angle,
+            newAngle: newest.angle
+          });
+
+          if (window.oceanMapControls && typeof window.oceanMapControls.stepGallery === "function") {
+            window.oceanMapControls.stepGallery(direction);
+          }
+
+          rotationDetected = true;
+          lastRotationActionTime = now;
+
+          // Clear history after rotation to prevent multiple triggers
+          handRotationHistory = [];
+        }
+      }
+    }
+  } else {
+    // Palm not open or location closed: reset rotation tracking
+    handRotationHistory = [];
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // RULE 4b: SIDEWAYS PALM SWIPE (location open) → SCROLL GALLERY
+  // Track hand motion and detect left/right swipe gestures
+  // Only fire if rotation was NOT detected (prevent simultaneous conflicts)
+  // ═══════════════════════════════════════════════════════════════════
+  if (window.locationIsOpen && gesture === "openPalm" && !rotationDetected) {
+    // Add current hand position to history
+    handPositionHistory.push({
+      x: handCenter.nx,
+      y: handCenter.ny,
+      timestamp: now
+    });
+
+    // Keep only recent history (remove old entries)
+    if (handPositionHistory.length > MAX_HISTORY_SIZE) {
+      handPositionHistory.shift();
+    }
+
+    // Detect swipe: check if hand has moved significantly horizontally within time window
+    if (handPositionHistory.length >= 2) {
+      const oldest = handPositionHistory[0];
+      const newest = handPositionHistory[handPositionHistory.length - 1];
+      const timeDelta = newest.timestamp - oldest.timestamp;
+
+      // Only consider swipes within the time window
+      if (timeDelta <= MAX_SWIPE_TIME && timeDelta > 0) {
+        const deltaX = newest.x - oldest.x;
+        const absSwipeDistance = Math.abs(deltaX);
+
+        // Throttle navigation to avoid excessive updates
+        const canScroll = now - lastGalleryScrollTime > 300;
+
+        // Detect significant horizontal movement (swipe)
+        if (canScroll && absSwipeDistance > MIN_SWIPE_DISTANCE) {
+          // Determine swipe direction: positive deltaX = hand moved right, negative = moved left
+          const direction = deltaX > 0 ? -1 : 1; // Swipe right shows prev image (-1), swipe left shows next (+1)
+          
+          console.debug('[HAND] SIDEWAYS PALM SWIPE → stepGallery', {
+            direction,
+            deltaX: deltaX.toFixed(3),
+            timeDelta,
+            historySize: handPositionHistory.length
+          });
+
+          if (window.oceanMapControls && typeof window.oceanMapControls.stepGallery === "function") {
+            window.oceanMapControls.stepGallery(direction);
+          }
+
+          lastGalleryScrollTime = now;
+
+          // Clear history after swipe to prevent multiple triggers from same motion
+          handPositionHistory = [];
+        }
+      }
+    }
+
+    // Reset gesture flag when palm is no longer detected
+    if (lastGalleryGesture !== "openPalm") {
+      lastGalleryGesture = "openPalm";
+    }
+  } else {
+    // Palm not open or location closed: reset motion tracking
+    handPositionHistory = [];
+    lastGalleryScrollX = null;
+    lastGalleryGesture = "none";
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // RULE 3: OPEN PALM (stable transition, location closed) → SELECT nearest location
+  // ═══════════════════════════════════════════════════════════════════
+  if (stableGesture === "openPalm" && !wasOpenPalm && now - lastSelectTime > 700 && !window.locationIsOpen) {
     console.debug('[HAND] OPEN PALM STABLE → selectNearestLocation');
     window.oceanMapControls.selectNearestLocation();
     lastSelectTime = now;
   }
 
   wasOpenPalm = stableGesture === "openPalm";
+  } catch (error) {
+    console.error('[HAND] Error in handleMapGesture:', error);
+    // Don't crash - just log and continue
+    if (status) status.textContent = 'Gesture handler error: ' + (error.message || String(error));
+  }
 }
 
 // Colors for different hands
