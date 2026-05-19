@@ -439,6 +439,155 @@ document.addEventListener('DOMContentLoaded', applyActiveSidebarLink);
 
 
 //pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cG4wYjkwMzhuNDhzZW9nbG84NjZyIn0.AqkBWyL51ozeXHUJR2snXg
+
+// ── Loading Animation ──
+function initializeLoadingAnimation() {
+  const loadingOverlay = document.getElementById('loading-overlay');
+  const loadingImageCenter = document.getElementById('loading-image');
+  const loadingCoordinates = document.getElementById('loading-coordinates');
+  const loadingGallery = document.getElementById('loading-gallery');
+  const homeMap = document.getElementById('home-map');
+  
+  if (!loadingOverlay || !loadingImageCenter || !loadingCoordinates || !loadingGallery || !homeMap) return;
+
+  // Fetch map data for images
+  fetch('map-data.json')
+    .then(res => res.json())
+    .then(data => {
+      const items = Array.isArray(data.items) ? data.items : [];
+      if (!items.length) throw new Error('No items found');
+
+      // Preload all images to avoid jumps/stutters
+      items.forEach(item => {
+        const img = new Image();
+        img.src = item.src;
+      });
+
+      let currentIndex = 0;
+      const imageDuration = 100; // Each image shows for 0.3 seconds
+      const transitionDuration = 150; // Fade transition duration
+      
+      // Function to show image with coordinates
+      function showImage(index) {
+        if (index >= items.length) {
+          startZoomPhase();
+          return;
+        }
+        
+        const item = items[index];
+        const coords = item.coordinates; // [lng, lat]
+        const coordsText = `${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}`;
+        
+        // Fade in new image and coordinates
+        loadingImageCenter.src = item.src;
+        loadingImageCenter.classList.add('show');
+        
+        // Create individual spans for each character to enable digit-by-digit animation
+        loadingCoordinates.innerHTML = '';
+        [...coordsText].forEach((char, charIndex) => {
+          const span = document.createElement('span');
+          span.textContent = char;
+          span.className = 'coord-char';
+          span.style.display = 'inline-block';
+          span.style.animationDelay = `${charIndex * 20}ms`;
+          loadingCoordinates.appendChild(span);
+        });
+        
+        loadingCoordinates.classList.add('show');
+        
+        // Schedule next image
+        setTimeout(() => {
+          loadingImageCenter.classList.remove('show');
+          loadingCoordinates.classList.remove('show');
+          
+          setTimeout(() => {
+            showImage(index + 1);
+          }, transitionDuration);
+        }, imageDuration);
+      }
+      
+      // Function to handle zoom/scatter phase
+      function startZoomPhase() {
+        loadingImageCenter.style.display = 'none';
+        loadingCoordinates.style.display = 'none';
+        loadingGallery.classList.add('show');
+        
+        // Get the map instance (it should be ready by now)
+        const map = window.procopioMap;
+        
+        // Create gallery images for scatter animation
+        items.forEach((item, index) => {
+          const img = document.createElement('img');
+          img.src = item.src;
+          img.alt = item.label;
+          img.className = 'loading-image';
+          
+          // Use Mapbox projection to get exact pixel coordinates
+          let tx = 0, ty = 0;
+          
+          if (map && map.project) {
+            // Project geographic coordinates to pixel coordinates
+            const screenCoords = map.project(item.coordinates);
+            // Offset from center of screen
+            tx = screenCoords.x - window.innerWidth / 2;
+            ty = screenCoords.y - window.innerHeight / 2;
+          } else {
+            // Fallback if map not ready
+            const [lng, lat] = item.coordinates;
+            tx = ((lng - 12) / 7.5) * 400; // Simple scaling
+            ty = ((42.5 - lat) / 6.5) * 300;
+          }
+          
+          img.style.setProperty('--tx', `${tx}px`);
+          img.style.setProperty('--ty', `${ty}px`);
+          
+          const rotation = (Math.random() - 0.5) * 20; // Random rotation between -10 and 10 degrees
+          img.style.setProperty('--rotation', `${rotation}deg`);
+          
+          loadingGallery.appendChild(img);
+
+          if (index === 0) {
+            // First image: reveal animation
+            img.classList.add('reveal-start');
+            // Force a reflow to apply the start state before transitioning
+            void img.offsetWidth; 
+            img.classList.add('reveal-end');
+
+            // After reveal, add scatter class
+            setTimeout(() => {
+              img.classList.add('scatter');
+            }, 500); // Wait for reveal to finish
+          } else {
+            // Other images: staggered scatter
+            setTimeout(() => {
+              img.classList.add('scatter');
+            }, index * 80);
+          }
+        });
+        
+        // Fade out overlay after scatter completes
+        const totalScatterTime = (items.length * 80) + 1200;
+        setTimeout(() => {
+          loadingOverlay.classList.add('fade-out');
+        }, totalScatterTime);
+      }
+      
+      // Start showing images
+      setTimeout(() => {
+        showImage(0);
+      }, 500);
+    })
+    .catch(err => {
+      console.error('Error loading animation images:', err);
+      // Fallback: skip animation after 2 seconds
+      setTimeout(() => {
+        loadingOverlay.classList.add('fade-out');
+      }, 2000);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initializeLoadingAnimation);
+
 // Initialize Mapbox background on home page
 (function() {
   document.addEventListener('DOMContentLoaded', function() {
