@@ -646,6 +646,19 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
   object-fit: cover;
   opacity: 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Add transition for clip-path */
+  transition: clip-path 0.5s linear;
+}
+
+/* Initial state for the first image reveal */
+.loading-image.reveal-start {
+  clip-path: inset(0 50% 0 50%);
+  opacity: 1; /* Make it visible before reveal */
+}
+
+/* End state for the reveal */
+.loading-image.reveal-end {
+  clip-path: inset(0 0 0 0);
 }
 
 .loading-image.scatter {
@@ -654,12 +667,12 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 
 @keyframes scatterOut {
   0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(1);
+    opacity: 1; /* Start visible */
+    transform: translate(0, 0) scale(0.95) rotate(0deg);
   }
   100% {
     opacity: 1;
-    transform: translate(var(--tx), var(--ty)) scale(1);
+    transform: translate(var(--tx), var(--ty)) scale(1) rotate(var(--rotation, 0deg));
   }
 }
 

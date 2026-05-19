@@ -541,12 +541,28 @@ function initializeLoadingAnimation() {
           img.style.setProperty('--tx', `${tx}px`);
           img.style.setProperty('--ty', `${ty}px`);
           
-          loadingGallery.appendChild(img);
+          const rotation = (Math.random() - 0.5) * 20; // Random rotation between -10 and 10 degrees
+          img.style.setProperty('--rotation', `${rotation}deg`);
           
-          // Stagger animation start
-          setTimeout(() => {
-            img.classList.add('scatter');
-          }, index * 80);
+          loadingGallery.appendChild(img);
+
+          if (index === 0) {
+            // First image: reveal animation
+            img.classList.add('reveal-start');
+            // Force a reflow to apply the start state before transitioning
+            void img.offsetWidth; 
+            img.classList.add('reveal-end');
+
+            // After reveal, add scatter class
+            setTimeout(() => {
+              img.classList.add('scatter');
+            }, 500); // Wait for reveal to finish
+          } else {
+            // Other images: staggered scatter
+            setTimeout(() => {
+              img.classList.add('scatter');
+            }, index * 80);
+          }
         });
         
         // Fade out overlay after scatter completes
