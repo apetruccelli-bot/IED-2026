@@ -43,11 +43,11 @@
       width: 100%;
       min-height: 100%;
       background: #f5d7df;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     body {
-      min-height: 460vh;
+      min-height: 100vh;
     }
 
     .landing-header {
@@ -286,6 +286,10 @@
     const introLineTop = document.querySelector(".intro-line-top");
     const introLineBottom = document.querySelector(".intro-line-bottom");
 
+    const ANIMATION_DURATION = 20000;
+    let animationStartTime = null;
+    let redirected = false;
+
     const startLayout = [
       { x: 50, y: 50, r: 0 },
       { x: 49, y: 49, r: 0 },
@@ -338,20 +342,8 @@
       return endLayout;
     }
 
-    function updateLanding() {
-      const maxScroll = document.body.scrollHeight - window.innerHeight;
-      const scrollProgress = clamp(window.scrollY / maxScroll, 0, 1);
-
-      /*
-        Sequenza:
-        1. frase iniziale al centro
-        2. le due righe si separano verso i margini laterali
-        3. appare De Veciariìe
-        4. De Veciariìe si ancora in alto a sinistra
-        5. appaiono le immagini
-        6. immagini e titolo si dissolvono
-        7. sfondo chiaro e redirect alla home/archive
-      */
+    function updateLanding(progress) {
+      const scrollProgress = clamp(progress, 0, 1);
 
       const introSplitProgress = easeInOutCubic(
         clamp((scrollProgress - 0.06) / 0.22, 0, 1)
@@ -428,18 +420,38 @@
       } else {
         homePreview.classList.remove("visible");
       }
+    }
 
-      if (scrollProgress >= 0.97) {
+    function animateLanding(timestamp) {
+      if (!animationStartTime) {
+        animationStartTime = timestamp;
+      }
+
+      const elapsed = timestamp - animationStartTime;
+      const progress = clamp(elapsed / ANIMATION_DURATION, 0, 1);
+
+      updateLanding(progress);
+
+      if (progress < 1) {
+        requestAnimationFrame(animateLanding);
+      } else if (!redirected) {
+        redirected = true;
         window.location.href = "archivio.html";
       }
     }
 
-    window.addEventListener("scroll", updateLanding);
-    window.addEventListener("resize", updateLanding);
+    window.addEventListener("resize", () => {
+      if (animationStartTime) {
+        const elapsed = performance.now() - animationStartTime;
+        const progress = clamp(elapsed / ANIMATION_DURATION, 0, 1);
+        updateLanding(progress);
+      }
+    });
 
     window.addEventListener("load", () => {
       window.scrollTo(0, 0);
-      updateLanding();
+      updateLanding(0);
+      requestAnimationFrame(animateLanding);
     });
   </script>
 </body>
