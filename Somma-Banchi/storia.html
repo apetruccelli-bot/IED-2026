@@ -130,8 +130,8 @@
         height: 19px;
         border-radius: 50%;
         background: #090909;
-        transform: translate(0, 0);
-        transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+        transform: translate(-50%, 60px);
+        transition: transform 0.75s cubic-bezier(0.50, 1, 0.36, 1);
         pointer-events: none;
       }
       
@@ -362,7 +362,7 @@
         });
 
         if (dot) {
-          fixedDotX = dashRight - dot.getBoundingClientRect().width / 2;
+          fixedDotX = dashRight;
           dot.style.left = `${fixedDotX}px`;
         }
       }
@@ -375,7 +375,7 @@
         const dotRect = dot.getBoundingClientRect();
 
         const y = stopRect.top - listRect.top + stopRect.height / 2 - dotRect.height / 2;
-        dot.style.transform = `translateY(${y}px)`;
+        dot.style.transform = `translate(-50%, ${y}px)`;
       }
 
       function setActiveStep(step) {
@@ -385,21 +385,19 @@
 
         const currentStop = activeStops[step];
 
-        // remove active/font-myTitle from all items first so measurements reflect the non-active layout
         cityItems.forEach((item) => {
           item.classList.remove("active", "font-myTitle");
         });
 
-        // move the dot using the non-active measurements (so centering matches other stops)
-        moveDotToStop(currentStop);
-
-        // now set the visual active state
         if (currentStop && currentStop.classList && currentStop.classList.contains("city-item")) {
           currentStop.classList.add("active");
           if (currentStop.id === 'city-barletta' || currentStop.id === 'city-bari') {
             currentStop.classList.add('font-myTitle');
           }
         }
+
+        // move the dot after applying the active state so it centers on the final city text position
+        moveDotToStop(currentStop);
 
         storyParts.forEach((part, index) => {
           part.classList.toggle("active", index === step);
