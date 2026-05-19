@@ -245,7 +245,8 @@
         "tags": ["piano di lavoro", "flaconi"],
         "description": "Descrizione dell'immagine"
       }
-  ],
+  ]
+  ,
   "macroCategories": {
     "strumenti": [
       "protesi dentale",
@@ -266,6 +267,5 @@
       "scaffali",
       "piano di lavoro"
     ]
-  },
-  "liveServer.settings.port": 81
+  }
 }

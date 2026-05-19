@@ -5,23 +5,64 @@ const dentaturaFrontale = new Image();
 const otturazione = new Image();
 // asset effects removed: do not load external restoration image
 // otturazione.src = "asset/otturazione.jpeg";
+// Radiograph image for smile-triggered overlay (folder: interazione)
+const radiografiaImg = new Image();
+radiografiaImg.src = 'interazione/radiografiabase.jpg';
+radiografiaImg.crossOrigin = 'anonymous';
+let radiografiaLoaded = false;
+radiografiaImg.onload = () => { radiografiaLoaded = true; };
+radiografiaImg.onerror = (e) => { console.error('Failed to load radiograph image:', radiografiaImg.src, e); };
+// DOM overlay element (placed above the video/canvas)
+let radiographOverlayEl = null;
+
+function ensureRadiographOverlay() {
+    if (radiographOverlayEl) return radiographOverlayEl;
+    try {
+        const frame = document.getElementById('webcamFrame') || document.getElementById('container');
+        if (!frame) return null;
+        const img = document.createElement('img');
+        img.id = 'radiographOverlay';
+        img.src = radiografiaImg.src;
+        img.style.position = 'absolute';
+        img.style.left = '0';
+        img.style.top = '0';
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        img.style.zIndex = '4';
+        img.style.pointerEvents = 'none';
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 220ms ease';
+        img.style.display = 'none';
+        frame.appendChild(img);
+        radiographOverlayEl = img;
+        return radiographOverlayEl;
+    } catch (e) {
+        return null;
+    }
+}
+
+// Try to create the overlay immediately; if DOM isn't ready, create it on DOMContentLoaded
+try {
+    if (!ensureRadiographOverlay()) {
+        document.addEventListener('DOMContentLoaded', () => { try { ensureRadiographOverlay(); } catch (e) {} });
+    }
+} catch (e) {}
  
 const video = document.getElementById("webcam");
  const canvas = document.getElementById("canvas");
  const ctx = canvas.getContext("2d");
  const status = document.getElementById("status");
- const startBtn = document.getElementById("startBtn");
+ // Visible button in webinteraction.html — use let so we can create it dynamically if missing
+ let startBtn = document.getElementById("startBtn") || document.getElementById("cameraToggle");
  const faceList = document.getElementById("faceList");
  const handList = document.getElementById("handList");
  const toggleNumbers = document.getElementById("toggleNumbers");
 
-// Helper: intentionally keep any status UI blank to hide tracking info
-function setStatus(_msg) {
+// Safe status helper — will no-op if #status is not present
+function setStatus(msg) {
     try {
-        if (status) {
-            // intentionally blank: do not show tracking/status messages in the UI
-            status.textContent = "";
-        }
+        if (status) status.textContent = msg || '';
     } catch (e) {
         // ignore
     }
@@ -170,7 +211,23 @@ function drawHandLandmarks(keypoints, color) {
          );
          
          setStatus("Model loaded! Click 'Start Camera'");
-         startBtn.disabled = false;
+         // If the visible button is missing, create it under #cameraWrapper or body
+         try {
+             if (!startBtn) {
+                 const container = document.getElementById('cameraWrapper') || document.body;
+                 const btn = document.createElement('button');
+                 btn.id = 'cameraToggle';
+                 btn.className = 'camera-btn link-style';
+                 btn.textContent = 'Enable Camera';
+                 btn.disabled = false;
+                 container.appendChild(btn);
+                 startBtn = btn;
+                 // attach handler immediately
+                 startBtn.addEventListener('click', startCamera);
+             } else {
+                 startBtn.disabled = false;
+             }
+         } catch (e) {}
          console.log("Face detection model loaded successfully!");
         // try to load hand model (optional)
         try {
@@ -247,7 +304,7 @@ function drawHandLandmarks(keypoints, color) {
              
              setStatus("Detecting faces...");
              if (startBtn) startBtn.textContent = "Camera Running";
-             startBtn.disabled = true;
+             if (startBtn) startBtn.disabled = true;
              detectFaces();
          });
      } catch (error) {
@@ -342,38 +399,104 @@ function drawHandLandmarks(keypoints, color) {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Process faces for interaction (mouth detection & finger mapping) but do not build HTML UI
-    if (faces && faces.length > 0) {
-        faces.forEach((face, index) => {
-            const color = faceColors[index % faceColors.length];
+    // If any detected face is smiling, show the radiograph overlay element above the stream
+    try {
+        if (typeof window !== 'undefined') console.debug && console.debug('radiografiaLoaded=', radiografiaLoaded);
+        const smilingFace = faces && faces.some(f => isSmiling(f.keypoints));
+        const overlay = ensureRadiographOverlay();
+        if (smilingFace && radiografiaLoaded && overlay) {
+            // show overlay (fade in)
+            overlay.style.display = 'block';
+            // ensure reflow before changing opacity
+            void overlay.offsetWidth;
+            overlay.style.opacity = '0.98';
+        } else if (overlay) {
+            // hide overlay (fade out)
+            overlay.style.opacity = '0';
+            // after transition, set display none
+            setTimeout(() => { if (overlay && overlay.style.opacity === '0') overlay.style.display = 'none'; }, 240);
+        }
+    } catch (e) {
+        // ignore detection-time overlay errors
+    }
 
+      // Draw each face with different color
+     let infoHTML = "";
+
+     if (faces.length > 0) {
+         infoHTML = `<div style="margin-bottom: 10px;"><strong>Tracking ${faces.length} face(s)</strong></div>`;
+
+         faces.forEach((face, index) => {
+             const color = faceColors[index % faceColors.length];
+             
+            // Tracking visuals hidden (bounding box and landmarks removed)
+            
             // MOUTH DETECTION: check if mouth is open, compute overlay and map finger interactions
             const mouthOpen = isMouthOpen(face.keypoints);
             if (mouthOpen) {
+                // draw the xray overlay aligned to mouth
                 const mouthOverlay = drawXrayMouth(face.keypoints);
 
+                // if there are hands detected, handle finger -> tooth interaction
                 if (hands && hands.length > 0) {
+                    // map first hand's index finger tip
                     const hand = hands[0];
-<<<<<<< HEAD
                     const indexTip = hand.annotations && hand.annotations.indexFinger ? hand.annotations.indexFinger[3] : null;
-=======
-                    const indexTip = hand.keypoints && hand.keypoints[8] ? hand.keypoints[8] : null;
->>>>>>> 0cd5488613f16e0b38e901ea6e5d54a3d8c478fa
                     if (indexTip) {
-                        const fingerPoint = { x: indexTip.x, y: indexTip.y };
-                        if (isFingerInsideMouth(fingerPoint, face.keypoints)) {
+                    const fingerPoint = { x: indexTip.x, y: indexTip.y };
+                    if (isFingerInsideMouth(fingerPoint, face.keypoints)) {
                             const mapped = mapFingerToOverlay(fingerPoint, face.keypoints, mouthOverlay);
                             drawFillingOnPoint(mapped, face.keypoints);
                         }
                     }
                 }
             }
-        });
+
+             // Add info for this face
+             const confidence = face.box ? 
+                 `${(face.box.probability * 100).toFixed(1)}%` : 
+                 "High confidence";
+
+             infoHTML += `<div class="face-info" style="border-color: ${color};">`;
+             infoHTML += `<strong>Face ${index + 1}</strong><br>`;
+             infoHTML += `<div style="margin: 5px 0;">`;
+             infoHTML += `<span class="feature-info">✓ Left Eye</span>`;
+             infoHTML += `<span class="feature-info">✓ Right Eye</span>`;
+             infoHTML += `<span class="feature-info">✓ Nose</span>`;
+             infoHTML += `<span class="feature-info">✓ Mouth</span>`;
+             infoHTML += `<span class="feature-info">✓ Eyebrows</span>`;
+             infoHTML += `<span class="feature-info">✓ Face Contour</span>`;
+             infoHTML += `</div>`;
+             infoHTML += `</div>`;
+         });
+     } else {
+         infoHTML = "<div>No faces detected - look at the camera!</div>";
+     }
+
+    if (faceList) {
+        faceList.innerHTML = infoHTML;
     }
 
-    // Ensure face/hand info areas remain empty on this minimal page
-    if (faceList) faceList.innerHTML = "";
-    if (handList) handList.innerHTML = "";
+    // Render hand info list
+    let handHTML = '';
+    if (hands && hands.length > 0) {
+        handHTML = `<div style="margin-bottom:10px"><strong>Tracking ${hands.length} hand(s)</strong></div>`;
+        hands.forEach((h, i) => {
+            const color = handColors[i % handColors.length];
+            const label = h.handedness || 'Hand';
+            handHTML += `<div class="hand-info" style="border-left:4px solid ${color}; padding:6px; margin-bottom:6px;">`;
+            handHTML += `<strong>${label}</strong> — ${h.keypoints ? h.keypoints.length : 0} pts`;
+            handHTML += `<div style="font-size:12px; margin-top:6px;">Detection: ${h.score ? (h.score*100).toFixed(1)+'%' : 'n/a'}</div>`;
+            if (showNumbers && h.keypoints) {
+                const keys = [0,4,8,12,16,20].map(idx => `${idx}:${LANDMARK_NAMES[idx] || idx}`).join(' &nbsp; ');
+                handHTML += `<div style="font-size:11px; margin-top:6px;">${keys}</div>`;
+            }
+            handHTML += `</div>`;
+        });
+    } else {
+        handHTML = '<div>No hands detected - show your hands to the camera!</div>';
+    }
+    if (handList) handList.innerHTML = handHTML;
 
     // Draw hands on canvas (over the faces overlays)
     if (hands && hands.length > 0) {
@@ -406,12 +529,14 @@ function drawHandLandmarks(keypoints, color) {
  }
 
  // Event listeners
- startBtn.addEventListener("click", startCamera);
- 
- toggleNumbers.addEventListener("click", () => {
-     showNumbers = !showNumbers;
-     toggleNumbers.textContent = showNumbers ? "Hide Numbers" : "Show Numbers";
- });
+if (startBtn) startBtn.addEventListener("click", startCamera);
+
+if (toggleNumbers) {
+    toggleNumbers.addEventListener("click", () => {
+        showNumbers = !showNumbers;
+        toggleNumbers.textContent = showNumbers ? "Hide Numbers" : "Show Numbers";
+    });
+}
 
  // Load model when page loads
  loadModel();
@@ -453,6 +578,22 @@ function isMouthOpen(keypoints) {
     const rel = dy / faceH;
     // tuned threshold: mouth open when vertical gap > ~0.035 of face height
     return rel > 0.035;
+}
+
+// Simple smile detector: compares mouth corner distance to face width
+function isSmiling(keypoints) {
+    if (!keypoints) return false;
+    const left = keypoints[61];
+    const right = keypoints[291];
+    if (!left || !right) return false;
+    const xs = keypoints.map(p => p.x);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const faceW = Math.max(1, maxX - minX);
+    const mouthW = Math.abs(right.x - left.x);
+    const ratio = mouthW / faceW;
+    // tuned threshold: smile when mouth width > ~0.48 of face width
+    return ratio > 0.48;
 }
 
 function isFingerInsideMouth(fingerPoint, keypoints) {
@@ -536,8 +677,5 @@ function drawFillingOnPoint(mappedPoint, face) {
     ctx.fill();
     ctx.restore();
 
-    setStatus("Restoration (marker)");
+    status.textContent = "Restoration (marker)";
 }
- 
- 
- 
