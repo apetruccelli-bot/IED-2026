@@ -86,6 +86,7 @@ body {
   100% { filter: blur(0px); }
 }
 
+
 .landing-content-enter {
   animation: landing-content-in 3s cubic-bezier(.8,0,.2,1) forwards;
 }
@@ -528,4 +529,44 @@ button {
 .lb-next:disabled {
   opacity: 0.2;
   cursor: default;
+}
+
+.myPhotos.has-selected .card {
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+}
+
+.myPhotos.has-selected .card.selectedImg {
+  opacity: 1;
+
+  position: fixed;
+
+  left: 10px;
+  top: 10rem;
+
+  width: calc((100vw / 12) * 4 - 20px);
+
+  z-index: 50;
+}
+
+.descriptionAndFilters {
+  position: fixed;
+  left: 10px;
+
+  top: 36rem; /* sotto immagine */
+
+  width: calc((100vw / 12) * 4 - 20px);
+
+  z-index: 40;
+}
+
+.myPhotos.has-selected .card.selectedImg .card-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: unset;
+  object-fit: contain;
+}
+
+.myPhotos.has-selected + .filters-under-image {
+  opacity: 1;
 }
