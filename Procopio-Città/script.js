@@ -457,15 +457,34 @@ function initializeLoadingAnimation() {
       const items = Array.isArray(data.items) ? data.items : [];
       if (!items.length) throw new Error('No items found');
 
-      // Preload all images to avoid jumps/stutters
+      // Preload all images with array tracking to verify load state
+      let preloadedImages = [];
+      let preloadedCount = 0;
+      const totalItems = items.length;
+      
       items.forEach(item => {
         const img = new Image();
+        img.onload = () => preloadedCount++;
+        img.onerror = () => preloadedCount++;
         img.src = item.src;
+        preloadedImages.push(img);
       });
 
       let currentIndex = 0;
-      const imageDuration = 100; // Each image shows for 0.3 seconds
-      const transitionDuration = 150; // Fade transition duration
+      const imageDuration = 300; // Each image shows for 300ms
+      const firstImageDuration = 1500; // First image shows for 1.5 seconds
+      const transitionDuration = 30; // Fade transition duration - very fast
+      
+      // Wait for images to preload before starting slideshow
+      const startSlideshow = () => {
+        if (preloadedCount < totalItems) {
+          setTimeout(startSlideshow, 50);
+          return;
+        }
+        // Make map visible as slideshow starts
+        if (homeMap) homeMap.classList.add('visible');
+        showImage(0);
+      };
       
       // Function to show image with coordinates
       function showImage(index) {
@@ -476,47 +495,75 @@ function initializeLoadingAnimation() {
         
         const item = items[index];
         const coords = item.coordinates; // [lng, lat]
-        const coordsText = `${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}`;
+        const coordsText = `(${coords[0].toFixed(2)}, ${coords[1].toFixed(2)})`;
         
-        // Fade in new image and coordinates
-        loadingImageCenter.src = item.src;
-        loadingImageCenter.classList.add('show');
+        // Wait for image to load before displaying
+        const img = preloadedImages[index];
         
-        // Create individual spans for each character to enable digit-by-digit animation
-        loadingCoordinates.innerHTML = '';
-        [...coordsText].forEach((char, charIndex) => {
-          const span = document.createElement('span');
-          span.textContent = char;
-          span.className = 'coord-char';
-          span.style.display = 'inline-block';
-          span.style.animationDelay = `${charIndex * 20}ms`;
-          loadingCoordinates.appendChild(span);
-        });
-        
-        loadingCoordinates.classList.add('show');
-        
-        // Schedule next image
-        setTimeout(() => {
-          loadingImageCenter.classList.remove('show');
-          loadingCoordinates.classList.remove('show');
+        const displayAndScheduleNext = () => {
+          loadingImageCenter.src = item.src;
+          loadingImageCenter.classList.add('show');
           
+          // First image gets reveal animation and longer display time
+          if (index === 0) {
+            loadingImageCenter.classList.add('first-image-reveal');
+          }
+          
+          // Create individual spans for each character to enable digit-by-digit animation
+          loadingCoordinates.innerHTML = '';
+          [...coordsText].forEach((char, charIndex) => {
+            const span = document.createElement('span');
+            span.textContent = char;
+            span.className = 'coord-char';
+            span.style.display = 'inline-block';
+            span.style.animationDelay = `${charIndex * 20}ms`;
+            loadingCoordinates.appendChild(span);
+          });
+          
+          loadingCoordinates.classList.add('show');
+          
+          // Determine display duration based on whether this is first image
+          const displayDuration = index === 0 ? firstImageDuration : imageDuration;
+          
+          // Schedule next image AFTER image is shown and visible
           setTimeout(() => {
-            showImage(index + 1);
-          }, transitionDuration);
-        }, imageDuration);
+            loadingImageCenter.classList.remove('show');
+            loadingImageCenter.classList.remove('first-image-reveal');
+            loadingCoordinates.classList.remove('show');
+            
+            setTimeout(() => {
+              showImage(index + 1);
+            }, transitionDuration);
+          }, displayDuration);
+        };
+        
+        // Wait for image to be fully loaded before displaying
+        if (img && !img.complete) {
+          // Image not fully loaded yet, wait for load event
+          img.addEventListener('load', displayAndScheduleNext, { once: true });
+        } else {
+          // Image already loaded or preloaded, display immediately
+          displayAndScheduleNext();
+        }
       }
       
       // Function to handle zoom/scatter phase
       function startZoomPhase() {
-        loadingImageCenter.style.display = 'none';
-        loadingCoordinates.style.display = 'none';
-        loadingGallery.classList.add('show');
+        // Fade out the central image and coordinates
+        loadingImageCenter.classList.add('fade-out');
+        loadingCoordinates.classList.add('fade-out');
+        
+        // After a brief delay, show the gallery with fade-in (0.8s)
+        setTimeout(() => {
+          loadingGallery.classList.add('show');
+        }, 200);
         
         // Get the map instance (it should be ready by now)
         const map = window.procopioMap;
         
-        // Create gallery images for scatter animation
-        items.forEach((item, index) => {
+        // Create gallery images for scatter animation - limit to first 10
+        const displayLimit = 10;
+        items.slice(0, displayLimit).forEach((item, index) => {
           const img = document.createElement('img');
           img.src = item.src;
           img.alt = item.label;
@@ -541,40 +588,46 @@ function initializeLoadingAnimation() {
           img.style.setProperty('--tx', `${tx}px`);
           img.style.setProperty('--ty', `${ty}px`);
           
-          const rotation = (Math.random() - 0.5) * 20; // Random rotation between -10 and 10 degrees
-          img.style.setProperty('--rotation', `${rotation}deg`);
-          
           loadingGallery.appendChild(img);
 
+          // Delay scatter animation start until gallery is visible + 300ms
+          const scatterStartDelay = 800 + 300 + (index * 200);
+          
           if (index === 0) {
             // First image: reveal animation
-            img.classList.add('reveal-start');
-            // Force a reflow to apply the start state before transitioning
-            void img.offsetWidth; 
-            img.classList.add('reveal-end');
+            setTimeout(() => {
+              img.classList.add('reveal-start');
+              // Force a reflow to apply the start state before transitioning
+              void img.offsetWidth; 
+              img.classList.add('reveal-end');
 
-            // After reveal, add scatter class
-            setTimeout(() => {
-              img.classList.add('scatter');
-            }, 500); // Wait for reveal to finish
+              // After reveal, add scatter class
+              setTimeout(() => {
+                img.classList.add('scatter');
+              }, 500); // Wait for reveal to finish
+            }, scatterStartDelay - 500);
           } else {
-            // Other images: staggered scatter
+            // Other images: staggered scatter with fade-in
             setTimeout(() => {
               img.classList.add('scatter');
-            }, index * 80);
+            }, scatterStartDelay);
           }
         });
         
         // Fade out overlay after scatter completes
-        const totalScatterTime = (items.length * 80) + 1200;
+        const totalScatterTime = (displayLimit * 200) + 800 + 300 + 2500;
         setTimeout(() => {
           loadingOverlay.classList.add('fade-out');
+          // Initialize camera NOW that loading is complete
+          if (typeof initProcopioTracking === 'function') {
+            initProcopioTracking();
+          }
         }, totalScatterTime);
       }
       
-      // Start showing images
+      // Start showing images (after small delay to ensure DOM ready)
       setTimeout(() => {
-        showImage(0);
+        startSlideshow();
       }, 500);
     })
     .catch(err => {
@@ -582,7 +635,7 @@ function initializeLoadingAnimation() {
       // Fallback: skip animation after 2 seconds
       setTimeout(() => {
         loadingOverlay.classList.add('fade-out');
-      }, 2000);
+      }, 3000);
     });
 }
 

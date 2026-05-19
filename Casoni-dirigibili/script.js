@@ -109,6 +109,28 @@ function getVictimsIndexFromLabel(label) {
   return victimStops.indexOf(label);
 }
 
+function positionVictimsStops(row) {
+  const slider = row.querySelector('.victims-slider');
+  const stops = row.querySelectorAll('.victims-stop');
+  if (!slider || stops.length === 0) return;
+
+  const min = Number(slider.min);
+  const max = Number(slider.max);
+  const sliderWidth = slider.offsetWidth;
+
+  const thumbSize = parseFloat(getComputedStyle(slider).getPropertyValue('--victims-thumb-size')) || 22;
+  const usableWidth = sliderWidth - thumbSize;
+
+  stops.forEach(stopEl => {
+    const index = Number(stopEl.dataset.index);
+    const percent = (index - min) / (max - min);
+    const x = (thumbSize / 2) + (percent * usableWidth);
+
+    stopEl.style.left = `${x}px`;
+  });
+}
+
+
 function matchesVictimsFilter(victims, label) {
   if (victims == null) return false;
   if (label === '<10') return victims < 10;
@@ -222,6 +244,7 @@ function buildFilterRows() {
       wrap.appendChild(slider);
       wrap.appendChild(stops);
       inside.appendChild(wrap);
+      requestAnimationFrame(() => positionVictimsStops(row));
 
       row.dataset.controlType = 'victims';
       syncVictimsRow(row);
@@ -750,6 +773,11 @@ document.querySelectorAll('.filter-link').forEach(btn => {
 let _lastRowCount = getRowCount();
 window.addEventListener('resize', () => {
   const n = getRowCount();
+
+  document.querySelectorAll('.filter-row[data-control-type="victims"]').forEach(row => {
+    positionVictimsStops(row);
+  });
+
   if (n !== _lastRowCount) {
     _lastRowCount = n;
     render();

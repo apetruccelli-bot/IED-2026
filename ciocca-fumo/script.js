@@ -349,6 +349,7 @@ function render() {
     const desc = document.createElement('p');
     desc.className = 'card-desc';
     desc.textContent = item.description;
+
     // body.appendChild(desc);
 
     const tagsEl = document.createElement('div');
@@ -362,7 +363,26 @@ function render() {
     });
     body.appendChild(tagsEl);
 
-    card.addEventListener('click', () => openLightbox(i));
+    EventListener('click', () => {
+  // funziona solo nella categoria Portraits / fotografie
+  if (activeCategory !== "fotografie") return;
+
+  const alreadyActive = card.classList.contains("selectedImg");
+
+  document.querySelectorAll(".card").forEach(c => {
+    c.classList.remove("selectedImg");
+  });
+
+  if (alreadyActive) {
+    grid.classList.remove("has-selected");
+  } else {
+    grid.classList.add("has-selected");
+    card.classList.add("selectedImg");
+  }
+});
+
+//selectedImg//
+if (!activeYear || item.year === activeYear) card.classList.add('activeImg');
 
     card.appendChild(body);
     grid.appendChild(card);

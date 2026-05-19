@@ -581,11 +581,12 @@ button {
   flex-direction: column;
   gap: 4px;
   width: 100%;
+  --victims-thumb-size: 10px;
 }
 
 .victims-slider {
   width: 100%;
-  margin: 3px;
+  margin: 3px 0 0 0;
   accent-color: var(--myWhite);
   height: 10px;
   -webkit-appearance: none;
@@ -629,20 +630,17 @@ button {
 }
 
 .victims-stops {
-  display: flex;
-  justify-content: space-between;
-  gap: 4px;
-  align-items: start;
+  position: relative;
+  width: 100%;
+  height: 18px;
+  margin-top: 4px;
 }
 
 .victims-stop {
-  font-size: 10px;
-  line-height: 1.1;
-  letter-spacing: 0.02em;
-  text-align: center;
-  color: var(--myWhite);
-  opacity: 0.4;
-  user-select: none;
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -1093,3 +1091,138 @@ button {
   }
 }
 
+/* ─────────────────────────────
+   ABOUT RESPONSIVE
+───────────────────────────── */
+
+.about-header-row {
+  width: 100%;
+  min-width: 0;
+  gap: 20px;
+}
+
+.about-header-row > a:first-child {
+  flex: 1 1 auto;
+  min-width: 165px;
+  max-width: 100%;
+}
+
+.about-top-link {
+  flex: 0 1 auto;
+  margin-left: auto;
+  text-align: right;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* sotto i 900px:
+   - immagine grande sotto al testo
+   - colonna centrale scrollabile verticalmente
+   - gallery da riga bassa a colonna destra */
+@media (max-width: 900px) {
+  .about-page {
+    --about-gallery-width: clamp(90px, 16vw, 150px);
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--about-gallery-width);
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+  }
+
+  .about-header {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .about-header-row > a:first-child {
+    flex: 0 0 165px;
+    width: 165px;
+    max-width: 165px;
+    white-space: normal;
+  }
+
+  .about-top-link {
+    flex: 1 1 auto;
+  }
+
+  .about-main {
+    grid-column: 1;
+    grid-row: 2;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .about-text-panel {
+    height: auto;
+    min-height: auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .about-image-panel {
+    height: auto;
+    min-height: 420px;
+    overflow: visible;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .right-column-img {
+    max-width: 100%;
+    width: 100%;
+    max-height: none;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .right-column-caption {
+    max-width: 100%;
+  }
+
+  .about-gallery-side {
+    grid-column: 2;
+    grid-row: 2;
+
+    width: var(--about-gallery-width);
+    height: 100%;
+    padding: 10px 8px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .about-gallery-side .horizontal-scroll {
+    height: auto;
+    min-height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    gap: 8px;
+  }
+
+  .about-gallery-side .scroll-img {
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    flex: 0 0 auto;
+  }
+}
+
+/* sotto i 600px la colonna immagini diventa ancora più stretta */
+@media (max-width: 600px) {
+  .about-page {
+    --about-gallery-width: clamp(64px, 18vw, 90px);
+  }
+
+  .about-image-panel {
+    min-height: 300px;
+  }
+}
