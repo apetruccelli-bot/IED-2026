@@ -443,121 +443,71 @@ document.addEventListener('DOMContentLoaded', applyActiveSidebarLink);
 // ── Loading Animation ──
 function initializeLoadingAnimation() {
   const loadingOverlay = document.getElementById('loading-overlay');
-  const loadingImageCenter = document.getElementById('loading-image');
   const loadingCoordinates = document.getElementById('loading-coordinates');
-  const loadingGallery = document.getElementById('loading-gallery');
   const homeMap = document.getElementById('home-map');
-  
-  if (!loadingOverlay || !loadingImageCenter || !loadingCoordinates || !loadingGallery || !homeMap) return;
 
-  // Fetch map data for images
+  if (!loadingOverlay || !loadingCoordinates || !homeMap) return;
+
   fetch('map-data.json')
     .then(res => res.json())
     .then(data => {
       const items = Array.isArray(data.items) ? data.items : [];
       if (!items.length) throw new Error('No items found');
 
-      // Preload all images with array tracking to verify load state
-      let preloadedImages = [];
-      let preloadedCount = 0;
-      const totalItems = items.length;
-      
-      items.forEach(item => {
-        const img = new Image();
-        img.onload = () => preloadedCount++;
-        img.onerror = () => preloadedCount++;
-        img.src = item.src;
-        preloadedImages.push(img);
-      });
+      const coordinateDuration = 120;
+      const mapFadeDuration = 900;
+      let index = 0;
 
-      let currentIndex = 0;
-      const imageDuration = 300; // Each image shows for 300ms
-      const firstImageDuration = 1500; // First image shows for 1.5 seconds
-      const transitionDuration = 30; // Fade transition duration - very fast
-      
-      // Wait for images to preload before starting slideshow
-      const startSlideshow = () => {
-        if (preloadedCount < totalItems) {
-          setTimeout(startSlideshow, 50);
-          return;
-        }
-        // Make map visible as slideshow starts
-        if (homeMap) homeMap.classList.add('visible');
-        showImage(0);
-      };
-      
-      // Function to show coordinates only
-      function showImage(index) {
-        if (index >= items.length) {
-          startZoomPhase();
-          return;
-        }
-
-        const item = items[index];
-        const coords = item.coordinates;
-        const coordsText = `(${coords[0].toFixed(2)}, ${coords[1].toFixed(2)})`;
-
-        loadingCoordinates.innerHTML = '';
-
-        [...coordsText].forEach((char, charIndex) => {
-          const span = document.createElement('span');
-          span.textContent = char;
-          span.className = 'coord-char';
-          span.style.display = 'inline-block';
-          span.style.animationDelay = `${charIndex * 20}ms`;
-          loadingCoordinates.appendChild(span);
-        });
-
-        loadingCoordinates.classList.add('show');
-
-        setTimeout(() => {
-          loadingCoordinates.classList.remove('show');
-
-          setTimeout(() => {
-            showImage(index + 1);
-          }, transitionDuration);
-
-        }, 120);
+      function formatCoordinates(item) {
+        const coords = item.coordinates || [];
+        if (coords.length < 2) return '(0.00, 0.00)';
+        return `(${Number(coords[0]).toFixed(2)}, ${Number(coords[1]).toFixed(2)})`;
       }
 
-      // Function to handle zoom/scatter phase
-      function startZoomPhase() {
-        // Fade out the central image and coordinates
-        loadingImageCenter.classList.add('fade-out');
-        loadingCoordinates.classList.add('fade-out');
-        
-        // After a brief delay, show the gallery with fade-in (0.8s)
-        setTimeout(() => {
-          loadingGallery.classList.add('show');
-        }, 200);
-        
-        // Get the map instance (it should be ready by now)
-        const map = window.procopioMap;
-        
-        // No loading slideshow images — only coordinates animation
+      function showNextCoordinate() {
+        const item = items[index % items.length];
+        loadingCoordinates.textContent = formatCoordinates(item);
+        loadingCoordinates.classList.add('show');
 
-        // Fade out overlay after coordinates sequence completes
-        const totalScatterTime = (displayLimit * 200) + 800 + 300 + 2500;
+        index += 1;
+
+        if (index < items.length) {
+          setTimeout(showNextCoordinate, coordinateDuration);
+          return;
+        }
+
+        setTimeout(startMapReveal, coordinateDuration);
+      }
+
+      function startMapReveal() {
+        loadingOverlay.classList.add('map-visible');
+        homeMap.classList.add('visible');
+        loadingCoordinates.classList.add('fade-out');
+
         setTimeout(() => {
+          document.body.classList.add('markers-ready');
+          document.querySelectorAll('.custom-marker').forEach(marker => {
+            marker.style.filter = 'blur(9px)';
+          });
           loadingOverlay.classList.add('fade-out');
-          // Initialize camera NOW that loading is complete
+
           if (typeof initProcopioTracking === 'function') {
             initProcopioTracking();
           }
-        }, totalScatterTime);
+        }, mapFadeDuration);
       }
-      
-      // Start showing images (after small delay to ensure DOM ready)
-      setTimeout(() => {
-        startSlideshow();
-      }, 500);
+
+      setTimeout(showNextCoordinate, 300);
     })
     .catch(err => {
-      console.error('Error loading animation images:', err);
-      // Fallback: skip animation after 2 seconds
-      setTimeout(() => {
-        loadingOverlay.classList.add('fade-out');
-      }, 3000);
+      console.error('Error loading coordinate animation:', err);
+      homeMap.classList.add('visible');
+      document.body.classList.add('markers-ready');
+      loadingOverlay.classList.add('fade-out');
+
+      if (typeof initProcopioTracking === 'function') {
+        initProcopioTracking();
+      }
     });
 }
 
