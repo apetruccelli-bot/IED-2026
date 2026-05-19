@@ -122,6 +122,26 @@ body {
   flex-shrink: 0;
 }
 
+/* Scroll reveal for horizontal movement */
+.scroll-reveal {
+  --reveal-progress: 0;
+
+  opacity: clamp(
+    0.22,
+    calc(0.22 + (var(--reveal-progress) * 0.78)),
+    1
+  ) !important;
+
+  transform: translateX(
+    calc((1 - var(--reveal-progress)) * 28px)
+  );
+
+  filter: blur(
+    calc((1 - var(--reveal-progress)) * 8px)
+  );
+
+  will-change: opacity, transform, filter;
+}
 
 
 /* ── HEADER ── */
@@ -260,27 +280,6 @@ button {
   filter: blur(2px);
 }
 
-/* Cigarette packs */
-.myPhotos.layout-pacchetti {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-content: flex-start;
-  align-items: flex-start;
-}
-.myPhotos.layout-pacchetti .card {
-  height: 10rem;
-  width: auto;
-  flex-direction: row;
-  flex-shrink: 0;
-}
-.myPhotos.layout-pacchetti .card-img {
-  width: auto;
-  height: 100%;
-  aspect-ratio: unset;
-  object-fit: cover;
-}
-
 /* Advertisements: full-width stacked column */
 .myPhotos.layout-pubblicita {
   display: flex;
@@ -363,11 +362,52 @@ button {
   color: #fff;
 }
 
-.myPhotos.layout-pacchetti .card-img {
-  height: 100%;
-  width: auto;
-  object-fit: contain;
+/* Cigarette packs — compact layout */
+.myPhotos.layout-pacchetti {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 1px;
+
+  align-items: flex-start;
+  align-content: flex-start;
+
+  grid-template-columns: none !important;
+}
+
+.myPhotos.layout-pacchetti .card {
   display: block;
+  flex: 0 0 auto;
+
+  width: auto !important;
+  height: auto !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: transparent !important;
+  overflow: visible;
+  border-radius: 0;
+}
+
+.myPhotos.layout-pacchetti .card-img {
+  display: block;
+
+  height: 160px;
+  width: auto !important;
+
+  max-width: none !important;
+
+  object-fit: contain;
+
+  aspect-ratio: unset !important;
+  background: transparent !important;
+}
+
+.card img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
 }
 
 /* ── EMPTY STATE ── */
