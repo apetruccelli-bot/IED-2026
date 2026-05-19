@@ -3,15 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>De veciariìe - Landing</title>
+  <title>De Veciariìe - Landing</title>
 
   <script>
-    // Prevent browser from restoring previous scroll position
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    // Ensure page starts at top (covers reloads and bfcache/pageshow)
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
-    window.addEventListener('pageshow', (e) => { if (e.persisted) window.scrollTo(0, 0); });
-    window.addEventListener('beforeunload', () => { window.scrollTo(0, 0); });
+
+    window.addEventListener("pageshow", (e) => {
+      if (e.persisted) window.scrollTo(0, 0);
+    });
+
+    window.addEventListener("beforeunload", () => {
+      window.scrollTo(0, 0);
+    });
   </script>
 
   <link rel="stylesheet" href="style.css" />
@@ -39,12 +43,11 @@
       width: 100%;
       min-height: 100%;
       background: #f5d7df;
-      font-family: inherit;
       overflow-x: hidden;
     }
 
     body {
-      min-height: 320vh;
+      min-height: 460vh;
     }
 
     .landing-header {
@@ -54,18 +57,52 @@
       width: 100vw;
       z-index: 100;
       padding: 10px;
-      display: flex;
-      justify-content: space-between;
       background: transparent;
       color: #090909;
       pointer-events: none;
     }
 
-    .landing-header span {
-      font-size: 32px;
-      line-height: 1;
-      font-weight: 600;
-      letter-spacing: -0.03em;
+    .intro-split-text {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      z-index: 130;
+      transform: translate(-50%, -50%);
+      width: calc(100vw - 40px);
+      text-align: center;
+      color: #090909;
+      pointer-events: none;
+      will-change: opacity, transform;
+    }
+
+    .intro-line {
+      display: block;
+      font: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      font-weight: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      white-space: nowrap;
+      will-change: transform, opacity;
+    }
+
+    .archive-title {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      z-index: 120;
+      transform: translate(-50%, -50%);
+      font: inherit;
+      font-size: 24px;
+      line-height: inherit;
+      font-weight: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      color: #090909;
+      white-space: nowrap;
+      opacity: 0;
+      will-change: transform, left, top, opacity;
     }
 
     .landing-stage {
@@ -83,38 +120,50 @@
       background-position: center;
       background-repeat: no-repeat;
       background-color: rgba(120, 120, 120, 0.35);
-      opacity: 0.75;
+      opacity: 0;
       will-change: transform, opacity;
     }
 
     .image-card:nth-child(1) {
-      width: 300px;
-      height: 380px;
+      width: 220px;
+      height: 280px;
       background-image: url("img/col1.png");
     }
 
     .image-card:nth-child(2) {
-      width: 300px;
-      height: 380px;
+      width: 220px;
+      height: 280px;
       background-image: url("img/col2.png");
     }
 
     .image-card:nth-child(3) {
-      width: 300px;
-      height: 270px;
+      width: 220px;
+      height: 200px;
       background-image: url("img/col3.png");
     }
 
     .image-card:nth-child(4) {
-      width: 300px;
-      height: 200px;
+      width: 220px;
+      height: 150px;
       background-image: url("img/col4.png");
     }
 
     .image-card:nth-child(5) {
-      width: 300px;
-      height: 270px;
+      width: 220px;
+      height: 200px;
       background-image: url("img/col5.png");
+    }
+
+    .image-card:nth-child(6) {
+      width: 220px;
+      height: 170px;
+      background-image: url("img/col6.png");
+    }
+
+    .image-card:nth-child(7) {
+      width: 220px;
+      height: 250px;
+      background-image: url("img/col7.png");
     }
 
     .enter-home {
@@ -123,60 +172,99 @@
       width: 100vw;
       height: 100vh;
       background: #fafafa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s ease;
-      z-index: 20;
+      z-index: 200;
     }
 
     .enter-home.visible {
       opacity: 1;
     }
 
-    .enter-home h1 {
-      font-size: 48px;
-      font-weight: 400;
-      letter-spacing: -0.03em;
-      color: #090909;
+    @media (max-width: 900px) {
+      .image-card:nth-child(1),
+      .image-card:nth-child(2),
+      .image-card:nth-child(3),
+      .image-card:nth-child(4),
+      .image-card:nth-child(5),
+      .image-card:nth-child(6),
+      .image-card:nth-child(7) {
+        width: 150px;
+      }
+
+      .image-card:nth-child(1),
+      .image-card:nth-child(2) {
+        height: 200px;
+      }
+
+      .image-card:nth-child(3),
+      .image-card:nth-child(5) {
+        height: 145px;
+      }
+
+      .image-card:nth-child(4) {
+        height: 105px;
+      }
+
+      .image-card:nth-child(6) {
+        height: 125px;
+      }
+
+      .image-card:nth-child(7) {
+        height: 180px;
+      }
     }
 
-    @media (max-width: 900px) {
-      .landing-header span {
-        font-size: 28px;
+    @media (max-width: 520px) {
+      .intro-line {
+        white-space: normal;
       }
 
       .image-card:nth-child(1),
       .image-card:nth-child(2),
       .image-card:nth-child(3),
       .image-card:nth-child(4),
-      .image-card:nth-child(5) {
-        width: 220px;
+      .image-card:nth-child(5),
+      .image-card:nth-child(6),
+      .image-card:nth-child(7) {
+        width: 118px;
       }
 
       .image-card:nth-child(1),
       .image-card:nth-child(2) {
-        height: 300px;
+        height: 155px;
       }
 
       .image-card:nth-child(3),
       .image-card:nth-child(5) {
-        height: 220px;
+        height: 110px;
       }
 
       .image-card:nth-child(4) {
-        height: 160px;
+        height: 85px;
+      }
+
+      .image-card:nth-child(6) {
+        height: 98px;
+      }
+
+      .image-card:nth-child(7) {
+        height: 135px;
       }
     }
   </style>
 </head>
 
-<body>
+<body class="not-font-my-title">
   <header class="landing-header">
-    <!-- Intestazione rimossa per mostrare solo il titolo nell'overlay -->
+    <div class="archive-title not-font-my-title">De Veciariìe</div>
   </header>
+
+  <div class="intro-split-text not-font-my-title">
+    <span class="intro-line intro-line-top">il mestiere di ruggiero dall'eredità,</span>
+    <span class="intro-line intro-line-bottom">al suo fallimento</span>
+  </div>
 
   <main class="landing-stage">
     <div class="image-card"></div>
@@ -184,30 +272,48 @@
     <div class="image-card"></div>
     <div class="image-card"></div>
     <div class="image-card"></div>
+    <div class="image-card"></div>
+    <div class="image-card"></div>
   </main>
 
-  <section class="enter-home">
-    <h1>De Veciariìe</h1>
-  </section>
+  <section class="enter-home"></section>
 
   <script>
     const cards = document.querySelectorAll(".image-card");
     const homePreview = document.querySelector(".enter-home");
+    const archiveTitle = document.querySelector(".archive-title");
+    const introText = document.querySelector(".intro-split-text");
+    const introLineTop = document.querySelector(".intro-line-top");
+    const introLineBottom = document.querySelector(".intro-line-bottom");
 
     const startLayout = [
       { x: 50, y: 50, r: 0 },
-      { x: 48, y: 49, r: 0 },
-      { x: 52, y: 50, r: 0 },
-      { x: 49, y: 47, r: 0 },
-      { x: 51, y: 53, r: 0 }
+      { x: 49, y: 49, r: 0 },
+      { x: 51, y: 50, r: 0 },
+      { x: 50, y: 48, r: 0 },
+      { x: 50, y: 52, r: 0 },
+      { x: 48, y: 51, r: 0 },
+      { x: 52, y: 49, r: 0 }
     ];
 
     const endLayout = [
-      { x: 18, y: 58, r: 0 },
-      { x: 40, y: 28, r: 0 },
-      { x: 62, y: 52, r: 0 },
-      { x: 43, y: 78, r: 0 },
-      { x: 69, y: 25, r: 0 }
+      { x: 15, y: 30, r: 0 },
+      { x: 38, y: 32, r: 0 },
+      { x: 63, y: 30, r: 0 },
+      { x: 84, y: 34, r: 0 },
+      { x: 24, y: 70, r: 0 },
+      { x: 52, y: 70, r: 0 },
+      { x: 78, y: 68, r: 0 }
+    ];
+
+    const mobileEndLayout = [
+      { x: 18, y: 28, r: 0 },
+      { x: 50, y: 28, r: 0 },
+      { x: 82, y: 28, r: 0 },
+      { x: 22, y: 56, r: 0 },
+      { x: 55, y: 56, r: 0 },
+      { x: 82, y: 56, r: 0 },
+      { x: 50, y: 80, r: 0 }
     ];
 
     function lerp(start, end, progress) {
@@ -224,16 +330,88 @@
         : 1 - Math.pow(-2 * t + 2, 3) / 2;
     }
 
+    function getEndLayout() {
+      if (window.innerWidth <= 520) {
+        return mobileEndLayout;
+      }
+
+      return endLayout;
+    }
+
     function updateLanding() {
       const maxScroll = document.body.scrollHeight - window.innerHeight;
       const scrollProgress = clamp(window.scrollY / maxScroll, 0, 1);
 
-      const spreadProgress = easeInOutCubic(clamp(scrollProgress / 0.55, 0, 1));
-      const fadeProgress = clamp((scrollProgress - 0.68) / 0.22, 0, 1);
+      /*
+        Sequenza:
+        1. frase iniziale al centro
+        2. le due righe si separano verso i margini laterali
+        3. appare De Veciariìe
+        4. De Veciariìe si ancora in alto a sinistra
+        5. appaiono le immagini
+        6. immagini e titolo si dissolvono
+        7. sfondo chiaro e redirect alla home/archive
+      */
+
+      const introSplitProgress = easeInOutCubic(
+        clamp((scrollProgress - 0.06) / 0.22, 0, 1)
+      );
+
+      const introFadeProgress = clamp((scrollProgress - 0.26) / 0.10, 0, 1);
+
+      const introDistance = lerp(
+        0,
+        window.innerWidth * 0.65,
+        introSplitProgress
+      );
+
+      introLineTop.style.transform = `translateX(${-introDistance}px)`;
+      introLineBottom.style.transform = `translateX(${introDistance}px)`;
+      introText.style.opacity = 1 - introFadeProgress;
+
+      if (scrollProgress > 0.38) {
+        introText.style.display = "none";
+      } else {
+        introText.style.display = "block";
+      }
+
+      const titleAppearProgress = clamp((scrollProgress - 0.34) / 0.12, 0, 1);
+
+      const titleMoveProgress = easeInOutCubic(
+        clamp((scrollProgress - 0.42) / 0.20, 0, 1)
+      );
+
+      const titleFadeProgress = clamp((scrollProgress - 0.76) / 0.16, 0, 1);
+
+      const titleLeft = lerp(50, 0, titleMoveProgress);
+      const titleTop = lerp(50, 0, titleMoveProgress);
+      const titleX = lerp(-50, 0, titleMoveProgress);
+      const titleY = lerp(-50, 0, titleMoveProgress);
+
+      archiveTitle.style.left = `${titleLeft}%`;
+      archiveTitle.style.top = `${titleTop}%`;
+      archiveTitle.style.transform = `translate(calc(${titleX}% + ${titleMoveProgress * 10}px), calc(${titleY}% + ${titleMoveProgress * 10}px))`;
+      archiveTitle.style.opacity = titleAppearProgress * (1 - titleFadeProgress);
+
+      if (scrollProgress > 0.90) {
+        archiveTitle.style.display = "none";
+      } else {
+        archiveTitle.style.display = "block";
+      }
+
+      const imageAppearProgress = clamp((scrollProgress - 0.55) / 0.16, 0, 1);
+
+      const spreadProgress = easeInOutCubic(
+        clamp((scrollProgress - 0.60) / 0.20, 0, 1)
+      );
+
+      const fadeProgress = clamp((scrollProgress - 0.74) / 0.16, 0, 1);
+
+      const activeEndLayout = getEndLayout();
 
       cards.forEach((card, index) => {
         const start = startLayout[index];
-        const end = endLayout[index];
+        const end = activeEndLayout[index];
 
         const x = lerp(start.x, end.x, spreadProgress);
         const y = lerp(start.y, end.y, spreadProgress);
@@ -242,10 +420,10 @@
         card.style.left = `${x}%`;
         card.style.top = `${y}%`;
         card.style.transform = `translate(-50%, -50%) rotate(${r}deg)`;
-        card.style.opacity = 0.75 * (1 - fadeProgress);
+        card.style.opacity = 0.85 * imageAppearProgress * (1 - fadeProgress);
       });
 
-      if (scrollProgress > 0.84) {
+      if (scrollProgress > 0.88) {
         homePreview.classList.add("visible");
       } else {
         homePreview.classList.remove("visible");
