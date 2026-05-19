@@ -41,6 +41,9 @@ let imageMarkersMap = null;
 let ensureImagesVisibleHandler = null;
 let isAdjustingImageBounds = false;
 let lastBoundsAdjustTime = 0;
+let activeGalleryImages = [];
+let activeGalleryIndex = 0;
+let activeGalleryTitle = '';
 
 // helper: normalize area names (take text before comma, lowercase)
 function normalizeArea(a) {
@@ -291,15 +294,61 @@ async function loadImagesByArea() {
   }
 }
 
+function renderActiveGalleryImage() {
+  const gallery = document.getElementById('gallery');
+  if (!gallery) return;
+
+  const imageLink = gallery.querySelector('.map-gallery-link');
+  const image = gallery.querySelector('.map-gallery-image');
+  const counter = gallery.querySelector('.map-gallery-count');
+
+  if (!imageLink || !image || !counter) return;
+
+  if (!activeGalleryImages.length) {
+    imageLink.href = '#';
+    image.alt = activeGalleryTitle || 'Gallery image';
+    image.removeAttribute('src');
+    counter.textContent = '0 / 0';
+    return;
+  }
+
+  const currentImage = activeGalleryImages[activeGalleryIndex];
+  imageLink.href = currentImage.src;
+  image.alt = currentImage.description || activeGalleryTitle || 'Gallery image';
+  image.src = currentImage.src;
+  counter.textContent = `${activeGalleryIndex + 1} / ${activeGalleryImages.length}`;
+}
+
+function stepGallery(direction) {
+  if (!activeGalleryImages.length) return;
+
+  activeGalleryIndex = (activeGalleryIndex + direction + activeGalleryImages.length) % activeGalleryImages.length;
+  renderActiveGalleryImage();
+}
+
 function showGallery(title, images){
   const gallery = document.getElementById('gallery');
   if (!gallery) return;
   gallery.innerHTML = '';
+
+  activeGalleryTitle = title || '';
+  activeGalleryImages = Array.isArray(images) ? images.slice() : [];
+  activeGalleryIndex = 0;
+
+  const header = document.createElement('div');
+  header.className = 'map-gallery-header';
+
   const h = document.createElement('div');
-  h.style.fontWeight = '600';
-  h.style.marginRight = '12px';
+  h.className = 'map-gallery-title';
   h.textContent = title + ':';
-  gallery.appendChild(h);
+  header.appendChild(h);
+
+  const hint = document.createElement('div');
+  hint.className = 'map-gallery-hint';
+  hint.textContent = 'Punta a sinistra o destra per scorrere le immagini.';
+  header.appendChild(hint);
+
+  gallery.appendChild(header);
 
   if (!images || images.length === 0) {
     const empty = document.createElement('div');
@@ -309,17 +358,51 @@ function showGallery(title, images){
     return;
   }
 
-  images.forEach((item) => {
-    const a = document.createElement('a');
-    a.href = item.src;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    const img = document.createElement('img');
-    img.src = item.src;
-    img.alt = title;
-    a.appendChild(img);
-    gallery.appendChild(a);
-  });
+  const frame = document.createElement('div');
+  frame.className = 'map-gallery-frame';
+
+  const prevButton = document.createElement('button');
+  prevButton.type = 'button';
+  prevButton.className = 'map-gallery-button';
+  prevButton.textContent = '←';
+  prevButton.setAttribute('aria-label', 'Immagine precedente');
+  prevButton.addEventListener('click', () => stepGallery(-1));
+
+  const viewport = document.createElement('div');
+  viewport.className = 'map-gallery-viewport';
+
+  const imageLink = document.createElement('a');
+  imageLink.className = 'map-gallery-link';
+  imageLink.target = '_blank';
+  imageLink.rel = 'noopener';
+
+  const img = document.createElement('img');
+  img.className = 'map-gallery-image';
+  img.alt = title;
+  imageLink.appendChild(img);
+  viewport.appendChild(imageLink);
+
+  const nextButton = document.createElement('button');
+  nextButton.type = 'button';
+  nextButton.className = 'map-gallery-button';
+  nextButton.textContent = '→';
+  nextButton.setAttribute('aria-label', 'Immagine successiva');
+  nextButton.addEventListener('click', () => stepGallery(1));
+
+  frame.appendChild(prevButton);
+  frame.appendChild(viewport);
+  frame.appendChild(nextButton);
+  gallery.appendChild(frame);
+
+  const footer = document.createElement('div');
+  footer.className = 'map-gallery-footer';
+
+  const counter = document.createElement('div');
+  counter.className = 'map-gallery-count';
+  footer.appendChild(counter);
+
+  gallery.appendChild(footer);
+  renderActiveGalleryImage();
 }
 
 if (mapContainer && typeof mapboxgl !== "undefined") {
@@ -430,6 +513,9 @@ if (mapContainer && typeof mapboxgl !== "undefined") {
 
     function closeLocationDetail() {
       window.locationIsOpen = false;
+      activeGalleryImages = [];
+      activeGalleryIndex = 0;
+      activeGalleryTitle = '';
       
       // Clear gallery
       const gallery = document.getElementById('gallery');
@@ -478,6 +564,7 @@ if (mapContainer && typeof mapboxgl !== "undefined") {
       navigateMapWithHand,
       selectNearestLocation,
       selectLocation,
+      stepGallery,
       stopMapMotion,
       zoomOutMap,
       resetToInitialView,
