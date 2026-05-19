@@ -6,6 +6,7 @@
 let procopioFaceDetector = null;
 let procopioHandDetector = null;
 let procopioIsDetecting  = false;
+let procopioDetectionAllowed = false; // Only start detection after loading overlay completes
 let procopioStream       = null;
 let procopioFadeLastTickAt = null;
 let procopioLastNavigationActivityAt = 0;
@@ -38,7 +39,12 @@ const HAND_CENTER_SMOOTH_ALPHA = 0.12;
 let filteredHandRatio = null;
 let filteredLng = null;
 let filteredLat = null;
+let filteredBlur = null; // Smooth blur interpolation
 let lastMapUpdateAt = 0;
+
+// Initial blur phase - gradual fade in from full blur to clear
+let blurInitialPhaseActive = false;
+let initialBlurStartTime = null;
 
 // Map bounds (matching maxBounds in script.js)
 const MAP_BOUNDS = {
@@ -48,9 +54,10 @@ const MAP_BOUNDS = {
   north: 42.5    // max latitude
 };
 
-const MARKER_FADE_DURATION_MS = 30 * 1000;
+const MARKER_FADE_DURATION_MS = 8 * 1000;
 const NAVIGATION_SLOWDOWN_WINDOW_MS = 8000;
 const NAVIGATION_SLOWDOWN_FACTOR = 0.25;
+const BLUR_SMOOTH_ALPHA = 0.02; // ~4-5 sec smooth fade
 
 function dist2D(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
@@ -145,12 +152,52 @@ function startProcopioMarkerFadeTimer() {
   requestAnimationFrame(updateProcopioMarkerFade);
 }
 
+// Animate initial blur phase - keep blur at 20px for duration, then enable face control
+function animateInitialBlur() {
+  if (!blurInitialPhaseActive || initialBlurStartTime === null) return;
+  
+  const now = performance.now();
+  const elapsedMs = now - initialBlurStartTime;
+  const durationMs = 3500; // 3.5 second hold at 20px blur
+  const progress = Math.min(1, elapsedMs / durationMs);
+  
+  // Keep blur constant at 20px during the initial phase
+  filteredBlur = 9;
+  
+  document.querySelectorAll('.custom-marker').forEach(m => {
+    m.style.filter = `blur(${filteredBlur.toFixed(1)}px)`;
+  });
+  
+  if (progress < 1) {
+    requestAnimationFrame(animateInitialBlur);
+  } else {
+    // Phase complete - reset filteredBlur so face detection can take over
+    blurInitialPhaseActive = false;
+    filteredBlur = null; // Reset so face detection initializes properly
+  }
+}
+
 async function initProcopioTracking() {
   const statusEl = document.getElementById('face-status-label');
   if (statusEl) statusEl.textContent = 'loading models…';
+  
+  // Start initial blur phase - gradual fade from full blur to clear
+  blurInitialPhaseActive = true;
+  initialBlurStartTime = performance.now();
+  filteredBlur = 20; // Start with maximum blur
+  animateInitialBlur();
+  
   try {
-    await tf.setBackend('webgl');
-    await tf.ready();
+    // Try WebGL first, fallback to CPU if not available
+    try {
+      await tf.setBackend('webgl');
+      await tf.ready();
+    } catch (webglErr) {
+      console.warn('WebGL backend failed, falling back to CPU:', webglErr);
+      await tf.setBackend('cpu');
+      await tf.ready();
+      if (statusEl) statusEl.textContent = 'loading models… (CPU mode)';
+    }
 
     // Load face detector
     procopioFaceDetector = await faceLandmarksDetection.createDetector(
@@ -175,6 +222,7 @@ async function initProcopioTracking() {
     );
 
     if (statusEl) statusEl.textContent = 'models ready';
+    procopioDetectionAllowed = true; // Enable detection now that models are loaded
     await startProcopioCamera();
   } catch (err) {
     if (statusEl) statusEl.textContent = 'error: ' + err.message;
@@ -188,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', recordActivity, true);
   window.addEventListener('scroll', recordActivity, { passive: true });
   startProcopioMarkerFadeTimer();
+  // Note: Camera initialization is deferred until loading overlay completes
 });
 
 async function startProcopioCamera() {
@@ -215,7 +264,10 @@ async function startProcopioCamera() {
 }
 
 async function detectLoop() {
-  if (!procopioIsDetecting) return;
+  if (!procopioIsDetecting || !procopioDetectionAllowed) {
+    if (procopioIsDetecting) requestAnimationFrame(detectLoop);
+    return;
+  }
   const video    = document.getElementById('face-webcam');
   const statusEl = document.getElementById('face-status-label');
   const proxEl   = document.getElementById('face-prox-label');
@@ -224,6 +276,11 @@ async function detectLoop() {
 
   // ── FACE → .custom-marker blur ───────────────────────────────────────────
   try {
+    // Check if video is ready before processing
+    if (video.readyState !== video.HAVE_ENOUGH_DATA) {
+      if (procopioIsDetecting) requestAnimationFrame(detectLoop);
+      return;
+    }
     const faces = await procopioFaceDetector.estimateFaces(video, { flipHorizontal: true });
     if (faces.length > 0) {
       if (statusEl) statusEl.textContent = '✓ face';
@@ -250,22 +307,40 @@ async function detectLoop() {
         }
         setFaceFarOverlayVisible(faceTooFar);
 
-        // ratio 1.4+ (very close) → 0px blur; ratio 0.4 (very far) → 20px blur
-        const blurT   = Math.max(0, Math.min(1, (ratio - 0.4) / (1.4 - 0.4)));
-        const blurAmt = 20 * (1 - blurT);
-        document.querySelectorAll('.custom-marker').forEach(m => {
-          m.style.filter = `blur(${blurAmt.toFixed(1)}px)`;
-        });
+        // Only apply face-based blur control if initial blur phase is complete
+        if (!blurInitialPhaseActive) {
+          // ratio 1.4+ (very close) → 0px blur; ratio 0.4 (very far) → 20px blur
+          const blurT   = Math.max(0, Math.min(1, (ratio - 0.4) / (1.4 - 0.4)));
+          const targetBlur = 20 * (1 - blurT);
+          
+          // Apply exponential smoothing for gradual blur transition
+          if (filteredBlur == null) filteredBlur = targetBlur;
+          filteredBlur += (targetBlur - filteredBlur) * BLUR_SMOOTH_ALPHA;
+          
+          document.querySelectorAll('.custom-marker').forEach(m => {
+            m.style.filter = `blur(${filteredBlur.toFixed(1)}px)`;
+          });
+        }
       }
     } else {
       if (statusEl) statusEl.textContent = 'no face';
       setFaceFarOverlayVisible(false);
       faceTooFar = false;
     }
-  } catch (e) { /* ignore per-frame errors */ }
+  } catch (e) { 
+    if (e.message && e.message.includes('WebGL')) {
+      console.error('WebGL error during face detection:', e);
+      if (statusEl) statusEl.textContent = 'WebGL error - see console';
+    }
+  }
 
   // ── HAND → map zoom + center ────────────────────────────────────────────
   try {
+    // Check if video is ready before processing
+    if (video.readyState !== video.HAVE_ENOUGH_DATA) {
+      if (procopioIsDetecting) requestAnimationFrame(detectLoop);
+      return;
+    }
     const hands = await procopioHandDetector.estimateHands(video, { flipHorizontal: true });
     if (hands.length > 0) {
       const kp        = hands[0].keypoints;
@@ -330,9 +405,11 @@ async function detectLoop() {
     } else {
       if (handEl) handEl.textContent = 'no hand';
     }
-  } catch (e) { /* ignore per-frame errors */ }
+  } catch (e) { 
+    if (e.message && e.message.includes('WebGL')) {
+      console.error('WebGL error during hand detection:', e);
+    }
+  }
 
   if (procopioIsDetecting) requestAnimationFrame(detectLoop);
 }
-
-document.addEventListener('DOMContentLoaded', initProcopioTracking);

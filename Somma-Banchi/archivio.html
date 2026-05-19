@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Archivio</title>
+    <link rel="stylesheet" href="style.css" />
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-myBlack: #090909;
+        --color-myWhite: #FAFAFA;
+        --color-lightGrey: #EBEBEA;
+        --spacing-10px: 10px;
+        --spacing-20px: 20px;
+      }
+    </style>
+    <style>
+      /* Uniform pink background like landing and transparent header */
+      body { background: #f5d7df; color: #090909; }
+      header { background: transparent; color: #090909; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <span onclick="closeExploreMode();" class="font-myTitle cursor-pointer">De veciariìe</span>
+      <div class="flex gap-20px">
+        <span id="nav-cerca-coltelli" onclick="openExploreMode()" 
+        class="font-myTitle cursor-pointer opacity-20 hover:opacity-100 transition-opacity" >Cerca coltelli</span>
+        <a href="storia.html"
+        class="font-myTitle cursor-pointer">Storia</a>
+      </div>
+    </header>
+    
+    <div class="mainLayout fixed top-0 left-0 w-screen h-screen overflow-y-scroll
+    grid grid-cols-15 gap-10px">
+      <div class="descriptionAndFilters col-span-3 h-full flex flex-col justify-between pb-10px">
+        <div class="description flex flex-col gap-10px">
+          
+        </div>
+
+        <!-- Explore mode panel -->
+        <div id="explore-description-panel" class="explore-description-panel">
+          <button onclick="closeExploreMode()" class="explore-close-btn">✕ Torna all'archivio</button>
+          <video id="explore-webcam" class="explore-webcam" autoplay muted playsinline></video>
+          <div class="explore-description disossare">
+            <p>Disossare</p>
+            <p>Separare la carne dall'osso con precisione, seguendo le venature naturali. Perfetto per rifinire tagli delicati e rimuovere le cartilagini senza sprecare la carne.</p>
+          </div>
+          <div class="explore-description tagliare">
+            <p>Tagliare</p>
+            <p>Tagli quotidiani e decisivi al banco. Divide porzioni consistenti, rompe piccole ossa e prepara i pezzi da vendita con colpi netti e controllati sul ceppo.</p>
+          </div>
+          <div class="explore-description tagliare-e-affettare">
+            <p>Tagliare e Affettare</p>
+            <p>Lavorazioni precise e pulite. Affetta porzioni sottili, ritaglia tagli di carne e rifinisce i bordi con controllo, seguendo le linee naturali del pezzo.</p>
+          </div>
+        </div>
+
+        <div id="filters-container" 
+        class="filters flex flex-col gap-12 mt-auto h-fit"></div>
+      </div>
+      <main id="grid" class="col-span-12 wireframe">
+        <div class="myColumn column-1"></div>
+        <div class="myColumn column-2"></div>
+        <div class="myColumn column-3"></div>
+        <div class="myColumn column-4"></div>
+      </main>
+    </div>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <div class="lb-backdrop" id="lb-backdrop"></div>
+      <button class="lb-close" id="lb-close">✕</button>
+      <button class="lb-prev" id="lb-prev">←</button>
+      <button class="lb-next" id="lb-next">→</button>
+      <div class="lb-content">
+        <img class="lb-img" id="lb-img" src="" alt="">
+        <div class="lb-info">
+          <p class="lb-description" id="lb-description"></p>
+          <!-- <span class="lb-id" id="lb-id"></span>
+          <div class="lb-tags" id="lb-tags"></div> -->
+        </div>
+      </div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+    <script src="somma-lm.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -86,6 +86,7 @@ body {
   100% { filter: blur(0px); }
 }
 
+
 .landing-content-enter {
   animation: landing-content-in 3s cubic-bezier(.8,0,.2,1) forwards;
 }
@@ -102,6 +103,13 @@ body {
 .all-unblurring {
   animation: body-unblur 1.4s ease-out forwards;
 }
+.smoking-gesture #status {
+  color: red;
+}
+
+.smoking-gesture #container {
+  filter: contrast(1.3) blur(1px);
+}
 
 
 /* ── ABOUT ── */
@@ -115,6 +123,26 @@ body {
   flex-shrink: 0;
 }
 
+/* Scroll reveal for horizontal movement */
+.scroll-reveal {
+  --reveal-progress: 0;
+
+  opacity: clamp(
+    0.22,
+    calc(0.22 + (var(--reveal-progress) * 0.78)),
+    1
+  ) !important;
+
+  transform: translateX(
+    calc((1 - var(--reveal-progress)) * 28px)
+  );
+
+  filter: blur(
+    calc((1 - var(--reveal-progress)) * 8px)
+  );
+
+  will-change: opacity, transform, filter;
+}
 
 
 /* ── HEADER ── */
@@ -253,26 +281,6 @@ button {
   filter: blur(2px);
 }
 
-/* Cigarette packs: horizontal rows of h-40 images */
-.myPhotos.layout-pacchetti {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-start;
-}
-.myPhotos.layout-pacchetti .card {
-  height: 10rem;
-  width: auto;
-  flex-direction: row;
-  flex-shrink: 0;
-}
-.myPhotos.layout-pacchetti .card-img {
-  width: auto;
-  height: 100%;
-  aspect-ratio: unset;
-  object-fit: cover;
-}
-
 /* Advertisements: full-width stacked column */
 .myPhotos.layout-pubblicita {
   display: flex;
@@ -353,6 +361,54 @@ button {
 .card-tag.highlight {
   background: var(--accent);
   color: #fff;
+}
+
+/* Cigarette packs — compact layout */
+.myPhotos.layout-pacchetti {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 1px;
+
+  align-items: flex-start;
+  align-content: flex-start;
+
+  grid-template-columns: none !important;
+}
+
+.myPhotos.layout-pacchetti .card {
+  display: block;
+  flex: 0 0 auto;
+
+  width: auto !important;
+  height: auto !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: transparent !important;
+  overflow: visible;
+  border-radius: 0;
+}
+
+.myPhotos.layout-pacchetti .card-img {
+  display: block;
+
+  height: 160px;
+  width: auto !important;
+
+  max-width: none !important;
+
+  object-fit: contain;
+
+  aspect-ratio: unset !important;
+  background: transparent !important;
+}
+
+.card img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
 }
 
 /* ── EMPTY STATE ── */
@@ -473,4 +529,44 @@ button {
 .lb-next:disabled {
   opacity: 0.2;
   cursor: default;
+}
+
+.myPhotos.has-selected .card {
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+}
+
+.myPhotos.has-selected .card.selectedImg {
+  opacity: 1;
+
+  position: fixed;
+
+  left: 10px;
+  top: 10rem;
+
+  width: calc((100vw / 12) * 4 - 20px);
+
+  z-index: 50;
+}
+
+.descriptionAndFilters {
+  position: fixed;
+  left: 10px;
+
+  top: 36rem; /* sotto immagine */
+
+  width: calc((100vw / 12) * 4 - 20px);
+
+  z-index: 40;
+}
+
+.myPhotos.has-selected .card.selectedImg .card-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: unset;
+  object-fit: contain;
+}
+
+.myPhotos.has-selected + .filters-under-image {
+  opacity: 1;
 }

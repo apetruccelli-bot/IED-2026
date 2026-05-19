@@ -5,15 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Face tracking</title>
   <link rel="stylesheet" href="style.css">
-</head> 
-<script type="module" src="natale-lm.js"></script>
+<body>
+  <!-- hand-pose-detection (tfjs) and MediaPipe runtime for hands -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@0.0.7/dist/hand-pose-detection.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1645985860/hands.js"></script>
+</head>
 
 <body>
+<script type="module" src="natale-lm.js"></script>
     
     <div id="container">
         <video id="webcam" autoplay muted playsinline></video>
         <canvas id="canvas"></canvas>
     </div>
+    
+  <!-- Title (match font/size/position of other pages) -->
+  <div class="archive-title">
+    <div class="line1">Book your appointment</div>
+  </div>
+
+  <a href="index.html?from=landing" class="back-to-gallery">Back to gallery</a>
     <div id="status">Loading model... Please wait</div>
 
     <div>
@@ -25,6 +36,10 @@
         <strong>Detected Faces:</strong>
         <div id="faceList">Waiting for face detection...</div>
     </div>
+  <div id="handInfo">
+    <strong>Detected Hands:</strong>
+    <div id="handList">Waiting for hand detection...</div>
+  </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>

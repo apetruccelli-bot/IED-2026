@@ -1,10 +1,10 @@
 const dentaturaFrontale = new Image();
-// use the required x-ray overlay image from the project's asset folder
-dentaturaFrontale.src = "asset/dentatura-frontale.jpeg";
+// asset effects removed: do not load external image for xray overlay
+// dentaturaFrontale.src = "asset/dentatura-frontale.jpeg";
 
 const otturazione = new Image();
-// use the restoration image bundled with the project
-otturazione.src = "asset/otturazione.jpeg";
+// asset effects removed: do not load external restoration image
+// otturazione.src = "asset/otturazione.jpeg";
  
 const video = document.getElementById("webcam");
  const canvas = document.getElementById("canvas");
@@ -12,13 +12,124 @@ const video = document.getElementById("webcam");
  const status = document.getElementById("status");
  const startBtn = document.getElementById("startBtn");
  const faceList = document.getElementById("faceList");
+ const handList = document.getElementById("handList");
  const toggleNumbers = document.getElementById("toggleNumbers");
+
+// Helper: intentionally keep any status UI blank to hide tracking info
+function setStatus(_msg) {
+    try {
+        if (status) {
+            // intentionally blank: do not show tracking/status messages in the UI
+            status.textContent = "";
+        }
+    } catch (e) {
+        // ignore
+    }
+}
 
  let detector = null;
  let isDetecting = false;
  let showNumbers = true;  // Toggle for showing numbers
 let handModel = null;
 let hands = [];
+let handDetector = null;
+const PREVIEW_IS_MIRRORED = true;
+
+// MediaPipe handedness is from camera perspective; swap for selfie-view UI labels.
+function normalizeHandednessLabel(label) {
+    if (label === 'Left') return 'Right';
+    if (label === 'Right') return 'Left';
+    return label || 'Unknown';
+}
+
+function mirrorPointX(point) {
+    if (!PREVIEW_IS_MIRRORED || !point) return point;
+    return { ...point, x: canvas.width - point.x };
+}
+
+function mirrorKeypointsX(keypoints) {
+    if (!PREVIEW_IS_MIRRORED || !Array.isArray(keypoints)) return keypoints;
+    return keypoints.map(mirrorPointX);
+}
+
+// Colors for different hands
+const handColors = [
+    "#FF0000",
+    "#00FF00",
+    "#0088FF",
+    "#FF00FF",
+    "#FFFF00",
+    "#00FFFF",
+];
+
+// Hand landmark connections
+const HAND_CONNECTIONS = [
+  [0,1],[1,2],[2,3],[3,4],
+  [0,5],[5,6],[6,7],[7,8],
+  [0,9],[9,10],[10,11],[11,12],
+  [0,13],[13,14],[14,15],[15,16],
+  [0,17],[17,18],[18,19],[19,20]
+];
+
+const LANDMARK_NAMES = [
+  "Wrist","Thumb CMC","Thumb MCP","Thumb IP","Thumb Tip",
+  "Index MCP","Index PIP","Index DIP","Index Tip",
+  "Middle MCP","Middle PIP","Middle DIP","Middle Tip",
+  "Ring MCP","Ring PIP","Ring DIP","Ring Tip",
+  "Pinky MCP","Pinky PIP","Pinky DIP","Pinky Tip"
+];
+
+function getDistance(p1, p2) {
+    return Math.hypot(p1.x - p2.x, p1.y - p2.y);
+}
+
+function drawHandBoundingBox(keypoints, color, label) {
+    const xs = keypoints.map(p => p.x);
+    const ys = keypoints.map(p => p.y);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(minX - 6, minY - 6, maxX - minX + 12, maxY - minY + 12);
+    if (label) {
+        ctx.fillStyle = color;
+        ctx.font = '12px Arial';
+        ctx.fillText(label, minX - 4, minY - 10);
+    }
+}
+
+function drawHandLandmarks(keypoints, color) {
+    // draw points
+    keypoints.forEach((p, i) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        if (showNumbers) {
+            ctx.fillStyle = color;
+            ctx.font = '10px Arial';
+            ctx.fillText(String(i), p.x + 6, p.y - 6);
+        }
+    });
+
+    // draw connections
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    HAND_CONNECTIONS.forEach(([a, b]) => {
+        const p1 = keypoints[a];
+        const p2 = keypoints[b];
+        if (!p1 || !p2) return;
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+    });
+}
 
  // Colors for different faces (made neutral to avoid red visual tracking)
  const faceColors = [
@@ -43,7 +154,7 @@ let hands = [];
  // Load the Face Landmarks Detection model
  async function loadModel() {
      try {
-         status.textContent = "Loading face detection model...";
+         setStatus("Loading face detection model...");
          
          await tf.setBackend('webgl');
          await tf.ready();
@@ -58,7 +169,7 @@ let hands = [];
              }
          );
          
-         status.textContent = "Model loaded! Click 'Start Camera'";
+         setStatus("Model loaded! Click 'Start Camera'");
          startBtn.disabled = false;
          console.log("Face detection model loaded successfully!");
         // try to load hand model (optional)
@@ -69,8 +180,26 @@ let hands = [];
             console.warn('Handpose model not available:', e && e.message);
             handModel = null;
         }
+        // then try the newer tfjs hand-pose-detection MediaPipe Hands detector (preferred)
+        try {
+            if (window.handPoseDetection && handPoseDetection.createDetector) {
+                handDetector = await handPoseDetection.createDetector(
+                    handPoseDetection.SupportedModels.MediaPipeHands,
+                    {
+                        runtime: 'mediapipe',
+                        solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands',
+                        modelType: 'full',
+                        maxHands: 4
+                    }
+                );
+                console.log('MediaPipe Hands detector loaded');
+            }
+        } catch (e) {
+            console.warn('Hand detector not available:', e && e.message);
+            handDetector = null;
+        }
      } catch (error) {
-         status.textContent = "Error loading model: " + error.message;
+         setStatus("Error loading model: " + (error && error.message));
          console.error(error);
      }
  }
@@ -100,14 +229,29 @@ let hands = [];
              video.height = videoHeight;
              
              console.log(`Video dimensions: ${videoWidth}x${videoHeight}`);
+            // Ensure the displayed video and overlay canvas are not visually mirrored.
+            try {
+                // Explicitly clear any CSS transform that may have been applied inline or by other scripts
+                video.style.transform = 'none';
+                video.style.webkitTransform = 'none';
+                canvas.style.transform = 'none';
+                canvas.style.webkitTransform = 'none';
+                // Log computed transforms for debugging if needed
+                console.debug('Computed video transform:', getComputedStyle(video).transform);
+                console.debug('Computed canvas transform:', getComputedStyle(canvas).transform);
+                // Reset canvas 2D transform matrix to identity
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+            } catch (e) {
+                console.warn('Could not reset transforms:', e && e.message);
+            }
              
-             status.textContent = "Detecting faces...";
-             startBtn.textContent = "Camera Running";
+             setStatus("Detecting faces...");
+             if (startBtn) startBtn.textContent = "Camera Running";
              startBtn.disabled = true;
              detectFaces();
          });
      } catch (error) {
-         status.textContent = "Error accessing camera: " + error.message;
+         setStatus("Error accessing camera: " + (error && error.message));
          console.error(error);
      }
  }
@@ -154,49 +298,69 @@ let hands = [];
      isDetecting = true;
 
      // Detect faces
-     const faces = await detector.estimateFaces(video, {
+    const rawFaces = await detector.estimateFaces(video, {
          flipHorizontal: false
      });
+    const faces = PREVIEW_IS_MIRRORED
+        ? rawFaces.map(face => ({ ...face, keypoints: mirrorKeypointsX(face.keypoints) }))
+        : rawFaces;
 
-    // optionally detect hands (lightweight) if model present
-    if (handModel) {
+    // detect hands: prefer the newer handDetector (MediaPipe Hands) if available
+    hands = [];
+    if (handDetector) {
         try {
-            hands = await handModel.estimateHands(video, true);
+            const raw = await handDetector.estimateHands(video, { flipHorizontal: false });
+            // normalize to { keypoints: [{x,y,z}], handedness, score }
+            hands = raw.map(h => {
+                const kps = mirrorKeypointsX((h.keypoints || h.landmarks || []).map(p => ({ x: p.x, y: p.y, z: p.z || 0 })));
+                const rawLabel = (h.handedness && h.handedness[0] && h.handedness[0].label) || h.handedness || (h.handednessLabel || 'Unknown');
+                return { keypoints: kps, handedness: normalizeHandednessLabel(rawLabel), score: h.score || (h.handInViewConfidence || 1) };
+            });
+        } catch (e) {
+            console.warn('handDetector error', e && e.message);
+            hands = [];
+        }
+    } else if (handModel) {
+        try {
+            const raw = await handModel.estimateHands(video, true);
+            // handpose returns objects with landmarks: array of [x,y,z] and annotations
+            hands = raw.map(h => {
+                const kps = mirrorKeypointsX((h.landmarks || []).map(p => ({ x: p[0], y: p[1], z: p[2] || 0 })));
+                return { keypoints: kps, annotations: h.annotations || {}, handedness: normalizeHandednessLabel(h.handedness || 'Unknown'), score: h.score || 1 };
+            });
         } catch (e) {
             hands = [];
         }
-    } else {
-        hands = [];
     }
 
-     // Clear canvas
-     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Reset any canvas transform and clear canvas to avoid mirrored drawings
+    try {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+    } catch (e) {
+        // ignore if context doesn't support setTransform for some reason
+    }
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-     // Draw each face with different color
-     let infoHTML = "";
+    // Process faces for interaction (mouth detection & finger mapping) but do not build HTML UI
+    if (faces && faces.length > 0) {
+        faces.forEach((face, index) => {
+            const color = faceColors[index % faceColors.length];
 
-     if (faces.length > 0) {
-         infoHTML = `<div style="margin-bottom: 10px;"><strong>Tracking ${faces.length} face(s)</strong></div>`;
-
-         faces.forEach((face, index) => {
-             const color = faceColors[index % faceColors.length];
-             
-            // Tracking visuals hidden (bounding box and landmarks removed)
-
-            // MOUTH DETECTION: check if mouth is open, draw xray overlay if so
+            // MOUTH DETECTION: check if mouth is open, compute overlay and map finger interactions
             const mouthOpen = isMouthOpen(face.keypoints);
             if (mouthOpen) {
-                // draw the xray overlay aligned to mouth
                 const mouthOverlay = drawXrayMouth(face.keypoints);
 
-                // if there are hands detected, handle finger -> tooth interaction
                 if (hands && hands.length > 0) {
-                    // map first hand's index finger tip
                     const hand = hands[0];
+<<<<<<< HEAD
                     const indexTip = hand.annotations && hand.annotations.indexFinger ? hand.annotations.indexFinger[3] : null;
-                    // handpose returns 3D points in pixels [x,y,z]
+=======
+                    const indexTip = hand.keypoints && hand.keypoints[8] ? hand.keypoints[8] : null;
+>>>>>>> 0cd5488613f16e0b38e901ea6e5d54a3d8c478fa
                     if (indexTip) {
-                        const fingerPoint = { x: indexTip[0], y: indexTip[1] };
+                        const fingerPoint = { x: indexTip.x, y: indexTip.y };
                         if (isFingerInsideMouth(fingerPoint, face.keypoints)) {
                             const mapped = mapFingerToOverlay(fingerPoint, face.keypoints, mouthOverlay);
                             drawFillingOnPoint(mapped, face.keypoints);
@@ -204,29 +368,36 @@ let hands = [];
                     }
                 }
             }
+        });
+    }
 
-             // Add info for this face
-             const confidence = face.box ? 
-                 `${(face.box.probability * 100).toFixed(1)}%` : 
-                 "High confidence";
+    // Ensure face/hand info areas remain empty on this minimal page
+    if (faceList) faceList.innerHTML = "";
+    if (handList) handList.innerHTML = "";
 
-             infoHTML += `<div class="face-info" style="border-color: ${color};">`;
-             infoHTML += `<strong>Face ${index + 1}</strong><br>`;
-             infoHTML += `<div style="margin: 5px 0;">`;
-             infoHTML += `<span class="feature-info">✓ Left Eye</span>`;
-             infoHTML += `<span class="feature-info">✓ Right Eye</span>`;
-             infoHTML += `<span class="feature-info">✓ Nose</span>`;
-             infoHTML += `<span class="feature-info">✓ Mouth</span>`;
-             infoHTML += `<span class="feature-info">✓ Eyebrows</span>`;
-             infoHTML += `<span class="feature-info">✓ Face Contour</span>`;
-             infoHTML += `</div>`;
-             infoHTML += `</div>`;
-         });
-     } else {
-         infoHTML = "<div>No faces detected - look at the camera!</div>";
-     }
+    // Draw hands on canvas (over the faces overlays)
+    if (hands && hands.length > 0) {
+        hands.forEach((h, i) => {
+            const color = handColors[i % handColors.length];
+            if (h.keypoints && h.keypoints.length > 0) {
+                drawHandBoundingBox(h.keypoints, color, h.handedness || 'Hand');
+                drawHandLandmarks(h.keypoints, color);
 
-     faceList.innerHTML = infoHTML;
+                // if hand is near mouth of any detected face, we can map fingertip to overlay
+                // try index fingertip (8)
+                const tip = h.keypoints[8];
+                if (tip && faces && faces.length > 0) {
+                    faces.forEach(face => {
+                        if (isMouthOpen(face.keypoints) && isFingerInsideMouth(tip, face.keypoints)) {
+                            const mouthOverlay = drawXrayMouth(face.keypoints);
+                            const mapped = mapFingerToOverlay(tip, face.keypoints, mouthOverlay);
+                            drawFillingOnPoint(mapped, face.keypoints);
+                        }
+                    });
+                }
+            }
+        });
+    }
 
      // Continue detection loop
      if (isDetecting) {
@@ -261,19 +432,9 @@ let hands = [];
     const drawX = mouthX - mouthW * 0.3;
     const drawY = mouthY - mouthH * 0.08;
 
-  ctx.save();
-  ctx.globalCompositeOperation = "screen";
-  ctx.globalAlpha = 0.58;
-
-  ctx.drawImage(
-    dentaturaFrontale,
-    drawX,
-    drawY,
-    mouthW,
-    mouthH
-  );
-
-  ctx.restore();
+    // Asset overlay removed: do not draw the x-ray image.
+    // If desired, a simple non-asset visual could be drawn here (e.g., translucent rect),
+    // but per request we remove asset-based effects.
 
     return { x: drawX, y: drawY, w: mouthW, h: mouthH };
 }
@@ -363,23 +524,19 @@ function drawFillingOnPoint(mappedPoint, face) {
     const jitterY = (Math.random() - 0.5) * 4;
     const flicker = 0.55 + Math.sin(Date.now() / 120) * 0.05; // oscillate around 0.55
 
-    const drawX = mappedPoint.x + jitterX - size / 2;
-    const drawY = mappedPoint.y + jitterY - size / 2;
+    const drawX = mappedPoint.x + jitterX;
+    const drawY = mappedPoint.y + jitterY;
 
+    // Asset effect removed: draw a simple subtle marker (non-asset) instead of image
     ctx.save();
-    ctx.globalCompositeOperation = "screen";
-    ctx.globalAlpha = Math.max(0.5, Math.min(0.65, flicker));
-
-    // draw slightly degraded (lower quality) by drawing at slight scale and with alpha
-    ctx.drawImage(otturazione, drawX, drawY, size, size);
-
-    // optional additional noise: small translucent overlay
-    ctx.fillStyle = 'rgba(255,255,255,0.02)';
-    ctx.fillRect(drawX - 1, drawY - 1, size + 2, size + 2);
-
+    ctx.globalAlpha = Math.max(0.4, Math.min(0.65, flicker));
+    ctx.fillStyle = 'rgba(255,200,100,0.85)';
+    ctx.beginPath();
+    ctx.arc(drawX, drawY, Math.max(4, size * 0.08), 0, Math.PI * 2);
+    ctx.fill();
     ctx.restore();
 
-    status.textContent = "Restoration detected.";
+    setStatus("Restoration (marker)");
 }
  
  

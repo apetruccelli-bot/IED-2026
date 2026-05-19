@@ -14,6 +14,11 @@ let reblurTimeout  = null;
 const TRIGGER_COOLDOWN = 1500; // ms — prevents re-trigger spam from one puff
 let lastTriggerTime = 0;
 
+function setExploreStatusText(text) {
+  const status = document.querySelector('.explore-status');
+  if (status) status.textContent = text;
+}
+
 // Cheek-puff calibration
 let cheekBaselineSamples = [];
 let cheekBaseline = null;
@@ -74,12 +79,10 @@ function triggerReveal() {
   setSquareBlurred(false);
   reblurTimeout = setTimeout(() => {
     setSquareBlurred(true);
-    const status = document.querySelector('.explore-status');
-    if (status) status.textContent = 'blow or puff your cheeks!';
+    setExploreStatusText('blow or puff your cheeks!');
   }, 3000);
 
-  const status = document.querySelector('.explore-status');
-  if (status) status.textContent = 'revealed — re-blurs in 3s…';
+  setExploreStatusText('revealed — re-blurs in 3s...');
 }
 
 // ── MICROPHONE / BLOW DETECTION ──
@@ -153,10 +156,9 @@ function loopMicDetection() {
 
 // ── FACE MODEL INIT ──
 async function initExplore() {
-  const status = document.querySelector('.explore-status');
   if (!exploreDetector && !exploreModelLoading) {
     exploreModelLoading = true;
-    status.textContent = 'Loading face detection model…';
+    setExploreStatusText('Loading face detection model...');
     try {
       await tf.setBackend('webgl');
       await tf.ready();
@@ -171,7 +173,7 @@ async function initExplore() {
       );
       exploreModelLoading = false;
     } catch (err) {
-      if (status) status.textContent = 'Error loading model: ' + err.message;
+      setExploreStatusText('Error loading model: ' + err.message);
       exploreModelLoading = false;
       return;
     }
@@ -186,7 +188,6 @@ async function initExplore() {
 
 async function startExploreCamera() {
   const video  = document.getElementById('explore-webcam');
-  const status = document.querySelector('.explore-status');
   try {
     exploreStream = await navigator.mediaDevices.getUserMedia({
       video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' }
@@ -194,11 +195,11 @@ async function startExploreCamera() {
     video.srcObject = exploreStream;
     video.addEventListener('loadeddata', () => {
       exploreIsDetecting = true;
-      status.textContent = 'blow or puff your cheeks!';
+      setExploreStatusText('blow or puff your cheeks!');
       detectExploreFace();
     }, { once: true });
   } catch (err) {
-    status.textContent = 'Camera error: ' + err.message;
+    setExploreStatusText('Camera error: ' + err.message);
   }
 }
 
@@ -207,7 +208,6 @@ async function detectExploreFace() {
   if (!exploreIsDetecting || !exploreDetector) return;
 
   const video       = document.getElementById('explore-webcam');
-  const status      = document.querySelector('.explore-status');
   const detectLabel = document.getElementById('explore-detect-label');
   const angleLabel  = document.getElementById('explore-angle-label');
 
@@ -231,7 +231,7 @@ async function detectExploreFace() {
         if (cheekBaselineSamples.length === 40) {
           cheekBaseline = cheekBaselineSamples.reduce((a, b) => a + b) / cheekBaselineSamples.length;
           calibrationComplete = true;
-          status.textContent = 'blow or puff your cheeks!';
+          setExploreStatusText('blow or puff your cheeks!');
         }
       } else {
         const puffed = ratio.toFixed(2) > (cheekBaseline.toFixed(2) + 5);

@@ -109,6 +109,28 @@ function getVictimsIndexFromLabel(label) {
   return victimStops.indexOf(label);
 }
 
+function positionVictimsStops(row) {
+  const slider = row.querySelector('.victims-slider');
+  const stops = row.querySelectorAll('.victims-stop');
+  if (!slider || stops.length === 0) return;
+
+  const min = Number(slider.min);
+  const max = Number(slider.max);
+  const sliderWidth = slider.offsetWidth;
+
+  const thumbSize = parseFloat(getComputedStyle(slider).getPropertyValue('--victims-thumb-size')) || 22;
+  const usableWidth = sliderWidth - thumbSize;
+
+  stops.forEach(stopEl => {
+    const index = Number(stopEl.dataset.index);
+    const percent = (index - min) / (max - min);
+    const x = (thumbSize / 2) + (percent * usableWidth);
+
+    stopEl.style.left = `${x}px`;
+  });
+}
+
+
 function matchesVictimsFilter(victims, label) {
   if (victims == null) return false;
   if (label === '<10') return victims < 10;
@@ -200,7 +222,7 @@ function buildFilterRows() {
         const stopLabel = getVictimsLabelFromIndex(Number(slider.value));
         activeRowFilters[label] = stopLabel;
         syncVictimsRow(row);
-        applyRowFilters();
+        applyRowFilters({ autoScroll: true });
       });
 
       stops.addEventListener('click', e => {
@@ -216,12 +238,13 @@ function buildFilterRows() {
           activeRowFilters[label] = stopLabel;
         }
         syncVictimsRow(row);
-        applyRowFilters();
+        applyRowFilters({ autoScroll: true });
       });
 
       wrap.appendChild(slider);
       wrap.appendChild(stops);
       inside.appendChild(wrap);
+      requestAnimationFrame(() => positionVictimsStops(row));
 
       row.dataset.controlType = 'victims';
       syncVictimsRow(row);
@@ -268,7 +291,7 @@ function buildFilterRows() {
             chip.classList.add('active');
           }
         }
-        applyRowFilters();
+        applyRowFilters({ autoScroll: true });
       });
       inside.appendChild(chip);
     });
@@ -352,8 +375,66 @@ function matchesRowFilters(item) {
   });
 }
 
+function getActiveGalleryCards() {
+  return [...document.querySelectorAll('.card:not(.card-dim)')];
+}
+
+function getCardVisibilityRatioInGallery(card) {
+  if (!galleryScroll || !card) return 0;
+
+  const galleryRect = galleryScroll.getBoundingClientRect();
+  const cardRect = card.getBoundingClientRect();
+
+  const visibleLeft = Math.max(cardRect.left, galleryRect.left);
+  const visibleRight = Math.min(cardRect.right, galleryRect.right);
+
+  const visibleWidth = Math.max(0, visibleRight - visibleLeft);
+
+  if (cardRect.width === 0) return 0;
+
+  return visibleWidth / cardRect.width;
+}
+
+// scroll sulla immagine illuminata se non è visibile
+function isCardVisibleEnoughInGallery(card) {
+  return getCardVisibilityRatioInGallery(card) >= 0.5;
+}
+
+function scrollToFirstActiveCardIfNeeded() {
+  if (!galleryScroll) return;
+
+  const activeCards = getActiveGalleryCards();
+
+  if (activeCards.length === 0) return;
+
+  const hasActiveCardVisibleEnough = activeCards.some(card => {
+    return isCardVisibleEnoughInGallery(card);
+  });
+
+  if (hasActiveCardVisibleEnough) return;
+
+  const firstActiveCard = activeCards.reduce((first, card) => {
+    return card.offsetLeft < first.offsetLeft ? card : first;
+  }, activeCards[0]);
+
+  const targetScrollLeft = Math.max(firstActiveCard.offsetLeft - 10, 0);
+
+  galleryScroll.scrollTo({
+    left: targetScrollLeft,
+    behavior: 'smooth'
+  });
+}
+
+function scheduleScrollToFirstActiveCardIfNeeded() {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      scrollToFirstActiveCardIfNeeded();
+    });
+  });
+}
+
 // ── Apply row filters to cards ────────────────────────────────────────────
-function applyRowFilters() {
+function applyRowFilters(options = {}) {
   const hasAny = Object.values(activeRowFilters).some(v => v);
   document.querySelectorAll('.card').forEach(card => {
     const item = items.find(i => String(i.id) === card.dataset.id);
@@ -367,6 +448,10 @@ function applyRowFilters() {
     const match = matchesRowFilters(item);
     card.classList.toggle('card-dim', categoryDim || !match);
   });
+
+    if (options.autoScroll) {
+    scheduleScrollToFirstActiveCardIfNeeded();
+  }
 }
 
 // ── Collect all unique tags ───────────────────────────────────────────────
@@ -583,6 +668,32 @@ function openLightbox(itemId) {
   lightbox.classList.add('open');
   lightbox.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+
+  // ensure description width matches the displayed image width
+  function updateLightboxDescriptionWidth() {
+    if (!lbImg || !lbDescription) return;
+    const rect = lbImg.getBoundingClientRect();
+    if (rect.width > 0) {
+      lbDescription.style.maxWidth = Math.floor(rect.width) + 'px';
+    }
+  }
+
+  // call when image loads (handles async image sizing)
+  lbImg.addEventListener('load', updateLightboxDescriptionWidth, { once: true });
+  // if image already loaded from cache
+  if (lbImg.complete) updateLightboxDescriptionWidth();
+
+  // update on window resize while lightbox is open
+  const _resizeHandler = () => {
+    if (lightbox.classList.contains('open')) updateLightboxDescriptionWidth();
+  };
+  window.addEventListener('resize', _resizeHandler);
+  // remove the resize listener when lightbox closes
+  const _removeResizeOnClose = () => {
+    window.removeEventListener('resize', _resizeHandler);
+    lightbox.removeEventListener('transitionend', _removeResizeOnClose);
+  };
+  lightbox.addEventListener('transitionend', _removeResizeOnClose);
 }
 
 function closeLightbox() {
@@ -654,6 +765,7 @@ document.querySelectorAll('.filter-link').forEach(btn => {
     }
 
     updateDisabledFilterRows();
+    scheduleScrollToFirstActiveCardIfNeeded();
   });
 });
 
@@ -661,11 +773,59 @@ document.querySelectorAll('.filter-link').forEach(btn => {
 let _lastRowCount = getRowCount();
 window.addEventListener('resize', () => {
   const n = getRowCount();
+
+  document.querySelectorAll('.filter-row[data-control-type="victims"]').forEach(row => {
+    positionVictimsStops(row);
+  });
+
   if (n !== _lastRowCount) {
     _lastRowCount = n;
     render();
   }
 });
 
+// ── Infinite scroll for gallery ────────────────────────────────────────────
+function enableInfiniteScroll() {
+  if (!galleryScroll) return;
+  
+  const gallery = document.querySelector('.archive-gallery');
+  if (!gallery) return;
+  
+  // Get original rows before cloning
+  const originalRows = [...gallery.querySelectorAll('.archive-row')];
+  
+  // Duplicate content 3 times for seamless looping
+  for (let i = 0; i < 3; i++) {
+    originalRows.forEach(row => {
+      const clone = row.cloneNode(true);
+      gallery.appendChild(clone);
+    });
+  }
+  
+  // Calculate original content width
+  let originalWidth = 0;
+  originalRows.forEach(row => {
+    originalWidth += row.scrollWidth;
+  });
+  
+  let isResetting = false;
+  
+  galleryScroll.addEventListener('scroll', () => {
+    if (isResetting) return;
+    
+    const scrollLeft = galleryScroll.scrollLeft;
+    const scrollWidth = galleryScroll.scrollWidth;
+    const clientWidth = galleryScroll.clientWidth;
+    
+    // Reset when we've scrolled through the original content
+    if (scrollLeft > originalWidth) {
+      isResetting = true;
+      galleryScroll.scrollLeft = scrollLeft - originalWidth;
+      setTimeout(() => { isResetting = false; }, 30);
+    }
+  }, { passive: true });
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────
 loadData();
+enableInfiniteScroll();

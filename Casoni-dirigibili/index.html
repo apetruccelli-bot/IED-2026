@@ -17,6 +17,25 @@
   </head>
   <body>
 
+    <!-- LANDING PAGE -->
+  <div id="landing-modal" class="landing-modal landing-hidden">
+    <div class="landing-aaa-track">
+    <div class="landing-aaa">AAAA</div>
+  </div>
+
+  <div class="landing-content">
+    <div class="landing-column">
+      <span>ADLER’S</span>
+    </div>
+    <div class="landing-column">
+      <span>AIRSHIP</span>
+    </div>
+    <div class="landing-column">
+      <span>ARCHIVE</span>
+    </div>
+  </div>
+</div>
+
     <header class="opacity-0 h-0 overflow-hidden hidden">
       <div class="header-inner">
         <div class="header-row">
@@ -55,19 +74,27 @@
     </div>
 
     <div class="w-screen h-screen grid two-rows-grid">
-      <div class="p-10px bg-myBlack flex flex-row justify-between items-start text-myWhite gap-20px">
-        <div class="flex flex-col">
-          <div class="flex flex-row items-baseline gap-4">
-            <a href="./" class="font-myTitle">AAA — Adler’s Airship Archive</a>
-            <a href="./about.html" class="not(.font-myTitle)">About</a>
-            <p onclick="openExploreModal()" class="not(.font-myTitle) explore-link" style="cursor:pointer;">Explore</p>
-          </div>
-        <div class="box">
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
+      <div class="top-home p-10px bg-myBlack flex flex-row justify-between items-baseline text-myWhite gap-10px">
+        <div class="intro-panel flex flex-col">
+          <a href="./" class="font-myTitle home-title">
+            AAA — Adler's Airship Archive
+          </a>
+          <div class="box">
+            <p>
+              "I am forwarding the latest records gathered from the recent expeditions. They have been arranged by category for ease of examination: photographs, newspaper cuttings and technical notes. I trust they may assist in the continued study of airship navigation and its dangers."
+            </p>
+
+            <p class="mt-4">
+              — Friedrich Adler
+            </p>
           </div>
         </div>
+        <div class="home-nav flex flex-row items-baseline gap-4">
+          <a href="./about.html" class="nav-link">About</a>
+          <p onclick="openExploreModal()" class="nav-link explore-link" style="cursor:pointer;">Explore</p>
+        </div>
         <div class="filters-panel max-w-[45rem] text-myWhite">
-          <nav class="filters-nav flex justify-between mt-[15px] mb-[17px]">
+          <nav class="filters-nav flex justify-between items-baseline mb-[17px]">
             <button class="filter-link" data-category="airships">Airship</button>
             <button class="filter-link" data-category="wreckage">Wreckage</button>
             <button class="filter-link" data-category="models">Models</button>
@@ -125,7 +152,7 @@
 
       <!-- Webcam preview top-right -->
       <div style="position:absolute; top:20px; right:70px; display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
-        <video id="explore-webcam" autoplay muted playsinline style="width:200px; height:150px; object-fit:cover; border-radius:6px; border:2px solid rgba(255,255,255,0.15); transform:scaleX(-1);"></video>
+        <video id="explore-webcam" autoplay muted playsinline style="display:none; width:200px; height:150px; object-fit:cover; border-radius:6px; border:2px solid rgba(255,255,255,0.15); transform:scaleX(-1);"></video>
         <div id="explore-hand-status" style="font-family:monospace; font-size:11px; text-align:right; line-height:1.5;">
           <span id="explore-detect-label" style="display:inline-block; padding:2px 8px; border-radius:3px; background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.4);">no hand detected</span><br>
           <span id="explore-angle-label" style="color:rgba(255,255,255,0.3);">angle: —</span>
@@ -158,6 +185,48 @@
 
     <script src="casoni-lm.js"></script>
     <script src="script.js"></script>
+
+<script>
+  (function () {
+    const modal = document.getElementById('landing-modal');
+    const aaaTrack = document.querySelector('.landing-aaa-track');
+
+    if (!modal || !aaaTrack) return;
+
+    const navigationEntry = performance.getEntriesByType('navigation')[0];
+    const isReload = navigationEntry && navigationEntry.type === 'reload';
+
+    if (!isReload) {
+      modal.remove();
+      return;
+    }
+
+    modal.classList.remove('landing-hidden');
+
+    requestAnimationFrame(() => {
+      modal.classList.add('landing-active');
+    });
+
+    let isLeaving = false;
+
+    function closeLanding() {
+      if (isLeaving) return;
+      isLeaving = true;
+
+      modal.classList.add('landing-modal-hide');
+
+      modal.addEventListener('animationend', () => {
+        modal.remove();
+      }, { once: true });
+    }
+
+    aaaTrack.addEventListener('animationend', () => {
+      setTimeout(closeLanding, 1000);
+    }, { once: true });
+
+    modal.addEventListener('click', closeLanding);
+  })();
+</script>
 
   </body>
 </html>
