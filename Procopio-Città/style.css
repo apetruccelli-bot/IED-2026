@@ -514,7 +514,7 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 .mapboxgl-ctrl-attrib-inner{display: none !important;}
 .mapboxgl-ctrl-logo {display: none !important;}
 .custom-marker {
-  transition: opacity 0.35s linear, filter 0.3s ease;
+  transition: opacity 0.35s linear, filter 4s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -591,7 +591,7 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
   width: 20vw;
   height: 25vw;
   object-fit: cover;
-  opacity: 1;
+  opacity: 0;
   z-index: 100;
   transform: scale(1) translateX(0) translateY(0);
   transition: opacity 0.15s linear, filter 0.15s linear;
@@ -599,6 +599,25 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 
 .loading-image-center.show {
   opacity: 1;
+}
+
+.loading-image-center.fade-out {
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+
+/* First image reveal animation - linear vertical expansion from center */
+.loading-image-center.first-image-reveal {
+  animation: firstImageLinearReveal 0.4s linear forwards;
+}
+
+@keyframes firstImageLinearReveal {
+  0% {
+    clip-path: inset(50% 0% 50% 0%);
+  }
+  100% {
+    clip-path: inset(0% 0% 0% 0%);
+  }
 }
 
 /* Coordinates display below image */
@@ -618,7 +637,12 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 }
 
 .loading-coordinates.show {
-  opacity: 1;
+  opacity: 0.9;
+}
+
+.loading-coordinates.fade-out {
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
 }
 
 /* Gallery (hidden initially, shows during zoom phase) */
@@ -632,6 +656,7 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
   opacity: 0;
   z-index: 50;
   pointer-events: none;
+  transition: opacity 0.8s ease-in-out;
 }
 
 .loading-gallery.show {
@@ -646,8 +671,7 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
   object-fit: cover;
   opacity: 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  /* Add transition for clip-path */
-  transition: clip-path 0.5s linear;
+  transition: opacity 0.6s ease-in-out, clip-path 0.5s linear;
 }
 
 /* Initial state for the first image reveal */
@@ -662,13 +686,13 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 }
 
 .loading-image.scatter {
-  animation: scatterOut 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: scatterOut 2.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 
 @keyframes scatterOut {
   0% {
-    opacity: 1; /* Start visible */
-    transform: translate(0, 0) scale(0.95) rotate(0deg);
+    opacity: 0.8;
+    transform: translate(0, 0) scale(0.9) rotate(0deg);
   }
   100% {
     opacity: 1;
@@ -677,11 +701,17 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 }
 
 /* ── Home page map (keep existing) ────────────────────────────────────── */
+#home-map {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+#home-map.visible {
+  opacity: 1;
 }
 .home-map::after {
   content: '';
