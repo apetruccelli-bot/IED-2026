@@ -74,8 +74,8 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        gap: 13px;
-        font-size: 13px;
+        gap: 16px;
+        font-size: 12px;
         line-height: 1;
       }
 
@@ -89,12 +89,15 @@
         transition: font-size 0.25s ease, font-weight 0.25s ease;
       }
 
-      .city-item::after {
-        content: "";
+      .city-item .city-dash {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
         width: 21px;
         height: 1px;
         background: #090909;
-        margin-left: auto;
+        transition: opacity 0.25s ease, left 0.25s ease;
       }
 
       .city-item.active {
@@ -102,7 +105,15 @@
         font-weight: 700;
       }
 
-      .city-item.active::after {
+      .city-item.font-myTitle {
+        font-family: 'Prophet Medium';
+        font-size: 28px;
+        line-height: 100%;
+        letter-spacing: 0.02em;
+        font-weight: normal;
+      }
+
+      .city-item.active .city-dash {
         opacity: 0;
       }
       
@@ -113,16 +124,17 @@
 
       .city-dot {
         position: absolute;
-        left: 110px;
+        left: 0;
         top: 0;
         width: 19px;
         height: 19px;
         border-radius: 50%;
         background: #090909;
-        transform: translateY(0);
+        transform: translate(0, 0);
         transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
         pointer-events: none;
       }
+      
 
       .history-stage {
         position: sticky;
@@ -196,7 +208,6 @@
         }
 
         .city-dot {
-          left: 88px;
           width: 15px;
           height: 15px;
         }
@@ -243,7 +254,7 @@
           <div class="city-item" data-step="0">Cerignola</div>
           <div class="city-item" data-step="0">Foggia</div>
 
-          <div class="city-item active" data-step="0" id="city-baretta">Barletta</div>
+          <div class="city-item active" data-step="0" id="city-barletta">Barletta</div>
           <div class="city-item" data-step="0">Bisceglie</div>
           <div class="city-item" data-step="0">Andria</div>
           <div class="city-item" data-step="0">Bitonto</div>
@@ -305,14 +316,11 @@
         </div>
       </section>
 
-      <!-- sezioni invisibili che comandano lo scroll -->
-      <section class="scroll-section" data-step="0"></section>
-      <section class="scroll-section" data-step="1"></section>
-      <section class="scroll-section" data-step="2"></section>
     </main>
 
     <script>
       const cityItems = document.querySelectorAll(".city-item");
+      const cityList = document.getElementById("cityList");
       const dot = document.getElementById("cityDot");
       const storyParts = document.querySelectorAll(".story-part");
       const images = document.querySelectorAll(".history-image");
@@ -326,20 +334,48 @@
 
       let currentStep = -1;
       let ticking = false;
+      let fixedDotX = null;
+      const headerTitle = document.querySelector('header a');
+
+      function ensureCityDashes() {
+        cityItems.forEach((item) => {
+          if (!item.querySelector('.city-dash')) {
+            const dash = document.createElement('span');
+            dash.className = 'city-dash';
+            item.appendChild(dash);
+          }
+        });
+      }
+
+      function updateDashAlignment() {
+        if (!cityList || !headerTitle) return;
+
+        const listRect = cityList.getBoundingClientRect();
+        const titleRect = headerTitle.getBoundingClientRect();
+        const dashRight = titleRect.right - listRect.left;
+
+        cityItems.forEach((item) => {
+          const dash = item.querySelector('.city-dash');
+          if (!dash) return;
+          const dashWidth = dash.getBoundingClientRect().width;
+          dash.style.left = `${dashRight - dashWidth}px`;
+        });
+
+        if (dot) {
+          fixedDotX = dashRight - dot.getBoundingClientRect().width / 2;
+          dot.style.left = `${fixedDotX}px`;
+        }
+      }
 
       function moveDotToStop(stop) {
-        if (!stop || !dot) return;
-        const listRect = document.getElementById('cityList').getBoundingClientRect();
+        if (!stop || !dot || !cityList) return;
+
+        const listRect = cityList.getBoundingClientRect();
         const stopRect = stop.getBoundingClientRect();
         const dotRect = dot.getBoundingClientRect();
 
-        // vertical center relative to the list container
-        const y = (stopRect.top - listRect.top) + stopRect.height / 2 - dotRect.height / 2;
-
-        // horizontal: position the dot at the right edge of the item, centered
-        const x = (stopRect.right - listRect.left) - dotRect.width / 2;
-
-        dot.style.transform = `translate(${x}px, ${y}px)`;
+        const y = stopRect.top - listRect.top + stopRect.height / 2 - dotRect.height / 2;
+        dot.style.transform = `translateY(${y}px)`;
       }
 
       function setActiveStep(step) {
@@ -347,14 +383,22 @@
 
         currentStep = step;
 
-        cityItems.forEach((item) => {
-          item.classList.remove("active");
-        });
-
         const currentStop = activeStops[step];
 
-        if (currentStop && currentStop.classList.contains("city-item")) {
+        // remove active/font-myTitle from all items first so measurements reflect the non-active layout
+        cityItems.forEach((item) => {
+          item.classList.remove("active", "font-myTitle");
+        });
+
+        // move the dot using the non-active measurements (so centering matches other stops)
+        moveDotToStop(currentStop);
+
+        // now set the visual active state
+        if (currentStop && currentStop.classList && currentStop.classList.contains("city-item")) {
           currentStop.classList.add("active");
+          if (currentStop.id === 'city-barletta' || currentStop.id === 'city-bari') {
+            currentStop.classList.add('font-myTitle');
+          }
         }
 
         storyParts.forEach((part, index) => {
@@ -364,26 +408,30 @@
         images.forEach((img, index) => {
           img.classList.toggle("active", index === step);
         });
-
-        moveDotToStop(currentStop);
       }
 
       function getStepFromScroll() {
         const rect = wrapper.getBoundingClientRect();
         const scrollableDistance = wrapper.offsetHeight - window.innerHeight;
+
+        if (scrollableDistance <= 0) return 0;
+
         const scrolledInsideWrapper = Math.min(
           Math.max(-rect.top, 0),
           scrollableDistance
         );
+
         const progress = scrolledInsideWrapper / scrollableDistance;
 
-        if (progress < 0.38) {
-          return 0;
+        if (progress < 0.36) {
+          return 0; // Barletta
         }
-        if (progress < 0.74) {
-          return 1;
+
+        if (progress < 0.72) {
+          return 1; // Bari
         }
-        return 2;
+
+        return 2; // Finale
       }
 
       function updateOnScroll() {
@@ -400,11 +448,17 @@
       }
 
       window.addEventListener("scroll", requestUpdate, { passive: true });
+
       window.addEventListener("resize", () => {
         currentStep = -1;
+        ensureCityDashes();
+        updateDashAlignment();
         requestUpdate();
       });
+
       window.addEventListener("load", () => {
+        ensureCityDashes();
+        updateDashAlignment();
         setActiveStep(0);
         requestUpdate();
       });
