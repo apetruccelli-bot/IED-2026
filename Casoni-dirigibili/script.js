@@ -2,6 +2,8 @@ const archiveGallery = document.getElementById('archive-gallery');
 const searchInput = document.getElementById('search');
 
 function getRowCount() {
+  if (window.innerWidth <= 600) return 1;
+
   const h = window.innerHeight;
   if (h > 750) return 3;
   if (h > 600) return 2;
@@ -97,6 +99,136 @@ let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
 let activeRowFilters = {};
 
+const mobileActiveFilters = document.getElementById('mobile-active-filters');
+
+function isMobileIndex() {
+  return window.matchMedia('(max-width: 600px)').matches;
+}
+
+function setupMobileFilterMenus() {
+  document.querySelectorAll('.filter-row').forEach(row => {
+    const label = row.querySelector('.filter-label');
+    if (!label || label.dataset.mobileReady === 'true') return;
+
+    label.dataset.mobileReady = 'true';
+
+    label.addEventListener('click', () => {
+      if (!isMobileIndex()) return;
+
+      const isOpen = row.classList.contains('mobile-open');
+
+      document.querySelectorAll('.filter-row.mobile-open').forEach(openRow => {
+        openRow.classList.remove('mobile-open');
+      });
+
+      if (!isOpen) {
+        row.classList.add('mobile-open');
+
+        if (row.dataset.controlType === 'victims') {
+          requestAnimationFrame(() => positionVictimsStops(row));
+        }
+      }
+    });
+  });
+}
+
+function renderMobileActiveFilters() {
+  if (!mobileActiveFilters) return;
+
+  mobileActiveFilters.innerHTML = '';
+
+  const chips = [];
+
+  if (activeCategory) {
+    chips.push({
+      label: 'Category',
+      value: activeCategory,
+      type: 'category'
+    });
+  }
+
+  Object.entries(activeRowFilters).forEach(([label, value]) => {
+    if (!value) return;
+
+    if (value instanceof Set) {
+      value.forEach(singleValue => {
+        chips.push({
+          label,
+          value: singleValue,
+          type: 'row'
+        });
+      });
+    } else {
+      chips.push({
+        label,
+        value,
+        type: 'row'
+      });
+    }
+  });
+
+  chips.forEach(chip => {
+    const btn = document.createElement('button');
+    btn.className = 'mobile-active-filter-chip';
+    btn.type = 'button';
+    btn.textContent = `${chip.value} ×`;
+
+    btn.addEventListener('click', () => {
+      if (chip.type === 'category') {
+        activeCategory = null;
+
+        document.querySelectorAll('.filter-link').forEach(button => {
+          button.classList.remove('active');
+        });
+
+        if (filtersPanel) {
+          filtersPanel.classList.remove('has-active-category');
+        }
+
+        document.querySelectorAll('.card').forEach(card => {
+          card.classList.remove('card-dim');
+        });
+
+        updateDisabledFilterRows();
+        renderMobileActiveFilters();
+        return;
+      }
+
+      const currentValue = activeRowFilters[chip.label];
+
+      if (currentValue instanceof Set) {
+        currentValue.delete(chip.value);
+
+        if (currentValue.size === 0) {
+          activeRowFilters[chip.label] = null;
+        }
+      } else {
+        activeRowFilters[chip.label] = null;
+      }
+
+      document.querySelectorAll('.filter-row').forEach(row => {
+        const rowLabel = row.querySelector('.filter-label')?.textContent.trim();
+        if (rowLabel !== chip.label) return;
+
+        row.querySelectorAll('.filter-chip').forEach(filterChip => {
+          if (filterChip.dataset.value === chip.value || !(activeRowFilters[chip.label])) {
+            filterChip.classList.remove('active');
+          }
+        });
+
+        if (row.dataset.controlType === 'victims') {
+          syncVictimsRow(row);
+        }
+      });
+
+      applyRowFilters({ autoScroll: true });
+      renderMobileActiveFilters();
+    });
+
+    mobileActiveFilters.appendChild(btn);
+  });
+}
+
 const disabledRowLabels = new Set(['Causes', 'Victims']);
 const categoryDisablesRows = new Set(['models', 'drawings', 'study models', 'technical drawings']);
 const victimStops = ['<10', '20', '30', '40', '50', '60', '70', '80', '90', '>100'];
@@ -141,6 +273,8 @@ function matchesVictimsFilter(victims, label) {
 
 if (galleryScroll) {
   galleryScroll.addEventListener('wheel', (e) => {
+    if (isMobileIndex()) return;
+
     const dominantDelta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
 
     if (dominantDelta === 0) return;
@@ -223,6 +357,7 @@ function buildFilterRows() {
         activeRowFilters[label] = stopLabel;
         syncVictimsRow(row);
         applyRowFilters({ autoScroll: true });
+        renderMobileActiveFilters();
       });
 
       stops.addEventListener('click', e => {
@@ -239,6 +374,11 @@ function buildFilterRows() {
         }
         syncVictimsRow(row);
         applyRowFilters({ autoScroll: true });
+        renderMobileActiveFilters();
+
+        if (isMobileIndex()) {
+          row.classList.remove('mobile-open');
+        }
       });
 
       wrap.appendChild(slider);
@@ -292,12 +432,19 @@ function buildFilterRows() {
           }
         }
         applyRowFilters({ autoScroll: true });
+        renderMobileActiveFilters();
+
+        if (isMobileIndex()) {
+          inside.closest('.filter-row')?.classList.remove('mobile-open');
+        }
       });
       inside.appendChild(chip);
     });
   });
 
   updateDisabledFilterRows();
+  setupMobileFilterMenus();
+  renderMobileActiveFilters();
 }
 
 function syncVictimsRow(row) {
@@ -385,9 +532,18 @@ function getCardVisibilityRatioInGallery(card) {
   const galleryRect = galleryScroll.getBoundingClientRect();
   const cardRect = card.getBoundingClientRect();
 
+  if (isMobileIndex()) {
+    const visibleTop = Math.max(cardRect.top, galleryRect.top);
+    const visibleBottom = Math.min(cardRect.bottom, galleryRect.bottom);
+    const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+
+    if (cardRect.height === 0) return 0;
+
+    return visibleHeight / cardRect.height;
+  }
+
   const visibleLeft = Math.max(cardRect.left, galleryRect.left);
   const visibleRight = Math.min(cardRect.right, galleryRect.right);
-
   const visibleWidth = Math.max(0, visibleRight - visibleLeft);
 
   if (cardRect.width === 0) return 0;
@@ -412,6 +568,23 @@ function scrollToFirstActiveCardIfNeeded() {
   });
 
   if (hasActiveCardVisibleEnough) return;
+
+  if (isMobileIndex()) {
+    const galleryRect = galleryScroll.getBoundingClientRect();
+
+    const firstActiveCard = activeCards.reduce((first, card) => {
+      return card.offsetTop < first.offsetTop ? card : first;
+    }, activeCards[0]);
+
+    const targetScrollTop = Math.max(firstActiveCard.offsetTop - 10, 0);
+
+    galleryScroll.scrollTo({
+      top: targetScrollTop,
+      behavior: 'smooth'
+    });
+
+    return;
+  }
 
   const firstActiveCard = activeCards.reduce((first, card) => {
     return card.offsetLeft < first.offsetLeft ? card : first;
@@ -765,6 +938,7 @@ document.querySelectorAll('.filter-link').forEach(btn => {
     }
 
     updateDisabledFilterRows();
+    renderMobileActiveFilters();
     scheduleScrollToFirstActiveCardIfNeeded();
   });
 });

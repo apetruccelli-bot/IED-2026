@@ -1297,3 +1297,225 @@ button {
     display: none;
   }
 }
+
+
+/* ─────────────────────────────
+   INDEX MOBILE
+───────────────────────────── */
+
+.mobile-active-filters {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  body {
+    overflow: hidden;
+  }
+
+  .two-rows-grid {
+    grid-template-rows: auto minmax(0, 1fr);
+    height: 100vh;
+  }
+
+  .top-home {
+    position: relative;
+    z-index: 20;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    align-items: start;
+    gap: 10px;
+
+    padding: 10px;
+    background: var(--myBlack);
+    overflow: visible;
+  }
+
+  .top-home .intro-panel {
+    grid-column: 1;
+    grid-row: 1;
+
+    width: 165px;
+    min-width: 165px;
+    max-width: 165px;
+    margin: 0;
+  }
+
+  .top-home .home-title {
+    width: 165px;
+    max-width: 165px;
+    white-space: normal;
+    line-height: 0.95;
+  }
+
+  .top-home .box {
+    display: none;
+  }
+
+  .home-nav {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+
+    width: auto;
+    margin: 0;
+    padding: 0;
+
+    z-index: 50;
+    white-space: nowrap;
+  }
+
+  /* Contenitore dei filtri sotto al titolo */
+  .filters-panel {
+    grid-column: 1;
+    grid-row: 2;
+
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    margin: 0;
+    overflow: visible;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+
+    column-gap: 12px;
+    row-gap: 6px;
+  }
+
+  /* Prima riga: categorie */
+  .filters-nav {
+    flex: 0 0 100%;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: baseline;
+
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 0;
+
+    overflow: visible;
+    white-space: nowrap;
+  }
+
+  .filter-link {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+
+  /* Seconda riga: Causes / Year / Country / Tags / People / Victims */
+  .filter-row {
+    flex: 0 0 auto;
+
+    display: block;
+    width: auto;
+    margin: 0;
+    padding: 0;
+
+    white-space: nowrap;
+  }
+
+  .filter-label {
+    display: inline-block;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+
+  .filter-row-inside {
+    display: none;
+  }
+
+  /* Menu aperto del filtro */
+  .filter-row.mobile-open {
+    flex: 0 0 100%;
+
+    display: block;
+    width: 100%;
+    margin: 4px 0 0 0;
+    white-space: normal;
+  }
+
+  .filter-row.mobile-open .filter-label {
+    display: inline-block;
+    margin-bottom: 6px;
+    font-weight: 800;
+  }
+
+  .filter-row.mobile-open .filter-row-inside {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    width: 100%;
+    max-height: 120px;
+    overflow-y: auto;
+    padding-bottom: 4px;
+  }
+
+  .mobile-active-filters {
+    grid-column: 1;
+    grid-row: 3;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+
+    min-height: 0;
+    margin-top: 0;
+    white-space: normal;
+  }
+
+  .mobile-active-filter-chip {
+    background: var(--myWhite);
+    color: var(--myBlack);
+    padding: 2px 4px;
+    font-size: 10px;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .gallery-scroll {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px;
+    background: var(--myBlack);
+  }
+
+  .archive-gallery {
+    display: block;
+    height: auto;
+    padding-top: 0;
+  }
+
+  .archive-gallery > .archive-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: auto;
+  }
+
+  .card {
+    width: 100%;
+    height: auto;
+    flex: none;
+  }
+
+  .card-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+}
