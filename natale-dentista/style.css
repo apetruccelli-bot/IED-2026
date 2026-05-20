@@ -495,17 +495,16 @@ button {
 .about-thumb-rail {
   position: fixed;
   right: 10px;
-  top: 75px;
-  bottom: 75px;
+  top: 10px; /* anchor to top-right */
+  bottom: auto;
   width: calc(var(--thumb-rail-w) - 18px);
   z-index: 240; /* slightly above grid but below title */
   display: flex;
   flex-direction: column;
-  /* distribute thumbs evenly along the rail and keep them close */
-  justify-content: space-between;
-  gap: 12px;
   align-items: flex-start;
-  padding: 8px 6px;
+  gap: 6px; /* smaller gap between thumbnails */
+  padding: 6px 6px;
+  max-height: calc(100vh - 20px);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -571,7 +570,7 @@ button {
 .left-panel .tag-btn,
 .left-panel .macro-btn {
   display: inline-block;
-  margin: 6px 8px 6px 0;
+  margin: 4px 8px 4px 0; /* slightly increased horizontal spacing */
   color: rgba(228,228,228,0.9);
   background: transparent;
 }
@@ -585,17 +584,17 @@ button {
 .categories-list {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* reduced to make the list more compact */
+  gap: 6px; /* tightened vertical gap between category sections */
 }
 .categories-list .cat-section {
   margin: 0;
-  padding: 4px 0; /* even tighter vertical padding */
+  padding: 2px 0; /* tighter vertical padding */
 }
 .categories-list .cat-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 6px; /* tighter spacing under title */
+  margin-bottom: 4px; /* reduced spacing under title */
   cursor: pointer;
 }
 
@@ -610,11 +609,11 @@ button {
   color: rgba(228,228,228,0.9);
 }
 .categories-list .cat-list .tag-btn {
-  margin: 3px 6px 4px 0; /* tightened more */
+  margin: 2px 10px 2px 0; /* slightly larger horizontal gap between subcategory tags */
   padding: 0;
   background: transparent;
   color: rgba(228,228,228,0.85);
-  font-size: 13px;
+  font-size: 12px; /* slight reduction for compactness */
 }
 .categories-list .cat-list .tag-btn.dimmed {
   opacity: 0.5;
