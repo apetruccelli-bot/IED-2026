@@ -363,7 +363,7 @@ function render() {
     });
     body.appendChild(tagsEl);
 
-    EventListener('click', () => {
+    card.addEventListener('click', () => {
   // funziona solo nella categoria Portraits / fotografie
   if (activeCategory !== "fotografie") return;
 
