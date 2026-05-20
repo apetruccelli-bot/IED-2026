@@ -14,6 +14,44 @@ radiografiaImg.onload = () => { radiografiaLoaded = true; };
 radiografiaImg.onerror = (e) => { console.error('Failed to load radiograph image:', radiografiaImg.src, e); };
 // DOM overlay element (placed above the video/canvas)
 let radiographOverlayEl = null;
+let overlayDebugEl = null;
+
+function ensureOverlayDebug() {
+    if (overlayDebugEl) return overlayDebugEl;
+    try {
+        const d = document.createElement('div');
+        d.id = 'overlayDebug';
+        d.style.position = 'fixed';
+        d.style.right = '18px';
+        d.style.bottom = '18px';
+        d.style.padding = '8px 10px';
+        d.style.background = 'rgba(0,0,0,0.6)';
+        d.style.color = '#fff';
+        d.style.fontFamily = 'monospace';
+        d.style.fontSize = '12px';
+        d.style.zIndex = '9999';
+        d.style.border = '1px solid rgba(255,255,255,0.06)';
+        d.style.borderRadius = '6px';
+        d.textContent = '';
+        document.body.appendChild(d);
+        overlayDebugEl = d;
+        return overlayDebugEl;
+    } catch (e) {
+        return null;
+    }
+}
+
+function showOverlayDebug(msg) {
+    try {
+        const el = ensureOverlayDebug();
+        if (!el) return;
+        el.textContent = msg;
+        // fade effect
+        el.style.opacity = '1';
+        clearTimeout(el._hideTimer);
+        el._hideTimer = setTimeout(() => { try { el.style.opacity = '0.85'; } catch (e) {} }, 2400);
+    } catch (e) {}
+}
 
 function ensureRadiographOverlay() {
     if (radiographOverlayEl) return radiographOverlayEl;
@@ -36,6 +74,8 @@ function ensureRadiographOverlay() {
         img.style.display = 'none';
         frame.appendChild(img);
         radiographOverlayEl = img;
+    console.log('Created radiograph overlay element, initial src=', img.src);
+    showOverlayDebug('Overlay created');
         return radiographOverlayEl;
     } catch (e) {
         return null;
@@ -74,7 +114,9 @@ function setStatus(msg) {
 let handModel = null;
 let hands = [];
 let handDetector = null;
-const PREVIEW_IS_MIRRORED = true;
+// Separate mirroring flags: face tracking should not be mirrored, but keep hand mirroring
+const MIRROR_FACE = false;
+const MIRROR_HAND = true;
 
 // MediaPipe handedness is from camera perspective; swap for selfie-view UI labels.
 function normalizeHandednessLabel(label) {
@@ -84,12 +126,13 @@ function normalizeHandednessLabel(label) {
 }
 
 function mirrorPointX(point) {
-    if (!PREVIEW_IS_MIRRORED || !point) return point;
-    return { ...point, x: canvas.width - point.x };
+    if (!point) return point;
+    // Mirror horizontally around the canvas center
+    return { ...point, x: (typeof canvas !== 'undefined' && canvas.width) ? (canvas.width - point.x) : point.x };
 }
 
-function mirrorKeypointsX(keypoints) {
-    if (!PREVIEW_IS_MIRRORED || !Array.isArray(keypoints)) return keypoints;
+function mirrorKeypointsX(keypoints, mirror = MIRROR_HAND) {
+    if (!mirror || !Array.isArray(keypoints)) return keypoints;
     return keypoints.map(mirrorPointX);
 }
 
@@ -358,9 +401,7 @@ function drawHandLandmarks(keypoints, color) {
     const rawFaces = await detector.estimateFaces(video, {
          flipHorizontal: false
      });
-    const faces = PREVIEW_IS_MIRRORED
-        ? rawFaces.map(face => ({ ...face, keypoints: mirrorKeypointsX(face.keypoints) }))
-        : rawFaces;
+    const faces = rawFaces.map(face => ({ ...face, keypoints: mirrorKeypointsX(face.keypoints, MIRROR_FACE) }));
 
     // detect hands: prefer the newer handDetector (MediaPipe Hands) if available
     hands = [];
@@ -369,7 +410,7 @@ function drawHandLandmarks(keypoints, color) {
             const raw = await handDetector.estimateHands(video, { flipHorizontal: false });
             // normalize to { keypoints: [{x,y,z}], handedness, score }
             hands = raw.map(h => {
-                const kps = mirrorKeypointsX((h.keypoints || h.landmarks || []).map(p => ({ x: p.x, y: p.y, z: p.z || 0 })));
+                const kps = mirrorKeypointsX((h.keypoints || h.landmarks || []).map(p => ({ x: p.x, y: p.y, z: p.z || 0 })), MIRROR_HAND);
                 const rawLabel = (h.handedness && h.handedness[0] && h.handedness[0].label) || h.handedness || (h.handednessLabel || 'Unknown');
                 return { keypoints: kps, handedness: normalizeHandednessLabel(rawLabel), score: h.score || (h.handInViewConfidence || 1) };
             });
@@ -382,13 +423,19 @@ function drawHandLandmarks(keypoints, color) {
             const raw = await handModel.estimateHands(video, true);
             // handpose returns objects with landmarks: array of [x,y,z] and annotations
             hands = raw.map(h => {
-                const kps = mirrorKeypointsX((h.landmarks || []).map(p => ({ x: p[0], y: p[1], z: p[2] || 0 })));
+                const kps = mirrorKeypointsX((h.landmarks || []).map(p => ({ x: p[0], y: p[1], z: p[2] || 0 })), MIRROR_HAND);
                 return { keypoints: kps, annotations: h.annotations || {}, handedness: normalizeHandednessLabel(h.handedness || 'Unknown'), score: h.score || 1 };
             });
         } catch (e) {
             hands = [];
         }
     }
+
+    // Show quick debug counts for faces and hands
+    try {
+        showOverlayDebug(`Faces: ${faces.length}  Hands: ${hands.length}`);
+        console.debug('Detection counts', { faces: faces.length, hands: hands.length });
+    } catch (e) {}
 
     // Reset any canvas transform and clear canvas to avoid mirrored drawings
     try {
@@ -399,26 +446,7 @@ function drawHandLandmarks(keypoints, color) {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // If any detected face is smiling, show the radiograph overlay element above the stream
-    try {
-        if (typeof window !== 'undefined') console.debug && console.debug('radiografiaLoaded=', radiografiaLoaded);
-        const smilingFace = faces && faces.some(f => isSmiling(f.keypoints));
-        const overlay = ensureRadiographOverlay();
-        if (smilingFace && radiografiaLoaded && overlay) {
-            // show overlay (fade in)
-            overlay.style.display = 'block';
-            // ensure reflow before changing opacity
-            void overlay.offsetWidth;
-            overlay.style.opacity = '0.98';
-        } else if (overlay) {
-            // hide overlay (fade out)
-            overlay.style.opacity = '0';
-            // after transition, set display none
-            setTimeout(() => { if (overlay && overlay.style.opacity === '0') overlay.style.display = 'none'; }, 240);
-        }
-    } catch (e) {
-        // ignore detection-time overlay errors
-    }
+    // (overlay handling moved later so cheek-trigger and hand logic can decide the source)
 
       // Draw each face with different color
      let infoHTML = "";
@@ -428,9 +456,45 @@ function drawHandLandmarks(keypoints, color) {
 
          faces.forEach((face, index) => {
              const color = faceColors[index % faceColors.length];
-             
-            // Tracking visuals hidden (bounding box and landmarks removed)
-            
+
+            // Draw face landmarks and bounding box so user sees tracking
+            try {
+                drawFaceLandmarks(face.keypoints, color);
+                drawBoundingBox(face.keypoints, color);
+            } catch (e) {
+                // ignore drawing errors
+            }
+
+            // Draw a persistent cheek hotspot to guide the user where to point
+            try {
+                const faceXs = face.keypoints.map(p => p.x);
+                const faceYs = face.keypoints.map(p => p.y);
+                const faceMinX = Math.min(...faceXs);
+                const faceMaxX = Math.max(...faceXs);
+                const faceMinY = Math.min(...faceYs);
+                const faceMaxY = Math.max(...faceYs);
+
+                // estimate left cheek position (using mesh index 234 when available)
+                const leftCheek = face.keypoints[234] || face.keypoints[61];
+                const leftCheekX = leftCheek ? leftCheek.x : (faceMinX + (faceMaxX - faceMinX) * 0.25);
+                const leftCheekY = (face.keypoints[10] && face.keypoints[10].y) ? face.keypoints[10].y : (faceMinY + (faceMaxY - faceMinY) * 0.44);
+                const guideW = Math.max(28, (faceMaxX - faceMinX) * 0.22);
+                const guideH = Math.max(24, (faceMaxY - faceMinY) * 0.18);
+
+                ctx.save();
+                ctx.globalAlpha = 0.12;
+                ctx.fillStyle = 'rgba(40,160,220,0.95)';
+                ctx.beginPath();
+                ctx.ellipse(leftCheekX, leftCheekY, guideW/2, guideH/2, 0, 0, Math.PI*2);
+                ctx.fill();
+                ctx.restore();
+
+                // label
+                ctx.fillStyle = 'rgba(220,220,220,0.9)';
+                ctx.font = '14px monospace';
+                ctx.fillText('Point here', leftCheekX - guideW/2 + 6, leftCheekY - guideH/2 - 8);
+            } catch (e) {}
+
             // MOUTH DETECTION: check if mouth is open, compute overlay and map finger interactions
             const mouthOpen = isMouthOpen(face.keypoints);
             if (mouthOpen) {
@@ -522,6 +586,84 @@ function drawHandLandmarks(keypoints, color) {
         });
     }
 
+    // --- Cheek detection: if the index finger touches the cheek region, show Asx1 overlay ---
+    try {
+        const overlay = ensureRadiographOverlay();
+        if (hands && hands.length > 0 && faces && faces.length > 0 && overlay) {
+            // take first hand and first face for simplicity
+            const h = hands[0];
+            const f = faces[0];
+            const tip = h.keypoints && h.keypoints[8];
+            if (tip && f && f.keypoints) {
+                // Cheek box: approximate using face contour and cheek-relative positions
+                // Use a larger relative box to make it easier to trigger on varied cameras
+                const faceXs = f.keypoints.map(p => p.x);
+                const faceYs = f.keypoints.map(p => p.y);
+                const faceMinX = Math.min(...faceXs);
+                const faceMaxX = Math.max(...faceXs);
+                const faceMinY = Math.min(...faceYs);
+                const faceMaxY = Math.max(...faceYs);
+
+                const leftCheekX = f.keypoints[234] ? f.keypoints[234].x : (f.keypoints[61] ? f.keypoints[61].x - (faceMaxX - faceMinX) * 0.12 : null);
+                const leftCheekY = f.keypoints[10] ? f.keypoints[10].y : (f.keypoints[13] ? f.keypoints[13].y - (faceMaxY - faceMinY) * 0.08 : null);
+                const cheekW = 0.28 * (faceMaxX - faceMinX);
+                const cheekH = 0.28 * (faceMaxY - faceMinY);
+
+                if (leftCheekX != null && leftCheekY != null) {
+                    const inCheek = (tip.x >= leftCheekX - cheekW/2 && tip.x <= leftCheekX + cheekW/2 && tip.y >= leftCheekY - cheekH/2 && tip.y <= leftCheekY + cheekH/2);
+
+                    // draw debug hotspot so the user can see where to point (briefly)
+                    ctx.save();
+                    ctx.globalAlpha = 0.18;
+                    ctx.fillStyle = 'rgba(200,200,240,0.9)';
+                    ctx.beginPath();
+                    ctx.ellipse(leftCheekX, leftCheekY, cheekW/2, cheekH/2, 0, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.restore();
+
+                    console.debug('Tip', tip.x.toFixed(1), tip.y.toFixed(1), 'CheekBox', leftCheekX.toFixed(1), leftCheekY.toFixed(1), cheekW.toFixed(1), cheekH.toFixed(1), 'inCheek=', inCheek);
+
+                    if (inCheek) {
+                        // show Asx1 radiograph specifically
+                        console.log('Cheek hit detected — showing interazione/radiografia_Asx1.jpg');
+                        showOverlayDebug('Cheek hit → Asx1');
+                        overlay.src = 'interazione/radiografia_Asx1.jpg';
+                        overlay.style.display = 'block';
+                        void overlay.offsetWidth;
+                        overlay.style.opacity = '0.98';
+                    }
+                }
+            }
+        }
+    } catch (e) {
+        console.warn('Cheek detection failed', e && e.message);
+    }
+
+    // Show base radiograph when smiling (if no other specific overlay shown)
+    try {
+        const overlay = ensureRadiographOverlay();
+        const smilingFace = faces && faces.some(f => isSmiling(f.keypoints));
+        if (overlay && radiografiaLoaded) {
+            // If overlay currently shows a cheek-specific image, don't override
+            const showingAsx1 = overlay.src && overlay.src.indexOf('radiografia_Asx1.jpg') !== -1;
+            if (smilingFace && !showingAsx1) {
+                console.log('Smiling detected — showing base radiograph', radiografiaImg.src);
+                showOverlayDebug('Smile → base radiograph');
+                overlay.src = radiografiaImg.src;
+                overlay.style.display = 'block';
+                void overlay.offsetWidth;
+                overlay.style.opacity = '0.98';
+            } else if (!smilingFace && !showingAsx1) {
+                console.log('No smile — hiding overlay (if showing base)');
+                showOverlayDebug('No smile → hide overlay');
+                overlay.style.opacity = '0';
+                setTimeout(() => { if (overlay && overlay.style.opacity === '0') overlay.style.display = 'none'; }, 240);
+            }
+        }
+    } catch (e) {
+        // ignore
+    }
+
      // Continue detection loop
      if (isDetecting) {
          requestAnimationFrame(detectFaces);
@@ -540,6 +682,25 @@ if (toggleNumbers) {
 
  // Load model when page loads
  loadModel();
+
+// Debug: allow clicking the canvas to force Asx1 overlay (useful when hand model isn't detecting)
+try {
+    const overlay = ensureRadiographOverlay();
+    if (canvas) {
+        canvas.addEventListener('click', (ev) => {
+            try {
+                if (overlay) {
+                    console.log('Canvas click — forcing Asx1');
+                    showOverlayDebug('Canvas → Asx1');
+                    overlay.src = 'interazione/radiografia_Asx1.jpg';
+                    overlay.style.display = 'block';
+                    void overlay.offsetWidth;
+                    overlay.style.opacity = '0.98';
+                }
+            } catch (e) { console.warn('Canvas click force failed', e && e.message); }
+        });
+    }
+} catch (e) {}
 
  function drawXrayMouth(face) {
     const left = face[61];
