@@ -533,7 +533,14 @@ function getCardVisibilityRatioInGallery(card) {
   const cardRect = card.getBoundingClientRect();
 
   if (isMobileIndex()) {
-    const visibleTop = Math.max(cardRect.top, galleryRect.top);
+    const topHome = document.querySelector('.top-home');
+    const topHomeRect = topHome ? topHome.getBoundingClientRect() : null;
+
+    const safeTop = topHomeRect
+      ? Math.max(galleryRect.top, topHomeRect.bottom)
+      : galleryRect.top;
+
+    const visibleTop = Math.max(cardRect.top, safeTop);
     const visibleBottom = Math.min(cardRect.bottom, galleryRect.bottom);
     const visibleHeight = Math.max(0, visibleBottom - visibleTop);
 
@@ -570,13 +577,16 @@ function scrollToFirstActiveCardIfNeeded() {
   if (hasActiveCardVisibleEnough) return;
 
   if (isMobileIndex()) {
-    const galleryRect = galleryScroll.getBoundingClientRect();
-
     const firstActiveCard = activeCards.reduce((first, card) => {
       return card.offsetTop < first.offsetTop ? card : first;
     }, activeCards[0]);
 
-    const targetScrollTop = Math.max(firstActiveCard.offsetTop - 10, 0);
+    const mobileTopGap = 230;
+
+    const targetScrollTop = Math.max(
+      firstActiveCard.offsetTop - mobileTopGap,
+      0
+    );
 
     galleryScroll.scrollTo({
       top: targetScrollTop,
