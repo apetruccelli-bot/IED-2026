@@ -149,9 +149,10 @@
 
       .image-frame {
         width: 100%;
-        max-width: 590px;
+        max-width: 450px;
         aspect-ratio: 1 / 1;
         position: relative;
+        transform: translateX(40px);
       }
 
       .history-image {
@@ -173,6 +174,7 @@
         font-size: 26px;
         line-height: 0.97;
         letter-spacing: 0.01em;
+        transform: translateX(-60px);
       }
 
       .story-part {
@@ -352,29 +354,42 @@
 
         const listRect = cityList.getBoundingClientRect();
         const titleRect = headerTitle.getBoundingClientRect();
+
+        // bordo destro dei trattini, allineato al titolo
         const dashRight = titleRect.right - listRect.left;
 
         cityItems.forEach((item) => {
           const dash = item.querySelector('.city-dash');
           if (!dash) return;
-          const dashWidth = dash.getBoundingClientRect().width;
-          dash.style.left = `${dashRight - dashWidth}px`;
+
+          const dashWidth = dash.offsetWidth;
+          const dashLeft = dashRight - dashWidth;
+
+          dash.style.left = `${dashLeft}px`;
         });
+         if (dot) {
+          const dashWidth = 21; // stessa width di .city-dash
+          const dotX = dashRight - dashWidth / 2;
 
-        if (dot) {
-          fixedDotX = dashRight;
-          dot.style.left = `${fixedDotX}px`;
-        }
+          dot.style.left = `${dotX}px`;
+        } 
       }
-
+      
+      
       function moveDotToStop(stop) {
         if (!stop || !dot || !cityList) return;
 
         const listRect = cityList.getBoundingClientRect();
         const stopRect = stop.getBoundingClientRect();
-        const dotRect = dot.getBoundingClientRect();
 
-        const y = stopRect.top - listRect.top + stopRect.height / 2 - dotRect.height / 2;
+        const dotHeight = dot.offsetHeight;
+
+        const y =
+          stopRect.top -
+          listRect.top +
+          stopRect.height / 2 -
+          dotHeight / 2;
+
         dot.style.transform = `translate(-50%, ${y}px)`;
       }
 
@@ -391,10 +406,15 @@
 
         if (currentStop && currentStop.classList && currentStop.classList.contains("city-item")) {
           currentStop.classList.add("active");
+
           if (currentStop.id === 'city-barletta' || currentStop.id === 'city-bari') {
             currentStop.classList.add('font-myTitle');
           }
         }
+
+        requestAnimationFrame(() => {
+          moveDotToStop(currentStop);
+        });
 
         // move the dot after applying the active state so it centers on the final city text position
         moveDotToStop(currentStop);

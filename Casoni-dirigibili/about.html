@@ -16,17 +16,20 @@
     </style>
   </head>
   <body>
-   <div class="w-screen h-screen grid grid-rows-[auto_1fr_auto] bg-myBlack text-myWhite">
-      <div class="p-10px flex flex-row justify-between items-start gap-20px">
-        <div class="flex flex-col">
-          <div class="flex flex-row items-baseline gap-287">
-            <a href="./" class="font-myTitle">AAA — Adler’s Airship Archive</a>
-            <a href="./about.html" class="font-myTitle">About</a>
-          </div>
+   <div class="about-page w-screen h-screen grid grid-rows-[auto_1fr_auto] bg-myBlack text-myWhite">
+     <div class="about-header p-10px flex flex-row items-baseline gap-20px">
+        <div class="intro-panel flex flex-col">
+          <a href="./" class="font-myTitle home-title">
+            AAA — Adler’s Airship Archive
+          </a>
         </div>
+
+        <a href="./about.html" class="font-myTitle about-top-link">
+          About
+        </a>
       </div>
-      <div class="grid min-h-0 grid-cols-2 gap-0 overflow-hidden bg-myBlack">
-        <div class="flex h-full items-center justify-left p-10px text-left">
+      <div class="about-main grid min-h-0 grid-cols-2 gap-0 overflow-hidden bg-myBlack">
+        <div class="about-text-panel flex h-full items-center justify-left p-10px text-left">
           <div class="box2 max-w-[44rem]">
             <p class="mb-20">
               In 1920, following the end of the First World War, many military departments and industrial companies were forced to redefine their roles and redirect their work toward new fields of research and development.
@@ -53,12 +56,12 @@
             </p>
           </div>
         </div>
-        <div class="flex h-full items-center justify-center overflow-hidden p-10px" style="flex-direction:column;">
+        <div class="about-image-panel flex h-full items-center justify-center overflow-hidden p-10px" style="flex-direction:column;">
           <img src="img/dirigibili/dirigibile (2).png" alt="dirigibile 2" class="right-column-img max-h-full max-w-full object-contain">
           <p class="right-column-caption"></p>
         </div>
       </div>
-      <div class="gallery-scroll-about bg-myBlack">
+      <div class="about-gallery-side gallery-scroll-about bg-myBlack">
         <div class="horizontal-scroll h-full items-center">
           <img src="img/dirigibili/dirigibile (2).png" alt="dirigibile 2" class="scroll-img" data-id="2">
           <img src="img/dirigibili/dirigibile (3).png" alt="dirigibile 3" class="scroll-img" data-id="3">
@@ -86,11 +89,19 @@
     <script>
       // Handle horizontal scroll with mouse wheel
       const horizontalScrollContainer = document.querySelector('.horizontal-scroll');
+
       if (horizontalScrollContainer) {
         horizontalScrollContainer.addEventListener('wheel', (e) => {
+          const isVerticalGallery = window.matchMedia('(max-width: 900px)').matches;
+
           e.preventDefault();
-          const scrollAmount = 80;
-          horizontalScrollContainer.scrollLeft += e.deltaY > 0 ? scrollAmount : -scrollAmount;
+
+          if (isVerticalGallery) {
+            horizontalScrollContainer.scrollTop += e.deltaY;
+          } else {
+            const scrollAmount = 80;
+            horizontalScrollContainer.scrollLeft += e.deltaY > 0 ? scrollAmount : -scrollAmount;
+          }
         });
       }
 
@@ -179,10 +190,15 @@
           let isResetting = false;
           horizontalScrollContainer.addEventListener('scroll', () => {
             if (isResetting) return;
-            
+
+            const isVerticalGallery = window.matchMedia('(max-width: 900px)').matches;
+
+            if (isVerticalGallery) {
+              return;
+            }
+
             const scrollLeft = horizontalScrollContainer.scrollLeft;
-            
-            // Reset when we've scrolled through the original content
+
             if (scrollLeft > originalWidth) {
               isResetting = true;
               horizontalScrollContainer.scrollLeft = scrollLeft - originalWidth;
