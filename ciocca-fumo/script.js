@@ -340,32 +340,48 @@ function render() {
     const body = document.createElement('div');
     body.className = 'card-body';
 
-    // id
-    const idEl = document.createElement('span');
-    idEl.className = 'card-id';
-    idEl.textContent = `#${String(item.id).padStart(2, '0')}`;
-    body.appendChild(idEl);
+   if (item.category === "pacchetti") {
+  body.innerHTML = `
+    <p class="card-desc">
+      ${item.description}
+    </p>
 
-    const desc = document.createElement('p');
-    desc.className = 'card-desc';
-    desc.textContent = item.description;
+    <div class="card-tags card-tags-info">
+      <span>色 Color</span>
+      <span>${item["tags-pacchetti"]?.join(" ") || ""}</span>
 
-    // body.appendChild(desc);
+      <span>産地 Origin</span>
+      <span>${item["luogo-pacchetti"] || ""} ${item["paese-pacchetti"] || ""}</span>
 
-    const tagsEl = document.createElement('div');
-    tagsEl.className = 'card-tags';
-    item.tags.forEach(tag => {
-      const t = document.createElement('span');
-      t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
-      t.textContent = tag;
-      t.addEventListener('click', e => { e.stopPropagation(); toggleTag(tag); });
-      tagsEl.appendChild(t);
+      <span>年 Year</span>
+      <span>${item.year}年</span>
+    </div>
+  `;
+} else {
+  const idEl = document.createElement('span');
+  idEl.className = 'card-id';
+  idEl.textContent = `#${String(item.id).padStart(2, '0')}`;
+  body.appendChild(idEl);
+
+  const tagsEl = document.createElement('div');
+  tagsEl.className = 'card-tags';
+
+  item.tags.forEach(tag => {
+    const t = document.createElement('span');
+    t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
+    t.textContent = tag;
+    t.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleTag(tag);
     });
-    body.appendChild(tagsEl);
+    tagsEl.appendChild(t);
+  });
 
-    card.addEventListener('click', () => {
-  // funziona solo nella categoria Portraits / fotografie
-  if (activeCategory !== "fotografie") return;
+  body.appendChild(tagsEl);
+}
+
+card.addEventListener('click', () => {
+  if (activeCategory !== "fotografie" && activeCategory !== "pacchetti") return;
 
   const alreadyActive = card.classList.contains("selectedImg");
 
