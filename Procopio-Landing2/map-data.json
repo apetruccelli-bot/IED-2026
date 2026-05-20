@@ -1,0 +1,144 @@
+{
+  "items": [
+    {
+      "id": 2,
+      "src": "img/persone/persone (9).jpg",
+      "label": "Serra Vasta",
+      "coordinates": [16.18, 38.55],
+      "description": "Serra Vasta, 1982, Franco Lamberti"
+    },
+    {
+      "id": 3,
+      "src": "img/architettura/architettura (29).jpg",
+      "label": "Valle Cupa",
+      "coordinates": [16.48, 39.30],
+      "description": "Valle Cupa, 1974, Lorenzo Fiore"
+    },
+    {
+      "id": 4,
+      "src": "img/architettura/architettura (28).jpg",
+      "label": "Vallefredda",
+      "coordinates": [14.77, 40.72],
+      "description": "Vallefredda, 1978, Stefano Conti"
+    },
+    {
+      "id": 5,
+      "src": "img/persone/persone (12).jpg",
+      "label": "Zagara",
+      "coordinates": [16.57, 38.91],
+      "description": "Zagara, 1970, Pietro Scorza"
+    },
+    {
+      "id": 6,
+      "src": "img/architettura/architettura (27).jpg",
+      "label": "Fonte Secca",
+      "coordinates": [16.82, 40.64],
+      "description": "Fonte Secca, 1981, Alberto Neri"
+    },
+    {
+      "id": 7,
+      "src": "img/architettura/architettura (33).jpg",
+      "label": "Colle Ombra",
+      "coordinates": [14.89, 37.69],
+      "description": "Colle Ombra, 1973, Davide Ferri"
+    },
+    {
+      "id": 8,
+      "src": "img/persone/persone (2).jpg",
+      "label": "Monteferro",
+      "coordinates": [16.24, 40.47],
+      "description": "Monteferro, 1971, Carlo De Santis"
+    },
+    {
+      "id": 11,
+      "src": "img/persone/persone (16).jpg",
+      "label": "San Velio",
+      "coordinates": [16.33, 39.21],
+      "description": "San Velio, 1980, Roberto Gatti"
+    },
+    {
+      "id": 12,
+      "src": "img/architettura/architettura (9).jpg",
+      "label": "Borgo Cupo",
+      "coordinates": [17.94, 40.64],
+      "description": "Borgo Cupo, 1975, Simone De Luca"
+    },
+    {
+      "id": 13,
+      "src": "img/architettura/architettura (4).jpg",
+      "label": "Rocca Secca",
+      "coordinates": [15.54, 40.41],
+      "description": "Rocca Secca, 1964, Emilio Varani"
+    },
+    {
+      "id": 14,
+      "src": "img/architettura/architettura (5).jpg",
+      "label": "Fonte Chiusa",
+      "coordinates": [16.45, 38.67],
+      "description": "Fonte Chiusa, 1979, Michele Orsini"
+    },
+    {
+      "id": 15,
+      "src": "img/architettura/architettura (18).jpg",
+      "label": "Riva Spenta",
+      "coordinates": [13.36, 38.12],
+      "description": "Riva Spenta, 1972, Luca Biagini"
+    },
+    {
+      "id": 16,
+      "src": "img/persone/persone (22).jpg",
+      "label": "Santa Rena",
+      "coordinates": [16.11, 39.67],
+      "description": "Santa Rena, 1968, Giulio Maffei"
+    },
+    {
+      "id": 17,
+      "src": "img/architettura/architettura (25).jpg",
+      "label": "Castel Ruvo",
+      "coordinates": [16.54, 41.12],
+      "description": "Castel Ruvo, 1983, Marco Leoni"
+    },
+    {
+      "id": 18,
+      "src": "img/persone/persone (4).jpg",
+      "label": "Costa Nera",
+      "coordinates": [15.75, 38.26],
+      "description": "Costa Nera, 1967, Paolo Rizzi"
+    },
+    {
+      "id": 19,
+      "src": "img/persone/persone (18).jpg",
+      "label": "Borgo Salso",
+      "coordinates": [18.05, 40.29],
+      "description": "Borgo Salso, 1985, Enrico Bellini"
+    },
+    {
+      "id": 21,
+      "src": "img/persone/persone (6).jpg",
+      "label": "Poggio Nero",
+      "coordinates": [15.92, 40.03],
+      "description": "Poggio Nero, 1969, Claudio Marchetti"
+    },
+    {
+      "id": 23,
+      "src": "img/architettura/architettura (3).jpg",
+      "label": "Pietra Lenta",
+      "coordinates": [16.73, 39.58],
+      "description": "Pietra Lenta, 1976, Andrea Colonna"
+    },
+    {
+      "id": 24,
+      "src": "img/architettura/architettura (10).jpg",
+      "label": "Piana Morta",
+      "coordinates": [16.91, 40.47],
+      "description": "Piana Morta, 1966, Antonio Greco"
+    },
+    {
+      "id": 25,
+      "src": "img/architettura/architettura (22).jpg",
+      "label": "Serra Antica",
+      "coordinates": [14.98, 40.81],
+      "description": "Serra Antica, 1986, Giorgio Vitale"
+    }
+  ]
+}

@@ -747,16 +747,20 @@ button {
   height: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+
+  --landing-text-baseline: 62vh;
 }
 
 .landing-column {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .landing-column span {
+  position: absolute;
+  top: var(--landing-text-baseline);
+  left: 50%;
+  transform: translate(-50%, -100%);
+
   font-family: 'SchengenA Regular', sans-serif;
   font-size: clamp(11px, 1.25vw, 18px);
   line-height: 100%;
@@ -764,8 +768,6 @@ button {
   text-transform: uppercase;
   color: var(--myWhite);
   z-index: 3;
-
-  transform: translateY(clamp(45px, 14vh, 150px));
 }
 
 /* AAA grandi */
@@ -783,8 +785,8 @@ button {
 
 .landing-modal.landing-active .landing-aaa-track {
   animation-name: landing-aaa-scroll-right;
-  animation-duration: 15s;
-  animation-timing-function: linear;
+  animation-duration: 9s;
+  animation-timing-function: cubic-bezier(0.22, 0.02, 0.12, 1);
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
 }
@@ -873,9 +875,20 @@ button {
     grid-template-rows: repeat(3, 1fr);
   }
 
+  .landing-column {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .landing-column span {
-    font-size: clamp(11px, 3.5vw, 16px);
+    position: static;
+    top: auto;
+    left: auto;
     transform: translateY(0);
+
+    font-size: clamp(11px, 3.5vw, 16px);
   }
 
   .landing-aaa {
@@ -1295,5 +1308,217 @@ button {
 
   .about-gallery-side {
     display: none;
+  }
+}
+
+
+/* ─────────────────────────────
+   INDEX MOBILE
+───────────────────────────── */
+
+.mobile-active-filters {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  body {
+    overflow: hidden;
+  }
+
+  .two-rows-grid {
+    grid-template-rows: auto minmax(0, 1fr);
+    height: 100vh;
+  }
+
+  .top-home {
+    position: relative;
+    z-index: 20;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    align-items: start;
+    gap: 10px;
+
+    padding: 10px;
+    background: var(--myBlack);
+    overflow: visible;
+  }
+
+  .top-home .intro-panel {
+    grid-column: 1;
+    grid-row: 1;
+
+    width: 165px;
+    min-width: 165px;
+    max-width: 165px;
+    margin: 0;
+  }
+
+  .top-home .home-title {
+    width: 165px;
+    max-width: 165px;
+    white-space: normal;
+    line-height: 0.95;
+  }
+
+  .top-home .box {
+    display: none;
+  }
+
+  .home-nav {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+
+    width: auto;
+    margin: 0;
+    padding: 0;
+
+    z-index: 50;
+    white-space: nowrap;
+  }
+
+  /* Contenitore filtri sotto al titolo */
+  .top-home .filters-panel {
+    grid-column: 1 / -1;
+    grid-row: 2;
+
+    width: calc(100vw - 20px);
+    max-width: calc(100vw - 20px);
+    min-width: 0;
+    margin: 0;
+
+    display: block;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  /* Prima riga: Airship / Wreckage / Models / Newspapers / Drawings */
+  .top-home .filters-panel .filters-nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    justify-content: flex-start;
+
+    width: 100%;
+    gap: 12px;
+    margin-bottom: 6px;
+
+    overflow: visible;
+    white-space: nowrap;
+  }
+
+  .top-home .filters-panel .filter-link {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+
+  /* Seconda riga: Causes / Year / Country / Tags / People / Victims */
+  .top-home .filters-panel .filter-row {
+    display: inline-block;
+    width: auto;
+    margin: 0 12px 0 0;
+    padding: 0;
+
+    white-space: nowrap;
+    vertical-align: top;
+  }
+
+  .top-home .filters-panel .filter-label {
+    display: inline-block;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+
+  .top-home .filters-panel .filter-row-inside {
+    display: none;
+  }
+
+  /* Menu aperto del filtro */
+  .top-home .filters-panel .filter-row.mobile-open {
+    display: block;
+    width: 100%;
+    margin: 6px 0 0 0;
+    white-space: normal;
+  }
+
+  .top-home .filters-panel .filter-row.mobile-open .filter-label {
+    display: inline-block;
+    margin-bottom: 6px;
+    font-weight: 800;
+  }
+
+  .top-home .filters-panel .filter-row.mobile-open .filter-row-inside {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    width: 100%;
+    max-height: 120px;
+    overflow-y: auto;
+    padding-bottom: 4px;
+  }
+
+  .mobile-active-filters {
+    grid-column: 1;
+    grid-row: 3;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+
+    min-height: 0;
+    margin-top: 0;
+    white-space: normal;
+  }
+
+  .mobile-active-filter-chip {
+    background: var(--myWhite);
+    color: var(--myBlack);
+    padding: 2px 4px;
+    font-size: 10px;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .gallery-scroll {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px;
+    background: var(--myBlack);
+  }
+
+  .archive-gallery {
+    display: block;
+    height: auto;
+    padding-top: 0;
+  }
+
+  .archive-gallery > .archive-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: auto;
+  }
+
+  .card {
+    width: 100%;
+    height: auto;
+    flex: none;
+  }
+
+  .card-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
   }
 }
