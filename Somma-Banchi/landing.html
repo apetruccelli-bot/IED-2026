@@ -345,6 +345,18 @@
     function updateLanding(progress) {
       const scrollProgress = clamp(progress, 0, 1);
 
+      /*
+        Sequenza automatica:
+        1. frase iniziale al centro
+        2. le due righe si separano lateralmente
+        3. appare De Veciariìe al centro
+        4. De Veciariìe sparisce dal centro
+        5. De Veciariìe riappare direttamente in alto a sinistra
+        6. appaiono le immagini
+        7. immagini e titolo si dissolvono
+        8. sfondo chiaro e redirect ad archivio.html
+      */
+
       const introSplitProgress = easeInOutCubic(
         clamp((scrollProgress - 0.06) / 0.22, 0, 1)
       );
@@ -367,28 +379,30 @@
         introText.style.display = "block";
       }
 
-      const titleAppearProgress = clamp((scrollProgress - 0.34) / 0.12, 0, 1);
+      const titleAppearCenterProgress = clamp((scrollProgress - 0.34) / 0.12, 0, 1);
+      const titleFadeCenterProgress = clamp((scrollProgress - 0.48) / 0.08, 0, 1);
 
-      const titleMoveProgress = easeInOutCubic(
-        clamp((scrollProgress - 0.42) / 0.20, 0, 1)
-      );
+      const titleAppearCornerProgress = clamp((scrollProgress - 0.58) / 0.08, 0, 1);
+      const titleFadeCornerProgress = clamp((scrollProgress - 0.76) / 0.16, 0, 1);
 
-      const titleFadeProgress = clamp((scrollProgress - 0.76) / 0.16, 0, 1);
-
-      const titleLeft = lerp(50, 0, titleMoveProgress);
-      const titleTop = lerp(50, 0, titleMoveProgress);
-      const titleX = lerp(-50, 0, titleMoveProgress);
-      const titleY = lerp(-50, 0, titleMoveProgress);
-
-      archiveTitle.style.left = `${titleLeft}%`;
-      archiveTitle.style.top = `${titleTop}%`;
-      archiveTitle.style.transform = `translate(calc(${titleX}% + ${titleMoveProgress * 10}px), calc(${titleY}% + ${titleMoveProgress * 10}px))`;
-      archiveTitle.style.opacity = titleAppearProgress * (1 - titleFadeProgress);
+      if (scrollProgress < 0.56) {
+        archiveTitle.style.left = "50%";
+        archiveTitle.style.top = "50%";
+        archiveTitle.style.transform = "translate(-50%, -50%)";
+        archiveTitle.style.opacity =
+          titleAppearCenterProgress * (1 - titleFadeCenterProgress);
+        archiveTitle.style.display = "block";
+      } else {
+        archiveTitle.style.left = "0";
+        archiveTitle.style.top = "0";
+        archiveTitle.style.transform = "translate(10px, 10px)";
+        archiveTitle.style.opacity =
+          titleAppearCornerProgress * (1 - titleFadeCornerProgress);
+        archiveTitle.style.display = "block";
+      }
 
       if (scrollProgress > 0.90) {
         archiveTitle.style.display = "none";
-      } else {
-        archiveTitle.style.display = "block";
       }
 
       const imageAppearProgress = clamp((scrollProgress - 0.55) / 0.16, 0, 1);
