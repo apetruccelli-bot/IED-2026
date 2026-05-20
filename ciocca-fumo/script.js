@@ -321,6 +321,9 @@ function render() {
     card.style.cursor = 'zoom-in';
     card.dataset.itemYear = item.year;
     if (!activeYear || item.year === activeYear) card.classList.add('activeImg');
+    if (activeCategory === "pubblicità") {
+  setupAdvertisingScrollText();
+}
 
     // image
     // create an image element
@@ -335,18 +338,9 @@ function render() {
     img.loading = 'lazy';
 
     if (item.category === "pubblicità") {
-      const adText = document.createElement('div');
-      adText.className = 'advertising-description';
-      adText.innerHTML = `
-        <p class="advertising-description-ja">
-          ${item["description-ja"] || item.description || ""}
-        </p>
-        <p class="advertising-description-en text-myGrey">
-          ${item["description-en"] || item.description || ""}
-        </p>
-      `;
-      card.appendChild(adText);
-    }
+  card.dataset.adJa = item["description-ja"] || item.description || "";
+  card.dataset.adEn = item["description-en"] || item.description || "";
+}
 
     // append the image to the card
     card.appendChild(img);
@@ -411,6 +405,34 @@ card.addEventListener('click', () => {
     card.classList.add("selectedImg");
   }
 });
+
+function setupAdvertisingScrollText() {
+  const cards = document.querySelectorAll(".myPhotos.layout-pubblicita .card");
+  const japaneseText = document.getElementById("category-japanese-text");
+  const englishText = document.getElementById("category-english-text");
+
+  if (!cards.length || !japaneseText || !englishText) return;
+
+  function updateOnScroll() {
+    let activeCard = cards[0];
+
+    cards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+
+      if (rect.top < window.innerHeight * 0.45) {
+        activeCard = card;
+      }
+
+      card.classList.toggle("ad-past", rect.bottom < window.innerHeight * 0.35);
+    });
+
+    japaneseText.textContent = activeCard.dataset.adJa || "";
+    englishText.textContent = activeCard.dataset.adEn || "";
+  }
+
+  grid.addEventListener("scroll", updateOnScroll);
+  updateOnScroll();
+}
 
 //selectedImg//
 if (!activeYear || item.year === activeYear) card.classList.add('activeImg');

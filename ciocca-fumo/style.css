@@ -285,15 +285,29 @@ button {
 .myPhotos.layout-pubblicita {
   display: flex;
   flex-direction: column;
+  gap: 80px;
 }
+
 .myPhotos.layout-pubblicita .card {
   width: 100%;
+  opacity: 1;
+  transition: opacity 0.4s ease, filter 0.4s ease;
 }
+
+.myPhotos.layout-pubblicita .card.ad-past {
+  opacity: 0.22;
+  filter: blur(1px);
+}
+
 .myPhotos.layout-pubblicita .card-img {
   width: 100%;
   height: auto;
   aspect-ratio: unset;
   object-fit: contain;
+}
+
+.myPhotos.layout-pubblicita .advertising-description {
+  display: none;
 }
 
 /* ── CARD ── */
