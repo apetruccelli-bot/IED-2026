@@ -333,6 +333,21 @@ function render() {
     img.alt = `Item ${item.id}`;
     // set the loading attribute
     img.loading = 'lazy';
+
+    if (item.category === "pubblicità") {
+      const adText = document.createElement('div');
+      adText.className = 'advertising-description';
+      adText.innerHTML = `
+        <p class="advertising-description-ja">
+          ${item["description-ja"] || item.description || ""}
+        </p>
+        <p class="advertising-description-en text-myGrey">
+          ${item["description-en"] || item.description || ""}
+        </p>
+      `;
+      card.appendChild(adText);
+    }
+
     // append the image to the card
     card.appendChild(img);
 
