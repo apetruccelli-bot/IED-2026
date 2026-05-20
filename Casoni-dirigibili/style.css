@@ -747,16 +747,20 @@ button {
   height: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+
+  --landing-text-baseline: 62vh;
 }
 
 .landing-column {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .landing-column span {
+  position: absolute;
+  top: var(--landing-text-baseline);
+  left: 50%;
+  transform: translate(-50%, -100%);
+
   font-family: 'SchengenA Regular', sans-serif;
   font-size: clamp(11px, 1.25vw, 18px);
   line-height: 100%;
@@ -764,8 +768,6 @@ button {
   text-transform: uppercase;
   color: var(--myWhite);
   z-index: 3;
-
-  transform: translateY(clamp(45px, 14vh, 150px));
 }
 
 /* AAA grandi */
@@ -783,8 +785,8 @@ button {
 
 .landing-modal.landing-active .landing-aaa-track {
   animation-name: landing-aaa-scroll-right;
-  animation-duration: 15s;
-  animation-timing-function: linear;
+  animation-duration: 9s;
+  animation-timing-function: cubic-bezier(0.22, 0.02, 0.12, 1);
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
 }
@@ -873,9 +875,20 @@ button {
     grid-template-rows: repeat(3, 1fr);
   }
 
+  .landing-column {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .landing-column span {
-    font-size: clamp(11px, 3.5vw, 16px);
+    position: static;
+    top: auto;
+    left: auto;
     transform: translateY(0);
+
+    font-size: clamp(11px, 3.5vw, 16px);
   }
 
   .landing-aaa {
@@ -1370,90 +1383,80 @@ button {
     white-space: nowrap;
   }
 
-  /* Contenitore dei filtri sotto al titolo */
-  .filters-panel {
-    grid-column: 1;
+  /* Contenitore filtri sotto al titolo */
+  .top-home .filters-panel {
+    grid-column: 1 / -1;
     grid-row: 2;
 
-    width: 100%;
-    max-width: none;
+    width: calc(100vw - 20px);
+    max-width: calc(100vw - 20px);
     min-width: 0;
     margin: 0;
+
+    display: block;
     overflow: visible;
-
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: baseline;
-
-    column-gap: 12px;
-    row-gap: 6px;
+    white-space: normal;
   }
 
-  /* Prima riga: categorie */
-  .filters-nav {
-    flex: 0 0 100%;
-
+  /* Prima riga: Airship / Wreckage / Models / Newspapers / Drawings */
+  .top-home .filters-panel .filters-nav {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: flex-start;
     align-items: baseline;
+    justify-content: flex-start;
 
-    gap: 12px;
     width: 100%;
-    margin-bottom: 0;
+    gap: 12px;
+    margin-bottom: 6px;
 
     overflow: visible;
     white-space: nowrap;
   }
 
-  .filter-link {
+  .top-home .filters-panel .filter-link {
     flex: 0 0 auto;
     white-space: nowrap;
     font-size: 12px;
   }
 
   /* Seconda riga: Causes / Year / Country / Tags / People / Victims */
-  .filter-row {
-    flex: 0 0 auto;
-
-    display: block;
+  .top-home .filters-panel .filter-row {
+    display: inline-block;
     width: auto;
-    margin: 0;
+    margin: 0 12px 0 0;
     padding: 0;
 
     white-space: nowrap;
+    vertical-align: top;
   }
 
-  .filter-label {
+  .top-home .filters-panel .filter-label {
     display: inline-block;
     cursor: pointer;
     white-space: nowrap;
     font-size: 12px;
   }
 
-  .filter-row-inside {
+  .top-home .filters-panel .filter-row-inside {
     display: none;
   }
 
   /* Menu aperto del filtro */
-  .filter-row.mobile-open {
-    flex: 0 0 100%;
-
+  .top-home .filters-panel .filter-row.mobile-open {
     display: block;
     width: 100%;
-    margin: 4px 0 0 0;
+    margin: 6px 0 0 0;
     white-space: normal;
   }
 
-  .filter-row.mobile-open .filter-label {
+  .top-home .filters-panel .filter-row.mobile-open .filter-label {
     display: inline-block;
     margin-bottom: 6px;
     font-weight: 800;
   }
 
-  .filter-row.mobile-open .filter-row-inside {
+  .top-home .filters-panel .filter-row.mobile-open .filter-row-inside {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
