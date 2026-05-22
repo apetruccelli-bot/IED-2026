@@ -16,7 +16,13 @@ radiografiaImg.onerror = (e) => { console.error('Failed to load radiograph image
 let radiographOverlayEl = null;
 let overlayDebugEl = null;
 // proximity multiplier for trackpoint sensitivity (higher = more permissive)
-let PROXIMITY_MULT = 0.32;
+let PROXIMITY_MULT = 0.18; // reduced sensitivity to avoid false positives
+// debounce: number of consecutive frames a fingertip must remain within threshold
+const PROXIMITY_REQUIRED_FRAMES = 3;
+// track consecutive hits for landmark indices
+const _consecutiveHits = {};
+// When true, the live webcam stream will be hidden visually (video kept playing for detection).
+const HIDE_VIDEO_STREAM = true;
 let overlayStatusEl = null;
 let _preloadFailures = [];
 
@@ -49,6 +55,7 @@ function ensureOverlayDebug() {
 const LANDMARK_IMAGE_MAP = {
     234: 'interazione/radiografia_Adx1.jpg',
     187: 'interazione/radiografia_Adx2.jpg',
+    32: 'interazione/radiografia_Bdx2.jpg',
     352: 'interazione/radiografia_Asx1.jpg',
     411: 'interazione/radiografia_Asx2.jpg',
     436: 'interazione/radiografia_Asx3.jpg',
@@ -162,6 +169,7 @@ function createOverlayTestPanel() {
                 const img = new Image();
                 img.onload = () => { 
                     try { overlay.dataset.landmarkActive = String(idx); } catch (e) {}
+                    try { overlay.dataset.persistent = '1'; } catch (e) {}
                     overlay.src = path; overlay.style.display='block'; overlay.style.opacity='0.98'; showOverlayDebug(`Loaded ${path.split('/').pop()}`); updateOverlayStatus();
                 };
                 img.onerror = (e) => { _preloadFailures.push(path); showOverlayDebug(`Failed ${path.split('/').pop()}`); updateOverlayStatus(); };
@@ -472,6 +480,20 @@ function drawHandLandmarks(keypoints, color) {
              video.height = videoHeight;
              
              console.log(`Video dimensions: ${videoWidth}x${videoHeight}`);
+            // Optionally hide the visible webcam stream while keeping the video element
+            // active so detections still receive frames. This makes only the overlay images
+            // visible to the user when interactions are active.
+            try {
+                if (typeof HIDE_VIDEO_STREAM !== 'undefined' && HIDE_VIDEO_STREAM) {
+                    video.style.opacity = '0';
+                    video.style.pointerEvents = 'none';
+                    video.style.visibility = 'hidden';
+                    // hide the drawing canvas as well so only the radiograph overlay is visible
+                    if (canvas) canvas.style.display = 'none';
+                }
+            } catch (e) {
+                console.warn('Could not hide video stream:', e && e.message);
+            }
             // Ensure the displayed video and overlay canvas are not visually mirrored.
             try {
                 // Explicitly clear any CSS transform that may have been applied inline or by other scripts
@@ -790,54 +812,69 @@ function drawHandLandmarks(keypoints, color) {
                 }
 
                 if (closest && closestDist <= threshold) {
-                    const img = LANDMARK_IMAGE_MAP[closest.idx];
-                    console.log('Finger near landmark', closest.idx, 'dist', Math.round(closestDist), '→', img);
-                    showOverlayDebug(`Landmark ${closest.idx} → ${img.split('/').pop()}`);
-                    // load image first to ensure it's available before showing overlay
-                    try {
-                        const loadImg = new Image();
-                        // mark the overlay as pending/active immediately to avoid race with smile logic
-                        try { overlay.dataset.landmarkActive = String(closest.idx); } catch (e) {}
-                        loadImg.onload = () => {
-                            try {
-                                // set the src after marking active so smile logic won't hide it
-                                overlay.src = img;
-                                overlay.style.display = 'block';
-                                void overlay.offsetWidth;
-                                overlay.style.opacity = '0.98';
-                                console.log('Overlay image set to', img, ' (landmark', closest.idx, ')');
-                                showOverlayDebug('Overlay → ' + img.split('/').pop());
+                    // debounce: require the fingertip to be within threshold for several frames
+                    _consecutiveHits[closest.idx] = (_consecutiveHits[closest.idx] || 0) + 1;
+                    // reset other counters
+                    Object.keys(_consecutiveHits).forEach(k => { if (Number(k) !== Number(closest.idx)) _consecutiveHits[k] = 0; });
+                    if (_consecutiveHits[closest.idx] >= PROXIMITY_REQUIRED_FRAMES) {
+                        const img = LANDMARK_IMAGE_MAP[closest.idx];
+                        console.log('Finger near landmark (stable)', closest.idx, 'dist', Math.round(closestDist), '→', img);
+                        showOverlayDebug(`Landmark ${closest.idx} → ${img.split('/').pop()}`);
+                        // load image first to ensure it's available before showing overlay
+                        try {
+                            const loadImg = new Image();
+                            // mark the overlay as pending/active immediately to avoid race with smile logic
+                            try { overlay.dataset.landmarkActive = String(closest.idx); } catch (e) {}
+                            loadImg.onload = () => {
+                                try {
+                                    // set the src after marking active so smile logic won't hide it
+                                    overlay.src = img;
+                                    overlay.style.display = 'block';
+                                    void overlay.offsetWidth;
+                                    overlay.style.opacity = '0.98';
+                                    console.log('Overlay image set to', img, ' (landmark', closest.idx, ')');
+                                    showOverlayDebug('Overlay → ' + img.split('/').pop());
+                                    // detection-based overlays are transient (do not mark persistent)
+                                    try { delete overlay.dataset.persistent; } catch (ee) {}
+                                    updateOverlayStatus();
+                                } catch (e) { console.warn('Failed to set overlay image after load', e && e.message); }
+                            };
+                            loadImg.onerror = (e) => {
+                                console.error('Failed to load landmark image', img, e);
+                                showOverlayDebug('Failed to load: ' + img.split('/').pop());
+                                try { _preloadFailures.push(img); } catch (ee) {}
+                                try { delete overlay.dataset.landmarkActive; } catch (ee) {}
                                 updateOverlayStatus();
-                            } catch (e) { console.warn('Failed to set overlay image after load', e && e.message); }
-                        };
-                        loadImg.onerror = (e) => {
-                            console.error('Failed to load landmark image', img, e);
-                            showOverlayDebug('Failed to load: ' + img.split('/').pop());
-                            try { _preloadFailures.push(img); } catch (ee) {}
-                            try { delete overlay.dataset.landmarkActive; } catch (ee) {}
-                            updateOverlayStatus();
-                        };
-                        loadImg.src = img;
-                    } catch (e) { console.warn('Error creating loader image', e && e.message); }
+                            };
+                            loadImg.src = img;
+                        } catch (e) { console.warn('Error creating loader image', e && e.message); }
+                    } else {
+                        showOverlayDebug(`Approaching ${closest.idx} (${_consecutiveHits[closest.idx]}/${PROXIMITY_REQUIRED_FRAMES})`);
+                    }
                 } else {
-                    // if previously active, clear and restore/hide accordingly
+                    // reset all consecutive counters when no close landmark
+                    Object.keys(_consecutiveHits).forEach(k => { _consecutiveHits[k] = 0; });
+                    // If there is an active landmark overlay, keep it visible even when the finger
+                    // is no longer on a mapped point. This lets the user examine the radiograph
+                    // until they point to another landmark or the overlay is changed manually.
                     try {
                         const active = overlay && overlay.dataset && overlay.dataset.landmarkActive;
                         if (active) {
-                            delete overlay.dataset.landmarkActive;
-                            if (smilingFace) {
-                                overlay.src = radiografiaImg.src;
-                                overlay.style.display = 'block';
-                                void overlay.offsetWidth;
-                                overlay.style.opacity = '0.98';
-                                showOverlayDebug('Restore base (smile)');
-                            } else {
+                            // If the active overlay was set by detection (not persistent), hide it now
+                            const isPersistent = !!(overlay.dataset && overlay.dataset.persistent);
+                            if (!isPersistent) {
+                                try { delete overlay.dataset.landmarkActive; } catch (e) {}
                                 overlay.style.opacity = '0';
-                                setTimeout(() => { if (overlay && overlay.style.opacity === '0') overlay.style.display = 'none'; }, 240);
-                                showOverlayDebug('Hide overlay');
+                                setTimeout(() => { if (overlay && overlay.style.opacity === '0') overlay.style.display = 'none'; }, 220);
+                                showOverlayDebug(`Cleared transient overlay ${active} (finger left)`);
+                                updateOverlayStatus();
+                            } else {
+                                showOverlayDebug(`Holding persistent overlay for landmark ${active} (finger left)`);
                             }
                         } else if (closest) {
                             showOverlayDebug(`Closest ${closest.idx} d=${Math.round(closestDist)} (thr ${Math.round(threshold)})`);
+                        } else {
+                            showOverlayDebug('No close landmark');
                         }
                     } catch (e) {}
                 }
@@ -852,9 +889,11 @@ function drawHandLandmarks(keypoints, color) {
         const overlay = ensureRadiographOverlay();
         const smilingFace = faces && faces.some(f => isSmiling(f.keypoints));
         if (overlay && radiografiaLoaded) {
-            // Only auto-show the base when smiling and when there is no landmark-specific overlay active
-            const isLandmarkActive = overlay.dataset && overlay.dataset.landmarkActive;
-            if (smilingFace && !isLandmarkActive) {
+            // Respect both landmarkActive and persistent flags: if an overlay was set by
+            // the user or test and marked persistent, do not auto-hide/override it.
+            const isLandmarkActive = !!(overlay.dataset && overlay.dataset.landmarkActive);
+            const isPersistent = !!(overlay.dataset && overlay.dataset.persistent);
+            if (smilingFace && !isLandmarkActive && !isPersistent) {
                 console.log('Smiling detected — showing base radiograph', radiografiaImg.src);
                 showOverlayDebug('Smile → base radiograph');
                 overlay.src = radiografiaImg.src;
@@ -862,11 +901,12 @@ function drawHandLandmarks(keypoints, color) {
                 void overlay.offsetWidth;
                 overlay.style.opacity = '0.98';
                 try { delete overlay.dataset.landmarkActive; } catch (e) {}
+                try { delete overlay.dataset.persistent; } catch (e) {}
             } else if (!smilingFace) {
-                // Only hide the overlay automatically if it's currently the base image.
-                // Do NOT auto-hide landmark-specific overlays (they may be set by user/test or pointing).
+                // Only hide the overlay automatically if it's currently the base image and
+                // there is no persistent or active landmark overlay set.
                 const isShowingBase = overlay.src && overlay.src.indexOf('radiografiabase.jpg') !== -1;
-                if (isShowingBase) {
+                if (isShowingBase && !isPersistent && !isLandmarkActive) {
                     console.log('No smile — hiding overlay (if showing base)');
                     showOverlayDebug('No smile → hide overlay');
                     overlay.style.opacity = '0';
@@ -907,6 +947,8 @@ try {
                     console.log('Canvas click — forcing Asx1');
                     showOverlayDebug('Canvas → Asx1');
                     overlay.src = 'interazione/radiografia_Asx1.jpg';
+                    try { overlay.dataset.landmarkActive = String(352); } catch (e) {}
+                    try { overlay.dataset.persistent = '1'; } catch (e) {}
                     overlay.style.display = 'block';
                     void overlay.offsetWidth;
                     overlay.style.opacity = '0.98';
