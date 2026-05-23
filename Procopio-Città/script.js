@@ -475,6 +475,9 @@ function initializeLoadingAnimation() {
       const firstImageDuration = 600; // First image shows for 0.6 seconds (faster)
       const transitionDuration = 20; // Fade transition duration - very fast
       
+      // Determine how many images to actually show (limit to 15)
+      const maxSlides = Math.min(items.length, 25);
+
       // Wait for images to preload before starting slideshow
       const startSlideshow = () => {
         if (preloadedCount < totalItems) {
@@ -488,7 +491,7 @@ function initializeLoadingAnimation() {
       
       // Function to show image with coordinates
       function showImage(index) {
-        if (index >= items.length) {
+        if (index >= maxSlides) {
           startZoomPhase();
           return;
         }
@@ -558,78 +561,23 @@ function initializeLoadingAnimation() {
           loadingGallery.classList.add('show');
         }, 100);
         
-        // Get the map instance (it should be ready by now)
+        // Show gallery briefly (no scatter) and reveal the map quickly
         const map = window.procopioMap;
-        
-        // Create gallery images for scatter animation - limit to first 10
-        const displayLimit = 10;
-        const scatterStagger = 60; // ms between each image scatter
-        const scatterBaseDelay = 300; // base delay before first scatter
-        const scatterAnimDuration = 900; // scatter animation duration in ms
 
-        items.slice(0, displayLimit).forEach((item, index) => {
-          const img = document.createElement('img');
-          img.src = item.src;
-          img.alt = item.label;
-          img.className = 'loading-image';
-          
-          // Use Mapbox projection to get exact pixel coordinates
-          let tx = 0, ty = 0;
-          
-          if (map && map.project) {
-            // Project geographic coordinates to pixel coordinates
-            const screenCoords = map.project(item.coordinates);
-            // Offset from center of screen
-            tx = screenCoords.x - window.innerWidth / 2;
-            ty = screenCoords.y - window.innerHeight / 2;
-          } else {
-            // Fallback if map not ready
-            const [lng, lat] = item.coordinates;
-            tx = ((lng - 12) / 7.5) * 400; // Simple scaling
-            ty = ((42.5 - lat) / 6.5) * 300;
-          }
-          
-          img.style.setProperty('--tx', `${tx}px`);
-          img.style.setProperty('--ty', `${ty}px`);
-          
-          loadingGallery.appendChild(img);
+        // Show gallery UI without creating individual images
+        loadingGallery.classList.add('show');
 
-          // Delay scatter animation start until gallery is visible
-          const scatterStartDelay = scatterBaseDelay + (index * scatterStagger);
+        // Ensure map is visible immediately
+        if (homeMap) homeMap.classList.add('visible');
 
-          if (index === 0) {
-            // First image: reveal animation
-            const revealPrepDelay = Math.max(0, scatterStartDelay - 200);
-            const revealFinishDelay = 250;
-            setTimeout(() => {
-              img.classList.add('reveal-start');
-              // Force a reflow to apply the start state before transitioning
-              void img.offsetWidth; 
-              img.classList.add('reveal-end');
-
-              // After reveal, add scatter class
-              setTimeout(() => {
-                img.classList.add('scatter');
-              }, revealFinishDelay);
-            }, revealPrepDelay);
-          } else {
-            // Other images: staggered scatter with fade-in
-            setTimeout(() => {
-              img.classList.add('scatter');
-            }, scatterStartDelay);
-          }
-        });
-        
-        // Fade out overlay after scatter completes (compute from stagger and anim duration)
-        const lastScatterStart = scatterBaseDelay + ((displayLimit - 1) * scatterStagger);
-        const totalScatterTime = lastScatterStart + scatterAnimDuration + 200;
+        // Fade out overlay shortly after revealing the map
+        const quickFade = 350; // ms
         setTimeout(() => {
           loadingOverlay.classList.add('fade-out');
-          // Initialize camera NOW that loading is complete
           if (typeof initProcopioTracking === 'function') {
             initProcopioTracking();
           }
-        }, totalScatterTime);
+        }, quickFade);
       }
       
       // Start showing images (shorter delay)
