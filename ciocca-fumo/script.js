@@ -321,6 +321,9 @@ function render() {
     card.style.cursor = 'zoom-in';
     card.dataset.itemYear = item.year;
     if (!activeYear || item.year === activeYear) card.classList.add('activeImg');
+    if (activeCategory === "pubblicità") {
+  setupAdvertisingScrollText();
+}
 
     // image
     // create an image element
@@ -333,6 +336,12 @@ function render() {
     img.alt = `Item ${item.id}`;
     // set the loading attribute
     img.loading = 'lazy';
+
+    if (item.category === "pubblicità") {
+  card.dataset.adJa = item["description-ja"] || item.description || "";
+  card.dataset.adEn = item["description-en"] || item.description || "";
+}
+
     // append the image to the card
     card.appendChild(img);
 
@@ -340,32 +349,48 @@ function render() {
     const body = document.createElement('div');
     body.className = 'card-body';
 
-    // id
-    const idEl = document.createElement('span');
-    idEl.className = 'card-id';
-    idEl.textContent = `#${String(item.id).padStart(2, '0')}`;
-    body.appendChild(idEl);
+   if (item.category === "pacchetti") {
+  body.innerHTML = `
+    <p class="card-desc">
+      ${item.description}
+    </p>
 
-    const desc = document.createElement('p');
-    desc.className = 'card-desc';
-    desc.textContent = item.description;
+    <div class="card-tags card-tags-info">
+      <span>色 Color</span>
+      <span>${item["tags-pacchetti"]?.join(" ") || ""}</span>
 
-    // body.appendChild(desc);
+      <span>産地 Origin</span>
+      <span>${item["luogo-pacchetti"] || ""} ${item["paese-pacchetti"] || ""}</span>
 
-    const tagsEl = document.createElement('div');
-    tagsEl.className = 'card-tags';
-    item.tags.forEach(tag => {
-      const t = document.createElement('span');
-      t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
-      t.textContent = tag;
-      t.addEventListener('click', e => { e.stopPropagation(); toggleTag(tag); });
-      tagsEl.appendChild(t);
+      <span>年 Year</span>
+      <span>${item.year}年</span>
+    </div>
+  `;
+} else {
+  const idEl = document.createElement('span');
+  idEl.className = 'card-id';
+  idEl.textContent = `#${String(item.id).padStart(2, '0')}`;
+  body.appendChild(idEl);
+
+  const tagsEl = document.createElement('div');
+  tagsEl.className = 'card-tags';
+
+  item.tags.forEach(tag => {
+    const t = document.createElement('span');
+    t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
+    t.textContent = tag;
+    t.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleTag(tag);
     });
-    body.appendChild(tagsEl);
+    tagsEl.appendChild(t);
+  });
 
-    EventListener('click', () => {
-  // funziona solo nella categoria Portraits / fotografie
-  if (activeCategory !== "fotografie") return;
+  body.appendChild(tagsEl);
+}
+
+card.addEventListener('click', () => {
+  if (activeCategory !== "fotografie" && activeCategory !== "pacchetti") return;
 
   const alreadyActive = card.classList.contains("selectedImg");
 
@@ -380,6 +405,34 @@ function render() {
     card.classList.add("selectedImg");
   }
 });
+
+function setupAdvertisingScrollText() {
+  const cards = document.querySelectorAll(".myPhotos.layout-pubblicita .card");
+  const japaneseText = document.getElementById("category-japanese-text");
+  const englishText = document.getElementById("category-english-text");
+
+  if (!cards.length || !japaneseText || !englishText) return;
+
+  function updateOnScroll() {
+    let activeCard = cards[0];
+
+    cards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+
+      if (rect.top < window.innerHeight * 0.45) {
+        activeCard = card;
+      }
+
+      card.classList.toggle("ad-past", rect.bottom < window.innerHeight * 0.35);
+    });
+
+    japaneseText.textContent = activeCard.dataset.adJa || "";
+    englishText.textContent = activeCard.dataset.adEn || "";
+  }
+
+  grid.addEventListener("scroll", updateOnScroll);
+  updateOnScroll();
+}
 
 //selectedImg//
 if (!activeYear || item.year === activeYear) card.classList.add('activeImg');

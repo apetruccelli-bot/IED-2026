@@ -14,12 +14,13 @@
   font-style: italic;
 }
 
-*:not(.font-myTitle) {
+*:not(.font-myTitle):not(.text-history) {
   font-family: 'Prophet Regular', sans-serif  ;
   font-size: 12px;
   line-height: 115%;
   text-transform: capitalize;
 }
+
 
 .font-myTitle {
   font-family: 'Prophet Medium';

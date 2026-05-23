@@ -48,7 +48,7 @@
 				padding: 0 18px;
 				border-radius: 0;
 				font-family: serif;
-				font-size: 36px;
+				font-size: 40px;
 				line-height: 1;
 				text-transform: lowercase;
 				letter-spacing: 0.02em;
@@ -70,13 +70,8 @@
 			.landing-cta.show {
 				transform: translate(-50%, -50%); /* final position (no Y offset) */
 				opacity: 1;
-				pointer-events: auto;
-				cursor: pointer;
-			}
-
-			/* hover: reduce opacity when active */
-			.landing-cta.show:hover {
-				opacity: 0.6;
+				pointer-events: auto; /* allow clicks only on enabled children */
+				cursor: default; /* title itself should not show pointer */
 			}
 
 			/* remove default focus rectangle */
@@ -88,12 +83,54 @@
 			.landing-cta::first-letter {
 				text-transform: uppercase;
 			}
+
+				/* link shown under the title without underline */
+				.landing-link {
+					display: inline-block;
+					margin-top: 12px;
+					font-size: 18px;
+					color: #fff;
+					text-decoration: none;
+					border-bottom: none;
+					text-transform: lowercase; /* keep rest lowercase */
+					/* start hidden and slide up slightly; will appear after title */
+					opacity: 0;
+					transform: translateY(6px);
+					transition: opacity 450ms ease, transform 450ms ease;
+					pointer-events: none; /* enabled once visible */
+				}
+
+				/* when the cta is shown, reveal the link with a small delay */
+				.landing-cta.show .landing-link {
+					opacity: 0.95;
+					transform: translateY(0);
+					transition-delay: 900ms; /* link appears after title (slower) */
+					pointer-events: auto;
+				}
+
+				.landing-link::first-letter {
+					text-transform: uppercase;
+				}
+
+				/* subtle hover effect for the link */
+				.landing-link:hover {
+					opacity: 0.75;
+				}
+
+				.landing-cta .landing-title-lines {
+					line-height: 1;
+					font-size: 40px;
+					pointer-events: none; /* make title non-interactive */
+				}
 		</style>
 	</head>
 	<body>
 		<div class="landing-wrap">
 			<img id="landing-img" src="img/landing/landing1.jpeg" alt="Landing">
-			<a class="landing-cta" href="index.html?from=landing">Show your teeth to<br>start the visit</a>
+			<div class="landing-cta landing-title" role="heading" aria-level="1">
+				<div class="landing-title-lines">Dr. Whitaker’s<br>Aberrant Findings</div>
+				<a id="landing-link" class="landing-link" href="index.html?from=landing" aria-label="Start visit">Show your teeth to<br>start the visit</a>
+			</div>
 		</div>
 
 		<!-- Face tracking: open mouth or smile triggers entry to site -->
@@ -111,8 +148,9 @@
 				const cta = document.querySelector('.landing-cta');
 				function show() {
 					img.classList.add('loaded');
-					// slightly longer delay so CTA arrives more gently
-					setTimeout(() => { if (cta) cta.classList.add('show'); }, 420);
+					// slightly longer delay so title appears after the image
+					// increased delay so the image is visible before the title
+					setTimeout(() => { if (cta) cta.classList.add('show'); }, 1200);
 				}
 				if (img.complete && img.naturalWidth !== 0) {
 					// already loaded from cache - allow a tick for paint

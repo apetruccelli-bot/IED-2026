@@ -631,7 +631,9 @@
       "category": "pubblicità",
       "year": 1960,
       "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
+      "description-ja": "煙草の広告は、日常のしぐさを静かな欲望として映し出す。",
+      "description-en": "A tobacco advertisement that turns an everyday gesture into a quiet image of desire.",
+      "description": "A tobacco advertisement that turns an everyday gesture into a quiet image of desire."
   },
   {
        "id": 63,
@@ -639,7 +641,9 @@
       "category": "pubblicità",
       "year": 1960,
       "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
+      "description-ja": "文字と色が、煙草を洗練された都市の記号へと変えている。",
+      "description-en": "Lettering and color transform cigarettes into a refined symbol of urban culture.",
+      "description": "Lettering and color transform cigarettes into a refined symbol of urban culture."
   },
   {
        "id": 64,
@@ -647,7 +651,9 @@
       "category": "pubblicità",
       "year": 1960,
       "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
+      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
+      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
+      "description": "The commercial image links smoking with memory, leisure and intimacy."
   }, 
   {
        "id": 65,

@@ -285,15 +285,29 @@ button {
 .myPhotos.layout-pubblicita {
   display: flex;
   flex-direction: column;
+  gap: 80px;
 }
+
 .myPhotos.layout-pubblicita .card {
   width: 100%;
+  opacity: 1;
+  transition: opacity 0.4s ease, filter 0.4s ease;
 }
+
+.myPhotos.layout-pubblicita .card.ad-past {
+  opacity: 0.22;
+  filter: blur(1px);
+}
+
 .myPhotos.layout-pubblicita .card-img {
   width: 100%;
   height: auto;
   aspect-ratio: unset;
   object-fit: contain;
+}
+
+.myPhotos.layout-pubblicita .advertising-description {
+  display: none;
 }
 
 /* ── CARD ── */
@@ -569,4 +583,106 @@ button {
 
 .myPhotos.has-selected + .filters-under-image {
   opacity: 1;
+}
+
+.myPhotos.has-selected .card {
+  opacity: 0.2;
+}
+
+.myPhotos.has-selected .card.selectedImg {
+  opacity: 1;
+  position: fixed;
+  left: 10px;
+  top: 10rem;
+  width: calc((100vw / 12) * 4 - 20px);
+  z-index: 50;
+}
+
+.myPhotos.has-selected .card.selectedImg .card-img {
+  width: 100%;
+  height: auto;
+  max-height: 62vh;
+  object-fit: contain;
+  aspect-ratio: unset;
+}
+
+.myPhotos.has-selected .card.selectedImg .card-body {
+  display: flex;
+  color: var(--myWhite);
+  padding-top: 20px;
+}
+
+.myPhotos.layout-pacchetti.has-selected .card.selectedImg {
+  position: fixed;
+  left: 10px;
+  top: 10rem;
+  width: calc((100vw / 12) * 4 - 20px);
+  opacity: 1;
+  z-index: 50;
+}
+
+.myPhotos.layout-pacchetti.has-selected .card.selectedImg .card-img {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 58vh;
+  object-fit: contain;
+  aspect-ratio: unset !important;
+}
+
+.myPhotos.layout-pacchetti.has-selected .card.selectedImg .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 20px;
+}
+
+.card-tags-info {
+  display: grid !important;
+  grid-template-columns: 1fr 3fr;
+  gap: 5px 10px;
+  color: var(--myWhite);
+}
+
+.myPhotos.layout-pacchetti.has-selected {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.myPhotos.layout-pacchetti.has-selected .card:not(.selectedImg) {
+  position: static !important;
+  opacity: 0.22;
+  width: auto !important;
+}
+
+.myPhotos.layout-pacchetti.has-selected .card:not(.selectedImg) .card-img {
+  height: 180px;
+  width: auto !important;
+  object-fit: contain;
+}
+
+.myPhotos.layout-pacchetti.has-selected .card.selectedImg {
+  position: fixed !important;
+  left: 10px;
+  top: 10rem;
+  width: calc((100vw / 12) * 4 - 20px);
+  opacity: 1 !important;
+  z-index: 50;
+}
+
+.myPhotos.layout-pacchetti.has-selected .card.selectedImg .card-img {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 58vh;
+  object-fit: contain;
+  aspect-ratio: unset !important;
+}
+
+.myPhotos.layout-pacchetti.has-selected .card.selectedImg .card-body {
+  display: flex !important;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 20px;
 }
