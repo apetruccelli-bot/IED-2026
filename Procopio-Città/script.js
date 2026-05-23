@@ -471,9 +471,9 @@ function initializeLoadingAnimation() {
       });
 
       let currentIndex = 0;
-      const imageDuration = 300; // Each image shows for 300ms
-      const firstImageDuration = 1500; // First image shows for 1.5 seconds
-      const transitionDuration = 30; // Fade transition duration - very fast
+      const imageDuration = 120; // Each image shows for 120ms (faster)
+      const firstImageDuration = 600; // First image shows for 0.6 seconds (faster)
+      const transitionDuration = 20; // Fade transition duration - very fast
       
       // Wait for images to preload before starting slideshow
       const startSlideshow = () => {
@@ -553,16 +553,20 @@ function initializeLoadingAnimation() {
         loadingImageCenter.classList.add('fade-out');
         loadingCoordinates.classList.add('fade-out');
         
-        // After a brief delay, show the gallery with fade-in (0.8s)
+        // After a brief delay, show the gallery with fade-in
         setTimeout(() => {
           loadingGallery.classList.add('show');
-        }, 200);
+        }, 100);
         
         // Get the map instance (it should be ready by now)
         const map = window.procopioMap;
         
         // Create gallery images for scatter animation - limit to first 10
         const displayLimit = 10;
+        const scatterStagger = 60; // ms between each image scatter
+        const scatterBaseDelay = 300; // base delay before first scatter
+        const scatterAnimDuration = 900; // scatter animation duration in ms
+
         items.slice(0, displayLimit).forEach((item, index) => {
           const img = document.createElement('img');
           img.src = item.src;
@@ -590,11 +594,13 @@ function initializeLoadingAnimation() {
           
           loadingGallery.appendChild(img);
 
-          // Delay scatter animation start until gallery is visible + 300ms
-          const scatterStartDelay = 800 + 300 + (index * 200);
-          
+          // Delay scatter animation start until gallery is visible
+          const scatterStartDelay = scatterBaseDelay + (index * scatterStagger);
+
           if (index === 0) {
             // First image: reveal animation
+            const revealPrepDelay = Math.max(0, scatterStartDelay - 200);
+            const revealFinishDelay = 250;
             setTimeout(() => {
               img.classList.add('reveal-start');
               // Force a reflow to apply the start state before transitioning
@@ -604,8 +610,8 @@ function initializeLoadingAnimation() {
               // After reveal, add scatter class
               setTimeout(() => {
                 img.classList.add('scatter');
-              }, 500); // Wait for reveal to finish
-            }, scatterStartDelay - 500);
+              }, revealFinishDelay);
+            }, revealPrepDelay);
           } else {
             // Other images: staggered scatter with fade-in
             setTimeout(() => {
@@ -614,8 +620,9 @@ function initializeLoadingAnimation() {
           }
         });
         
-        // Fade out overlay after scatter completes
-        const totalScatterTime = (displayLimit * 200) + 800 + 300 + 2500;
+        // Fade out overlay after scatter completes (compute from stagger and anim duration)
+        const lastScatterStart = scatterBaseDelay + ((displayLimit - 1) * scatterStagger);
+        const totalScatterTime = lastScatterStart + scatterAnimDuration + 200;
         setTimeout(() => {
           loadingOverlay.classList.add('fade-out');
           // Initialize camera NOW that loading is complete
@@ -625,10 +632,10 @@ function initializeLoadingAnimation() {
         }, totalScatterTime);
       }
       
-      // Start showing images (after small delay to ensure DOM ready)
+      // Start showing images (shorter delay)
       setTimeout(() => {
         startSlideshow();
-      }, 500);
+      }, 150);
     })
     .catch(err => {
       console.error('Error loading animation images:', err);

@@ -608,7 +608,7 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 
 /* First image reveal animation - linear vertical expansion from center */
 .loading-image-center.first-image-reveal {
-  animation: firstImageLinearReveal 0.4s linear forwards;
+  animation: firstImageLinearReveal 0.22s linear forwards;
 }
 
 @keyframes firstImageLinearReveal {
@@ -656,7 +656,7 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
   opacity: 0;
   z-index: 50;
   pointer-events: none;
-  transition: opacity 0.8s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
 }
 
 .loading-gallery.show {
@@ -671,7 +671,7 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
   object-fit: cover;
   opacity: 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: opacity 0.6s ease-in-out, clip-path 0.5s linear;
+  transition: opacity 0.35s ease-in-out, clip-path 0.3s linear;
 }
 
 /* Initial state for the first image reveal */
@@ -686,7 +686,7 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 }
 
 .loading-image.scatter {
-  animation: scatterOut 2.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  animation: scatterOut 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 
 @keyframes scatterOut {
@@ -708,7 +708,7 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
   height: 100%;
   z-index: 1;
   opacity: 0;
-  transition: opacity 0.8s ease-in-out;
+  transition: opacity 0.45s ease-in-out;
 }
 #home-map.visible {
   opacity: 1;
