@@ -53,6 +53,12 @@
   --radius: 0px;
   --myWhite: #FCFCFC;
   --myBlack: #1E1E1E;
+  --page-padding: 10px;
+  --site-gap: 20px;
+  --attach-extra: 60px;
+  --image-max-height: 420px;
+  --title-size: 25px;
+  --text-size: 14px;
 }
 
 body {
@@ -65,16 +71,174 @@ body {
 
 *:not(.font-myTitle) {
   font-family: 'Diatype';
-  font-size: 12px;
+  font-size: var(--text-size);
   line-height: 120%;
 }
 
 .font-myTitle {
   font-family: 'Diatype-Mono';
-  font-size: 25px;
+  font-size: var(--title-size);
   text-transform: uppercase;
   line-height: 100%;
   letter-spacing: 0.02em;
+}
+
+/* Modern page spacing and image sizing */
+#main-scroll {
+  padding: var(--page-padding) !important;
+  padding-top: 0 !important;
+}
+
+#main-scroll .grid {
+  gap: var(--site-gap) !important;
+}
+
+/* Sticky section anchors: start at 30% opacity and animate as sections approach */
+#main-scroll .sticky a[href^="#sezione_"] {
+  opacity: .3;
+  transition: opacity .2s ease;
+  will-change: opacity;
+}
+
+#main-scroll img {
+  max-height: var(--image-max-height);
+  width: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+/* Make images inside single-column blocks sit flush with the column edge
+   by compensating the .col-span-1 lateral padding. Keeps images visually closer
+   to the content edge without changing global padding. */
+#main-scroll .col-span-1 > img {
+  display: block;
+  width: calc(100% + 16px);
+  margin-left: -8px;
+  margin-right: -8px;
+  object-fit: cover;
+}
+
+/* Make a selected image span full-bleed to the #main-scroll container edges */
+#main-scroll .col-span-1 > img.full-bleed {
+  display: block;
+  width: calc(100% + (var(--page-padding) * 2) + 16px);
+  margin-left: calc(-1 * (var(--page-padding) + 8px));
+  margin-right: calc(-1 * (var(--page-padding) + 8px));
+  max-width: none;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  #main-scroll .col-span-1 > img.full-bleed {
+    width: calc(100% + (var(--page-padding) * 2) + 16px);
+    margin-left: calc(-1 * (var(--page-padding) + 8px));
+    margin-right: calc(-1 * (var(--page-padding) + 8px));
+  }
+}
+
+/* Attach image to the right edge of the two-column grid (compensate col padding)
+   Use class `attach-right` on the image. Keeps left side aligned but extends to the right */
+#main-scroll .col-start-3 > .grid, #main-scroll .grid {
+  position: relative;
+}
+
+/* Revised attach-right: move the image right using relative positioning and
+   expand its width by the same offset so its right edge reaches the grid edge. */
+#main-scroll .col-span-1 > img.attach-right {
+  display: block !important;
+  position: relative !important;
+  --attach-offset: calc(var(--page-padding) + var(--site-gap) + 20px + 8px);
+  left: calc(var(--attach-offset));
+  width: calc(100% + var(--attach-offset)) !important;
+  margin-left: calc(-1 * 8px) !important;
+  margin-right: 0 !important;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  #main-scroll .col-span-1 > img.attach-right {
+    --attach-offset: calc(var(--page-padding) + var(--site-gap) + 12px);
+    left: calc(var(--attach-offset));
+    width: calc(100% + var(--attach-offset)) !important;
+    margin-left: calc(-1 * 8px) !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Captions follow images using default flow (same behaviour as section 1) */
+
+/* Ensure captions placed immediately after images have 10px spacing */
+#main-scroll img + .font-myText,
+#main-scroll img + .italic,
+#main-scroll .col-span-1 img + .font-myText,
+#main-scroll .col-span-1 img + .italic,
+#main-scroll img + div.font-myText,
+#main-scroll img + p {
+  margin-top: 10px !important;
+}
+
+/* Slight column gutters */
+.col-span-1 {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+@media (max-width: 900px) {
+  :root { --image-max-height: 260px; --page-padding: 10px; --attach-extra: 24px; }
+  .font-myTitle { font-size: 20px; }
+  :root { --text-size: 13px; }
+}
+
+/* More vertical white space around full-width quotes */
+#main-scroll .col-span-2.font-myTitle {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+/* Constrain line length using ch unit for better readability
+   Exclude italic descriptions (they should remain full-width) */
+#main-scroll p,
+#main-scroll ul,
+#main-scroll ol,
+#main-scroll blockquote,
+#main-scroll .font-myTitle,
+#main-scroll .font-myText:not(.italic),
+#main-scroll .space-y-30px {
+  max-width: 70ch;
+  margin-right: auto;
+}
+
+/* Ensure list items don't exceed the ch width */
+#main-scroll li {
+  max-width: 70ch;
+}
+
+/* Tighten list line-height and reduce vertical gap for compact lists
+   Applies to bullet/numbered lists inside the main content. */
+#main-scroll ul.list-disc,
+#main-scroll ol {
+  line-height: 1.15;
+}
+#main-scroll ul.list-disc li,
+#main-scroll ol li {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+#main-scroll ul.list-disc.space-y-10px > li {
+  margin-top: 6px !important;
+  margin-bottom: 6px !important;
+}
+
+/* Narrower line length for single-column (left/right) blocks */
+#main-scroll .col-span-1:not(img):not(.italic),
+#main-scroll .col-span-1:not(img) > p,
+#main-scroll .col-span-1:not(img) > ul,
+#main-scroll .col-span-1:not(img) > ol,
+#main-scroll .col-span-1:not(img) > .font-myText:not(.italic),
+#main-scroll .col-span-1:not(img) > .font-myTitle {
+  max-width: 55ch;
 }
 
 a {
@@ -423,6 +587,26 @@ header {
   margin-right: auto;
 }
 
+#main-scroll .story-fade {
+  opacity: 0.18;
+  transform: translateY(22px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+  will-change: opacity, transform;
+}
+
+#main-scroll .story-fade.story-fade--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #main-scroll .story-fade {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 
 #archive-rows a,
 #archive-rows span.p {
@@ -463,6 +647,26 @@ header {
   background: linear-gradient(to bottom, var(--myWhite), transparent);
   z-index: 99;
   pointer-events: none;
+}
+
+#archive-gallery .archive-fade {
+  opacity: 0.18;
+  transform: translateY(18px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+  will-change: opacity, transform;
+}
+
+#archive-gallery .archive-fade.archive-fade--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #archive-gallery .archive-fade {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 
@@ -641,6 +845,374 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 }
 
 .loading-coordinates.fade-out {
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     STATISTICAL CHARTS STYLES
+     Used for data visualizations on stat.html page
+     ════════════════════════════════════════════════════════════════════════════ */
+
+  .stat-chart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+
+  /* Population Chart: Row-based visualization */
+  .stat-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .stat-label {
+    font-family: 'Diatype';
+    font-size: 12px;
+    min-width: 100px;
+    opacity: 0.9;
+    text-align: right;
+  }
+
+  .stat-bars {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+    align-items: center;
+  }
+
+  .stat-bar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+  }
+
+  .stat-bar-label {
+    font-family: 'Diatype';
+    font-size: 10px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .stat-bar {
+    height: 12px;
+    background-color: #1E1E1E;
+    border-radius: 1px;
+    transition: width 0.6s ease, opacity 0.8s ease;
+    will-change: width, opacity;
+    min-height: 1px;
+  }
+
+  .stat-bar-value {
+    font-family: 'Diatype-Mono';
+    font-size: 11px;
+    margin-top: 2px;
+    opacity: 0.8;
+    transition: opacity 0.6s ease;
+    will-change: opacity;
+  }
+
+  /* Age/Bands Stacked Horizontal Bars */
+  .stat-age-band {
+    margin-bottom: 20px;
+  }
+
+  .stat-age-label {
+    font-family: 'Diatype';
+    font-size: 12px;
+    margin-bottom: 8px;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .stat-stacked-bar {
+    display: flex;
+    height: 16px;
+    width: 100%;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    background: #f0f0f0;
+  }
+
+  .stat-stacked-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Diatype-Mono';
+    font-size: 9px;
+    color: white;
+    transition: flex-basis 0.6s ease, opacity 0.8s ease;
+    will-change: flex-basis, opacity;
+    position: relative;
+  }
+
+  .stat-stacked-segment.age-0-14 { background-color: #1E1E1E; }
+  .stat-stacked-segment.age-15-35 { background-color: #4a4a4a; }
+  .stat-stacked-segment.age-36-64 { background-color: #8a8a8a; }
+  .stat-stacked-segment.age-65plus { background-color: #c0c0c0; }
+
+  /* Births Counters */
+  .stat-counter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    width: 100%;
+  }
+
+  .stat-counter-card {
+    border: 1px solid #1E1E1E;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #FCFCFC;
+    transition: opacity 0.8s ease, border-color 0.6s ease;
+    will-change: opacity;
+  }
+
+  .stat-counter-label {
+    font-family: 'Diatype';
+    font-size: 11px;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .stat-counter-values {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stat-counter-value {
+    font-family: 'Diatype-Mono';
+    font-size: 12px;
+    font-weight: bold;
+    transition: opacity 0.6s ease;
+    will-change: opacity;
+  }
+
+  .stat-counter-separator {
+    font-size: 10px;
+    opacity: 0.5;
+  }
+
+  /* Houses Grouped Bars */
+  .stat-houses-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-houses-label {
+    font-family: 'Diatype';
+    font-size: 11px;
+    min-width: 80px;
+    opacity: 0.9;
+  }
+
+  .stat-houses-group {
+    display: flex;
+    gap: 6px;
+    align-items: flex-end;
+  }
+
+  .stat-house-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .stat-house-column {
+    width: 20px;
+    background-color: #1E1E1E;
+    border-radius: 1px;
+    transition: height 0.6s ease, opacity 0.8s ease;
+    will-change: height, opacity;
+    min-height: 2px;
+  }
+
+  .stat-house-legend {
+    font-family: 'Diatype';
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.6;
+    text-align: center;
+    max-width: 20px;
+    word-wrap: break-word;
+  }
+
+  /* Services Table */
+  .stat-services-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Diatype';
+    font-size: 11px;
+  }
+
+  .stat-services-table th,
+  .stat-services-table td {
+    padding: 10px 8px;
+    text-align: left;
+    border: 1px solid #e0e0e0;
+    transition: opacity 0.6s ease;
+    will-change: opacity;
+  }
+
+  .stat-services-table th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 10px;
+  }
+
+  .stat-services-table tbody tr:hover {
+    background-color: #fcfcfc;
+  }
+
+  .stat-service-status {
+    font-family: 'Diatype';
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.8;
+  }
+
+  .stat-service-status.closed { color: #999; }
+  .stat-service-status.partial { color: #1E1E1E; }
+  .stat-service-status.monthly { color: #1E1E1E; }
+  .stat-service-status.reduced { color: #1E1E1E; }
+
+  /* Continuity Index Indicators */
+  .stat-continuity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    width: 100%;
+  }
+
+  .stat-continuity-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .stat-continuity-label {
+    font-family: 'Diatype';
+    font-size: 11px;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .stat-continuity-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stat-continuity-bar-bg {
+    flex: 1;
+    height: 14px;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .stat-continuity-bar-fill {
+    height: 100%;
+    background-color: #1E1E1E;
+    border-radius: 1px;
+    transition: width 0.6s ease, opacity 0.8s ease;
+    will-change: width, opacity;
+  }
+
+  .stat-continuity-value {
+    font-family: 'Diatype-Mono';
+    font-size: 11px;
+    min-width: 30px;
+    text-align: right;
+    transition: opacity 0.6s ease;
+    will-change: opacity;
+  }
+
+  /* Degradation Animation: Progressive opacity fade */
+  @keyframes degradeFade {
+    from { opacity: 1; }
+    to { opacity: 0.6; }
+  }
+
+  .stat-degrading {
+    animation: degradeFade 12s ease-in-out infinite;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 900px) {
+    .stat-counter-grid {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+  
+    .stat-continuity-grid {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+  
+    .stat-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .stat-bars {
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .stat-counter-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  
+    .stat-continuity-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .stat-services-table {
+      font-size: 10px;
+    }
+  
+    .stat-services-table th,
+    .stat-services-table td {
+      padding: 6px 4px;
+    }
+  
+    .stat-label {
+      min-width: 70px;
+    }
+  }
+
+  /* Respect user's motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .stat-bar,
+    .stat-stacked-segment,
+    .stat-counter-card,
+    .stat-house-column,
+    .stat-services-table th,
+    .stat-services-table td,
+    .stat-continuity-bar-fill,
+    .stat-degrading {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
   opacity: 0;
   transition: opacity 0.6s ease-in-out;
 }
@@ -657,6 +1229,317 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
   z-index: 50;
   pointer-events: none;
   transition: opacity 0.35s ease-in-out;
+
+body.stat-page {
+  background: var(--bg);
+}
+
+#main-scroll .stat-section {
+  padding: 26px 0;
+  border-top: 1px solid rgba(30, 30, 30, 0.12);
+}
+
+#main-scroll .stat-section:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+#main-scroll .stat-section--end {
+  padding-bottom: 0;
+}
+
+#main-scroll .stat-kicker {
+  margin-bottom: 14px;
+  font-family: 'Diatype-Mono';
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+#main-scroll .stat-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+#main-scroll .stat-number {
+  font-family: 'Diatype-Mono';
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  opacity: 0.55;
+}
+
+#main-scroll .stat-lead {
+  max-width: 34ch;
+  font-family: 'Diatype-Mono';
+  font-size: 13px;
+  line-height: 1.15;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+#main-scroll .stat-copy {
+  max-width: 68ch;
+}
+
+#main-scroll .stat-note {
+  max-width: 54ch;
+  font-size: 12px;
+  opacity: 0.62;
+}
+
+#main-scroll .stat-panel {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid rgba(30, 30, 30, 0.14);
+  background: linear-gradient(180deg, rgba(30, 30, 30, 0.03), transparent);
+}
+
+#main-scroll .stat-panel-label {
+  margin-bottom: 12px;
+  font-family: 'Diatype-Mono';
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+#main-scroll .stat-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#main-scroll .stat-town,
+#main-scroll .stat-cell-label,
+#main-scroll .stat-value,
+#main-scroll .stat-service-cell,
+#main-scroll .stat-range {
+  font-family: 'Diatype-Mono';
+}
+
+#main-scroll .stat-town {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+}
+
+#main-scroll .stat-value {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+#main-scroll .stat-cell-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+#main-scroll .stat-bar-track {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  background: rgba(30, 30, 30, 0.08);
+  overflow: hidden;
+}
+
+#main-scroll .stat-bar-fill {
+  width: 0;
+  height: 100%;
+  background: var(--myBlack);
+  transition: width 0.8s ease;
+}
+
+#main-scroll .stat-bar-fill--today {
+  background: rgba(30, 30, 30, 0.55);
+}
+
+#main-scroll .stat-bar-fill--light {
+  background: rgba(30, 30, 30, 0.36);
+}
+
+#main-scroll .stat-population-row,
+#main-scroll .stat-houses-row,
+#main-scroll .stat-continuity-row {
+  display: grid;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid rgba(30, 30, 30, 0.10);
+}
+
+#main-scroll .stat-population-row:first-child,
+#main-scroll .stat-houses-row:first-child,
+#main-scroll .stat-continuity-row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+#main-scroll .stat-population-row {
+  grid-template-columns: 1.1fr 1fr 1fr;
+}
+
+#main-scroll .stat-population-cell,
+#main-scroll .stat-age-bar,
+#main-scroll .stat-birth-card,
+#main-scroll .stat-house-cell,
+#main-scroll .stat-continuity-value {
+  min-width: 0;
+}
+
+#main-scroll .stat-population-cell {
+  display: grid;
+  gap: 8px;
+}
+
+#main-scroll .stat-age-row {
+  display: grid;
+  grid-template-columns: 12ch 1fr;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(30, 30, 30, 0.10);
+}
+
+#main-scroll .stat-age-row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+#main-scroll .stat-age-bars {
+  display: grid;
+  gap: 10px;
+}
+
+#main-scroll .stat-age-bar {
+  display: grid;
+  grid-template-columns: 6ch 1fr 6ch;
+  gap: 10px;
+  align-items: center;
+}
+
+#main-scroll .stat-births-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+#main-scroll .stat-birth-card {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(30, 30, 30, 0.12);
+  background: rgba(30, 30, 30, 0.02);
+}
+
+#main-scroll .stat-birth-values {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+#main-scroll .stat-house-row {
+  grid-template-columns: 1.15fr repeat(3, 1fr);
+}
+
+#main-scroll .stat-house-cell {
+  display: grid;
+  gap: 8px;
+}
+
+#main-scroll .stat-services-table {
+  display: grid;
+  gap: 8px;
+}
+
+#main-scroll .stat-services-row,
+#main-scroll .stat-services-head {
+  display: grid;
+  grid-template-columns: 1.1fr repeat(5, 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+#main-scroll .stat-services-head {
+  padding-bottom: 4px;
+  font-family: 'Diatype-Mono';
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+#main-scroll .stat-service-cell {
+  min-height: 36px;
+  padding: 8px 10px;
+  border: 1px solid rgba(30, 30, 30, 0.12);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+}
+
+#main-scroll .stat-service-cell--on,
+#main-scroll .stat-service-cell--partial {
+  background: rgba(30, 30, 30, 0.04);
+}
+
+#main-scroll .stat-service-cell--off {
+  background: rgba(30, 30, 30, 0.10);
+}
+
+#main-scroll .stat-service-cell--empty {
+  background: transparent;
+  opacity: 0.45;
+}
+
+#main-scroll .stat-continuity-row {
+  grid-template-columns: 1.1fr 1.7fr 14ch;
+}
+
+#main-scroll .stat-range {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.62;
+}
+
+#main-scroll .stat-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  font-family: 'Diatype-Mono';
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+#main-scroll .stat-legend span {
+  padding: 4px 8px;
+  border: 1px solid rgba(30, 30, 30, 0.12);
+}
+
+@media (max-width: 900px) {
+  #main-scroll .stat-population-row,
+  #main-scroll .stat-house-row,
+  #main-scroll .stat-continuity-row,
+  #main-scroll .stat-services-row,
+  #main-scroll .stat-services-head,
+  #main-scroll .stat-age-row {
+    grid-template-columns: 1fr;
+  }
+
+  #main-scroll .stat-age-bar {
+    grid-template-columns: 1fr;
+  }
+}
 }
 
 .loading-gallery.show {
