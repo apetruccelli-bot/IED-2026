@@ -235,6 +235,8 @@ function renderAll() {
   document.querySelectorAll('[data-item-index]').forEach((el) => {
     el.addEventListener('click', () => openLightbox(Number(el.dataset.itemIndex)));
   });
+
+  initializeArchiveScrollOpacity();
 }
 
 function filterVisible(term = '') {
@@ -372,6 +374,32 @@ hydrateRowsWithImages()
     renderAll();
   });
 
+function initializeArchiveScrollOpacity() {
+  const archiveScroll = document.querySelector('#archive-scroll, .col-start-3.col-end-9.bg-myWhite.h-screen.overflow-y-scroll');
+  const archiveItems = Array.from(document.querySelectorAll('#archive-gallery [data-item-index]'));
+
+  if (!archiveScroll || !archiveItems.length) return;
+
+  archiveItems.forEach((item) => item.classList.add('archive-fade'));
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+    archiveItems.forEach((item) => item.classList.add('archive-fade--visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      entry.target.classList.toggle('archive-fade--visible', entry.isIntersecting);
+    });
+  }, {
+    root: archiveScroll,
+    threshold: 0.14,
+    rootMargin: '0px 0px -8% 0px',
+  });
+
+  archiveItems.forEach((item) => observer.observe(item));
+}
+
 function normalizeNavPath(pathname) {
   const raw = String(pathname || '').trim().toLowerCase();
   if (!raw) return 'home.html';
@@ -419,6 +447,386 @@ document.addEventListener('DOMContentLoaded', applyActiveSidebarLink);
     });
   });
 })();
+
+// Fade-in sections while scrolling inside the story page container
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const mainScroll = document.getElementById('main-scroll');
+    const storyGrid = mainScroll?.querySelector('div.grid.grid-cols-2.gap-10px.pt-30px.pl-10px.pr-10px.pb-30px');
+    if (!mainScroll || !storyGrid) return;
+
+    const storyItems = Array.from(storyGrid.children).filter((element) => element.nodeType === 1);
+    if (!storyItems.length) return;
+
+    storyItems.forEach((element) => element.classList.add('story-fade'));
+    // Fallback: if IntersectionObserver is unavailable, reveal all
+    if (!('IntersectionObserver' in window)) {
+      storyItems.forEach((element) => element.classList.add('story-fade--visible'));
+      return;
+    }
+
+    // Track last scroll position to detect direction
+    let lastScrollTop = mainScroll.scrollTop || 0;
+
+    // Mark items already visible on load as visible
+    const containerRect = mainScroll.getBoundingClientRect();
+    storyItems.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.top < containerRect.bottom && r.bottom > containerRect.top) {
+        el.classList.add('story-fade--visible');
+      }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      const currentScroll = mainScroll.scrollTop || 0;
+      const scrollingDown = currentScroll > lastScrollTop;
+
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && scrollingDown) {
+          entry.target.classList.add('story-fade--visible');
+          observer.unobserve(entry.target);
+        }
+      });
+
+      lastScrollTop = currentScroll;
+    }, {
+      root: mainScroll,
+      threshold: 0.18,
+      rootMargin: '0px 0px -10% 0px',
+    });
+
+    storyItems.forEach((element) => {
+      if (!element.classList.contains('story-fade--visible')) observer.observe(element);
+    });
+  });
+})();
+
+// Progressive opacity for sticky section anchors while scrolling inside the story page
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const mainScroll = document.getElementById('main-scroll');
+    if (!mainScroll) return;
+
+    const navLinks = Array.from(mainScroll.querySelectorAll('.sticky a[href^="#sezione_"]'));
+    if (!navLinks.length) return;
+    const headerOffset = 80;
+
+    const sectionTargets = navLinks
+      .map((link) => {
+        const targetId = link.getAttribute('href')?.slice(1);
+        const target = targetId ? document.getElementById(targetId) : null;
+        return target ? { link, target } : null;
+      })
+      .filter(Boolean);
+
+    const updateAnchorOpacity = () => {
+      const scrollTop = mainScroll.scrollTop || 0;
+      const currentPosition = scrollTop + headerOffset;
+      const containerRect = mainScroll.getBoundingClientRect();
+      let activeIndex = -1;
+
+      sectionTargets.forEach(({ target }, index) => {
+        if (!target) return;
+        const sectionTop = target.getBoundingClientRect().top - containerRect.top + scrollTop;
+        const sectionStart = Math.max(0, sectionTop - headerOffset);
+        if (currentPosition >= sectionStart) {
+          activeIndex = index;
+        }
+      });
+
+      sectionTargets.forEach(({ link }, index) => {
+        link.style.opacity = index === activeIndex ? '1' : '.3';
+      });
+    };
+
+    let rafId = 0;
+    const requestUpdate = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0;
+        updateAnchorOpacity();
+      });
+    };
+
+    updateAnchorOpacity();
+    mainScroll.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate, { passive: true });
+  });
+})();
+
+function initializeStatisticsPage() {
+  // Use main scroll container as root for stats if explicit wrapper is not present
+  const statPage = document.getElementById('main-scroll') || document.body;
+
+  const formatNumber = (value) => new Intl.NumberFormat('it-IT').format(Math.round(value));
+  const clampPercentage = (value) => Math.max(4, Math.min(100, value));
+
+  const data = {
+    population: [
+      { town: 'Zagara', start: 1842, today: 312 },
+      { town: 'Santa Rena', start: 986, today: 141 },
+      { town: 'Monteferro', start: 1204, today: 226 },
+      { town: 'Serra Vasta', start: 1530, today: 318 },
+      { town: 'Valle Cupa', start: 764, today: 82 },
+      { town: 'Borgo Cupo', start: 692, today: 57 },
+      { town: 'Rocca Secca', start: 1106, today: 149 },
+    ],
+    age: [
+      { label: '0–14 anni', historic: 26, today: 3 },
+      { label: '15–35 anni', historic: 31, today: 7 },
+      { label: '36–64 anni', historic: 29, today: 28 },
+      { label: '65+ anni', historic: 14, today: 62 },
+    ],
+    births: [
+      { town: 'Zagara', start: 38, last: 1 },
+      { town: 'Santa Rena', start: 21, last: 0 },
+      { town: 'Monteferro', start: 27, last: 2 },
+      { town: 'Valle Cupa', start: 14, last: 0 },
+      { town: 'Borgo Cupo', start: 12, last: 0 },
+      { town: 'Piana Morta', start: 9, last: 0 },
+    ],
+    houses: [
+      { town: 'Zagara', built: 612, occupied: 189, active: 74 },
+      { town: 'Monteferro', built: 431, occupied: 102, active: 39 },
+      { town: 'Borgo Cupo', built: 288, occupied: 41, active: 12 },
+    ],
+    services: [
+      { town: 'Zagara', school: 'chiusa', postOffice: 'parziale', clinic: 'mensile', transport: 'ridotto', groceries: '1' },
+      { town: 'Santa Rena', school: 'chiusa', postOffice: 'chiuso', clinic: 'assente', transport: 'assente', groceries: '0' },
+      { town: 'Monteferro', school: 'chiusa', postOffice: 'parziale', clinic: 'assente', transport: 'ridotto', groceries: '1' },
+      { town: 'Borgo Cupo', school: 'chiusa', postOffice: 'chiuso', clinic: 'assente', transport: 'assente', groceries: '0' },
+    ],
+    continuity: [
+      { town: 'Zagara', value: 18 },
+      { town: 'Monteferro', value: 22 },
+      { town: 'Serra Vasta', value: 31 },
+      { town: 'Santa Rena', value: 12 },
+      { town: 'Borgo Cupo', value: 7 },
+      { town: 'Piana Morta', value: 4 },
+    ],
+  };
+
+  const birthsHost = document.getElementById('births-chart');
+  if (birthsHost) {
+    birthsHost.classList.add('stat-births-grid');
+    birthsHost.innerHTML = data.births
+      .map((item) => {
+        const width = clampPercentage((item.last / item.start) * 100);
+        return `
+          <div class="stat-birth-card">
+            <div class="stat-town">${item.town}</div>
+            <div class="stat-birth-values">
+              <div>
+                <span class="stat-cell-label">1964</span>
+                <div class="stat-value">${formatNumber(item.start)}</div>
+              </div>
+              <div>
+                <span class="stat-cell-label">ultimo anno</span>
+                <div class="stat-value" data-stat-drift-type="births" data-base="${item.last}" data-current="${item.last}" data-min="0">${formatNumber(item.last)}</div>
+              </div>
+            </div>
+            <div class="stat-bar-track"><div class="stat-bar-fill stat-bar-fill--today" data-stat-fill="births" style="width:${width}%"></div></div>
+          </div>
+        `;
+      })
+      .join('');
+  }
+
+  const housesHost = document.getElementById('houses-chart');
+  if (housesHost) {
+    housesHost.innerHTML = `
+      <svg viewBox="0 0 520 360" xmlns="http://www.w3.org/2000/svg" class="block w-full h-auto" aria-labelledby="houses-chart-title houses-chart-desc" role="img" style="font-family: 'Diatype', serif;">
+        <style type="text/css"><![CDATA[
+          @font-face {
+            font-family: 'Diatype';
+            src: url('font/ABCDiatype-Regular-Trial.woff2') format('woff2');
+            font-style: normal;
+            font-weight: normal;
+            font-display: swap;
+          }
+          @font-face {
+            font-family: 'Diatype-Regular';
+            src: url('font/ABCDiatype-Regular-Trial.woff2') format('woff2');
+            font-style: normal;
+            font-weight: normal;
+            font-display: swap;
+          }
+          text {
+            font-family: 'Diatype-Mono', 'Diatype', sans-serif !important;
+            font-weight: 400 !important;
+            letter-spacing: 0.01em !important;
+            text-rendering: optimizeLegibility !important;
+            shape-rendering: geometricPrecision !important;
+            text-transform: none !important;
+            font-size: 10px !important;
+          }
+          .small {
+            font-size: 11px !important;
+          }
+          .axis {
+            stroke: #1E1E1E;
+            stroke-width: 1;
+          }
+          .b1 {
+            fill: #1E1E1E;
+          }
+          .b2 {
+            fill: #5C5C5C;
+          }
+          .b3 {
+            fill: #A0A0A0;
+          }
+        ]]></style>
+
+        <title id="houses-chart-title">Case occupate</title>
+        <desc id="houses-chart-desc">Confronto tra case costruite, occupate e attive per Zagara, Monteferro e Borgo Cupo.</desc>
+
+        <line x1="60" y1="300" x2="490" y2="300" class="axis"/>
+        <line x1="60" y1="100" x2="60" y2="300" class="axis"/>
+
+        <rect x="90" y="145" width="28" height="155" class="b1"/>
+        <rect x="123" y="250" width="28" height="50" class="b2"/>
+        <rect x="156" y="280" width="28" height="20" class="b3"/>
+        <text x="88" y="138" class="small">612</text>
+        <text x="120" y="243" class="small">189</text>
+        <text x="155" y="273" class="small">74</text>
+        <text x="90" y="325" class="small">ZAGARA</text>
+
+        <rect x="240" y="190" width="28" height="110" class="b1"/>
+        <rect x="273" y="270" width="28" height="30" class="b2"/>
+        <rect x="306" y="290" width="28" height="10" class="b3"/>
+        <text x="238" y="183" class="small">431</text>
+        <text x="270" y="263" class="small">102</text>
+        <text x="305" y="283" class="small">39</text>
+        <text x="235" y="325" class="small">MONTEFERRO</text>
+
+        <rect x="390" y="228" width="28" height="72" class="b1"/>
+        <rect x="423" y="290" width="28" height="10" class="b2"/>
+        <rect x="456" y="296" width="28" height="4" class="b3"/>
+        <text x="388" y="221" class="small">288</text>
+        <text x="423" y="283" class="small">41</text>
+        <text x="455" y="290" class="small">12</text>
+        <text x="390" y="325" class="small">BORGO CUPO</text>
+
+        <text x="130" y="85" class="small">■ COSTRUITE</text>
+        <text x="260" y="85" class="small">■ OCCUPATE</text>
+        <text x="390" y="85" class="small">■ ATTIVE</text>
+      </svg>
+    `;
+  }
+
+  const servicesHost = document.getElementById('services-chart');
+  if (servicesHost) {
+    const serviceHead = `
+      <div class="stat-services-head">
+        <span>Paese</span>
+        <span>Scuola</span>
+        <span>Ufficio postale</span>
+        <span>Ambulatorio</span>
+        <span>Trasporto</span>
+        <span>Alimentari</span>
+      </div>
+    `;
+
+    const serviceCell = (value) => {
+      const normalized = normalize(value);
+      let modifier = 'stat-service-cell--empty';
+      if (normalized === '1') modifier = 'stat-service-cell--on';
+      else if (normalized === '0' || normalized.includes('assente')) modifier = 'stat-service-cell--off';
+      else if (normalized.includes('chius')) modifier = 'stat-service-cell--off';
+      else if (normalized.includes('parziale') || normalized.includes('ridotto') || normalized.includes('mensile')) modifier = 'stat-service-cell--partial';
+
+      return `<span class="stat-service-cell ${modifier}">${value || '—'}</span>`;
+    };
+
+    servicesHost.innerHTML = `
+      <div class="stat-services-table">
+        ${serviceHead}
+        ${data.services
+          .map((item) => `
+            <div class="stat-services-row">
+              <span class="stat-town">${item.town}</span>
+              ${serviceCell(item.school)}
+              ${serviceCell(item.postOffice)}
+              ${serviceCell(item.clinic)}
+              ${serviceCell(item.transport)}
+              ${serviceCell(item.groceries)}
+            </div>
+          `)
+          .join('')}
+      </div>
+    `;
+  }
+
+  const continuityHost = document.getElementById('continuity-chart');
+  if (continuityHost) {
+    const continuityLabel = (value) => {
+      if (value >= 70) return 'continuità attiva';
+      if (value >= 40) return 'continuità fragile';
+      if (value >= 15) return 'continuità terminale';
+      return 'continuità non rilevabile';
+    };
+
+    continuityHost.innerHTML = `
+      ${data.continuity
+        .map((item) => {
+          const width = clampPercentage(item.value);
+          return `
+            <div class="stat-continuity-row">
+              <div class="stat-town">${item.town}</div>
+              <div class="stat-continuity-value">
+                <span class="stat-cell-label">indice</span>
+                <div class="stat-bar-track"><div class="stat-bar-fill" data-stat-fill="continuity" style="width:${width}%"></div></div>
+                <div class="stat-value" data-stat-drift-type="continuity" data-base="${item.value}" data-current="${item.value}" data-min="0">${item.value}</div>
+              </div>
+              <div class="stat-range">${continuityLabel(item.value)}</div>
+            </div>
+          `;
+        })
+        .join('')}
+      <div class="stat-legend">
+        <span>100–70 continuità attiva</span>
+        <span>69–40 continuità fragile</span>
+        <span>39–15 continuità terminale</span>
+        <span>14–0 continuità non rilevabile</span>
+      </div>
+    `;
+  }
+
+  const driftingNodes = Array.from(statPage.querySelectorAll('[data-stat-drift-type]'));
+  if (driftingNodes.length) {
+    const updateDrift = () => {
+      driftingNodes.forEach((node) => {
+        const current = Number(node.dataset.current || node.dataset.base || 0);
+        const min = Number(node.dataset.min || 0);
+        if (current <= min) return;
+
+        const next = Math.max(min, current - 1);
+        node.dataset.current = String(next);
+        node.textContent = formatNumber(next);
+
+        const type = node.dataset.statDriftType || '';
+        const parent = node.closest('.stat-population-cell, .stat-birth-card, .stat-continuity-value');
+        const fill = parent ? parent.querySelector(`[data-stat-fill="${type}"]`) : null;
+        const base = Number(node.dataset.base || current || 1);
+        if (fill && base > 0) {
+          const percent = Math.max(3, (next / base) * 100);
+          fill.style.width = `${Math.min(100, percent)}%`;
+        }
+      });
+    };
+
+    updateDrift();
+    window.setInterval(updateDrift, 12000);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeStatisticsPage);
+} else {
+  // If script is loaded after DOMContentLoaded, run immediately
+  initializeStatisticsPage();
+}
 
 // Toggle sidebar-links on pages that include the toggle button
 (function(){
@@ -471,10 +879,13 @@ function initializeLoadingAnimation() {
       });
 
       let currentIndex = 0;
-      const imageDuration = 300; // Each image shows for 300ms
-      const firstImageDuration = 1500; // First image shows for 1.5 seconds
-      const transitionDuration = 30; // Fade transition duration - very fast
+      const imageDuration = 120; // Each image shows for 120ms (faster)
+      const firstImageDuration = 600; // First image shows for 0.6 seconds (faster)
+      const transitionDuration = 20; // Fade transition duration - very fast
       
+      // Determine how many images to actually show (limit to 15)
+      const maxSlides = Math.min(items.length, 25);
+
       // Wait for images to preload before starting slideshow
       const startSlideshow = () => {
         if (preloadedCount < totalItems) {
@@ -488,7 +899,7 @@ function initializeLoadingAnimation() {
       
       // Function to show image with coordinates
       function showImage(index) {
-        if (index >= items.length) {
+        if (index >= maxSlides) {
           startZoomPhase();
           return;
         }
@@ -553,82 +964,34 @@ function initializeLoadingAnimation() {
         loadingImageCenter.classList.add('fade-out');
         loadingCoordinates.classList.add('fade-out');
         
-        // After a brief delay, show the gallery with fade-in (0.8s)
+        // After a brief delay, show the gallery with fade-in
         setTimeout(() => {
           loadingGallery.classList.add('show');
-        }, 200);
+        }, 100);
         
-        // Get the map instance (it should be ready by now)
+        // Show gallery briefly (no scatter) and reveal the map quickly
         const map = window.procopioMap;
-        
-        // Create gallery images for scatter animation - limit to first 10
-        const displayLimit = 10;
-        items.slice(0, displayLimit).forEach((item, index) => {
-          const img = document.createElement('img');
-          img.src = item.src;
-          img.alt = item.label;
-          img.className = 'loading-image';
-          
-          // Use Mapbox projection to get exact pixel coordinates
-          let tx = 0, ty = 0;
-          
-          if (map && map.project) {
-            // Project geographic coordinates to pixel coordinates
-            const screenCoords = map.project(item.coordinates);
-            // Offset from center of screen
-            tx = screenCoords.x - window.innerWidth / 2;
-            ty = screenCoords.y - window.innerHeight / 2;
-          } else {
-            // Fallback if map not ready
-            const [lng, lat] = item.coordinates;
-            tx = ((lng - 12) / 7.5) * 400; // Simple scaling
-            ty = ((42.5 - lat) / 6.5) * 300;
-          }
-          
-          img.style.setProperty('--tx', `${tx}px`);
-          img.style.setProperty('--ty', `${ty}px`);
-          
-          loadingGallery.appendChild(img);
 
-          // Delay scatter animation start until gallery is visible + 300ms
-          const scatterStartDelay = 800 + 300 + (index * 200);
-          
-          if (index === 0) {
-            // First image: reveal animation
-            setTimeout(() => {
-              img.classList.add('reveal-start');
-              // Force a reflow to apply the start state before transitioning
-              void img.offsetWidth; 
-              img.classList.add('reveal-end');
+        // Show gallery UI without creating individual images
+        loadingGallery.classList.add('show');
 
-              // After reveal, add scatter class
-              setTimeout(() => {
-                img.classList.add('scatter');
-              }, 500); // Wait for reveal to finish
-            }, scatterStartDelay - 500);
-          } else {
-            // Other images: staggered scatter with fade-in
-            setTimeout(() => {
-              img.classList.add('scatter');
-            }, scatterStartDelay);
-          }
-        });
-        
-        // Fade out overlay after scatter completes
-        const totalScatterTime = (displayLimit * 200) + 800 + 300 + 2500;
+        // Ensure map is visible immediately
+        if (homeMap) homeMap.classList.add('visible');
+
+        // Fade out overlay shortly after revealing the map
+        const quickFade = 350; // ms
         setTimeout(() => {
           loadingOverlay.classList.add('fade-out');
-          // Initialize camera NOW that loading is complete
           if (typeof initProcopioTracking === 'function') {
             initProcopioTracking();
           }
-        }, totalScatterTime);
+        }, quickFade);
       }
       
-      // Start showing images (after small delay to ensure DOM ready)
+      // Start showing images (shorter delay)
       setTimeout(() => {
         startSlideshow();
-      }, 500);
+      }, 150);
     })
     .catch(err => {
       console.error('Error loading animation images:', err);

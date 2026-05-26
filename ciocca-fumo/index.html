@@ -70,26 +70,47 @@
       })();
     </script>
 
+  <div class="descriptionAndFilters">
+  <div class="description-intro">
+    <div class="japanese" id="category-japanese-text"></div>
+    <div class="english text-myGrey" id="category-english-text"></div>
+  </div>
+
+  <div class="filters" id="filters-panel">
+    ...
+  </div>
+</div>
+
+  <main id="grid" class="myPhotos"></main>
+</div>
 
     <header class="initially-blurred all-blurred">
       <div class="header-inner ">
-        <a href="/" class="col-span-2">禁煙 No smoking</a>
+        <a href="../index.html" class="col-span-2">禁煙 No smoking</a>
         <div class="flex gap-20px col-span-10">
           <div class="flex gap-20px">
-            <p class="cursor-pointer" data-category="fotografie">吸殻 Portraits</p>
-            <p class="cursor-pointer" data-category="pacchetti">タバコの箱 Cigarette packs</p>
-            <p class="cursor-pointer" data-category="pubblicità">広告 Advertisements</p>
+            <a href="#portraits" class="cursor-pointer" data-category="fotografie">吸殻 Portraits</a>
+            <a href="#packs" class="cursor-pointer" data-category="pacchetti">タバコの箱 Cigarette packs</a>
+            <a href="#advertisements" class="cursor-pointer" data-category="pubblicità">広告 Advertisements</a>
           </div>
-          <p onclick="openExploreModal()" class="ml-auto cursor-pointer">アーカイブについて About the Archive</p>
+         <p onclick="openExploreModal()" class="cursor-pointer"> アーカイブについて About the Archive </p>
         </div>
       </div>
     </header>
 
     <!-- <p class="results-info font-myTitle" id="results-info"></p> -->
 
-    <div class="mainLayout initially-blurred all-blurred
-    bg-myBlack fixed top-0 left-0 w-screen h-screen overflow-y-scroll
-    grid grid-cols-12 gap-10px">
+    <section id="portraits">
+      <h2>吸殻 Portraits</h2>
+    </section>
+
+    <section id="packs">
+      <h2>タバコの箱 Cigarette packs</h2>
+    </section>
+
+    <section id="advertisements">
+      <h2>広告 Advertisements</h2>
+    </section>
       <div class="descriptionAndFilters col-span-4 h-full flex flex-col justify-between pt-[10rem]">
         <div class="description flex flex-col gap-10px">
           <div class="japanese" id="category-japanese-text">
@@ -171,61 +192,71 @@
 
       <header class="initially-blurred all-blurred">
       <div class="header-inner ">
-        <a href="/" class="col-span-2">禁煙 No smoking</a>
+        <a href="../index.html" class="col-span-2">禁煙 No smoking</a>
         <div class="flex gap-20px col-span-10">
           <div class="flex gap-20px">
-            <p class="cursor-pointer" data-category="fotografie">吸殻 Portraits</p>
-            <p class="cursor-pointer" data-category="pacchetti">タバコの箱 Cigarette packs</p>
-            <p class="cursor-pointer" data-category="pubblicità">広告 Advertisements</p>
+            <a href="#portraits" onclick="navigateFromModal('#portraits')" class="cursor-pointer">吸殻 Portraits</a>
+            <a href="#packs" onclick="navigateFromModal('#packs')" class="cursor-pointer">タバコの箱 Cigarette packs</a>
+            <a href="#advertisements" onclick="navigateFromModal('#advertisements')" class="cursor-pointer">広告 Advertisements</a>
           </div>
-          <p onclick="openExploreModal()" class="ml-auto cursor-pointer">アーカイブについて About the Archive</p>
+          <a href="javascript:void(0)" onclick="closeExploreModal()" class="ml-auto cursor-pointer">Close</a>
         </div>
       </div>
     </header>
 
 
-      <div class="about-text flex flex-col gap-20px max-w-[90ch] mx-auto w-full items-center 
-pt-[10rem] pb-[10rem] overflow-scroll">
+      <div class="about-page">
 
-  <!-- TITLE -->
-  <p class="text-center font-myTitle">
-    田中弘 Hiroshi Tanaka<br>
-    禁煙 No Smoking
-  </p>
+        <div style="position:fixed; top:18px; left:18px; z-index:1001;">
+          <a href="../index.html" style="color:var(--color-myWhite); text-decoration:underline;">Site Home</a>
+        </div>
+
+  <section class="about-hero">
+    <h1>
+      田中弘 Hiroshi Tanaka<br>
+      禁煙 No Smoking
+    </h1>
+
+    <p class="about-intro">
+      1980年代、大阪でタバコ屋を営んでいた田中浩氏は、喫煙を単なる悪癖ではなく生き方の一つと捉え、タバコや関連グッズを収集していた。
+    </p>
+
+    <p class="about-intro">
+      Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items.
+    </p>
+  </section>
+
+  <!-- PRIMA RIGA -->
+  <section class="about-grid about-grid-3">
+    <img src="img/about/about1.png">
+    <img src="img/about/about2.jpg">
+    <img src="img/about/about3.png">
+  </section>
+
+  <section class="about-text-block">
+    <p>
+      ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。
+      ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。
+    </p>
+
+    <p>
+      Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items.
+    </p>
+  </section>
+
+  <!-- TERZA RIGA -->
+  <section class="about-grid about-grid-3">
+    <img src="img/about/about4.png">
+    <img src="img/about/about5.jpg">
+    <img src="img/about/about6.png">
+  </section>
+
+</div>
 
   <!-- TEXT -->
   <p class="text-myGrey text-center max-w-[70ch]">
     Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life...
   </p>
-
-  <!-- IMAGE FULL -->
-  <div class="about-img-full">
-    <img src="img/about/about1.png" />
-  </div>
-
-  <!-- GRID IMAGES -->
-  <div class="about-img-grid">
-    <img src="img/about/about2.jpg" />
-    <img src="img/about/about3.png" />
-  </div>
-
-  <!-- TEXT -->
-  <p class="text-myGrey max-w-[70ch] text-center">
-    Over time, he filled his tobacco shop with packs, images, and objects...
-  </p>
-
-  <!-- IMAGE FULL -->
-  <div class="about-img-full">
-    <img src="img/about/about4.png" />
-  </div>
-
-  <!-- GRID 3 -->
-  <div class="about-img-grid-3">
-    <img src="img/about/about5.jpg" />
-    <img src="img/about/about6.png" />
-    <img src="img/about/about1.png" />
-  </div>
-      </div>
 
     </div>
 
@@ -235,6 +266,22 @@ pt-[10rem] pb-[10rem] overflow-scroll">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2"></script>
+
+    <script>
+      function navigateFromModal(hash) {
+        try { closeExploreModal(); } catch (e) { /* ignore */ }
+        // small delay to allow modal hide animation / cleanup
+        setTimeout(function() {
+          var el = document.querySelector(hash);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else {
+            // fallback: navigate to site root with hash
+            window.location.href = '../index.html' + (hash || '');
+          }
+        }, 220);
+      }
+    </script>
 
     <script src="ciocca-ml.js"></script>
     <script src="script.js"></script>

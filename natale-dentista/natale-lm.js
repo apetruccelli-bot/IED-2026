@@ -14,6 +14,178 @@ radiografiaImg.onload = () => { radiografiaLoaded = true; };
 radiografiaImg.onerror = (e) => { console.error('Failed to load radiograph image:', radiografiaImg.src, e); };
 // DOM overlay element (placed above the video/canvas)
 let radiographOverlayEl = null;
+let overlayDebugEl = null;
+// proximity multiplier for trackpoint sensitivity (higher = more permissive)
+let PROXIMITY_MULT = 0.18; // reduced sensitivity to avoid false positives
+// debounce: number of consecutive frames a fingertip must remain within threshold
+const PROXIMITY_REQUIRED_FRAMES = 3;
+// track consecutive hits for landmark indices
+const _consecutiveHits = {};
+// When true, the live webcam stream will be hidden visually (video kept playing for detection).
+const HIDE_VIDEO_STREAM = true;
+let overlayStatusEl = null;
+let _preloadFailures = [];
+
+function ensureOverlayDebug() {
+    if (overlayDebugEl) return overlayDebugEl;
+    try {
+        const d = document.createElement('div');
+        d.id = 'overlayDebug';
+        d.style.position = 'fixed';
+        d.style.right = '18px';
+        d.style.bottom = '18px';
+        d.style.padding = '8px 10px';
+        d.style.background = 'rgba(0,0,0,0.6)';
+        d.style.color = '#fff';
+        d.style.fontFamily = 'monospace';
+        d.style.fontSize = '12px';
+        d.style.zIndex = '9999';
+        d.style.border = '1px solid rgba(255,255,255,0.06)';
+        d.style.borderRadius = '6px';
+        d.textContent = '';
+        document.body.appendChild(d);
+        overlayDebugEl = d;
+        return overlayDebugEl;
+    } catch (e) {
+        return null;
+    }
+}
+
+// Map specific face-landmark indices to radiograph assets
+const LANDMARK_IMAGE_MAP = {
+    234: 'interazione/radiografia_Adx1.jpg',
+    187: 'interazione/radiografia_Adx2.jpg',
+    32: 'interazione/radiografia_Bdx2.jpg',
+    352: 'interazione/radiografia_Asx1.jpg',
+    411: 'interazione/radiografia_Asx2.jpg',
+    436: 'interazione/radiografia_Asx3.jpg',
+    172: 'interazione/radiografia_Bdx1.jpg',
+    397: 'interazione/radiografia_Bsx1.jpg',
+    394: 'interazione/radiografia_Bsx2.jpg',
+    428: 'interazione/radiografia_Bsx3.jpg'
+};
+
+
+function showOverlayDebug(msg) {
+    try {
+        const el = ensureOverlayDebug();
+        if (!el) return;
+        el.textContent = msg;
+        // fade effect
+        el.style.opacity = '1';
+        clearTimeout(el._hideTimer);
+        el._hideTimer = setTimeout(() => { try { el.style.opacity = '0.85'; } catch (e) {} }, 2400);
+    } catch (e) {}
+}
+
+function ensureOverlayStatus() {
+    if (overlayStatusEl) return overlayStatusEl;
+    try {
+        const s = document.createElement('div');
+        s.id = 'overlayStatus';
+        s.style.position = 'fixed';
+        s.style.left = '18px';
+        s.style.bottom = '18px';
+        s.style.padding = '8px 10px';
+        s.style.background = 'rgba(0,0,0,0.6)';
+        s.style.color = '#fff';
+        s.style.fontFamily = 'monospace';
+        s.style.fontSize = '12px';
+        s.style.zIndex = '10000';
+        s.style.border = '1px solid rgba(255,255,255,0.06)';
+        s.style.borderRadius = '6px';
+        s.style.maxWidth = '320px';
+        s.innerHTML = '<strong>Overlay status</strong><br><div id="overlayStatusInner">initializing...</div>';
+        document.body.appendChild(s);
+        overlayStatusEl = s;
+        return overlayStatusEl;
+    } catch (e) { return null; }
+}
+
+function updateOverlayStatus() {
+    try {
+        const el = ensureOverlayStatus();
+        if (!el) return;
+        const inner = document.getElementById('overlayStatusInner');
+        const overlay = radiographOverlayEl;
+        const lines = [];
+        lines.push(`<div style="margin-bottom:6px"><em>Preload failures:</em> ${_preloadFailures.length}</div>`);
+        if (_preloadFailures.length > 0) {
+            _preloadFailures.slice(-3).forEach(p => lines.push(`<div style="color:#f88;">• ${p}</div>`));
+        }
+        if (overlay) {
+            lines.push(`<div>overlay.src: ${overlay.src.split('/').pop()}</div>`);
+            lines.push(`<div>display: ${overlay.style.display || 'n/a'} opacity: ${overlay.style.opacity || 'n/a'}</div>`);
+            const la = overlay.dataset && overlay.dataset.landmarkActive ? overlay.dataset.landmarkActive : 'none';
+            lines.push(`<div>landmarkActive: ${la}</div>`);
+        } else {
+            lines.push('<div>overlay element: not present</div>');
+        }
+        inner.innerHTML = lines.join('');
+    } catch (e) {}
+}
+
+function createOverlayTestPanel() {
+    try {
+        const panel = document.createElement('div');
+        panel.id = 'overlayTestPanel';
+        panel.style.position = 'fixed';
+        panel.style.right = '18px';
+        panel.style.top = '18px';
+        panel.style.zIndex = '10001';
+        panel.style.background = 'rgba(0,0,0,0.6)';
+        panel.style.color = '#fff';
+        panel.style.padding = '8px';
+        panel.style.borderRadius = '8px';
+        panel.style.fontFamily = 'monospace';
+        panel.style.fontSize = '12px';
+        panel.innerHTML = '<strong>Overlay test</strong><div style="margin-top:6px" id="overlayTestButtons"></div>';
+        document.body.appendChild(panel);
+
+        const container = document.getElementById('overlayTestButtons');
+        // base image
+        const baseBtn = document.createElement('button');
+        baseBtn.textContent = 'Test base';
+        baseBtn.style.margin = '4px';
+        baseBtn.onclick = () => {
+            const overlay = ensureRadiographOverlay();
+            if (!overlay) return;
+            const p = radiografiaImg.src;
+            const img = new Image();
+            img.onload = () => { overlay.src = p; overlay.style.display='block'; overlay.style.opacity='0.98'; showOverlayDebug('Base loaded'); updateOverlayStatus(); };
+            img.onerror = (e) => { _preloadFailures.push(p); showOverlayDebug('Base failed'); updateOverlayStatus(); };
+            img.src = p;
+        };
+        container.appendChild(baseBtn);
+
+        Object.entries(LANDMARK_IMAGE_MAP).forEach(([idx, path]) => {
+            const b = document.createElement('button');
+            b.textContent = `${idx}`;
+            b.title = path.split('/').pop();
+            b.style.margin = '4px';
+            b.onclick = () => {
+                const overlay = ensureRadiographOverlay();
+                if (!overlay) return;
+                const img = new Image();
+                img.onload = () => { 
+                    try { overlay.dataset.landmarkActive = String(idx); } catch (e) {}
+                    try { overlay.dataset.persistent = '1'; } catch (e) {}
+                    overlay.src = path; overlay.style.display='block'; overlay.style.opacity='0.98'; showOverlayDebug(`Loaded ${path.split('/').pop()}`); updateOverlayStatus();
+                };
+                img.onerror = (e) => { _preloadFailures.push(path); showOverlayDebug(`Failed ${path.split('/').pop()}`); updateOverlayStatus(); };
+                img.src = path;
+            };
+            container.appendChild(b);
+        });
+    } catch (e) { console.warn('Failed to create overlay test panel', e && e.message); }
+}
+
+// create the test panel after DOM ready
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(createOverlayTestPanel, 400);
+} else {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(createOverlayTestPanel, 400));
+}
 
 function ensureRadiographOverlay() {
     if (radiographOverlayEl) return radiographOverlayEl;
@@ -29,13 +201,32 @@ function ensureRadiographOverlay() {
         img.style.width = '100%';
         img.style.height = '100%';
         img.style.objectFit = 'cover';
-        img.style.zIndex = '4';
+        // place overlay above video/canvas; debug canvas sits above it
+        img.style.zIndex = '10';
         img.style.pointerEvents = 'none';
         img.style.opacity = '0';
         img.style.transition = 'opacity 220ms ease';
         img.style.display = 'none';
+        // add listeners to observe load errors and success
+    img.addEventListener('load', () => { console.log('Radiograph overlay loaded:', img.src); showOverlayDebug('Overlay image loaded'); updateOverlayStatus(); });
+    img.addEventListener('error', (e) => { console.error('Radiograph overlay failed to load:', img.src, e); showOverlayDebug('Overlay load failed: ' + img.src.split('/').pop()); _preloadFailures.push(img.src); updateOverlayStatus(); });
+
+        // Preload mapped images so 404s surface early
+        try {
+            Object.values(LANDMARK_IMAGE_MAP).forEach(p => {
+                const pre = new Image();
+                pre.src = p;
+                pre.onload = () => { console.log('Preloaded', p); updateOverlayStatus(); };
+                pre.onerror = (e) => { console.warn('Preload failed', p, e); _preloadFailures.push(p); updateOverlayStatus(); };
+            });
+            const basePre = new Image(); basePre.src = radiografiaImg.src; basePre.onload = () => {}; basePre.onerror = () => {};
+        } catch (e) {}
+
         frame.appendChild(img);
         radiographOverlayEl = img;
+    console.log('Created radiograph overlay element, initial src=', img.src);
+    showOverlayDebug('Overlay created');
+        updateOverlayStatus();
         return radiographOverlayEl;
     } catch (e) {
         return null;
@@ -74,7 +265,9 @@ function setStatus(msg) {
 let handModel = null;
 let hands = [];
 let handDetector = null;
-const PREVIEW_IS_MIRRORED = true;
+// Separate mirroring flags: face tracking should not be mirrored, but keep hand mirroring
+const MIRROR_FACE = false;
+const MIRROR_HAND = true;
 
 // MediaPipe handedness is from camera perspective; swap for selfie-view UI labels.
 function normalizeHandednessLabel(label) {
@@ -84,12 +277,13 @@ function normalizeHandednessLabel(label) {
 }
 
 function mirrorPointX(point) {
-    if (!PREVIEW_IS_MIRRORED || !point) return point;
-    return { ...point, x: canvas.width - point.x };
+    if (!point) return point;
+    // Mirror horizontally around the canvas center
+    return { ...point, x: (typeof canvas !== 'undefined' && canvas.width) ? (canvas.width - point.x) : point.x };
 }
 
-function mirrorKeypointsX(keypoints) {
-    if (!PREVIEW_IS_MIRRORED || !Array.isArray(keypoints)) return keypoints;
+function mirrorKeypointsX(keypoints, mirror = MIRROR_HAND) {
+    if (!mirror || !Array.isArray(keypoints)) return keypoints;
     return keypoints.map(mirrorPointX);
 }
 
@@ -286,6 +480,20 @@ function drawHandLandmarks(keypoints, color) {
              video.height = videoHeight;
              
              console.log(`Video dimensions: ${videoWidth}x${videoHeight}`);
+            // Optionally hide the visible webcam stream while keeping the video element
+            // active so detections still receive frames. This makes only the overlay images
+            // visible to the user when interactions are active.
+            try {
+                if (typeof HIDE_VIDEO_STREAM !== 'undefined' && HIDE_VIDEO_STREAM) {
+                    video.style.opacity = '0';
+                    video.style.pointerEvents = 'none';
+                    video.style.visibility = 'hidden';
+                    // hide the drawing canvas as well so only the radiograph overlay is visible
+                    if (canvas) canvas.style.display = 'none';
+                }
+            } catch (e) {
+                console.warn('Could not hide video stream:', e && e.message);
+            }
             // Ensure the displayed video and overlay canvas are not visually mirrored.
             try {
                 // Explicitly clear any CSS transform that may have been applied inline or by other scripts
@@ -358,9 +566,9 @@ function drawHandLandmarks(keypoints, color) {
     const rawFaces = await detector.estimateFaces(video, {
          flipHorizontal: false
      });
-    const faces = PREVIEW_IS_MIRRORED
-        ? rawFaces.map(face => ({ ...face, keypoints: mirrorKeypointsX(face.keypoints) }))
-        : rawFaces;
+    const faces = rawFaces.map(face => ({ ...face, keypoints: mirrorKeypointsX(face.keypoints, MIRROR_FACE) }));
+    // Precompute smiling state so cheek logic can decide whether to restore base image
+    const smilingFace = faces && faces.some(f => isSmiling(f.keypoints));
 
     // detect hands: prefer the newer handDetector (MediaPipe Hands) if available
     hands = [];
@@ -369,7 +577,7 @@ function drawHandLandmarks(keypoints, color) {
             const raw = await handDetector.estimateHands(video, { flipHorizontal: false });
             // normalize to { keypoints: [{x,y,z}], handedness, score }
             hands = raw.map(h => {
-                const kps = mirrorKeypointsX((h.keypoints || h.landmarks || []).map(p => ({ x: p.x, y: p.y, z: p.z || 0 })));
+                const kps = mirrorKeypointsX((h.keypoints || h.landmarks || []).map(p => ({ x: p.x, y: p.y, z: p.z || 0 })), MIRROR_HAND);
                 const rawLabel = (h.handedness && h.handedness[0] && h.handedness[0].label) || h.handedness || (h.handednessLabel || 'Unknown');
                 return { keypoints: kps, handedness: normalizeHandednessLabel(rawLabel), score: h.score || (h.handInViewConfidence || 1) };
             });
@@ -382,13 +590,19 @@ function drawHandLandmarks(keypoints, color) {
             const raw = await handModel.estimateHands(video, true);
             // handpose returns objects with landmarks: array of [x,y,z] and annotations
             hands = raw.map(h => {
-                const kps = mirrorKeypointsX((h.landmarks || []).map(p => ({ x: p[0], y: p[1], z: p[2] || 0 })));
+                const kps = mirrorKeypointsX((h.landmarks || []).map(p => ({ x: p[0], y: p[1], z: p[2] || 0 })), MIRROR_HAND);
                 return { keypoints: kps, annotations: h.annotations || {}, handedness: normalizeHandednessLabel(h.handedness || 'Unknown'), score: h.score || 1 };
             });
         } catch (e) {
             hands = [];
         }
     }
+
+    // Show quick debug counts for faces and hands
+    try {
+        showOverlayDebug(`Faces: ${faces.length}  Hands: ${hands.length}`);
+        console.debug('Detection counts', { faces: faces.length, hands: hands.length });
+    } catch (e) {}
 
     // Reset any canvas transform and clear canvas to avoid mirrored drawings
     try {
@@ -399,26 +613,7 @@ function drawHandLandmarks(keypoints, color) {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // If any detected face is smiling, show the radiograph overlay element above the stream
-    try {
-        if (typeof window !== 'undefined') console.debug && console.debug('radiografiaLoaded=', radiografiaLoaded);
-        const smilingFace = faces && faces.some(f => isSmiling(f.keypoints));
-        const overlay = ensureRadiographOverlay();
-        if (smilingFace && radiografiaLoaded && overlay) {
-            // show overlay (fade in)
-            overlay.style.display = 'block';
-            // ensure reflow before changing opacity
-            void overlay.offsetWidth;
-            overlay.style.opacity = '0.98';
-        } else if (overlay) {
-            // hide overlay (fade out)
-            overlay.style.opacity = '0';
-            // after transition, set display none
-            setTimeout(() => { if (overlay && overlay.style.opacity === '0') overlay.style.display = 'none'; }, 240);
-        }
-    } catch (e) {
-        // ignore detection-time overlay errors
-    }
+    // (overlay handling moved later so cheek-trigger and hand logic can decide the source)
 
       // Draw each face with different color
      let infoHTML = "";
@@ -428,9 +623,45 @@ function drawHandLandmarks(keypoints, color) {
 
          faces.forEach((face, index) => {
              const color = faceColors[index % faceColors.length];
-             
-            // Tracking visuals hidden (bounding box and landmarks removed)
-            
+
+            // Draw face landmarks and bounding box so user sees tracking
+            try {
+                drawFaceLandmarks(face.keypoints, color);
+                drawBoundingBox(face.keypoints, color);
+            } catch (e) {
+                // ignore drawing errors
+            }
+
+            // Draw a persistent cheek hotspot to guide the user where to point
+            try {
+                const faceXs = face.keypoints.map(p => p.x);
+                const faceYs = face.keypoints.map(p => p.y);
+                const faceMinX = Math.min(...faceXs);
+                const faceMaxX = Math.max(...faceXs);
+                const faceMinY = Math.min(...faceYs);
+                const faceMaxY = Math.max(...faceYs);
+
+                // estimate left cheek position (using mesh index 234 when available)
+                const leftCheek = face.keypoints[234] || face.keypoints[61];
+                const leftCheekX = leftCheek ? leftCheek.x : (faceMinX + (faceMaxX - faceMinX) * 0.25);
+                const leftCheekY = (face.keypoints[10] && face.keypoints[10].y) ? face.keypoints[10].y : (faceMinY + (faceMaxY - faceMinY) * 0.44);
+                const guideW = Math.max(28, (faceMaxX - faceMinX) * 0.22);
+                const guideH = Math.max(24, (faceMaxY - faceMinY) * 0.18);
+
+                ctx.save();
+                ctx.globalAlpha = 0.12;
+                ctx.fillStyle = 'rgba(40,160,220,0.95)';
+                ctx.beginPath();
+                ctx.ellipse(leftCheekX, leftCheekY, guideW/2, guideH/2, 0, 0, Math.PI*2);
+                ctx.fill();
+                ctx.restore();
+
+                // label
+                ctx.fillStyle = 'rgba(220,220,220,0.9)';
+                ctx.font = '14px monospace';
+                ctx.fillText('Point here', leftCheekX - guideW/2 + 6, leftCheekY - guideH/2 - 8);
+            } catch (e) {}
+
             // MOUTH DETECTION: check if mouth is open, compute overlay and map finger interactions
             const mouthOpen = isMouthOpen(face.keypoints);
             if (mouthOpen) {
@@ -522,6 +753,171 @@ function drawHandLandmarks(keypoints, color) {
         });
     }
 
+    // Proximity-to-landmark detection: when the index fingertip points near a mapped face landmark,
+    // show the corresponding radiograph. This replaces the previous cheek-box approach.
+    try {
+        const overlay = ensureRadiographOverlay();
+        if (!(hands && hands.length > 0 && faces && faces.length > 0 && overlay)) {
+            // nothing to do
+        } else {
+            // simple: use first hand and first face for now
+            const h = hands[0];
+            const f = faces[0];
+            const tip = h.keypoints && h.keypoints[8];
+            if (tip && f && f.keypoints) {
+                const faceXs = f.keypoints.map(p => p.x);
+                const faceYs = f.keypoints.map(p => p.y);
+                const faceW = Math.max(...faceXs) - Math.min(...faceXs) || 1;
+                const faceH = Math.max(...faceYs) - Math.min(...faceYs) || 1;
+                // threshold relative to face size (tuned via PROXIMITY_MULT)
+                const threshold = Math.max(faceW, faceH) * PROXIMITY_MULT;
+
+                // compute closest mapped landmark
+                let closest = null;
+                let closestDist = Infinity;
+
+                // draw and annotate mapped landmarks for debugging
+                ctx.save();
+                Object.keys(LANDMARK_IMAGE_MAP).forEach(k => {
+                    const idx = Number(k);
+                    const kp = f.keypoints[idx];
+                    if (!kp) return;
+                    const d = Math.hypot(tip.x - kp.x, tip.y - kp.y);
+                    // mark mapped point
+                    ctx.beginPath();
+                    ctx.arc(kp.x, kp.y, 6, 0, Math.PI * 2);
+                    ctx.fillStyle = d <= threshold ? 'rgba(80,220,140,0.95)' : 'rgba(200,200,200,0.18)';
+                    ctx.fill();
+                    ctx.fillStyle = 'rgba(220,220,220,0.95)';
+                    ctx.font = '11px monospace';
+                    ctx.fillText(String(idx), kp.x + 8, kp.y + 4);
+                    ctx.fillText(Math.round(d), kp.x + 8, kp.y + 18);
+
+                    if (d < closestDist) {
+                        closestDist = d;
+                        closest = { idx, kp, d };
+                    }
+                });
+                ctx.restore();
+
+                if (closest) {
+                    // highlight closest
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(closest.kp.x, closest.kp.y, 12, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(255,220,120,0.95)';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    ctx.restore();
+                }
+
+                if (closest && closestDist <= threshold) {
+                    // debounce: require the fingertip to be within threshold for several frames
+                    _consecutiveHits[closest.idx] = (_consecutiveHits[closest.idx] || 0) + 1;
+                    // reset other counters
+                    Object.keys(_consecutiveHits).forEach(k => { if (Number(k) !== Number(closest.idx)) _consecutiveHits[k] = 0; });
+                    if (_consecutiveHits[closest.idx] >= PROXIMITY_REQUIRED_FRAMES) {
+                        const img = LANDMARK_IMAGE_MAP[closest.idx];
+                        console.log('Finger near landmark (stable)', closest.idx, 'dist', Math.round(closestDist), '→', img);
+                        showOverlayDebug(`Landmark ${closest.idx} → ${img.split('/').pop()}`);
+                        // load image first to ensure it's available before showing overlay
+                        try {
+                            const loadImg = new Image();
+                            // mark the overlay as pending/active immediately to avoid race with smile logic
+                            try { overlay.dataset.landmarkActive = String(closest.idx); } catch (e) {}
+                            loadImg.onload = () => {
+                                try {
+                                    // set the src after marking active so smile logic won't hide it
+                                    overlay.src = img;
+                                    overlay.style.display = 'block';
+                                    void overlay.offsetWidth;
+                                    overlay.style.opacity = '0.98';
+                                    console.log('Overlay image set to', img, ' (landmark', closest.idx, ')');
+                                    showOverlayDebug('Overlay → ' + img.split('/').pop());
+                                    // detection-based overlays are transient (do not mark persistent)
+                                    try { delete overlay.dataset.persistent; } catch (ee) {}
+                                    updateOverlayStatus();
+                                } catch (e) { console.warn('Failed to set overlay image after load', e && e.message); }
+                            };
+                            loadImg.onerror = (e) => {
+                                console.error('Failed to load landmark image', img, e);
+                                showOverlayDebug('Failed to load: ' + img.split('/').pop());
+                                try { _preloadFailures.push(img); } catch (ee) {}
+                                try { delete overlay.dataset.landmarkActive; } catch (ee) {}
+                                updateOverlayStatus();
+                            };
+                            loadImg.src = img;
+                        } catch (e) { console.warn('Error creating loader image', e && e.message); }
+                    } else {
+                        showOverlayDebug(`Approaching ${closest.idx} (${_consecutiveHits[closest.idx]}/${PROXIMITY_REQUIRED_FRAMES})`);
+                    }
+                } else {
+                    // reset all consecutive counters when no close landmark
+                    Object.keys(_consecutiveHits).forEach(k => { _consecutiveHits[k] = 0; });
+                    // If there is an active landmark overlay, keep it visible even when the finger
+                    // is no longer on a mapped point. This lets the user examine the radiograph
+                    // until they point to another landmark or the overlay is changed manually.
+                    try {
+                        const active = overlay && overlay.dataset && overlay.dataset.landmarkActive;
+                        if (active) {
+                            // If the active overlay was set by detection (not persistent), hide it now
+                            const isPersistent = !!(overlay.dataset && overlay.dataset.persistent);
+                            if (!isPersistent) {
+                                try { delete overlay.dataset.landmarkActive; } catch (e) {}
+                                overlay.style.opacity = '0';
+                                setTimeout(() => { if (overlay && overlay.style.opacity === '0') overlay.style.display = 'none'; }, 220);
+                                showOverlayDebug(`Cleared transient overlay ${active} (finger left)`);
+                                updateOverlayStatus();
+                            } else {
+                                showOverlayDebug(`Holding persistent overlay for landmark ${active} (finger left)`);
+                            }
+                        } else if (closest) {
+                            showOverlayDebug(`Closest ${closest.idx} d=${Math.round(closestDist)} (thr ${Math.round(threshold)})`);
+                        } else {
+                            showOverlayDebug('No close landmark');
+                        }
+                    } catch (e) {}
+                }
+            }
+        }
+    } catch (e) {
+        console.warn('Landmark proximity detection failed', e && e.message);
+    }
+
+    // Show base radiograph when smiling (if no other specific overlay shown)
+    try {
+        const overlay = ensureRadiographOverlay();
+        const smilingFace = faces && faces.some(f => isSmiling(f.keypoints));
+        if (overlay && radiografiaLoaded) {
+            // Respect both landmarkActive and persistent flags: if an overlay was set by
+            // the user or test and marked persistent, do not auto-hide/override it.
+            const isLandmarkActive = !!(overlay.dataset && overlay.dataset.landmarkActive);
+            const isPersistent = !!(overlay.dataset && overlay.dataset.persistent);
+            if (smilingFace && !isLandmarkActive && !isPersistent) {
+                console.log('Smiling detected — showing base radiograph', radiografiaImg.src);
+                showOverlayDebug('Smile → base radiograph');
+                overlay.src = radiografiaImg.src;
+                overlay.style.display = 'block';
+                void overlay.offsetWidth;
+                overlay.style.opacity = '0.98';
+                try { delete overlay.dataset.landmarkActive; } catch (e) {}
+                try { delete overlay.dataset.persistent; } catch (e) {}
+            } else if (!smilingFace) {
+                // Only hide the overlay automatically if it's currently the base image and
+                // there is no persistent or active landmark overlay set.
+                const isShowingBase = overlay.src && overlay.src.indexOf('radiografiabase.jpg') !== -1;
+                if (isShowingBase && !isPersistent && !isLandmarkActive) {
+                    console.log('No smile — hiding overlay (if showing base)');
+                    showOverlayDebug('No smile → hide overlay');
+                    overlay.style.opacity = '0';
+                    setTimeout(() => { if (overlay && overlay.style.opacity === '0') overlay.style.display = 'none'; }, 240);
+                }
+            }
+        }
+    } catch (e) {
+        // ignore
+    }
+
      // Continue detection loop
      if (isDetecting) {
          requestAnimationFrame(detectFaces);
@@ -540,6 +936,27 @@ if (toggleNumbers) {
 
  // Load model when page loads
  loadModel();
+
+// Debug: allow clicking the canvas to force Asx1 overlay (useful when hand model isn't detecting)
+try {
+    const overlay = ensureRadiographOverlay();
+    if (canvas) {
+        canvas.addEventListener('click', (ev) => {
+            try {
+                if (overlay) {
+                    console.log('Canvas click — forcing Asx1');
+                    showOverlayDebug('Canvas → Asx1');
+                    overlay.src = 'interazione/radiografia_Asx1.jpg';
+                    try { overlay.dataset.landmarkActive = String(352); } catch (e) {}
+                    try { overlay.dataset.persistent = '1'; } catch (e) {}
+                    overlay.style.display = 'block';
+                    void overlay.offsetWidth;
+                    overlay.style.opacity = '0.98';
+                }
+            } catch (e) { console.warn('Canvas click force failed', e && e.message); }
+        });
+    }
+} catch (e) {}
 
  function drawXrayMouth(face) {
     const left = face[61];
