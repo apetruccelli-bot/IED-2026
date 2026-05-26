@@ -8,6 +8,7 @@ const lightbox   = document.getElementById('lightbox');
 const lbImg      = document.getElementById('lbImg') || document.getElementById('lb-img');
 const lbTagsEl   = document.getElementById('lbTags') || document.getElementById('lb-tags');
 const lbSimilarEl = document.getElementById('lbSimilar') || document.getElementById('lb-similar');
+const lbCaption  = document.getElementById('lbCaption') || document.getElementById('lb-caption');
 const lbClose    = document.getElementById('lbClose') || document.getElementById('lb-close');
 const lbPrev     = document.getElementById('lbPrev') || document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lbNext') || document.getElementById('lb-next');
@@ -17,6 +18,26 @@ const labels = {
   missions: "Missions",
   "deck-operations": "Deck Operations"
 };
+
+function updateCaptionWidth() {
+  if (!lbCaption || !lbImg) return;
+  const imgRect = lbImg.getBoundingClientRect();
+  if (imgRect.width && imgRect.width > 0) {
+    const maxWidth = Math.min(imgRect.width, window.innerWidth * 0.9);
+    lbCaption.style.width = maxWidth + 'px';
+    lbCaption.style.marginLeft = 'auto';
+    lbCaption.style.marginRight = 'auto';
+  } else {
+    lbCaption.style.width = '';
+    lbCaption.style.marginLeft = '';
+    lbCaption.style.marginRight = '';
+  }
+}
+
+if (lbImg) {
+  lbImg.addEventListener('load', updateCaptionWidth);
+}
+window.addEventListener('resize', updateCaptionWidth);
 
 const areaMeta = {
   "Strait of Florida, FL": {
@@ -342,6 +363,7 @@ function openLightbox(index) {
 
   lbImg.src = item.src;
   lbImg.alt = `Item ${item.id}`;
+  if (lbCaption) lbCaption.textContent = item.description || '';
   renderSimilarImages(item, visible);
 
   lightbox.classList.add('open');
@@ -439,6 +461,12 @@ function closeLightbox() {
 
   lbImg.src = '';
   lbSimilarEl.innerHTML = '';
+  if (lbCaption) {
+    lbCaption.textContent = '';
+    lbCaption.style.width = '';
+    lbCaption.style.marginLeft = '';
+    lbCaption.style.marginRight = '';
+  }
 }
 
 function navigateLightbox(dir) {

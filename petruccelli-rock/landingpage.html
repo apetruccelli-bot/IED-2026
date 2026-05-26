@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Pile Layout</title>
+
+  <style>
+/* =========================
+   FONTS
+========================= */
+
+@font-face {
+  font-family: 'Social';
+  src: url('font/ABCSocial-Regular-Trial.woff2') format('woff2');
+  font-style: normal;
+  font-size: 14px;
+  font-display: swap; 
+}
+:root {
+  --font-title: "Social", serif;
+  --font-body: "Helvetica Neue", Arial, sans-serif;
+
+  --text-title: clamp(28px, 3vw, 52px);
+  --text-subtitle: clamp(14px, 1.2vw, 18px);
+  --text-body: 16px;
+  --text-year: clamp(80px, 10vw, 160px);
+
+  --line-tight: 1;
+  --line-normal: 1.3;
+
+  --color-black: #1E1E1E;
+  --color-white: #FCFCFC;
+  --color-grey: #888880;
+}
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #ffffff;
+      font-family: var(--font-body);
+    }
+
+    .frame {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+   .pile {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transform: translateY(-90px);
+}
+
+  .photo {
+  position: absolute;
+
+  max-width: 44vw;
+  max-height: 52vh;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+  display: block;
+}
+.photo:nth-child(1) {
+  transform: translate(-70px, 10px) rotate(-7deg) scale(0.95);
+  z-index: 1;
+}
+
+.photo:nth-child(2) {
+  transform: translate(80px, 5px) rotate(6deg) scale(0.8);
+  z-index: 2;
+}
+
+.photo:nth-child(3) {
+  transform: translate(-35px, -20px) rotate(4deg) scale(1.05);
+  z-index: 3;
+}
+
+.photo:nth-child(4) {
+  transform: translate(40px, 28px) rotate(-5deg) scale(0.9);
+  z-index: 4;
+}
+
+.photo:nth-child(5) {
+  transform: translate(-10px, 34px) rotate(2deg) scale(0.95);
+  z-index: 5;
+}
+
+.photo:nth-child(6) {
+  transform: translate(55px, -18px) rotate(8deg) scale(0.82);
+  z-index: 6;
+}
+
+.photo:nth-child(7) {
+  transform: translate(0, 0) rotate(0deg) scale(0.7);
+  z-index: 7;
+}
+
+ .title {
+  position: absolute;
+
+  left: 50%;
+  bottom: 70px;
+
+  transform: translateX(-50%);
+
+  width: max-content;
+  max-width: 86vw;
+
+  text-align: center;
+
+  color: var(--color-black);
+
+  font-family: var(--font-title);
+
+  font-size: clamp(22px, 2.2vw, 34px);
+  line-height: var(--line-normal);
+
+  z-index: 20;
+  margin: 0;
+}
+
+    @media (max-width: 640px) {
+      .pile {
+        padding-bottom: 90px;
+      }
+      .title {
+        bottom: 30px;
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="frame">
+    <section class="pile" aria-label="Stacked image pile">
+      <img class="photo" src="img/rock1.png" alt="Archive image 1" />
+      <img class="photo" src="img/rock8.png" alt="Archive image 2" />
+      <img class="photo" src="img/rock3.png" alt="Archive image 3" />
+      <img class="photo" src="img/rock19.png" alt="Archive image 4" />
+      <img class="photo" src="img/rock40.png" alt="Archive image 5" />
+      <img class="photo" src="img/rock16.png" alt="Archive image 6" />
+      <img class="photo" src="img/rock15.png" alt="Archive image 7" />
+    </section>
+
+    <h1 class="title">Abigail’s Archive. Timeline of a transformation.</h1>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="animation.js"></script>
+<script>
+  document.addEventListener("click", () => {
+    window.location.href = "index.html";
+  });
+</script>
+</body>
+</html>

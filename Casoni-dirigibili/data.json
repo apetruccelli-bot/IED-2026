@@ -259,7 +259,7 @@
       "year": "1930",
       "victims": 31,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Mountain wreckage after impact; outer envelope lost, with the internal frame exposed along the slope."    },
     {
       "id": 23,
       "src": "img/relitti/relitto (5).png",
@@ -270,7 +270,7 @@
       "year": "1931",
       "victims": 44,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Night fire after structural collapse; frame remains visible while the envelope is almost entirely consumed."    },
 
     {
       "id": 24,
@@ -282,7 +282,7 @@
       "year": "1931",
       "victims": 68,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Close view of the burned framework; combustion appears to have progressed through the lower structure first."    },
 
     {
       "id": 25,
@@ -294,7 +294,7 @@
       "year": "1933",
       "victims": 74,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Wreckage burning on inclined terrain; impact and fire damage concentrated along the lower side."    },
 
     {
       "id": 26,
@@ -306,7 +306,7 @@
       "year": "1934",
       "victims": 55,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Tail frame recovered after collapse; stabilizers distorted and rear structure heavily compressed."    },
 
     {
       "id": 27,
@@ -318,7 +318,7 @@
       "year": "1935",
       "victims": 17,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Rear section under inspection; circular frame and stabilizers preserved despite severe central collapse."    },
 
     {
       "id": 28,
@@ -330,7 +330,7 @@
       "year": "1935",
       "victims": 21,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Illuminated framework after fire; outer covering destroyed, leaving the internal structure fully exposed."    },
 
     {
       "id": 29,
@@ -342,7 +342,7 @@
       "year": "1936",
       "victims": 64,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Ground wreckage after fire; envelope covering destroyed and smoke still rising from the rear section."    },
 
     {
       "id": 30,
@@ -354,7 +354,7 @@
       "year": "1929",
       "victims": 72,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Night view of the hull burning in a mountain basin; fire spread along both lower edges of the frame."    },
 
     {
       "id": 31,
@@ -366,7 +366,7 @@
       "year": "1930",
       "victims": 46,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Wreckage resting in wooded terrain; internal structure exposed, with no remaining envelope covering."    },
 
     {
       "id": 32,
@@ -378,7 +378,7 @@
       "year": "1931",
       "victims": 79,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Forward frame recovered among trees; deformation suggests final impact followed by structural compression."    },
 
     {
       "id": 33,
@@ -390,7 +390,7 @@
       "year": "1932",
       "victims": 11,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Close inspection of the passenger section; cabin remains partially intact within a collapsed frame."    },
 
     {
       "id": 34,
@@ -402,7 +402,7 @@
       "year": "1928",
       "victims": 8,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Burned wreckage after impact; forward frame upright, with smoke rising from the central debris field."    },
 
     {
       "id": 35,
@@ -414,7 +414,7 @@
       "year": "1927",
       "victims": 28,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Collapsed frame near mooring structure; tail and forward sections remain identifiable despite central failure."    },
 
     {
       "id": 36,
@@ -426,7 +426,7 @@
       "year": "1926",
       "victims": 41,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Mountain wreckage with residual smoke; frame broken across the central hull after ground impact."    },
 
     {
       "id": 37,
@@ -438,7 +438,7 @@
       "year": "1927",
       "victims": 23,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Open field inspection; long frame section collapsed but preserved enough for structural comparison."    },
 
     {
       "id": 38,
@@ -450,7 +450,7 @@
       "year": "1935",
       "victims": 19,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Hillside wreckage still burning; forward frame intact while rear section is consumed by fire."    },
 
     {
       "id": 39,
@@ -462,7 +462,7 @@
       "year": "1935",
       "victims": 69,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Night fire inside exposed frame; combustion concentrated along the lower structure and internal supports."    },
 
     {
       "id": 40,
@@ -472,8 +472,9 @@
       "country": "Italy",
       "year": "1935",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
-      
+      "description": "Scale model of the airship Aurelia II under inspection; suspension lines and gondola arrangement tested beneath artificial light."
+    },
+
     {  
       "id": 41,
       "src": "img/modelli/modello (2).png",
@@ -482,17 +483,19 @@
       "country": "Poland",
       "year": "1933",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Technical review of the Vistula Expedition model; officers comparing hull balance, tail plane position, and projected lift distribution."
+    },
 
     {
       "id": 42,
       "src": "img/modelli/modello (3).png",
       "category": "models",
-      "tags": ["men", "women", "light" ],
+      "tags": ["men", "women", "light"],
       "country": "Russia",
       "year": "1934",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Laboratory observation of the Severny-4 prototype model; crew studying cable tension, gondola load, and envelope stability during suspended test."
+    },
 
     {
       "id": 43,
@@ -502,7 +505,8 @@
       "country": "USA",
       "year": "1935",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Classroom demonstration of the Columbia-B test model; instructor indicating forward pressure points and gondola suspension layout."
+    },
 
     {
       "id": 44,
@@ -512,7 +516,8 @@
       "country": "Spain",
       "year": "1937",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Technical review of the Iberia-7 model; observers studying gondola placement, rigging tension, and lower-frame balance."
+    },
 
     {
       "id": 45,
@@ -522,7 +527,8 @@
       "country": "Russia",
       "year": "1934",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Suspended test of the Severny-4 model; team examining cable load, envelope trim, and gondola stability under artificial light."
+    },
 
     {
       "id": 46,
@@ -532,7 +538,8 @@
       "country": "Russia",
       "year": "1927",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Early balance test for the Volga Research Flight model; temporary rigging used to measure tilt response and suspended load."
+    },
 
     {
       "id": 47,
@@ -542,7 +549,8 @@
       "country": "Germany",
       "year": "1928",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Inspection of the Doppelkörper Mark-Nine concept; twin-envelope arrangement examined for lift distribution and structural redundancy."
+    },
 
     {
       "id": 48,
@@ -552,7 +560,8 @@
       "country": "Germany",
       "year": "1928",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Public demonstration of the Adler-Klein model; scale hull used to explain rudder response and simplified control surfaces."
+    },
 
     {
       "id": 49,
@@ -562,7 +571,8 @@
       "country": "Spain",
       "year": "1928",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Demonstration of the Castilla-A model; exposed suspension lines show proposed gondola connection and ballast control method."
+    },
 
     {
       "id": 50,
@@ -572,7 +582,8 @@
       "country": "Germany",
       "year": "1928",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Wind-table preparation for the Rhein Versuch model; small-scale hull positioned before airflow testing and stability observation."
+    },
 
     {
       "id": 51,
@@ -582,7 +593,8 @@
       "country": "Spain",
       "year": "1928",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Wall-mounted plans and full model of the Córdoba cargo design; side elevation compared with gondola and ballast arrangement."
+    },
 
     {
       "id": 52,
@@ -592,7 +604,8 @@
       "country": "Poland",
       "year": "1930",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Review of the Kraków-P2 training model; committee notes focus on tail-plane proportion and cable suspension beneath the envelope."
+    },
 
     {
       "id": 53,
@@ -602,7 +615,8 @@
       "country": "USA",
       "year": "1935",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Wind-tunnel test of the Atlantic Ranger scale hull; airflow trial arranged to measure drag along the ribbed envelope."
+    },
 
     {
       "id": 54,
@@ -612,7 +626,8 @@
       "country": "Italy",
       "year": "1935",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Presentation of the Aurelia II model; rigid gondola frame and lower support truss inspected before comparative stability tests."
+    },
 
     {
       "id": 55,
@@ -622,7 +637,8 @@
       "country": "Italy",
       "year": "1936",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Final adjustment of the Adriatico-6 scale model; operator checking tail alignment and underside fittings before documentation."
+    }, 
 
     {
       "id": 56,

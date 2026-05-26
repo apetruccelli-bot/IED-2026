@@ -14,6 +14,21 @@
   font-size: 14px;
   line-height: 130%;
 }
+.header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 140px;
+}
+
+.about-link {
+  margin-top: 22px;
+  text-decoration: none;
+  color: var(--myBlack);
+}
+
+.about-link:hover {
+  opacity: 0.5;
+}
 .font-myYear {
   font-family: 'Repro';
   font-size: 80px;
