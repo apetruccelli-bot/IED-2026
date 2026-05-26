@@ -28,11 +28,12 @@ let lastGalleryScrollX = null;
 let lastGalleryGesture = "none";
 let wasThumbIndexPinched = false;
 let wasOpenPalm = false;
+let galleryInteractionLockUntil = 0;
 
 // Hand motion tracking for swipe detection
 let handPositionHistory = []; // Array of { x, y, timestamp }
 const MAX_HISTORY_SIZE = 5; // Keep 5 recent positions (~150ms at 30fps)
-const MIN_SWIPE_DISTANCE = 0.15; // Minimum normalized distance to qualify as swipe
+const MIN_SWIPE_DISTANCE = 0.20; // Minimum normalized distance to qualify as swipe (harsher threshold)
 const MAX_SWIPE_TIME = 300; // Maximum time window for swipe (ms)
 
 // Hand rotation tracking for gallery navigation
@@ -51,6 +52,7 @@ let stableGesture = "none";
 let lastDetectedPinch = false;
 let pinchStabilityCount = 0;
 let stablePinch = false;
+let pinchStickyState = false; // Isteresi: resta true finché thumb-index non è completamente separato
 
 function isFingerExtended(keypoints, tipIndex, pipIndex, mcpIndex) {
   const tip = keypoints[tipIndex];
@@ -174,7 +176,14 @@ function isThumbIndexPinched(keypoints) {
   const palmSize = getDistance(wrist, indexMcp);
 
   // Pinch gesture when thumb-index are close together (adjusted threshold)
-  return pinchDistance < palmSize * 0.50;
+  // Con isteresi: se già in stato "pinched", richiedi separazione maggiore per uscire
+  if (pinchStickyState) {
+    // Per uscire dal pinch, richiedi separazione > 0.70
+    return pinchDistance < palmSize * 0.70;
+  } else {
+    // Per entrare nel pinch, richiedi distanza < 0.50
+    return pinchDistance < palmSize * 0.50;
+  }
 }
 
 function normalizeAngle(angle) {
@@ -246,21 +255,32 @@ function handleMapGesture(hand) {
   // Pinch is "stable" only after GESTURE_STABILITY_THRESHOLD consecutive frames
   if (pinchStabilityCount >= GESTURE_STABILITY_THRESHOLD) {
     stablePinch = thumbIndexPinched;
+    // Aggiorna sticky state: se stablePinch è true, attiva lo sticky
+    if (stablePinch) {
+      pinchStickyState = true;
+    }
+  }
+
+  // Se no longer pinched, disattiva sticky state
+  if (!stablePinch && !thumbIndexPinched) {
+    pinchStickyState = false;
   }
 
   // ═══════════════════════════════════════════════════════════════════
   // RULE 1: PINCH (stable thumb-index close) → CLOSE location
   // ═══════════════════════════════════════════════════════════════════
-  if (stablePinch && !wasThumbIndexPinched && now - lastPinchTime > 480 && window.locationIsOpen) {
+  if (stablePinch && !wasThumbIndexPinched && now - lastPinchTime > 800 && window.locationIsOpen) {
     console.debug('[HAND] PINCH STABLE detected → closeLocationDetail');
     if (window.oceanMapControls && typeof window.oceanMapControls.closeLocationDetail === "function") {
       window.oceanMapControls.closeLocationDetail();
       window.locationIsOpen = false;
     }
     lastPinchTime = now;
+    galleryInteractionLockUntil = now + 420;
     // Reset pinch counter to avoid re-trigger
     pinchStabilityCount = 0;
     stablePinch = false;
+    return;
   }
   wasThumbIndexPinched = stablePinch;
 
@@ -268,6 +288,12 @@ function handleMapGesture(hand) {
   // RULE 2: CLOSED FIST (stable) → NAVIGATE map
   // ═══════════════════════════════════════════════════════════════════
   if (stableGesture === "closedFist") {
+    // If a location is already open, the fist must not close or disturb it.
+    // Pinch stays the only gesture allowed to close the location.
+    if (window.locationIsOpen) {
+      return;
+    }
+
     // Throttle navigation to avoid excessive updates
     if (now - lastNavigationTime < 35) return;
 
@@ -287,12 +313,17 @@ function handleMapGesture(hand) {
     lastNavigationTime = now;
   }
 
+  // If a recent open/close action happened, skip gallery gestures for a short time
+  if (now < galleryInteractionLockUntil) {
+    return;
+  }
+
   // ═══════════════════════════════════════════════════════════════════
   // RULE 4a: HAND ROTATION (location open) → FLIP THROUGH GALLERY
   // Track hand angle rotation for clockwise/counter-clockwise navigation
   // ═══════════════════════════════════════════════════════════════════
   let rotationDetected = false;
-  if (window.locationIsOpen && gesture === "openPalm") {
+  if (window.locationIsOpen && stableGesture === "openPalm") {
     // Add current hand angle to rotation history
     handRotationHistory.push({
       angle: handCenter.angleDeg,
@@ -315,8 +346,8 @@ function handleMapGesture(hand) {
         const angleDelta = getAngleDelta(oldest.angle, newest.angle);
         const absRotation = Math.abs(angleDelta);
 
-        // Throttle rotation actions
-        const canRotate = now - lastRotationActionTime > 400;
+        // Throttle rotation actions (more conservative)
+        const canRotate = now - lastRotationActionTime > 600;
 
         // Detect significant rotation (clockwise or counter-clockwise)
         if (canRotate && absRotation > MIN_ROTATION_DELTA) {
@@ -354,7 +385,7 @@ function handleMapGesture(hand) {
   // Track hand motion and detect left/right swipe gestures
   // Only fire if rotation was NOT detected (prevent simultaneous conflicts)
   // ═══════════════════════════════════════════════════════════════════
-  if (window.locationIsOpen && gesture === "openPalm" && !rotationDetected) {
+  if (window.locationIsOpen && stableGesture === "openPalm" && !rotationDetected) {
     // Add current hand position to history
     handPositionHistory.push({
       x: handCenter.nx,
@@ -379,7 +410,7 @@ function handleMapGesture(hand) {
         const absSwipeDistance = Math.abs(deltaX);
 
         // Throttle navigation to avoid excessive updates
-        const canScroll = now - lastGalleryScrollTime > 300;
+        const canScroll = now - lastGalleryScrollTime > 420;
 
         // Detect significant horizontal movement (swipe)
         if (canScroll && absSwipeDistance > MIN_SWIPE_DISTANCE) {
@@ -423,6 +454,9 @@ function handleMapGesture(hand) {
     console.debug('[HAND] OPEN PALM STABLE → selectNearestLocation');
     window.oceanMapControls.selectNearestLocation();
     lastSelectTime = now;
+    galleryInteractionLockUntil = now + 250;
+    wasOpenPalm = true;
+    return;
   }
 
   wasOpenPalm = stableGesture === "openPalm";

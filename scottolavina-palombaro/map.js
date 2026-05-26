@@ -298,29 +298,74 @@ function renderActiveGalleryImage() {
   const gallery = document.getElementById('gallery');
   if (!gallery) return;
 
-  const imageLink = gallery.querySelector('.map-gallery-link');
-  const image = gallery.querySelector('.map-gallery-image');
+  const prevLink = gallery.querySelector('.map-gallery-link-prev');
+  const prevImage = gallery.querySelector('.map-gallery-image-prev');
+  const currentLink = gallery.querySelector('.map-gallery-link-current');
+  const currentImageEl = gallery.querySelector('.map-gallery-image-current');
+  const nextLink = gallery.querySelector('.map-gallery-link-next');
+  const nextImage = gallery.querySelector('.map-gallery-image-next');
   const counter = gallery.querySelector('.map-gallery-count');
 
-  if (!imageLink || !image || !counter) return;
+  if (!prevLink || !prevImage || !currentLink || !currentImageEl || !nextLink || !nextImage || !counter) return;
 
   if (!activeGalleryImages.length) {
-    imageLink.href = '#';
-    image.alt = activeGalleryTitle || 'Gallery image';
-    image.removeAttribute('src');
+    [prevLink, currentLink, nextLink].forEach((link) => {
+      link.href = '#';
+    });
+    [prevImage, currentImageEl, nextImage].forEach((image) => {
+      image.alt = activeGalleryTitle || 'Gallery image';
+      image.removeAttribute('src');
+    });
     counter.textContent = '0 / 0';
     return;
   }
 
-  const currentImage = activeGalleryImages[activeGalleryIndex];
-  imageLink.href = currentImage.src;
-  image.alt = currentImage.description || activeGalleryTitle || 'Gallery image';
-  image.src = currentImage.src;
+  const total = activeGalleryImages.length;
+  const prevIndex = (activeGalleryIndex - 1 + total) % total;
+  const nextIndex = (activeGalleryIndex + 1) % total;
+  const currentImageData = activeGalleryImages[activeGalleryIndex];
+  const prevImageData = activeGalleryImages[prevIndex];
+  const nextImageData = activeGalleryImages[nextIndex];
+
+  // Set hrefs immediately
+  prevLink.href = prevImageData.src;
+  currentLink.href = currentImageData.src;
+  nextLink.href = nextImageData.src;
+
+  // Helper: preload image then swap with fade to avoid flicker
+  const preloadAndSwap = (imgEl, src, alt) => {
+    imgEl.alt = alt || activeGalleryTitle || 'Gallery image';
+    imgEl.style.opacity = '0';
+    const tmp = new Image();
+    tmp.onload = () => {
+      imgEl.src = src;
+      // ensure CSS transition for opacity
+      imgEl.style.transition = 'opacity 240ms ease';
+      requestAnimationFrame(() => { imgEl.style.opacity = '1'; });
+    };
+    tmp.onerror = () => {
+      // On error, still set src to trigger browser fallback
+      imgEl.src = src;
+      imgEl.style.opacity = '1';
+    };
+    tmp.src = src;
+  };
+
+  preloadAndSwap(prevImage, prevImageData.src, prevImageData.description);
+  preloadAndSwap(currentImageEl, currentImageData.src, currentImageData.description);
+  preloadAndSwap(nextImage, nextImageData.src, nextImageData.description);
+
   counter.textContent = `${activeGalleryIndex + 1} / ${activeGalleryImages.length}`;
 }
 
 function stepGallery(direction) {
   if (!activeGalleryImages.length) return;
+
+  // Debounce rapid step calls (defensive against multiple triggers)
+  const now = Date.now();
+  if (!window._lastGalleryStepTime) window._lastGalleryStepTime = 0;
+  if (now - window._lastGalleryStepTime < 320) return;
+  window._lastGalleryStepTime = now;
 
   activeGalleryIndex = (activeGalleryIndex + direction + activeGalleryImages.length) % activeGalleryImages.length;
   renderActiveGalleryImage();
@@ -371,16 +416,29 @@ function showGallery(title, images){
   const viewport = document.createElement('div');
   viewport.className = 'map-gallery-viewport';
 
-  const imageLink = document.createElement('a');
-  imageLink.className = 'map-gallery-link';
-  imageLink.target = '_blank';
-  imageLink.rel = 'noopener';
+  const strip = document.createElement('div');
+  strip.className = 'map-gallery-strip';
 
-  const img = document.createElement('img');
-  img.className = 'map-gallery-image';
-  img.alt = title;
-  imageLink.appendChild(img);
-  viewport.appendChild(imageLink);
+  const createPreview = (variant) => {
+    const link = document.createElement('a');
+    link.className = `map-gallery-link map-gallery-link-${variant}`;
+    link.target = '_blank';
+    link.rel = 'noopener';
+
+    const img = document.createElement('img');
+    img.className = `map-gallery-image map-gallery-image-${variant}`;
+    link.appendChild(img);
+    return { link, img };
+  };
+
+  const prevPreview = createPreview('prev');
+  const currentPreview = createPreview('current');
+  const nextPreview = createPreview('next');
+
+  strip.appendChild(prevPreview.link);
+  strip.appendChild(currentPreview.link);
+  strip.appendChild(nextPreview.link);
+  viewport.appendChild(strip);
 
   const nextButton = document.createElement('button');
   nextButton.type = 'button';
