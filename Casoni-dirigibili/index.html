@@ -77,7 +77,7 @@
       <div class="top-home p-10px bg-myBlack flex flex-row justify-between items-baseline text-myWhite gap-10px">
         <div class="intro-panel flex flex-col">
           <a href="./" class="font-myTitle home-title">
-            AAA — Adler's Airship Archive
+            <span class="home-title-short">AAA</span><span class="home-title-full"> — Adler's Airship Archive</span>
           </a>
           <div class="box">
             <p>
@@ -95,6 +95,7 @@
         </div>
         <div class="filters-panel max-w-[45rem] text-myWhite">
           <nav class="filters-nav flex justify-between items-baseline mb-[17px]">
+            <span class="mobile-categories-label">Categories:</span>
             <button class="filter-link" data-category="airships">Airship</button>
             <button class="filter-link" data-category="wreckage">Wreckage</button>
             <button class="filter-link" data-category="models">Models</button>
@@ -102,36 +103,42 @@
             <button class="filter-link" data-category="drawings">Drawings</button>
           </nav>
 
-          <div class="filter-row ">
-            <div class="filter-label">Causes</div>
-            <div class="filter-row-inside"></div>
+          <div class="mobile-filter-labels">
+            <span class="mobile-filters-label">Filters:</span>
+
+            <div class="filter-row">
+              <div class="filter-label">Causes</div>
+              <div class="filter-row-inside"></div>
+            </div>
+
+            <div class="filter-row">
+              <div class="filter-label">Year</div>
+              <div class="filter-row-inside"></div>
+            </div>
+
+            <div class="filter-row">
+              <div class="filter-label">Country</div>
+              <div class="filter-row-inside"></div>
+            </div>
+
+            <div class="filter-row">
+              <div class="filter-label">Tags</div>
+              <div class="filter-row-inside"></div>
+            </div>
+
+            <div class="filter-row">
+              <div class="filter-label">People</div>
+              <div class="filter-row-inside"></div>
+            </div>
+
+            <div class="filter-row items-center">
+              <div class="filter-label">Victims</div>
+              <div class="filter-row-inside"></div>
+            </div>
           </div>
 
-          <div class="filter-row">
-            <div class="filter-label">Year</div>
-            <div class="filter-row-inside"></div>
-          </div>
-
-          <div class="filter-row">
-            <div class="filter-label">Country</div>
-            <div class="filter-row-inside"></div>
-          </div>
-
-          <div class="filter-row">
-            <div class="filter-label">Tags</div>
-            <div class="filter-row-inside"></div>
-          </div>
-
-          <div class="filter-row">
-            <div class="filter-label">People</div>
-            <div class="filter-row-inside"></div>
-          </div>
-
-          <div class="filter-row items-center">
-            <div class="filter-label">Victims</div>
-            <div class="filter-row-inside"></div>
-          </div>
-        </div>
+          <div class="mobile-filter-options" id="mobile-filter-options"></div>
+        </div>  
       <div class="mobile-active-filters" id="mobile-active-filters"></div>
       </div>
       <div class="bg-myBlack overflow-hidden">

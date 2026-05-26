@@ -100,9 +100,42 @@ let lbIndex = -1;        // current index in filteredItems() array
 let activeRowFilters = {};
 
 const mobileActiveFilters = document.getElementById('mobile-active-filters');
+const mobileFilterOptions = document.getElementById('mobile-filter-options');
+
 
 function isMobileIndex() {
   return window.matchMedia('(max-width: 600px)').matches;
+}
+
+function restoreMobileFilterOptions() {
+  if (!mobileFilterOptions) return;
+
+  const movedRow = document.querySelector('.filter-row[data-mobile-options-moved="true"]');
+  const movedInside = mobileFilterOptions.querySelector('.filter-row-inside');
+
+  if (movedRow && movedInside) {
+    movedRow.appendChild(movedInside);
+    movedRow.removeAttribute('data-mobile-options-moved');
+  }
+
+  mobileFilterOptions.classList.remove('is-open');
+}
+
+function showMobileFilterOptions(row) {
+  if (!mobileFilterOptions || !row) return;
+
+  const inside = row.querySelector('.filter-row-inside');
+  if (!inside) return;
+
+  restoreMobileFilterOptions();
+
+  mobileFilterOptions.appendChild(inside);
+  mobileFilterOptions.classList.add('is-open');
+  row.dataset.mobileOptionsMoved = 'true';
+
+  if (row.dataset.controlType === 'victims') {
+    requestAnimationFrame(() => positionVictimsStops(row));
+  }
 }
 
 function setupMobileFilterMenus() {
@@ -121,12 +154,11 @@ function setupMobileFilterMenus() {
         openRow.classList.remove('mobile-open');
       });
 
+      restoreMobileFilterOptions();
+
       if (!isOpen) {
         row.classList.add('mobile-open');
-
-        if (row.dataset.controlType === 'victims') {
-          requestAnimationFrame(() => positionVictimsStops(row));
-        }
+        showMobileFilterOptions(row);
       }
     });
   });
@@ -242,9 +274,15 @@ function getVictimsIndexFromLabel(label) {
 }
 
 function positionVictimsStops(row) {
-  const slider = row.querySelector('.victims-slider');
-  const stops = row.querySelectorAll('.victims-stop');
-  if (!slider || stops.length === 0) return;
+  const slider =
+  row.querySelector('.victims-slider') ||
+  mobileFilterOptions?.querySelector('.victims-slider');
+
+  const stops = row.querySelectorAll('.victims-stop').length
+    ? row.querySelectorAll('.victims-stop')
+    : mobileFilterOptions?.querySelectorAll('.victims-stop');
+
+  if (!slider || !stops || stops.length === 0) return;
 
   const min = Number(slider.min);
   const max = Number(slider.max);
@@ -366,7 +404,8 @@ function buildFilterRows() {
         renderMobileActiveFilters();
 
         if (isMobileIndex()) {
-          row.classList.remove('mobile-open');
+          row.classList.add('mobile-open');
+          showMobileFilterOptions(row);
         }
       });
 
@@ -424,7 +463,8 @@ function buildFilterRows() {
         renderMobileActiveFilters();
 
         if (isMobileIndex()) {
-          inside.closest('.filter-row')?.classList.remove('mobile-open');
+          row.classList.add('mobile-open');
+          showMobileFilterOptions(row);
         }
       });
       inside.appendChild(chip);
@@ -437,9 +477,15 @@ function buildFilterRows() {
 }
 
 function syncVictimsRow(row) {
-  const slider = row.querySelector('.victims-slider');
-  const stops = row.querySelectorAll('.victims-stop');
-  if (!slider || stops.length === 0) return;
+ const slider =
+  row.querySelector('.victims-slider') ||
+  mobileFilterOptions?.querySelector('.victims-slider');
+
+  const stops = row.querySelectorAll('.victims-stop').length
+    ? row.querySelectorAll('.victims-stop')
+    : mobileFilterOptions?.querySelectorAll('.victims-stop');
+
+  if (!slider || !stops || stops.length === 0) return;
 
   const activeValue = activeRowFilters.Victims;
   const activeIndex = activeValue ? getVictimsIndexFromLabel(activeValue) : -1;
@@ -570,17 +616,17 @@ function scrollToFirstActiveCardIfNeeded() {
       return card.offsetTop < first.offsetTop ? card : first;
     }, activeCards[0]);
 
-    const mobileTopGap = 230;
+    const galleryRect = galleryScroll.getBoundingClientRect();
+    const cardRect = firstActiveCard.getBoundingClientRect();
 
-    const targetScrollTop = Math.max(
-      firstActiveCard.offsetTop - mobileTopGap,
-      0
-    );
+    const currentScrollTop = galleryScroll.scrollTop;
+    const targetScrollTop =
+      currentScrollTop + cardRect.top - galleryRect.top - 10;
 
-    /*galleryScroll.scrollTo({
-      top: targetScrollTop,
+    galleryScroll.scrollTo({
+      top: Math.max(targetScrollTop, 0),
       behavior: 'smooth'
-    });*/
+    });
 
     return;
   }
