@@ -145,6 +145,10 @@ function setCategory(cat) {
   activeFilter = null;
   activeFilterType = null;
 
+  document.querySelector(".description-intro").classList.remove("is-hidden");
+
+  document.querySelector(".description-intro").classList.add("is-hidden");
+  
   document.querySelectorAll('[data-category]').forEach(el => {
     el.style.opacity = (!activeCategory || el.dataset.category === activeCategory) ? '1' : '0.35';
   });
