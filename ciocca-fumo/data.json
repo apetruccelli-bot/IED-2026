@@ -646,9 +646,69 @@
       "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
       "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
       "description": "The commercial image links smoking with memory, leisure and intimacy."
-  }, 
+  },
   {
        "id": 64,
+       "src": "img/pubblicità/advertising4.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
+      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
+      "description": "The commercial image links smoking with memory, leisure and intimacy."
+  }, 
+  {
+       "id": 65,
+       "src": "img/pubblicità/advertising5.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
+      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
+      "description": "The commercial image links smoking with memory, leisure and intimacy."
+  },
+  {
+       "id": 66,
+       "src": "img/pubblicità/advertising6.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
+      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
+      "description": "The commercial image links smoking with memory, leisure and intimacy."
+  },
+  {
+       "id": 67,
+       "src": "img/pubblicità/advertising7.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
+      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
+      "description": "The commercial image links smoking with memory, leisure and intimacy."
+  },
+  {
+       "id": 68,
+       "src": "img/pubblicità/advertising8.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
+      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
+      "description": "The commercial image links smoking with memory, leisure and intimacy."
+  },
+  {
+       "id": 69,
+       "src": "img/pubblicità/advertising9.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
+      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
+      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
+      "description": "The commercial image links smoking with memory, leisure and intimacy."
+  },
+  {
+       "id": 70,
        "src": "img/about/about1.png",
       "category": "about archive",
       "year": 1960,
@@ -656,7 +716,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 65,
+       "id": 6715,
        "src": "img/about/about2.jpg",
       "category": "about archive",
       "year": 1960,
@@ -664,7 +724,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 66,
+       "id": 72,
        "src": "img/about/about3.png",
       "category": "about archive",
       "year": 1960,
@@ -672,7 +732,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 67,
+       "id": 73,
        "src": "img/about/about4.png",
       "category": "about archive",
       "year": 1960,
@@ -680,7 +740,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 68,
+       "id": 74,
        "src": "img/about/about5.jpg",
       "category": "about archive",
       "year": 1960,
@@ -688,7 +748,7 @@
       "description": "Descrizione dell'immagine"
    },
    {
-       "id": 69,
+       "id": 75,
        "src": "img/about/about6.png",
       "category": "about archive",
       "year": 1960,
