@@ -858,6 +858,59 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
     width: 100%;
   }
 
+  .population-chart-wrap {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .population-chart-svg {
+    display: block;
+    width: min(100%, 540px);
+    height: auto;
+  }
+
+  .population-chart-svg text {
+    font-family: 'Diatype';
+    fill: #1E1E1E;
+    stroke: none;
+  }
+
+  .population-chart-svg .font-myText {
+    font-family: 'Diatype';
+    fill: #1E1E1E;
+    stroke: none;
+    font-size: 10px;
+  }
+
+  .population-chart-svg .chart-title {
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+
+  .population-chart-svg .small {
+    font-size: 11px;
+  }
+
+  .population-chart-svg .axis {
+    stroke: #1E1E1E;
+    stroke-width: 1;
+  }
+
+  .population-chart-svg .grid {
+    stroke: rgba(30, 30, 30, 0.16);
+    stroke-width: 1;
+  }
+
+  .population-chart-svg .line {
+    fill: none;
+    stroke-width: 1.5;
+  }
+
+  .population-chart-svg .dot {
+    stroke: none;
+  }
+
   /* Population Chart: Row-based visualization */
   .stat-row {
     display: flex;

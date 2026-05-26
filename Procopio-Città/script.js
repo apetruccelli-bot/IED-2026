@@ -606,56 +606,6 @@ function initializeStatisticsPage() {
     ],
   };
 
-  const populationHost = document.getElementById('population-chart');
-  if (populationHost) {
-    const maxStart = Math.max(...data.population.map((item) => item.start));
-    populationHost.innerHTML = data.population
-      .map((item) => {
-        const currentWidth = clampPercentage((item.start / maxStart) * 100);
-        const todayWidth = clampPercentage((item.today / item.start) * 100);
-
-        return `
-          <div class="stat-population-row">
-            <div class="stat-town">${item.town}</div>
-            <div class="stat-population-cell">
-              <span class="stat-cell-label">1964</span>
-              <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${currentWidth}%"></div></div>
-              <div class="stat-value">${formatNumber(item.start)}</div>
-            </div>
-            <div class="stat-population-cell">
-              <span class="stat-cell-label">oggi</span>
-              <div class="stat-bar-track"><div class="stat-bar-fill stat-bar-fill--today" data-stat-fill="population" style="width:${todayWidth}%"></div></div>
-              <div class="stat-value" data-stat-drift-type="population" data-base="${item.today}" data-current="${item.today}" data-min="0">${formatNumber(item.today)}</div>
-            </div>
-          </div>
-        `;
-      })
-      .join('');
-  }
-
-  const ageHost = document.getElementById('age-chart');
-  if (ageHost) {
-    ageHost.innerHTML = data.age
-      .map((item) => `
-        <div class="stat-age-row">
-          <div class="stat-town">${item.label}</div>
-          <div class="stat-age-bars">
-            <div class="stat-age-bar">
-              <span class="stat-cell-label">1964</span>
-              <div class="stat-bar-track"><div class="stat-bar-fill stat-bar-fill--light" style="width:${item.historic}%"></div></div>
-              <div class="stat-value">${item.historic}%</div>
-            </div>
-            <div class="stat-age-bar">
-              <span class="stat-cell-label">oggi</span>
-              <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${item.today}%"></div></div>
-              <div class="stat-value">${item.today}%</div>
-            </div>
-          </div>
-        </div>
-      `)
-      .join('');
-  }
-
   const birthsHost = document.getElementById('births-chart');
   if (birthsHost) {
     birthsHost.classList.add('stat-births-grid');
@@ -684,35 +634,85 @@ function initializeStatisticsPage() {
 
   const housesHost = document.getElementById('houses-chart');
   if (housesHost) {
-    const maxBuilt = Math.max(...data.houses.map((item) => item.built));
-    housesHost.innerHTML = data.houses
-      .map((item) => {
-        const builtWidth = clampPercentage((item.built / maxBuilt) * 100);
-        const occupiedWidth = clampPercentage((item.occupied / item.built) * 100);
-        const activeWidth = clampPercentage((item.active / item.built) * 100);
+    housesHost.innerHTML = `
+      <svg viewBox="0 0 520 360" xmlns="http://www.w3.org/2000/svg" class="block w-full h-auto" aria-labelledby="houses-chart-title houses-chart-desc" role="img" style="font-family: 'Diatype', serif;">
+        <style type="text/css"><![CDATA[
+          @font-face {
+            font-family: 'Diatype';
+            src: url('font/ABCDiatype-Regular-Trial.woff2') format('woff2');
+            font-style: normal;
+            font-weight: normal;
+            font-display: swap;
+          }
+          @font-face {
+            font-family: 'Diatype-Regular';
+            src: url('font/ABCDiatype-Regular-Trial.woff2') format('woff2');
+            font-style: normal;
+            font-weight: normal;
+            font-display: swap;
+          }
+          text {
+            font-family: 'Diatype-Mono', 'Diatype', sans-serif !important;
+            font-weight: 400 !important;
+            letter-spacing: 0.01em !important;
+            text-rendering: optimizeLegibility !important;
+            shape-rendering: geometricPrecision !important;
+            text-transform: none !important;
+            font-size: 10px !important;
+          }
+          .small {
+            font-size: 11px !important;
+          }
+          .axis {
+            stroke: #1E1E1E;
+            stroke-width: 1;
+          }
+          .b1 {
+            fill: #1E1E1E;
+          }
+          .b2 {
+            fill: #5C5C5C;
+          }
+          .b3 {
+            fill: #A0A0A0;
+          }
+        ]]></style>
 
-        return `
-          <div class="stat-houses-row">
-            <div class="stat-town">${item.town}</div>
-            <div class="stat-house-cell">
-              <span class="stat-cell-label">costruite</span>
-              <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${builtWidth}%"></div></div>
-              <div class="stat-value">${formatNumber(item.built)}</div>
-            </div>
-            <div class="stat-house-cell">
-              <span class="stat-cell-label">occupate</span>
-              <div class="stat-bar-track"><div class="stat-bar-fill stat-bar-fill--light" style="width:${occupiedWidth}%"></div></div>
-              <div class="stat-value">${formatNumber(item.occupied)}</div>
-            </div>
-            <div class="stat-house-cell">
-              <span class="stat-cell-label">attive</span>
-              <div class="stat-bar-track"><div class="stat-bar-fill stat-bar-fill--today" style="width:${activeWidth}%"></div></div>
-              <div class="stat-value">${formatNumber(item.active)}</div>
-            </div>
-          </div>
-        `;
-      })
-      .join('');
+        <title id="houses-chart-title">Case occupate</title>
+        <desc id="houses-chart-desc">Confronto tra case costruite, occupate e attive per Zagara, Monteferro e Borgo Cupo.</desc>
+
+        <line x1="60" y1="300" x2="490" y2="300" class="axis"/>
+        <line x1="60" y1="100" x2="60" y2="300" class="axis"/>
+
+        <rect x="90" y="145" width="28" height="155" class="b1"/>
+        <rect x="123" y="250" width="28" height="50" class="b2"/>
+        <rect x="156" y="280" width="28" height="20" class="b3"/>
+        <text x="88" y="138" class="small">612</text>
+        <text x="120" y="243" class="small">189</text>
+        <text x="155" y="273" class="small">74</text>
+        <text x="90" y="325" class="small">ZAGARA</text>
+
+        <rect x="240" y="190" width="28" height="110" class="b1"/>
+        <rect x="273" y="270" width="28" height="30" class="b2"/>
+        <rect x="306" y="290" width="28" height="10" class="b3"/>
+        <text x="238" y="183" class="small">431</text>
+        <text x="270" y="263" class="small">102</text>
+        <text x="305" y="283" class="small">39</text>
+        <text x="235" y="325" class="small">MONTEFERRO</text>
+
+        <rect x="390" y="228" width="28" height="72" class="b1"/>
+        <rect x="423" y="290" width="28" height="10" class="b2"/>
+        <rect x="456" y="296" width="28" height="4" class="b3"/>
+        <text x="388" y="221" class="small">288</text>
+        <text x="423" y="283" class="small">41</text>
+        <text x="455" y="290" class="small">12</text>
+        <text x="390" y="325" class="small">BORGO CUPO</text>
+
+        <text x="130" y="85" class="small">■ COSTRUITE</text>
+        <text x="260" y="85" class="small">■ OCCUPATE</text>
+        <text x="390" y="85" class="small">■ ATTIVE</text>
+      </svg>
+    `;
   }
 
   const servicesHost = document.getElementById('services-chart');
