@@ -28,8 +28,9 @@
           About
         </a>
       </div>
+
       <div class="about-main grid min-h-0 grid-cols-2 gap-0 overflow-hidden bg-myBlack">
-        <div class="about-text-panel flex h-full items-center justify-left p-10px text-left">
+        <div class="about-text-panel flex items-start justify-left p-10px text-left">
           <div class="box2 max-w-[44rem]">
             <p class="mb-20">
               In 1920, following the end of the First World War, many military departments and industrial companies were forced to redefine their roles and redirect their work toward new fields of research and development.
@@ -37,6 +38,30 @@
 
             <p class="mb-4">
               "Reply Note to the Department - 1920, September 15th
+            </p>
+
+            <p class="mb-4">
+              I acknowledge the transfer ordered following the conclusion of the conflict and understand its operational reasons. After my service with the AAA — Anti-Aircraft Artillery, I will undertake the new assignment with the same discipline and diligence.
+            </p>
+
+            <p class="mb-4">
+              I will devote particular attention to the study of transoceanic airship navigation, with the task of observing, documenting, and analyzing risks, technical anomalies, weather conditions, and testimonies related to airship incidents. I believe that the careful collection of such material may contribute to the future safety of this form of navigation.
+            </p>
+
+            <p class="mb-4">
+              It is my intention to continue offering the best possible service to the AAA.
+            </p>
+
+            <p class="mb-4">
+              I acknowledge the transfer ordered following the conclusion of the conflict and understand its operational reasons. After my service with the AAA — Anti-Aircraft Artillery, I will undertake the new assignment with the same discipline and diligence.
+            </p>
+
+            <p class="mb-4">
+              I will devote particular attention to the study of transoceanic airship navigation, with the task of observing, documenting, and analyzing risks, technical anomalies, weather conditions, and testimonies related to airship incidents. I believe that the careful collection of such material may contribute to the future safety of this form of navigation.
+            </p>
+
+            <p class="mb-4">
+              It is my intention to continue offering the best possible service to the AAA.
             </p>
 
             <p class="mb-4">
@@ -74,36 +99,39 @@
           <img src="img/dirigibili/dirigibile (10).png" alt="dirigibile 10" class="scroll-img" data-id="10">
           <img src="img/dirigibili/dirigibile (11).png" alt="dirigibile 11" class="scroll-img" data-id="11">
           <img src="img/dirigibili/dirigibile (12).png" alt="dirigibile 12" class="scroll-img" data-id="12">
-          <img src="img/dirigibili/dirigibile (13).png" alt="dirigibile 13" class="scroll-img" data-id="13">
-          <img src="img/dirigibili/dirigibile (14).png" alt="dirigibile 14" class="scroll-img" data-id="14">
-          <img src="img/dirigibili/dirigibile (15).png" alt="dirigibile 15" class="scroll-img" data-id="15">
-          <img src="img/dirigibili/dirigibile (16).png" alt="dirigibile 16" class="scroll-img" data-id="16">
-          <img src="img/dirigibili/dirigibile (17).png" alt="dirigibile 17" class="scroll-img" data-id="17">
-          <img src="img/dirigibili/dirigibile (18).png" alt="dirigibile 18" class="scroll-img" data-id="18">
-          <img src="img/dirigibili/dirigibile (19).png" alt="dirigibile 19" class="scroll-img" data-id="19">
-          <img src="img/dirigibili/dirigibile (20).png" alt="dirigibile 20" class="scroll-img" data-id="20">
         </div>
       </div>
     </div>
 
     <script>
-      // Handle horizontal scroll with mouse wheel
-      const horizontalScrollContainer = document.querySelector('.horizontal-scroll');
+       const horizontalScrollContainer = document.querySelector('.horizontal-scroll');
 
-      if (horizontalScrollContainer) {
-        horizontalScrollContainer.addEventListener('wheel', (e) => {
-          const isVerticalGallery = window.matchMedia('(max-width: 900px)').matches;
+function updateAboutGalleryScrollState() {
+  if (!horizontalScrollContainer) return;
 
-          e.preventDefault();
+    const shouldEnableScroll = window.innerWidth < 1450;
 
-          if (isVerticalGallery) {
-            horizontalScrollContainer.scrollTop += e.deltaY;
-          } else {
-            const scrollAmount = 80;
-            horizontalScrollContainer.scrollLeft += e.deltaY > 0 ? scrollAmount : -scrollAmount;
-          }
-        });
+    horizontalScrollContainer.classList.toggle('about-can-scroll', shouldEnableScroll);
+  }
+
+  if (horizontalScrollContainer) {
+    updateAboutGalleryScrollState();
+
+    window.addEventListener('resize', updateAboutGalleryScrollState);
+
+    horizontalScrollContainer.addEventListener('wheel', (e) => {
+      updateAboutGalleryScrollState();
+
+      const canScrollX = horizontalScrollContainer.classList.contains('about-can-scroll');
+
+      if (!canScrollX) {
+        return;
       }
+
+      e.preventDefault();
+      horizontalScrollContainer.scrollLeft += e.deltaY;
+    }, { passive: false });
+  }
 
       // Load data and set up image click handlers
       let imageData = {};
@@ -155,21 +183,6 @@
           // Get all scroll images
           scrollImages = document.querySelectorAll('.scroll-img');
 
-          // Duplicate scroll images for infinite loop (3 times total)
-          const originalImages = [...scrollImages];
-          for (let i = 0; i < 2; i++) {
-            originalImages.forEach(img => {
-              const clone = img.cloneNode(true);
-              img.parentElement.appendChild(clone);
-            });
-          }
-          scrollImages = document.querySelectorAll('.scroll-img');
-          
-          // Calculate original content width
-          let originalWidth = 0;
-          originalImages.forEach(img => {
-            originalWidth += img.scrollWidth;
-          });
 
           // Set initial image and description (id 2)
           updateImage(2);
@@ -185,26 +198,6 @@
 
           // Start auto-rotation
           resetAutoRotate();
-
-          // Enable infinite scroll with seamless looping
-          let isResetting = false;
-          horizontalScrollContainer.addEventListener('scroll', () => {
-            if (isResetting) return;
-
-            const isVerticalGallery = window.matchMedia('(max-width: 900px)').matches;
-
-            if (isVerticalGallery) {
-              return;
-            }
-
-            const scrollLeft = horizontalScrollContainer.scrollLeft;
-
-            if (scrollLeft > originalWidth) {
-              isResetting = true;
-              horizontalScrollContainer.scrollLeft = scrollLeft - originalWidth;
-              setTimeout(() => { isResetting = false; }, 30);
-            }
-          }, { passive: true });
         })
         .catch(error => console.error('Error loading data:', error));
     </script>
