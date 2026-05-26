@@ -19,8 +19,8 @@
    <div class="about-page w-screen h-screen grid grid-rows-[auto_1fr_auto] bg-myBlack text-myWhite">
      <div class="about-header p-10px flex flex-row items-baseline gap-20px">
         <div class="intro-panel flex flex-col">
-          <a href="./" class="font-myTitle home-title">
-            AAA — Adler’s Airship Archive
+          <a href="./" class="font-myTitle home-title about-title">
+            <span class="home-title-short">AAA</span><span class="home-title-full"> — Adler’s Airship Archive</span>
           </a>
         </div>
 
@@ -28,8 +28,9 @@
           About
         </a>
       </div>
+
       <div class="about-main grid min-h-0 grid-cols-2 gap-0 overflow-hidden bg-myBlack">
-        <div class="about-text-panel flex h-full items-center justify-left p-10px text-left">
+        <div class="about-text-panel flex items-start justify-left p-10px text-left">
           <div class="box2 max-w-[44rem]">
             <p class="mb-20">
               In 1920, following the end of the First World War, many military departments and industrial companies were forced to redefine their roles and redirect their work toward new fields of research and development.
@@ -37,6 +38,30 @@
 
             <p class="mb-4">
               "Reply Note to the Department - 1920, September 15th
+            </p>
+
+            <p class="mb-4">
+              I acknowledge the transfer ordered following the conclusion of the conflict and understand its operational reasons. After my service with the AAA — Anti-Aircraft Artillery, I will undertake the new assignment with the same discipline and diligence.
+            </p>
+
+            <p class="mb-4">
+              I will devote particular attention to the study of transoceanic airship navigation, with the task of observing, documenting, and analyzing risks, technical anomalies, weather conditions, and testimonies related to airship incidents. I believe that the careful collection of such material may contribute to the future safety of this form of navigation.
+            </p>
+
+            <p class="mb-4">
+              It is my intention to continue offering the best possible service to the AAA.
+            </p>
+
+            <p class="mb-4">
+              I acknowledge the transfer ordered following the conclusion of the conflict and understand its operational reasons. After my service with the AAA — Anti-Aircraft Artillery, I will undertake the new assignment with the same discipline and diligence.
+            </p>
+
+            <p class="mb-4">
+              I will devote particular attention to the study of transoceanic airship navigation, with the task of observing, documenting, and analyzing risks, technical anomalies, weather conditions, and testimonies related to airship incidents. I believe that the careful collection of such material may contribute to the future safety of this form of navigation.
+            </p>
+
+            <p class="mb-4">
+              It is my intention to continue offering the best possible service to the AAA.
             </p>
 
             <p class="mb-4">
@@ -74,42 +99,81 @@
           <img src="img/dirigibili/dirigibile (10).png" alt="dirigibile 10" class="scroll-img" data-id="10">
           <img src="img/dirigibili/dirigibile (11).png" alt="dirigibile 11" class="scroll-img" data-id="11">
           <img src="img/dirigibili/dirigibile (12).png" alt="dirigibile 12" class="scroll-img" data-id="12">
-          <img src="img/dirigibili/dirigibile (13).png" alt="dirigibile 13" class="scroll-img" data-id="13">
-          <img src="img/dirigibili/dirigibile (14).png" alt="dirigibile 14" class="scroll-img" data-id="14">
-          <img src="img/dirigibili/dirigibile (15).png" alt="dirigibile 15" class="scroll-img" data-id="15">
-          <img src="img/dirigibili/dirigibile (16).png" alt="dirigibile 16" class="scroll-img" data-id="16">
-          <img src="img/dirigibili/dirigibile (17).png" alt="dirigibile 17" class="scroll-img" data-id="17">
-          <img src="img/dirigibili/dirigibile (18).png" alt="dirigibile 18" class="scroll-img" data-id="18">
-          <img src="img/dirigibili/dirigibile (19).png" alt="dirigibile 19" class="scroll-img" data-id="19">
-          <img src="img/dirigibili/dirigibile (20).png" alt="dirigibile 20" class="scroll-img" data-id="20">
+        </div>
+      </div>
+    </div>
+
+    <div class="lightbox" id="about-lightbox" aria-hidden="true">
+      <div class="lb-backdrop" id="about-lb-backdrop"></div>
+      <button class="lb-close" id="about-lb-close">✕</button>
+
+      <div class="lb-content">
+        <img class="lb-img select-none" id="about-lb-img" src="" alt="">
+
+        <div class="lb-info">
+          <div class="lb-tags-row">
+            <span class="lb-id" id="about-lb-id"></span>
+            <div class="lb-tags" id="about-lb-tags"></div>
+          </div>
+
+          <p class="lb-description" id="about-lb-description"></p>
+          <div class="lb-meta" id="about-lb-meta"></div>
         </div>
       </div>
     </div>
 
     <script>
-      // Handle horizontal scroll with mouse wheel
-      const horizontalScrollContainer = document.querySelector('.horizontal-scroll');
+       const horizontalScrollContainer = document.querySelector('.horizontal-scroll');
+        const aboutLightbox = document.getElementById('about-lightbox');
+        const aboutLbImg = document.getElementById('about-lb-img');
+        const aboutLbId = document.getElementById('about-lb-id');
+        const aboutLbTags = document.getElementById('about-lb-tags');
+        const aboutLbDescription = document.getElementById('about-lb-description');
+        const aboutLbMeta = document.getElementById('about-lb-meta');
+        const aboutLbClose = document.getElementById('about-lb-close');
+        const aboutLbBackdrop = document.getElementById('about-lb-backdrop');
 
-      if (horizontalScrollContainer) {
-        horizontalScrollContainer.addEventListener('wheel', (e) => {
-          const isVerticalGallery = window.matchMedia('(max-width: 900px)').matches;
 
-          e.preventDefault();
+function updateAboutGalleryScrollState() {
+  if (!horizontalScrollContainer) return;
 
-          if (isVerticalGallery) {
-            horizontalScrollContainer.scrollTop += e.deltaY;
-          } else {
-            const scrollAmount = 80;
-            horizontalScrollContainer.scrollLeft += e.deltaY > 0 ? scrollAmount : -scrollAmount;
-          }
-        });
+    const shouldEnableScroll = window.innerWidth < 1450;
+
+    horizontalScrollContainer.classList.toggle('about-can-scroll', shouldEnableScroll);
+  }
+
+  if (horizontalScrollContainer) {
+    updateAboutGalleryScrollState();
+
+    window.addEventListener('resize', updateAboutGalleryScrollState);
+
+    horizontalScrollContainer.addEventListener('wheel', (e) => {
+      const isMobileAbout = window.matchMedia('(max-width: 600px)').matches;
+
+      if (isMobileAbout) {
+        return;
       }
+
+      updateAboutGalleryScrollState();
+
+      const canScrollX = horizontalScrollContainer.classList.contains('about-can-scroll');
+
+      if (!canScrollX) {
+        e.preventDefault();
+        return;
+      }
+
+      e.preventDefault();
+      horizontalScrollContainer.scrollLeft += e.deltaY;
+    }, { passive: false });
+  }
 
       // Load data and set up image click handlers
       let imageData = {};
       let autoRotateTimer;
       let currentImageIndex = 0; // Index into the scroll images array
       let scrollImages = [];
+      let aboutLbIndex = -1;
 
       function updateImage(imageId) {
         const item = imageData[imageId];
@@ -144,6 +208,146 @@
         autoRotateTimer = setTimeout(autoRotateNext, 6000);
       }
 
+      function isAboutMobile() {
+          return window.matchMedia('(max-width: 600px)').matches;
+        }
+
+        function formatAboutMetaValue(key, value) {
+          if (key === 'causes') {
+            return Array.isArray(value) ? value.join(', ') : (value || '-');
+          }
+
+          if (value === undefined || value === null || value === '') {
+            return '-';
+          }
+
+          return String(value);
+        }
+
+        function renderAboutLightboxMeta(item) {
+          if (!aboutLbMeta) return;
+
+          const category = (item.category || '').toLowerCase();
+
+          const fullMetaCategories = new Set(['airships', 'wreckage', 'newspapers']);
+          const compactMetaCategories = new Set(['study models', 'technical drawings', 'models', 'drawings']);
+
+          const metaLabels = {
+            causes: 'Causes',
+            country: 'Country',
+            year: 'Year',
+            victims: 'Victims',
+          };
+
+          let fields = [];
+
+          if (fullMetaCategories.has(category)) {
+            fields = ['causes', 'country', 'year', 'victims'];
+          } else if (compactMetaCategories.has(category)) {
+            fields = ['year', 'country'];
+          }
+
+          aboutLbMeta.innerHTML = '';
+
+          fields.forEach(field => {
+            const row = document.createElement('p');
+            row.className = 'lb-meta-row';
+
+            const label = document.createElement('span');
+            label.className = 'lb-meta-label';
+            label.textContent = `${metaLabels[field] || field}: `;
+
+            const value = document.createElement('span');
+            value.className = 'lb-meta-value';
+            value.textContent = formatAboutMetaValue(field, item[field]);
+
+            row.appendChild(label);
+            row.appendChild(value);
+            aboutLbMeta.appendChild(row);
+          });
+        }
+
+        function openAboutLightbox(imageId) {
+          const item = imageData[imageId];
+
+          if (!item || !aboutLightbox) return;
+
+          aboutLbIndex = [...scrollImages].findIndex(img => {
+            return parseInt(img.getAttribute('data-id')) === imageId;
+          });
+
+          aboutLbImg.src = item.src;
+          aboutLbImg.alt = `Item ${item.id}`;
+          aboutLbId.textContent = `#${String(item.id).padStart(2, '0')}`;
+
+          aboutLbTags.innerHTML = '';
+
+          item.tags.forEach(tag => {
+            const tagEl = document.createElement('span');
+            tagEl.className = 'card-tag';
+            tagEl.textContent = tag;
+            aboutLbTags.appendChild(tagEl);
+          });
+
+          aboutLbDescription.textContent = item.description || '';
+          renderAboutLightboxMeta(item);
+
+          aboutLightbox.classList.add('open');
+          aboutLightbox.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeAboutLightbox() {
+          if (!aboutLightbox) return;
+
+          aboutLightbox.classList.remove('open');
+          aboutLightbox.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          aboutLbImg.src = '';
+        }
+
+        function navigateAboutLightbox(dir) {
+          if (!scrollImages.length) return;
+
+          let next = aboutLbIndex + dir;
+
+          if (next >= scrollImages.length) next = 0;
+          if (next < 0) next = scrollImages.length - 1;
+
+          const nextImageId = parseInt(scrollImages[next].getAttribute('data-id'));
+
+          openAboutLightbox(nextImageId);
+        }
+
+        aboutLbClose?.addEventListener('click', closeAboutLightbox);
+        aboutLbBackdrop?.addEventListener('click', closeAboutLightbox);
+
+        aboutLbImg?.addEventListener('click', e => {
+          const half = e.offsetX < aboutLbImg.offsetWidth / 2;
+          navigateAboutLightbox(half ? -1 : 1);
+        });
+
+        aboutLbImg?.addEventListener('mousemove', e => {
+          aboutLbImg.style.cursor =
+            e.offsetX < aboutLbImg.offsetWidth / 2 ? 'w-resize' : 'e-resize';
+        });
+
+        document.addEventListener('keydown', e => {
+          if (!aboutLightbox || !aboutLightbox.classList.contains('open')) return;
+
+          if (e.key === 'Escape') {
+            closeAboutLightbox();
+          }
+
+          if (e.key === 'ArrowLeft') {
+            navigateAboutLightbox(-1);
+          }
+
+          if (e.key === 'ArrowRight') {
+            navigateAboutLightbox(1);
+          }
+        });
+
       fetch('data.json')
         .then(response => response.json())
         .then(data => {
@@ -155,56 +359,27 @@
           // Get all scroll images
           scrollImages = document.querySelectorAll('.scroll-img');
 
-          // Duplicate scroll images for infinite loop (3 times total)
-          const originalImages = [...scrollImages];
-          for (let i = 0; i < 2; i++) {
-            originalImages.forEach(img => {
-              const clone = img.cloneNode(true);
-              img.parentElement.appendChild(clone);
-            });
-          }
-          scrollImages = document.querySelectorAll('.scroll-img');
-          
-          // Calculate original content width
-          let originalWidth = 0;
-          originalImages.forEach(img => {
-            originalWidth += img.scrollWidth;
-          });
 
           // Set initial image and description (id 2)
           updateImage(2);
 
           // Add click handlers to all scroll images
           scrollImages.forEach(img => {
-            img.addEventListener('click', (e) => {
-              const imageId = parseInt(img.getAttribute('data-id'));
-              updateImage(imageId);
-              resetAutoRotate();
+              img.addEventListener('click', () => {
+                const imageId = parseInt(img.getAttribute('data-id'));
+
+                if (isAboutMobile()) {
+                  openAboutLightbox(imageId);
+                  return;
+                }
+
+                updateImage(imageId);
+                resetAutoRotate();
+              });
             });
-          });
 
           // Start auto-rotation
           resetAutoRotate();
-
-          // Enable infinite scroll with seamless looping
-          let isResetting = false;
-          horizontalScrollContainer.addEventListener('scroll', () => {
-            if (isResetting) return;
-
-            const isVerticalGallery = window.matchMedia('(max-width: 900px)').matches;
-
-            if (isVerticalGallery) {
-              return;
-            }
-
-            const scrollLeft = horizontalScrollContainer.scrollLeft;
-
-            if (scrollLeft > originalWidth) {
-              isResetting = true;
-              horizontalScrollContainer.scrollLeft = scrollLeft - originalWidth;
-              setTimeout(() => { isResetting = false; }, 30);
-            }
-          }, { passive: true });
         })
         .catch(error => console.error('Error loading data:', error));
     </script>

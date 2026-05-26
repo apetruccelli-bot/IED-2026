@@ -542,3 +542,34 @@ function setYear(year) {
 loadData();
 renderCategoryFilters("fotografie");
 setCategory("fotografie");
+
+
+function initAboutImageBlurOnScroll() {
+  const modal = document.getElementById("explore-modal");
+  const images = document.querySelectorAll(".about-grid img");
+
+  if (!modal || !images.length) return;
+
+  modal.addEventListener("scroll", () => {
+    images.forEach((img) => {
+      const rect = img.getBoundingClientRect();
+      const windowH = window.innerHeight;
+
+      const distanceFromTop = rect.top;
+      const progress = 1 - distanceFromTop / windowH;
+
+      if (progress > 0.45) {
+        img.classList.add("about-faded");
+      } else {
+        img.classList.remove("about-faded");
+      }
+    });
+  });
+}
+
+function openExploreModal() {
+  const modal = document.getElementById("explore-modal");
+  modal.style.display = "block";
+
+  initAboutImageBlurOnScroll();
+}

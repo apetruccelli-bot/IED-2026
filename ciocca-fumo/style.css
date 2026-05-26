@@ -147,19 +147,16 @@ body {
 
 /* ── HEADER ── */
 header {
-  position: fixed;
-  width: 100vw;
+  position: sticky;
   top: 0;
   z-index: 100;
-  /* background: var(--bg); */
-  /* padding: 16px 24px; */
-  padding: 10px;
-  height: 10rem;
-  background: linear-gradient(to bottom, var(--myBlack) 2.5rem, transparent);
+  padding: 16px 24px;
+  height: auto;
+  background: var(--myBlack);
 }
 
 .header-inner {
-  max-width: 100vw;
+  max-width: 1200px;
   display: flex;
   gap: 12px;
   display: grid;
@@ -257,20 +254,33 @@ button {
 
 /* ── GRID ── */
 .mainLayout {
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 10px;
+  padding: 10px;
+  height: 100vh;
 }
+
+.descriptionAndFilters {
+  grid-column: 1 / 6;
+  position: fixed;
+  left: 10px;
+  top: 10rem;
+  width: calc((100vw / 12) * 5 - 20px);
+}
+
 .myPhotos {
-  grid-column-start: 6;
-  grid-column-end: 13;
+  grid-column: 6 / 13;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   overflow: scroll;
-  height: 100%;
+  height: 100vh;
   padding-top: 10rem;
+}
+
+.myPhotos .card {
+  direction: ltr;
 }
 
 .myPhotos.year-filtered .card {
@@ -420,8 +430,6 @@ button {
 
 .card img {
   display: block;
-  width: auto;
-  height: auto;
   max-width: 100%;
 }
 
@@ -685,4 +693,128 @@ button {
   flex-direction: column;
   gap: 20px;
   padding-top: 20px;
+}
+
+/* ── ABOUT PAGE ── */
+
+#explore-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--myBlack) !important;
+  color: var(--myWhite);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  align-items: unset !important;
+  justify-content: unset !important;
+}
+
+#explore-modal > button {
+  z-index: 10000;
+}
+
+.about-page {
+  width: 100vw;
+  min-height: 100vh;
+  padding: 10rem 10px 8rem;
+}
+
+.about-hero {
+  width: 100%;
+  max-width: 70ch;
+  margin: 0 auto 4rem;
+  text-align: center;
+}
+
+.about-hero h1 {
+  font-family: 'Daily';
+  font-size: 48px;
+  line-height: 100%;
+  margin-bottom: 3rem;
+}
+
+.about-intro {
+  color: var(--myWhite);
+  text-align: left;
+  margin-bottom: 1.4rem;
+}
+
+.about-grid {
+  width: 100%;
+  display: grid;
+  gap: 10px;
+  margin: 0 0 3rem;
+}
+
+.about-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.about-grid img {
+  width: 100%;
+  height: 40vh;
+  object-fit: cover;
+  display: block;
+}
+
+.about-text-block {
+  max-width: 70ch;
+  margin: 0 auto 4rem;
+  color: var(--myWhite);
+}
+
+.about-text-block p {
+  margin-bottom: 1.2rem;
+}
+
+/* variante tipo prima immagine: testo in alto + immagini sfocate sotto */
+.about-grid.is-blurred img {
+  filter: blur(18px);
+  opacity: 0.45;
+}
+
+/* responsive */
+@media (max-width: 800px) {
+  .about-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .about-grid img {
+    height: auto;
+  }
+
+  .about-hero h1 {
+    font-size: 36px;
+  }
+}
+
+.about-grid img {
+  transition: opacity 0.6s ease, filter 0.6s ease;
+  opacity: 1;
+  filter: blur(0);
+}
+
+.about-grid img.about-faded {
+  opacity: 0.22;
+  filter: blur(10px);
+}
+
+.about-grid img {
+  transition: opacity 0.6s ease, filter 0.6s ease;
+  opacity: 1;
+  filter: blur(0);
+}
+
+.about-grid img.about-faded {
+  opacity: 0.22;
+  filter: blur(10px);
+}
+
+.descriptionAndFilters.is-hidden {
+  display: none;
+}
+
+.description-intro.is-hidden {
+  display: none;
 }

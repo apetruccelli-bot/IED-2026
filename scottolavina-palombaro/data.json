@@ -3,627 +3,438 @@
     {
       "id": 1,
       "src": "img/palombari/palombaro2.jpg",
-      "tags": [
-        "seabed",
-        "dust",
-        "rocks",
-        "seaweed"
-      ],
+      "tags": ["seabed","dust","rocks","seaweed"],
       "category": "missions",
       "subcategory": "immersions",
       "area": "Aleutian Trench, AK",
-      "description": "A deep sea diver photographed on the ocean floor in the Strait of Florida, surrounded by sediment and marine life."
+      "description": "A deep-sea diver photographed on the ocean floor, surrounded by sediment and marine life."
     },
     {
       "id": 2,
       "src": "img/palombari/palombaro3.jpg",
-      "tags": [
-        "crew",
-        "surface"
-      ],
+      "tags": ["crew","surface"],
       "category": "missions",
       "subcategory": "crew",
       "area": "Strait of Florida, FL",
-      "description": "Due palombari in equipaggiamento completo si trovano sul ponte di una nave, affiancati da membri dell\u2019crew. La scena documenta un momento operativo o preparatorio prima o dopo un\u2019immersione."
+      "description": "Two divers in full gear stand on the deck of a ship, accompanied by crew members. The scene documents an operational or preparatory moment before or after a dive."
     },
     {
       "id": 3,
       "src": "img/palombari/palombaro4.jpg",
-      "tags": [
-        "dust",
-        "seabed",
-        "seaweed"
-      ],
+      "tags": ["dust","seabed","seaweed"],
       "category": "missions",
       "area": "Monterey submarine Canyon, CA",
       "subcategory": "immersions",
-      "description": "Un palombaro sott\u2019acqua tiene tra le mani il tubo dell\u2019aria collegato alla superficie. Il fondale \u00e8 visibile sotto di lui, mentre bolle e particelle in sospensione riempiono l\u2019acqua."
+      "description": "An underwater diver holds the air hose connected to the surface. The seabed is visible beneath him while bubbles and suspended particles fill the water."
     },
     {
       "id": 4,
       "src": "img/palombari/palombaro5.jpg",
-      "tags": [
-        "crew",
-        "surface"
-      ],
+      "tags": ["crew","surface"],
       "category": "missions",
       "subcategory": "deck operations",
-      "description": "Primo piano di un casco da palombaro con tubi e raccordi visibili. Le mani guantate dell\u2019operatore interagiscono con l\u2019attrezzatura, evidenziando i dettagli tecnici del dispositivo.",
+      "description": "Close-up of a diver's helmet with hoses and fittings visible. The operator's gloved hands interact with the equipment, highlighting technical details.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 5,
       "src": "img/palombari/palombaro6.jpg",
-      "tags": [
-        "crew",
-        "surface"
-      ],
+      "tags": ["crew","surface"],
       "category": "missions",
       "subcategory": "deck operations",
-      "description": "Un palombaro seduto sul bordo di una barca viene assistito da un uomo in abiti da lavoro. La scena mostra un momento di supporto e verifica dell\u2019equipaggiamento prima o dopo l\u2019immersione.",
+      "description": "A diver seated on the edge of a boat is assisted by a worker. The scene shows support and equipment checks before or after a dive.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 6,
       "src": "img/palombari/palombaro7.jpg",
-      "tags": [
-        "surface",
-        "crew"
-      ],
+      "tags": ["surface","crew"],
       "category": "missions",
       "subcategory": "deck operations",
-      "description": "Un palombaro sale una scala metallica per uscire dall\u2019acqua e tornare sul ponte della nave. Tiene in mano una parte dell\u2019attrezzatura mentre il mare si estende sullo sfondo.",
+      "description": "A diver climbs a metal ladder to exit the water and return to the ship's deck, holding part of his equipment while the sea stretches in the background.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 7,
       "src": "img/palombari/palombaro8.jpg",
-      "tags": [
-        "seabed",
-        "dust",
-        "rocks"
-      ],
+      "tags": ["seabed","dust","rocks"],
       "category": "missions",
       "subcategory": "immersions",
-      "description": "Un palombaro si muove sott\u2019acqua con una bombola sulle spalle e un cavo di sicurezza collegato. Il corpo \u00e8 inclinato in avanti mentre avanza vicino al fondale.",
+      "description": "A diver moves underwater with a tank on his shoulders and a safety line attached. He advances close to the seabed.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 8,
       "src": "img/palombari/palombaro9.jpg",
-      "tags": [
-        "findings",
-        "seabed",
-        "dust"
-      ],
+      "tags": ["findings","seabed","dust"],
       "category": "missions",
       "subcategory": "immersions",
-      "description": "Un palombaro esplora una grande struttura sommersa, probabilmente parte di un relitto o di un macchinario. L\u2019oggetto \u00e8 coperto di incrostazioni marine, segno di lunga permanenza sott\u2019acqua.",
+      "description": "A diver explores a large submerged structure, likely part of a wreck or machinery. The object is covered in marine encrustations, indicating long submersion.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 9,
       "src": "img/palombari/palombaro10.jpg",
-      "tags": [
-        "crew",
-        "surface"
-      ],
+      "tags": ["crew","surface"],
       "category": "missions",
       "subcategory": "crew",
-      "description": "Un  di palombari in tuta e casco siede sul ponte di una nave. Sono disposti in fila, mostrando uniformit\u00e0 nell\u2019equipaggiamento e suggerendo un\u2019unit\u00e0 operativa pronta all\u2019azione.",
+      "description": "A group of divers in suits and helmets sit on the ship's deck in a row, showing uniformity in equipment and suggesting an operational unit ready for action.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 10,
       "src": "img/palombari/palombaro11.jpg",
-      "tags": [
-        "seabed",
-        "dust",
-        "seaweed"
-      ],
+      "tags": ["seabed","dust","seaweed"],
       "category": "missions",
       "subcategory": "immersions",
-      "description": "Un palombaro in tuta pesante esplora il seabed utilizzando una torcia subacquea. Il fascio di luce illumina l\u2019acqua torbida mentre bolle d\u2019aria risalgono verso la superficie.",
+      "description": "A diver in a heavy suit explores the seabed using an underwater torch. The beam of light cuts through murky water as air bubbles rise toward the surface.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 11,
       "src": "img/palombari/palombaro12.jpg",
-      "tags": [
-        "surface",
-        "crew"
-      ],
+      "tags": ["surface","crew"],
       "category": "missions",
       "subcategory": "deck operations",
-      "description": "Un palombaro emerge dall\u2019acqua accanto a una nave e si aggrappa a una scala metallica per risalire a bordo, tenendo parte dell\u2019attrezzatura nella mano.",
+      "description": "A diver emerges from the water beside a ship and grabs a metal ladder to climb aboard, holding part of his equipment.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 12,
       "src": "img/palombari/palombaro13.jpg",
-      "tags": [
-        "crew",
-        "surface"
-      ],
+      "tags": ["crew","surface"],
       "category": "missions",
       "subcategory": "deck operations",
-      "description": "Un palombaro seduto sul bordo della nave viene assistito da un operatore che controlla o regola l\u2019equipaggiamento, con il mare sullo sfondo.",
+      "description": "A diver seated on the ship's edge is assisted by an operator who checks or adjusts equipment, with the sea in the background.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 13,
       "src": "img/palombari/palombaro14.jpg",
-      "tags": [
-        "surface",
-        "crew"
-      ],
+      "tags": ["surface","crew"],
       "category": "missions",
       "subcategory": "deck operations",
-      "description": "Vista dall\u2019alto di un palombaro sul ponte mentre maneggia un elemento dell\u2019equipaggiamento, circondato da tubi e strutture metalliche della nave.",
+      "description": "Top-down view of a diver on the deck handling a piece of equipment, surrounded by hoses and metal structures.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 14,
       "src": "img/palombari/palombaro15.jpg",
-      "tags": [
-        "seabed",
-        "dust",
-        "rocks",
-        "seaweed"
-      ],
+      "tags": ["seabed","dust","rocks","seaweed"],
       "category": "missions",
       "subcategory": "immersions",
-      "description": "Un palombaro cammina lentamente sul seabed vicino a formazioni rocciose o coralline, con bolle d\u2019aria che emergono dal casco.",
+      "description": "A diver walks slowly on the seabed near rock or coral formations, with air bubbles rising from the helmet.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 15,
       "src": "img/palombari/palombaro16.jpg",
-      "tags": [
-        "seabed",
-        "underwater canyon",
-        "rocks"
-      ],
+      "tags": ["seabed","underwater canyon","rocks"],
       "category": "missions",
       "subcategory": "immersions",
-      "description": "Un palombaro avanza sul fondale tra formazioni rocciose, con un cavo collegato alla superficie che segue i suoi movimenti.",
+      "description": "A diver moves along the seabed among rock formations, with a cable connected to the surface trailing his movements.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 16,
       "src": "img/palombari/palombaro17.jpg",
-      "tags": [
-        "crew",
-        "surface"
-      ],
+      "tags": ["crew","surface"],
       "category": "missions",
       "subcategory": "deck operations",
-      "description": "Un palombaro sul ponte della nave tiene un tubo dell\u2019aria collegato all\u2019equipaggiamento, in una fase operativa prima dell\u2019immersione.",
+      "description": "A diver on the ship's deck holds an air hose connected to equipment during a pre-dive operational phase.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 17,
       "src": "img/palombari/palombaro18.jpg",
-      "tags": [
-        "crew",
-        "surface"
-      ],
+      "tags": ["crew","surface"],
       "category": "missions",
       "subcategory": "crew",
-      "description": "Tre palombari in tuta e casco si trovano sul ponte della nave.",
+      "description": "Three divers in suits and helmets stand on the ship's deck.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 18,
       "src": "img/palombari/palombaro19.jpg",
-      "tags": [
-        "surface",
-        "crew"
-      ],
+      "tags": ["surface","crew"],
       "category": "missions",
       "subcategory": "deck operations",
-      "description": "Un palombaro inginocchiato sul ponte controlla o prepara l\u2019attrezzatura accanto a un dispositivo metallico, probabilmente parte del sistema di immersione.",
+      "description": "A diver kneels on deck inspecting or preparing equipment next to a metal device, likely part of the diving system.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 19,
       "src": "img/palombari/palombaro20.jpg",
-      "tags": [
-        "seabed",
-        "findings"
-      ],
+      "tags": ["seabed","findings"],
       "category": "missions",
       "subcategory": "immersions",
-      "description": "Un palombaro esamina un reperto sul fondale, circondato da sedimenti e detriti marini.",
+      "description": "A diver examines an artifact on the seabed, surrounded by sediment and marine debris.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 20,
       "src": "img/palombari/palombaro21.jpg",
-      "tags": [
-        "seabed",
-        "dust",
-        "rocks"
-      ],
+      "tags": ["seabed","dust","rocks"],
       "category": "missions",
       "subcategory": "immersions",
-      "description": "Un palombaro si muove sul fondale mentre manipola un tubo o strumento, impegnato in un\u2019attivit\u00e0 tecnica subacquea.",
+      "description": "A diver moves along the seabed while manipulating a pipe or instrument, engaged in a technical underwater task.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 21,
       "src": "img/palombari/palombaro22.jpg",
-      "tags": [
-        "seabed",
-        "findings",
-        "marine creature"
-      ],
+      "tags": ["seabed","findings","marine creature"],
       "category": "missions",
       "subcategory": "immersions",
-      "description": "A deep sea diver inspecting a creature on the seabed",
+      "description": "A deep-sea diver inspecting a creature on the seabed.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 22,
       "src": "img/palombari/palombaro23.jpg",
-      "tags": [
-        "seabed",
-        "rocks",
-        "findings"
-      ],
+      "tags": ["seabed","rocks","findings"],
       "category": "missions",
       "subcategory": "immersions",
-      "description": "Un palombaro si muove sul fondale con un cavo collegato alla superficie, mentre bolle d\u2019aria emergono dal casco.",
+      "description": "A diver moves along the seabed with a cable attached to the surface, while air bubbles rise from the helmet.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 23,
       "src": "img/palombari/palombaro24.jpg",
-      "tags": [
-        "crew",
-        "surface"
-      ],
+      "tags": ["crew","surface"],
       "category": "missions",
       "subcategory": "crew",
-      "description": "Un palombaro cammina sul seabed vicino a formazioni rocciose, con bolle d\u2019aria che emergono dal casco.",
+      "description": "A diver walks on the seabed near rock formations, with air bubbles rising from the helmet.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 24,
       "src": "img/fondali/fondali1.jpg",
-      "tags": [
-        "rocks",
-        "coral",
-        "dust",
-        "underwater canyon"
-      ],
+      "tags": ["rocks","coral","dust","underwater canyon"],
       "category": "sea depths",
       "subcategory": "landscapes",
-      "description": "Un canyon sottomarino stretto con pareti rocciose scure. Il fondale sabbioso \u00e8 punteggiato da piccoli coralli e massi, mentre una luce diffusa filtra dall\u2019alto creando un forte contrasto.",
+      "description": "A narrow underwater canyon with dark rocky walls. The sandy seabed is dotted with small corals and boulders, while diffuse light filters from above creating strong contrast.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 25,
       "src": "img/fondali/fondali2.jpg",
-      "tags": [
-        "marine creature",
-        "rocks"
-      ],
+      "tags": ["marine creature","rocks"],
       "category": "sea depths",
       "subcategory": "sea creatures",
-      "description": "Silhouette di un grande mammifero marino che nuota sopra un fondale corallino, illuminato da una luce soffusa dall\u2019alto.",
+      "description": "Silhouette of a large marine mammal swimming above a coral seabed, lit by soft light from above.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 26,
       "src": "img/fondali/fondali3.jpg",
-      "tags": [
-        "coral",
-        "rocks"
-      ],
+      "tags": ["coral","rocks"],
       "category": "sea depths",
       "subcategory": "landscapes",
-      "description": "Primo piano di formazioni coralline dense e tondeggianti, con texture dettagliate e profondit\u00e0 marcata.",
+      "description": "Close-up of dense, rounded coral formations with detailed texture and pronounced depth.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 27,
       "src": "img/fondali/fondali4.jpg",
-      "tags": [
-        "dust",
-        "sediments",
-        "rocks",
-        "sand"
-      ],
+      "tags": ["dust","sediments","rocks","sand"],
       "category": "sea depths",
       "subcategory": "landscapes",
-      "description": "Un fondale sabbioso con sedimenti in sospensione che creano un\u2019atmosfera torbida, con pochi elementi visibili oltre alla texture del fondo.",
+      "description": "A sandy seabed with suspended sediments creating a turbid atmosphere, with few elements visible beyond the texture.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 28,
       "src": "img/fondali/fondali5.jpg",
-      "tags": [
-        "marine creature",
-        "seabed",
-        "rocks"
-      ],
+      "tags": ["marine creature","seabed","rocks"],
       "category": "sea depths",
       "subcategory": "sea creatures",
-      "description": "Vista ravvicinata del corpo di una grande marine creature.",
+      "description": "Close-up view of the body of a large marine creature.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 29,
       "src": "img/fondali/fondali6.jpg",
-      "tags": [
-        "coral",
-        "dust",
-        "sediments"
-      ],
+      "tags": ["coral","dust","sediments"],
       "category": "sea depths",
       "subcategory": "landscapes",
-      "description": "Distesa piatta di coralli bassi che si estende verso l\u2019orizzonte.",
+      "description": "A flat expanse of low corals extending toward the horizon.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 30,
       "src": "img/fondali/fondali7.jpg",
-      "tags": [
-        "marine creature",
-        "dust"
-      ],
+      "tags": ["marine creature","dust"],
       "category": "sea depths",
       "subcategory": "sea creatures",
-      "description": "Banco di pesci in silhouette che nuotano verso la superficie, attraversando raggi di luce.",
+      "description": "A school of fish silhouetted swimming toward the surface, crossing shafts of light.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 31,
       "src": "img/fondali/fondali8.jpg",
-      "tags": [
-        "underwater canyon",
-        "seaweed"
-      ],
+      "tags": ["underwater canyon","seaweed"],
       "category": "sea depths",
       "subcategory": "landscapes",
-      "description": "Ambiente subacqueo molto scuro.",
+      "description": "A very dark underwater environment.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 32,
       "src": "img/fondali/fondali9.jpg",
-      "tags": [
-        "marine creature",
-        "rocks",
-        "underwater canyon"
-      ],
+      "tags": ["sonar frequency","graph","data","spectometer readings"],
       "category": "sea depths",
       "subcategory": "sea creatures",
-      "description": "Silhouette di una marine creature che attraversa uno stretto passaggio roccioso illuminato dall\u2019alto.",
+      "description": "Silhouette of a marine creature moving through a narrow rocky passage illuminated from above.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 33,
       "src": "img/fondali/fondali10.jpg",
-      "tags": [
-        "coral",
-        "dust",
-        "sediments"
-      ],
+      "tags": ["coral","dust","sediments"],
       "category": "sea depths",
       "subcategory": "landscapes",
-      "description": "Fondale sabbioso con piccoli coralli sparsi e una luce circolare diffusa che illumina la scena.",
+      "description": "Sandy seabed with scattered small corals and a diffuse circular light illuminating the scene.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 34,
       "src": "img/fondali/fondali11.jpg",
-      "tags": [
-        "coral",
-        "dust",
-        "sediments"
-      ],
+      "tags": ["coral","dust","sediments"],
       "category": "sea depths",
       "subcategory": "landscapes",
-      "description": "Paesaggio corallino con forte presenza di particelle sospese e grana, che crea un effetto quasi nevoso.",
+      "description": "Coral landscape with heavy suspended particles and grain, creating an almost snowy effect.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 35,
       "src": "img/fondali/fondali12.jpg",
-      "tags": [
-        "marine creature",
-        "coral",
-        "rocks"
-      ],
+      "tags": ["marine creature","coral","rocks"],
       "category": "sea depths",
       "subcategory": "sea creatures",
-      "description": "Silhouette di una marine creature che nuota sopra una barriera corallina, con luce diffusa sullo sfondo.",
+      "description": "Silhouette of a marine creature swimming above a coral reef, with diffuse light in the background.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 36,
       "src": "img/fondali/fondali13.jpg",
-      "tags": [
-        "coral",
-        "rocks"
-      ],
+      "tags": ["coral","rocks"],
       "category": "sea depths",
       "subcategory": "formations",
-      "description": "Formazione corallina sporgente con dettagli ramificati, immersa in penombra.",
+      "description": "Prominent coral formation with branching details, set in semi-darkness.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 37,
       "src": "img/fondali/fondali14.jpg",
-      "tags": [
-        "dust",
-        "marine creature",
-        "coral"
-      ],
+      "tags": ["dust","marine creature","coral"],
       "category": "sea depths",
       "subcategory": "sea creatures",
-      "description": "Vista laterale di una scogliera corallina con fondale in discesa e visibilit\u00e0 ridotta.",
+      "description": "Side view of a coral reef with a sloping seabed and reduced visibility.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 38,
       "src": "img/fondali/fondali15.jpg",
-      "tags": [
-        "rocks",
-        "dust",
-        "sediments",
-        "underwater canyon"
-      ],
+      "tags": ["rocks","dust","sediments","underwater canyon"],
       "category": "sea depths",
       "subcategory": "formations",
-      "description": "Fondale con coralli in primo piano e una marine creature sfocata sullo sfondo, immersa nella nebbia.",
+      "description": "Seabed with corals in the foreground and a blurred marine creature in the background, immersed in mist.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 39,
       "src": "img/fondali/fondali16.jpg",
-      "tags": [
-        "coral",
-        "rocks",
-        "seabed",
-        "sand"
-      ],
+      "tags": ["coral","rocks","seabed","sand"],
       "category": "sea depths",
       "subcategory": "landscapes",
-      "description": "Formazione corallina con dettagli intricati, illuminata da una luce diffusa che evidenzia le texture.",
+      "description": "Coral formation with intricate details, lit by diffuse light that highlights its textures.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 40,
       "src": "img/fondali/fondali17.jpg",
-      "tags": [
-        "marine creature",
-        "underwater canyon",
-        "seaweed"
-      ],
+      "tags": ["marine creature","underwater canyon","seaweed"],
       "category": "sea depths",
       "subcategory": "sea creatures",
-      "description": "Fondale sabbioso con piccoli coralli e una luce circolare diffusa che illumina la scena.",
+      "description": "Sandy seabed with small corals and a diffuse circular light illuminating the scene.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 41,
       "src": "img/fondali/fondali18.jpg",
-      "tags": [
-        "seaweed",
-        "dust",
-        "underwater canyon",
-        "rocks"
-      ],
+      "tags": ["seaweed","dust","underwater canyon","rocks"],
       "category": "sea depths",
       "subcategory": "formations",
-      "description": "Paesaggio corallino con forte presenza di particelle sospese e grana, che crea un effetto quasi nevoso.",
+      "description": "Coral landscape with heavy suspended particles and grain, creating an almost snowy effect.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 42,
       "src": "img/fondali/fondali19.jpg",
-      "tags": [
-        "rocks",
-        "underwater canyon",
-        "coral",
-        "seabed"
-      ],
+      "tags": ["rocks","underwater canyon","coral","seabed"],
       "category": "sea depths",
       "subcategory": "formations",
-      "description": "Silhouette di una marine creature che nuota sopra una barriera corallina, con luce diffusa sullo sfondo.",
+      "description": "Silhouette of a marine creature swimming above a coral reef, with diffuse light in the background.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 43,
       "src": "img/fondali/fondali20.jpg",
-      "tags": [
-        "coral",
-        "dust",
-        "sediments",
-        "seabed"
-      ],
+      "tags": ["coral","dust","sediments","seabed"],
       "category": "sea depths",
       "subcategory": "landscapes",
-      "description": "Formazione corallina sporgente con dettagli ramificati, immersa in penombra.",
+      "description": "Prominent coral formation with branching details, set in semi-darkness.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 44,
       "src": "img/fondali/fondali21.jpg",
-      "tags": [
-        "dust",
-        "marine creature",
-        "coral"
-      ],
+      "tags": ["dust","marine creature","coral"],
       "category": "sea depths",
       "subcategory": "sea creatures",
-      "description": "Vista laterale di una scogliera corallina con fondale in discesa e visibilit\u00e0 ridotta.",
+      "description": "Side view of a coral reef with a sloping seabed and reduced visibility.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 45,
       "src": "img/fondali/fondali22.jpg",
-      "tags": [
-        "rocks",
-        "dust",
-        "sediments",
-        "underwater canyon"
-      ],
+      "tags": ["rocks","dust","sediments","underwater canyon"],
       "category": "sea depths",
       "subcategory": "formations",
-      "description": "Fondale con coralli in primo piano e una marine creature sfocata sullo sfondo, immersa nella nebbia.",
+      "description": "Seabed with corals in the foreground and a blurred marine creature in the background, immersed in mist.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 46,
       "src": "img/Sonar/sonarDati1.jpg",
-      "tags": [
-        "graph",
-        "data"
-      ],
+      "tags": ["graph","data"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "Formazione corallina con dettagli intricati, illuminata da una luce diffusa che evidenzia le texture.",
-      "area": "Aleutian Trench, AK"
+      "description": "Official scientific research documents representing nautical points with varying depths on a hand written graph."
     },
     {
       "id": 47,
       "src": "img/Sonar/sonarDati2.jpg",
-      "tags": [
-        "sonar",
-        "acoustic data",
-        "anomaly"
-      ],
+      "tags": ["sonar","acoustic data","anomaly"],
       "category": "Documents",
       "subcategory": "sonar frequencies",
-      "description": "Fondale sabbioso con piccoli coralli e una luce circolare diffusa che illumina la scena.",
+      "description": "Sonar frequencies graph representing the data collected during the mission in the Aleutian Trench.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 48,
       "src": "img/Sonar/sonarDati3.jpg",
-      "tags": [
-        "graph",
-        "data",
-        "sonar",
-        "anomaly"
-      ],
+      "tags": ["graph","data","sonar","anomaly"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "A scientific paper containing a sonar frequencies graph.",
+      "description": "A scientific paper containing a sonar frequencies graph representing the data collected during the mission in the Aleutian Trench.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 49,
       "src": "img/Sonar/sonarDati4.jpg",
-      "tags": [
-        "technical diagrams",
-        "contour maps",
-        "oceanographic research"
-      ],
+      "tags": ["technical diagrams","contour maps","oceanographic research"],
       "category": "Documents",
       "subcategory": "research papers",
       "description": "A composite archival page containing multiple technical figures, circular scans, contour diagrams, plotted data, and typed analysis discussing acoustic readings and mapped basin anomalies.",
@@ -632,12 +443,7 @@
     {
       "id": 50,
       "src": "img/Sonar/sonarDati5.jpg",
-      "tags": [
-        "sonar",
-        "contour maps",
-        "waveforms",
-        "topographic maps"
-      ],
+      "tags": ["sonar","contour maps","waveforms","topographic maps"],
       "category": "Documents",
       "subcategory": "research papers",
       "description": "A report page with typed analysis, redacted text, waveform plots, contour illustrations, and notes describing a low-frequency acoustic tone detected during a submersible mission.",
@@ -646,38 +452,25 @@
     {
       "id": 51,
       "src": "img/Sonar/sonarDati6.jpg",
-      "tags": [
-        "sonar",
-        "data visualization",
-        "oceanographic research",
-        "anomaly"
-      ],
+      "tags": ["sonar","data visualization","oceanographic research","anomaly"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "Vista laterale di una scogliera corallina con fondale in discesa e visibilit\u00e0 ridotta.",
+      "description": "Heavily redacted official report detailing the history of the mission.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 52,
       "src": "img/Sonar/sonarDati7.jpg",
-      "tags": [
-        "maps",
-        "graph",
-        "anomaly"
-      ],
+      "tags": ["maps","graph","anomaly"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "Fondale con coralli in primo piano e una marine creature sfocata sullo sfondo, immersa nella nebbia.",
+      "description": "A composite archival page containing multiple technical figures, marine charts and oceanographic maps.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 53,
       "src": "img/Sonar/sonarDati8.jpg",
-      "tags": [
-        "sonar",
-        "oceanographic report",
-        "anomaly"
-      ],
+      "tags": ["sonar","oceanographic report","anomaly"],
       "category": "Documents",
       "subcategory": "official reports",
       "description": "A single report page featuring a sonar image of a vertical formation and typed notes describing inconsistent returns, signal degradation, and total sonar attenuation.",
@@ -686,37 +479,25 @@
     {
       "id": 54,
       "src": "img/Sonar/sonarDati9.jpg",
-      "tags": [
-        "waveform",
-        "graph",
-        "sonar frequency"
-      ],
+      "tags": ["waveform","graph","sonar frequency"],
       "category": "Documents",
       "subcategory": "sonar frequencies",
-      "description": "sonar graph showing a highly irregular waveform with annotations about frequency shifts, amplitude spikes, and a noted correlation to depth changes during the incident.",
+      "description": "Sonar graph showing a highly irregular waveform with annotations about frequency shifts, amplitude spikes, and a noted correlation to depth changes during the incident.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 55,
       "src": "img/Sonar/sonarDati10.jpg",
-      "tags": [
-        "restricted addendum",
-        "Oceanographic Research Authority",
-        "classified"
-      ],
+      "tags": ["restricted addendum","Oceanographic Research Authority","classified"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "A restricted Oceanographic Research Authority addendum",
+      "description": "A restricted Oceanographic Research Authority addendum stating that the anomalies are of unknown origin.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 56,
       "src": "img/Sonar/sonarDati11.jpg",
-      "tags": [
-        "restricted addendum",
-        "Oceanographic Research Authority",
-        "operations report"
-      ],
+      "tags": ["restricted addendum","Oceanographic Research Authority","operations report"],
       "category": "Documents",
       "subcategory": "official reports",
       "description": "A formal incident report for file D-17/6B documenting loss of contact with Nerites II on 18 June 1957, listing last transmission depth, observations, and an undetermined cause of failure.",
@@ -725,11 +506,7 @@
     {
       "id": 57,
       "src": "img/Sonar/sonarDati12.jpg",
-      "tags": [
-        "sonar",
-        "oceanographic report",
-        "anomaly"
-      ],
+      "tags": ["sonar","oceanographic report","anomaly"],
       "category": "Documents",
       "subcategory": "official reports",
       "description": "A post-incident review page showing a grainy image of a damaged submersible-like object and typed analysis describing abrupt structural deformation without typical implosion debris patterns.",
@@ -738,11 +515,7 @@
     {
       "id": 58,
       "src": "img/Sonar/sonarDati13.jpg",
-      "tags": [
-        "graph",
-        "data visualization",
-        "anomaly"
-      ],
+      "tags": ["graph","data visualization","anomaly"],
       "category": "Documents",
       "subcategory": "research papers",
       "description": "A technical chart page with colored bathymetric bands, depth curves, and typed notes about conflicting pressure gauge, cable payout, and acoustic beacon readings.",
@@ -751,11 +524,7 @@
     {
       "id": 59,
       "src": "img/Sonar/sonarDati14.jpg",
-      "tags": [
-        "restricted addendum",
-        "Oceanographic Research Authority",
-        "classified"
-      ],
+      "tags": ["restricted addendum","Oceanographic Research Authority","classified"],
       "category": "Documents",
       "subcategory": "official reports",
       "description": "A mission authorization page for file D-17/6B.",
@@ -764,23 +533,16 @@
     {
       "id": 60,
       "src": "img/Sonar/sonarDati15.jpg",
-      "tags": [
-        "sonar",
-        "acoustic data",
-        "anomaly"
-      ],
+      "tags": ["sonar","acoustic data","anomaly"],
       "category": "Documents",
       "subcategory": "sonar frequencies",
-      "description": "Vista laterale di una scogliera corallina con fondale in discesa e visibilit\u00e0 ridotta.",
+      "description": "Official acoustic data analysis showing anomalous underwater readings.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 61,
       "src": "img/Sonar/sonarDati16.jpg",
-      "tags": [
-        "oceanographic report",
-        "anomaly"
-      ],
+      "tags": ["oceanographic report","anomaly"],
       "category": "Documents",
       "subcategory": "official reports",
       "description": "A report page with a grainy deep-sea image and typed notes describing an unidentified object at approximately 9,700 meters, persistent sonar returns, unexplained movement, and a recommendation to avoid close-range observation.",
@@ -789,249 +551,172 @@
     {
       "id": 62,
       "src": "img/Sonar/sonarDati17.jpg",
-      "tags": [
-        "graph",
-        "data"
-      ],
+      "tags": ["graph","data"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "a scientific paper with graphs and handwritten notes.",
+      "description": "A scientific paper with graphs and handwritten notes representing different nautical points with varying depths.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 63,
       "src": "img/Sonar/sonarDati18.jpg",
-      "tags": [
-        "graph",
-        "data"
-      ],
+      "tags": ["graph","data"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "A reproduced technical reference page showing descent and approach profiles for steep-wall hadal operations, with diagrams comparing expected and observed vehicle paths near submarine escarpments..",
+      "description": "A reproduced technical reference page showing descent and approach profiles for steep-wall hadal operations, with diagrams comparing expected and observed vehicle paths near submarine escarpments.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 64,
       "src": "img/Sonar/sonarDati19.jpg",
-      "tags": [
-        "graph",
-        "data",
-        "composite",
-        "sonar",
-        "anomaly"
-      ],
+      "tags": ["graph","data","composite","sonar","anomaly"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "A large archival-style research collage combining landscape photographs, technical illustrations, charts, handwritten notes, and a large plotted data graph on aged paper.",
+      "description": "A large archival-style research collage combining landscape photographs, technical illustrations, charts, handwritten notes, and a large plotted data graph all dating back to studies prior to the missions.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 65,
       "src": "img/Sonar/sonarDati20.jpg",
-      "tags": [
-        "graph",
-        "data",
-        "anomaly"
-      ],
+      "tags": ["graph","data","anomaly"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "Formazione corallina sporgente con dettagli ramificati, immersa in penombra.",
+      "description": "Official scientific documents stating irregularities of unknown origin and not attributable to mechanical failures.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 66,
       "src": "img/Sonar/sonarDati21.jpg",
-      "tags": [
-        "oceanographic report"
-      ],
+      "tags": ["oceanographic report"],
       "category": "Documents",
       "subcategory": "official reports",
-      "description": "page from an operations manual explaining how to operate a submersible.",
+      "description": "Page from an operations manual explaining how to operate a submersible and detailing the code of conduct regarding underwater operations.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 67,
       "src": "img/Sonar/sonarDati22.jpg",
-      "tags": [
-        "restricted addendum",
-        "Oceanographic Research Authority",
-        "classified"
-      ],
+      "tags": ["restricted addendum","Oceanographic Research Authority","classified"],
       "category": "Documents",
       "subcategory": "official reports",
-      "description": "official document from oceanographic research authority stating irregularities.",
-      "area": "Strait of Florida, FL"
+      "description": "An official document from the Oceanographic Research Authority noting irregularities and anomalies possibly due to issues in the equipment and requesting further investigation.",
+      "area": "Aleutian Trench, AK"
     },
     {
       "id": 68,
       "src": "img/Sonar/sonarDati23.jpg",
-      "tags": [
-        "graph",
-        "data",
-        "anomaly"
-      ],
+      "tags": ["graph","data","anomaly"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "scientific paper with graphs and handwritten notes.",
+      "description": "A scientific paper with graphs and handwritten notes representing the scientific findings made prior to the expedition in the Strait of Florida and signed off by the research team.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 69,
       "src": "img/Sonar/sonarDati24.jpg",
-      "tags": [
-        "graph",
-        "data",
-        "maps"
-      ],
+      "tags": ["graph","data","maps"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "scientific paper with graphs and handwritten notes.",
+      "description": "A scientific paper with graphs and handwritten graphs and nautical charts written prior to the expedition in the Strait of Florida detailing the speed of the vessel.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 70,
       "src": "img/Sonar/sonarDati25.jpg",
-      "tags": [
-        "graph",
-        "data",
-        "anomaly"
-      ],
+      "tags": ["graph","data","anomaly"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "scientific paper with diagrams and graphs.",
+      "description": "A scientific paper with diagrams and graphs showing the relationship between different variables found during underwater surveys.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 71,
       "src": "img/Sonar/sonarDati26.jpg",
-      "tags": [
-        "restricted addendum",
-        "Oceanographic Research Authority",
-        "classified"
-      ],
+      "tags": ["restricted addendum","Oceanographic Research Authority","classified"],
       "category": "Documents",
       "subcategory": "official reports",
-      "description": "Formazione corallina sporgente con dettagli ramificati, immersa in penombra.",
+      "description": "An official document from the Oceanographic Research Authority requesting the immediate suspension of all underwater operations in the Aleutian Trench after the discovery of unusual acoustic signatures following the events of the expedition in sector D-17.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 72,
       "src": "img/Sonar/sonarDati27.jpg",
-      "tags": [
-        "topographic maps",
-        "waveforms"
-      ],
+      "tags": ["topographic maps","waveforms"],
       "category": "Documents",
       "subcategory": "topography maps",
-      "description": "a topographic map showing underwater terrain.",
+      "description": "A topographic map showing underwater terrain of the Aleutian Trench and surrounding areas with detailed contour lines.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 73,
       "src": "img/Sonar/sonarDati28.jpg",
-      "tags": [
-        "maps",
-        "graph",
-        "anomaly",
-        "sonar frequency"
-      ],
+      "tags": ["maps","graph","anomaly","sonar frequency"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "A composite archival page containing multiple technical figures, circular scans, contour diagrams, plotted data, and typed analysis discussing acoustic readings and mapped basin anomalies.",
+      "description": "A composite archival page containing multiple technical figures, circular scans, contour diagrams, plotted data, and typed analysis discussing acoustic readings and mapped basin anomalies relative to studies on the Monterey submarine Canyon.",
       "area": "Monterey submarine Canyon, CA"
     },
     {
       "id": 74,
       "src": "img/Sonar/sonarDati29.jpg",
-      "tags": [
-        "Oceanographic Research Authority",
-        "classified"
-      ],
+      "tags": ["Oceanographic Research Authority","classified"],
       "category": "Documents",
       "subcategory": "official reports",
-      "description": "a front page of an official document stating how to operate a submersible.",
+      "description": "The front page of an official document describing submersible operation procedures and how to operate a submersible.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 75,
       "src": "img/Sonar/sonarDati30.jpg",
-      "tags": [
-        "sonar",
-        "acoustic data",
-        "spectometer readings"
-      ],
+      "tags": ["sonar","acoustic data","spectometer readings"],
       "category": "Documents",
       "subcategory": "sonar frequencies",
-      "description": "scientific paper with sonar frequencies.",
+      "description": "A scientific paper with sonar frequency data recorded during underwater surveys in the Strait of Florida underscoring the significance of the anomalies in the findings.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 76,
       "src": "img/Sonar/sonarDati31.jpg",
-      "tags": [
-        "maps",
-        "graph",
-        "anomaly"
-      ],
+      "tags": ["maps","graph","anomaly"],
       "category": "Documents",
       "subcategory": "research papers",
-      "description": "A scientific paper with a circular map.",
+      "description": "A scientific paper with a circular nautical map relative to the Strait of Florida.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 77,
       "src": "img/Sonar/sonarDati32.jpg",
-      "tags": [
-        "sonar frequency",
-        "graph",
-        "data",
-        "anomaly",
-        "sonar",
-        "spectometer readings"
-      ],
+      "tags": ["sonar frequency","graph","data","anomaly","sonar","spectometer readings"],
       "category": "Documents",
       "subcategory": "sonar frequencies",
-      "description": "A scientific paper containing multiple sonar frequencies graphs.",
+      "description": "A scientific paper containing multiple sonar frequency graphs recorded during underwater surveys in the Strait of Florida.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 78,
       "src": "img/Sonar/sonarDati33.jpg",
-      "tags": [
-        "sonar frequency",
-        "graph",
-        "data",
-        "spectometer readings"
-      ],
+      "tags": ["sonar frequency","graph","data","spectometer readings"],
       "category": "Documents",
       "subcategory": "sonar frequencies",
-      "description": "A scientific paper containing multiple sonar frequencies graphs.",
+      "description": "A scientific paper containing multiple sonar frequency graphs recorded underwater in the Strait of Florida over the course of several days.",
       "area": "Strait of Florida, FL"
     },
     {
       "id": 79,
       "src": "img/Sonar/sonarDati34.jpg",
-      "tags": [
-        "sonar frequency",
-        "graph",
-        "data",
-        "spectometer readings"
-      ],
+      "tags": ["sonar frequency","graph","data","spectometer readings"],
       "category": "Documents",
       "subcategory": "sonar frequencies",
-      "description": "A scientific paper containing multiple sonar frequencies graphs.",
+      "description": "A scientific paper containing multiple sonar frequency graphs recorded underwater in the Aleutian Trench.",
       "area": "Aleutian Trench, AK"
     },
     {
       "id": 80,
       "src": "img/Sonar/sonarDati35.jpg",
-      "tags": [
-        "topographic maps",
-        "waveforms"
-      ],
+      "tags": ["topographic maps","waveforms"],
       "category": "Documents",
       "subcategory": "topography maps",
-      "description": "a topographic map showing underwater terrain.",
+      "description": "A topographic map showing underwater terrain of the Strait of Florida.",
       "area": "Strait of Florida, FL"
     }
   ]

@@ -38,6 +38,8 @@
   --tag-active-text: #ffffff;
   --accent: #1a1a1a;
   --radius: 0px;
+  --global-line-height: 1.34; /* aumento addizionale richiesto */
+  --site-header-height: 82px; /* used by lightbox to avoid being covered */
 }
 
 html,
@@ -45,6 +47,12 @@ body {
   margin: 0;
   width: 100%;
   height: 100%;
+}
+
+/* Applicare l'interlinea ridotta a tutto il testo; usare !important per sovrascrivere valori locali */
+body,
+body * {
+  line-height: var(--global-line-height) !important;
 }
 
 body {
@@ -100,10 +108,12 @@ body.lightbox-open .search-wrap {
 
 .lightbox {
   position: fixed;
-  top: 96px;
-  bottom: 0;
-  left: 260px;
-  right: 260px;
+  top: var(--site-header-height);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(90vw, 1100px);
+  height: calc(100vh - var(--site-header-height));
+  max-height: calc(100vh - var(--site-header-height));
   z-index: 180;
   display: none;
 }
@@ -121,42 +131,75 @@ body.lightbox-open .search-wrap {
 .lightbox-content {
   position: relative;
   z-index: 1;
-  height: 100%;
   width: 100%;
-  padding: 34px;
+  padding: 24px; /* small internal padding to keep space around the image */
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  gap: 16px;
+  gap: 8px; /* tighter spacing between elements */
+  max-height: calc(100vh - var(--site-header-height));
+  height: 100%;
   overflow-y: auto;
 }
 
 .lightbox-main {
   display: flex;
   justify-content: center;
+  align-items: center; /* vertical center image and nav inside modal */
+  overflow: visible; /* allow nav buttons to sit beside the image inside the modal */
+  border-radius: 12px;
+  padding: 12px 0; /* small padding to avoid visual collision */
+  flex: 1 1 auto;
+  min-height: 0; /* allow proper flex children overflow handling */
+}
+
+.lightbox-caption {
+  margin: 12px 0 6px;
+  font-size: 14px;
+  line-height: 1.34;
+  color: var(--text);
+  max-width: min(90vw, 880px);
+  text-align: center;
+  padding: 0 12px;
 }
 
 .lightbox-img {
   display: block;
   width: auto;
-  max-width: 100%;
-  max-height: clamp(420px, 66vh, 760px);
+  height: auto;
+  /* lasciare spazio ai controlli laterali dentro il modale in modo che non sovrappongano l'immagine */
+  max-width: calc(100% - 240px);
+  max-height: 100%; /* si limita all'altezza del contenitore .lightbox-main */
   object-fit: contain;
   background: #eee;
   margin: 0 auto;
+  border-radius: 12px;
 }
 
 .lightbox-close {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 12px;
+  right: 12px;
   border: 0;
-  background: transparent;
-  font-size: 22px;
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  font-size: 40px;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   line-height: 1;
   cursor: pointer;
   font-family: monospace;
-  opacity: 0.7;
+  opacity: 0.95;
+  padding: 0;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  transition: transform 0.12s ease, opacity 0.12s ease, background 0.12s ease;
+}
+
+.lightbox-close:hover {
 }
 
 .lightbox-close:hover {
@@ -168,16 +211,28 @@ body.lightbox-open .search-wrap {
   top: 50%;
   transform: translateY(-50%);
   border: 0;
-  background: transparent;
-  font-size: 64px;
+  background: rgba(255,255,255,0.02);
+  color: var(--text);
+  /* large, but not so wide to overlap the image; glyph sized for visibility */
+  font-size: 48px;
+  width: 96px; /* hit area kept comfortable for desktop and touch */
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   line-height: 1;
   cursor: pointer;
   font-family: monospace;
   z-index: 3;
-  color: var(--text);
-  opacity: 0.55;
+  opacity: 1;
   padding: 0;
-  transition: opacity 0.12s ease;
+  border-radius: 999px;
+  transition: none; /* remove transitions to avoid jank */
+  touch-action: manipulation; /* improve touch responsiveness */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lightbox-nav:hover {
 }
 
 .lightbox-nav:hover {
@@ -185,11 +240,11 @@ body.lightbox-open .search-wrap {
 }
 
 .lightbox-prev {
-  left: 8px;
+  left: 12px; /* inside the modal, at the left side (beside the image) */
 }
 
 .lightbox-next {
-  right: 8px;
+  right: 12px; /* inside the modal, at the right side (beside the image) */
 }
 
 .lightbox-tags {
@@ -233,6 +288,7 @@ body.lightbox-open .search-wrap {
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 8px;
 }
 
 .lightbox-similar-item:hover {
@@ -266,8 +322,15 @@ body.lightbox-open .search-wrap {
   }
 
   .lightbox-nav {
-    display: none;
+    font-size: 84px;
+    width: 86px;
+    height: 86px;
+    /* keep nav inside modal on small screens */
+    left: 8px;
+    right: 8px;
   }
+  .lightbox-prev { left: 8px; }
+  .lightbox-next { right: 8px; }
 }
 .search-wrap input {
   width: 100%;
@@ -669,8 +732,8 @@ nav a {
   position: absolute;
   left: 0;
   top: 0.1em;
-  width: 100%;
-  height: 1em;
+  width: 320px; /* larger hit area, keep inside modal */
+  height: 320px;
   background: #000;
   transform: scaleX(0);
   transform-origin: left;
@@ -780,6 +843,15 @@ body.about-page {
   padding-right: 32px;
 }
 
+/* Spaziatura verticale per le immagini nella sezione About */
+.about-main img,
+.about-main figure {
+  padding-block: 1.2rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 body.about-page header {
   position: static;
   left: auto;
@@ -854,6 +926,32 @@ body.about-page .about-section-link:hover {
   max-width: 1080px;
   margin: 0 auto;
   padding-bottom: 36vh;
+}
+
+/* Padding for images inside the About sections */
+.about-main img,
+.about-main picture img,
+.about-main figure img,
+.about-main .about-image img,
+.about-main .my-6 img,
+.about-main .lightbox-img {
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+/* About image captions */
+.about-main figure {
+  margin: 0;
+}
+
+.about-main figcaption {
+  font-size: 12px;
+  color: var(--muted);
+  opacity: 0.9;
+  margin-top: 8px;
+  text-align: center;
+  font-style: italic;
+  letter-spacing: 0.02em;
 }
 
 @media (max-width: 900px) {
@@ -961,6 +1059,7 @@ body.map-page-body .topbar-right a:hover {
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: hidden;
 }
 
 #map {
@@ -972,19 +1071,41 @@ body.map-page-body .topbar-right a:hover {
 }
 
 .map-gallery {
-  display: block;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.65);
-  color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%; /* fully centered */
+  transform: translate(-50%, -50%);
+  display: none; /* hidden by default to avoid an empty central bar */
+  width: min(920px, calc(100% - 1.5rem));
+  max-height: calc(100% - 2rem);
+  padding: 0.6rem 0.6rem 0.5rem; /* reduced padding */
+  background: rgba(255, 255, 255, 0.14);
+  color: #f5f5f2;
   overflow: hidden;
   flex-shrink: 0;
-  width: 100%;
+  z-index: 160;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px; /* slightly smaller radius to match lightbox */
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(12px) saturate(1.05);
+  -webkit-backdrop-filter: blur(12px) saturate(1.05);
+  pointer-events: auto;
+}
+
+/* Show gallery only when it actually contains the image frame (avoids the empty translucent bar) */
+.map-gallery:has(.map-gallery-frame) {
+  display: block;
 }
 
 .map-gallery-header {
   display: grid;
   gap: 4px;
   margin-bottom: 10px;
+}
+
+/* Hide the header bar (title/hint) per design request */
+.map-gallery-header {
+  display: none !important;
 }
 
 .map-gallery-title {
@@ -1002,26 +1123,68 @@ body.map-page-body .topbar-right a:hover {
 
 .map-gallery-frame {
   display: grid;
-  grid-template-columns: 36px minmax(0, 1fr) 36px;
-  gap: 10px;
+  grid-template-columns: 36px minmax(0, 1fr) 36px; /* tighter controls */
+  gap: 8px; /* reduced gap */
   align-items: center;
 }
 
 .map-gallery-viewport {
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: min(46vh, 420px); /* reduced height to limit empty vertical space */
+}
+
+.map-gallery-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.8fr) minmax(0, 0.55fr);
+  gap: 8px; /* reduced gap between previews */
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 .map-gallery-link {
   display: block;
+  overflow: hidden;
+  border-radius: 14px;
 }
+
+/* Ensure images inside gallery and lightbox inherit the same rounding */
+.map-gallery-link img,
+.map-gallery-image,
+.lightbox-img,
+.lightbox-similar-item img {
+  border-radius: 12px;
+  display: block;
+}
+
+/* global img rounding removed — rounded corners applied only to lightbox/gallery elements */
 
 .map-gallery-image {
   width: 100%;
-  max-height: 280px;
+  height: 100%;
   object-fit: contain;
   display: block;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  transition: transform 180ms ease, opacity 180ms ease, filter 180ms ease;
+}
+
+.map-gallery-image-prev,
+.map-gallery-image-next {
+  opacity: 0.42;
+  filter: saturate(0.48) brightness(0.72) blur(3px);
+  transform: scale(0.82);
+}
+
+.map-gallery-image-current {
+  opacity: 1;
+  transform: scale(1);
+  filter: saturate(1) brightness(1) blur(0px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
 .map-gallery-button {
@@ -1036,7 +1199,7 @@ body.map-page-body .topbar-right a:hover {
 }
 
 .map-gallery-button:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.26);
 }
 
 .map-gallery .empty {
@@ -1047,7 +1210,42 @@ body.map-page-body .topbar-right a:hover {
 .map-gallery-footer {
   display: grid;
   grid-template-columns: 1fr;
-  margin-top: 10px;
+  margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .map-gallery {
+    width: calc(100% - 1rem);
+    top: 50%;
+    padding: 0.85rem 0.85rem 0.75rem;
+    border-radius: 14px;
+  }
+
+  .map-gallery-frame {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
+    gap: 8px;
+  }
+
+  .map-gallery-strip {
+    grid-template-columns: minmax(0, 0.48fr) minmax(0, 1.9fr) minmax(0, 0.48fr);
+    gap: 8px;
+  }
+
+  .map-gallery-image {
+    height: auto;
+  }
+
+  .map-gallery-image-prev,
+  .map-gallery-image-next {
+    opacity: 0.35;
+    filter: saturate(0.36) brightness(0.66) blur(4px);
+    transform: scale(0.75);
+  }
+
+  .map-gallery-button {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 .map-location-label {
