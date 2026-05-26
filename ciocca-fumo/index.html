@@ -6,8 +6,9 @@
     <title>Archivio di Giorgia</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
     <style type="text/tailwindcss">
-      @theme{
+      @theme {
         --color-myBlack: #3A3A3A;
         --color-myWhite: #E5E5E5;
         --color-myGrey: #FFFFFF80;
@@ -18,15 +19,17 @@
     </style>
   </head>
 
-  <body class="bg-myBlack text-myWhite ">
+  <body class="bg-myBlack text-myWhite">
 
-
-    <div id="landing-modal" 
-    class="fixed top-0 left-0 bg-myBlack w-screen h-screen z-[999]" 
-    style="cursor:pointer;">
-      <div id="landing-content" 
-      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center flex flex-col gap-1 
-      landing-content-enter">
+    <div
+      id="landing-modal"
+      class="fixed top-0 left-0 bg-myBlack w-screen h-screen z-[999]"
+      style="cursor:pointer;"
+    >
+      <div
+        id="landing-content"
+        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center flex flex-col gap-1 landing-content-enter"
+      >
         <p class="font-mySubtitle">Hiroshi Tanaka</p>
         <p class="font-myTitle">禁煙 No smoking</p>
         <p class="font-mySubtitle">Osaka 1985–1990</p>
@@ -35,23 +38,29 @@
 
     <script>
       (function () {
-        const modal   = document.getElementById('landing-modal');
+        const modal = document.getElementById('landing-modal');
         const content = document.getElementById('landing-content');
         let leaving = false;
 
         function startLeave() {
           if (leaving) return;
           leaving = true;
+
           content.classList.remove('landing-content-enter');
           content.classList.add('landing-content-leave');
+
           content.addEventListener('animationend', () => {
             modal.classList.add('landing-modal-hide');
+
             modal.addEventListener('animationend', () => {
               modal.style.opacity = '0';
               modal.style.pointerEvents = 'none';
+              modal.style.display = 'none';
+
               document.querySelectorAll('.initially-blurred').forEach(el => {
                 el.classList.remove('all-blurred');
                 el.classList.add('all-unblurring');
+
                 el.addEventListener('animationend', () => {
                   el.classList.remove('all-unblurring');
                 }, { once: true });
@@ -60,44 +69,37 @@
           }, { once: true });
         }
 
-        // auto-leave after 2s blur-in + 2s blur-out
         content.addEventListener('animationend', () => {
           if (!leaving) setTimeout(startLeave, 2000);
         }, { once: true });
 
-        // click to skip
         modal.addEventListener('click', startLeave);
       })();
     </script>
 
-
     <header class="initially-blurred all-blurred">
-      <div class="header-inner ">
-        <a href="../index.html" class="col-span-2">禁煙 No smoking</a>
+      <div class="header-inner">
+        <a href="/" class="col-span-2">禁煙 No smoking</a>
+
         <div class="flex gap-20px col-span-10">
           <div class="flex gap-20px">
             <a href="#portraits" class="cursor-pointer" data-category="fotografie">吸殻 Portraits</a>
             <a href="#packs" class="cursor-pointer" data-category="pacchetti">タバコの箱 Cigarette packs</a>
             <a href="#advertisements" class="cursor-pointer" data-category="pubblicità">広告 Advertisements</a>
           </div>
-          <p onclick="openExploreModal()" class="ml-auto cursor-pointer">アーカイブについて About the Archive</p>
+
+          <p onclick="openExploreModal()" class="ml-auto cursor-pointer">
+            アーカイブについて About the Archive
+          </p>
         </div>
       </div>
     </header>
 
     <!-- <p class="results-info font-myTitle" id="results-info"></p> -->
 
-    <section id="portraits">
+    <section id="portraits" class="archive-section">
       <h2>吸殻 Portraits</h2>
-    </section>
 
-    <section id="packs">
-      <h2>タバコの箱 Cigarette packs</h2>
-    </section>
-
-    <section id="advertisements">
-      <h2>広告 Advertisements</h2>
-    </section>
       <div class="descriptionAndFilters col-span-4 h-full flex flex-col justify-between pt-[10rem]">
         <div class="description flex flex-col gap-10px">
           <div class="japanese" id="category-japanese-text">
@@ -107,6 +109,7 @@
           <div class="english text-myGrey" id="category-english-text">
             Hiroshi Tanaka, a tobacconist in Osaka...
           </div>
+
           <div class="filters grid grid-cols-4 gap-x-10px gap-y-5px mt-auto h-fit" id="filters-panel">
             <div class="filter col-span-4 grid grid-cols-4 gap-x-10px gap-y-5px h-fit">
               <p class="col-span-1">状態 Status</p>
@@ -116,6 +119,7 @@
                 <span>君 Kun</span>
               </p>
             </div>
+
             <div class="filter col-span-4 grid grid-cols-4 gap-x-10px gap-y-5px h-fit">
               <p class="col-span-1">人々 People</p>
               <p class="col-span-3 flex flex-wrap gap-x-10px">
@@ -123,6 +127,7 @@
                 <span>グループ Group</span>
               </p>
             </div>
+
             <div class="filter col-span-4 grid grid-cols-4 gap-x-10px gap-y-5px h-fit">
               <p class="col-span-1">空間 Year</p>
               <p class="col-span-3 flex flex-wrap gap-x-10px">
@@ -132,14 +137,24 @@
           </div>
         </div>
       </div>
+
       <main id="grid" class="myPhotos"></main>
-    </div>
+    </section>
+
+    <section id="packs" class="archive-section">
+      <h2>タバコの箱 Cigarette packs</h2>
+    </section>
+
+    <section id="advertisements" class="archive-section">
+      <h2>広告 Advertisements</h2>
+    </section>
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
       <button class="lb-close" id="lb-close">✕</button>
       <button class="lb-prev" id="lb-prev">←</button>
       <button class="lb-next" id="lb-next">→</button>
+
       <div class="lb-content">
         <img class="lb-img" id="lb-img" src="" alt="">
         <div class="lb-info">
@@ -150,103 +165,130 @@
     </div>
 
     <!-- About Modal -->
-    <div id="explore-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.95); align-items:center; justify-content:center; flex-direction:column; gap:20px;">
-      <button onclick="closeExploreModal()" style="position:absolute; top:20px; right:20px; background:none; border:none; color:white; font-size:28px; cursor:pointer; line-height:1;">✕</button>
+    <div
+      id="explore-modal"
+      style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.95); align-items:center; justify-content:center; flex-direction:column; gap:20px;"
+    >
+      <button
+        onclick="closeExploreModal()"
+        style="position:absolute; top:20px; right:20px; background:none; border:none; color:white; font-size:28px; cursor:pointer; line-height:1;"
+      >
+        ✕
+      </button>
 
       <!-- Webcam preview top-right -->
       <div style="position:absolute; top:20px; right:70px; display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
-        <video id="explore-webcam" autoplay muted playsinline style="width:200px; height:150px; object-fit:cover; border-radius:6px; border:2px solid rgba(255,255,255,0.15); transform:scaleX(-1);"></video>
+        <video
+          id="explore-webcam"
+          autoplay
+          muted
+          playsinline
+          style="width:200px; height:150px; object-fit:cover; border-radius:6px; border:2px solid rgba(255,255,255,0.15); transform:scaleX(-1);"
+        ></video>
+
         <div id="explore-hand-status" style="font-family:monospace; font-size:11px; text-align:right; line-height:1.5;">
-          <span id="explore-detect-label" style="display:inline-block; padding:2px 8px; border-radius:3px; background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.4);">no face detected</span><br>
+          <span
+            id="explore-detect-label"
+            style="display:inline-block; padding:2px 8px; border-radius:3px; background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.4);"
+          >
+            no face detected
+          </span>
+          <br>
           <span id="explore-angle-label" style="color:rgba(255,255,255,0.3);">—</span>
         </div>
+
         <!-- Mic level indicator -->
         <div style="width:200px; font-family:monospace; font-size:10px; color:rgba(255,255,255,0.35);">
           <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
             <span>mic</span>
             <span id="explore-mic-value">0</span>
           </div>
+
           <div style="position:relative; height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:visible;">
-            <!-- threshold marker -->
-            <div id="explore-mic-threshold-marker" style="position:absolute; top:-3px; width:2px; height:12px; background:rgba(255,255,255,0.5); border-radius:1px; left:43%;">
-              <span style="position:absolute; top:-14px; left:50%; transform:translateX(-50%); font-size:9px; color:rgba(255,255,255,0.4); white-space:nowrap;">110</span>
+            <div
+              id="explore-mic-threshold-marker"
+              style="position:absolute; top:-3px; width:2px; height:12px; background:rgba(255,255,255,0.5); border-radius:1px; left:43%;"
+            >
+              <span style="position:absolute; top:-14px; left:50%; transform:translateX(-50%); font-size:9px; color:rgba(255,255,255,0.4); white-space:nowrap;">
+                110
+              </span>
             </div>
-            <!-- level bar -->
-            <div id="explore-mic-bar" style="height:100%; width:0%; background:rgba(255,255,255,0.4); border-radius:3px; transition:width 0.05s linear;"></div>
+
+            <div
+              id="explore-mic-bar"
+              style="height:100%; width:0%; background:rgba(255,255,255,0.4); border-radius:3px; transition:width 0.05s linear;"
+            ></div>
           </div>
         </div>
       </div>
 
       <header class="initially-blurred all-blurred">
-      <div class="header-inner ">
-        <a href="../index.html" class="col-span-2">禁煙 No smoking</a>
-        <div class="flex gap-20px col-span-10">
-          <div class="flex gap-20px">
-            <a href="#portraits" onclick="navigateFromModal('#portraits')" class="cursor-pointer">吸殻 Portraits</a>
-            <a href="#packs" onclick="navigateFromModal('#packs')" class="cursor-pointer">タバコの箱 Cigarette packs</a>
-            <a href="#advertisements" onclick="navigateFromModal('#advertisements')" class="cursor-pointer">広告 Advertisements</a>
-          </div>
-          <a href="javascript:void(0)" onclick="closeExploreModal()" class="ml-auto cursor-pointer">Close</a>
-        </div>
-      </div>
-    </header>
+        <div class="header-inner">
+          <a href="/" class="col-span-2">禁煙 No smoking</a>
 
+          <div class="flex gap-20px col-span-10">
+            <div class="flex gap-20px">
+              <a href="#portraits" class="cursor-pointer" data-category="fotografie">吸殻 Portraits</a>
+              <a href="#packs" class="cursor-pointer" data-category="pacchetti">タバコの箱 Cigarette packs</a>
+              <a href="#advertisements" class="cursor-pointer" data-category="pubblicità">広告 Advertisements</a>
+            </div>
+
+            <p onclick="openExploreModal()" class="ml-auto cursor-pointer">
+              アーカイブについて About the Archive
+            </p>
+          </div>
+        </div>
+      </header>
 
       <div class="about-page">
 
-        <div style="position:fixed; top:18px; left:18px; z-index:1001;">
-          <a href="../index.html" style="color:var(--color-myWhite); text-decoration:underline;">Site Home</a>
-        </div>
+        <section class="about-hero">
+          <h1>
+            田中弘 Hiroshi Tanaka<br>
+            禁煙 No Smoking
+          </h1>
 
-  <section class="about-hero">
-    <h1>
-      田中弘 Hiroshi Tanaka<br>
-      禁煙 No Smoking
-    </h1>
+          <p class="about-intro">
+            1980年代、大阪でタバコ屋を営んでいた田中浩氏は、喫煙を単なる悪癖ではなく生き方の一つと捉え、タバコや関連グッズを収集していた。
+          </p>
 
-    <p class="about-intro">
-      1980年代、大阪でタバコ屋を営んでいた田中浩氏は、喫煙を単なる悪癖ではなく生き方の一つと捉え、タバコや関連グッズを収集していた。
-    </p>
+          <p class="about-intro">
+            Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items.
+          </p>
+        </section>
 
-    <p class="about-intro">
-      Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items.
-    </p>
-  </section>
+        <!-- PRIMA RIGA -->
+        <section class="about-grid about-grid-3">
+          <img src="img/about/about1.png" alt="">
+          <img src="img/about/about2.jpg" alt="">
+          <img src="img/about/about3.png" alt="">
+        </section>
 
-  <!-- PRIMA RIGA -->
-  <section class="about-grid about-grid-3">
-    <img src="img/about/about1.png">
-    <img src="img/about/about2.jpg">
-    <img src="img/about/about3.png">
-  </section>
+        <section class="about-text-block">
+          <p>
+            ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。
+            ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。
+          </p>
 
-  <section class="about-text-block">
-    <p>
-      ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。
-      ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。
-    </p>
+          <p>
+            Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items.
+          </p>
+        </section>
 
-    <p>
-      Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items.
-    </p>
-  </section>
+        <!-- TERZA RIGA -->
+        <section class="about-grid about-grid-3">
+          <img src="img/about/about4.png" alt="">
+          <img src="img/about/about5.jpg" alt="">
+          <img src="img/about/about6.png" alt="">
+        </section>
 
-  <!-- TERZA RIGA -->
-  <section class="about-grid about-grid-3">
-    <img src="img/about/about4.png">
-    <img src="img/about/about5.jpg">
-    <img src="img/about/about6.png">
-  </section>
+      </div>
 
-</div>
-
-  <!-- TEXT -->
-  <p class="text-myGrey text-center max-w-[70ch]">
-    Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life...
-  </p>
-
+      <!-- TEXT -->
+      <p class="text-myGrey text-center max-w-[70ch]">
+        Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life...
+      </p>
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
@@ -254,23 +296,60 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2"></script>
 
+    <script src="ciocca-ml.js"></script>
+
     <script>
-      function navigateFromModal(hash) {
-        try { closeExploreModal(); } catch (e) { /* ignore */ }
-        // small delay to allow modal hide animation / cleanup
-        setTimeout(function() {
-          var el = document.querySelector(hash);
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          } else {
-            // fallback: navigate to site root with hash
-            window.location.href = '../index.html' + (hash || '');
-          }
-        }, 220);
-      }
+      (function () {
+        const selectors = [
+          'a[href="#portraits"]',
+          'a[href="#packs"]',
+          'a[href="#advertisements"]'
+        ];
+
+        function setupAnchorHandlers() {
+          selectors.forEach(sel => {
+            document.querySelectorAll(sel).forEach(a => {
+              a.addEventListener('click', function (ev) {
+                const href = this.getAttribute('href');
+                const target = document.querySelector(href);
+                const modal = document.getElementById('explore-modal');
+
+                ev.preventDefault();
+
+                if (modal && modal.style.display !== 'none') {
+                  try {
+                    closeExploreModal();
+                  } catch (e) {}
+
+                  setTimeout(() => {
+                    if (target) {
+                      target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                      });
+                    }
+                  }, 220);
+                } else {
+                  if (target) {
+                    target.scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'start'
+                    });
+                  }
+                }
+              });
+            });
+          });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', setupAnchorHandlers);
+        } else {
+          setupAnchorHandlers();
+        }
+      })();
     </script>
 
-    <script src="ciocca-ml.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
