@@ -479,8 +479,7 @@ button {
 .gallery-scroll {
   width: 100vw;
   height: 100%;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  overflow: hidden;
   background: #080808;
   padding: 10px;
 }
@@ -526,6 +525,25 @@ button {
   align-content: flex-start;
 }
 
+.archive-row.infinite-ready {
+  gap: 0;
+}
+
+.archive-row-track {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  height: 100%;
+  will-change: transform;
+}
+
+.archive-row-block {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  height: 100%;
+  flex: 0 0 auto;
+}
 
 
 .card {
@@ -662,10 +680,6 @@ button {
 
 .filters-panel.has-active-category .filter-link:not(.active) {
   opacity: 0.4;
-}
-
-.filter-link.active {
-  font-weight: 800;
 }
 
 .filter-chip {
