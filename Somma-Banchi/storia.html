@@ -29,7 +29,7 @@
 
       body {
         margin: 0;
-        background: #f5d7df; /* same pink as landing */
+        background: #f5d7df;
         color: #090909;
         overflow-x: hidden;
       }
@@ -44,7 +44,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px 12px;
-        background: transparent; /* remove black bar */
+        background: transparent;
         color: #090909;
       }
 
@@ -54,12 +54,12 @@
         line-height: 1;
       }
 
-     .history-wrapper {
-       position: relative;
-       display: grid;
-       grid-template-columns: 190px 1fr;
-       min-height: 560vh;
-       padding-top: 70px;
+      .history-wrapper {
+        position: relative;
+        display: grid;
+        grid-template-columns: 230px 1fr;
+        min-height: 520vh;
+        padding-top: 70px;
       }
 
       .city-sidebar {
@@ -68,73 +68,41 @@
         height: calc(100vh - 70px);
         padding-left: 12px;
         z-index: 20;
+
+        display: flex;
+        align-items: center;
       }
 
       .city-list {
         position: relative;
         display: flex;
         flex-direction: column;
-        gap: 16px;
-        font-size: 12px;
+        gap: 22px;
+        font-size: 36px;
         line-height: 1;
+        transform: translateY(-20px);
       }
 
       .city-item {
         position: relative;
-        display: flex;
-        align-items: center;
-        width: 120px;
-        min-height: 14px;
-        opacity: 1;
-        transition: font-size 0.25s ease, font-weight 0.25s ease;
-      }
-
-      .city-item .city-dash {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        transform: translateY(-50%);
-        width: 21px;
-        height: 1px;
-        background: #090909;
-        transition: opacity 0.25s ease, left 0.25s ease;
+        display: block;
+        width: max-content;
+        opacity: 0.35;
+        font-size: 36px;
+        line-height: 1;
+        font-weight: normal;
+        transform: translateX(0) scale(1);
+        transform-origin: left center;
+        transition:
+          opacity 0.35s ease,
+          transform 0.35s ease;
+          font-size 0.35s ease;
       }
 
       .city-item.active {
-        font-size: 26px;
-        font-weight: 700;
+        opacity: 1;
+        transform: translateX(8px) scale(1.1);
       }
-
-      .city-item.font-myTitle {
-        font-family: 'Prophet Medium';
-        font-size: 28px;
-        line-height: 100%;
-        letter-spacing: 0.02em;
-        font-weight: normal;
-      }
-
-      .city-item.active .city-dash {
-        opacity: 0;
-      }
-      
-      .city-end-step {
-       width: 90px;
-       height: 36px;
-      }
-
-      .city-dot {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 19px;
-        height: 19px;
-        border-radius: 50%;
-        background: #090909;
-        transform: translate(-50%, 60px);
-        transition: transform 0.75s cubic-bezier(0.50, 1, 0.36, 1);
-        pointer-events: none;
-      }
-      
 
       .history-stage {
         position: sticky;
@@ -160,7 +128,7 @@
         inset: 0;
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         opacity: 0;
         transition: opacity 0.45s ease;
       }
@@ -179,39 +147,51 @@
 
       .story-part {
         display: none;
+        opacity: 0;
+        transform: translateX(-24px);
       }
 
       .story-part.active {
         display: block;
+        opacity: 1;
+        transform: translateX(0);
+        animation: textSlideIn 0.45s ease forwards;
       }
 
-      .scroll-section {
-        height: 0;
-        pointer-events: none;
+      @keyframes textSlideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-24px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
       }
 
       @media (max-width: 900px) {
         header a,
         header span {
-          font-size: 26px;
+          font-size: 36px;
         }
 
         .history-wrapper {
-          grid-template-columns: 120px 1fr;
+          grid-template-columns: 145px 1fr;
+          min-height: 520vh;
+        }
+
+        .city-list {
+          gap: 18px;
+          font-size: 36px;
         }
 
         .city-item {
-          width: 90px;
-          font-size: 11px;
+          font-size: 36px;
         }
 
         .city-item.active {
-          font-size: 19px;
-        }
-
-        .city-dot {
-          width: 15px;
-          height: 15px;
+          transform: translateX(8px) scale (1.18);
         }
 
         .history-stage {
@@ -224,11 +204,36 @@
         .image-frame {
           max-width: 100%;
           aspect-ratio: 1 / 1;
+          transform: translateX(0);
         }
 
         .history-text {
           font-size: 20px;
           line-height: 1.05;
+          transform: translateX(0);
+        }
+      }
+
+      @media (max-width: 520px) {
+        .history-wrapper {
+          grid-template-columns: 115px 1fr;
+        }
+
+        .city-list {
+          gap: 14px;
+          font-size: 17px;
+        }
+
+        .city-item {
+          font-size: 17px;
+        }
+
+        .history-stage {
+          padding: 70px 12px 30px 22px;
+        }
+
+        .history-text {
+          font-size: 18px;
         }
       }
     </style>
@@ -253,145 +258,68 @@
     <main class="history-wrapper">
       <aside class="city-sidebar">
         <nav class="city-list" id="cityList">
-          <div class="city-item" data-step="0">Cerignola</div>
-          <div class="city-item" data-step="0">Foggia</div>
-
-          <div class="city-item active" data-step="0" id="city-barletta">Barletta</div>
-          <div class="city-item" data-step="0">Bisceglie</div>
-          <div class="city-item" data-step="0">Andria</div>
-          <div class="city-item" data-step="0">Bitonto</div>
-          <div class="city-item" data-step="0">Modugno</div>
-          <div class="city-item" data-step="0">Toritto</div>
-
-          <div class="city-item" data-step="1" id="city-bari">Bari</div>
-
-          <div class="city-item" data-step="1">Conversano</div>
-          <div class="city-item" data-step="1">Noci</div>
-          <div class="city-item" data-step="1">Martina<br />Franca</div>
-          <div class="city-item" data-step="1">Faggiano</div>
-          <div class="city-item" data-step="1">Taranto</div>
-          <div class="city-item" data-step="1">Francavilla<br />Fontana</div>
-          <div class="city-item" data-step="1">Carovigno</div>
-          <div class="city-item" data-step="1">Maglie</div>
-          <div class="city-item" data-step="1">Nardò</div>
-          <div class="city-item" data-step="1">Melpignano</div>
-          
-          <div class="city-item" data-step="2">San Foca</div>
-          
-          <span class="city-end-step" id="city-finale"></span>
-
-          <span class="city-dot" id="cityDot"></span>
-
+          <div class="city-item active" data-step="0">Barletta</div>
+          <div class="city-item" data-step="1">Toritto</div>
+          <div class="city-item" data-step="2">Bari</div>
+          <div class="city-item" data-step="3">Conversano</div>
+          <div class="city-item" data-step="4">Taranto</div>
         </nav>
       </aside>
 
       <section class="history-stage">
         <div class="image-frame">
-          <!-- massimo 5 immagini -->
           <img class="history-image active" src="img/a3.png" alt="Macelleria Somma a Barletta" />
-          <img class="history-image" src="img/a2.png" alt="Macelleria Somma a Bari" />
-          <img class="history-image" src="img/a1.png" alt="Fine" />
+          <img class="history-image" src="img/a2.png" alt="Macelleria a Toritto" />
+          <img class="history-image" src="img/a1.png" alt="Macelleria Somma a Bari" />
+          <img class="history-image" src="img/col9.png" alt="Macelleria a Conversano" />
+          <img class="history-image" src="img/col19.png" alt="Macelleria a Taranto" />
         </div>
 
         <div class="history-text">
           <p class="story-part active">
-            De veciariìe, è l’eredità di Ruggiero Somma, macellaio nato a Barletta.
-            Il suo lavoro ereditato da diverse generazioni, era per lui qualcosa che andava raccontato,
-            per far vedere cosa c’è dietro un semplice banco di vendita o una saracinesca alzata.
-            Nasce e impara i segreti del mestiere nella macelleria di suo nonno a Barletta,
-            ma lui decide di mandare avanti la sua attività a Bari, dove si trasferisce durante gli anni ‘60. 
-
+            De veciariìe è l’eredità di Ruggiero Somma, macellaio nato a Barletta.
+            Il suo lavoro, ereditato da diverse generazioni, era per lui qualcosa che andava raccontato:
+            un modo per mostrare cosa c’è dietro un semplice banco di vendita o una saracinesca alzata.
           </p>
 
           <p class="story-part">
-            Durante gli anni ’60 Ruggiero decide di mandare avanti la sua attività a Bari.
-            La bottega diventa casa, luogo di lavoro e punto d’incontro.
-            Con il tempo inizia a fotografare colleghi, banchi, coltelli, insegne,
-            saracinesche e piccoli gesti quotidiani, trasformando il mestiere in memoria.
+            Toritto diventa una delle tappe di questo percorso visivo.
+            Attraverso i volti, gli strumenti e gli spazi delle botteghe, il mestiere prende forma
+            come racconto quotidiano, fatto di gesti precisi e memorie condivise.
           </p>
 
           <p class="story-part">
-            Quello che doveva essere l’album orgoglioso di una categoria diventa,
-            con la crisi della Mucca Pazza, il documento malinconico di un mondo che
-            stava scomparendo. De veciariìe rimane oggi come archivio visivo di quelle
-            macellerie pugliesi, delle loro persone e della loro cultura materiale.
+            A Bari Ruggiero decide di mandare avanti la sua attività durante gli anni Sessanta.
+            La bottega diventa casa, luogo di lavoro e punto d’incontro, uno spazio in cui il mestiere
+            si intreccia con la vita del quartiere.
+          </p>
+
+          <p class="story-part">
+            Conversano entra nell’archivio come frammento di una geografia più ampia.
+            Ogni immagine conserva un dettaglio: un banco, un’insegna, un coltello, una postura,
+            una relazione tra chi lavora e chi attraversa quei luoghi.
+          </p>
+
+          <p class="story-part">
+            Taranto chiude idealmente questo viaggio tra le macellerie pugliesi.
+            Quello che doveva essere l’album orgoglioso di una categoria diventa, con il tempo,
+            il documento malinconico di un mondo che stava cambiando.
           </p>
         </div>
       </section>
-
     </main>
 
     <script>
       const cityItems = document.querySelectorAll(".city-item");
-      const cityList = document.getElementById("cityList");
-      const dot = document.getElementById("cityDot");
       const storyParts = document.querySelectorAll(".story-part");
       const images = document.querySelectorAll(".history-image");
       const wrapper = document.querySelector(".history-wrapper");
 
-      const activeStops = [
-        document.getElementById("city-barletta"),
-        document.getElementById("city-bari"),
-        document.getElementById("city-finale")
-      ];
-
       let currentStep = -1;
       let ticking = false;
-      let fixedDotX = null;
-      const headerTitle = document.querySelector('header a');
 
-      function ensureCityDashes() {
-        cityItems.forEach((item) => {
-          if (!item.querySelector('.city-dash')) {
-            const dash = document.createElement('span');
-            dash.className = 'city-dash';
-            item.appendChild(dash);
-          }
-        });
-      }
-
-      function updateDashAlignment() {
-        if (!cityList || !headerTitle) return;
-
-        const listRect = cityList.getBoundingClientRect();
-        const titleRect = headerTitle.getBoundingClientRect();
-
-        // bordo destro dei trattini, allineato al titolo
-        const dashRight = titleRect.right - listRect.left;
-
-        cityItems.forEach((item) => {
-          const dash = item.querySelector('.city-dash');
-          if (!dash) return;
-
-          const dashWidth = dash.offsetWidth;
-          const dashLeft = dashRight - dashWidth;
-
-          dash.style.left = `${dashLeft}px`;
-        });
-         if (dot) {
-          const dashWidth = 21; // stessa width di .city-dash
-          const dotX = dashRight - dashWidth / 2;
-
-          dot.style.left = `${dotX}px`;
-        } 
-      }
-      
-      
-      function moveDotToStop(stop) {
-        if (!stop || !dot || !cityList) return;
-
-        const listRect = cityList.getBoundingClientRect();
-        const stopRect = stop.getBoundingClientRect();
-
-        const dotHeight = dot.offsetHeight;
-
-        const y =
-          stopRect.top -
-          listRect.top +
-          stopRect.height / 2 -
-          dotHeight / 2;
-
-        dot.style.transform = `translate(-50%, ${y}px)`;
+      function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
       }
 
       function setActiveStep(step) {
@@ -399,26 +327,9 @@
 
         currentStep = step;
 
-        const currentStop = activeStops[step];
-
-        cityItems.forEach((item) => {
-          item.classList.remove("active", "font-myTitle");
+        cityItems.forEach((item, index) => {
+          item.classList.toggle("active", index === step);
         });
-
-        if (currentStop && currentStop.classList && currentStop.classList.contains("city-item")) {
-          currentStop.classList.add("active");
-
-          if (currentStop.id === 'city-barletta' || currentStop.id === 'city-bari') {
-            currentStop.classList.add('font-myTitle');
-          }
-        }
-
-        requestAnimationFrame(() => {
-          moveDotToStop(currentStop);
-        });
-
-        // move the dot after applying the active state so it centers on the final city text position
-        moveDotToStop(currentStop);
 
         storyParts.forEach((part, index) => {
           part.classList.toggle("active", index === step);
@@ -435,22 +346,26 @@
 
         if (scrollableDistance <= 0) return 0;
 
-        const scrolledInsideWrapper = Math.min(
-          Math.max(-rect.top, 0),
-          scrollableDistance
-        );
-
+        const scrolledInsideWrapper = clamp(-rect.top, 0, scrollableDistance);
         const progress = scrolledInsideWrapper / scrollableDistance;
 
-        if (progress < 0.36) {
-          return 0; // Barletta
+        if (progress < 0.20) {
+          return 0;
         }
 
-        if (progress < 0.72) {
-          return 1; // Bari
+        if (progress < 0.40) {
+          return 1;
         }
 
-        return 2; // Finale
+        if (progress < 0.60) {
+          return 2;
+        }
+
+        if (progress < 0.80) {
+          return 3;
+        }
+
+        return 4;
       }
 
       function updateOnScroll() {
@@ -470,14 +385,10 @@
 
       window.addEventListener("resize", () => {
         currentStep = -1;
-        ensureCityDashes();
-        updateDashAlignment();
         requestUpdate();
       });
 
       window.addEventListener("load", () => {
-        ensureCityDashes();
-        updateDashAlignment();
         setActiveStep(0);
         requestUpdate();
       });
