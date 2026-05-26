@@ -126,13 +126,32 @@ function renderImagesAroundLocation(map, location, items) {
   const placedPoints = [];
 
   function placeItemGroup(groupItems, isCoastal) {
-    const perRing = isCoastal ? 3 : 3;
-    const angleStep = isCoastal ? 18 : 28;
+    // More organic coastal layout: fewer overlaps, more jitter, pixel checks
+    const perRing = isCoastal ? 4 : 3; // spread coastal items across more angular slots
+    const angleStep = isCoastal ? 26 : 28; // wider angular separation for coast
     // make deep-items much farther and more spread out
-      const ringGap = isCoastal ? 26 : (placement.deepRingGap || 60);
-      const baseDistance = isCoastal ? 22 : (placement.deepBaseDistance || 160);
+    const ringGap = isCoastal ? 36 : (placement.deepRingGap || 60);
+    const baseDistance = isCoastal ? 28 : (placement.deepBaseDistance || 160);
     const baseBearing = isCoastal ? placement.coastBearing : placement.deepBearing;
-    const minimumSpacingKm = isCoastal ? 14 : (placement.deepMinimumSpacingKm || 40);
+    const minimumSpacingKm = isCoastal ? 24 : (placement.deepMinimumSpacingKm || 40);
+
+    // Track placed marker pixel positions to avoid visual overlap on screen
+    const placedPixelPoints = [];
+
+    // Cache label rectangles (relative to map container) to avoid placing
+    // images on top of location labels.
+    const containerRect = map.getContainer().getBoundingClientRect();
+    const labelRects = Array.from(document.querySelectorAll('.map-location-label')).map((el) => {
+      const r = el.getBoundingClientRect();
+      return {
+        left: r.left - containerRect.left,
+        top: r.top - containerRect.top,
+        right: r.right - containerRect.left,
+        bottom: r.bottom - containerRect.top,
+        width: r.width,
+        height: r.height,
+      };
+    });
 
     groupItems.forEach((item, index) => {
       const isDeepSea = !isCoastal && isDeepSeaItem(item);
@@ -158,9 +177,55 @@ function renderImagesAroundLocation(map, location, items) {
         const candidate = offsetLngLat(origin, distanceKm, bearing);
         const isTooClose = placedPoints.some((point) => approximateDistanceKm(point, candidate) < minimumSpacingKm);
 
-        if (!isTooClose || attempt === 13) {
+        // Also avoid overlapping location labels and other images by checking pixel distance.
+        let isTooCloseToLabel = false;
+        let overlapsPixel = false;
+        try {
+          const pt = map.project(candidate);
+          const minLabelDistancePx = Math.max(44, (isCoastal ? 48 : 60));
+          const thumbPx = isCoastal ? 64 : 96;
+          const minPixelSpacing = thumbPx + 18;
+
+          for (const lr of labelRects) {
+            if (pt.x >= lr.left && pt.x <= lr.right && pt.y >= lr.top && pt.y <= lr.bottom) {
+              isTooCloseToLabel = true;
+              break;
+            }
+            const cx = lr.left + lr.width / 2;
+            const cy = lr.top + lr.height / 2;
+            const dx = pt.x - cx;
+            const dy = pt.y - cy;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < minLabelDistancePx + Math.max(lr.width, lr.height) * 0.5) {
+              isTooCloseToLabel = true;
+              break;
+            }
+          }
+
+          if (!isTooCloseToLabel) {
+            for (const p of placedPixelPoints) {
+              const dx = pt.x - p.x;
+              const dy = pt.y - p.y;
+              if (Math.sqrt(dx * dx + dy * dy) < minPixelSpacing) {
+                overlapsPixel = true;
+                break;
+              }
+            }
+          }
+        } catch (e) {
+          isTooCloseToLabel = false;
+          overlapsPixel = false;
+        }
+
+        if ((!isTooClose && !isTooCloseToLabel && !overlapsPixel) || attempt === 13) {
           targetLngLat = candidate;
           placedPoints.push(candidate);
+          try {
+            const ptFinal = map.project(candidate);
+            placedPixelPoints.push({ x: ptFinal.x, y: ptFinal.y });
+          } catch (e) {
+            // ignore
+          }
           break;
         }
       }

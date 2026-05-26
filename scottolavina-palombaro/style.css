@@ -38,6 +38,7 @@
   --tag-active-text: #ffffff;
   --accent: #1a1a1a;
   --radius: 0px;
+  --global-line-height: 1.34; /* aumento addizionale richiesto */
 }
 
 html,
@@ -45,6 +46,12 @@ body {
   margin: 0;
   width: 100%;
   height: 100%;
+}
+
+/* Applicare l'interlinea ridotta a tutto il testo; usare !important per sovrascrivere valori locali */
+body,
+body * {
+  line-height: var(--global-line-height) !important;
 }
 
 body {
@@ -982,9 +989,9 @@ body.map-page-body .topbar-right a:hover {
 .map-gallery {
   position: absolute;
   left: 50%;
-  bottom: 1rem; /* slightly higher to reduce overlap */
-  transform: translateX(-50%);
-  display: block;
+  top: 50%; /* fully centered */
+  transform: translate(-50%, -50%);
+  display: none; /* hidden by default to avoid an empty central bar */
   width: min(920px, calc(100% - 1.5rem));
   max-height: calc(100% - 2rem);
   padding: 0.6rem 0.6rem 0.5rem; /* reduced padding */
@@ -1001,10 +1008,20 @@ body.map-page-body .topbar-right a:hover {
   pointer-events: auto;
 }
 
+/* Show gallery only when it actually contains the image frame (avoids the empty translucent bar) */
+.map-gallery:has(.map-gallery-frame) {
+  display: block;
+}
+
 .map-gallery-header {
   display: grid;
   gap: 4px;
   margin-bottom: 10px;
+}
+
+/* Hide the header bar (title/hint) per design request */
+.map-gallery-header {
+  display: none !important;
 }
 
 .map-gallery-title {
@@ -1113,7 +1130,7 @@ body.map-page-body .topbar-right a:hover {
 @media (max-width: 768px) {
   .map-gallery {
     width: calc(100% - 1rem);
-    bottom: 0.75rem;
+    top: 50%;
     padding: 0.85rem 0.85rem 0.75rem;
     border-radius: 14px;
   }
