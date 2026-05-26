@@ -254,20 +254,33 @@ button {
 
 /* ── GRID ── */
 .mainLayout {
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 10px;
+  padding: 10px;
+  height: 100vh;
 }
+
+.descriptionAndFilters {
+  grid-column: 1 / 6;
+  position: fixed;
+  left: 10px;
+  top: 10rem;
+  width: calc((100vw / 12) * 5 - 20px);
+}
+
 .myPhotos {
-  grid-column-start: 6;
-  grid-column-end: 13;
+  grid-column: 6 / 13;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   overflow: scroll;
-  height: 100%;
+  height: 100vh;
   padding-top: 10rem;
+}
+
+.myPhotos .card {
+  direction: ltr;
 }
 
 .myPhotos.year-filtered .card {
@@ -417,8 +430,6 @@ button {
 
 .card img {
   display: block;
-  width: auto;
-  height: auto;
   max-width: 100%;
 }
 
@@ -798,4 +809,12 @@ button {
 .about-grid img.about-faded {
   opacity: 0.22;
   filter: blur(10px);
+}
+
+.descriptionAndFilters.is-hidden {
+  display: none;
+}
+
+.description-intro.is-hidden {
+  display: none;
 }
