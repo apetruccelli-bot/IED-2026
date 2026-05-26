@@ -197,23 +197,32 @@ button {
   padding-top: 6rem;
   padding-left: 10px;
   padding-right: 10px;
+
+  height: 100vh;
+  overflow: hidden;
 }
-.myColumn {
+.myColumn { 
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
+  gap: 10px; 
+} 
 .myColumn > article:last-child {
-  padding-bottom: 10px;
+   padding-bottom: 10px; 
 }
 .wireframe {
-  /* display: grid;
-  grid-template-columns: repeat(4, 1fr); */
   display: flex;
   gap: 10px;
-  height: 100%;
-  overflow: scroll;
 
+  height: calc(100vh - 6rem);
+  overflow-x: auto;
+  overflow-y: scroll;
+
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* Edge / Internet Explorer */
+}
+
+.wireframe::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari */
 }
 
 /* ── CARD ── */

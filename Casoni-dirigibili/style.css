@@ -432,11 +432,16 @@ button {
 /* Horizontal scroll container about */
 .horizontal-scroll {
   display: flex;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: hidden;
   gap: 10px;
   height: 100%;
+  width: 100%;
+  max-width: 100%;
   align-items: stretch;
+}
+
+.horizontal-scroll.about-can-scroll {
+  overflow-x: auto;
 }
 
 .horizontal-scroll::-webkit-scrollbar {
@@ -488,10 +493,32 @@ button {
   width: 100vw;
   height: clamp(110px, 12vh, 180px);
   display: flex;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  overflow: hidden;
   background: #080808;
   padding: 8px 10px;
+}
+
+/* ABOUT desktop: colonna testo scrollabile */
+.about-main {
+  min-height: 0;
+}
+
+.about-text-panel {
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  align-items: flex-start;
+}
+
+.about-text-panel .box2 {
+  padding-bottom: 10px;
+}
+
+.about-text-panel {
+  height: 70%;
+  align-self: center;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Right column main image (about page) — make it smaller */
@@ -1132,107 +1159,6 @@ button {
   text-align: right;
   white-space: nowrap;
   min-width: 0;
-}
-
-/* sotto i 900px:
-   - immagine grande sotto al testo
-   - colonna centrale scrollabile verticalmente
-   - gallery da riga bassa a colonna destra */
-@media (max-width: 900px) {
-  .about-page {
-    --about-gallery-width: clamp(90px, 16vw, 150px);
-
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) var(--about-gallery-width);
-    grid-template-rows: auto minmax(0, 1fr);
-    overflow: hidden;
-  }
-
-  .about-header {
-    grid-column: 1 / -1;
-    grid-row: 1;
-  }
-
-  .about-header-row > a:first-child {
-    flex: 0 0 165px;
-    width: 165px;
-    max-width: 165px;
-    white-space: normal;
-  }
-
-  .about-top-link {
-    flex: 1 1 auto;
-  }
-
-  .about-main {
-    grid-column: 1;
-    grid-row: 2;
-
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
-  .about-text-panel {
-    height: auto;
-    min-height: auto;
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
-
-  .about-image-panel {
-    height: auto;
-    min-height: 420px;
-    overflow: visible;
-    align-items: center;
-    justify-content: flex-start;
-  }
-
-  .right-column-img {
-    max-width: 100%;
-    width: 100%;
-    max-height: none;
-    height: auto;
-    object-fit: contain;
-  }
-
-  .right-column-caption {
-    max-width: 100%;
-  }
-
-  .about-gallery-side {
-    grid-column: 2;
-    grid-row: 2;
-
-    width: var(--about-gallery-width);
-    height: 100%;
-    padding: 10px 8px;
-
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
-  .about-gallery-side .horizontal-scroll {
-    height: auto;
-    min-height: 100%;
-    width: 100%;
-
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
-    overflow-y: auto;
-    gap: 8px;
-  }
-
-  .about-gallery-side .scroll-img {
-    width: 100%;
-    height: auto;
-    max-width: none;
-    max-height: none;
-    flex: 0 0 auto;
-  }
 }
 
 /* QUERY MOBILE ABOUT */

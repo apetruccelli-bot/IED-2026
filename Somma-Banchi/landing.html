@@ -62,46 +62,19 @@
       pointer-events: none;
     }
 
-    .intro-split-text {
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      z-index: 130;
-      transform: translate(-50%, -50%);
-      width: calc(100vw - 40px);
-      text-align: center;
-      color: #090909;
-      pointer-events: none;
-      will-change: opacity, transform;
-    }
-
-    .intro-line {
-      display: block;
-      font: inherit;
-      font-size: 24px;
-      line-height: 32px;
-      font-weight: inherit;
-      letter-spacing: inherit;
-      text-transform: inherit;
-      white-space: nowrap;
-      will-change: transform, opacity;
-    }
-
     .archive-title {
       position: fixed;
       left: 50%;
       top: 50%;
       z-index: 120;
       transform: translate(-50%, -50%);
-      font: inherit;
-      font-size: 24px;
       line-height: inherit;
       font-weight: inherit;
       letter-spacing: inherit;
       text-transform: inherit;
       color: #090909;
       white-space: nowrap;
-      opacity: 0;
+      opacity: 1;
       will-change: transform, left, top, opacity;
     }
 
@@ -116,10 +89,10 @@
 
     .image-card {
       position: absolute;
-      background-size: cover;
+      background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
-      background-color: rgba(120, 120, 120, 0.35);
+      background-color: transparent;
       opacity: 0;
       will-change: transform, opacity;
     }
@@ -217,10 +190,6 @@
     }
 
     @media (max-width: 520px) {
-      .intro-line {
-        white-space: normal;
-      }
-
       .image-card:nth-child(1),
       .image-card:nth-child(2),
       .image-card:nth-child(3),
@@ -256,15 +225,10 @@
   </style>
 </head>
 
-<body class="not-font-my-title">
+<body class="font-myTitle">
   <header class="landing-header">
-    <div class="archive-title not-font-my-title">De Veciariìe</div>
+    <div class="archive-title font-myTitle">De Veciariìe</div>
   </header>
-
-  <div class="intro-split-text not-font-my-title">
-    <span class="intro-line intro-line-top">il mestiere di ruggiero</span>
-    <span class="intro-line intro-line-bottom">dall'eredità, al suo fallimento</span>
-  </div>
 
   <main class="landing-stage">
     <div class="image-card"></div>
@@ -282,11 +246,8 @@
     const cards = document.querySelectorAll(".image-card");
     const homePreview = document.querySelector(".enter-home");
     const archiveTitle = document.querySelector(".archive-title");
-    const introText = document.querySelector(".intro-split-text");
-    const introLineTop = document.querySelector(".intro-line-top");
-    const introLineBottom = document.querySelector(".intro-line-bottom");
 
-    const ANIMATION_DURATION = 20000;
+    const ANIMATION_DURATION = 7000;
     let animationStartTime = null;
     let redirected = false;
 
@@ -347,50 +308,24 @@
 
       /*
         Sequenza automatica:
-        1. frase iniziale al centro
-        2. le due righe si separano lateralmente
-        3. appare De Veciariìe al centro
-        4. De Veciariìe sparisce dal centro
-        5. De Veciariìe riappare direttamente in alto a sinistra
-        6. appaiono le immagini
-        7. immagini e titolo si dissolvono
-        8. sfondo chiaro e redirect ad archivio.html
+        1. De Veciariìe appare subito al centro
+        2. De Veciariìe sparisce dal centro
+        3. De Veciariìe riappare direttamente in alto a sinistra
+        4. appaiono le immagini
+        5. immagini e titolo si dissolvono
+        6. sfondo chiaro e redirect ad archivio.html
       */
 
-      const introSplitProgress = easeInOutCubic(
-        clamp((scrollProgress - 0.06) / 0.22, 0, 1)
-      );
+      const titleFadeCenterProgress = clamp((scrollProgress - 0.34) / 0.10, 0, 1);
 
-      const introFadeProgress = clamp((scrollProgress - 0.26) / 0.10, 0, 1);
-
-      const introDistance = lerp(
-        0,
-        window.innerWidth * 0.65,
-        introSplitProgress
-      );
-
-      introLineTop.style.transform = `translateX(${-introDistance}px)`;
-      introLineBottom.style.transform = `translateX(${introDistance}px)`;
-      introText.style.opacity = 1 - introFadeProgress;
-
-      if (scrollProgress > 0.38) {
-        introText.style.display = "none";
-      } else {
-        introText.style.display = "block";
-      }
-
-      const titleAppearCenterProgress = clamp((scrollProgress - 0.34) / 0.12, 0, 1);
-      const titleFadeCenterProgress = clamp((scrollProgress - 0.48) / 0.08, 0, 1);
-
-      const titleAppearCornerProgress = clamp((scrollProgress - 0.58) / 0.08, 0, 1);
+      const titleAppearCornerProgress = clamp((scrollProgress - 0.48) / 0.08, 0, 1);
       const titleFadeCornerProgress = clamp((scrollProgress - 0.76) / 0.16, 0, 1);
 
-      if (scrollProgress < 0.56) {
+      if (scrollProgress < 0.46) {
         archiveTitle.style.left = "50%";
         archiveTitle.style.top = "50%";
         archiveTitle.style.transform = "translate(-50%, -50%)";
-        archiveTitle.style.opacity =
-          titleAppearCenterProgress * (1 - titleFadeCenterProgress);
+        archiveTitle.style.opacity = 1 - titleFadeCenterProgress;
         archiveTitle.style.display = "block";
       } else {
         archiveTitle.style.left = "0";
@@ -405,10 +340,10 @@
         archiveTitle.style.display = "none";
       }
 
-      const imageAppearProgress = clamp((scrollProgress - 0.55) / 0.16, 0, 1);
+      const imageAppearProgress = clamp((scrollProgress - 0.46) / 0.16, 0, 1);
 
       const spreadProgress = easeInOutCubic(
-        clamp((scrollProgress - 0.60) / 0.20, 0, 1)
+        clamp((scrollProgress - 0.52) / 0.20, 0, 1)
       );
 
       const fadeProgress = clamp((scrollProgress - 0.74) / 0.16, 0, 1);
