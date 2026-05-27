@@ -11,10 +11,10 @@
 @font-face {
   font-family: 'Prophet Regular';
   src: url('font/ABCProphet-Regular-Trial.woff2') format('woff2');
-  font-style: italic;
+  font-style: normal;
 }
 
-*:not(.font-myTitle):not(.text-history) {
+*:not(.font-myTitle){
   font-family: 'Prophet Regular', sans-serif  ;
   font-size: 12px;
   line-height: 115%;
