@@ -1,588 +1,1750 @@
-const grid = document.getElementById('grid');
-const searchInput = document.getElementById('search');
-const tagsBar = document.getElementById('tags-bar');
-const resultsInfo = document.getElementById('results-info');
-const btnRandom = document.getElementById('btn-random');
-
-const lightbox = document.getElementById('lightbox');
-const lbImg = document.getElementById('lb-img');
-const lbId = document.getElementById('lb-id');
-const lbTagsEl = document.getElementById('lb-tags');
-const lbClose = document.getElementById('lb-close');
-const lbPrev = document.getElementById('lb-prev');
-const lbNext = document.getElementById('lb-next');
-const lbBackdrop = document.getElementById('lb-backdrop');
-
-const categoryTexts = {
-  fotografie: {
-    japanese: `ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。`,
-    english: `Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items. When he was diagnosed with lung cancer, instead of quitting, he continued to smoke and began photographing people smoking on the street to show just how normal it was.`
-  },
-  pacchetti: {
-    japanese: `タバコの箱は、色、文字、場所によって集められた小さな記憶の断片である。`,
-    english: `Cigarette packs presents the visual archive of tobacco packaging: colors, lettering and graphic details collected between Osaka, Tokyo, Kyoto and Nara.`
-  },
-  pubblicità: {
-    japanese: `広告は、喫煙が日常の中でどのように語られ、見せられていたかを記録している。`,
-    english: `Advertisements shows how cigarettes were represented through commercial images, slogans and visual culture.`
-  }
-};
-
-const filtersByCategory = {
-  pacchetti: [
-    { title: '色 Color', type: 'pack-color', values: ['赤 Red', '白 White', '青 Blue', '黄色 Yellow', '緑 Green'] },
-    { title: '産地 Origin', type: 'origin', values: ['大阪 Osaka', '東京 Tokyo', '京都 Kyoto', '奈良 Nara'] },
-    { title: '年 Year', type: 'year', values: [1985, 1986, 1987, 1988, 1989, 1990] }
-  ],
-  pubblicità: [
-    { title: '年 Year', type: 'year', values: [1960] }
+{
+  "items": [
+    {
+      "id": 1,
+      "src": "img/fumo/businessman7.png",
+      "category": "fotografie",
+      "year": 1988,
+      "tags": [
+        "salaryman",
+        "Osaka",
+        "cigarette",
+        "businessman",
+        "city street",
+        "documentary photography",
+        "1980s Japan",
+        "work break",
+        "evening atmosphere",
+        "urban portrait"
+      ],
+      "tags-fotografie": [],
+      "description": "大阪の都心にあるオフィスビルの外で、あるビジネスマンがさっとタバコを一服すると、仕事に戻っていった\nA businessman quickly smokes a cigarette outside a commercial building before returning to work in downtown Osaka.",
+      "portrait-status": "様 Sama",
+      "portrait-relationship": "個人 Individual",
+      "description-ja": "大阪の都心にあるオフィスビルの外で、あるビジネスマンがさっとタバコを一服すると、仕事に戻っていった",
+      "description-en": "A businessman quickly smokes a cigarette outside a commercial building before returning to work in downtown Osaka."
+    },
+    {
+      "id": 2,
+      "src": "img/fumo/giovani19.png",
+      "category": "fotografie",
+      "year": 1987,
+      "tags": [
+        "Osaka",
+        "izakaya",
+        "smokers",
+        "group",
+        "nightlife",
+        "1980s",
+        "cigarettes",
+        "Japanese bar",
+        "yokocho",
+        "documentary photography",
+        "smoky atmosphere"
+      ],
+      "tags-fotografie": [],
+      "description": "大阪の小さなバーで、若者たちがタバコを吸いながらおしゃべりしている。これはこの街ではよくある光景だ\nA group of young people is smoking and chatting in a small bar in Osaka, a common sight in the city during the 1980s.",
+      "portrait-status": "君 Kun",
+      "portrait-relationship": "グループ Group",
+      "description-ja": "大阪の小さなバーで、若者たちがタバコを吸いながらおしゃべりしている。これはこの街ではよくある光景だ",
+      "description-en": "A group of young people is smoking and chatting in a small bar in Osaka, a common sight in the city during the 1980s."
+    },
+    {
+      "id": 3,
+      "src": "img/fumo/anziano1.png",
+      "category": "fotografie",
+      "year": 1987,
+      "tags": [
+        "Japanese elderly man",
+        "Osaka",
+        "cigarette",
+        "city street",
+        "documentary photography",
+        "smoker",
+        "daily life",
+        "1980s",
+        "sidewalk",
+        "winter atmosphere",
+        "urban portrait"
+      ],
+      "tags-fotografie": [],
+      "description": "午後、ある年配の男性が近所の小さな店の前で立ち止まり、タバコを吸っている。その間も、通りすがりの人々は通りを歩き続けている\nAn elderly man stops in front of a small neighborhood store to smoke a cigarette in the afternoon, while passersby continue walking down the street.",
+      "portrait-status": "先輩 Senpai",
+      "portrait-relationship": "個人 Individual",
+      "description-ja": "午後、ある年配の男性が近所の小さな店の前で立ち止まり、タバコを吸っている。その間も、通りすがりの人々は通りを歩き続けている",
+      "description-en": "An elderly man stops in front of a small neighborhood store to smoke a cigarette in the afternoon, while passersby continue walking down the street."
+    },
+    {
+      "id": 4,
+      "src": "img/fumo/businessman8.png",
+      "category": "fotografie",
+      "year": 1987,
+      "tags": [
+        "Japanese salarymen",
+        "group",
+        "cigarettes",
+        "office",
+        "cigarette break",
+        "analog photography",
+        "urban Osaka",
+        "men in suits",
+        "working life",
+        "1980s"
+      ],
+      "tags-fotografie": [],
+      "description": "シフトの合間の休憩時間に、オフィスの入り口付近でタバコを吸うビジネスマンもいる\nSome businessmen stop near the office entrance to smoke during their break between shifts.",
+      "portrait-status": "様 Sama",
+      "portrait-relationship": "グループ Group",
+      "description-ja": "シフトの合間の休憩時間に、オフィスの入り口付近でタバコを吸うビジネスマンもいる",
+      "description-en": "Some businessmen stop near the office entrance to smoke during their break between shifts."
+    },
+    {
+      "id": 5,
+      "src": "img/fumo/businessman9.png",
+      "category": "fotografie",
+      "year": 1989,
+      "tags": [
+        "portrait of a man",
+        "businessman",
+        "cigarette",
+        "Osaka at night",
+        "vintage photography",
+        "urban atmosphere",
+        "work culture",
+        "smoking",
+        "retro Japan"
+      ],
+      "tags-fotografie": [],
+      "description": "混雑した商店街の壁際に、ダークスーツを着たビジネスマンが黙ってタバコを吸っている\nA businessman in a dark suit stands silently smoking, leaning against the wall of a crowded shopping street.",
+      "portrait-status": "様 Sama",
+      "portrait-relationship": "個人 Individual",
+      "description-ja": "混雑した商店街の壁際に、ダークスーツを着たビジネスマンが黙ってタバコを吸っている",
+      "description-en": "A businessman in a dark suit stands silently smoking, leaning against the wall of a crowded shopping street."
+    },
+    {
+      "id": 6,
+      "src": "img/fumo/anziano2.png",
+      "category": "fotografie",
+      "year": 1988,
+      "tags": [
+        "elderly man",
+        "retro Osaka",
+        "cigarette",
+        "neighborhood shops",
+        "analog photography",
+        "Japanese street",
+        "urban life",
+        "tobacco",
+        "everyday atmosphere",
+        "1980s Japan"
+      ],
+      "tags-fotografie": [],
+      "description": "閉店した店の外に腰を下ろし、一人の老人が黙ってタバコを吸いながら、繁華街の喧騒を眺めている\nSitting outside a closed shop, an elderly man smokes in silence, watching the hustle and bustle of the street in the commercial district.",
+      "portrait-status": "先輩 Senpai",
+      "portrait-relationship": "個人 Individual",
+      "description-ja": "閉店した店の外に腰を下ろし、一人の老人が黙ってタバコを吸いながら、繁華街の喧騒を眺めている",
+      "description-en": "Sitting outside a closed shop, an elderly man smokes in silence, watching the hustle and bustle of the street in the commercial district."
+    },
+    {
+      "id": 7,
+      "src": "img/fumo/giovani20.png",
+      "category": "fotografie",
+      "year": 1988,
+      "tags": [
+        "urban portrait",
+        "man smoking",
+        "Osaka",
+        "cigarette",
+        "film photography",
+        "Japanese bar",
+        "nighttime atmosphere",
+        "tobacco culture",
+        "1980s Japan"
+      ],
+      "tags-fotografie": [],
+      "description": "大阪の繁華街にある混雑したバーで、カウンターに座った若い男性が、飲み物が運ばれてくるのを待ちながらタバコに火をつけた\nA young man sitting at the bar lights a cigarette while waiting for his drink in a crowded bar in downtown Osaka.",
+      "portrait-status": "君 Kun",
+      "portrait-relationship": "個人 Individual",
+      "description-ja": "大阪の繁華街にある混雑したバーで、カウンターに座った若い男性が、飲み物が運ばれてくるのを待ちながらタバコに火をつけた",
+      "description-en": "A young man sitting at the bar lights a cigarette while waiting for his drink in a crowded bar in downtown Osaka."
+    },
+    {
+      "id": 8,
+      "src": "img/fumo/businessman10.png",
+      "category": "fotografie",
+      "year": 1986,
+      "tags": [
+        "salaryman",
+        "Japanese alley",
+        "cigarette",
+        "1980s Osaka",
+        "documentary photography",
+        "shopping street",
+        "evening break",
+        "Japanese man",
+        "nostalgic atmosphere"
+      ],
+      "tags-fotografie": [],
+      "description": "あるビジネスマンが、レストランやネオンサインが立ち並ぶ小さな通りを歩きながら、タバコに火をつけた\nA businessman lights a cigarette as he walks down a small street lined with restaurants and neon signs.",
+      "portrait-status": "様 Sama",
+      "portrait-relationship": "個人 Individual",
+      "description-ja": "あるビジネスマンが、レストランやネオンサインが立ち並ぶ小さな通りを歩きながら、タバコに火をつけた",
+      "description-en": "A businessman lights a cigarette as he walks down a small street lined with restaurants and neon signs."
+    },
+    {
+      "id": 9,
+      "src": "img/fumo/businessman11.png",
+      "category": "fotografie",
+      "year": 1990,
+      "tags": [
+        "smoking businessman",
+        "urban Osaka",
+        "salaryman",
+        "smoky alley",
+        "cinematic photography",
+        "everyday life",
+        "Japanese signs",
+        "evening atmosphere",
+        "tobacco"
+      ],
+      "tags-fotografie": [],
+      "description": "ネオンサインが並ぶ路地で、ビジネスマンがゆっくりとタバコをくゆらせている。その頃、人々は仕事帰りの足取りで家路についている\nA businessman smokes slowly in an alley lined with neon signs as people head home from work.",
+      "portrait-status": "様 Sama",
+      "portrait-relationship": "個人 Individual",
+      "description-ja": "ネオンサインが並ぶ路地で、ビジネスマンがゆっくりとタバコをくゆらせている。その頃、人々は仕事帰りの足取りで家路についている",
+      "description-en": "A businessman smokes slowly in an alley lined with neon signs as people head home from work."
+    },
+    {
+      "id": 10,
+      "src": "img/fumo/giovani21.png",
+      "category": "fotografie",
+      "year": 1986,
+      "tags": [
+        "izakaya",
+        "social gathering",
+        "smokers",
+        "Osaka by night",
+        "vintage photography",
+        "smoky interiors",
+        "Japanese men",
+        "daily life",
+        "1980s"
+      ],
+      "description": "常連客たちが近所の小さな居酒屋に集まり、酒を飲み、タバコを吸い、おしゃべりを楽しんでいる\nRegulars gather at a small neighborhood izakaya to drink, smoke, and chat together.",
+      "portrait-status": "君 Kun",
+      "portrait-relationship": "グループ Group",
+      "tags-fotografie": [],
+      "description-ja": "常連客たちが近所の小さな居酒屋に集まり、酒を飲み、タバコを吸い、おしゃべりを楽しんでいる",
+      "description-en": "Regulars gather at a small neighborhood izakaya to drink, smoke, and chat together."
+    },
+    {
+      "id": 11,
+      "src": "img/fumo/anziano3.png",
+      "category": "fotografie",
+      "year": 1989,
+      "tags": [
+        "portrait of an elderly man",
+        "cigarette",
+        "urban Osaka",
+        "vintage photography",
+        "city street",
+        "daily break",
+        "smoking culture",
+        "Japanese man",
+        "melancholic atmosphere",
+        "social documentary"
+      ],
+      "tags-fotografie": [],
+      "description": "街が活気に満ち溢れる中、ある老人が小さな店の前に座り、温かい飲み物を飲みながらタバコを吸っている\nAn elderly man is drinking something hot and smoking while sitting in front of a small shop, as the city bustles around him.",
+      "portrait-status": "先輩 Senpai",
+      "portrait-relationship": "個人 Individual",
+      "description-ja": "街が活気に満ち溢れる中、ある老人が小さな店の前に座り、温かい飲み物を飲みながらタバコを吸っている",
+      "description-en": "An elderly man is drinking something hot and smoking while sitting in front of a small shop, as the city bustles around him."
+    },
+    {
+      "id": 12,
+      "src": "img/fumo/businessman12.png",
+      "category": "fotografie",
+      "year": 1988,
+      "tags": [
+        "group of office workers",
+        "cigarettes",
+        "city street",
+        "Osaka",
+        "social photography",
+        "working life",
+        "men in suits",
+        "lunch break",
+        "1980s Japan"
+      ],
+      "tags-fotografie": [],
+      "description": "従業員や同僚たちが、近所のオフィスに戻る前に、バーの外に集まってタバコを吸っている\nEmployees and colleagues gather outside a bar to smoke before heading back to their offices in the neighborhood.",
+      "portrait-status": "様 Sama",
+      "portrait-relationship": "グループ Group",
+      "description-ja": "従業員や同僚たちが、近所のオフィスに戻る前に、バーの外に集まってタバコを吸っている",
+      "description-en": "Employees and colleagues gather outside a bar to smoke before heading back to their offices in the neighborhood."
+    },
+    {
+      "id": 13,
+      "src": "img/fumo/businessman13.png",
+      "category": "fotografie",
+      "year": 1987,
+      "tags": [
+        "salaryman",
+        "Japanese alley",
+        "cigarette",
+        "urban group",
+        "retro Osaka",
+        "analog photography",
+        "businessmen",
+        "narrow street",
+        "smoky atmosphere"
+      ],
+      "tags-fotografie": [],
+      "description": "2人のビジネスマンが小さな商店街でタバコを吸っている。その背後では、通行人たちがゆっくりと通りを渡っている\nTwo businessmen are smoking in a small shopping alley while other passersby slowly cross the street behind them.",
+      "portrait-status": "様 Sama",
+      "portrait-relationship": "グループ Group",
+      "description-ja": "2人のビジネスマンが小さな商店街でタバコを吸っている。その背後では、通行人たちがゆっくりと通りを渡っている",
+      "description-en": "Two businessmen are smoking in a small shopping alley while other passersby slowly cross the street behind them."
+    },
+    {
+      "id": 14,
+      "src": "img/fumo/anziano4.png",
+      "category": "fotografie",
+      "year": 1990,
+      "tags": [
+        "elderly man smoking",
+        "street photography",
+        "1980s Osaka",
+        "male portrait",
+        "urban market",
+        "lit cigarette",
+        "city crowd",
+        "documentary photography",
+        "Japanese daily life"
+      ],
+      "tags-fotografie": [],
+      "description": "にぎやかな市場の喧騒の中、ある老人が日々の用事を済ませた合間に、ゆっくりとタバコに火をつけた\nAmid the bustling market crowd, an elderly man slowly lights a cigarette during a break from his daily errands.",
+      "portrait-status": "先輩 Senpai",
+      "portrait-relationship": "個人 Individual",
+      "description-ja": "にぎやかな市場の喧騒の中、ある老人が日々の用事を済ませた合間に、ゆっくりとタバコに火をつけた",
+      "description-en": "Amid the bustling market crowd, an elderly man slowly lights a cigarette during a break from his daily errands."
+    },
+    {
+      "id": 15,
+      "src": "img/fumo/giovani22.png",
+      "category": "fotografie",
+      "year": 1989,
+      "tags": [
+        "street photography",
+        "lone man",
+        "cigarette",
+        "1980s Osaka",
+        "male portrait",
+        "nightclub",
+        "urban atmosphere",
+        "documentary photography"
+      ],
+      "description": "クラブの入り口付近で、一人の若者が静かにタバコを吸っている。周囲は夜の喧騒と煙に包まれている\nA young man sits quietly smoking near the entrance to the club, surrounded by the noise and smoke of the evening.",
+      "portrait-status": "君 Kun",
+      "portrait-relationship": "個人 Individual",
+      "tags-fotografie": [],
+      "description-ja": "クラブの入り口付近で、一人の若者が静かにタバコを吸っている。周囲は夜の喧騒と煙に包まれている",
+      "description-en": "A young man sits quietly smoking near the entrance to the club, surrounded by the noise and smoke of the evening."
+    },
+    {
+      "id": 16,
+      "src": "img/fumo/businessman14.png",
+      "category": "fotografie",
+      "year": 1989,
+      "tags": [
+        "Japanese businessman",
+        "city street",
+        "cigarette",
+        "1980s Osaka",
+        "documentary photography",
+        "elegant man",
+        "melancholic atmosphere",
+        "everyday life"
+      ],
+      "tags-fotografie": [],
+      "description": "ある会社員が、帰宅途中、タバコを吸いながら路地を歩いている\nAn office worker is walking down a side street, smoking a cigarette on his way home.",
+      "portrait-status": "様 Sama",
+      "portrait-relationship": "個人 Individual",
+      "description-ja": "ある会社員が、帰宅途中、タバコを吸いながら路地を歩いている",
+      "description-en": "An office worker is walking down a side street, smoking a cigarette on his way home."
+    },
+    {
+      "id": 17,
+      "src": "img/fumo/businessman15.png",
+      "category": "fotografie",
+      "year": 1986,
+      "tags": [
+        "man crouching",
+        "cigarette",
+        "salaryman",
+        "urban Osaka",
+        "vintage photography",
+        "work break",
+        "Japanese street",
+        "quiet atmosphere",
+        "smoker"
+      ],
+      "tags-fotografie": [],
+      "description": "ある会社員が、道端に落ちていたタバコの吸い殻を拾おうと、しゃがみ込んだ\nAn office worker crouches down at the side of the road to pick up the cigarette that fell.",
+      "portrait-status": "様 Sama",
+      "portrait-relationship": "個人 Individual",
+      "description-ja": "ある会社員が、道端に落ちていたタバコの吸い殻を拾おうと、しゃがみ込んだ",
+      "description-en": "An office worker crouches down at the side of the road to pick up the cigarette that fell."
+    },
+    {
+      "id": 18,
+      "src": "img/fumo/giovani23.png",
+      "category": "fotografie",
+      "year": 1990,
+      "tags": [
+        "urban loneliness",
+        "man smoking",
+        "Osaka at night",
+        "cinematic photography",
+        "cigarette",
+        "Japanese bar",
+        "retro atmosphere",
+        "everyday life"
+      ],
+      "description": "若い男が窓辺に一人座り、ゆっくりとタバコをくゆらせている。その間も、バーには次々と客が入り、煙が充満していった\nA young man sits alone by the window, smoking slowly, while the bar continues to fill with people and smoke.",
+      "portrait-status": "君 Kun",
+      "portrait-relationship": "個人 Individual",
+      "tags-fotografie": [],
+      "description-ja": "若い男が窓辺に一人座り、ゆっくりとタバコをくゆらせている。その間も、バーには次々と客が入り、煙が充満していった",
+      "description-en": "A young man sits alone by the window, smoking slowly, while the bar continues to fill with people and smoke."
+    },
+    {
+      "id": 19,
+      "src": "img/fumo/anziano5.png",
+      "category": "fotografie",
+      "year": 1986,
+      "tags": [
+        "Japanese seniors",
+        "group",
+        "smokers",
+        "Osaka at night",
+        "city street",
+        "cigarettes",
+        "conversation",
+        "social photography",
+        "working-class neighborhood",
+        "smoky atmosphere",
+        "daily life"
+      ],
+      "tags-fotografie": [],
+      "description": "小さな店の外に二人の高齢者が座り、タバコを吸いながらおしゃべりをしている。その間も、近所の住民たちはゆっくりと夕方の日常を送っている\nTwo elderly people are sitting outside a small shop, smoking and chatting, while the neighborhood slowly goes about its evening routine.",
+      "portrait-status": "先輩 Senpai",
+      "portrait-relationship": "グループ Group",
+      "description-ja": "小さな店の外に二人の高齢者が座り、タバコを吸いながらおしゃべりをしている。その間も、近所の住民たちはゆっくりと夕方の日常を送っている",
+      "description-en": "Two elderly people are sitting outside a small shop, smoking and chatting, while the neighborhood slowly goes about its evening routine."
+    },
+    {
+      "id": 20,
+      "src": "img/fumo/businessman16.png",
+      "category": "fotografie",
+      "year": 1990,
+      "tags": [
+        "urban scene",
+        "Osaka at night",
+        "salaryman",
+        "cigarettes",
+        "shopping alley",
+        "smoky atmosphere",
+        "social photography",
+        "Japanese men",
+        "neon signs"
+      ],
+      "tags-fotografie": [],
+      "description": "煙と店の看板が立ち込める中、ダウンタウンの路地で数人のビジネスマンが足を止め、一服しながらその日の仕事について語り合っている\nAmid the smoke and shop signs, a few businessmen stop in the alleys of downtown to smoke and talk about their workday.",
+      "portrait-status": "様 Sama",
+      "portrait-relationship": "グループ Group",
+      "description-ja": "煙と店の看板が立ち込める中、ダウンタウンの路地で数人のビジネスマンが足を止め、一服しながらその日の仕事について語り合っている",
+      "description-en": "Amid the smoke and shop signs, a few businessmen stop in the alleys of downtown to smoke and talk about their workday."
+    },
+    {
+      "id": 6716,
+      "src": "img/fumo/businessman17.png",
+      "category": "fotografie",
+      "year": 1988,
+      "portrait-status": "様 Sama",
+      "portrait-relationship": "個人 Individual",
+      "tags": [
+        "urban portrait",
+        "businessman",
+        "cigarette",
+        "retro Osaka",
+        "analog photography",
+        "lone man",
+        "evening atmosphere",
+        "shopping street",
+        "1980s Japan"
+      ],
+      "tags-fotografie": [],
+      "description-ja": "スーツにネクタイ姿の男がタバコ屋の入り口付近でタバコを吸っている。その間、通りには仕事を終えた男たちが徐々に集まってきている",
+      "description-en": "A man in a suit and tie is smoking near the entrance to a tobacco shop as the street slowly fills with other men leaving work.",
+      "description": "スーツにネクタイ姿の男がタバコ屋の入り口付近でタバコを吸っている。その間、通りには仕事を終えた男たちが徐々に集まってきている\nA man in a suit and tie is smoking near the entrance to a tobacco shop as the street slowly fills with other men leaving work."
+    },
+    {
+      "id": 21,
+      "src": "img/pacchetti/pack1.png",
+      "category": "pacchetti",
+      "year": 1986,
+      "tags": [
+        "vintage cigarettes",
+        "red pack",
+        "Osaka",
+        "Japanese tobacco",
+        "retro design",
+        "1980s collection"
+      ],
+      "tags-pacchetti": [
+        "赤 Red"
+      ],
+      "luogo-pacchetti": "Osaka",
+      "paese-pacchetti": "Giappone",
+      "description": "1980年代半ば、大阪の小さなカフェやタバコ屋で広く販売されていた、手頃な価格のパック\nA budget-friendly pack that was widely available in small cafes and tobacco shops in Osaka in the mid-1980s.",
+      "pack-color": "赤 Red",
+      "pack-origin": "大阪 Osaka",
+      "description-ja": "1980年代半ば、大阪の小さなカフェやタバコ屋で広く販売されていた、手頃な価格のパック",
+      "description-en": "A budget-friendly pack that was widely available in small cafes and tobacco shops in Osaka in the mid-1980s."
+    },
+    {
+      "id": 22,
+      "src": "img/pacchetti/pack2.png",
+      "category": "pacchetti",
+      "year": 1988,
+      "tags": [
+        "white pack",
+        "Tokyo",
+        "Japanese cigarettes",
+        "1980s design",
+        "urban tobacco",
+        "stylish packaging",
+        "collecting",
+        "Japanese popular culture"
+      ],
+      "tags-pacchetti": [
+        "白 White"
+      ],
+      "luogo-pacchetti": "Tokyo",
+      "paese-pacchetti": "Giappone",
+      "description": "主に東京の繁華街で販売されている、より洗練されたバージョンで、オフィスワーカーや顧客に好まれている\nA more refined version sold mainly in Tokyo's commercial districts, often chosen by office workers and customers.",
+      "pack-color": "白 White",
+      "pack-origin": "東京 Tokyo",
+      "description-ja": "主に東京の繁華街で販売されている、より洗練されたバージョンで、オフィスワーカーや顧客に好まれている",
+      "description-en": "A more refined version sold mainly in Tokyo's commercial districts, often chosen by office workers and customers."
+    },
+    {
+      "id": 23,
+      "src": "img/pacchetti/pack3.png",
+      "category": "pacchetti",
+      "year": 1987,
+      "tags": [
+        "retro cigarettes",
+        "Kyoto",
+        "blue pack",
+        "Japanese tobacco",
+        "vintage graphics",
+        "tobacco collection",
+        "1980s Japan",
+        "compact design"
+      ],
+      "tags-pacchetti": [
+        "青 Blue"
+      ],
+      "luogo-pacchetti": "Kyoto",
+      "paese-pacchetti": "Giappone",
+      "description": "市場向けに展開されているブランドで、コンパクトなパッケージと鮮やかな色使いが特徴であり、京都のタバコ店ではよく見かける\nA brand produced for the market, known for its compact packaging and bright colors, which are commonly found in Kyoto's tobacco shops.",
+      "pack-color": "青 Blue",
+      "pack-origin": "京都 Kyoto",
+      "description-ja": "市場向けに展開されているブランドで、コンパクトなパッケージと鮮やかな色使いが特徴であり、京都のタバコ店ではよく見かける",
+      "description-en": "A brand produced for the market, known for its compact packaging and bright colors, which are commonly found in Kyoto's tobacco shops."
+    },
+    {
+      "id": 24,
+      "src": "img/pacchetti/pack4.png",
+      "category": "pacchetti",
+      "year": 1985,
+      "tags": [
+        "red pack",
+        "Nara",
+        "vintage cigarettes",
+        "floral symbol",
+        "tobacco culture",
+        "Japanese design",
+        "classic packaging",
+        "1980s"
+      ],
+      "tags-pacchetti": [
+        "赤 Red"
+      ],
+      "luogo-pacchetti": "Nara",
+      "paese-pacchetti": "Giappone",
+      "description": "伝統的な花柄をモチーフにした中央の赤いマークで知られ、奈良の自動販売機でよく見かけられた\nKnown for its central red symbol inspired by a traditional floral motif, it was commonly found in vending machines in Nara.",
+      "pack-color": "赤 Red",
+      "pack-origin": "奈良 Nara",
+      "description-ja": "伝統的な花柄をモチーフにした中央の赤いマークで知られ、奈良の自動販売機でよく見かけられた",
+      "description-en": "Known for its central red symbol inspired by a traditional floral motif, it was commonly found in vending machines in Nara."
+    },
+    {
+      "id": 25,
+      "src": "img/pacchetti/pack5.png",
+      "category": "pacchetti",
+      "year": 1989,
+      "tags": [
+        "green packaging",
+        "Kyoto",
+        "Japanese tobacco",
+        "traditional graphics",
+        "1980s cigarettes",
+        "vintage collection",
+        "illustrated design",
+        "urban culture"
+      ],
+      "tags-pacchetti": [
+        "緑 Green"
+      ],
+      "luogo-pacchetti": "Kyoto",
+      "paese-pacchetti": "Giappone",
+      "description": "表紙の風景画が特徴的な地域ブランドで、京都の歴史ある街並みでよく購入される\nA regional brand recognizable by the landscape illustration on the front, often purchased in Kyoto’s historic neighborhoods.",
+      "pack-color": "緑 Green",
+      "pack-origin": "京都 Kyoto",
+      "description-ja": "表紙の風景画が特徴的な地域ブランドで、京都の歴史ある街並みでよく購入される",
+      "description-en": "A regional brand recognizable by the landscape illustration on the front, often purchased in Kyoto’s historic neighborhoods."
+    },
+    {
+      "id": 26,
+      "src": "img/pacchetti/pack6.png",
+      "category": "pacchetti",
+      "year": 1990,
+      "tags": [
+        "red cigarettes",
+        "urban Tokyo",
+        "minimalist packaging",
+        "retro tobacco",
+        "bold design",
+        "1990s collectibles",
+        "smoking culture"
+      ],
+      "tags-pacchetti": [
+        "赤 Red"
+      ],
+      "luogo-pacchetti": "Tokyo",
+      "paese-pacchetti": "Giappone",
+      "description": "東京の駅周辺のコンビニエンスストアやキオスクで販売されています\nPackages available at convenience stores and kiosks near Tokyo train stations.",
+      "pack-color": "赤 Red",
+      "pack-origin": "東京 Tokyo",
+      "description-ja": "東京の駅周辺のコンビニエンスストアやキオスクで販売されています",
+      "description-en": "Packages available at convenience stores and kiosks near Tokyo train stations."
+    },
+    {
+      "id": 27,
+      "src": "img/pacchetti/pack7.png",
+      "category": "pacchetti",
+      "year": 1987,
+      "tags": [
+        "yellow pack",
+        "Osaka",
+        "vintage cigarettes",
+        "stylized leaf",
+        "Japanese tobacco shop",
+        "1980s design",
+        "Hiroshi Tanaka collection"
+      ],
+      "tags-pacchetti": [
+        "黄色 Yellow"
+      ],
+      "luogo-pacchetti": "Osaka",
+      "paese-pacchetti": "Giappone",
+      "description": "大阪の労働者や顧客に親しまれているブランドで、パッケージの金箔が特徴的です\nA brand popular among workers and customers in Osaka, easily recognizable by the gold leaf on the packaging.",
+      "pack-color": "黄色 Yellow",
+      "pack-origin": "大阪 Osaka",
+      "description-ja": "大阪の労働者や顧客に親しまれているブランドで、パッケージの金箔が特徴的です",
+      "description-en": "A brand popular among workers and customers in Osaka, easily recognizable by the gold leaf on the packaging."
+    },
+    {
+      "id": 28,
+      "src": "img/pacchetti/pack8.png",
+      "category": "pacchetti",
+      "year": 1986,
+      "tags": [
+        "white pack",
+        "Nara",
+        "classic cigarettes",
+        "Japanese tobacco",
+        "traditional design",
+        "elegant packaging",
+        "1980s",
+        "popular culture"
+      ],
+      "tags-pacchetti": [
+        "白 White"
+      ],
+      "luogo-pacchetti": "Nara",
+      "paese-pacchetti": "Giappone",
+      "description": "奈良県内の小規模な家族経営のタバコ店で主に販売されている、シンプルでスリムなパッケージのタバコ\nA simple, slim pack sold mainly in small, family-run tobacco shops in Nara Prefecture.",
+      "pack-color": "白 White",
+      "pack-origin": "奈良 Nara",
+      "description-ja": "奈良県内の小規模な家族経営のタバコ店で主に販売されている、シンプルでスリムなパッケージのタバコ",
+      "description-en": "A simple, slim pack sold mainly in small, family-run tobacco shops in Nara Prefecture."
+    },
+    {
+      "id": 29,
+      "src": "img/pacchetti/pack9.png",
+      "category": "pacchetti",
+      "year": 1989,
+      "tags": [
+        "green cigarettes",
+        "Tokyo",
+        "retro design",
+        "illustrated packaging",
+        "urban tobacco",
+        "Japanese graphic design",
+        "smoking culture",
+        "the 1980s"
+      ],
+      "tags-pacchetti": [
+        "緑 Green"
+      ],
+      "luogo-pacchetti": "Tokyo",
+      "paese-pacchetti": "Giappone",
+      "description": "このブランドはビジネス街で販売されており、若者から人気があります\nThis brand is sold in business districts and is popular with young people.",
+      "pack-color": "緑 Green",
+      "pack-origin": "東京 Tokyo",
+      "description-ja": "このブランドはビジネス街で販売されており、若者から人気があります",
+      "description-en": "This brand is sold in business districts and is popular with young people."
+    },
+    {
+      "id": 30,
+      "src": "img/pacchetti/pack10.png",
+      "category": "pacchetti",
+      "year": 1985,
+      "tags": [
+        "blue pack",
+        "retro Osaka",
+        "Japanese cigarettes",
+        "minimalist design",
+        "vintage tobacco",
+        "historical collection",
+        "urban culture",
+        "1980s"
+      ],
+      "tags-pacchetti": [
+        "青 Blue"
+      ],
+      "luogo-pacchetti": "Osaka",
+      "paese-pacchetti": "Giappone",
+      "description": "1980年代半ばの大阪の自動販売機でよく見かけた商品です\nA very common package found in vending machines in Osaka during the mid-1980s.",
+      "pack-color": "青 Blue",
+      "pack-origin": "大阪 Osaka",
+      "description-ja": "1980年代半ばの大阪の自動販売機でよく見かけた商品です",
+      "description-en": "A very common package found in vending machines in Osaka during the mid-1980s."
+    },
+    {
+      "id": 31,
+      "src": "img/pacchetti/pack11.png",
+      "category": "pacchetti",
+      "year": 1987,
+      "tags": [
+        "blue pack",
+        "Kyoto",
+        "vintage cigarettes",
+        "illustrated graphics",
+        "Japanese tobacco",
+        "1980s",
+        "retro packaging",
+        "popular culture"
+      ],
+      "tags-pacchetti": [
+        "青 Blue"
+      ],
+      "luogo-pacchetti": "Kyoto",
+      "paese-pacchetti": "Giappone",
+      "description": "1987年に京都で製造された青いパッケージのタバコで、カラフルな表側のイラストで知られ、商店街近くのタバコ店でよく販売されていた\nA blue pack produced in Kyoto in 1987, known for its colorful front illustration and often sold in tobacco shops near shopping districts.",
+      "pack-color": "青 Blue",
+      "pack-origin": "京都 Kyoto",
+      "description-ja": "1987年に京都で製造された青いパッケージのタバコで、カラフルな表側のイラストで知られ、商店街近くのタバコ店でよく販売されていた",
+      "description-en": "A blue pack produced in Kyoto in 1987, known for its colorful front illustration and often sold in tobacco shops near shopping districts."
+    },
+    {
+      "id": 32,
+      "src": "img/pacchetti/pack12.png",
+      "category": "pacchetti",
+      "year": 1985,
+      "tags": [
+        "white pack",
+        "Nara",
+        "classic cigarettes",
+        "minimalist design",
+        "retro tobacco",
+        "elegant packaging",
+        "vintage collection"
+      ],
+      "tags-pacchetti": [
+        "白 White"
+      ],
+      "luogo-pacchetti": "Nara",
+      "paese-pacchetti": "Giappone",
+      "description": "1985年に奈良で配布された白いパッケージで、当時の低価格ブランドに典型的な、非常にシンプルな青い文字が特徴である\nA white package distributed in Nara in 1985, recognizable by its very simple blue lettering, typical of budget brands of the time.",
+      "pack-color": "白 White",
+      "pack-origin": "奈良 Nara",
+      "description-ja": "1985年に奈良で配布された白いパッケージで、当時の低価格ブランドに典型的な、非常にシンプルな青い文字が特徴である",
+      "description-en": "A white package distributed in Nara in 1985, recognizable by its very simple blue lettering, typical of budget brands of the time."
+    },
+    {
+      "id": 33,
+      "src": "img/pacchetti/pack13.png",
+      "category": "pacchetti",
+      "year": 1988,
+      "tags": [
+        "red pack",
+        "Tokyo",
+        "Japanese cigarettes",
+        "traditional design",
+        "smoking culture",
+        "urban tobacco",
+        "1980s Japan"
+      ],
+      "tags-pacchetti": [
+        "赤 Red"
+      ],
+      "luogo-pacchetti": "Tokyo",
+      "paese-pacchetti": "Giappone",
+      "description": "1988年に東京で製造された赤いパッケージの製品で、主に会社員や駅近くの小さなバーの常連客に人気がある\nA red pack produced in Tokyo in 1988, popular mainly among office workers and regular customers at small bars near train stations.",
+      "pack-color": "赤 Red",
+      "pack-origin": "東京 Tokyo",
+      "description-ja": "1988年に東京で製造された赤いパッケージの製品で、主に会社員や駅近くの小さなバーの常連客に人気がある",
+      "description-en": "A red pack produced in Tokyo in 1988, popular mainly among office workers and regular customers at small bars near train stations."
+    },
+    {
+      "id": 34,
+      "src": "img/pacchetti/pack14.png",
+      "category": "pacchetti",
+      "year": 1989,
+      "tags": [
+        "white pack",
+        "Osaka",
+        "retro cigarettes",
+        "red leaf",
+        "Japanese tobacco",
+        "minimalist packaging",
+        "1980s design"
+      ],
+      "tags-pacchetti": [
+        "白 White"
+      ],
+      "luogo-pacchetti": "Osaka",
+      "paese-pacchetti": "Giappone",
+      "description": "1989年に大阪で製造され、中央に赤いマークが入った白いパッケージで、市内の自動販売機で販売されていた\nA white package produced in Osaka in 1989, featuring a red symbol in the center, and sold in vending machines throughout the city.",
+      "pack-color": "白 White",
+      "pack-origin": "大阪 Osaka",
+      "description-ja": "1989年に大阪で製造され、中央に赤いマークが入った白いパッケージで、市内の自動販売機で販売されていた",
+      "description-en": "A white package produced in Osaka in 1989, featuring a red symbol in the center, and sold in vending machines throughout the city."
+    },
+    {
+      "id": 35,
+      "src": "img/pacchetti/pack15.png",
+      "category": "pacchetti",
+      "year": 1986,
+      "tags": [
+        "Red cigarettes",
+        "Kyoto",
+        "vintage packaging",
+        "classic tobacco",
+        "elegant design",
+        "Japanese urban culture",
+        "1980s"
+      ],
+      "tags-pacchetti": [
+        "赤 Red"
+      ],
+      "luogo-pacchetti": "Kyoto",
+      "paese-pacchetti": "Giappone",
+      "description": "1986年に京都で製造された赤いパッケージ。その控えめなデザインで知られ、主に小さな伝統的なカフェで使用されている\nA red package produced in Kyoto in 1986, known for its understated design and used primarily in small traditional cafes.",
+      "pack-color": "赤 Red",
+      "pack-origin": "京都 Kyoto",
+      "description-ja": "1986年に京都で製造された赤いパッケージ。その控えめなデザインで知られ、主に小さな伝統的なカフェで使用されている",
+      "description-en": "A red package produced in Kyoto in 1986, known for its understated design and used primarily in small traditional cafes."
+    },
+    {
+      "id": 36,
+      "src": "img/pacchetti/pack16.png",
+      "category": "pacchetti",
+      "year": 1990,
+      "tags": [
+        "yellow pack",
+        "Nara",
+        "vintage cigarettes",
+        "illustrated design",
+        "plain packaging",
+        "Japanese tobacco",
+        "early 1990s"
+      ],
+      "tags-pacchetti": [
+        "黄色 Yellow"
+      ],
+      "luogo-pacchetti": "Nara",
+      "paese-pacchetti": "Giappone",
+      "description": "1990年に奈良で流通した黄色いパッケージで、装飾的なイラストが目印となっており、近所のタバコ屋でよく見かけるものでした\nA yellow pack distributed in Nara in 1990, recognizable by its decorative illustration and very common in neighborhood tobacco shops.",
+      "pack-color": "黄色 Yellow",
+      "pack-origin": "奈良 Nara",
+      "description-ja": "1990年に奈良で流通した黄色いパッケージで、装飾的なイラストが目印となっており、近所のタバコ屋でよく見かけるものでした",
+      "description-en": "A yellow pack distributed in Nara in 1990, recognizable by its decorative illustration and very common in neighborhood tobacco shops."
+    },
+    {
+      "id": 37,
+      "src": "img/pacchetti/pack17.png",
+      "category": "pacchetti",
+      "year": 1987,
+      "tags": [
+        "yellow cigarettes",
+        "Tokyo",
+        "illustrated packaging",
+        "retro tobacco",
+        "traditional design",
+        "smoking culture",
+        "vintage collection"
+      ],
+      "tags-pacchetti": [
+        "黄色 Yellow"
+      ],
+      "luogo-pacchetti": "Tokyo",
+      "paese-pacchetti": "Giappone",
+      "description": "A yellow package produced in Tokyo in 1987, noted for the landscape design printed on the front of the package.",
+      "pack-color": "黄色 Yellow",
+      "pack-origin": "東京 Tokyo",
+      "description-ja": "",
+      "description-en": "A yellow package produced in Tokyo in 1987, noted for the landscape design printed on the front of the package."
+    },
+    {
+      "id": 38,
+      "src": "img/pacchetti/pack18.png",
+      "category": "pacchetti",
+      "year": 1988,
+      "tags": [
+        "blue pack",
+        "retro Osaka",
+        "Japanese cigarettes",
+        "dark design",
+        "urban tobacco",
+        "1980s",
+        "compact pack"
+      ],
+      "tags-pacchetti": [
+        "青 Blue"
+      ],
+      "luogo-pacchetti": "Osaka",
+      "paese-pacchetti": "Giappone",
+      "description": "1988年に大阪で導入された青いパッケージで、労働者階級の地域で広く使われており、その鮮やかな色のコントラストで一目でそれとわかる\nA blue package introduced in Osaka in 1988, widely used in working-class neighborhoods and easily recognizable for its striking color contrast.",
+      "pack-color": "青 Blue",
+      "pack-origin": "大阪 Osaka",
+      "description-ja": "1988年に大阪で導入された青いパッケージで、労働者階級の地域で広く使われており、その鮮やかな色のコントラストで一目でそれとわかる",
+      "description-en": "A blue package introduced in Osaka in 1988, widely used in working-class neighborhoods and easily recognizable for its striking color contrast."
+    },
+    {
+      "id": 39,
+      "src": "img/pacchetti/pack19.png",
+      "category": "pacchetti",
+      "year": 1989,
+      "tags": [
+        "red cigarettes",
+        "Kyoto",
+        "illustrated pink",
+        "vintage tobacco",
+        "floral design",
+        "retro packaging",
+        "1980s Japan"
+      ],
+      "tags-pacchetti": [
+        "赤 Red"
+      ],
+      "luogo-pacchetti": "Kyoto",
+      "paese-pacchetti": "Giappone",
+      "description": "1989年に京都で製造された赤いパッケージで、エレガントなデザインの中心に大きなバラがプリントされていることで知られています\nA red package produced in Kyoto in 1989, known for the large rose printed in the center of its elegantly designed packaging.",
+      "pack-color": "赤 Red",
+      "pack-origin": "京都 Kyoto",
+      "description-ja": "1989年に京都で製造された赤いパッケージで、エレガントなデザインの中心に大きなバラがプリントされていることで知られています",
+      "description-en": "A red package produced in Kyoto in 1989, known for the large rose printed in the center of its elegantly designed packaging."
+    },
+    {
+      "id": 40,
+      "src": "img/pacchetti/pack20.png",
+      "category": "pacchetti",
+      "year": 1986,
+      "tags": [
+        "green packaging",
+        "Tokyo",
+        "vintage cigarettes",
+        "floral symbol",
+        "Japanese tobacco",
+        "classic design",
+        "1980s urban culture"
+      ],
+      "tags-pacchetti": [
+        "緑 Green"
+      ],
+      "luogo-pacchetti": "Tokyo",
+      "paese-pacchetti": "Giappone",
+      "description": "1986年に東京で販売されていた緑色のタバコ箱。中央のカラフルなシンボルと、当時のタバコ特有のデザインで一目でそれとわかる\nA green cigarette pack sold in Tokyo in 1986, easily recognizable by its colorful central symbol and the typical design of cigarettes from that era.",
+      "pack-color": "緑 Green",
+      "pack-origin": "東京 Tokyo",
+      "description-ja": "1986年に東京で販売されていた緑色のタバコ箱。中央のカラフルなシンボルと、当時のタバコ特有のデザインで一目でそれとわかる",
+      "description-en": "A green cigarette pack sold in Tokyo in 1986, easily recognizable by its colorful central symbol and the typical design of cigarettes from that era."
+    },
+    {
+      "id": 41,
+      "src": "img/pacchetti/pack21.png",
+      "category": "pacchetti",
+      "year": 1988,
+      "tags": [
+        "blue pack",
+        "Tokyo",
+        "vintage cigarettes",
+        "minimalist design",
+        "Japanese tobacco",
+        "1980s",
+        "retro packaging",
+        "urban culture"
+      ],
+      "tags-pacchetti": [
+        "青 Blue"
+      ],
+      "luogo-pacchetti": "Tokyo",
+      "paese-pacchetti": "Giappone",
+      "description": "1988年に東京で製造された青いパッケージで、繁華街でよく見かけられ、中央に大きく配された文字で一目でそれとわかる\nA blue package produced in Tokyo in 1988, commonly found in commercial districts and easily recognizable by its large central typography.",
+      "pack-color": "青 Blue",
+      "pack-origin": "東京 Tokyo",
+      "description-ja": "1988年に東京で製造された青いパッケージで、繁華街でよく見かけられ、中央に大きく配された文字で一目でそれとわかる",
+      "description-en": "A blue package produced in Tokyo in 1988, commonly found in commercial districts and easily recognizable by its large central typography."
+    },
+    {
+      "id": 42,
+      "src": "img/pacchetti/pack22.png",
+      "category": "pacchetti",
+      "year": 1986,
+      "tags": [
+        "white pack",
+        "Kyoto",
+        "classic cigarettes",
+        "red logo",
+        "retro tobacco",
+        "elegant design",
+        "vintage collection"
+      ],
+      "tags-pacchetti": [
+        "白 White"
+      ],
+      "luogo-pacchetti": "Kyoto",
+      "paese-pacchetti": "Giappone",
+      "description": "1986年に京都で製造された白いタバコのパッケージ。中央の赤いマークで知られ、市内の伝統的なタバコ店で販売されていた\nA white cigarette pack produced in Kyoto in 1986, known for its red central symbol and sold in traditional tobacco shops throughout the city.",
+      "pack-color": "白 White",
+      "pack-origin": "京都 Kyoto",
+      "description-ja": "1986年に京都で製造された白いタバコのパッケージ。中央の赤いマークで知られ、市内の伝統的なタバコ店で販売されていた",
+      "description-en": "A white cigarette pack produced in Kyoto in 1986, known for its red central symbol and sold in traditional tobacco shops throughout the city."
+    },
+    {
+      "id": 43,
+      "src": "img/pacchetti/pack23.png",
+      "category": "pacchetti",
+      "year": 1989,
+      "tags": [
+        "blue cigarettes",
+        "Osaka",
+        "geometric design",
+        "modern packaging",
+        "urban tobacco",
+        "1980s Japan",
+        "retro graphics"
+      ],
+      "tags-pacchetti": [
+        "青 Blue"
+      ],
+      "luogo-pacchetti": "Osaka",
+      "paese-pacchetti": "Giappone",
+      "description": "1989年に大阪で発売された青いパッケージのブランドで、市内の若い喫煙者の間や小規模なコンビニエンスストアで広く見られる\nA blue-packaged brand introduced in Osaka in 1989, very common among young smokers and in small convenience stores throughout the city.",
+      "pack-color": "青 Blue",
+      "pack-origin": "大阪 Osaka",
+      "description-ja": "1989年に大阪で発売された青いパッケージのブランドで、市内の若い喫煙者の間や小規模なコンビニエンスストアで広く見られる",
+      "description-en": "A blue-packaged brand introduced in Osaka in 1989, very common among young smokers and in small convenience stores throughout the city."
+    },
+    {
+      "id": 44,
+      "src": "img/pacchetti/pack24.png",
+      "category": "pacchetti",
+      "year": 1985,
+      "tags": [
+        "yellow pack",
+        "Nara",
+        "vintage illustration",
+        "Japanese cigarettes",
+        "artistic design",
+        "tobacco culture",
+        "1980s"
+      ],
+      "tags-pacchetti": [
+        "黄色 Yellow"
+      ],
+      "luogo-pacchetti": "Nara",
+      "paese-pacchetti": "Giappone",
+      "description": "1985年に奈良で配布された黄色いパッケージ。表面のイラストと、当時特有の装飾的なデザインが特徴である\nYellow package distributed in Nara in 1985, recognizable by the illustration on the front and the more decorative design typical of that period.",
+      "pack-color": "黄色 Yellow",
+      "pack-origin": "奈良 Nara",
+      "description-ja": "1985年に奈良で配布された黄色いパッケージ。表面のイラストと、当時特有の装飾的なデザインが特徴である",
+      "description-en": "Yellow package distributed in Nara in 1985, recognizable by the illustration on the front and the more decorative design typical of that period."
+    },
+    {
+      "id": 45,
+      "src": "img/pacchetti/pack25.png",
+      "category": "pacchetti",
+      "year": 1990,
+      "tags": [
+        "green packaging",
+        "Kyoto",
+        "illustrated flowers",
+        "vintage tobacco",
+        "floral design",
+        "retro cigarettes",
+        "Japanese urban culture"
+      ],
+      "tags-pacchetti": [
+        "緑 Green"
+      ],
+      "luogo-pacchetti": "Kyoto",
+      "paese-pacchetti": "Giappone",
+      "description": "1990年に京都で製造された、精巧な花柄が特徴の緑色のパッケージで、近所の店で販売されていた\nA green package produced in Kyoto in 1990, featuring highly detailed floral designs and sold in neighborhood stores.",
+      "pack-color": "緑 Green",
+      "pack-origin": "京都 Kyoto",
+      "description-ja": "1990年に京都で製造された、精巧な花柄が特徴の緑色のパッケージで、近所の店で販売されていた",
+      "description-en": "A green package produced in Kyoto in 1990, featuring highly detailed floral designs and sold in neighborhood stores."
+    },
+    {
+      "id": 46,
+      "src": "img/pacchetti/pack26.png",
+      "category": "pacchetti",
+      "year": 1987,
+      "tags": [
+        "red cigarettes",
+        "Tokyo",
+        "typographic design",
+        "minimalist packaging",
+        "Japanese tobacco",
+        "1980s",
+        "retro collection"
+      ],
+      "tags-pacchetti": [
+        "赤 Red"
+      ],
+      "luogo-pacchetti": "Tokyo",
+      "paese-pacchetti": "Giappone",
+      "description": "1987年に東京で配布された赤いパッケージ。そのシンプルなデザインが評価され、駅周辺などでよく見かけられた\nA red package distributed in Tokyo in 1987, appreciated for its simple design and commonly found in areas near train stations.",
+      "pack-color": "赤 Red",
+      "pack-origin": "東京 Tokyo",
+      "description-ja": "1987年に東京で配布された赤いパッケージ。そのシンプルなデザインが評価され、駅周辺などでよく見かけられた",
+      "description-en": "A red package distributed in Tokyo in 1987, appreciated for its simple design and commonly found in areas near train stations."
+    },
+    {
+      "id": 47,
+      "src": "img/pacchetti/pack27.png",
+      "category": "pacchetti",
+      "year": 1988,
+      "tags": [
+        "red pack",
+        "retro Osaka",
+        "vintage cigarettes",
+        "Western-style graphics",
+        "urban tobacco",
+        "stylish packaging",
+        "1980s Japan"
+      ],
+      "tags-pacchetti": [
+        "赤 Red"
+      ],
+      "luogo-pacchetti": "Osaka",
+      "paese-pacchetti": "Giappone",
+      "description": "1988年に大阪で製造された赤いパッケージで、表面に大きく印刷された西洋風のロゴが目印となっている\nA red package produced in Osaka in 1988, recognizable by the large Western-style logo printed on the front of the package.",
+      "pack-color": "赤 Red",
+      "pack-origin": "大阪 Osaka",
+      "description-ja": "1988年に大阪で製造された赤いパッケージで、表面に大きく印刷された西洋風のロゴが目印となっている",
+      "description-en": "A red package produced in Osaka in 1988, recognizable by the large Western-style logo printed on the front of the package."
+    },
+    {
+      "id": 48,
+      "src": "img/pacchetti/pack28.png",
+      "category": "pacchetti",
+      "year": 1986,
+      "tags": [
+        "green pack",
+        "Nara",
+        "Japanese cigarettes",
+        "natural design",
+        "illustrated packaging",
+        "vintage tobacco",
+        "1980s"
+      ],
+      "tags-pacchetti": [
+        "緑 Green"
+      ],
+      "luogo-pacchetti": "Nara",
+      "paese-pacchetti": "Giappone",
+      "description": "1986年に奈良で発売された、果物や自然をモチーフにしたイラストが特徴の「グリーン」をテーマにしたパッケージ\nA green-themed package launched in Nara in 1986, known for its illustrations inspired by fruit and natural motifs.",
+      "pack-color": "緑 Green",
+      "pack-origin": "奈良 Nara",
+      "description-ja": "1986年に奈良で発売された、果物や自然をモチーフにしたイラストが特徴の「グリーン」をテーマにしたパッケージ",
+      "description-en": "A green-themed package launched in Nara in 1986, known for its illustrations inspired by fruit and natural motifs."
+    },
+    {
+      "id": 49,
+      "src": "img/pacchetti/pack29.png",
+      "category": "pacchetti",
+      "year": 1989,
+      "tags": [
+        "red cigarettes",
+        "Kyoto",
+        "traditional design",
+        "retro tobacco",
+        "classic packaging",
+        "smoking culture",
+        "1980s Japan"
+      ],
+      "tags-pacchetti": [
+        "赤 Red"
+      ],
+      "luogo-pacchetti": "Kyoto",
+      "paese-pacchetti": "Giappone",
+      "description": "1989年に京都で製造された赤いパッケージで、小規模なナイトクラブで広く使用され、そのミニマルなデザインで一目でそれとわかる\nA red package produced in Kyoto in 1989, widely used in small nightclubs and easily recognizable for its minimalist design.",
+      "pack-color": "赤 Red",
+      "pack-origin": "京都 Kyoto",
+      "description-ja": "1989年に京都で製造された赤いパッケージで、小規模なナイトクラブで広く使用され、そのミニマルなデザインで一目でそれとわかる",
+      "description-en": "A red package produced in Kyoto in 1989, widely used in small nightclubs and easily recognizable for its minimalist design."
+    },
+    {
+      "id": 50,
+      "src": "img/pacchetti/pack30.png",
+      "category": "pacchetti",
+      "year": 1985,
+      "tags": [
+        "blue pack",
+        "Tokyo",
+        "illustrated sun",
+        "vintage cigarettes",
+        "retro design",
+        "urban tobacco",
+        "1980s",
+        "colorful packaging"
+      ],
+      "tags-pacchetti": [
+        "青 Blue"
+      ],
+      "luogo-pacchetti": "Tokyo",
+      "paese-pacchetti": "Giappone",
+      "description": "1985年に東京で配布された青いパッケージで、中央に太陽のシンボルが描かれており、主に繁華街のキオスクで販売されていた\nA blue package distributed in Tokyo in 1985, featuring a central sun symbol and sold primarily at kiosks in commercial districts",
+      "pack-color": "青 Blue",
+      "pack-origin": "東京 Tokyo",
+      "description-ja": "1985年に東京で配布された青いパッケージで、中央に太陽のシンボルが描かれており、主に繁華街のキオスクで販売されていた",
+      "description-en": "A blue package distributed in Tokyo in 1985, featuring a central sun symbol and sold primarily at kiosks in commercial districts"
+    },
+    {
+      "id": 51,
+      "src": "img/pacchetti/pack31.png",
+      "category": "pacchetti",
+      "year": 1987,
+      "tags": [
+        "blue pack",
+        "Osaka",
+        "vintage cigarettes",
+        "abstract symbol",
+        "Japanese tobacco",
+        "1980s design",
+        "retro packaging",
+        "urban culture"
+      ],
+      "tags-pacchetti": [
+        "青 Blue"
+      ],
+      "luogo-pacchetti": "Osaka",
+      "paese-pacchetti": "Giappone",
+      "description": "1987年に大阪で製造された青いパッケージのタバコで、中央のスタイリッシュなシンボルマークが特徴であり、労働者階級の地域にあるタバコ店で広く販売されていた\nA blue pack produced in Osaka in 1987, recognizable by its stylized central symbol and widely available in tobacco shops in working-class neighborhoods.",
+      "pack-color": "青 Blue",
+      "pack-origin": "大阪 Osaka",
+      "description-ja": "1987年に大阪で製造された青いパッケージのタバコで、中央のスタイリッシュなシンボルマークが特徴であり、労働者階級の地域にあるタバコ店で広く販売されていた",
+      "description-en": "A blue pack produced in Osaka in 1987, recognizable by its stylized central symbol and widely available in tobacco shops in working-class neighborhoods."
+    },
+    {
+      "id": 52,
+      "src": "img/pacchetti/pack32.png",
+      "category": "pacchetti",
+      "year": 1985,
+      "tags": [
+        "Blue cigarettes",
+        "Tokyo",
+        "classic packaging",
+        "retro tobacco",
+        "minimalist design",
+        "smoking culture",
+        "1980s Japan"
+      ],
+      "tags-pacchetti": [
+        "青 Blue"
+      ],
+      "luogo-pacchetti": "Tokyo",
+      "paese-pacchetti": "Giappone",
+      "description": "1985年に東京で流通した青いパッケージ。シンプルなデザインと濃い色の包装で知られ、当時の街中のキオスクではよく見かけられた\nA blue package distributed in Tokyo in 1985, known for its simple design and dark packaging, which was very common in city kiosks.",
+      "pack-color": "青 Blue",
+      "pack-origin": "東京 Tokyo",
+      "description-ja": "1985年に東京で流通した青いパッケージ。シンプルなデザインと濃い色の包装で知られ、当時の街中のキオスクではよく見かけられた",
+      "description-en": "A blue package distributed in Tokyo in 1985, known for its simple design and dark packaging, which was very common in city kiosks."
+    },
+    {
+      "id": 53,
+      "src": "img/pacchetti/pack33.png",
+      "category": "pacchetti",
+      "year": 1989,
+      "tags": [
+        "white pack",
+        "Kyoto",
+        "Japanese cigarettes",
+        "light blue graphics",
+        "vintage tobacco",
+        "urban design",
+        "1980s"
+      ],
+      "tags-pacchetti": [
+        "白 White"
+      ],
+      "luogo-pacchetti": "Kyoto",
+      "paese-pacchetti": "Giappone",
+      "description": "1989年に京都で製造された白いパッケージで、中央に大きな水色の部分があり、近所のコンビニで販売されていた\nA white package produced in Kyoto in 1989, featuring a large light blue central area and sold in small convenience stores.",
+      "pack-color": "白 White",
+      "pack-origin": "京都 Kyoto",
+      "description-ja": "1989年に京都で製造された白いパッケージで、中央に大きな水色の部分があり、近所のコンビニで販売されていた",
+      "description-en": "A white package produced in Kyoto in 1989, featuring a large light blue central area and sold in small convenience stores."
+    },
+    {
+      "id": 54,
+      "src": "img/pacchetti/pack34.png",
+      "category": "pacchetti",
+      "year": 1988,
+      "tags": [
+        "red pack",
+        "Nara",
+        "advertising design",
+        "retro cigarettes",
+        "Japanese tobacco",
+        "illustrated packaging",
+        "1980s"
+      ],
+      "tags-pacchetti": [
+        "赤 Red"
+      ],
+      "luogo-pacchetti": "Nara",
+      "paese-pacchetti": "Giappone",
+      "description": "1988年に奈良で販売された赤いパッケージで、パッケージの表面に印刷された広告グラフィックで一目でわかる\nA red package sold in Nara in 1988, recognizable by the advertising graphics printed on the front of the package.",
+      "pack-color": "赤 Red",
+      "pack-origin": "奈良 Nara",
+      "description-ja": "1988年に奈良で販売された赤いパッケージで、パッケージの表面に印刷された広告グラフィックで一目でわかる",
+      "description-en": "A red package sold in Nara in 1988, recognizable by the advertising graphics printed on the front of the package."
+    },
+    {
+      "id": 55,
+      "src": "img/pacchetti/pack35.png",
+      "category": "pacchetti",
+      "year": 1986,
+      "tags": [
+        "white cigarettes",
+        "Tokyo",
+        "animal symbol",
+        "vintage tobacco",
+        "minimalist design",
+        "Japanese urban culture",
+        "retro packaging"
+      ],
+      "tags-pacchetti": [
+        "白 White"
+      ],
+      "luogo-pacchetti": "Tokyo",
+      "paese-pacchetti": "Giappone",
+      "description": "1986年に東京で配布された白いパッケージ。小さな赤い動物のシンボルと、当時特有のシンプルなデザインで知られている\nA white package distributed in Tokyo in 1986, known for its small red animal symbol and the clean design typical of the era.",
+      "pack-color": "白 White",
+      "pack-origin": "東京 Tokyo",
+      "description-ja": "1986年に東京で配布された白いパッケージ。小さな赤い動物のシンボルと、当時特有のシンプルなデザインで知られている",
+      "description-en": "A white package distributed in Tokyo in 1986, known for its small red animal symbol and the clean design typical of the era."
+    },
+    {
+      "id": 56,
+      "src": "img/pacchetti/pack36.png",
+      "category": "pacchetti",
+      "year": 1990,
+      "tags": [
+        "red pack",
+        "retro Osaka",
+        "Japanese cigarettes",
+        "large print",
+        "urban tobacco",
+        "classic design",
+        "early ’90s"
+      ],
+      "tags-pacchetti": [
+        "赤 Red"
+      ],
+      "luogo-pacchetti": "Osaka",
+      "paese-pacchetti": "Giappone",
+      "description": "1990年に大阪で製造された赤いパッケージ。シンプルで一目でそれとわかるデザインのおかげで、自動販売機でよく見かける商品だ\nA red package produced in Osaka in 1990, commonly found in vending machines thanks to its simple and instantly recognizable design.",
+      "pack-color": "赤 Red",
+      "pack-origin": "大阪 Osaka",
+      "description-ja": "1990年に大阪で製造された赤いパッケージ。シンプルで一目でそれとわかるデザインのおかげで、自動販売機でよく見かける商品だ",
+      "description-en": "A red package produced in Osaka in 1990, commonly found in vending machines thanks to its simple and instantly recognizable design."
+    },
+    {
+      "id": 57,
+      "src": "img/pacchetti/pack37.png",
+      "category": "pacchetti",
+      "year": 1987,
+      "tags": [
+        "light blue pack",
+        "Kyoto",
+        "vintage cigarettes",
+        "floral symbol",
+        "Japanese tobacco",
+        "elegant design",
+        "1980s"
+      ],
+      "tags-pacchetti": [
+        "青 Blue"
+      ],
+      "luogo-pacchetti": "Kyoto",
+      "paese-pacchetti": "Giappone",
+      "description": "1987年に京都で製造された水色のパッケージで、中央に配された花のシンボルと、より洗練されたデザインが評価されている\nA light blue package produced in Kyoto in 1987, prized for its central floral symbol and its more refined design.",
+      "pack-color": "青 Blue",
+      "pack-origin": "京都 Kyoto",
+      "description-ja": "1987年に京都で製造された水色のパッケージで、中央に配された花のシンボルと、より洗練されたデザインが評価されている",
+      "description-en": "A light blue package produced in Kyoto in 1987, prized for its central floral symbol and its more refined design."
+    },
+    {
+      "id": 58,
+      "src": "img/pacchetti/pack38.png",
+      "category": "pacchetti",
+      "year": 1985,
+      "tags": [
+        "white cigarettes",
+        "Nara",
+        "traditional typography",
+        "retro tobacco",
+        "classic packaging",
+        "smoking culture",
+        "1980s Japan"
+      ],
+      "tags-pacchetti": [
+        "白 White"
+      ],
+      "luogo-pacchetti": "Nara",
+      "paese-pacchetti": "Giappone",
+      "description": "1985年に奈良で配布された白い封筒で、表面に大きく赤と黒の文字が印刷されていることで知られている\nA white package distributed in Nara in 1985, known for the large red and black lettering printed on the front.",
+      "pack-color": "白 White",
+      "pack-origin": "奈良 Nara",
+      "description-ja": "1985年に奈良で配布された白い封筒で、表面に大きく赤と黒の文字が印刷されていることで知られている",
+      "description-en": "A white package distributed in Nara in 1985, known for the large red and black lettering printed on the front."
+    },
+    {
+      "id": 59,
+      "src": "img/pacchetti/pack39.png",
+      "category": "pacchetti",
+      "year": 1989,
+      "tags": [
+        "blue pack",
+        "urban Tokyo",
+        "vintage cigarettes",
+        "minimalist design",
+        "Japanese tobacco",
+        "retro packaging",
+        "1980s"
+      ],
+      "tags-pacchetti": [
+        "青 Blue"
+      ],
+      "luogo-pacchetti": "Tokyo",
+      "paese-pacchetti": "Giappone",
+      "description": "1989年に東京で発売された青いパッケージで、中央に大きく書かれた黒い文字と、非常にシンプルなデザインが特徴である\nA blue package introduced in Tokyo in 1989, recognizable by its large black lettering in the center and its very simple design.",
+      "pack-color": "青 Blue",
+      "pack-origin": "東京 Tokyo",
+      "description-ja": "1989年に東京で発売された青いパッケージで、中央に大きく書かれた黒い文字と、非常にシンプルなデザインが特徴である",
+      "description-en": "A blue package introduced in Tokyo in 1989, recognizable by its large black lettering in the center and its very simple design."
+    },
+    {
+      "id": 60,
+      "src": "img/pacchetti/pack40.png",
+      "category": "pacchetti",
+      "year": 1988,
+      "tags": [
+        "yellow pack",
+        "Osaka",
+        "retro cigarettes",
+        "Western design",
+        "urban tobacco",
+        "stylish packaging",
+        "1980s Japan"
+      ],
+      "tags-pacchetti": [
+        "黄色 Yellow"
+      ],
+      "luogo-pacchetti": "Osaka",
+      "paese-pacchetti": "Giappone",
+      "description": "1988年に大阪で製造された黄色いパッケージで、中央に西洋風のロゴが入っており、主に市内の繁華街で広く流通していた\nA yellow package produced in Osaka in 1988, featuring a Western-style logo in the center and widely distributed primarily in the city's commercial districts.",
+      "pack-color": "黄色 Yellow",
+      "pack-origin": "大阪 Osaka",
+      "description-ja": "1988年に大阪で製造された黄色いパッケージで、中央に西洋風のロゴが入っており、主に市内の繁華街で広く流通していた",
+      "description-en": "A yellow package produced in Osaka in 1988, featuring a Western-style logo in the center and widely distributed primarily in the city's commercial districts."
+    },
+    {
+      "id": 61,
+      "src": "img/pubblicità/advertising1.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description-ja": "ディアリア – 韓国、1990年代後半\n仕事のストレスを抱えるビジネスマンをターゲットにした「プレミアムで情感あふれる」たばこブランド。この広告は、俳優の疲れ切った表情を巧みに活用しており、ディアリアを吸うことが、過酷な一日の後に訪れる、心安らぐひとときとして描かれている",
+      "description-en": "Deariea – South Korea, late 1990s\nA “premium emotive” cigarette brand aimed at work-stressed businessmen. The ad plays on the actor’s exhausted expression: smoking Deariea is presented as a brief moment of mental relief after a grueling day.",
+      "description": "A “premium emotive” cigarette brand aimed at work-stressed businessmen. The ad plays on the actor’s exhausted expression: smoking Deariea is presented as a brief moment of mental relief after a grueling day.",
+      "title-ja": "ディアリア – 韓国、1990年代後半",
+      "title-en": "Deariea – South Korea, late 1990s"
+    },
+    {
+      "id": 62,
+      "src": "img/pubblicità/advertising2.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description-ja": "POIK / JF – 日本、1980年代半ば\n成熟したビジネスマンをターゲットにした、エレガントでミニマルなタバコキャンペーン。イメージキャラクターは信頼感と静かな成功を醸し出しており、製品は「静かな品格」と社会的安定を約束している。",
+      "description-en": "POIK / JF – Japan, mid-1980s\nAn elegant, minimalist campaign for cigarettes aimed at mature businessmen. The spokesperson conveys reliability and quiet success: the product promises “quiet class” and social stability.",
+      "description": "An elegant, minimalist campaign for cigarettes aimed at mature businessmen. The spokesperson conveys reliability and quiet success: the product promises “quiet class” and social stability.",
+      "title-ja": "POIK / JF – 日本、1980年代半ば",
+      "title-en": "POIK / JF – Japan, mid-1980s"
+    },
+    {
+      "id": 63,
+      "src": "img/pubblicità/advertising3.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description-ja": "ホワイト／オレンジパック – 台湾、2000年代初頭\n若い会社員や大学生向けにデザインされたライトタバコ。スタイルはメランコリックで映画的であり、広告は内省、都会の夜、そして控えめなロマンスを連想させる",
+      "description-en": "White/Orange Pack – Taiwan, early 2000s\nLight cigarettes designed for young office workers and college students. The style is melancholic and cinematic: the ad suggests introspection, nights in the city, and understated romance.",
+      "description": "Light cigarettes designed for young office workers and college students. The style is melancholic and cinematic: the ad suggests introspection, nights in the city, and understated romance.",
+      "title-ja": "ホワイト／オレンジパック – 台湾、2000年代初頭",
+      "title-en": "White/Orange Pack – Taiwan, early 2000s"
+    },
+    {
+      "id": 64,
+      "src": "img/pubblicità/advertising4.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description-ja": "FAGA – 韓国、1990年代\n力強い味わいが特徴の人気メンズブランド。笑顔でリラックスしたイメージキャラクターは、親しみやすさと本物らしさを醸し出している。「庶民のタバコ」として、贅沢さはないが、個性に溢れている",
+      "description-en": "FAGA – South Korea, 1990s\nA popular men’s brand with a strong flavor. The smiling, relaxed spokesperson suggests familiarity and authenticity: “the common man’s cigarette,” without luxury but with character.",
+      "description": "A popular men’s brand with a strong flavor. The smiling, relaxed spokesperson suggests familiarity and authenticity: “the common man’s cigarette,” without luxury but with character.",
+      "title-ja": "FAGA – 韓国、1990年代",
+      "title-en": "FAGA – South Korea, 1990s"
+    },
+    {
+      "id": 65,
+      "src": "img/pubblicità/advertising5.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description-ja": "赤井陽吾 – 日本、1970年代後半\n文化誌に掲載された洗練されたタバコの広告。その優雅なデザインと瞑想的なトーンは、まるで文学カフェのような雰囲気で、芸術的かつ知的な読者層をターゲットにしている",
+      "description-en": "Akai Yoago – Japan, late 1970s\nSophisticated cigarettes from a cultural magazine. The elegant design and contemplative tone are aimed at an artistic and intellectual audience, almost like a literary café.",
+      "description": "Sophisticated cigarettes from a cultural magazine. The elegant design and contemplative tone are aimed at an artistic and intellectual audience, almost like a literary café.",
+      "title-ja": "赤井陽吾 – 日本、1970年代後半",
+      "title-en": "Akai Yoago – Japan, late 1970s"
+    },
+    {
+      "id": 66,
+      "src": "img/pubblicità/advertising6.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description-ja": "紺色のパッケージ – 香港、1980年代\n強いタバコのための、攻撃的で演劇的なキャンペーン。クローズアップの構図と強烈なコントラストは、都会の反逆精神、ビリヤード場、そしてナイトライフを想起させる",
+      "description-en": "Dark blue pack – Hong Kong, 1980s\nAn aggressive and theatrical campaign for strong cigarettes. The close-up framing and harsh contrast evoke urban rebellion, pool halls, and nightlife.",
+      "description": "An aggressive and theatrical campaign for strong cigarettes. The close-up framing and harsh contrast evoke urban rebellion, pool halls, and nightlife.",
+      "title-ja": "紺色のパッケージ – 香港、1980年代",
+      "title-en": "Dark blue pack – Hong Kong, 1980s"
+    },
+    {
+      "id": 67,
+      "src": "img/pubblicità/advertising7.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description-ja": "ピスンバ／ファイビー – 韓国、2000年代初頭\nファッションに敏感な若い男性をターゲットにした「クール」なブランド。そのビジュアルはまるでファッション誌の編集ページから抜け出したかのよう。タバコはミステリー、美しさ、そして現代的なスタイルと結びつけられている",
+      "description-en": "Pisnba / Fivey – South Korea, early 2000s\nA “cool” brand aimed at young, fashion-conscious men. The look is straight out of a fashion editorial: the cigarette is associated with mystery, beauty, and contemporary style.",
+      "description": "A “cool” brand aimed at young, fashion-conscious men. The look is straight out of a fashion editorial: the cigarette is associated with mystery, beauty, and contemporary style.",
+      "title-ja": "ピスンバ／ファイビー – 韓国、2000年代初頭",
+      "title-en": "Pisnba / Fivey – South Korea, early 2000s"
+    },
+    {
+      "id": 68,
+      "src": "img/pubblicità/advertising8.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description-ja": "DAJ PORE – タイ、1990年代\n手頃な価格でありながら洗練された印象を与えるタバコ。広告は柔らかく日常的なトーンを用い、喫煙は家庭的な安らぎと感情的な親密さを表すジェスチャーとなっている",
+      "description-en": "DAJ PORE – Thailand, 1990s\nInexpensive cigarettes perceived as sophisticated. The ad uses soft, everyday tones: smoking becomes a gesture of domestic calm and emotional closeness.",
+      "description": "Inexpensive cigarettes perceived as sophisticated. The ad uses soft, everyday tones: smoking becomes a gesture of domestic calm and emotional closeness.",
+      "title-ja": "DAJ PORE – タイ、1990年代",
+      "title-en": "DAJ PORE – Thailand, 1990s"
+    },
+    {
+      "id": 69,
+      "src": "img/pubblicità/advertising9.png",
+      "category": "pubblicità",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description-ja": "DEAN – 日本のアンダーグラウンドシーン、1990年代後半\nナイトクラブやインディーズ音楽と結びついた架空のブランド。強烈な印象のスポークスパーソンは、不安感とダークな魅力を醸し出している。「夜を生きる者たち」のためのタバコ",
+      "description-en": "DEAN – Japan’s underground scene, late ’90s\nA fictional brand linked to nightclubs and indie music. The intense-looking spokesperson conveys unease and dark charm: a cigarette “for those who live at night.”",
+      "description": "A fictional brand linked to nightclubs and indie music. The intense-looking spokesperson conveys unease and dark charm: a cigarette “for those who live at night.”",
+      "title-ja": "DEAN – 日本のアンダーグラウンドシーン、1990年代後半",
+      "title-en": "DEAN – Japan’s underground scene, late ’90s"
+    },
+    {
+      "id": 70,
+      "src": "img/about/about1.png",
+      "category": "about archive",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description": "Descrizione dell'immagine"
+    },
+    {
+      "id": 6715,
+      "src": "img/about/about2.jpg",
+      "category": "about archive",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description": "Descrizione dell'immagine"
+    },
+    {
+      "id": 72,
+      "src": "img/about/about3.png",
+      "category": "about archive",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description": "Descrizione dell'immagine"
+    },
+    {
+      "id": 73,
+      "src": "img/about/about4.png",
+      "category": "about archive",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description": "Descrizione dell'immagine"
+    },
+    {
+      "id": 74,
+      "src": "img/about/about5.jpg",
+      "category": "about archive",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description": "Descrizione dell'immagine"
+    },
+    {
+      "id": 75,
+      "src": "img/about/about6.png",
+      "category": "about archive",
+      "year": 1960,
+      "tags": [
+        "astratto",
+        "texture",
+        "colore",
+        "composizione",
+        "dettaglio"
+      ],
+      "description": "Descrizione dell'immagine"
+    }
   ]
-};
-
-let items = [];
-let displayItems = [];
-let activeTags = new Set();
-let searchQuery = '';
-let isRandom = false;
-let lbIndex = -1;
-let activeCategory = 'fotografie';
-let activeFilter = null;
-let activeFilterType = null;
-let advertisingScrollBound = false;
-
-function updateCategoryText(category) {
-  const japaneseText = document.getElementById('category-japanese-text');
-  const englishText = document.getElementById('category-english-text');
-  if (!japaneseText || !englishText) return;
-
-  const text = categoryTexts[category] || categoryTexts.fotografie;
-  japaneseText.textContent = text.japanese;
-  englishText.textContent = text.english;
 }
-
-async function loadData() {
-  const res = await fetch('data.json');
-  if (!res.ok) throw new Error(`Impossibile caricare data.json: ${res.status}`);
-  const data = await res.json();
-  items = Array.isArray(data.items) ? data.items : [];
-  displayItems = [...items];
-  buildTagsBar();
-}
-
-function getItemTags(item) {
-  return [
-    ...(item.tags || []),
-    ...(item['tags-fotografie'] || []),
-    ...(item['tags-pacchetti'] || [])
-  ];
-}
-
-function allTags() {
-  return [...new Set(items.flatMap(getItemTags))].sort();
-}
-
-function buildTagsBar() {
-  if (!tagsBar) return;
-  tagsBar.innerHTML = '';
-  allTags().forEach(tag => {
-    const btn = document.createElement('button');
-    btn.className = 'tag-btn';
-    btn.textContent = tag;
-    btn.dataset.tag = tag;
-    btn.addEventListener('click', () => toggleTag(tag));
-    tagsBar.appendChild(btn);
-  });
-}
-
-function toggleTag(tag) {
-  if (activeTags.has(tag)) activeTags.delete(tag);
-  else activeTags.add(tag);
-  syncGlobalTagButtons();
-  render();
-}
-
-function syncGlobalTagButtons() {
-  if (!tagsBar) return;
-  tagsBar.querySelectorAll('.tag-btn').forEach(btn => {
-    btn.classList.toggle('active', activeTags.has(btn.dataset.tag));
-  });
-}
-
-function filteredItems() {
-  const q = searchQuery.trim().toLowerCase();
-
-  return displayItems.filter(item => {
-    const matchesCategory = !activeCategory || item.category === activeCategory;
-    const tags = getItemTags(item);
-    const matchesTags = [...activeTags].every(tag => tags.includes(tag));
-    const matchesSearch = !q || [item.description, item['description-ja'], item['description-en'], item['portrait-status'], item['portrait-relationship'], item.category, item.year, ...tags]
-      .join(' ')
-      .toLowerCase()
-      .includes(q);
-
-    let matchesCustomFilter = true;
-
-    if (activeFilter && activeFilterType === 'year') {
-      matchesCustomFilter = Number(item.year) === Number(activeFilter);
-    }
-
-    if (activeFilter && activeFilterType === 'tag') {
-      matchesCustomFilter = tags.includes(activeFilter);
-    }
-
-    if (activeFilter && activeFilterType === 'luogo') {
-      matchesCustomFilter =
-        item['luogo-pacchetti']?.toLowerCase() === activeFilter.toLowerCase() ||
-        tags.some(tag => tag.toLowerCase() === activeFilter.toLowerCase());
-    }
-
-    if (activeFilter && activeFilterType === 'pack-color') {
-      matchesCustomFilter = item['pack-color'] === activeFilter;
-    }
-
-    if (activeFilter && activeFilterType === 'origin') {
-      matchesCustomFilter = item['pack-origin'] === activeFilter;
-    }
-
-    if (activeFilter && activeFilterType === 'status') {
-      matchesCustomFilter = item['portrait-status'] === activeFilter;
-    }
-
-    if (activeFilter && activeFilterType === 'relationship') {
-      matchesCustomFilter = item['portrait-relationship'] === activeFilter;
-    }
-
-    return matchesCategory && matchesTags && matchesSearch && matchesCustomFilter;
-  });
-}
-
-function setCategory(cat) {
-  activeCategory = cat;
-  activeFilter = null;
-  activeFilterType = null;
-  activeTags.clear();
-  syncGlobalTagButtons();
-
-  grid?.classList.remove(
-    'has-selected',
-    'layout-fotografie',
-    'layout-pacchetti',
-    'layout-pubblicita',
-    'year-filtered'
-  );
-
-  document.querySelectorAll('[data-category]').forEach(el => {
-    el.style.opacity = el.dataset.category === activeCategory ? '1' : '0.35';
-  });
-
-  if (activeCategory === 'fotografie') {
-    grid?.classList.add('layout-fotografie');
-    renderPortraitFilters();
-  } else {
-    renderCategoryFilters(activeCategory);
-  }
-
-  if (activeCategory === 'pacchetti') grid?.classList.add('layout-pacchetti');
-  if (activeCategory === 'pubblicità') grid?.classList.add('layout-pubblicita');
-
-  updateCategoryText(activeCategory);
-  render();
-
-  if (
-    activeCategory === 'fotografie' &&
-    typeof handDetector !== 'undefined' &&
-    !handDetector &&
-    typeof initPortraitGesture === 'function'
-  ) {
-    initPortraitGesture();
-  }
-}
-
-function renderPortraitFilters() {
-  const panel = document.getElementById('filters-panel');
-  if (!panel) return;
-
-  panel.innerHTML = `
-    <div class="filter">
-      <p>ステータス&nbsp;&nbsp; Status</p>
-      <p>
-        <span class="filter-option" data-filter-type="status" data-filter-value="様 Sama">様 Sama</span>
-        <span class="filter-option" data-filter-type="status" data-filter-value="先輩 Senpai">先輩 Senpai</span>
-        <span class="filter-option" data-filter-type="status" data-filter-value="君 Kun">君 Kun</span>
-      </p>
-    </div>
-
-    <div class="filter">
-      <p>関係&nbsp;&nbsp; Relationship</p>
-      <p>
-        <span class="filter-option" data-filter-type="relationship" data-filter-value="個人 Individual">個人 Individual</span>
-        <span class="filter-option" data-filter-type="relationship" data-filter-value="グループ Group">グループ Group</span>
-      </p>
-    </div>
-
-    <div class="filter">
-      <p>年&nbsp;&nbsp; Year</p>
-      <p>
-        <span class="filter-option" data-filter-type="year" data-filter-value="1986">1986年</span>
-        <span class="filter-option" data-filter-type="year" data-filter-value="1987">1987年</span>
-        <span class="filter-option" data-filter-type="year" data-filter-value="1988">1988年</span>
-        <span class="filter-option" data-filter-type="year" data-filter-value="1989">1989年</span>
-        <span class="filter-option" data-filter-type="year" data-filter-value="1990">1990年</span>
-      </p>
-    </div>
-  `;
-
-  bindFilterOptionClicks(panel);
-}
-
-function renderCategoryFilters(category) {
-  const panel = document.getElementById('filters-panel');
-  if (!panel) return;
-
-  panel.innerHTML = '';
-
-  (filtersByCategory[category] || []).forEach(group => {
-    const div = document.createElement('div');
-    div.className = 'filter';
-    div.innerHTML = `
-      <p>${group.title}</p>
-      <p>
-        ${group.values.map(value => `
-          <span class="filter-option" data-filter-type="${group.type}" data-filter-value="${value}">${value}</span>
-        `).join('')}
-      </p>
-    `;
-    panel.appendChild(div);
-  });
-
-  bindFilterOptionClicks(panel);
-}
-
-function bindFilterOptionClicks(panel) {
-  panel.querySelectorAll('.filter-option').forEach(option => {
-    option.addEventListener('click', () => {
-      const value = option.dataset.filterValue;
-      const type = option.dataset.filterType;
-
-      if (activeFilter === value && activeFilterType === type) {
-        activeFilter = null;
-        activeFilterType = null;
-      } else {
-        activeFilter = value;
-        activeFilterType = type;
-      }
-
-      updateFilterOpacity();
-      render();
-    });
-  });
-}
-
-function updateFilterOpacity() {
-  document.querySelectorAll('.filter-option').forEach(el => {
-    const active = activeFilter === el.dataset.filterValue && activeFilterType === el.dataset.filterType;
-    el.classList.toggle('active-filter', active);
-    el.style.opacity = !activeFilter || active ? '1' : '0.35';
-  });
-}
-
-function updateActiveInfo(item) {
-  const tags = getItemTags(item);
-
-  document.querySelectorAll('[data-category]').forEach(el => {
-    el.style.opacity = el.dataset.category === item.category ? '1' : '0.35';
-  });
-
-  document.querySelectorAll('.filter-option').forEach(el => {
-    const value = el.dataset.filterValue;
-    const type = el.dataset.filterType;
-
-    const isActive =
-      (type === 'year' && Number(value) === Number(item.year)) ||
-      (type === 'tag' && tags.includes(value)) ||
-      (type === 'status' && value === item['portrait-status']) ||
-      (type === 'relationship' && value === item['portrait-relationship']) ||
-      (type === 'pack-color' && value === item['pack-color']) ||
-      (type === 'origin' && value === item['pack-origin']) ||
-      (type === 'luogo' && value === item['luogo-pacchetti']);
-
-    el.classList.toggle('active-filter', isActive);
-    el.style.opacity = isActive ? '1' : '0.35';
-  });
-
-  document.querySelectorAll('.card-tag').forEach(tagEl => {
-    tagEl.classList.toggle('highlight', tags.includes(tagEl.textContent));
-  });
-}
-
-function clearActiveInfo() {
-  document.querySelectorAll('[data-category]').forEach(el => {
-    el.style.opacity = el.dataset.category === activeCategory ? '1' : '0.35';
-  });
-  document.querySelectorAll('.filter-option').forEach(el => {
-    el.classList.remove('active-filter');
-    el.style.opacity = '1';
-  });
-}
-
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-btnRandom?.addEventListener('click', () => {
-  if (isRandom) {
-    displayItems = [...items];
-    btnRandom.textContent = 'Random';
-  } else {
-    displayItems = shuffle(items);
-    btnRandom.textContent = 'Reset';
-  }
-  isRandom = !isRandom;
-  render();
-});
-
-searchInput?.addEventListener('input', e => {
-  searchQuery = e.target.value;
-  render();
-});
-
-function render() {
-  if (!grid) return;
-  const visible = filteredItems();
-
-  if (resultsInfo) {
-    resultsInfo.textContent = visible.length === items.length
-      ? `${items.length} items`
-      : `${visible.length} / ${items.length} items`;
-  }
-
-  grid.innerHTML = '';
-  grid.classList.toggle('layout-fotografie', activeCategory === 'fotografie');
-  grid.classList.toggle('layout-pubblicita', activeCategory === 'pubblicità');
-  grid.classList.toggle('layout-pacchetti', activeCategory === 'pacchetti');
-  grid.classList.remove('has-selected');
-
-  if (!visible.length) {
-    const empty = document.createElement('div');
-    empty.className = 'empty';
-    empty.textContent = 'Nessun risultato.';
-    grid.appendChild(empty);
-    return;
-  }
-
-  visible.forEach((item, i) => {
-    const card = document.createElement('article');
-    card.className = 'card activeImg';
-    card.style.cursor = activeCategory === 'fotografie' || activeCategory === 'pacchetti' ? 'zoom-in' : 'default';
-    card.dataset.itemYear = item.year;
-
-    if (item.category === 'pubblicità') {
-      card.dataset.adJa = item['description-ja'] || item.description || '';
-      card.dataset.adEn = item['description-en'] || item.description || '';
-    }
-
-    const img = document.createElement('img');
-    img.className = 'card-img';
-    img.src = item.src;
-    img.alt = item.description || `Item ${item.id}`;
-    img.loading = 'lazy';
-    card.appendChild(img);
-
-    const body = document.createElement('div');
-    body.className = 'card-body';
-
-    if (item.category === 'pacchetti') {
-      body.innerHTML = `
-        <div class="card-tags">
-          ${(item.tags || []).map(tag => `<span class="card-tag">${tag}</span>`).join('')}
-        </div>
-        <p class="card-desc">${item['description-ja'] || ''}<br>${item['description-en'] || ''}</p>
-      `;
-    } else {
-      const idEl = document.createElement('span');
-      idEl.className = 'card-id';
-      idEl.textContent = `#${String(item.id).padStart(2, '0')}`;
-      body.appendChild(idEl);
-
-      const tagsEl = document.createElement('div');
-      tagsEl.className = 'card-tags';
-      getItemTags(item).forEach(tag => {
-        const t = document.createElement('span');
-        t.className = 'card-tag';
-        t.textContent = tag;
-        t.addEventListener('click', e => {
-          e.stopPropagation();
-          toggleTag(tag);
-        });
-        tagsEl.appendChild(t);
-      });
-      body.appendChild(tagsEl);
-
-      if (item.category === 'fotografie') {
-        const descEl = document.createElement('p');
-        descEl.className = 'card-desc';
-        descEl.innerHTML = `${item['description-ja'] || ''}<br>${item['description-en'] || ''}`;
-        body.appendChild(descEl);
-      }
-    }
-
-    card.appendChild(body);
-
-    card.addEventListener('click', () => {
-      if (activeCategory !== 'fotografie' && activeCategory !== 'pacchetti') return;
-
-      const alreadyActive = card.classList.contains('selectedImg');
-      grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
-      grid.classList.toggle('has-selected', !alreadyActive);
-
-      if (!alreadyActive) {
-        card.classList.add('selectedImg');
-        updateActiveInfo(item);
-      } else {
-        clearActiveInfo();
-      }
-    });
-
-    grid.appendChild(card);
-  });
-
-  if (activeCategory === 'pubblicità') setupAdvertisingScrollText();
-}
-
-function setupAdvertisingScrollText() {
-  if (!grid || advertisingScrollBound) {
-    updateAdvertisingTextOnScroll();
-    return;
-  }
-  grid.addEventListener('scroll', updateAdvertisingTextOnScroll);
-  advertisingScrollBound = true;
-  updateAdvertisingTextOnScroll();
-}
-
-function updateAdvertisingTextOnScroll() {
-  const cards = document.querySelectorAll('.myPhotos.layout-pubblicita .card');
-  const japaneseText = document.getElementById('category-japanese-text');
-  const englishText = document.getElementById('category-english-text');
-  if (!cards.length || !japaneseText || !englishText) return;
-
-  let activeCard = cards[0];
-  cards.forEach(card => {
-    const rect = card.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.45) activeCard = card;
-    card.classList.toggle('ad-past', rect.bottom < window.innerHeight * 0.35);
-  });
-
-  japaneseText.textContent = activeCard.dataset.adJa || '';
-  englishText.textContent = activeCard.dataset.adEn || '';
-}
-
-function openLightbox(index) {
-  if (!lightbox || !lbImg || !lbId || !lbTagsEl) return;
-  const visible = filteredItems();
-  lbIndex = index;
-  const item = visible[lbIndex];
-  if (!item) return;
-
-  lbImg.src = item.src;
-  lbImg.alt = item.description || `Item ${item.id}`;
-  lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
-  lbTagsEl.innerHTML = '';
-
-  getItemTags(item).forEach(tag => {
-    const t = document.createElement('span');
-    t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
-    t.textContent = tag;
-    t.addEventListener('click', () => {
-      toggleTag(tag);
-      closeLightbox();
-    });
-    lbTagsEl.appendChild(t);
-  });
-
-  lightbox.classList.add('open');
-  lightbox.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeLightbox() {
-  if (!lightbox || !lbImg) return;
-  lightbox.classList.remove('open');
-  lightbox.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
-  lbImg.src = '';
-}
-
-function navigateLightbox(dir) {
-  const visible = filteredItems();
-  if (!visible.length) return;
-  let next = lbIndex + dir;
-  if (next >= visible.length) next = 0;
-  if (next < 0) next = visible.length - 1;
-  openLightbox(next);
-}
-
-lbClose?.addEventListener('click', closeLightbox);
-lbBackdrop?.addEventListener('click', closeLightbox);
-lbPrev?.addEventListener('click', () => navigateLightbox(-1));
-lbNext?.addEventListener('click', () => navigateLightbox(1));
-
-document.addEventListener('keydown', e => {
-  if (!lightbox?.classList.contains('open')) return;
-  if (e.key === 'ArrowLeft') navigateLightbox(-1);
-  if (e.key === 'ArrowRight') navigateLightbox(1);
-  if (e.key === 'Escape') closeLightbox();
-});
-
-document.querySelectorAll('[data-category]').forEach(el => {
-  el.addEventListener('click', event => {
-    event.preventDefault();
-    setCategory(el.dataset.category);
-  });
-});
-
-function initAboutImageBlurOnScroll() {
-  const modal = document.getElementById('explore-modal');
-  const images = document.querySelectorAll('.about-grid img');
-  if (!modal || !images.length || modal.dataset.blurBound === 'true') return;
-
-  modal.dataset.blurBound = 'true';
-  modal.addEventListener('scroll', () => {
-    images.forEach(img => {
-      const rect = img.getBoundingClientRect();
-      const progress = 1 - rect.top / window.innerHeight;
-      img.classList.toggle('about-faded', progress > 0.45);
-    });
-  });
-}
-
-function openExploreModal() {
-  const modal = document.getElementById('explore-modal');
-  if (!modal) return;
-  modal.style.display = 'block';
-  modal.setAttribute('aria-hidden', 'false');
-  initAboutImageBlurOnScroll();
-}
-
-function closeExploreModal() {
-  const modal = document.getElementById('explore-modal');
-  if (!modal) return;
-  modal.style.display = 'none';
-  modal.setAttribute('aria-hidden', 'true');
-}
-
-async function init() {
-  try {
-    await loadData();
-    setCategory('fotografie');
-  } catch (error) {
-    console.error(error);
-    if (grid) grid.innerHTML = `<div class="empty">Errore nel caricamento dei dati.</div>`;
-  }
-}
-
-init();
