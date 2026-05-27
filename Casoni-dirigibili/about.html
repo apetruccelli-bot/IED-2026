@@ -19,8 +19,8 @@
    <div class="about-page w-screen h-screen grid grid-rows-[auto_1fr_auto] bg-myBlack text-myWhite">
      <div class="about-header p-10px flex flex-row items-baseline gap-20px">
         <div class="intro-panel flex flex-col">
-          <a href="./" class="font-myTitle home-title">
-            AAA — Adler’s Airship Archive
+          <a href="./" class="font-myTitle home-title about-title">
+            <span class="home-title-short">AAA</span><span class="home-title-full"> — Adler’s Airship Archive</span>
           </a>
         </div>
 
@@ -32,52 +32,44 @@
       <div class="about-main grid min-h-0 grid-cols-2 gap-0 overflow-hidden bg-myBlack">
         <div class="about-text-panel flex items-start justify-left p-10px text-left">
           <div class="box2 max-w-[44rem]">
-            <p class="mb-20">
-              In 1920, following the end of the First World War, many military departments and industrial companies were forced to redefine their roles and redirect their work toward new fields of research and development.
+            <p class="mb-15">
+              In 1926, following the end of the First World War, many military departments and industrial companies were forced to redefine their roles and redirect their work toward new fields of research and development.
             </p>
 
-            <p class="mb-4">
-              "Reply Note to the Department - 1920, September 15th
+            <p class="mb-4 italic">
+              "Reply Note to the Department - 1926, September 15th
             </p>
 
-            <p class="mb-4">
+            <p class="mb-4 italic">
               I acknowledge the transfer ordered following the conclusion of the conflict and understand its operational reasons. After my service with the AAA — Anti-Aircraft Artillery, I will undertake the new assignment with the same discipline and diligence.
             </p>
 
-            <p class="mb-4">
+            <p class="mb-4 italic">
               I will devote particular attention to the study of transoceanic airship navigation, with the task of observing, documenting, and analyzing risks, technical anomalies, weather conditions, and testimonies related to airship incidents. I believe that the careful collection of such material may contribute to the future safety of this form of navigation.
             </p>
 
-            <p class="mb-4">
+            <p class="mb-4 italic">
               It is my intention to continue offering the best possible service to the AAA.
             </p>
 
-            <p class="mb-4">
-              I acknowledge the transfer ordered following the conclusion of the conflict and understand its operational reasons. After my service with the AAA — Anti-Aircraft Artillery, I will undertake the new assignment with the same discipline and diligence.
-            </p>
-
-            <p class="mb-4">
-              I will devote particular attention to the study of transoceanic airship navigation, with the task of observing, documenting, and analyzing risks, technical anomalies, weather conditions, and testimonies related to airship incidents. I believe that the careful collection of such material may contribute to the future safety of this form of navigation.
-            </p>
-
-            <p class="mb-4">
-              It is my intention to continue offering the best possible service to the AAA.
-            </p>
-
-            <p class="mb-4">
-              I acknowledge the transfer ordered following the conclusion of the conflict and understand its operational reasons. After my service with the AAA — Anti-Aircraft Artillery, I will undertake the new assignment with the same discipline and diligence.
-            </p>
-
-            <p class="mb-4">
-              I will devote particular attention to the study of transoceanic airship navigation, with the task of observing, documenting, and analyzing risks, technical anomalies, weather conditions, and testimonies related to airship incidents. I believe that the careful collection of such material may contribute to the future safety of this form of navigation.
-            </p>
-
-            <p class="mb-4">
-              It is my intention to continue offering the best possible service to the AAA.
-            </p>
-
-            <p>
+            <p class="mb-15 italic">
               Friedrich Adler"
+            </p>
+
+            <p class="mb-4">
+              It was in this context that the AAA — Anti-Aircraft Artillery, originally established as a military unit during the First World War, was gradually converted into a technical department dedicated to the analysis of aerial risk. Once its original operational function had come to an end, the section continued for several years to collect, organize, and study materials related to aeronautical incidents, with particular attention to airship navigation.
+            </p>
+
+            <p class="mb-4">
+              With the gradual decline of airship use and the subsequent reorganization of technical departments, the activity of the AAA was discontinued. Its archives were transferred and entrusted to the Archiv für Luftfahrttechnik und Risikoforschung, an institution responsible for preserving historical collections related to flight safety, technical documentation, and the memory of European aeronautics.
+            </p>
+
+            <p class="mb-4">
+              Among the materials preserved, the Adler’s Archive is now considered one of the richest and most complete collections to have survived on the history of airship incidents. The collection includes photographs, technical reports, press cuttings, testimonies, operational notes, and comparisons between cases, organized according to a classification method that reflects the analytical work carried out by Friedrich Adler between 1926 and 1937.
+            </p>
+
+            <p class="mb-4">
+              In 2026, one hundred years after the archive was first established, we decided to publish a digitized selection of its materials. Our aim is to make accessible a collection originally created for internal technical analysis and now recognized as a historical document on safety, failure, and memory in airship navigation.
             </p>
           </div>
         </div>
@@ -103,8 +95,36 @@
       </div>
     </div>
 
+    <div class="lightbox" id="about-lightbox" aria-hidden="true">
+      <div class="lb-backdrop" id="about-lb-backdrop"></div>
+      <button class="lb-close" id="about-lb-close">✕</button>
+
+      <div class="lb-content">
+        <img class="lb-img select-none" id="about-lb-img" src="" alt="">
+
+        <div class="lb-info">
+          <div class="lb-tags-row">
+            <span class="lb-id" id="about-lb-id"></span>
+            <div class="lb-tags" id="about-lb-tags"></div>
+          </div>
+
+          <p class="lb-description" id="about-lb-description"></p>
+          <div class="lb-meta" id="about-lb-meta"></div>
+        </div>
+      </div>
+    </div>
+
     <script>
        const horizontalScrollContainer = document.querySelector('.horizontal-scroll');
+        const aboutLightbox = document.getElementById('about-lightbox');
+        const aboutLbImg = document.getElementById('about-lb-img');
+        const aboutLbId = document.getElementById('about-lb-id');
+        const aboutLbTags = document.getElementById('about-lb-tags');
+        const aboutLbDescription = document.getElementById('about-lb-description');
+        const aboutLbMeta = document.getElementById('about-lb-meta');
+        const aboutLbClose = document.getElementById('about-lb-close');
+        const aboutLbBackdrop = document.getElementById('about-lb-backdrop');
+
 
 function updateAboutGalleryScrollState() {
   if (!horizontalScrollContainer) return;
@@ -120,11 +140,18 @@ function updateAboutGalleryScrollState() {
     window.addEventListener('resize', updateAboutGalleryScrollState);
 
     horizontalScrollContainer.addEventListener('wheel', (e) => {
+      const isMobileAbout = window.matchMedia('(max-width: 600px)').matches;
+
+      if (isMobileAbout) {
+        return;
+      }
+
       updateAboutGalleryScrollState();
 
       const canScrollX = horizontalScrollContainer.classList.contains('about-can-scroll');
 
       if (!canScrollX) {
+        e.preventDefault();
         return;
       }
 
@@ -138,6 +165,7 @@ function updateAboutGalleryScrollState() {
       let autoRotateTimer;
       let currentImageIndex = 0; // Index into the scroll images array
       let scrollImages = [];
+      let aboutLbIndex = -1;
 
       function updateImage(imageId) {
         const item = imageData[imageId];
@@ -172,6 +200,146 @@ function updateAboutGalleryScrollState() {
         autoRotateTimer = setTimeout(autoRotateNext, 6000);
       }
 
+      function isAboutMobile() {
+          return window.matchMedia('(max-width: 600px)').matches;
+        }
+
+        function formatAboutMetaValue(key, value) {
+          if (key === 'causes') {
+            return Array.isArray(value) ? value.join(', ') : (value || '-');
+          }
+
+          if (value === undefined || value === null || value === '') {
+            return '-';
+          }
+
+          return String(value);
+        }
+
+        function renderAboutLightboxMeta(item) {
+          if (!aboutLbMeta) return;
+
+          const category = (item.category || '').toLowerCase();
+
+          const fullMetaCategories = new Set(['airships', 'wreckage', 'newspapers']);
+          const compactMetaCategories = new Set(['study models', 'technical drawings', 'models', 'drawings']);
+
+          const metaLabels = {
+            causes: 'Causes',
+            country: 'Country',
+            year: 'Year',
+            victims: 'Victims',
+          };
+
+          let fields = [];
+
+          if (fullMetaCategories.has(category)) {
+            fields = ['causes', 'country', 'year', 'victims'];
+          } else if (compactMetaCategories.has(category)) {
+            fields = ['year', 'country'];
+          }
+
+          aboutLbMeta.innerHTML = '';
+
+          fields.forEach(field => {
+            const row = document.createElement('p');
+            row.className = 'lb-meta-row';
+
+            const label = document.createElement('span');
+            label.className = 'lb-meta-label';
+            label.textContent = `${metaLabels[field] || field}: `;
+
+            const value = document.createElement('span');
+            value.className = 'lb-meta-value';
+            value.textContent = formatAboutMetaValue(field, item[field]);
+
+            row.appendChild(label);
+            row.appendChild(value);
+            aboutLbMeta.appendChild(row);
+          });
+        }
+
+        function openAboutLightbox(imageId) {
+          const item = imageData[imageId];
+
+          if (!item || !aboutLightbox) return;
+
+          aboutLbIndex = [...scrollImages].findIndex(img => {
+            return parseInt(img.getAttribute('data-id')) === imageId;
+          });
+
+          aboutLbImg.src = item.src;
+          aboutLbImg.alt = `Item ${item.id}`;
+          aboutLbId.textContent = `#${String(item.id).padStart(2, '0')}`;
+
+          aboutLbTags.innerHTML = '';
+
+          item.tags.forEach(tag => {
+            const tagEl = document.createElement('span');
+            tagEl.className = 'card-tag';
+            tagEl.textContent = tag;
+            aboutLbTags.appendChild(tagEl);
+          });
+
+          aboutLbDescription.textContent = item.description || '';
+          renderAboutLightboxMeta(item);
+
+          aboutLightbox.classList.add('open');
+          aboutLightbox.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeAboutLightbox() {
+          if (!aboutLightbox) return;
+
+          aboutLightbox.classList.remove('open');
+          aboutLightbox.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          aboutLbImg.src = '';
+        }
+
+        function navigateAboutLightbox(dir) {
+          if (!scrollImages.length) return;
+
+          let next = aboutLbIndex + dir;
+
+          if (next >= scrollImages.length) next = 0;
+          if (next < 0) next = scrollImages.length - 1;
+
+          const nextImageId = parseInt(scrollImages[next].getAttribute('data-id'));
+
+          openAboutLightbox(nextImageId);
+        }
+
+        aboutLbClose?.addEventListener('click', closeAboutLightbox);
+        aboutLbBackdrop?.addEventListener('click', closeAboutLightbox);
+
+        aboutLbImg?.addEventListener('click', e => {
+          const half = e.offsetX < aboutLbImg.offsetWidth / 2;
+          navigateAboutLightbox(half ? -1 : 1);
+        });
+
+        aboutLbImg?.addEventListener('mousemove', e => {
+          aboutLbImg.style.cursor =
+            e.offsetX < aboutLbImg.offsetWidth / 2 ? 'w-resize' : 'e-resize';
+        });
+
+        document.addEventListener('keydown', e => {
+          if (!aboutLightbox || !aboutLightbox.classList.contains('open')) return;
+
+          if (e.key === 'Escape') {
+            closeAboutLightbox();
+          }
+
+          if (e.key === 'ArrowLeft') {
+            navigateAboutLightbox(-1);
+          }
+
+          if (e.key === 'ArrowRight') {
+            navigateAboutLightbox(1);
+          }
+        });
+
       fetch('data.json')
         .then(response => response.json())
         .then(data => {
@@ -189,12 +357,18 @@ function updateAboutGalleryScrollState() {
 
           // Add click handlers to all scroll images
           scrollImages.forEach(img => {
-            img.addEventListener('click', (e) => {
-              const imageId = parseInt(img.getAttribute('data-id'));
-              updateImage(imageId);
-              resetAutoRotate();
+              img.addEventListener('click', () => {
+                const imageId = parseInt(img.getAttribute('data-id'));
+
+                if (isAboutMobile()) {
+                  openAboutLightbox(imageId);
+                  return;
+                }
+
+                updateImage(imageId);
+                resetAutoRotate();
+              });
             });
-          });
 
           // Start auto-rotation
           resetAutoRotate();

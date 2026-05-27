@@ -23,6 +23,15 @@
       <div id="handList">Waiting for hand detection...</div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+
+<div id="gesture-camera">
+  <video id="gesture-webcam" autoplay muted playsinline></video>
+  <canvas id="gesture-canvas"></canvas>
+  <div id="gesture-status">hand tracking</div>
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>

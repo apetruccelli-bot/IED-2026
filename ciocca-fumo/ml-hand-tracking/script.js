@@ -314,3 +314,151 @@ toggleNumbers.addEventListener("click", () => {
 
 // Load model when page loads
 loadModel();
+
+let handDetector = null;
+let gestureVideo = null;
+let gestureCanvas = null;
+let gestureCtx = null;
+
+let portraitIndex = 0;
+let lastY = null;
+let strokeCount = 0;
+let lastStrokeTime = 0;
+let gestureCooldown = false;
+
+async function initPortraitGesture() {
+  gestureVideo = document.getElementById("gesture-webcam");
+  gestureCanvas = document.getElementById("gesture-canvas");
+  gestureCtx = gestureCanvas.getContext("2d");
+
+  await tf.setBackend("webgl");
+  await tf.ready();
+
+  handDetector = await handPoseDetection.createDetector(
+    handPoseDetection.SupportedModels.MediaPipeHands,
+    {
+      runtime: "mediapipe",
+      solutionPath: "https://cdn.jsdelivr.net/npm/@mediapipe/hands",
+      modelType: "lite",
+      maxHands: 1
+    }
+  );
+
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: { width: 480, height: 360, facingMode: "user" }
+  });
+
+  gestureVideo.srcObject = stream;
+
+  gestureVideo.addEventListener("loadeddata", () => {
+    gestureCanvas.width = gestureVideo.videoWidth;
+    gestureCanvas.height = gestureVideo.videoHeight;
+    selectPortrait(0);
+    detectPortraitGesture();
+  });
+}
+
+function selectPortrait(index) {
+  const portraits = filteredItems().filter(item => item.category === "fotografie");
+  if (!portraits.length) return;
+
+  portraitIndex = (index + portraits.length) % portraits.length;
+  const selectedItem = portraits[portraitIndex];
+
+  document.querySelectorAll(".card").forEach(card => {
+    card.classList.remove("selectedImg");
+  });
+
+  const cards = [...document.querySelectorAll(".card")];
+  const selectedCard = cards.find(card => {
+    const img = card.querySelector("img");
+    return img && img.src.includes(selectedItem.src);
+  });
+
+  if (selectedCard) {
+    grid.classList.add("has-selected");
+    selectedCard.classList.add("selectedImg");
+  }
+}
+
+function isIndexMiddleDown(hand) {
+  const k = hand.keypoints;
+
+  const indexTip = k[8];
+  const indexPip = k[6];
+  const middleTip = k[12];
+  const middlePip = k[10];
+
+  const ringTip = k[16];
+  const ringPip = k[14];
+  const pinkyTip = k[20];
+  const pinkyPip = k[18];
+
+  const indexDown = indexTip.y > indexPip.y + 20;
+  const middleDown = middleTip.y > middlePip.y + 20;
+
+  const ringNotDown = ringTip.y < ringPip.y + 35;
+  const pinkyNotDown = pinkyTip.y < pinkyPip.y + 35;
+
+  return indexDown && middleDown && ringNotDown && pinkyNotDown;
+}
+
+function checkDoubleDownStroke(hand) {
+  const now = performance.now();
+  const indexTip = hand.keypoints[8];
+  const middleTip = hand.keypoints[12];
+  const currentY = (indexTip.y + middleTip.y) / 2;
+
+  if (lastY === null) {
+    lastY = currentY;
+    return false;
+  }
+
+  const deltaY = currentY - lastY;
+  lastY = currentY;
+
+  if (deltaY > 28 && isIndexMiddleDown(hand)) {
+    if (now - lastStrokeTime < 700) {
+      strokeCount++;
+    } else {
+      strokeCount = 1;
+    }
+
+    lastStrokeTime = now;
+
+    if (strokeCount >= 2) {
+      strokeCount = 0;
+      return true;
+    }
+  }
+
+  return false;
+}
+
+async function detectPortraitGesture() {
+  if (!handDetector || activeCategory !== "fotografie") {
+    requestAnimationFrame(detectPortraitGesture);
+    return;
+  }
+
+  const hands = await handDetector.estimateHands(gestureVideo, {
+    flipHorizontal: true
+  });
+
+  gestureCtx.clearRect(0, 0, gestureCanvas.width, gestureCanvas.height);
+
+  if (hands.length && !gestureCooldown) {
+    const hand = hands[0];
+
+    if (checkDoubleDownStroke(hand)) {
+      gestureCooldown = true;
+      selectPortrait(portraitIndex + 1);
+
+      setTimeout(() => {
+        gestureCooldown = false;
+      }, 900);
+    }
+  }
+
+  requestAnimationFrame(detectPortraitGesture);
+}
