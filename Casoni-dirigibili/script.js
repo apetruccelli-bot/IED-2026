@@ -598,6 +598,20 @@ function isCardVisibleEnoughInGallery(card) {
   return getCardVisibilityRatioInGallery(card) >= 0.5;
 }
 
+function getActiveGalleryCards() {
+  return [...galleryScroll.querySelectorAll('.card:not(.card-dim)')];
+}
+
+function getActiveCenterCards() {
+  if (isMobileIndex()) {
+    return getActiveGalleryCards();
+  }
+
+  return infiniteScrollState.rows.flatMap(rowData => {
+    return [...rowData.centerBlock.querySelectorAll('.card:not(.card-dim)')];
+  });
+}
+
 function scrollToFirstActiveCardIfNeeded() {
   if (!galleryScroll) return;
 
@@ -631,24 +645,75 @@ function scrollToFirstActiveCardIfNeeded() {
     return;
   }
 
-  const firstActiveCard = activeCards.reduce((first, card) => {
-    return card.offsetLeft < first.offsetLeft ? card : first;
-  }, activeCards[0]);
+  const centerActiveCards = getActiveCenterCards();
 
-  const targetScrollLeft = Math.max(firstActiveCard.offsetLeft - 10, 0);
+  if (centerActiveCards.length === 0) return;
 
-  galleryScroll.scrollTo({
-    left: targetScrollLeft,
-    behavior: 'smooth'
-  });
+  const galleryRect = galleryScroll.getBoundingClientRect();
+
+  const firstActiveCard = centerActiveCards.reduce((best, card) => {
+    const bestRect = best.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+
+    return cardRect.left < bestRect.left ? card : best;
+  }, centerActiveCards[0]);
+
+  const cardRect = firstActiveCard.getBoundingClientRect();
+
+  const desiredLeft = galleryRect.left + 10;
+  const delta = cardRect.left - desiredLeft;
+
+  animateVirtualXBy(delta, 650); /*velocità scroll automatico */
 }
 
 function scheduleScrollToFirstActiveCardIfNeeded() {
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
+      if (!isMobileIndex()) {
+        measureInfiniteRows();
+        updateInfiniteRows();
+      }
+
       scrollToFirstActiveCardIfNeeded();
     });
   });
+}
+
+let autoScrollAnimationFrame = null;
+
+function animateVirtualXBy(delta, duration = 550) {
+  if (autoScrollAnimationFrame) {
+    cancelAnimationFrame(autoScrollAnimationFrame);
+  }
+
+  const startX = infiniteScrollState.virtualX;
+  const targetX = startX + delta;
+  const startTime = performance.now();
+
+  function easeInOutCubic(t) {
+    return t < 0.5
+      ? 4 * t * t * t
+      : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeInOutCubic(progress);
+
+    infiniteScrollState.virtualX = startX + (targetX - startX) * eased;
+    updateInfiniteRows();
+
+    if (progress < 1) {
+      autoScrollAnimationFrame = requestAnimationFrame(step);
+    } else {
+      infiniteScrollState.virtualX = targetX;
+      updateInfiniteRows();
+      autoScrollAnimationFrame = null;
+    }
+  }
+
+  autoScrollAnimationFrame = requestAnimationFrame(step);
 }
 
 // ── Apply row filters to cards ────────────────────────────────────────────

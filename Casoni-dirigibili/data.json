@@ -259,7 +259,7 @@
       "year": "1930",
       "victims": 31,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Mountain wreckage after impact; outer envelope lost, with the internal frame exposed along the slope."    },
     {
       "id": 23,
       "src": "img/relitti/relitto (5).png",
@@ -270,7 +270,7 @@
       "year": "1931",
       "victims": 44,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Night fire after structural collapse; frame remains visible while the envelope is almost entirely consumed."    },
 
     {
       "id": 24,
@@ -282,7 +282,7 @@
       "year": "1931",
       "victims": 68,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Close view of the burned framework; combustion appears to have progressed through the lower structure first."    },
 
     {
       "id": 25,
@@ -294,7 +294,7 @@
       "year": "1933",
       "victims": 74,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Wreckage burning on inclined terrain; impact and fire damage concentrated along the lower side."    },
 
     {
       "id": 26,
@@ -306,7 +306,7 @@
       "year": "1934",
       "victims": 55,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Tail frame recovered after collapse; stabilizers distorted and rear structure heavily compressed."    },
 
     {
       "id": 27,
@@ -318,7 +318,7 @@
       "year": "1935",
       "victims": 17,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Rear section under inspection; circular frame and stabilizers preserved despite severe central collapse."    },
 
     {
       "id": 28,
@@ -330,7 +330,7 @@
       "year": "1935",
       "victims": 21,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Illuminated framework after fire; outer covering destroyed, leaving the internal structure fully exposed."    },
 
     {
       "id": 29,
@@ -342,7 +342,7 @@
       "year": "1936",
       "victims": 64,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Ground wreckage after fire; envelope covering destroyed and smoke still rising from the rear section."    },
 
     {
       "id": 30,
@@ -354,7 +354,7 @@
       "year": "1929",
       "victims": 72,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Night view of the hull burning in a mountain basin; fire spread along both lower edges of the frame."    },
 
     {
       "id": 31,
@@ -366,7 +366,7 @@
       "year": "1930",
       "victims": 46,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Wreckage resting in wooded terrain; internal structure exposed, with no remaining envelope covering."    },
 
     {
       "id": 32,
@@ -378,7 +378,7 @@
       "year": "1931",
       "victims": 79,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Forward frame recovered among trees; deformation suggests final impact followed by structural compression."    },
 
     {
       "id": 33,
@@ -390,7 +390,7 @@
       "year": "1932",
       "victims": 11,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Close inspection of the passenger section; cabin remains partially intact within a collapsed frame."    },
 
     {
       "id": 34,
@@ -402,7 +402,7 @@
       "year": "1928",
       "victims": 8,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Burned wreckage after impact; forward frame upright, with smoke rising from the central debris field."    },
 
     {
       "id": 35,
@@ -414,7 +414,7 @@
       "year": "1927",
       "victims": 28,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Collapsed frame near mooring structure; tail and forward sections remain identifiable despite central failure."    },
 
     {
       "id": 36,
@@ -426,7 +426,7 @@
       "year": "1926",
       "victims": 41,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Mountain wreckage with residual smoke; frame broken across the central hull after ground impact."    },
 
     {
       "id": 37,
@@ -438,7 +438,7 @@
       "year": "1927",
       "victims": 23,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Open field inspection; long frame section collapsed but preserved enough for structural comparison."    },
 
     {
       "id": 38,
@@ -450,7 +450,7 @@
       "year": "1935",
       "victims": 19,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Hillside wreckage still burning; forward frame intact while rear section is consumed by fire."    },
 
     {
       "id": 39,
@@ -462,7 +462,7 @@
       "year": "1935",
       "victims": 69,
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Night fire inside exposed frame; combustion concentrated along the lower structure and internal supports."    },
 
     {
       "id": 40,
@@ -472,8 +472,9 @@
       "country": "Italy",
       "year": "1935",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
-      
+      "description": "Scale model of the airship Aurelia II under inspection; suspension lines and gondola arrangement tested beneath artificial light."
+    },
+
     {  
       "id": 41,
       "src": "img/modelli/modello (2).png",
@@ -482,17 +483,19 @@
       "country": "Poland",
       "year": "1933",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Technical review of the Vistula Expedition model; officers comparing hull balance, tail plane position, and projected lift distribution."
+    },
 
     {
       "id": 42,
       "src": "img/modelli/modello (3).png",
       "category": "models",
-      "tags": ["men", "women", "light" ],
+      "tags": ["men", "women", "light"],
       "country": "Russia",
       "year": "1934",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Laboratory observation of the Severny-4 prototype model; crew studying cable tension, gondola load, and envelope stability during suspended test."
+    },
 
     {
       "id": 43,
@@ -502,7 +505,8 @@
       "country": "USA",
       "year": "1935",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Classroom demonstration of the Columbia-B test model; instructor indicating forward pressure points and gondola suspension layout."
+    },
 
     {
       "id": 44,
@@ -512,7 +516,8 @@
       "country": "Spain",
       "year": "1937",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Technical review of the Iberia-7 model; observers studying gondola placement, rigging tension, and lower-frame balance."
+    },
 
     {
       "id": 45,
@@ -522,7 +527,8 @@
       "country": "Russia",
       "year": "1934",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Suspended test of the Severny-4 model; team examining cable load, envelope trim, and gondola stability under artificial light."
+    },
 
     {
       "id": 46,
@@ -532,7 +538,8 @@
       "country": "Russia",
       "year": "1927",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Early balance test for the Volga Research Flight model; temporary rigging used to measure tilt response and suspended load."
+    },
 
     {
       "id": 47,
@@ -542,7 +549,8 @@
       "country": "Germany",
       "year": "1928",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Inspection of the Doppelkörper Mark-Nine concept; twin-envelope arrangement examined for lift distribution and structural redundancy."
+    },
 
     {
       "id": 48,
@@ -552,7 +560,8 @@
       "country": "Germany",
       "year": "1928",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Public demonstration of the Adler-Klein model; scale hull used to explain rudder response and simplified control surfaces."
+    },
 
     {
       "id": 49,
@@ -562,7 +571,8 @@
       "country": "Spain",
       "year": "1928",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Demonstration of the Castilla-A model; exposed suspension lines show proposed gondola connection and ballast control method."
+    },
 
     {
       "id": 50,
@@ -572,7 +582,8 @@
       "country": "Germany",
       "year": "1928",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Wind-table preparation for the Rhein Versuch model; small-scale hull positioned before airflow testing and stability observation."
+    },
 
     {
       "id": 51,
@@ -582,7 +593,8 @@
       "country": "Spain",
       "year": "1928",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Wall-mounted plans and full model of the Córdoba cargo design; side elevation compared with gondola and ballast arrangement."
+    },
 
     {
       "id": 52,
@@ -592,7 +604,8 @@
       "country": "Poland",
       "year": "1930",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Review of the Kraków-P2 training model; committee notes focus on tail-plane proportion and cable suspension beneath the envelope."
+    },
 
     {
       "id": 53,
@@ -602,7 +615,8 @@
       "country": "USA",
       "year": "1935",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Wind-tunnel test of the Atlantic Ranger scale hull; airflow trial arranged to measure drag along the ribbed envelope."
+    },
 
     {
       "id": 54,
@@ -612,7 +626,8 @@
       "country": "Italy",
       "year": "1935",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Presentation of the Aurelia II model; rigid gondola frame and lower support truss inspected before comparative stability tests."
+    },
 
     {
       "id": 55,
@@ -622,7 +637,8 @@
       "country": "Italy",
       "year": "1936",
       "people": true,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Final adjustment of the Adriatico-6 scale model; operator checking tail alignment and underside fittings before documentation."
+    }, 
 
     {
       "id": 56,
@@ -634,7 +650,8 @@
       "year": "1934",
       "victims": 57,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Kurier Warszawski report on the Polonia II disaster near Poznań; witness accounts describe fire, crash impact, and the still-incomplete list of victims."
+    },
 
     {
       "id": 57,
@@ -646,7 +663,8 @@
       "year": "1929",
       "victims": 34,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "The Guardian coverage of the Manchester Air-Dock catastrophe; investigators suspect static discharge and possible engine-area ignition."
+    },
 
     {
       "id": 58,
@@ -658,7 +676,8 @@
       "year": "1934",
       "victims": 9,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Diario del Aire report on the Río de la Plata mail airship; electrical storm and suspected engine failure caused in-flight fire over the estuary."
+    },
 
     {
       "id": 59,
@@ -670,7 +689,8 @@
       "year": "1928",
       "people": false,
       "victims": 63,
-      "description": "Descrizione dell'immagine"    },
+      "description": "ABC front page on the Cádiz aerial wreck; La Infanta caught fire before falling into the sea, with investigators examining possible gas or engine faults."
+    },
 
     {
       "id": 60,
@@ -682,7 +702,8 @@
       "year": "1933",
       "people": true,
       "victims": 38,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Gazeta Wyborcza account of the Warsaw-Praga crash; giant airship wreckage shown after impact, with early reports questioning weather and ignition."
+    },
 
     {
       "id": 61,
@@ -694,7 +715,8 @@
       "year": "1926",
       "people": false,
       "victims": 31,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Izvestia report on the Krasnaya Zarya accident over the Urals; rescue work continued while officials examined weather conditions and possible technical failure."
+    },
 
     {
       "id": 62,
@@ -706,7 +728,8 @@
       "year": "1926",
       "people": false,
       "victims": 36,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Russian business press report on the Slava Truda explosion near Leningrad; market panic followed the crash and renewed doubts over hydrogen airship safety."
+    },
 
     {
       "id": 63,
@@ -718,7 +741,8 @@
       "year": "1926",
       "people": false,
       "victims": 0,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Sibirskiy Vestnik report on the Arktika expedition; the airship is shown at a severe angle during adverse conditions, with no casualties reported."
+    },
 
     {
       "id": 64,
@@ -730,7 +754,8 @@
       "year": "1927",
       "people": true,
       "victims": 22,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Daily Mirror report on the Zephyr disaster over the Atlantic; survivors brought ashore at Halifax as inquiry records panic, fire, and failed control."
+    },
 
     {
       "id": 65,
@@ -742,7 +767,8 @@
       "year": "1929",
       "victims": 19,
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Pravda report on the Krasny Proletariy test flight; the Soviet airship caught fire near Moscow after a suspected rear gas-cell or engine failure."
+    },
 
     {
       "id": 66,
@@ -754,7 +780,8 @@
       "year": "1930",
       "people": false,
       "victims": 23,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Bild special on the Hindenburg II fire over Berlin; flames broke out during landing at Tempelhof, with witnesses reporting explosions before collapse."
+    },
 
     {
       "id": 67,
@@ -766,7 +793,8 @@
       "year": "1928",
       "people": false,
       "victims": 29,
-      "description": "Descrizione dell'immagine"    },
+      "description": "La Vanguardia report on the Mediterráneo disaster over Barcelona; engine explosion and fire scattered wreckage across the city after the Marseille route crossing."
+    },
 
     {
       "id": 68,
@@ -778,7 +806,8 @@
       "year": "1928",
       "people": false,
       "victims": 40,
-      "description": "Descrizione dell'immagine"    },
+      "description": "El País report on the Ícaro crash in the Pyrenees; violent wind destroyed the hull during forced landing, though all occupants survived."
+    },
 
     {
       "id": 69,
@@ -790,7 +819,8 @@
       "year": "1929",
       "people": false,
       "victims": 55,
-      "description": "Descrizione dell'immagine"    },
+      "description": "The Times report on the HMS Majestic collapse over the Thames; witnesses heard explosions before the passenger liner fell into the river in flames."
+    },
 
     {
       "id": 70,
@@ -802,7 +832,8 @@
       "year": "1929",
       "people": false,
       "victims": 61,
-      "description": "Descrizione dell'immagine"    },
+      "description": "New York Post front page on the Liberty Island disaster; passenger liner exploded in mid-air over the harbor, with rescue boats recovering wreckage from the water."
+    },
 
     {
       "id": 71,
@@ -812,7 +843,8 @@
       "country": "USA",
       "year": "1929",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Annotated technical sheet for the Akron class, with full side elevations, internal compartment markings, gondola placement, and handwritten notes on risk, balance, and structural distribution."
+    },
 
     {
       "id": 72,
@@ -822,7 +854,8 @@
       "country": "Russia",
       "year": "1927",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Early sectional study for the Krasnaya Zarya, showing circular frame geometry, front views, and lower gondola arrangements before the final hull proportions were fixed."
+    },
 
     {
       "id": 73,
@@ -832,7 +865,8 @@
       "country": "Russia",
       "year": "1927",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Detailed construction drawing of the Krasnaya Zarya, combining side elevation, bow and stern sections, gondola supports, and internal frame studies used for the first Russian risk evaluations."
+    },
 
     {
       "id": 74,
@@ -842,7 +876,8 @@
       "country": "Spain",
       "year": "1927",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Structural plan for the Ícaro, focused on the forward hull, passenger compartment, engine fittings, and lower suspension points later examined after the Pyrenees incident."
+    },
 
     {
       "id": 75,
@@ -852,7 +887,8 @@
       "country": "Italy",
       "year": "1928",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Italian design sheet related to the Italia polar programme, showing side elevations and frontal framing of the envelope, with notes on gondola weight and the vulnerability of the lower structure."
+    },
 
     {
       "id": 76,
@@ -862,7 +898,8 @@
       "country": "Italy",
       "year": "1926",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Preliminary technical plate for the Nobile expedition airship, including side views, circular frame sections, tail configuration, and handwritten calculations on lift and cabin suspension."
+    },
 
     {
       "id": 77,
@@ -872,7 +909,8 @@
       "country": "Italy",
       "year": "1926",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Comparative drawing of the Nobile airship, with multiple hull elevations, frame sections, and gondola placement studies; Adler marked it as useful for understanding polar navigation stress."
+    },
 
     {
       "id": 78,
@@ -882,7 +920,8 @@
       "country": "Poland",
       "year": "1926",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Early design proposal for the Polonia II, showing a long passenger hull, lower gondola, tail surfaces, and several cross-section studies prepared before the later Poznań service trials."
+    },
 
     {
       "id": 79,
@@ -892,7 +931,8 @@
       "country": "Poland",
       "year": "1934",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Revised Polish technical plan for the Polonia II after the Poznań catastrophe, with emphasis on gondola position, engine housings, and the lower hull areas suspected of structural weakness."
+    },
 
     {
       "id": 80,
@@ -902,8 +942,9 @@
       "country": "Germany",
       "year": "1930",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
-      
+      "description": "German side-elevation study for the Hindenburg II programme, showing a streamlined rigid hull, tail planes, lower gondola modules, and notes on passenger distribution and gas-cell access."
+    },
+
     {
       "id": 81,
       "src": "img/disegni/disegno (11).png",
@@ -912,17 +953,19 @@
       "country": "Germany",
       "year": "1937",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Late technical reconstruction of the Hindenburg II, with side views, frame sections, and handwritten annotations on ignition points, outer skin failure, and the relation between gas cells and the lower service deck."
+    },
 
     {
       "id": 82,
       "src": "img/disegni/disegno (12).png",
       "category": "drawings",
-      "tags": [ "side view", "text"],
+      "tags": ["side view", "text"],
       "country": "USA",
       "year": "1929",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "American design comparison for the Akron class, showing three hull profiles, reinforced lower gondolas, and notes on engine placement later compared with other Atlantic passenger-airship failures."
+    },
 
     {
       "id": 83,
@@ -932,7 +975,8 @@
       "country": "USA",
       "year": "1936",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Technical sheet for the Liberty Island passenger liner, showing upper and lower side elevations with gondola and engine positions, preserved after the New York explosion investigation."
+    },
 
     {
       "id": 84,
@@ -942,7 +986,8 @@
       "country": "Spain",
       "year": "1936",
       "people": false,
-      "description": "Descrizione dell'immagine"    },
+      "description": "Spanish design sheet for the La Infanta, with paired side elevations, tail assembly, cabin placement, and handwritten inspection notes later attached to the Cádiz maritime accident file."
+    },
 
     {
       "id": 85,
@@ -952,7 +997,7 @@
       "country": "Poland",
       "year": "1933",
       "people": false,
-      "description": "Descrizione dell'immagine"    }
-    
+      "description": "Simplified structural drawing of the Polonia II, combining a full side profile with three frontal frame sections; likely used by Adler to compare the original design with the wreckage recovered near Poznań."
+    }
   ]
 }
