@@ -1037,7 +1037,8 @@ function isSmiling(keypoints) {
     const mouthW = Math.abs(right.x - left.x);
     const ratio = mouthW / faceW;
     // tuned threshold: smile when mouth width > ~0.48 of face width
-    return ratio > 0.48;
+    // lowered threshold to make smile detection more sensitive
+    return ratio > 0.42;
 }
 
 function isFingerInsideMouth(fingerPoint, keypoints) {

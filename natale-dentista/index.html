@@ -15,6 +15,13 @@
         try {
           const params = new URLSearchParams(window.location.search);
           const hasFrom = params.toString() !== '' && params.has('from');
+          // If we were navigated from landing and set a session flag, honor it and do not redirect
+          try {
+            if (sessionStorage && sessionStorage.getItem && sessionStorage.getItem('fromLanding') === '1') {
+              sessionStorage.removeItem('fromLanding');
+              return; // do not redirect
+            }
+          } catch (e) { /* ignore */ }
 
           // If there is a `from` param, remove it from the URL but do not redirect.
           if (hasFrom) {

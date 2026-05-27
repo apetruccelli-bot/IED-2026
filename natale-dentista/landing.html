@@ -204,7 +204,8 @@
 					const faceW = getFaceWidth(kp);
 					const rel = mouthW / faceW;
 					// smile when mouth width is relatively large (corners pulled sideways)
-					return rel > 0.48;
+					// lowered threshold to make smile detection more sensitive
+					return rel > 0.42;
 				}
 
 				async function startCamera() {
@@ -250,8 +251,9 @@
 							}
 
 							if (mouthOpenCount >= CONFIRM_FRAMES || smileCount >= CONFIRM_FRAMES) {
-								// navigate to index with param so it doesn't redirect back to landing
+								// navigate to index with param and a session flag so index won't redirect back to landing
 								running = false;
+								try { sessionStorage.setItem('fromLanding', '1'); } catch (e) {}
 								const target = 'index.html?from=landing';
 								// small delay to let user see action
 								setTimeout(() => { window.location.href = target; }, 200);
