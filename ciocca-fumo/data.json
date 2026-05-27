@@ -1,759 +1,588 @@
-{
-  "items": [
-    {
-  "id": 1,
-  "src": "img/fumo/businessman7.png",
-  "category": "fotografie",
-  "year": 1987,
-  "tags": ["urbano", "business", "osaka", "giappone"],
-  "tags-fotografie": ["giorno", "strada", "ritratto", "fumare"],
-  "description": "Uomo in abito elegante fuma una sigaretta lungo una strada urbana di Osaka."
-    },
-    {
-  "id": 2,
-  "src": "img/fumo/giovani19.png",
-  "category": "fotografie",
-  "year": 1961,
-  "tags": ["urbano"],
-  "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
-  "description": "Descrizione dell'immagine"
-},
-    {
-  "id": 3,
-  "src": "img/fumo/anziano1.png",
-  "category": "fotografie",
-  "year": 1985,
-  "tags": ["urbano", "anziano", "osaka", "giappone"],
-  "tags-fotografie": ["giorno", "seduto", "fumo", "ritratto"],
-  "description": "Anziano seduto lungo la strada fuma osservando la vita urbana di Osaka."
-},
-    {
-  "id": 4,
-  "src": "img/fumo/businessman8.png",
-  "category": "fotografie",
-  "year": 1988,
-  "tags": ["urbano", "lavoro", "osaka", "giappone"],
-  "tags-fotografie": ["interno", "gruppo", "fumo", "attesa"],
-  "description": "Gruppo di uomini in abiti formali fuma in uno spazio interno affollato a Osaka."
-},
-  {
-  "id": 5,
-  "src": "img/fumo/businessman9.png",
-  "category": "fotografie",
-  "year": 1989,
-  "tags": ["urbano", "ritratto", "osaka", "giappone"],
-  "tags-fotografie": ["profilo", "interno", "fumare", "luci artificiali"],
-  "description": "Primo piano laterale di un uomo che fuma in un ambiente urbano affollato a Osaka."
-},
-    {
-  "id": 6,
-  "src": "img/fumo/anziano2.png",
-  "category": "fotografie",
-  "year": 1987,
-  "tags": ["urbano", "anziano", "osaka", "giappone"],
-  "tags-fotografie": ["giorno", "esterno", "fumo", "quotidiano"],
-  "description": "Anziano fuma seduto davanti a un negozio in una strada di Osaka."
-},
-   {
-  "id": 7,
-  "src": "img/fumo/giovani20.png",
-  "category": "fotografie",
-  "year": 1960,
-  "tags": ["urbano"],
-  "tags-fotografie": ["giorno", "lontano", "nebbia", "fumare"],
-  "description": "Descrizione dell'immagine"
-},
-    {
-  "id": 8,
-  "src": "img/fumo/businessman10.png",
-  "category": "fotografie",
-  "year": 1986,
-  "tags": ["urbano", "strada", "osaka", "giappone"],
-  "tags-fotografie": ["giorno", "vicolo", "azione", "accendere sigaretta"],
-  "description": "Uomo in abito accende una sigaretta in un vicolo della città di Osaka."
-},
-    {
-  "id": 9,
-  "src": "img/fumo/businessman11.png",
-  "category": "fotografie",
-  "year": 1987,
-  "tags": ["urbano", "atmosfera", "osaka", "giappone"],
-  "tags-fotografie": ["nebbia", "sera", "strada", "fumare"],
-  "description": "Uomo fuma in una strada stretta e nebbiosa tra insegne luminose a Osaka."
-},
-    {
-      "id": 10, 
-       "src": "img/fumo/giovani21.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
-    {
-  "id": 11,
-  "src": "img/fumo/anziano3.png",
-  "category": "fotografie",
-  "year": 1989,
-  "tags": ["urbano", "anziano", "osaka", "giappone"],
-  "tags-fotografie": ["ritratto", "fumo", "primo piano", "giorno"],
-  "description": "Primo piano di un anziano che accende una sigaretta tra la folla a Osaka."
-},
-    {
-  "id": 12,
-  "src": "img/fumo/businessman12.png",
-  "category": "fotografie",
-  "year": 1986,
-  "tags": ["urbano", "lavoro", "osaka", "giappone"],
-  "tags-fotografie": ["giorno", "dettaglio", "sigaretta", "mani"],
-  "description": "Dettaglio di un uomo in abito mentre accende una sigaretta tra la folla a Osaka."
-},
-    {
-  "id": 13,
-  "src": "img/fumo/businessman13.png",
-  "category": "fotografie",
-  "year": 1990,
-  "tags": ["urbano", "notturno", "osaka", "giappone"],
-  "tags-fotografie": ["sera", "luci", "strada", "fumare"],
-  "description": "Uomo fuma in una strada illuminata da insegne al neon nella Osaka notturna."
-},
-    {
-  "id": 14,
-  "src": "img/fumo/anziano4.png",
-  "category": "fotografie",
-  "year": 1986,
-  "tags": ["urbano", "anziano", "osaka", "giappone"],
-  "tags-fotografie": ["seduto", "strada", "fumo", "conversazione"],
-  "description": "Due anziani seduti fumano e conversano lungo una strada di Osaka."
-},
-    {
-      "id": 15,
-      "src": "img/fumo/giovani22.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },
-    {
-  "id": 16,
-  "src": "img/fumo/businessman14.png",
-  "category": "fotografie",
-  "year": 1988,
-  "tags": ["urbano", "incontro", "osaka", "giappone"],
-  "tags-fotografie": ["strada", "dialogo", "fumare", "nebbia"],
-  "description": "Due uomini si incontrano in strada mentre uno fuma in un contesto urbano di Osaka."
-},
-    {
-  "id": 17,
-  "src": "img/fumo/businessman15.png",
-  "category": "fotografie",
-  "year": 1989,
-  "tags": ["urbano", "movimento", "osaka", "giappone"],
-  "tags-fotografie": ["strada", "camminare", "fumare", "giorno"],
-  "description": "Uomo in giacca cammina lungo una strada cittadina fumando a Osaka."
-},
-    {
-      "id": 18,
-      "src": "img/fumo/giovani23.png",
-      "category": "fotografie",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-       },   
-    {
-  "id": 19,
-  "src": "img/fumo/anziano5.png",
-  "category": "fotografie",
-  "year": 1988,
-  "tags": ["urbano", "anziano", "osaka", "giappone"],
-  "tags-fotografie": ["giorno", "dettaglio", "fumo", "oggetti"],
-  "description": "Anziano fuma tenendo una tazza, seduto vicino a oggetti in vendita a Osaka."
-},
-    {
-  "id": 20,
-  "src": "img/fumo/businessman16.png",
-  "category": "fotografie",
-  "year": 1985,
-  "tags": ["urbano", "lavoro", "osaka", "giappone"],
-  "tags-fotografie": ["giorno", "accovacciato", "sigaretta", "pausa"],
-  "description": "Uomo in abito accovacciato sul marciapiede durante una pausa lavoro a Osaka."
-}, 
-    {
-  "id": 21,
-  "src": "img/pacchetti/pack1.png",
-  "category": "pacchetti",
-  "year": 1985,
-  "tags": ["blu", "osaka"],
-  "tags-pacchetti": ["blu", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Osaka",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
+const grid = document.getElementById('grid');
+const searchInput = document.getElementById('search');
+const tagsBar = document.getElementById('tags-bar');
+const resultsInfo = document.getElementById('results-info');
+const btnRandom = document.getElementById('btn-random');
+
+const lightbox = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+const lbId = document.getElementById('lb-id');
+const lbTagsEl = document.getElementById('lb-tags');
+const lbClose = document.getElementById('lb-close');
+const lbPrev = document.getElementById('lb-prev');
+const lbNext = document.getElementById('lb-next');
+const lbBackdrop = document.getElementById('lb-backdrop');
+
+const categoryTexts = {
+  fotografie: {
+    japanese: `ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。`,
+    english: `Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items. When he was diagnosed with lung cancer, instead of quitting, he continued to smoke and began photographing people smoking on the street to show just how normal it was.`
+  },
+  pacchetti: {
+    japanese: `タバコの箱は、色、文字、場所によって集められた小さな記憶の断片である。`,
+    english: `Cigarette packs presents the visual archive of tobacco packaging: colors, lettering and graphic details collected between Osaka, Tokyo, Kyoto and Nara.`
+  },
+  pubblicità: {
+    japanese: `広告は、喫煙が日常の中でどのように語られ、見せられていたかを記録している。`,
+    english: `Advertisements shows how cigarettes were represented through commercial images, slogans and visual culture.`
   }
-   ,{
-  "id": 22,
-  "src": "img/pacchetti/pack2.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "tokyo"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Tokyo",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 23,
-  "src": "img/pacchetti/pack3.png",
-  "category": "pacchetti",
-  "year": 1989,
-  "tags": ["bianco", "nara"],
-  "tags-pacchetti": ["bianco", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 24,
-  "src": "img/pacchetti/pack4.png",
-  "category": "pacchetti",
-  "year": 1990,
-  "tags": ["rosso", "kyoto"],
-  "tags-pacchetti": ["rosso", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Kyoto",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 25,
-  "src": "img/pacchetti/pack5.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "tokyo"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Tokyo",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 26,
-  "src": "img/pacchetti/pack6.png",
-  "category": "pacchetti",
-  "year": 1996,
-  "tags": ["blu", "osaka"],
-  "tags-pacchetti": ["blu", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Osaka",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 27,
-  "src": "img/pacchetti/pack7.png",
-  "category": "pacchetti",
-  "year": 1990,
-  "tags": ["rosso", "nara"],
-  "tags-pacchetti": ["rosso", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 28,
-  "src": "img/pacchetti/pack8.png",
-  "category": "pacchetti",
-  "year": 1985,
-  "tags": ["bianco", "kyoto"],
-  "tags-pacchetti": ["bianco", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Kyoto",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 29,
-  "src": "img/pacchetti/pack9.png",
-  "category": "pacchetti",
-  "year": 1986,
-  "tags": ["blu", "tokyo"],
-  "tags-pacchetti": ["blu", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Tokyo",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
- {
-  "id": 30,
-  "src": "img/pacchetti/pack10.png",
-  "category": "pacchetti",
-  "year": 1985,
-  "tags": ["blu", "osaka"],
-  "tags-pacchetti": ["blu", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Osaka",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-  },
-{
-  "id": 31,
-  "src": "img/pacchetti/pack11.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "tokyo"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Tokyo",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 32,
-  "src": "img/pacchetti/pack12.png",
-  "category": "pacchetti",
-  "year": 1989,
-  "tags": ["bianco", "nara"],
-  "tags-pacchetti": ["bianco", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 33,
-  "src": "img/pacchetti/pack13.png",
-  "category": "pacchetti",
-  "year": 1990,
-  "tags": ["rosso", "kyoto"],
-  "tags-pacchetti": ["rosso", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Kyoto",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 34,
-  "src": "img/pacchetti/pack14.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "tokyo"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Tokyo",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 35,
-  "src": "img/pacchetti/pack15.png",
-  "category": "pacchetti",
-  "year": 1996,
-  "tags": ["blu", "osaka"],
-  "tags-pacchetti": ["blu", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Osaka",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 36,
-  "src": "img/pacchetti/pack16.png",
-  "category": "pacchetti",
-  "year": 1990,
-  "tags": ["rosso", "nara"],
-  "tags-pacchetti": ["rosso", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 37,
-  "src": "img/pacchetti/pack17.png",
-  "category": "pacchetti",
-  "year": 1985,
-  "tags": ["bianco", "kyoto"],
-  "tags-pacchetti": ["bianco", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Kyoto",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 38,
-  "src": "img/pacchetti/pack18.png",
-  "category": "pacchetti",
-  "year": 1986,
-  "tags": ["blu", "tokyo"],
-  "tags-pacchetti": ["blu", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Tokyo",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 39,
-  "src": "img/pacchetti/pack19.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 40,
-  "src": "img/pacchetti/pack20.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 41,
-  "src": "img/pacchetti/pack21.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 42,
-  "src": "img/pacchetti/pack22.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 43,
-  "src": "img/pacchetti/pack23.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 44,
-  "src": "img/pacchetti/pack24.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 45,
-  "src": "img/pacchetti/pack25.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 46,
-  "src": "img/pacchetti/pack26.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 47,
-  "src": "img/pacchetti/pack27.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 48,
-  "src": "img/pacchetti/pack28.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 49,
-  "src": "img/pacchetti/pack29.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 50,
-  "src": "img/pacchetti/pack30.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 51,
-  "src": "img/pacchetti/pack31.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 52,
-  "src": "img/pacchetti/pack32.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 53,
-  "src": "img/pacchetti/pack33.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 54,
-  "src": "img/pacchetti/pack34.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 55,
-  "src": "img/pacchetti/pack35.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 56,
-  "src": "img/pacchetti/pack36.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 57,
-  "src": "img/pacchetti/pack37.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 58,
-  "src": "img/pacchetti/pack38.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 59,
-  "src": "img/pacchetti/pack39.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-  "id": 60,
-  "src": "img/pacchetti/pack40.png",
-  "category": "pacchetti",
-  "year": 1988,
-  "tags": ["verde", "nara"],
-  "tags-pacchetti": ["verde", "lettering", "colori accesi"],
-  "luogo-pacchetti": "Nara",
-  "paese-pacchetti": "Giappone",
-  "description": "Descrizione dell'immagine"
-},
-{
-       "id": 61,
-       "src": "img/pubblicità/advertising1.png",
-      "category": "pubblicità",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description-ja": "煙草の広告は、日常のしぐさを静かな欲望として映し出す。",
-      "description-en": "A tobacco advertisement that turns an everyday gesture into a quiet image of desire.",
-      "description": "A tobacco advertisement that turns an everyday gesture into a quiet image of desire."
-  },
-  {
-       "id": 62,
-       "src": "img/pubblicità/advertising2.png",
-      "category": "pubblicità",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description-ja": "文字と色が、煙草を洗練された都市の記号へと変えている。",
-      "description-en": "Lettering and color transform cigarettes into a refined symbol of urban culture.",
-      "description": "Lettering and color transform cigarettes into a refined symbol of urban culture."
-  },
-  {
-       "id": 63,
-       "src": "img/pubblicità/advertising3.png",
-      "category": "pubblicità",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
-      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
-      "description": "The commercial image links smoking with memory, leisure and intimacy."
-  },
-  {
-       "id": 64,
-       "src": "img/pubblicità/advertising4.png",
-      "category": "pubblicità",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
-      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
-      "description": "The commercial image links smoking with memory, leisure and intimacy."
-  }, 
-  {
-       "id": 65,
-       "src": "img/pubblicità/advertising5.png",
-      "category": "pubblicità",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
-      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
-      "description": "The commercial image links smoking with memory, leisure and intimacy."
-  },
-  {
-       "id": 66,
-       "src": "img/pubblicità/advertising6.png",
-      "category": "pubblicità",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
-      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
-      "description": "The commercial image links smoking with memory, leisure and intimacy."
-  },
-  {
-       "id": 67,
-       "src": "img/pubblicità/advertising7.png",
-      "category": "pubblicità",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
-      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
-      "description": "The commercial image links smoking with memory, leisure and intimacy."
-  },
-  {
-       "id": 68,
-       "src": "img/pubblicità/advertising8.png",
-      "category": "pubblicità",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
-      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
-      "description": "The commercial image links smoking with memory, leisure and intimacy."
-  },
-  {
-       "id": 69,
-       "src": "img/pubblicità/advertising9.png",
-      "category": "pubblicità",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description-ja": "商品イメージは、喫煙を記憶、余暇、親密さと結びつける。",
-      "description-en": "The commercial image links smoking with memory, leisure and intimacy.",
-      "description": "The commercial image links smoking with memory, leisure and intimacy."
-  },
-  {
-       "id": 70,
-       "src": "img/about/about1.png",
-      "category": "about archive",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-   },
-   {
-       "id": 6715,
-       "src": "img/about/about2.jpg",
-      "category": "about archive",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-   },
-   {
-       "id": 72,
-       "src": "img/about/about3.png",
-      "category": "about archive",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-   },
-   {
-       "id": 73,
-       "src": "img/about/about4.png",
-      "category": "about archive",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-   },
-   {
-       "id": 74,
-       "src": "img/about/about5.jpg",
-      "category": "about archive",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-   },
-   {
-       "id": 75,
-       "src": "img/about/about6.png",
-      "category": "about archive",
-      "year": 1960,
-      "tags": ["astratto", "texture", "colore", "composizione", "dettaglio"],
-      "description": "Descrizione dell'immagine"
-   }
+};
+
+const filtersByCategory = {
+  pacchetti: [
+    { title: '色 Color', type: 'pack-color', values: ['赤 Red', '白 White', '青 Blue', '黄色 Yellow', '緑 Green'] },
+    { title: '産地 Origin', type: 'origin', values: ['大阪 Osaka', '東京 Tokyo', '京都 Kyoto', '奈良 Nara'] },
+    { title: '年 Year', type: 'year', values: [1985, 1986, 1987, 1988, 1989, 1990] }
+  ],
+  pubblicità: [
+    { title: '年 Year', type: 'year', values: [1960] }
   ]
+};
+
+let items = [];
+let displayItems = [];
+let activeTags = new Set();
+let searchQuery = '';
+let isRandom = false;
+let lbIndex = -1;
+let activeCategory = 'fotografie';
+let activeFilter = null;
+let activeFilterType = null;
+let advertisingScrollBound = false;
+
+function updateCategoryText(category) {
+  const japaneseText = document.getElementById('category-japanese-text');
+  const englishText = document.getElementById('category-english-text');
+  if (!japaneseText || !englishText) return;
+
+  const text = categoryTexts[category] || categoryTexts.fotografie;
+  japaneseText.textContent = text.japanese;
+  englishText.textContent = text.english;
 }
+
+async function loadData() {
+  const res = await fetch('data.json');
+  if (!res.ok) throw new Error(`Impossibile caricare data.json: ${res.status}`);
+  const data = await res.json();
+  items = Array.isArray(data.items) ? data.items : [];
+  displayItems = [...items];
+  buildTagsBar();
+}
+
+function getItemTags(item) {
+  return [
+    ...(item.tags || []),
+    ...(item['tags-fotografie'] || []),
+    ...(item['tags-pacchetti'] || [])
+  ];
+}
+
+function allTags() {
+  return [...new Set(items.flatMap(getItemTags))].sort();
+}
+
+function buildTagsBar() {
+  if (!tagsBar) return;
+  tagsBar.innerHTML = '';
+  allTags().forEach(tag => {
+    const btn = document.createElement('button');
+    btn.className = 'tag-btn';
+    btn.textContent = tag;
+    btn.dataset.tag = tag;
+    btn.addEventListener('click', () => toggleTag(tag));
+    tagsBar.appendChild(btn);
+  });
+}
+
+function toggleTag(tag) {
+  if (activeTags.has(tag)) activeTags.delete(tag);
+  else activeTags.add(tag);
+  syncGlobalTagButtons();
+  render();
+}
+
+function syncGlobalTagButtons() {
+  if (!tagsBar) return;
+  tagsBar.querySelectorAll('.tag-btn').forEach(btn => {
+    btn.classList.toggle('active', activeTags.has(btn.dataset.tag));
+  });
+}
+
+function filteredItems() {
+  const q = searchQuery.trim().toLowerCase();
+
+  return displayItems.filter(item => {
+    const matchesCategory = !activeCategory || item.category === activeCategory;
+    const tags = getItemTags(item);
+    const matchesTags = [...activeTags].every(tag => tags.includes(tag));
+    const matchesSearch = !q || [item.description, item['description-ja'], item['description-en'], item['portrait-status'], item['portrait-relationship'], item.category, item.year, ...tags]
+      .join(' ')
+      .toLowerCase()
+      .includes(q);
+
+    let matchesCustomFilter = true;
+
+    if (activeFilter && activeFilterType === 'year') {
+      matchesCustomFilter = Number(item.year) === Number(activeFilter);
+    }
+
+    if (activeFilter && activeFilterType === 'tag') {
+      matchesCustomFilter = tags.includes(activeFilter);
+    }
+
+    if (activeFilter && activeFilterType === 'luogo') {
+      matchesCustomFilter =
+        item['luogo-pacchetti']?.toLowerCase() === activeFilter.toLowerCase() ||
+        tags.some(tag => tag.toLowerCase() === activeFilter.toLowerCase());
+    }
+
+    if (activeFilter && activeFilterType === 'pack-color') {
+      matchesCustomFilter = item['pack-color'] === activeFilter;
+    }
+
+    if (activeFilter && activeFilterType === 'origin') {
+      matchesCustomFilter = item['pack-origin'] === activeFilter;
+    }
+
+    if (activeFilter && activeFilterType === 'status') {
+      matchesCustomFilter = item['portrait-status'] === activeFilter;
+    }
+
+    if (activeFilter && activeFilterType === 'relationship') {
+      matchesCustomFilter = item['portrait-relationship'] === activeFilter;
+    }
+
+    return matchesCategory && matchesTags && matchesSearch && matchesCustomFilter;
+  });
+}
+
+function setCategory(cat) {
+  activeCategory = cat;
+  activeFilter = null;
+  activeFilterType = null;
+  activeTags.clear();
+  syncGlobalTagButtons();
+
+  grid?.classList.remove(
+    'has-selected',
+    'layout-fotografie',
+    'layout-pacchetti',
+    'layout-pubblicita',
+    'year-filtered'
+  );
+
+  document.querySelectorAll('[data-category]').forEach(el => {
+    el.style.opacity = el.dataset.category === activeCategory ? '1' : '0.35';
+  });
+
+  if (activeCategory === 'fotografie') {
+    grid?.classList.add('layout-fotografie');
+    renderPortraitFilters();
+  } else {
+    renderCategoryFilters(activeCategory);
+  }
+
+  if (activeCategory === 'pacchetti') grid?.classList.add('layout-pacchetti');
+  if (activeCategory === 'pubblicità') grid?.classList.add('layout-pubblicita');
+
+  updateCategoryText(activeCategory);
+  render();
+
+  if (
+    activeCategory === 'fotografie' &&
+    typeof handDetector !== 'undefined' &&
+    !handDetector &&
+    typeof initPortraitGesture === 'function'
+  ) {
+    initPortraitGesture();
+  }
+}
+
+function renderPortraitFilters() {
+  const panel = document.getElementById('filters-panel');
+  if (!panel) return;
+
+  panel.innerHTML = `
+    <div class="filter">
+      <p>ステータス&nbsp;&nbsp; Status</p>
+      <p>
+        <span class="filter-option" data-filter-type="status" data-filter-value="様 Sama">様 Sama</span>
+        <span class="filter-option" data-filter-type="status" data-filter-value="先輩 Senpai">先輩 Senpai</span>
+        <span class="filter-option" data-filter-type="status" data-filter-value="君 Kun">君 Kun</span>
+      </p>
+    </div>
+
+    <div class="filter">
+      <p>関係&nbsp;&nbsp; Relationship</p>
+      <p>
+        <span class="filter-option" data-filter-type="relationship" data-filter-value="個人 Individual">個人 Individual</span>
+        <span class="filter-option" data-filter-type="relationship" data-filter-value="グループ Group">グループ Group</span>
+      </p>
+    </div>
+
+    <div class="filter">
+      <p>年&nbsp;&nbsp; Year</p>
+      <p>
+        <span class="filter-option" data-filter-type="year" data-filter-value="1986">1986年</span>
+        <span class="filter-option" data-filter-type="year" data-filter-value="1987">1987年</span>
+        <span class="filter-option" data-filter-type="year" data-filter-value="1988">1988年</span>
+        <span class="filter-option" data-filter-type="year" data-filter-value="1989">1989年</span>
+        <span class="filter-option" data-filter-type="year" data-filter-value="1990">1990年</span>
+      </p>
+    </div>
+  `;
+
+  bindFilterOptionClicks(panel);
+}
+
+function renderCategoryFilters(category) {
+  const panel = document.getElementById('filters-panel');
+  if (!panel) return;
+
+  panel.innerHTML = '';
+
+  (filtersByCategory[category] || []).forEach(group => {
+    const div = document.createElement('div');
+    div.className = 'filter';
+    div.innerHTML = `
+      <p>${group.title}</p>
+      <p>
+        ${group.values.map(value => `
+          <span class="filter-option" data-filter-type="${group.type}" data-filter-value="${value}">${value}</span>
+        `).join('')}
+      </p>
+    `;
+    panel.appendChild(div);
+  });
+
+  bindFilterOptionClicks(panel);
+}
+
+function bindFilterOptionClicks(panel) {
+  panel.querySelectorAll('.filter-option').forEach(option => {
+    option.addEventListener('click', () => {
+      const value = option.dataset.filterValue;
+      const type = option.dataset.filterType;
+
+      if (activeFilter === value && activeFilterType === type) {
+        activeFilter = null;
+        activeFilterType = null;
+      } else {
+        activeFilter = value;
+        activeFilterType = type;
+      }
+
+      updateFilterOpacity();
+      render();
+    });
+  });
+}
+
+function updateFilterOpacity() {
+  document.querySelectorAll('.filter-option').forEach(el => {
+    const active = activeFilter === el.dataset.filterValue && activeFilterType === el.dataset.filterType;
+    el.classList.toggle('active-filter', active);
+    el.style.opacity = !activeFilter || active ? '1' : '0.35';
+  });
+}
+
+function updateActiveInfo(item) {
+  const tags = getItemTags(item);
+
+  document.querySelectorAll('[data-category]').forEach(el => {
+    el.style.opacity = el.dataset.category === item.category ? '1' : '0.35';
+  });
+
+  document.querySelectorAll('.filter-option').forEach(el => {
+    const value = el.dataset.filterValue;
+    const type = el.dataset.filterType;
+
+    const isActive =
+      (type === 'year' && Number(value) === Number(item.year)) ||
+      (type === 'tag' && tags.includes(value)) ||
+      (type === 'status' && value === item['portrait-status']) ||
+      (type === 'relationship' && value === item['portrait-relationship']) ||
+      (type === 'pack-color' && value === item['pack-color']) ||
+      (type === 'origin' && value === item['pack-origin']) ||
+      (type === 'luogo' && value === item['luogo-pacchetti']);
+
+    el.classList.toggle('active-filter', isActive);
+    el.style.opacity = isActive ? '1' : '0.35';
+  });
+
+  document.querySelectorAll('.card-tag').forEach(tagEl => {
+    tagEl.classList.toggle('highlight', tags.includes(tagEl.textContent));
+  });
+}
+
+function clearActiveInfo() {
+  document.querySelectorAll('[data-category]').forEach(el => {
+    el.style.opacity = el.dataset.category === activeCategory ? '1' : '0.35';
+  });
+  document.querySelectorAll('.filter-option').forEach(el => {
+    el.classList.remove('active-filter');
+    el.style.opacity = '1';
+  });
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+btnRandom?.addEventListener('click', () => {
+  if (isRandom) {
+    displayItems = [...items];
+    btnRandom.textContent = 'Random';
+  } else {
+    displayItems = shuffle(items);
+    btnRandom.textContent = 'Reset';
+  }
+  isRandom = !isRandom;
+  render();
+});
+
+searchInput?.addEventListener('input', e => {
+  searchQuery = e.target.value;
+  render();
+});
+
+function render() {
+  if (!grid) return;
+  const visible = filteredItems();
+
+  if (resultsInfo) {
+    resultsInfo.textContent = visible.length === items.length
+      ? `${items.length} items`
+      : `${visible.length} / ${items.length} items`;
+  }
+
+  grid.innerHTML = '';
+  grid.classList.toggle('layout-fotografie', activeCategory === 'fotografie');
+  grid.classList.toggle('layout-pubblicita', activeCategory === 'pubblicità');
+  grid.classList.toggle('layout-pacchetti', activeCategory === 'pacchetti');
+  grid.classList.remove('has-selected');
+
+  if (!visible.length) {
+    const empty = document.createElement('div');
+    empty.className = 'empty';
+    empty.textContent = 'Nessun risultato.';
+    grid.appendChild(empty);
+    return;
+  }
+
+  visible.forEach((item, i) => {
+    const card = document.createElement('article');
+    card.className = 'card activeImg';
+    card.style.cursor = activeCategory === 'fotografie' || activeCategory === 'pacchetti' ? 'zoom-in' : 'default';
+    card.dataset.itemYear = item.year;
+
+    if (item.category === 'pubblicità') {
+      card.dataset.adJa = item['description-ja'] || item.description || '';
+      card.dataset.adEn = item['description-en'] || item.description || '';
+    }
+
+    const img = document.createElement('img');
+    img.className = 'card-img';
+    img.src = item.src;
+    img.alt = item.description || `Item ${item.id}`;
+    img.loading = 'lazy';
+    card.appendChild(img);
+
+    const body = document.createElement('div');
+    body.className = 'card-body';
+
+    if (item.category === 'pacchetti') {
+      body.innerHTML = `
+        <div class="card-tags">
+          ${(item.tags || []).map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+        </div>
+        <p class="card-desc">${item['description-ja'] || ''}<br>${item['description-en'] || ''}</p>
+      `;
+    } else {
+      const idEl = document.createElement('span');
+      idEl.className = 'card-id';
+      idEl.textContent = `#${String(item.id).padStart(2, '0')}`;
+      body.appendChild(idEl);
+
+      const tagsEl = document.createElement('div');
+      tagsEl.className = 'card-tags';
+      getItemTags(item).forEach(tag => {
+        const t = document.createElement('span');
+        t.className = 'card-tag';
+        t.textContent = tag;
+        t.addEventListener('click', e => {
+          e.stopPropagation();
+          toggleTag(tag);
+        });
+        tagsEl.appendChild(t);
+      });
+      body.appendChild(tagsEl);
+
+      if (item.category === 'fotografie') {
+        const descEl = document.createElement('p');
+        descEl.className = 'card-desc';
+        descEl.innerHTML = `${item['description-ja'] || ''}<br>${item['description-en'] || ''}`;
+        body.appendChild(descEl);
+      }
+    }
+
+    card.appendChild(body);
+
+    card.addEventListener('click', () => {
+      if (activeCategory !== 'fotografie' && activeCategory !== 'pacchetti') return;
+
+      const alreadyActive = card.classList.contains('selectedImg');
+      grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
+      grid.classList.toggle('has-selected', !alreadyActive);
+
+      if (!alreadyActive) {
+        card.classList.add('selectedImg');
+        updateActiveInfo(item);
+      } else {
+        clearActiveInfo();
+      }
+    });
+
+    grid.appendChild(card);
+  });
+
+  if (activeCategory === 'pubblicità') setupAdvertisingScrollText();
+}
+
+function setupAdvertisingScrollText() {
+  if (!grid || advertisingScrollBound) {
+    updateAdvertisingTextOnScroll();
+    return;
+  }
+  grid.addEventListener('scroll', updateAdvertisingTextOnScroll);
+  advertisingScrollBound = true;
+  updateAdvertisingTextOnScroll();
+}
+
+function updateAdvertisingTextOnScroll() {
+  const cards = document.querySelectorAll('.myPhotos.layout-pubblicita .card');
+  const japaneseText = document.getElementById('category-japanese-text');
+  const englishText = document.getElementById('category-english-text');
+  if (!cards.length || !japaneseText || !englishText) return;
+
+  let activeCard = cards[0];
+  cards.forEach(card => {
+    const rect = card.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.45) activeCard = card;
+    card.classList.toggle('ad-past', rect.bottom < window.innerHeight * 0.35);
+  });
+
+  japaneseText.textContent = activeCard.dataset.adJa || '';
+  englishText.textContent = activeCard.dataset.adEn || '';
+}
+
+function openLightbox(index) {
+  if (!lightbox || !lbImg || !lbId || !lbTagsEl) return;
+  const visible = filteredItems();
+  lbIndex = index;
+  const item = visible[lbIndex];
+  if (!item) return;
+
+  lbImg.src = item.src;
+  lbImg.alt = item.description || `Item ${item.id}`;
+  lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
+  lbTagsEl.innerHTML = '';
+
+  getItemTags(item).forEach(tag => {
+    const t = document.createElement('span');
+    t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
+    t.textContent = tag;
+    t.addEventListener('click', () => {
+      toggleTag(tag);
+      closeLightbox();
+    });
+    lbTagsEl.appendChild(t);
+  });
+
+  lightbox.classList.add('open');
+  lightbox.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  if (!lightbox || !lbImg) return;
+  lightbox.classList.remove('open');
+  lightbox.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  lbImg.src = '';
+}
+
+function navigateLightbox(dir) {
+  const visible = filteredItems();
+  if (!visible.length) return;
+  let next = lbIndex + dir;
+  if (next >= visible.length) next = 0;
+  if (next < 0) next = visible.length - 1;
+  openLightbox(next);
+}
+
+lbClose?.addEventListener('click', closeLightbox);
+lbBackdrop?.addEventListener('click', closeLightbox);
+lbPrev?.addEventListener('click', () => navigateLightbox(-1));
+lbNext?.addEventListener('click', () => navigateLightbox(1));
+
+document.addEventListener('keydown', e => {
+  if (!lightbox?.classList.contains('open')) return;
+  if (e.key === 'ArrowLeft') navigateLightbox(-1);
+  if (e.key === 'ArrowRight') navigateLightbox(1);
+  if (e.key === 'Escape') closeLightbox();
+});
+
+document.querySelectorAll('[data-category]').forEach(el => {
+  el.addEventListener('click', event => {
+    event.preventDefault();
+    setCategory(el.dataset.category);
+  });
+});
+
+function initAboutImageBlurOnScroll() {
+  const modal = document.getElementById('explore-modal');
+  const images = document.querySelectorAll('.about-grid img');
+  if (!modal || !images.length || modal.dataset.blurBound === 'true') return;
+
+  modal.dataset.blurBound = 'true';
+  modal.addEventListener('scroll', () => {
+    images.forEach(img => {
+      const rect = img.getBoundingClientRect();
+      const progress = 1 - rect.top / window.innerHeight;
+      img.classList.toggle('about-faded', progress > 0.45);
+    });
+  });
+}
+
+function openExploreModal() {
+  const modal = document.getElementById('explore-modal');
+  if (!modal) return;
+  modal.style.display = 'block';
+  modal.setAttribute('aria-hidden', 'false');
+  initAboutImageBlurOnScroll();
+}
+
+function closeExploreModal() {
+  const modal = document.getElementById('explore-modal');
+  if (!modal) return;
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
+}
+
+async function init() {
+  try {
+    await loadData();
+    setCategory('fotografie');
+  } catch (error) {
+    console.error(error);
+    if (grid) grid.innerHTML = `<div class="empty">Errore nel caricamento dei dati.</div>`;
+  }
+}
+
+init();
