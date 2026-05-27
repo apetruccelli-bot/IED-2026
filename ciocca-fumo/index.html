@@ -84,119 +84,42 @@
       </div>
     </header>
 
-    <!-- <p class="results-info font-myTitle" id="results-info"></p> -->
+    <!-- MAIN LAYOUT -->
+   <div class="mainLayout initially-blurred all-blurred">
 
-    <section id="portraits">
-      <h2>吸殻 Portraits</h2>
-    </section>
-
-    <section id="packs">
-      <h2>タバコの箱 Cigarette packs</h2>
-    </section>
-
-    <section id="advertisements">
-      <h2>広告 Advertisements</h2>
-    </section>
-      <div class="descriptionAndFilters col-span-4 h-full flex flex-col justify-between pt-[10rem]">
-        <div class="description flex flex-col gap-10px">
-          <div class="japanese" id="category-japanese-text">
-            ある実業家がまるでその中を探そうとするかのように...
-          </div>
-
-          <div class="english text-myGrey" id="category-english-text">
-            Hiroshi Tanaka, a tobacconist in Osaka...
-          </div>
-          <div class="filters grid grid-cols-4 gap-x-10px gap-y-5px mt-auto h-fit" id="filters-panel">
-            <div class="filter col-span-4 grid grid-cols-4 gap-x-10px gap-y-5px h-fit">
-              <p class="col-span-1">状態 Status</p>
-              <p class="col-span-3 flex flex-wrap gap-x-10px">
-                <span>様 Sama</span>
-                <span>先輩 Senpai</span>
-                <span>君 Kun</span>
-              </p>
-            </div>
-            <div class="filter col-span-4 grid grid-cols-4 gap-x-10px gap-y-5px h-fit">
-              <p class="col-span-1">人々 People</p>
-              <p class="col-span-3 flex flex-wrap gap-x-10px">
-                <span>個人 Individual</span>
-                <span>グループ Group</span>
-              </p>
-            </div>
-            <div class="filter col-span-4 grid grid-cols-4 gap-x-10px gap-y-5px h-fit">
-              <p class="col-span-1">空間 Year</p>
-              <p class="col-span-3 flex flex-wrap gap-x-10px">
-                <span id="year-filter-list" class="flex flex-wrap gap-x-10px"></span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <main id="grid" class="myPhotos"></main>
+  <aside class="descriptionAndFilters">
+    <div class="description-intro">
+      <div class="japanese" id="category-japanese-text"></div>
+      <div class="english text-myGrey" id="category-english-text"></div>
     </div>
 
-    <div class="lightbox" id="lightbox" aria-hidden="true">
-      <div class="lb-backdrop" id="lb-backdrop"></div>
-      <button class="lb-close" id="lb-close">✕</button>
-      <button class="lb-prev" id="lb-prev">←</button>
-      <button class="lb-next" id="lb-next">→</button>
-      <div class="lb-content">
-        <img class="lb-img" id="lb-img" src="" alt="">
-        <div class="lb-info">
-          <span class="lb-id" id="lb-id"></span>
-          <div class="lb-tags" id="lb-tags"></div>
-        </div>
-      </div>
+    <div class="filters" id="filters-panel"></div>
+  </aside>
+
+  <main id="grid" class="myPhotos layout-fotografie"></main>
+
+</div>
+
+  <main id="grid" class="myPhotos layout-fotografie"></main>
+
+</div>
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lb-backdrop" id="lb-backdrop"></div>
+  <button class="lb-close" id="lb-close">✕</button>
+  <button class="lb-prev" id="lb-prev">←</button>
+  <button class="lb-next" id="lb-next">→</button>
+
+  <div class="lb-content">
+    <img class="lb-img" id="lb-img" src="" alt="">
+    <div class="lb-info">
+      <span class="lb-id" id="lb-id"></span>
+      <div class="lb-tags" id="lb-tags"></div>
     </div>
+  </div>
+</div>
 
-    <!-- About Modal -->
-    <div id="explore-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.95); align-items:center; justify-content:center; flex-direction:column; gap:20px;">
-      <button onclick="closeExploreModal()" style="position:absolute; top:20px; right:20px; background:none; border:none; color:white; font-size:28px; cursor:pointer; line-height:1;">✕</button>
-
-      <!-- Webcam preview top-right -->
-      <div style="position:absolute; top:20px; right:70px; display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
-        <video id="explore-webcam" autoplay muted playsinline style="width:200px; height:150px; object-fit:cover; border-radius:6px; border:2px solid rgba(255,255,255,0.15); transform:scaleX(-1);"></video>
-        <div id="explore-hand-status" style="font-family:monospace; font-size:11px; text-align:right; line-height:1.5;">
-          <span id="explore-detect-label" style="display:inline-block; padding:2px 8px; border-radius:3px; background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.4);">no face detected</span><br>
-          <span id="explore-angle-label" style="color:rgba(255,255,255,0.3);">—</span>
-        </div>
-        <!-- Mic level indicator -->
-        <div style="width:200px; font-family:monospace; font-size:10px; color:rgba(255,255,255,0.35);">
-          <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
-            <span>mic</span>
-            <span id="explore-mic-value">0</span>
-          </div>
-          <div style="position:relative; height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:visible;">
-            <!-- threshold marker -->
-            <div id="explore-mic-threshold-marker" style="position:absolute; top:-3px; width:2px; height:12px; background:rgba(255,255,255,0.5); border-radius:1px; left:43%;">
-              <span style="position:absolute; top:-14px; left:50%; transform:translateX(-50%); font-size:9px; color:rgba(255,255,255,0.4); white-space:nowrap;">110</span>
-            </div>
-            <!-- level bar -->
-            <div id="explore-mic-bar" style="height:100%; width:0%; background:rgba(255,255,255,0.4); border-radius:3px; transition:width 0.05s linear;"></div>
-          </div>
-        </div>
-      </div>
-
-      <header class="initially-blurred all-blurred">
-      <div class="header-inner ">
-        <a href="../index.html" class="col-span-2">禁煙 No smoking</a>
-        <div class="flex gap-20px col-span-10">
-          <div class="flex gap-20px">
-            <a href="#portraits" onclick="navigateFromModal('#portraits')" class="cursor-pointer">吸殻 Portraits</a>
-            <a href="#packs" onclick="navigateFromModal('#packs')" class="cursor-pointer">タバコの箱 Cigarette packs</a>
-            <a href="#advertisements" onclick="navigateFromModal('#advertisements')" class="cursor-pointer">広告 Advertisements</a>
-          </div>
-          <a href="javascript:void(0)" onclick="closeExploreModal()" class="ml-auto cursor-pointer">Close</a>
-        </div>
-      </div>
-    </header>
-
-
-      <div class="about-page">
-
-        <div style="position:fixed; top:18px; left:18px; z-index:1001;">
-          <a href="../index.html" style="color:var(--color-myWhite); text-decoration:underline;">Site Home</a>
-        </div>
-
+<div id="explore-modal" style="display:none;">
+  <div class="about-page">
   <section class="about-hero">
     <h1>
       田中弘 Hiroshi Tanaka<br>

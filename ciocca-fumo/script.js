@@ -15,35 +15,39 @@ const lbBackdrop = document.getElementById('lb-backdrop');
 
 const categoryTexts = {
   fotografie: {
-    japanese: `ある実業家がまるでその中を探そうとするかのように
-腰をかがめて吸い殻を拾い上げた。`,
-    english: `Portraits collects photographs of people smoking in Osaka between 1985 and 1990. These images show smoking as a daily gesture, part of work, waiting, conversation and urban life.`
+    japanese: `ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。`,
+    english: `Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items. When he was diagnosed with lung cancer, instead of quitting, he continued to smoke and began photographing people smoking on the street to show just how normal it was. Over time, he filled his tobacco shop with packs, images, and objects he had collected here and there. He died in 1990, and years later his granddaughter reopened the shop, discovering that all of this also told the story of the life and customs of an entire era.`
   },
   pacchetti: {
-    japanese: `タバコの箱は、色、文字、場所によって集められた
-小さな記憶の断片である。`,
+    japanese: `タバコの箱は、色、文字、場所によって集められた小さな記憶の断片である。`,
     english: `Cigarette packs presents the visual archive of tobacco packaging: colors, lettering and graphic details collected between Osaka, Tokyo, Kyoto and Nara.`
   },
   pubblicità: {
-    japanese: `広告は、喫煙が日常の中でどのように語られ、
-見せられていたかを記録している。`,
+    japanese: `広告は、喫煙が日常の中でどのように語られ、見せられていたかを記録している。`,
     english: `Advertisements shows how cigarettes were represented through commercial images, slogans and visual culture.`
   }
 };
 
 const filtersByCategory = {
   fotografie: [
-    { title: '状態 Status', type: 'tag', values: ['giorno', 'sera', 'lontano', 'primo piano', 'interno', 'esterno'] },
-    { title: '人々 People', type: 'tag', values: ['ritratto', 'gruppo', 'anziano', 'business'] },
-    { title: '年 Year', type: 'year', values: [1985, 1986, 1987, 1988, 1989, 1990] }
+    { title: '状態&nbsp;&nbsp; Status', type: 'visual', values: [
+      { label: '様 Sama', value: null },
+      { label: '先輩 Senpai', value: null },
+      { label: '君 Kun', value: null }
+    ] },
+    { title: '関係&nbsp;&nbsp; Relationship', type: 'visual', values: [
+      { label: '個人 Individual', value: null },
+      { label: 'グループ Group', value: 'gruppo' }
+    ] },
+    { title: '空間&nbsp;&nbsp; Year', type: 'year', values: [1985, 1986, 1987, 1988, 1989, 1990] }
   ],
   pacchetti: [
-    { title: '色 Color', type: 'tag', values: ['blu', 'bianco', 'rosso', 'verde'] },
-    { title: '年 Year', type: 'year', values: [1985, 1986, 1987, 1988, 1989, 1990, 1996] },
-    { title: '場所 Place', type: 'luogo', values: ['Osaka', 'Tokyo', 'Kyoto', 'Nara'] }
+    { title: '色&nbsp;&nbsp; Color', type: 'tag', values: ['blu', 'bianco', 'rosso', 'verde'] },
+    { title: '年&nbsp;&nbsp; Year', type: 'year', values: [1985, 1986, 1987, 1988, 1989, 1990, 1996] },
+    { title: '場所&nbsp;&nbsp; Place', type: 'luogo', values: ['Osaka', 'Tokyo', 'Kyoto', 'Nara'] }
   ],
   pubblicità: [
-    { title: '年 Year', type: 'year', values: [1960] }
+    { title: '年&nbsp;&nbsp; Year', type: 'year', values: [1960] }
   ]
 };
 
@@ -71,6 +75,7 @@ function updateCategoryText(category) {
 async function loadData() {
   const res = await fetch('data.json');
   if (!res.ok) throw new Error(`Impossibile caricare data.json: ${res.status}`);
+
   const data = await res.json();
   items = Array.isArray(data.items) ? data.items : [];
   displayItems = [...items];
@@ -91,6 +96,7 @@ function allTags() {
 
 function buildTagsBar() {
   if (!tagsBar) return;
+
   tagsBar.innerHTML = '';
   allTags().forEach(tag => {
     const btn = document.createElement('button');
@@ -111,6 +117,7 @@ function toggleTag(tag) {
       btn.classList.toggle('active', activeTags.has(btn.dataset.tag));
     });
   }
+
   render();
 }
 
@@ -118,9 +125,11 @@ function filteredItems() {
   const q = searchQuery.trim().toLowerCase();
 
   return displayItems.filter(item => {
-    const matchesCategory = !activeCategory || item.category === activeCategory;
+    const matchesCategory = item.category === activeCategory;
     const tags = getItemTags(item);
+
     const matchesTags = [...activeTags].every(tag => tags.includes(tag));
+
     const matchesSearch = !q || [
       item.description,
       item.category,
@@ -129,16 +138,23 @@ function filteredItems() {
     ].join(' ').toLowerCase().includes(q);
 
     let matchesCustomFilter = true;
+
     if (activeFilter && activeFilterType === 'year') {
       matchesCustomFilter = Number(item.year) === Number(activeFilter);
     }
+
     if (activeFilter && activeFilterType === 'tag') {
       matchesCustomFilter = tags.includes(activeFilter);
     }
+
     if (activeFilter && activeFilterType === 'luogo') {
       matchesCustomFilter =
         item['luogo-pacchetti']?.toLowerCase() === activeFilter.toLowerCase() ||
         tags.some(tag => tag.toLowerCase() === activeFilter.toLowerCase());
+    }
+
+    if (activeFilter && activeFilterType === 'visual') {
+      matchesCustomFilter = activeFilter === '__disabled__' ? true : tags.includes(activeFilter);
     }
 
     return matchesCategory && matchesTags && matchesSearch && matchesCustomFilter;
@@ -149,12 +165,20 @@ function setCategory(cat) {
   activeCategory = cat;
   activeFilter = null;
   activeFilterType = null;
-  grid?.classList.remove('has-selected', 'layout-fotografie', 'layout-pacchetti', 'layout-pubblicita', 'year-filtered');
+
+  grid?.classList.remove(
+    'has-selected',
+    'layout-fotografie',
+    'layout-pacchetti',
+    'layout-pubblicita',
+    'year-filtered'
+  );
 
   document.querySelectorAll('[data-category]').forEach(el => {
     el.style.opacity = el.dataset.category === activeCategory ? '1' : '0.35';
   });
 
+  if (activeCategory === 'fotografie') grid?.classList.add('layout-fotografie');
   if (activeCategory === 'pacchetti') grid?.classList.add('layout-pacchetti');
   if (activeCategory === 'pubblicità') grid?.classList.add('layout-pubblicita');
 
@@ -177,22 +201,38 @@ function renderCategoryFilters(category) {
   if (!panel) return;
 
   panel.innerHTML = '';
+
   (filtersByCategory[category] || []).forEach(group => {
     const div = document.createElement('div');
     div.className = 'filter col-span-4 grid grid-cols-4 gap-x-10px gap-y-5px h-fit';
+
     div.innerHTML = `
       <p class="col-span-1">${group.title}</p>
       <p class="col-span-3 flex flex-wrap gap-x-10px">
-        ${group.values.map(value => `
-          <span class="cursor-pointer filter-option" data-filter-type="${group.type}" data-filter-value="${value}">${value}</span>
-        `).join('')}
+        ${group.values.map(entry => {
+          const isObject = typeof entry === 'object';
+          const label = isObject ? entry.label : (group.type === 'year' ? `${entry}年` : entry);
+          const value = isObject ? entry.value : entry;
+          const disabled = value === null || value === undefined;
+
+          return `
+            <span class="cursor-pointer filter-option ${disabled ? 'is-disabled' : ''}"
+                  data-filter-type="${group.type}"
+                  data-filter-value="${disabled ? '__disabled__' : value}">
+              ${label}
+            </span>
+          `;
+        }).join('')}
       </p>
     `;
+
     panel.appendChild(div);
   });
 
   panel.querySelectorAll('.filter-option').forEach(option => {
     option.addEventListener('click', () => {
+      if (option.classList.contains('is-disabled')) return;
+
       const value = option.dataset.filterValue;
       const type = option.dataset.filterType;
 
@@ -208,6 +248,7 @@ function renderCategoryFilters(category) {
         const active = activeFilter === el.dataset.filterValue && activeFilterType === el.dataset.filterType;
         el.style.opacity = !activeFilter || active ? '1' : '0.35';
       });
+
       render();
     });
   });
@@ -230,6 +271,7 @@ btnRandom?.addEventListener('click', () => {
     displayItems = shuffle(items);
     btnRandom.textContent = 'Reset';
   }
+
   isRandom = !isRandom;
   render();
 });
@@ -241,6 +283,7 @@ searchInput?.addEventListener('input', e => {
 
 function render() {
   if (!grid) return;
+
   const visible = filteredItems();
 
   if (resultsInfo) {
@@ -250,6 +293,7 @@ function render() {
   }
 
   grid.innerHTML = '';
+  grid.classList.toggle('layout-fotografie', activeCategory === 'fotografie');
   grid.classList.toggle('layout-pubblicita', activeCategory === 'pubblicità');
   grid.classList.toggle('layout-pacchetti', activeCategory === 'pacchetti');
 
@@ -261,7 +305,7 @@ function render() {
     return;
   }
 
-  visible.forEach((item, i) => {
+  visible.forEach((item, index) => {
     const card = document.createElement('article');
     card.className = 'card activeImg';
     card.style.cursor = activeCategory === 'fotografie' || activeCategory === 'pacchetti' ? 'zoom-in' : 'default';
@@ -299,6 +343,7 @@ function render() {
 
       const tagsEl = document.createElement('div');
       tagsEl.className = 'card-tags';
+
       getItemTags(item).forEach(tag => {
         const t = document.createElement('span');
         t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
@@ -309,15 +354,19 @@ function render() {
         });
         tagsEl.appendChild(t);
       });
+
       body.appendChild(tagsEl);
     }
 
     card.appendChild(body);
+
     card.addEventListener('click', () => {
       if (activeCategory !== 'fotografie' && activeCategory !== 'pacchetti') return;
+
       const alreadyActive = card.classList.contains('selectedImg');
       grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
       grid.classList.toggle('has-selected', !alreadyActive);
+
       if (!alreadyActive) card.classList.add('selectedImg');
     });
 
@@ -332,6 +381,7 @@ function setupAdvertisingScrollText() {
     updateAdvertisingTextOnScroll();
     return;
   }
+
   grid.addEventListener('scroll', updateAdvertisingTextOnScroll);
   advertisingScrollBound = true;
   updateAdvertisingTextOnScroll();
@@ -344,6 +394,7 @@ function updateAdvertisingTextOnScroll() {
   if (!cards.length || !japaneseText || !englishText) return;
 
   let activeCard = cards[0];
+
   cards.forEach(card => {
     const rect = card.getBoundingClientRect();
     if (rect.top < window.innerHeight * 0.45) activeCard = card;
@@ -356,6 +407,7 @@ function updateAdvertisingTextOnScroll() {
 
 function openLightbox(index) {
   if (!lightbox || !lbImg || !lbId || !lbTagsEl) return;
+
   const visible = filteredItems();
   lbIndex = index;
   const item = visible[lbIndex];
@@ -384,6 +436,7 @@ function openLightbox(index) {
 
 function closeLightbox() {
   if (!lightbox || !lbImg) return;
+
   lightbox.classList.remove('open');
   lightbox.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
@@ -393,6 +446,7 @@ function closeLightbox() {
 function navigateLightbox(dir) {
   const visible = filteredItems();
   if (!visible.length) return;
+
   let next = lbIndex + dir;
   if (next >= visible.length) next = 0;
   if (next < 0) next = visible.length - 1;
@@ -406,15 +460,16 @@ lbNext?.addEventListener('click', () => navigateLightbox(1));
 
 document.addEventListener('keydown', e => {
   if (!lightbox?.classList.contains('open')) return;
+
   if (e.key === 'ArrowLeft') navigateLightbox(-1);
   if (e.key === 'ArrowRight') navigateLightbox(1);
   if (e.key === 'Escape') closeLightbox();
 });
 
-document.querySelectorAll('[data-category]').forEach(el => {
-  el.addEventListener('click', event => {
+document.querySelectorAll('[data-category]').forEach(link => {
+  link.addEventListener('click', event => {
     event.preventDefault();
-    setCategory(el.dataset.category);
+    setCategory(link.dataset.category);
   });
 });
 
@@ -424,6 +479,7 @@ function initAboutImageBlurOnScroll() {
   if (!modal || !images.length || modal.dataset.blurBound === 'true') return;
 
   modal.dataset.blurBound = 'true';
+
   modal.addEventListener('scroll', () => {
     images.forEach(img => {
       const rect = img.getBoundingClientRect();
@@ -436,6 +492,7 @@ function initAboutImageBlurOnScroll() {
 function openExploreModal() {
   const modal = document.getElementById('explore-modal');
   if (!modal) return;
+
   modal.style.display = 'block';
   modal.setAttribute('aria-hidden', 'false');
   initAboutImageBlurOnScroll();
@@ -444,6 +501,7 @@ function openExploreModal() {
 function closeExploreModal() {
   const modal = document.getElementById('explore-modal');
   if (!modal) return;
+
   modal.style.display = 'none';
   modal.setAttribute('aria-hidden', 'true');
 }
@@ -454,7 +512,7 @@ async function init() {
     setCategory('fotografie');
   } catch (error) {
     console.error(error);
-    if (grid) grid.innerHTML = `<div class="empty">Errore nel caricamento dei dati.</div>`;
+    if (grid) grid.innerHTML = '<div class="empty">Errore nel caricamento dei dati.</div>';
   }
 }
 

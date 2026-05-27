@@ -252,22 +252,7 @@ button {
   text-transform: uppercase;
 }
 
-/* ── GRID ── */
-.mainLayout {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 10px;
-  padding: 10px;
-  height: 100vh;
-}
 
-.descriptionAndFilters {
-  grid-column: 1 / 6;
-  position: fixed;
-  left: 10px;
-  top: 10rem;
-  width: calc((100vw / 12) * 5 - 20px);
-}
 
 .myPhotos {
   grid-column: 6 / 13;
@@ -571,17 +556,6 @@ button {
   z-index: 50;
 }
 
-.descriptionAndFilters {
-  position: fixed;
-  left: 10px;
-
-  top: 36rem; /* sotto immagine */
-
-  width: calc((100vw / 12) * 4 - 20px);
-
-  z-index: 40;
-}
-
 .myPhotos.has-selected .card.selectedImg .card-img {
   width: 100%;
   height: auto;
@@ -811,14 +785,6 @@ button {
   filter: blur(10px);
 }
 
-.descriptionAndFilters.is-hidden {
-  display: none;
-}
-
-.description-intro.is-hidden {
-  display: none;
-}
-
 #gesture-camera {
   position: fixed;
   right: 10px;
@@ -846,4 +812,104 @@ button {
   color: var(--myWhite);
   font-size: 10px;
   margin-top: 4px;
+}
+
+.descriptionAndFilters {
+  position: fixed;
+  left: 10px;
+  top: 10rem;
+  width: calc((100vw / 12) * 5 - 20px);
+  height: calc(100vh - 10rem - 10px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  z-index: 40;
+}
+
+html,
+body {
+  overflow: hidden;
+}
+
+.mainLayout {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 10px;
+  padding: 10px;
+  height: calc(100vh - 52px);
+}
+
+.descriptionAndFilters {
+  position: fixed;
+  left: 10px;
+  top: 10rem;
+  width: calc((100vw / 12) * 5 - 20px);
+  height: calc(100vh - 10rem - 10px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.description-intro {
+  max-width: 45ch;
+}
+
+.filters {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px 10px;
+}
+
+.filter {
+  grid-column: span 4;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 10px;
+}
+
+.filter {
+  grid-column: span 4;
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  align-items: start;
+}
+
+.filter p:first-child {
+  white-space: nowrap;
+}
+
+.filter p:last-child {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 14px;
+  white-space: nowrap;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.myPhotos {
+  margin-left: calc((100vw / 12) * 5);
+  width: calc((100vw / 12) * 7 - 20px);
+  height: calc(100vh - 4rem);
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+
+  overflow-y: auto;
+  padding-top: 4rem;
+}
+
+.myPhotos.layout-fotografie .card-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
 }
