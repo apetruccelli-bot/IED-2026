@@ -608,16 +608,27 @@ header {
 }
 
 
-#archive-rows a,
-#archive-rows span.p {
+/* Archive filter items: default semi-opaque, hover/active become fully opaque */
+#archive-rows [data-filter-key][data-filter-value] {
   opacity: 0.3;
   transition: opacity 0.3s ease;
   color: var(--color-myBlack, #1E1E1E);
 }
 
-#archive-rows a:hover,
-#archive-rows span.p:hover {
+#archive-rows [data-filter-key][data-filter-value]:hover {
   opacity: 1;
+}
+
+/* JS toggles these utility classes; ensure they have the expected effect */
+.opacity-100 {
+  opacity: 1 !important;
+}
+.opacity-50 {
+  opacity: 0.3 !important;
+}
+
+#archive-rows[hidden] {
+  display: none;
 }
 
 #archive-rows > .flex.flex-col {
@@ -640,7 +651,7 @@ header {
 #archive-rows:before {
   content: "";
   position: absolute;
-  top: 3.5rem;
+  top: calc(3.5rem + 10px);
   left: 0;
   width: calc((100% - 50px) / 6);
   height: 4rem;

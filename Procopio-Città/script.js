@@ -1,6 +1,7 @@
 const rowsHost = document.getElementById('archive-rows');
 const galleryHost = document.getElementById('archive-gallery');
 const searchInput = document.getElementById('search');
+const archiveToggleButtons = document.querySelectorAll('[data-archive-toggle]');
 const lightbox = document.getElementById('lightbox');
 const lbImg = document.getElementById('lb-img');
 const lbId = document.getElementById('lb-id');
@@ -32,6 +33,7 @@ let mapItems = [];
 let activeFilters = new Set();
 let lbIndex = -1;
 let markerIndex = -1;
+let archiveFiltersVisible = false;
 
 const regionGroups = {
   Calabria: ['Serra Vasta', 'Valle Cupa', 'Zagara', 'San Velio', 'Fonte Chiusa', 'Santa Rena', 'Costa Nera', 'Pietra Lenta'],
@@ -110,6 +112,18 @@ async function hydrateRowsWithImages() {
   renderFilters();
 }
 
+function setArchiveFiltersVisible(visible) {
+  archiveFiltersVisible = visible;
+
+  if (rowsHost) {
+    rowsHost.hidden = !visible;
+  }
+
+  archiveToggleButtons.forEach((button) => {
+    button.setAttribute('aria-expanded', String(visible));
+  });
+}
+
 function renderFilters() {
   if (!rowsHost) return;
 
@@ -159,6 +173,8 @@ function renderFilters() {
       if (key && value) toggleFilter(key, value);
     });
   });
+
+  setArchiveFiltersVisible(archiveFiltersVisible);
 }
 
 function toggleFilter(key, value) {
@@ -354,6 +370,12 @@ if (lbBackdrop) lbBackdrop.addEventListener('click', closeLightbox);
 if (lbPrev) lbPrev.addEventListener('click', () => navigateLightbox(-1));
 if (lbNext) lbNext.addEventListener('click', () => navigateLightbox(1));
 
+archiveToggleButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    setArchiveFiltersVisible(!archiveFiltersVisible);
+  });
+});
+
 /* document.addEventListener('keydown', (event) => {
   if (!lightbox.classList.contains('open')) return;
   if (event.key === 'ArrowLeft') navigateLightbox(-1);
@@ -366,6 +388,8 @@ if (searchInput) {
     filterVisible(event.target.value);
   });
 }
+
+setArchiveFiltersVisible(false);
 
 hydrateRowsWithImages()
   .then(() => renderAll())
