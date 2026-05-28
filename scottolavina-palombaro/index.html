@@ -33,6 +33,9 @@
   </main>
 
   <a class="enter-site-link" href="archive.html">Enter Site</a>
+  
+  <!-- Landing page audio: play once on load with fade in/out -->
+  <audio id="landing-audio" src="audio.mp3" preload="auto"></audio>
 
   <script src="script.js"></script>
   <script>
@@ -53,6 +56,110 @@
           }
         }, { once: true });
       });
+
+      // Try to play landing audio with fade-in/out and slowed playback.
+      const audio = document.getElementById('landing-audio');
+      if (audio) {
+        const slowFactor = 0.85; // playback rate (less than 1 = slower)
+        const targetGain = 0.8; // perceived volume after fade-in
+        const fadeSecs = 3.0; // fade duration (seconds)
+
+        // Web Audio setup
+        let audioCtx = null;
+        let sourceNode = null;
+        let gainNode = null;
+        let isFadingOut = false;
+
+        function setupAudioNodes() {
+          if (audioCtx) return;
+          try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            sourceNode = audioCtx.createMediaElementSource(audio);
+            gainNode = audioCtx.createGain();
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            sourceNode.connect(gainNode).connect(audioCtx.destination);
+          } catch (e) {
+            console.warn('[AUDIO] Web Audio setup failed', e);
+            audioCtx = null;
+          }
+        }
+
+        // Fade helpers
+        function fadeIn() {
+          if (!gainNode || !audioCtx) return;
+          const t = audioCtx.currentTime;
+          gainNode.gain.cancelScheduledValues(t);
+          gainNode.gain.setValueAtTime(0, t);
+          gainNode.gain.linearRampToValueAtTime(targetGain, t + fadeSecs);
+        }
+
+        function fadeOut(duration) {
+          if (!gainNode || !audioCtx) return;
+          const t = audioCtx.currentTime;
+          gainNode.gain.cancelScheduledValues(t);
+          const current = gainNode.gain.value || targetGain;
+          gainNode.gain.setValueAtTime(current, t);
+          gainNode.gain.linearRampToValueAtTime(0, t + duration);
+        }
+
+        // Attempt playback; if blocked, wait for user gesture to resume context + play
+        const tryPlay = async () => {
+          setupAudioNodes();
+          if (audioCtx && audioCtx.state === 'suspended') {
+            // try to resume automatically
+            try { await audioCtx.resume(); } catch (e) { /* ignore */ }
+          }
+
+          audio.playbackRate = slowFactor;
+
+          try {
+            // start with gain 0, then fade in
+            if (gainNode && audioCtx) gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            await audio.play();
+            if (audioCtx && gainNode) fadeIn();
+          } catch (err) {
+            // Autoplay blocked: attach one-time gesture to resume + play
+            const resumeHandler = async () => {
+              try {
+                setupAudioNodes();
+                if (audioCtx && audioCtx.state === 'suspended') await audioCtx.resume();
+                audio.playbackRate = slowFactor;
+                await audio.play();
+                if (gainNode && audioCtx) fadeIn();
+              } catch (e) {
+                console.warn('[AUDIO] Playback resume failed', e);
+              }
+              window.removeEventListener('click', resumeHandler);
+              window.removeEventListener('touchstart', resumeHandler);
+            };
+            window.addEventListener('click', resumeHandler, { once: true });
+            window.addEventListener('touchstart', resumeHandler, { once: true });
+          }
+        };
+
+        // Single-play handling: fade-out near end, then stop (no loop)
+        audio.addEventListener('timeupdate', () => {
+          if (!audio.duration || !isFinite(audio.duration)) return;
+          const remaining = audio.duration - audio.currentTime;
+          if (!isFadingOut && remaining <= fadeSecs + 0.05) {
+            isFadingOut = true;
+            if (gainNode && audioCtx) {
+              fadeOut(Math.max(0.05, remaining));
+            }
+            setTimeout(() => {
+              try {
+                audio.pause();
+              } catch (e) {
+                console.warn('[AUDIO] Pause failed', e);
+              }
+              isFadingOut = false;
+            }, Math.max(0, remaining) * 1000 + 50);
+          }
+        });
+
+        // Start attempt
+        tryPlay();
+      }
     });
   </script>
 </body>
