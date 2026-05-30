@@ -18,23 +18,13 @@
       }
     </style>
   </head>
-  <body>
-    <div class="w-screen h-screen grid grid-cols-8 specialGrid">
-      <div class="col-start-1 col-end-3 p-10px bg-myBlack flex flex-col justify-between text-myWhite z-[1100]">
-        <div class="flex flex-col">
-          <a href="home.html" class="font-myTitle">Città<br>interrotte</a>
-          <p>di Fondazione Scorza</p>
-        </div>
-        <div class="sidebar-links flex flex-col">
-          <a href="index.html" class="font-myTitle">Archivio</a>
-          <a href="storia.html" class="font-myTitle">Storia</a>
-          <a href="stat.html" class="font-myTitle">Statistiche</a>
-        </div>
-      </div>
+  <body class="archive-page stat-page">
+    <div class="w-screen min-h-screen grid grid-cols-8 specialGrid bg-myWhite">
+      <!-- Brand/navigation moved to bottom across pages -->
 
-      <div id="main-scroll" class="col-start-3 col-end-9 bg-myWhite h-screen overflow-y-scroll relative">
-        <div class="sticky top-0 z-20 col-span-full pt-40px pb-40px bg-myWhite">
-          <div class="grid grid-cols-6 mb-10px">
+      <div id="main-scroll" class="col-start-2 col-end-8 bg-transparent h-screen overflow-y-scroll relative">
+        <div class="sticky story-sticky top-0 z-20 col-span-full pt-10px bg-transparent" style="position: sticky; top: 0;" data-story-top-nav>
+          <div class="grid grid-cols-6 story-top-nav">
             <a href="#sezione_1" class="p text-justify">Introduzione</a>
             <a href="#sezione_2" class="p text-justify">Popolazione</a>
             <a href="#sezione_3" class="p text-justify">Età media</a>
@@ -43,27 +33,30 @@
             <a href="#sezione_6" class="p text-justify">Servizi</a>
           </div>
         </div>
+        <button type="button" class="story-back-to-top" data-story-back-to-top aria-label="Torna all'inizio della pagina">
+          <span aria-hidden="true">↑</span>
+        </button>
 
-        <div class="grid grid-cols-2 gap-10px pt-30px pl-10px pr-10px pb-30px">
+        <div class="grid grid-cols-2 ">
           <!-- SEZIONE 1: Introduzione -->
           <div id="sezione_1" class="sezione_1"></div>
-          <div class="col-span-2 font-myTitle uppercase leading-none max-w-[70ch] mr-auto">Questa sezione raccoglie dati demografici, abitativi e infrastrutturali relativi ai territori documentati dall'Archivio Scorza tra il 1964 e il 1986.</div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-2 font-myTitle uppercase leading-none max-w-[70ch] mr-auto" style="margin: 0;">Questa sezione raccoglie dati demografici, abitativi e infrastrutturali relativi ai territori documentati dall'Archivio Scorza tra il 1964 e il 1986.</div>
+          <div class="col-span-1 space-y-20px">
             <p> Le rilevazioni originarie provengono dai materiali raccolti dagli antropologi nel corso delle indagini sul campo: registri comunali, appunti, censimenti locali, fotografie e osservazioni dirette.</p>
             <p>I dati attuali sono stati ricostruiti successivamente dalla famiglia Scorza attraverso documentazione amministrativa, testimonianze dirette e aggiornamenti territoriali raccolti nei centri ancora abitati.</p>
           </div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p>Le statistiche non vengono presentate come indicatori astratti, ma come tracce concrete di una trasformazione lenta e persistente. I numeri mostrano il progressivo svuotamento dei paesi documentati, la riduzione della continuità generazionale e l'indebolimento delle strutture collettive che rendevano possibile l'abitare.</p>
           </div>
           <div class="col-span-2 h-px bg-myBlack mt-30px my-10px"></div>
           <!-- SEZIONE 2: Popolazione residua -->
           <div id="sezione_2" class="sezione_2"></div>
           <div class="col-span-2 font-myTitle uppercase leading-none max-w-[70ch]">Il primo indicatore riguarda la popolazione residente nei paesi documentati dall'Archivio Scorza.</div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p> Le rilevazioni mostrano una riduzione costante già visibile nei materiali raccolti dagli antropologi negli anni Settanta.</p>
             <p>In molti casi, i dati registrano una perdita progressiva che non deriva da eventi traumatici o improvvisi, ma da un lento processo di spostamento verso i centri urbani e industriali. Le generazioni più giovani lasciano i paesi in modo sistematico, attratte da possibilità economiche e infrastrutture assenti nei territori documentati.</p>
           </div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p>I materiali raccolti mostrano come il calo della popolazione non coincida immediatamente con l'abbandono dello spazio. Le strutture restano presenti, le abitazioni continuano a essere occupate, le attività sopravvivono in forma ridotta. Tuttavia, la riduzione numerica produce progressivamente un indebolimento del sistema sociale e collettivo.</p>
             <p>Le fotografie documentano strade ancora percorse, case mantenute, luoghi apparentemente attivi. I dati mostrano invece una diminuzione continua e irreversibile della presenza umana.</p>
           </div>
@@ -161,11 +154,11 @@
           <!-- SEZIONE 3: Età media -->
           <div id="sezione_3" class="sezione_3"></div>
           <div class="col-span-2 font-myTitle uppercase leading-none max-w-[70ch]">Nei territori documentati, la perdita di popolazione non riguarda soltanto il numero degli abitanti, ma la composizione stessa della comunità.</div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p>Le rilevazioni mostrano una progressiva scomparsa delle fasce più giovani e un aumento costante della popolazione anziana. In molti paesi documentati, i bambini diventano una presenza eccezionale già all'inizio degli anni Ottanta.</p>
             <p>Gli antropologi registrano frequentemente l'assenza di continuità generazionale: scuole con poche iscrizioni, nuclei familiari ridotti, abitazioni mantenute da persone anziane senza prospettive di successione.</p>
           </div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p>La trasformazione demografica modifica il funzionamento stesso del territorio. La riduzione della popolazione giovane comporta una diminuzione delle attività economiche, della mobilità e della vita collettiva.</p>
             <p>L'invecchiamento non appare come un dato isolato, ma come il segnale più evidente di una continuità interrotta.</p>
           </div>
@@ -217,11 +210,11 @@
           <!-- SEZIONE 4: Nascite registrate -->
           <div id="sezione_4" class="sezione_4"></div>
           <div class="col-span-2 font-myTitle uppercase leading-none max-w-[70ch]">Le nascite rappresentano uno degli indicatori più evidenti della continuità di un territorio.</div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p> Nei materiali raccolti dagli antropologi, la loro diminuzione viene annotata molto prima che emerga con chiarezza nei dati ufficiali. I registri comunali mostrano un calo progressivo che attraversa tutti i paesi documentati. In molti casi, il numero annuale delle nascite si riduce fino a diventare nullo.</p>
             <p>Gli appunti riportano frequentemente osservazioni sulla quasi totale assenza di bambini negli spazi pubblici, nelle scuole e nelle abitazioni.</p>
           </div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p>La riduzione delle nascite non viene interpretata come una crisi temporanea, ma come il segnale di una trasformazione irreversibile. I territori continuano a essere abitati, ma smettono progressivamente di produrre futuro.</p>
           </div>
           <div class="col-span-2 stat-chart-container mt-20px">
@@ -257,11 +250,11 @@
           <!-- SEZIONE 5: Case occupate -->
           <div id="sezione_5" class="sezione_5"></div>
           <div class="col-span-2 font-myTitle uppercase leading-none max-w-[70ch]">L'archivio distingue tra abitazioni costruite, abitazioni occupate e abitazioni realmente attive.</div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p> Questa distinzione emerge nel corso delle ricerche come elemento fondamentale per comprendere la condizione dei territori documentati.</p>
             <p>Molti edifici risultano ancora presenti e formalmente utilizzati, ma non producono una reale continuità abitativa. Alcune case vengono mantenute pur essendo occupate da una sola persona anziana; altre restano aperte e arredate nonostante lunghi periodi di inattività.</p>
           </div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p>Le fotografie mostrano spazi apparentemente intatti: finestre aperte, sedie all'esterno, cucine utilizzate. Tuttavia, i dati raccolti indicano una riduzione progressiva delle abitazioni realmente vissute in modo stabile.</p>
             <p>La permanenza delle strutture non coincide con la permanenza della vita collettiva. Una casa occupata non è sempre una casa abitata.</p>
           </div>
@@ -270,11 +263,11 @@
           <!-- SEZIONE 6: Servizi attivi -->
           <div id="sezione_6" class="sezione_6"></div>
           <div class="col-span-2 font-myTitle uppercase leading-none max-w-[70ch]">Le strutture restano presenti, ma senza una comunità sufficiente a sostenerle.</div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p>Scuole, ambulatori, uffici postali, linee di trasporto e attività commerciali vengono registrati nell'archivio come indicatori della possibilità di mantenere una vita collettiva stabile.</p>
             <p>La loro progressiva chiusura non rappresenta soltanto una perdita funzionale, ma la riduzione concreta della possibilità di restare.</p>
           </div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p>In molti dei territori documentati, le infrastrutture vengono costruite nel corso degli anni Settanta e Ottanta come parte di programmi di sviluppo e modernizzazione del Mezzogiorno. Tuttavia, la riduzione della popolazione e l'assenza di continuità generazionale rendono progressivamente impossibile mantenerle attive.</p>
             <p>Le infrastrutture rimangono visibili più a lungo della loro funzione.</p>
           </div>
@@ -336,7 +329,7 @@
           <!-- SEZIONE 7: Indice di continuità -->
           <div id="sezione_7" class="sezione_7"></div>
           <div class="col-span-2 font-myTitle uppercase leading-none max-w-[70ch]">L'Indice di Continuità è una classificazione interna elaborata dalla Fondazione Scorza negli anni Novanta per sintetizzare la condizione dei territori documentati.</div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p>L'indice incrocia:</p>
             <ul class="list-disc pl-30px space-y-10px">
               <li>popolazione residua</li>
@@ -347,7 +340,7 @@
             </ul>
             <p>Non indica se un paese sia ancora abitato, ma se possieda ancora le condizioni minime per continuare a esserlo nel tempo.</p>
           </div>
-          <div class="col-span-1 pt-30px space-y-20px">
+          <div class="col-span-1 space-y-20px">
             <p>I valori più bassi non corrispondono necessariamente ai territori più degradati, ma a quelli in cui la continuità generazionale e collettiva risulta ormai compromessa.</p>
             <p>Scala:</p>
             <ul class="list-disc pl-30px space-y-10px">
@@ -363,7 +356,7 @@
                 text{font-family:serif;fill:#111}
                 .small{font-size:12px}
                 .base{stroke:#aaa;stroke-width:1}
-                .value{stroke:#111;stroke-width:3}
+                .value{stroke:#111;stroke-width:1}
               </style>
               <text x="140" y="95" class="small">0</text>
               <text x="350" y="95" class="small">100</text>
@@ -409,5 +402,20 @@
     </div>
 
     <script src="script.js"></script>
+    
+    <!-- Bottom brand + links (identical on every page) -->
+    <div class="site-bottom-brand" style="position:fixed;left:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
+      <div style="line-height:1">
+        <a href="home.html" class="font-myTitle" style="display:inline-block">Città<br>interrotte</a>
+        <p style="margin:0">di Fondazione Scorza</p>
+      </div>
+    </div>
+    <div class="sidebar-links" style="position:fixed;right:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">
+      <div style="display:flex;flex-direction:column">
+        <a href="storia.html" class="font-myTitle text-right">Storia</a>
+        <a href="index.html" class="font-myTitle text-right">Archivio</a>
+        <a href="stat.html" class="font-myTitle text-right">Dati</a>
+      </div>
+    </div>
   </body>
 </html>
