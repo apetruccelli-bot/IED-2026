@@ -22,24 +22,35 @@
       <!-- Brand moved to bottom across pages -->
         <div class="col-start-2 col-end-8 bg-transparent">
           <div class="sticky archive-sticky top-0 z-20 col-span-full pt-10px pl-10px pr-10px pb-10px">
-            <div class="grid grid-cols-6 bg-transparent mb-10px gap-10px ">
-              <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Anno</button>
-            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Autore</button>
-            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Regione</button>
-            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Abitanti</button>
-            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Documento</button>
-            <form action="/" onsubmit="return false;">
+            <button
+              type="button"
+              class="archive-mobile-toggle p text-left bg-transparent border-0 p-0 cursor-pointer select-none"
+              data-mobile-filters-toggle
+              aria-controls="archive-filters-panel"
+              aria-expanded="false"
+            >
+              Filtri
+            </button>
+            <div id="archive-filters-panel" class="archive-filters-panel">
+              <div class="archive-filter-controls grid grid-cols-6 bg-transparent mb-10px gap-10px">
+                <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Anno</button>
+                <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Autore</button>
+                <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Regione</button>
+                <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Abitanti</button>
+                <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Documento</button>
+              </div>
+              <div id="archive-rows" hidden class="archive-rows-panel grid grid-cols-6 gap-10px mt-20px"></div>
+            </div>
+            <form action="/" class="archive-search-shell" onsubmit="return false;">
               <label for="search" class="sr-only">Ricerca</label>
               <input
-              id="search"
-              type="search"
-              placeholder="Ricerca"
-              class="w-full border-b border-myBlack bg-transparent text-myBlack outline-none placeholder:text-myBlack"
+                id="search"
+                type="search"
+                placeholder="Ricerca"
+                class="w-full border-b border-myBlack bg-transparent text-myBlack outline-none placeholder:text-myBlack"
               />
-              </form>
-              </div>
-                <div id="archive-rows" hidden class="archive-rows-panel grid grid-cols-6 gap-10px mt-20px"></div>
-              </div>
+            </form>
+          </div>
           <div id="archive-gallery" 
           class="columns-2 xl:columns-2 p-10px"></div>
         </div>
@@ -62,7 +73,7 @@
         <div class="lb-info">
           <span class="lb-id" id="lb-id"></span>
           <div class="lb-desc" id="lb-desc"></div>
-        </div>
+          </div>
       </div>
     </div>
 
