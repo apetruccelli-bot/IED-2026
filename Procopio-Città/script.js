@@ -2,9 +2,6 @@ const rowsHost = document.getElementById('archive-rows');
 const galleryHost = document.getElementById('archive-gallery');
 const searchInput = document.getElementById('search');
 const archiveToggleButtons = document.querySelectorAll('[data-archive-toggle]');
-const mobileFiltersToggleButton = document.querySelector('[data-mobile-filters-toggle]');
-const archiveFiltersPanel = document.getElementById('archive-filters-panel');
-const compactFiltersQuery = window.matchMedia('(max-width: 1119px)');
 const lightbox = document.getElementById('lightbox');
 const lbImg = document.getElementById('lb-img');
 const lbId = document.getElementById('lb-id');
@@ -156,28 +153,18 @@ async function hydrateRowsWithImages() {
 
 function setArchiveFiltersVisible(visible) {
   archiveFiltersVisible = visible;
-  const isCompactLayout = compactFiltersQuery.matches;
 
   if (rowsHost) {
     rowsHost.hidden = !visible;
-  }
-
-  if (archiveFiltersPanel) {
-    archiveFiltersPanel.classList.toggle('is-open', !isCompactLayout || visible);
   }
 
   if (stickyHeader) {
     stickyHeader.classList.toggle('is-open', visible);
   }
 
-  if (mobileFiltersToggleButton) {
-    mobileFiltersToggleButton.setAttribute('aria-expanded', String(visible));
-  }
-
   // toggle full-screen overlay class on body so entire background fades to myWhite
   if (typeof document !== 'undefined' && document.body) {
     document.body.classList.toggle('archive-overlay-open', visible);
-    document.body.classList.toggle('archive-mobile-filters-open', isCompactLayout && visible);
   }
 
   archiveToggleButtons.forEach((button) => {
@@ -189,50 +176,12 @@ function renderFilters() {
   if (!rowsHost) return;
 
   const columns = buildFilterColumns();
-  const compactYearCount = 4;
-  const makeHeading = (label) => {
-    const safeLabel = String(label || '').trim();
-    if (!safeLabel) return '';
-    return `${safeLabel.charAt(0).toUpperCase()}${safeLabel.slice(1)}`;
-  };
-
-  const renderYearValues = (values) => {
-    const visibleYears = values.slice(0, compactYearCount);
-    const extraYears = values.slice(compactYearCount);
-
-    const visibleMarkup = visibleYears
-      .map(
-        (v) =>
-          `<p class="text-justify cursor-pointer select-none" data-filter-key="year" data-filter-value="${escapeHtml(v)}">${escapeHtml(v)}</p>`
-      )
-      .join('');
-
-    if (!extraYears.length) return visibleMarkup;
-
-    const extraMarkup = extraYears
-      .map(
-        (v) =>
-          `<p class="text-justify cursor-pointer select-none" data-filter-key="year" data-filter-value="${escapeHtml(v)}">${escapeHtml(v)}</p>`
-      )
-      .join('');
-
-    return `
-      ${visibleMarkup}
-      <div class="archive-years-more hidden" data-years-more>
-        ${extraMarkup}
-      </div>
-      <button type="button" class="archive-years-expand" data-years-expand aria-expanded="false" aria-label="Mostra altri anni">+</button>
-    `;
-  };
 
   rowsHost.innerHTML = columns
     .map(
       ({ key, label, values }) => `
       <div class="flex flex-col">
-        <button type="button" class="archive-row-heading" disabled>${escapeHtml(makeHeading(label))}</button>
-        ${key === 'year'
-          ? renderYearValues(values)
-          : key === 'regione'
+        ${key === 'regione'
           ? values
               .map((v) => {
                 const towns = regionGroups[v] || [];
@@ -270,20 +219,6 @@ function renderFilters() {
       const key = el.dataset.filterKey;
       const value = el.dataset.filterValue;
       if (key && value) toggleFilter(key, value);
-    });
-  });
-
-  rowsHost.querySelectorAll('[data-years-expand]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const host = button.closest('.flex.flex-col');
-      const moreYears = host?.querySelector('[data-years-more]');
-      if (!moreYears) return;
-
-      const isOpen = !moreYears.classList.contains('hidden');
-      moreYears.classList.toggle('hidden', isOpen);
-      button.setAttribute('aria-expanded', String(!isOpen));
-      button.textContent = isOpen ? '+' : '-';
-      button.setAttribute('aria-label', isOpen ? 'Mostra altri anni' : 'Nascondi anni');
     });
   });
 
@@ -512,58 +447,26 @@ if (lbNext) lbNext.addEventListener('click', () => navigateLightbox(1));
 
 archiveToggleButtons.forEach((button) => {
   button.addEventListener('click', () => {
-    if (compactFiltersQuery.matches) {
-      manualToggle = true;
-      setArchiveFiltersVisible(true);
-      return;
-    }
-
     manualToggle = !manualToggle;
     setArchiveFiltersVisible(manualToggle);
   });
 });
 
-if (mobileFiltersToggleButton) {
-  mobileFiltersToggleButton.addEventListener('click', () => {
-    manualToggle = !manualToggle;
-    setArchiveFiltersVisible(manualToggle);
-  });
-}
-
 // show filters on hover; if the user manually toggled (manualToggle), keep that state
 const stickyHeader = document.querySelector('.archive-page .sticky:not(.story-sticky)');
 if (stickyHeader) {
-  stickyHeader.addEventListener('mouseenter', () => {
-    if (compactFiltersQuery.matches) return;
-    setArchiveFiltersVisible(true);
-  });
+  stickyHeader.addEventListener('mouseenter', () => setArchiveFiltersVisible(true));
   stickyHeader.addEventListener('mouseleave', () => {
-    if (compactFiltersQuery.matches) return;
     if (!manualToggle) setArchiveFiltersVisible(false);
   });
 
-  // Keep touch toggle on desktop/tablet only; compact layout uses the explicit Filtri button.
+  // support basic touch toggling for mobile: tap header to toggle filters
   stickyHeader.addEventListener('touchstart', (e) => {
-    if (compactFiltersQuery.matches) return;
     manualToggle = !manualToggle;
     setArchiveFiltersVisible(manualToggle);
     // prevent immediate mouse events
     e.preventDefault();
   }, { passive: false });
-}
-
-if (compactFiltersQuery) {
-  compactFiltersQuery.addEventListener('change', () => {
-    if (!compactFiltersQuery.matches) {
-      manualToggle = false;
-      setArchiveFiltersVisible(false);
-      return;
-    }
-
-    if (!manualToggle) {
-      setArchiveFiltersVisible(false);
-    }
-  });
 }
 
 /* document.addEventListener('keydown', (event) => {

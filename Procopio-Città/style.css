@@ -97,9 +97,8 @@ body.page-transition.page-transition-leaving > :not(#lightbox) {
   --site-gap: 20px;
   --attach-extra: 60px;
   --image-max-height: 420px;
-  --title-size: clamp(14px, 2vw, 25px);
-  /* Prevent `font-myText` shrinking too small on narrow viewports */
-  --text-size: clamp(12px, 1.1vw, 16px);
+  --title-size: 25px;
+  --text-size: 14px;
 }
 
 body {
@@ -122,45 +121,6 @@ body {
   text-transform: uppercase;
   line-height: 100%;
   letter-spacing: 0.02em;
-}
-
-/* Ensure brand/title scales fluidly in lightbox, footer and sidebar */
-.lb-title .font-myTitle,
-.site-bottom-brand .font-myTitle,
-.sidebar-links .font-myTitle {
-  font-size: clamp(12px, 6vw, var(--title-size));
-  line-height: 1;
-}
-
-.lb-title p,
-.site-bottom-brand p {
-  font-size: clamp(10px, 2.4vw, 14px);
-  margin: 0;
-}
-
-/* Responsive margins and spacing for brand elements */
-.lb-title {
-  padding: clamp(6px, 1.5vw, 18px) clamp(8px, 2.2vw, 24px);
-  margin: 0;
-}
-
-.site-bottom-brand {
-  left: clamp(8px, 1.5vw, 20px) !important;
-  bottom: clamp(8px, 1.5vw, 20px) !important;
-  gap: clamp(6px, 1.2vw, 12px) !important;
-  padding: clamp(4px, 0.8vw, 10px) !important;
-}
-
-.sidebar-links {
-  right: clamp(8px, 1.5vw, 20px) !important;
-  bottom: clamp(8px, 1.5vw, 20px) !important;
-  gap: clamp(4px, 1vw, 10px) !important;
-}
-
-/* Ensure lightbox title aligns and scales with viewport */
-.lb-title .font-myTitle {
-  display: inline-block;
-  transform-origin: left top;
 }
 
 /* Keep masthead and sidebar titles layout unchanged (no wrap).
@@ -666,8 +626,8 @@ header {
 
 .lb-title {
   position: absolute;
+  top: 10px;
   left: 10px;
-  bottom: 10px;
   color: var(--myBlack, #1E1E1E);
   z-index: 9999;
   pointer-events: auto;
@@ -1214,14 +1174,6 @@ header {
   background: transparent;
 }
 
-.archive-mobile-toggle {
-  display: none;
-}
-
-.archive-filters-panel {
-  display: block;
-}
-
 .archive-sticky::before {
   /* removed local sticky overlay to avoid visible white block; global body overlay is used instead */
   content: "";
@@ -1359,135 +1311,6 @@ body.archive-overlay-open #archive-gallery p {
   overflow: visible;
   padding-bottom: 20px;
   position: relative;
-}
-
-.archive-row-heading {
-  display: none;
-}
-
-.archive-years-expand,
-.archive-years-more {
-  display: none;
-}
-
-.archive-page .specialGrid,
-.archive-page .specialGrid > .col-start-2.col-end-8 {
-  overflow: visible;
-}
-
-.archive-page .specialGrid > .col-start-2.col-end-8 {
-  position: relative;
-  z-index: 4002;
-}
-
-.archive-page .specialGrid > .col-start-8.col-end-9 {
-  position: relative;
-  z-index: 1;
-}
-
-.archive-search-shell {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: max(190px, calc((100% - 50px) / 6));
-  margin: 0;
-  z-index: 3003;
-}
-
-.archive-search-shell #search {
-  font-size: var(--text-size);
-  line-height: 1.1;
-}
-
-.archive-search-shell #search::placeholder {
-  font-size: var(--text-size);
-}
-
-@media (max-width: 1119px) {
-  .archive-mobile-toggle {
-    display: inline-block;
-    margin-bottom: 10px;
-  }
-
-  .archive-filters-panel {
-    display: none;
-  }
-
-  .archive-filters-panel.is-open {
-    display: block;
-  }
-
-  .archive-filter-controls {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  .archive-filter-controls > button[data-archive-toggle] {
-    display: none;
-  }
-
-  .archive-search-shell {
-    top: 10px;
-    right: 10px;
-    width: calc((100% - 50px) / 6);
-  }
-
-  #archive-rows.archive-rows-panel {
-    position: static;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px 20px;
-    padding: 0;
-    margin-top: 10px;
-  }
-
-  #archive-rows > .flex.flex-col {
-    padding-bottom: 12px;
-  }
-
-  .archive-row-heading {
-    display: block;
-    width: 100%;
-    margin: 0 0 8px 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--myBlack);
-    text-align: left;
-    font-family: 'Diatype-Mono';
-    font-size: clamp(11px, 1.8vw, 15px);
-    line-height: 1;
-    text-transform: uppercase;
-    opacity: 1;
-  }
-
-  #archive-rows [data-filter-key][data-filter-value],
-  #archive-rows .region-group > button {
-    font-size: clamp(9px, 1.35vw, 12px);
-    line-height: 1.1;
-  }
-
-  .archive-years-more {
-    display: block;
-  }
-
-  .archive-years-more.hidden {
-    display: none;
-  }
-
-  .archive-years-expand {
-    display: inline-block;
-    margin-top: 4px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--myBlack);
-    font-family: 'Diatype-Mono';
-    font-size: clamp(10px, 1.4vw, 14px);
-    line-height: 1;
-    cursor: pointer;
-  }
 }
 
 
