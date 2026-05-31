@@ -49,6 +49,7 @@ let activeFilterType = null;
 let advertisingScrollBound = false;
 let lastAdvertisingIndex = -1;
 let adScrollSyncLock = false;
+let currentPackIndex = 0;
 
 function updateCategoryText(category) {
   const japaneseText = document.getElementById('category-japanese-text');
@@ -218,14 +219,14 @@ function setCategory(cat) {
     updateCategoryText(activeCategory);
   }
   render();
+  syncCategoryGestures();
+}
 
-  if (
-    activeCategory === 'fotografie' &&
-    typeof handDetector !== 'undefined' &&
-    !handDetector &&
-    typeof initPortraitGesture === 'function'
-  ) {
-    initPortraitGesture();
+function syncCategoryGestures() {
+  if (activeCategory === 'pacchetti') {
+    window.initPackGesture?.();
+  } else {
+    window.stopPackGesture?.();
   }
 }
 
@@ -362,6 +363,41 @@ function clearActiveInfo() {
   });
 }
 
+function getPackItems() {
+  return filteredItems().filter(item => item.category === 'pacchetti');
+}
+
+function selectPackByIndex(index) {
+  if (activeCategory !== 'pacchetti' || !grid) return -1;
+
+  const packs = getPackItems();
+  if (!packs.length) return -1;
+
+  currentPackIndex = (index + packs.length) % packs.length;
+  const item = packs[currentPackIndex];
+
+  grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
+  grid.classList.add('has-selected');
+
+  const card = grid.querySelector(`.card[data-item-id="${item.id}"]`);
+  if (card) {
+    card.classList.add('selectedImg');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  updateActiveInfo(item);
+  showItemPreview(item);
+  return currentPackIndex;
+}
+
+function advancePack() {
+  return selectPackByIndex(currentPackIndex + 1);
+}
+
+window.getArchiveActiveCategory = () => activeCategory;
+window.selectPackByIndex = selectPackByIndex;
+window.advancePack = advancePack;
+
 function descriptionTextHtml(ja, en) {
   return `
     <div class="japanese">${ja || ''}</div>
@@ -483,6 +519,7 @@ function render() {
   visible.forEach((item, i) => {
     const card = document.createElement('article');
     card.className = 'card activeImg';
+    card.dataset.itemId = String(item.id);
     card.style.cursor = ['fotografie', 'pacchetti'].includes(activeCategory) ? 'zoom-in' : 'default';
     card.dataset.itemYear = item.year;
 
@@ -577,6 +614,10 @@ function render() {
         card.classList.add('selectedImg');
         updateActiveInfo(item);
         showItemPreview(item);
+        if (activeCategory === 'pacchetti') {
+          const idx = getPackItems().findIndex(p => p.id === item.id);
+          if (idx >= 0) currentPackIndex = idx;
+        }
       } else {
         clearActiveInfo();
         clearItemPreview();
@@ -599,6 +640,11 @@ function render() {
     });
   } else {
     clearAdvertisingDescriptions();
+  }
+
+  if (activeCategory === 'pacchetti' && visible.length) {
+    currentPackIndex = 0;
+    requestAnimationFrame(() => selectPackByIndex(0));
   }
 }
 
@@ -816,19 +862,25 @@ document.querySelectorAll('[data-category]').forEach(el => {
   });
 });
 
+function updateAboutImageBlur() {
+  const images = document.querySelectorAll('.about-plate img, .about-grid img');
+  images.forEach(img => {
+    const rect = img.getBoundingClientRect();
+    const progress = 1 - rect.top / window.innerHeight;
+    img.classList.toggle('about-faded', progress > 0.45);
+  });
+}
+
 function initAboutImageBlurOnScroll() {
   const modal = document.getElementById('explore-modal');
-  const images = document.querySelectorAll('.about-grid img');
-  if (!modal || !images.length || modal.dataset.blurBound === 'true') return;
+  const images = document.querySelectorAll('.about-plate img, .about-grid img');
+  if (!modal || !images.length) return;
 
-  modal.dataset.blurBound = 'true';
-  modal.addEventListener('scroll', () => {
-    images.forEach(img => {
-      const rect = img.getBoundingClientRect();
-      const progress = 1 - rect.top / window.innerHeight;
-      img.classList.toggle('about-faded', progress > 0.45);
-    });
-  });
+  if (modal.dataset.blurBound !== 'true') {
+    modal.dataset.blurBound = 'true';
+    modal.addEventListener('scroll', updateAboutImageBlur, { passive: true });
+  }
+  updateAboutImageBlur();
 }
 
 function updateAboutHeaderOffset() {
@@ -837,12 +889,35 @@ function updateAboutHeaderOffset() {
   document.documentElement.style.setProperty('--about-header-offset', `${header.offsetHeight}px`);
 }
 
-function openAboutIndex() {
+let aboutIndexOpenTimer = null;
+
+function openAboutIndexPanel() {
   document.querySelector('.header-about-wrap')?.classList.add('is-index-open');
 }
 
-function closeAboutIndex() {
+function closeAboutIndexPanel() {
   document.querySelector('.header-about-wrap')?.classList.remove('is-index-open');
+}
+
+function cancelAboutIndexOpenTimer() {
+  window.clearTimeout(aboutIndexOpenTimer);
+  aboutIndexOpenTimer = null;
+}
+
+function closeAboutIndex() {
+  cancelAboutIndexOpenTimer();
+  closeAboutIndexPanel();
+}
+
+function scheduleAboutIndexOpen() {
+  cancelAboutIndexOpenTimer();
+  closeAboutIndexPanel();
+  aboutIndexOpenTimer = window.setTimeout(() => {
+    aboutIndexOpenTimer = null;
+    if (document.body.classList.contains('about-open')) {
+      openAboutIndexPanel();
+    }
+  }, 2000);
 }
 
 function initAboutIndexLinks() {
@@ -861,14 +936,19 @@ function initAboutIndexLinks() {
 }
 
 function initAboutDropdown() {
+  const aboutWrap = document.querySelector('.header-about-wrap');
   const aboutLink = document.getElementById('header-about-link');
   const aboutIndex = document.getElementById('about-index');
-  if (!aboutLink || !aboutIndex) return;
+  if (!aboutWrap || !aboutLink || !aboutIndex) return;
 
   let closeTimer = null;
 
   const scheduleClose = () => {
-    closeTimer = window.setTimeout(closeAboutIndex, 120);
+    closeTimer = window.setTimeout(() => {
+      if (aboutWrap.classList.contains('is-index-open')) {
+        closeAboutIndexPanel();
+      }
+    }, 120);
   };
 
   const cancelClose = () => {
@@ -879,13 +959,11 @@ function initAboutDropdown() {
     e.preventDefault();
     e.stopPropagation();
     openExploreModal();
-    openAboutIndex();
+    scheduleAboutIndexOpen();
   });
 
-  [aboutLink, aboutIndex].forEach(el => {
-    el.addEventListener('mouseenter', cancelClose);
-    el.addEventListener('mouseleave', scheduleClose);
-  });
+  aboutWrap.addEventListener('mouseenter', cancelClose);
+  aboutWrap.addEventListener('mouseleave', scheduleClose);
 }
 
 function openExploreModal() {

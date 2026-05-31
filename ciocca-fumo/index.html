@@ -363,12 +363,19 @@
   </div>
 </div>
 
+<div id="gesture-camera" aria-hidden="true">
+  <video id="gesture-webcam" autoplay muted playsinline></video>
+  <canvas id="gesture-canvas"></canvas>
+  <div id="gesture-status">Gesture tracking</div>
+</div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
 
     <script>
       function navigateFromModal(hash) {
@@ -387,6 +394,7 @@
     </script>
 
     <script src="ciocca-ml.js"></script>
+    <script src="ml-hand-tracking/pack-gesture.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
