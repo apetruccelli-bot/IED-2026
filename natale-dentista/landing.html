@@ -61,8 +61,9 @@
 
 			/* slide-from-top animation for CTA (slightly slower) */
 			.landing-cta {
-				transition: transform 1000ms cubic-bezier(.2,.9,.2,1), opacity 900ms ease;
-				transform: translate(-50%, -120%); /* start above final position */
+				/* slower entrance: longer transform and opacity transitions */
+				transition: transform 1400ms cubic-bezier(.2,.9,.2,1), opacity 1200ms ease;
+				transform: translate(-50%, -140%); /* start further above for a slower slide-in */
 				opacity: 0;
 				pointer-events: none; /* not clickable until shown */
 			}
@@ -104,7 +105,8 @@
 				.landing-cta.show .landing-link {
 					opacity: 0.95;
 					transform: translateY(0);
-					transition-delay: 900ms; /* link appears after title (slower) */
+					/* increase delay so link appears after the (now slower) title entrance */
+					transition-delay: 1900ms;
 					pointer-events: auto;
 				}
 
@@ -121,6 +123,7 @@
 					line-height: 1;
 					font-size: 40px;
 					pointer-events: none; /* make title non-interactive */
+					text-transform: none; /* preserve original casing (ensure 'Whitaker' is capitalized) */
 				}
 		</style>
 	</head>
@@ -128,7 +131,7 @@
 		<div class="landing-wrap">
 			<img id="landing-img" src="img/landing/landing1.jpeg" alt="Landing">
 			<div class="landing-cta landing-title" role="heading" aria-level="1">
-				<div class="landing-title-lines">Dr. Whitaker’s<br>Aberrant Findings</div>
+				<div class="landing-title-lines">Dr. Whitaker’s<br>aberrant findings</div>
 				<a id="landing-link" class="landing-link" href="index.html?from=landing" aria-label="Start visit">Show your teeth to<br>start the visit</a>
 			</div>
 		</div>
@@ -150,7 +153,8 @@
 					img.classList.add('loaded');
 					// slightly longer delay so title appears after the image
 					// increased delay so the image is visible before the title
-					setTimeout(() => { if (cta) cta.classList.add('show'); }, 1200);
+					// bumped to 1800ms to match the slower CSS entrance
+					setTimeout(() => { if (cta) cta.classList.add('show'); }, 1800);
 				}
 				if (img.complete && img.naturalWidth !== 0) {
 					// already loaded from cache - allow a tick for paint
@@ -204,7 +208,8 @@
 					const faceW = getFaceWidth(kp);
 					const rel = mouthW / faceW;
 					// smile when mouth width is relatively large (corners pulled sideways)
-					return rel > 0.48;
+					// lowered threshold to make smile detection more sensitive
+					return rel > 0.42;
 				}
 
 				async function startCamera() {
@@ -250,8 +255,9 @@
 							}
 
 							if (mouthOpenCount >= CONFIRM_FRAMES || smileCount >= CONFIRM_FRAMES) {
-								// navigate to index with param so it doesn't redirect back to landing
+								// navigate to index with param and a session flag so index won't redirect back to landing
 								running = false;
+								try { sessionStorage.setItem('fromLanding', '1'); } catch (e) {}
 								const target = 'index.html?from=landing';
 								// small delay to let user see action
 								setTimeout(() => { window.location.href = target; }, 200);
