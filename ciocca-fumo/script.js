@@ -50,6 +50,7 @@ let advertisingScrollBound = false;
 let lastAdvertisingIndex = -1;
 let adScrollSyncLock = false;
 let portraitGestureIndex = 0;
+let packGestureIndex = 0;
 
 function updateCategoryText(category) {
   const japaneseText = document.getElementById('category-japanese-text');
@@ -207,7 +208,10 @@ function setCategory(cat) {
     renderCategoryFilters(activeCategory);
   }
 
-  if (activeCategory === 'pacchetti') grid?.classList.add('layout-pacchetti');
+  if (activeCategory === 'pacchetti') {
+    packGestureIndex = 0;
+    grid?.classList.add('layout-pacchetti');
+  }
   if (activeCategory === 'pubblicità') {
     grid?.classList.add('layout-pubblicita');
     lastAdvertisingIndex = -1;
@@ -273,6 +277,48 @@ function syncPortraitSelection() {
 
 function advancePortraitViaGesture() {
   selectPortraitByIndex(portraitGestureIndex + 1);
+}
+
+function getPackItems() {
+  return filteredItems().filter(item => item.category === 'pacchetti');
+}
+
+function selectPackByIndex(index) {
+  if (activeCategory !== 'pacchetti' || !grid) return;
+
+  const packs = getPackItems();
+  if (!packs.length) return;
+
+  packGestureIndex = ((index % packs.length) + packs.length) % packs.length;
+  const item = packs[packGestureIndex];
+
+  grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
+  grid.classList.add('has-selected');
+
+  const card = findCardForItem(item);
+  if (card) {
+    card.classList.add('selectedImg');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  updateActiveInfo(item);
+  showItemPreview(item);
+}
+
+function syncPackSelection() {
+  const packs = getPackItems();
+  if (!packs.length) {
+    clearItemPreview();
+    grid?.classList.remove('has-selected');
+    return;
+  }
+
+  packGestureIndex = Math.min(packGestureIndex, packs.length - 1);
+  selectPackByIndex(packGestureIndex);
+}
+
+function advancePackViaGesture() {
+  selectPackByIndex(packGestureIndex + 1);
 }
 
 function renderPortraitFilters() {
@@ -627,6 +673,10 @@ function render() {
           const portraits = getPortraitItems();
           const idx = portraits.findIndex(p => p.id === item.id);
           if (idx >= 0) portraitGestureIndex = idx;
+        } else if (activeCategory === 'pacchetti') {
+          const packs = getPackItems();
+          const idx = packs.findIndex(p => p.id === item.id);
+          if (idx >= 0) packGestureIndex = idx;
         }
       } else {
         clearActiveInfo();
@@ -654,6 +704,10 @@ function render() {
 
   if (activeCategory === 'fotografie') {
     syncPortraitSelection();
+  }
+
+  if (activeCategory === 'pacchetti') {
+    syncPackSelection();
   }
 }
 
@@ -1027,3 +1081,6 @@ window.getActiveCategory = () => activeCategory;
 window.getPortraitItems = getPortraitItems;
 window.selectPortraitByIndex = selectPortraitByIndex;
 window.advancePortraitViaGesture = advancePortraitViaGesture;
+window.getPackItems = getPackItems;
+window.selectPackByIndex = selectPackByIndex;
+window.advancePackViaGesture = advancePackViaGesture;
