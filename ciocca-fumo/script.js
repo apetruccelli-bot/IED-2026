@@ -48,6 +48,7 @@ let activeFilter = null;
 let activeFilterType = null;
 let advertisingScrollBound = false;
 let lastAdvertisingIndex = -1;
+let adScrollSyncLock = false;
 
 function updateCategoryText(category) {
   const japaneseText = document.getElementById('category-japanese-text');
@@ -161,6 +162,18 @@ function filteredItems() {
   });
 }
 
+function updateHeaderNavState({ aboutOpen = false, highlightCategory = null } = {}) {
+  const aboutLink = document.getElementById('header-about-link');
+  const activeCat = highlightCategory ?? activeCategory;
+
+  document.querySelectorAll('[data-category]').forEach(el => {
+    el.classList.toggle('is-active', !aboutOpen && el.dataset.category === activeCat);
+    el.style.opacity = '';
+  });
+
+  aboutLink?.classList.toggle('is-active', aboutOpen);
+}
+
 function setCategory(cat) {
   activeCategory = cat;
   activeFilter = null;
@@ -179,9 +192,7 @@ function setCategory(cat) {
     'year-filtered'
   );
 
-  document.querySelectorAll('[data-category]').forEach(el => {
-    el.style.opacity = el.dataset.category === activeCategory ? '1' : '0.35';
-  });
+  updateHeaderNavState();
 
   document.querySelector('.mainLayout')?.classList.toggle('category-pubblicita', activeCategory === 'pubblicità');
 
@@ -199,9 +210,13 @@ function setCategory(cat) {
     grid?.classList.add('layout-pubblicita');
     lastAdvertisingIndex = -1;
     if (grid) grid.scrollTop = 0;
+  } else {
+    resetAdvertisingScroll();
   }
 
-  updateCategoryText(activeCategory);
+  if (activeCategory !== 'pubblicità') {
+    updateCategoryText(activeCategory);
+  }
   render();
 
   if (
@@ -312,8 +327,10 @@ function updateActiveInfo(item) {
   const tags = getItemTags(item);
 
   document.querySelectorAll('[data-category]').forEach(el => {
-    el.style.opacity = el.dataset.category === item.category ? '1' : '0.35';
+    el.classList.toggle('is-active', el.dataset.category === item.category);
+    el.style.opacity = '';
   });
+  document.getElementById('header-about-link')?.classList.remove('is-active');
 
   document.querySelectorAll('.filter-option').forEach(el => {
     const value = el.dataset.filterValue;
@@ -338,13 +355,18 @@ function updateActiveInfo(item) {
 }
 
 function clearActiveInfo() {
-  document.querySelectorAll('[data-category]').forEach(el => {
-    el.style.opacity = el.dataset.category === activeCategory ? '1' : '0.35';
-  });
+  updateHeaderNavState();
   document.querySelectorAll('.filter-option').forEach(el => {
     el.classList.remove('active-filter');
     el.style.opacity = '1';
   });
+}
+
+function descriptionTextHtml(ja, en) {
+  return `
+    <div class="japanese">${ja || ''}</div>
+    <div class="english">${en || ''}</div>
+  `;
 }
 
 function showItemPreview(item) {
@@ -364,11 +386,11 @@ function showItemPreview(item) {
       <div class="card-tags">
         ${(item.tags || []).map(tag => `<span class="card-tag">${tag}</span>`).join('')}
       </div>
-      <p class="card-desc">${item['description-ja'] || ''}<br>${item['description-en'] || ''}</p>
+      <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
     `;
   } else if (item.category === 'pubblicità') {
     bodyHtml = `
-      <p class="card-desc">${item['description-ja'] || ''}<br>${item['description-en'] || ''}</p>
+      <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
     `;
   } else {
     const tags = getItemTags(item);
@@ -377,7 +399,7 @@ function showItemPreview(item) {
       <div class="card-tags">
         ${tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
       </div>
-      <p class="card-desc">${item['description-ja'] || ''}<br>${item['description-en'] || ''}</p>
+      <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
     `;
   }
 
@@ -395,7 +417,7 @@ function clearItemPreview() {
   itemPreview.setAttribute('aria-hidden', 'true');
   setDescriptionIntroVisible(true);
 
-  if (activeCategory === 'pubblicità') updateAdvertisingTextOnScroll();
+  if (activeCategory === 'pubblicità') updateAdvertisingScrollState();
   else updateCategoryText(activeCategory);
 }
 
@@ -466,6 +488,22 @@ function render() {
     img.src = item.src;
     img.alt = item.description || `Item ${item.id}`;
     img.loading = 'lazy';
+
+    if (item.category === 'pubblicità') {
+      img.addEventListener('load', () => {
+        syncAdvertisingDescHeights();
+        syncAdvertisingScrollPosition();
+        if (i === 0) initFirstAdvertisingText();
+      }, { once: true });
+      if (img.complete) {
+        requestAnimationFrame(() => {
+          syncAdvertisingDescHeights();
+          syncAdvertisingScrollPosition();
+          initFirstAdvertisingText();
+        });
+      }
+    }
+
     card.appendChild(img);
 
     const body = document.createElement('div');
@@ -476,7 +514,7 @@ function render() {
         <div class="card-tags">
           ${(item.tags || []).map(tag => `<span class="card-tag">${tag}</span>`).join('')}
         </div>
-        <p class="card-desc">${item['description-ja'] || ''}<br>${item['description-en'] || ''}</p>
+        <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
       `;
     } else {
       const idEl = document.createElement('span');
@@ -501,7 +539,7 @@ function render() {
       if (item.category === 'fotografie') {
         const descEl = document.createElement('p');
         descEl.className = 'card-desc';
-        descEl.innerHTML = `${item['description-ja'] || ''}<br>${item['description-en'] || ''}`;
+        descEl.innerHTML = descriptionTextHtml(item['description-ja'], item['description-en']);
         body.appendChild(descEl);
       }
     }
@@ -529,44 +567,129 @@ function render() {
   });
 
   if (activeCategory === 'pubblicità') {
+    renderAdvertisingDescriptions(visible);
     if (grid) grid.scrollTop = 0;
     lastAdvertisingIndex = -1;
     setupAdvertisingScrollText();
+    requestAnimationFrame(() => {
+      syncAdvertisingDescHeights();
+      syncAdvertisingScrollPosition();
+      updateAdvertisingScrollState();
+      initFirstAdvertisingText();
+    });
+  } else {
+    clearAdvertisingDescriptions();
   }
 }
 
-function setAdvertisingDescription(ja, en, index) {
+function toggleAdvertisingDescScroll(show) {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (!scroll) return;
+  scroll.classList.toggle('is-active', show);
+  scroll.setAttribute('aria-hidden', String(!show));
+}
+
+function renderAdvertisingDescriptions(visible) {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (!scroll) return;
+
+  scroll.innerHTML = '';
+  toggleAdvertisingDescScroll(true);
+
+  visible.forEach(item => {
+    const block = document.createElement('div');
+    block.className = 'ad-desc-block';
+    block.innerHTML = `
+      <div class="ad-desc-text">
+        <div class="japanese">${item['description-ja'] || ''}</div>
+        <div class="english">${item['description-en'] || ''}</div>
+      </div>
+    `;
+    scroll.appendChild(block);
+  });
+}
+
+function clearAdvertisingDescriptions() {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (scroll) scroll.innerHTML = '';
+  toggleAdvertisingDescScroll(false);
+}
+
+function syncAdvertisingDescHeights() {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (!scroll || activeCategory !== 'pubblicità' || !grid) return;
+
+  const cards = [...grid.querySelectorAll('.card')];
+  const blocks = [...scroll.querySelectorAll('.ad-desc-block')];
+
+  cards.forEach((card, i) => {
+    const block = blocks[i];
+    if (!block) return;
+    block.style.height = `${card.offsetHeight}px`;
+  });
+
+  const lastText = blocks[blocks.length - 1]?.querySelector('.ad-desc-text');
+  scroll.style.paddingBottom = lastText ? `${lastText.offsetHeight + 40}px` : '';
+}
+
+function initFirstAdvertisingText() {
+  const firstText = document.querySelector('.ad-desc-block .ad-desc-text');
+  if (!firstText) return;
+  firstText.classList.remove('ad-desc-animate');
+  void firstText.offsetWidth;
+  firstText.classList.add('ad-desc-animate');
+  lastAdvertisingIndex = 0;
+}
+
+function syncAdvertisingScrollPosition() {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (!scroll || !grid || adScrollSyncLock) return;
+
+  adScrollSyncLock = true;
+  scroll.scrollTop = grid.scrollTop;
+  adScrollSyncLock = false;
+}
+
+function resetAdvertisingScroll() {
+  clearAdvertisingDescriptions();
+  resetAdvertisingDescriptionPosition();
+}
+
+function resetAdvertisingDescriptionPosition() {
   const intro = document.querySelector('.description-intro');
-  const japaneseText = document.getElementById('category-japanese-text');
-  const englishText = document.getElementById('category-english-text');
-  if (!intro || !japaneseText || !englishText) return;
-
-  setDescriptionIntroVisible(true);
-  japaneseText.textContent = ja;
-  englishText.textContent = en;
-
-  if (index === lastAdvertisingIndex) return;
-  lastAdvertisingIndex = index;
-
-  intro.classList.remove('ad-desc-animate');
-  void intro.offsetWidth;
-  intro.classList.add('ad-desc-animate');
+  if (!intro) return;
+  intro.style.position = '';
+  intro.style.left = '';
+  intro.style.top = '';
+  intro.style.width = '';
+  intro.style.bottom = '';
+  intro.style.marginBottom = '';
+  intro.classList.remove('is-positioned');
 }
 
 function setupAdvertisingScrollText() {
+  syncAdvertisingDescHeights();
+  syncAdvertisingScrollPosition();
+
   if (!grid || advertisingScrollBound) {
-    updateAdvertisingTextOnScroll();
+    updateAdvertisingScrollState();
     return;
   }
-  grid.addEventListener('scroll', updateAdvertisingTextOnScroll);
+
+  grid.addEventListener('scroll', () => {
+    syncAdvertisingScrollPosition();
+    updateAdvertisingScrollState();
+  });
+
   advertisingScrollBound = true;
-  updateAdvertisingTextOnScroll();
+  updateAdvertisingScrollState();
 }
 
-function updateAdvertisingTextOnScroll() {
+function updateAdvertisingScrollState() {
   if (document.querySelector('.mainLayout.has-item-selected')) return;
 
   const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
+  const blocks = [...document.querySelectorAll('.ad-desc-block')];
   if (!cards.length) return;
 
   const pastThreshold = window.innerHeight * 0.35;
@@ -579,23 +702,33 @@ function updateAdvertisingTextOnScroll() {
       card.classList.toggle('ad-past', false);
       card.classList.toggle('ad-active', i === 0);
     });
+    blocks.forEach((block, i) => {
+      block.classList.toggle('ad-desc-past', false);
+    });
   } else {
     cards.forEach((card, i) => {
       const rect = card.getBoundingClientRect();
       const isPast = rect.bottom < pastThreshold;
       card.classList.toggle('ad-past', isPast);
       card.classList.toggle('ad-active', false);
+      blocks[i]?.classList.toggle('ad-desc-past', isPast);
       if (rect.top < activeThreshold && rect.bottom > pastThreshold) activeIndex = i;
     });
     cards[activeIndex]?.classList.add('ad-active');
   }
 
-  const activeCard = cards[activeIndex];
-  setAdvertisingDescription(
-    activeCard.dataset.adJa || '',
-    activeCard.dataset.adEn || '',
-    activeIndex
-  );
+  if (activeIndex !== lastAdvertisingIndex) {
+    blocks.forEach((block, i) => {
+      const text = block.querySelector('.ad-desc-text');
+      if (!text) return;
+      text.classList.remove('ad-desc-animate');
+      if (i === activeIndex) {
+        void text.offsetWidth;
+        text.classList.add('ad-desc-animate');
+      }
+    });
+    lastAdvertisingIndex = activeIndex;
+  }
 }
 
 function openLightbox(index) {
@@ -658,6 +791,7 @@ document.addEventListener('keydown', e => {
 document.querySelectorAll('[data-category]').forEach(el => {
   el.addEventListener('click', event => {
     event.preventDefault();
+    closeExploreModal();
     setCategory(el.dataset.category);
   });
 });
@@ -682,6 +816,7 @@ function openExploreModal() {
   if (!modal) return;
   modal.style.display = 'block';
   modal.setAttribute('aria-hidden', 'false');
+  updateHeaderNavState({ aboutOpen: true });
   initAboutImageBlurOnScroll();
 }
 
@@ -690,6 +825,7 @@ function closeExploreModal() {
   if (!modal) return;
   modal.style.display = 'none';
   modal.setAttribute('aria-hidden', 'true');
+  updateHeaderNavState();
 }
 
 async function init() {
@@ -704,6 +840,8 @@ async function init() {
 
 init();
 
+window.openExploreModal = openExploreModal;
+window.closeExploreModal = closeExploreModal;
 window.showItemPreview = showItemPreview;
 window.clearItemPreview = clearItemPreview;
 window.showPortraitPreview = showItemPreview;

@@ -71,16 +71,14 @@
     </script>
 
     <header class="initially-blurred all-blurred">
-      <div class="header-inner ">
-        <a href="../index.html" class="col-span-2">禁煙 No smoking</a>
-        <div class="flex gap-20px col-span-10">
-          <div class="flex gap-20px">
-            <a href="#portraits" class="cursor-pointer" data-category="fotografie">吸殻 Portraits</a>
-            <a href="#packs" class="cursor-pointer" data-category="pacchetti">タバコの箱 Cigarette packs</a>
-            <a href="#advertisements" class="cursor-pointer" data-category="pubblicità">広告 Advertisements</a>
-          </div>
-         <p onclick="openExploreModal()" class="cursor-pointer"> アーカイブについて About the Archive </p>
-        </div>
+      <div class="header-inner">
+        <a href="../index.html" class="header-logo">禁煙 No smoking</a>
+        <nav class="header-nav-categories">
+          <a href="#portraits" data-category="fotografie">吸殻 Portraits</a>
+          <a href="#packs" data-category="pacchetti">タバコの箱 Cigarette packs</a>
+          <a href="#advertisements" data-category="pubblicità">広告 Advertisements</a>
+        </nav>
+        <p id="header-about-link" class="header-about" onclick="openExploreModal()">アーカイブについて About the Archive</p>
       </div>
     </header>
 
@@ -90,8 +88,10 @@
   <aside class="descriptionAndFilters">
     <div class="description-intro">
       <div class="japanese" id="category-japanese-text"></div>
-      <div class="english text-myGrey" id="category-english-text"></div>
+      <div class="english" id="category-english-text"></div>
     </div>
+
+    <div id="advertising-desc-scroll" class="advertising-desc-scroll" aria-hidden="true"></div>
 
     <div id="item-preview" class="item-preview" aria-hidden="true"></div>
 
@@ -116,7 +116,8 @@
   </div>
 </div>
 
-<div id="explore-modal" style="display:none;">
+<div id="explore-modal" style="display:none;" aria-hidden="true">
+  <button type="button" class="about-close" onclick="closeExploreModal()" aria-label="Chiudi">✕</button>
   <div class="about-page">
   <section class="about-hero">
     <h1>
@@ -124,11 +125,11 @@
       禁煙 No Smoking
     </h1>
 
-    <p class="about-intro">
+    <p class="about-intro japanese">
       1980年代、大阪でタバコ屋を営んでいた田中浩氏は、喫煙を単なる悪癖ではなく生き方の一つと捉え、タバコや関連グッズを収集していた。
     </p>
 
-    <p class="about-intro">
+    <p class="about-intro english">
       Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items.
     </p>
   </section>
@@ -141,12 +142,12 @@
   </section>
 
   <section class="about-text-block">
-    <p>
+    <p class="japanese">
       ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。
       ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。
     </p>
 
-    <p>
+    <p class="english">
       Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items.
     </p>
   </section>
@@ -158,14 +159,8 @@
     <img src="img/about/about6.png">
   </section>
 
+  </div>
 </div>
-
-  <!-- TEXT -->
-  <p class="text-myGrey text-center max-w-[70ch]">
-    Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life...
-  </p>
-
-    </div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>

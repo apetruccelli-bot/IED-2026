@@ -57,6 +57,7 @@
   --tag-active-text: #ffffff;
   --accent: #1a1a1a;
   --radius: 10px;
+  --header-fade-height: clamp(150px, 24vh, 220px);
 }
 
 body {
@@ -149,18 +150,62 @@ body {
 header {
   position: sticky;
   top: 0;
-  z-index: 100;
-  padding: 16px 24px;
-  height: auto;
-  background: var(--myBlack);
+  z-index: 10001;
+  padding: 16px 24px var(--header-fade-height);
+  margin-bottom: calc(var(--header-fade-height) * -0.82);
+  background: linear-gradient(
+    180deg,
+    var(--myBlack) 0%,
+    var(--myBlack) 22%,
+    rgba(58, 58, 58, 0.84) 40%,
+    rgba(58, 58, 58, 0.48) 62%,
+    rgba(58, 58, 58, 0.16) 84%,
+    rgba(58, 58, 58, 0) 100%
+  );
+  pointer-events: none;
 }
 
 .header-inner {
-  max-width: 1200px;
-  display: flex;
-  gap: 12px;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.header-logo {
+  grid-column: span 2;
+  color: var(--myWhite);
+}
+
+.header-nav-categories {
+  grid-column: span 8;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.header-about {
+  grid-column: span 2;
+  justify-self: end;
+  text-align: right;
+  cursor: pointer;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.header-nav-categories a,
+.header-about {
+  color: var(--myGrey);
+  transition: color 0.2s ease;
+}
+
+.header-nav-categories a.is-active,
+.header-about.is-active {
+  color: var(--myWhite);
 }
 
 .header-row {
@@ -261,7 +306,6 @@ button {
   gap: 10px;
   overflow: scroll;
   height: 100vh;
-  padding-top: 10rem;
 }
 
 .myPhotos .card {
@@ -302,7 +346,7 @@ button {
 @keyframes ad-desc-reveal {
   0% {
     filter: blur(18px);
-    opacity: 0.3;
+    opacity: 1;
   }
   100% {
     filter: blur(0);
@@ -310,8 +354,52 @@ button {
   }
 }
 
-.mainLayout.category-pubblicita .description-intro.ad-desc-animate {
-  animation: ad-desc-reveal 0.9s cubic-bezier(.8, 0, .2, 1) forwards;
+.advertising-desc-scroll {
+  display: none;
+  position: fixed;
+  left: 10px;
+  width: calc((100vw / 12) * 5 - 20px);
+  max-width: 68ch;
+  height: 100vh;
+  overflow: hidden;
+  padding-top: 4rem;
+  pointer-events: none;
+  z-index: 41;
+}
+
+.mainLayout.category-pubblicita .advertising-desc-scroll.is-active {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.mainLayout.category-pubblicita .description-intro {
+  display: none;
+}
+
+.ad-desc-block {
+  position: relative;
+  flex-shrink: 0;
+  transition: opacity 0.4s ease;
+}
+
+.ad-desc-block.ad-desc-past {
+  opacity: 0.22;
+}
+
+.ad-desc-text {
+  position: absolute;
+  top: calc(100% + 20px);
+  left: 0;
+  width: 100%;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+
+.ad-desc-text.ad-desc-animate {
+  animation: ad-desc-reveal 2s cubic-bezier(.8, 0, .2, 1) forwards;
 }
 
 .myPhotos.layout-pubblicita .card-img {
@@ -362,8 +450,18 @@ button {
 .card-desc {
   font-size: 13px;
   line-height: 1.55;
-  color: var(--myWhite);
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+
+.japanese {
+  color: var(--myWhite);
+}
+
+.english {
+  color: var(--myGrey);
 }
 
 .card-tags {
@@ -450,7 +548,10 @@ button {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 600px) {
-  header { padding: 12px 16px; }
+  header {
+    padding: 12px 16px clamp(120px, 28vh, 170px);
+    margin-bottom: calc(clamp(120px, 28vh, 170px) * -0.82);
+  }
   .results-info { padding: 12px 16px 0; }
   h1 { font-size: 12px; }
 }
@@ -683,6 +784,20 @@ button {
   z-index: 10000;
 }
 
+.about-close {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 10002;
+  background: none;
+  border: none;
+  color: var(--myWhite);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px 12px;
+  line-height: 1;
+}
+
 .about-page {
   width: 100vw;
   min-height: 100vh;
@@ -704,9 +819,17 @@ button {
 }
 
 .about-intro {
-  color: var(--myWhite);
   text-align: left;
   margin-bottom: 1.4rem;
+}
+
+.about-text-block {
+  max-width: 70ch;
+  margin: 0 auto 4rem;
+}
+
+.about-text-block p {
+  margin-bottom: 1.2rem;
 }
 
 .about-grid {
@@ -725,16 +848,6 @@ button {
   height: 40vh;
   object-fit: cover;
   display: block;
-}
-
-.about-text-block {
-  max-width: 70ch;
-  margin: 0 auto 4rem;
-  color: var(--myWhite);
-}
-
-.about-text-block p {
-  margin-bottom: 1.2rem;
 }
 
 /* variante tipo prima immagine: testo in alto + immagini sfocate sotto */
@@ -827,7 +940,8 @@ button {
 
 .descriptionAndFilters .description-intro,
 .descriptionAndFilters .filters,
-.descriptionAndFilters .item-preview {
+.descriptionAndFilters .item-preview,
+.descriptionAndFilters .advertising-desc-scroll {
   pointer-events: auto;
 }
 
@@ -871,6 +985,16 @@ button {
   white-space: nowrap;
 }
 
+.filter-option {
+  color: var(--myGrey);
+  cursor: pointer;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.filter-option.active-filter {
+  color: var(--myWhite);
+}
+
 html,
 body {
   overflow: hidden;
@@ -881,14 +1005,14 @@ body {
   grid-template-columns: repeat(12, 1fr);
   gap: 10px;
   padding: 10px;
-  height: calc(100vh - 52px);
+  height: 100vh;
 }
 
 .myPhotos {
   grid-column: 6 / 13;
   width: auto;
   margin-left: 0;
-  height: calc(100vh - 4rem);
+  height: 100vh;
   position: relative;
   z-index: 1;
 
@@ -897,7 +1021,7 @@ body {
   gap: 5px;
 
   overflow-y: auto;
-  padding-top: 4rem;
+  padding-top: 0;
 }
 
 .myPhotos.layout-fotografie .card-img {
@@ -979,7 +1103,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  color: var(--myWhite);
   padding-top: 20px;
   flex-shrink: 0;
   background: var(--myBlack);
