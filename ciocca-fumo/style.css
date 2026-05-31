@@ -1137,27 +1137,20 @@ body.about-open #explore-modal {
 }
 
 #gesture-camera {
-  display: none;
   position: fixed;
   right: 10px;
   bottom: 10px;
-  width: 200px;
+  width: 180px;
   z-index: 999;
-  opacity: 0.85;
-  pointer-events: none;
-}
-
-#gesture-camera.is-ready {
-  display: block;
+  opacity: 0.65;
 }
 
 #gesture-webcam,
 #gesture-canvas {
-  width: 200px;
-  height: 150px;
+  width: 180px;
+  height: 135px;
   object-fit: cover;
   transform: scaleX(-1);
-  border-radius: 2px;
 }
 
 #gesture-canvas {
@@ -1170,8 +1163,6 @@ body.about-open #explore-modal {
   color: var(--myWhite);
   font-size: 10px;
   margin-top: 4px;
-  line-height: 1.3;
-  min-height: 2.6em;
 }
 
 .descriptionAndFilters {

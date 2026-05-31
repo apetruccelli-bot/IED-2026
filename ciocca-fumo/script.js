@@ -49,7 +49,7 @@ let activeFilterType = null;
 let advertisingScrollBound = false;
 let lastAdvertisingIndex = -1;
 let adScrollSyncLock = false;
-let currentPackIndex = 0;
+let portraitGestureIndex = 0;
 
 function updateCategoryText(category) {
   const japaneseText = document.getElementById('category-japanese-text');
@@ -198,6 +198,7 @@ function setCategory(cat) {
   document.querySelector('.mainLayout')?.classList.toggle('category-pubblicita', activeCategory === 'pubblicità');
 
   if (activeCategory === 'fotografie') {
+    portraitGestureIndex = 0;
     grid?.classList.add('layout-fotografie');
     renderPortraitFilters();
   } else if (activeCategory === 'pubblicità') {
@@ -219,15 +220,59 @@ function setCategory(cat) {
     updateCategoryText(activeCategory);
   }
   render();
-  syncCategoryGestures();
 }
 
-function syncCategoryGestures() {
-  if (activeCategory === 'pacchetti') {
-    window.initPackGesture?.();
-  } else {
-    window.stopPackGesture?.();
+function getPortraitItems() {
+  return filteredItems().filter(item => item.category === 'fotografie');
+}
+
+function findCardForItem(item) {
+  if (!grid || !item) return null;
+  return [...grid.querySelectorAll('.card')].find(card => {
+    const img = card.querySelector('img');
+    if (!img) return false;
+    const itemSrc = item.src;
+    const attrSrc = img.getAttribute('src') || '';
+    return attrSrc === itemSrc || img.src.endsWith(itemSrc);
+  }) || null;
+}
+
+function selectPortraitByIndex(index) {
+  if (activeCategory !== 'fotografie' || !grid) return;
+
+  const portraits = getPortraitItems();
+  if (!portraits.length) return;
+
+  portraitGestureIndex = ((index % portraits.length) + portraits.length) % portraits.length;
+  const item = portraits[portraitGestureIndex];
+
+  grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
+  grid.classList.add('has-selected');
+
+  const card = findCardForItem(item);
+  if (card) {
+    card.classList.add('selectedImg');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
+
+  updateActiveInfo(item);
+  showItemPreview(item);
+}
+
+function syncPortraitSelection() {
+  const portraits = getPortraitItems();
+  if (!portraits.length) {
+    clearItemPreview();
+    grid?.classList.remove('has-selected');
+    return;
+  }
+
+  portraitGestureIndex = Math.min(portraitGestureIndex, portraits.length - 1);
+  selectPortraitByIndex(portraitGestureIndex);
+}
+
+function advancePortraitViaGesture() {
+  selectPortraitByIndex(portraitGestureIndex + 1);
 }
 
 function renderPortraitFilters() {
@@ -363,41 +408,6 @@ function clearActiveInfo() {
   });
 }
 
-function getPackItems() {
-  return filteredItems().filter(item => item.category === 'pacchetti');
-}
-
-function selectPackByIndex(index) {
-  if (activeCategory !== 'pacchetti' || !grid) return -1;
-
-  const packs = getPackItems();
-  if (!packs.length) return -1;
-
-  currentPackIndex = (index + packs.length) % packs.length;
-  const item = packs[currentPackIndex];
-
-  grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
-  grid.classList.add('has-selected');
-
-  const card = grid.querySelector(`.card[data-item-id="${item.id}"]`);
-  if (card) {
-    card.classList.add('selectedImg');
-    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  updateActiveInfo(item);
-  showItemPreview(item);
-  return currentPackIndex;
-}
-
-function advancePack() {
-  return selectPackByIndex(currentPackIndex + 1);
-}
-
-window.getArchiveActiveCategory = () => activeCategory;
-window.selectPackByIndex = selectPackByIndex;
-window.advancePack = advancePack;
-
 function descriptionTextHtml(ja, en) {
   return `
     <div class="japanese">${ja || ''}</div>
@@ -519,7 +529,6 @@ function render() {
   visible.forEach((item, i) => {
     const card = document.createElement('article');
     card.className = 'card activeImg';
-    card.dataset.itemId = String(item.id);
     card.style.cursor = ['fotografie', 'pacchetti'].includes(activeCategory) ? 'zoom-in' : 'default';
     card.dataset.itemYear = item.year;
 
@@ -614,9 +623,10 @@ function render() {
         card.classList.add('selectedImg');
         updateActiveInfo(item);
         showItemPreview(item);
-        if (activeCategory === 'pacchetti') {
-          const idx = getPackItems().findIndex(p => p.id === item.id);
-          if (idx >= 0) currentPackIndex = idx;
+        if (activeCategory === 'fotografie') {
+          const portraits = getPortraitItems();
+          const idx = portraits.findIndex(p => p.id === item.id);
+          if (idx >= 0) portraitGestureIndex = idx;
         }
       } else {
         clearActiveInfo();
@@ -642,9 +652,8 @@ function render() {
     clearAdvertisingDescriptions();
   }
 
-  if (activeCategory === 'pacchetti' && visible.length) {
-    currentPackIndex = 0;
-    requestAnimationFrame(() => selectPackByIndex(0));
+  if (activeCategory === 'fotografie') {
+    syncPortraitSelection();
   }
 }
 
@@ -1014,3 +1023,7 @@ window.showItemPreview = showItemPreview;
 window.clearItemPreview = clearItemPreview;
 window.showPortraitPreview = showItemPreview;
 window.clearPortraitPreview = clearItemPreview;
+window.getActiveCategory = () => activeCategory;
+window.getPortraitItems = getPortraitItems;
+window.selectPortraitByIndex = selectPortraitByIndex;
+window.advancePortraitViaGesture = advancePortraitViaGesture;
