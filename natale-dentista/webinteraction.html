@@ -39,13 +39,6 @@
     #faceList, #handList, #status, .face-info, .hand-info, .feature-info, #info { display: none !important; }
   </style>
 <body>
-  <!-- hand-pose-detection (tfjs) and MediaPipe runtime for hands -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@0.0.7/dist/hand-pose-detection.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1645985860/hands.js"></script>
-</head>
-
-<body>
-<script type="module" src="natale-lm.js"></script>
 
   <!-- Minimal interaction: only the camera button is visible -->
   <div id="cameraWrapper">
@@ -69,6 +62,8 @@
   <!-- Hand detection (optional). If unavailable, finger interactions fall back to mouse testing. -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose@0.0.7"></script>
 
-   
+  <!-- Load the interaction module after DOM and vendor libs are ready -->
+  <script type="module" src="natale-lm.js"></script>
+
 </body>
 </html>

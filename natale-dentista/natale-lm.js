@@ -126,6 +126,7 @@ function updateOverlayStatus() {
 }
 
 function createOverlayTestPanel() {
+    initDOM();
     try {
         const panel = document.createElement('div');
         panel.id = 'overlayTestPanel';
@@ -240,15 +241,38 @@ try {
     }
 } catch (e) {}
  
-const video = document.getElementById("webcam");
- const canvas = document.getElementById("canvas");
- const ctx = canvas.getContext("2d");
- const status = document.getElementById("status");
- // Visible button in webinteraction.html — use let so we can create it dynamically if missing
- let startBtn = document.getElementById("startBtn") || document.getElementById("cameraToggle");
- const faceList = document.getElementById("faceList");
- const handList = document.getElementById("handList");
- const toggleNumbers = document.getElementById("toggleNumbers");
+// DOM elements (initialized lazily)
+let video = null;
+let canvas = null;
+let ctx = null;
+let status = null;
+// Visible button in webinteraction.html — will be resolved in initDOM
+let startBtn = null;
+let faceList = null;
+let handList = null;
+let toggleNumbers = null;
+
+function initDOM() {
+    try {
+        if (!video) video = document.getElementById('webcam');
+        if (!canvas) canvas = document.getElementById('canvas');
+        if (canvas && !ctx) ctx = canvas.getContext('2d');
+        if (!status) status = document.getElementById('status');
+        if (!startBtn) startBtn = document.getElementById('startBtn') || document.getElementById('cameraToggle');
+        if (!faceList) faceList = document.getElementById('faceList');
+        if (!handList) handList = document.getElementById('handList');
+        if (!toggleNumbers) toggleNumbers = document.getElementById('toggleNumbers');
+    } catch (e) {
+        // ignore
+    }
+}
+
+// ensure DOM refs are present once the document is ready
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initDOM();
+} else {
+    document.addEventListener('DOMContentLoaded', initDOM);
+}
 
 // Safe status helper — will no-op if #status is not present
 function setStatus(msg) {
@@ -388,6 +412,7 @@ function drawHandLandmarks(keypoints, color) {
 
  // Load the Face Landmarks Detection model
  async function loadModel() {
+    initDOM();
      try {
          setStatus("Loading face detection model...");
          
@@ -459,6 +484,7 @@ function drawHandLandmarks(keypoints, color) {
 // camera permission. If the browser blocks autoplay or permission is denied, the page will
 // show the status message and the start button (if present) remains as a fallback.
 async function tryAutoStartCamera() {
+    initDOM();
     try {
         // small delay to ensure UI updates
         await new Promise(r => setTimeout(r, 120));
@@ -482,6 +508,7 @@ async function tryAutoStartCamera() {
 
  // Start the webcam
  async function startCamera() {
+     initDOM();
      try {
          const stream = await navigator.mediaDevices.getUserMedia({
              video: { 
@@ -950,6 +977,7 @@ async function tryAutoStartCamera() {
  }
 
  // Event listeners
+initDOM();
 if (startBtn) startBtn.addEventListener("click", startCamera);
 
 if (toggleNumbers) {
