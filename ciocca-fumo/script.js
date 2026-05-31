@@ -49,6 +49,12 @@ let activeFilterType = null;
 let advertisingScrollBound = false;
 let lastAdvertisingIndex = -1;
 let adScrollSyncLock = false;
+let portraitGestureIndex = 0;
+let packGestureIndex = 0;
+let adGestureIndex = 0;
+let adsSmokingHeld = false;
+let aboutGestureIndex = 0;
+let aboutBlowHeld = false;
 
 function updateCategoryText(category) {
   const japaneseText = document.getElementById('category-japanese-text');
@@ -197,6 +203,7 @@ function setCategory(cat) {
   document.querySelector('.mainLayout')?.classList.toggle('category-pubblicita', activeCategory === 'pubblicità');
 
   if (activeCategory === 'fotografie') {
+    portraitGestureIndex = 0;
     grid?.classList.add('layout-fotografie');
     renderPortraitFilters();
   } else if (activeCategory === 'pubblicità') {
@@ -205,8 +212,13 @@ function setCategory(cat) {
     renderCategoryFilters(activeCategory);
   }
 
-  if (activeCategory === 'pacchetti') grid?.classList.add('layout-pacchetti');
+  if (activeCategory === 'pacchetti') {
+    packGestureIndex = 0;
+    grid?.classList.add('layout-pacchetti');
+  }
   if (activeCategory === 'pubblicità') {
+    adGestureIndex = 0;
+    adsSmokingHeld = false;
     grid?.classList.add('layout-pubblicita');
     lastAdvertisingIndex = -1;
     if (grid) grid.scrollTop = 0;
@@ -216,16 +228,257 @@ function setCategory(cat) {
 
   if (activeCategory !== 'pubblicità') {
     updateCategoryText(activeCategory);
+    resetAdsSmokingGesture();
   }
   render();
+}
 
-  if (
-    activeCategory === 'fotografie' &&
-    typeof handDetector !== 'undefined' &&
-    !handDetector &&
-    typeof initPortraitGesture === 'function'
-  ) {
-    initPortraitGesture();
+const CATEGORY_ORDER = ['fotografie', 'pacchetti', 'pubblicità'];
+
+function changeCategoryViaGesture(delta) {
+  if (document.body.classList.contains('about-open')) {
+    closeExploreModal();
+  }
+  const idx = CATEGORY_ORDER.indexOf(activeCategory);
+  if (idx === -1) return;
+  const nextIdx = (idx + delta + CATEGORY_ORDER.length) % CATEGORY_ORDER.length;
+  setCategory(CATEGORY_ORDER[nextIdx]);
+}
+
+function advanceCategoryViaGesture() {
+  changeCategoryViaGesture(1);
+}
+
+function prevCategoryViaGesture() {
+  changeCategoryViaGesture(-1);
+}
+
+function getPortraitItems() {
+  return filteredItems().filter(item => item.category === 'fotografie');
+}
+
+function findCardForItem(item) {
+  if (!grid || !item) return null;
+  return [...grid.querySelectorAll('.card')].find(card => {
+    const img = card.querySelector('img');
+    if (!img) return false;
+    const itemSrc = item.src;
+    const attrSrc = img.getAttribute('src') || '';
+    return attrSrc === itemSrc || img.src.endsWith(itemSrc);
+  }) || null;
+}
+
+function selectPortraitByIndex(index) {
+  if (activeCategory !== 'fotografie' || !grid) return;
+
+  const portraits = getPortraitItems();
+  if (!portraits.length) return;
+
+  portraitGestureIndex = ((index % portraits.length) + portraits.length) % portraits.length;
+  const item = portraits[portraitGestureIndex];
+
+  grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
+  grid.classList.add('has-selected');
+
+  const card = findCardForItem(item);
+  if (card) {
+    card.classList.add('selectedImg');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  updateActiveInfo(item);
+  showItemPreview(item);
+}
+
+function syncPortraitSelection() {
+  const portraits = getPortraitItems();
+  if (!portraits.length) {
+    clearItemPreview();
+    grid?.classList.remove('has-selected');
+    return;
+  }
+
+  portraitGestureIndex = Math.min(portraitGestureIndex, portraits.length - 1);
+  selectPortraitByIndex(portraitGestureIndex);
+}
+
+function advancePortraitViaGesture() {
+  selectPortraitByIndex(portraitGestureIndex + 1);
+}
+
+function getPackItems() {
+  return filteredItems().filter(item => item.category === 'pacchetti');
+}
+
+function selectPackByIndex(index) {
+  if (activeCategory !== 'pacchetti' || !grid) return;
+
+  const packs = getPackItems();
+  if (!packs.length) return;
+
+  packGestureIndex = ((index % packs.length) + packs.length) % packs.length;
+  const item = packs[packGestureIndex];
+
+  grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
+  grid.classList.add('has-selected');
+
+  const card = findCardForItem(item);
+  if (card) {
+    card.classList.add('selectedImg');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  updateActiveInfo(item);
+  showItemPreview(item);
+}
+
+function syncPackSelection() {
+  const packs = getPackItems();
+  if (!packs.length) {
+    clearItemPreview();
+    grid?.classList.remove('has-selected');
+    return;
+  }
+
+  packGestureIndex = Math.min(packGestureIndex, packs.length - 1);
+  selectPackByIndex(packGestureIndex);
+}
+
+function advancePackViaGesture() {
+  selectPackByIndex(packGestureIndex + 1);
+}
+
+function getAdItems() {
+  return filteredItems().filter(item => item.category === 'pubblicità');
+}
+
+function syncAdRevealState() {
+  const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
+  if (!cards.length) return;
+
+  if (adGestureIndex >= cards.length) {
+    adGestureIndex = cards.length - 1;
+  }
+
+  cards.forEach((card, i) => {
+    card.classList.toggle('ad-revealed', adsSmokingHeld && i === adGestureIndex);
+  });
+}
+
+function onAdSmokingGestureStart() {
+  if (activeCategory !== 'pubblicità') return;
+  adsSmokingHeld = true;
+  syncAdRevealState();
+}
+
+function onAdSmokingGestureEnd() {
+  if (activeCategory !== 'pubblicità') return;
+  adsSmokingHeld = false;
+  syncAdRevealState();
+}
+
+function getAboutImages() {
+  return [...document.querySelectorAll('.about-plate img, .about-grid img')];
+}
+
+function syncAboutRevealState() {
+  const images = getAboutImages();
+  if (!images.length) return;
+
+  if (aboutGestureIndex >= images.length) {
+    aboutGestureIndex = images.length - 1;
+  }
+
+  images.forEach((img, i) => {
+    img.classList.toggle('about-revealed', aboutBlowHeld && i === aboutGestureIndex);
+  });
+}
+
+function onAboutBlowGestureStart() {
+  if (!document.body.classList.contains('about-open')) return;
+  aboutBlowHeld = true;
+  syncAboutRevealState();
+}
+
+function onAboutBlowGestureEnd() {
+  if (!document.body.classList.contains('about-open')) return;
+  aboutBlowHeld = false;
+  syncAboutRevealState();
+}
+
+function syncAboutIndexToScroll() {
+  if (!document.body.classList.contains('about-open')) return;
+
+  const images = getAboutImages();
+  if (!images.length) return;
+
+  const targetY = window.innerHeight * 0.45;
+  let bestIndex = aboutGestureIndex;
+  let bestDistance = Infinity;
+
+  images.forEach((img, i) => {
+    const rect = img.getBoundingClientRect();
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.abs(centerY - targetY);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestIndex = i;
+    }
+  });
+
+  aboutGestureIndex = bestIndex;
+  syncAboutRevealState();
+}
+
+function resetAboutBlowGesture() {
+  aboutGestureIndex = 0;
+  aboutBlowHeld = false;
+  getAboutImages().forEach(img => img.classList.remove('about-revealed'));
+}
+
+function syncAdIndexToScroll() {
+  if (activeCategory !== 'pubblicità') return;
+
+  const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
+  if (!cards.length) return;
+
+  const targetY = window.innerHeight * 0.45;
+  let bestIndex = adGestureIndex;
+  let bestDistance = Infinity;
+
+  cards.forEach((card, i) => {
+    const rect = card.getBoundingClientRect();
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.abs(centerY - targetY);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestIndex = i;
+    }
+  });
+
+  adGestureIndex = bestIndex;
+  syncAdRevealState();
+}
+
+function scrollContentByGesture(direction) {
+  const modal = document.getElementById('explore-modal');
+  const grid = document.getElementById('grid');
+  const isAboutOpen = document.body.classList.contains('about-open') && modal?.style.display !== 'none';
+  const scrollEl = isAboutOpen ? modal : grid;
+
+  if (!scrollEl) return;
+
+  const amount = Math.round(scrollEl.clientHeight * 0.55);
+  scrollEl.scrollBy({
+    top: direction === 'down' ? amount : -amount,
+    behavior: 'smooth',
+  });
+
+  if (activeCategory === 'pubblicità' && !isAboutOpen) {
+    window.setTimeout(() => syncAdIndexToScroll(), 450);
+  }
+  if (isAboutOpen) {
+    window.setTimeout(() => syncAboutIndexToScroll(), 450);
   }
 }
 
@@ -577,6 +830,15 @@ function render() {
         card.classList.add('selectedImg');
         updateActiveInfo(item);
         showItemPreview(item);
+        if (activeCategory === 'fotografie') {
+          const portraits = getPortraitItems();
+          const idx = portraits.findIndex(p => p.id === item.id);
+          if (idx >= 0) portraitGestureIndex = idx;
+        } else if (activeCategory === 'pacchetti') {
+          const packs = getPackItems();
+          const idx = packs.findIndex(p => p.id === item.id);
+          if (idx >= 0) packGestureIndex = idx;
+        }
       } else {
         clearActiveInfo();
         clearItemPreview();
@@ -599,6 +861,18 @@ function render() {
     });
   } else {
     clearAdvertisingDescriptions();
+  }
+
+  if (activeCategory === 'fotografie') {
+    syncPortraitSelection();
+  }
+
+  if (activeCategory === 'pacchetti') {
+    syncPackSelection();
+  }
+
+  if (activeCategory === 'pubblicità') {
+    syncAdRevealState();
   }
 }
 
@@ -816,19 +1090,22 @@ document.querySelectorAll('[data-category]').forEach(el => {
   });
 });
 
-function initAboutImageBlurOnScroll() {
+function initAboutGestureScrollSync() {
   const modal = document.getElementById('explore-modal');
-  const images = document.querySelectorAll('.about-grid img');
-  if (!modal || !images.length || modal.dataset.blurBound === 'true') return;
+  if (!modal || !getAboutImages().length) return;
 
-  modal.dataset.blurBound = 'true';
-  modal.addEventListener('scroll', () => {
-    images.forEach(img => {
-      const rect = img.getBoundingClientRect();
-      const progress = 1 - rect.top / window.innerHeight;
-      img.classList.toggle('about-faded', progress > 0.45);
-    });
-  });
+  if (modal.dataset.aboutGestureBound !== 'true') {
+    modal.dataset.aboutGestureBound = 'true';
+    modal.addEventListener('scroll', syncAboutIndexToScroll, { passive: true });
+  }
+  syncAboutIndexToScroll();
+}
+
+function resetAdsSmokingGesture() {
+  adGestureIndex = 0;
+  adsSmokingHeld = false;
+  document.body.classList.remove('ads-smoking-gesture');
+  syncAdRevealState();
 }
 
 function updateAboutHeaderOffset() {
@@ -837,12 +1114,35 @@ function updateAboutHeaderOffset() {
   document.documentElement.style.setProperty('--about-header-offset', `${header.offsetHeight}px`);
 }
 
-function openAboutIndex() {
+let aboutIndexOpenTimer = null;
+
+function openAboutIndexPanel() {
   document.querySelector('.header-about-wrap')?.classList.add('is-index-open');
 }
 
-function closeAboutIndex() {
+function closeAboutIndexPanel() {
   document.querySelector('.header-about-wrap')?.classList.remove('is-index-open');
+}
+
+function cancelAboutIndexOpenTimer() {
+  window.clearTimeout(aboutIndexOpenTimer);
+  aboutIndexOpenTimer = null;
+}
+
+function closeAboutIndex() {
+  cancelAboutIndexOpenTimer();
+  closeAboutIndexPanel();
+}
+
+function scheduleAboutIndexOpen() {
+  cancelAboutIndexOpenTimer();
+  closeAboutIndexPanel();
+  aboutIndexOpenTimer = window.setTimeout(() => {
+    aboutIndexOpenTimer = null;
+    if (document.body.classList.contains('about-open')) {
+      openAboutIndexPanel();
+    }
+  }, 2000);
 }
 
 function initAboutIndexLinks() {
@@ -861,14 +1161,19 @@ function initAboutIndexLinks() {
 }
 
 function initAboutDropdown() {
+  const aboutWrap = document.querySelector('.header-about-wrap');
   const aboutLink = document.getElementById('header-about-link');
   const aboutIndex = document.getElementById('about-index');
-  if (!aboutLink || !aboutIndex) return;
+  if (!aboutWrap || !aboutLink || !aboutIndex) return;
 
   let closeTimer = null;
 
   const scheduleClose = () => {
-    closeTimer = window.setTimeout(closeAboutIndex, 120);
+    closeTimer = window.setTimeout(() => {
+      if (aboutWrap.classList.contains('is-index-open')) {
+        closeAboutIndexPanel();
+      }
+    }, 120);
   };
 
   const cancelClose = () => {
@@ -879,13 +1184,11 @@ function initAboutDropdown() {
     e.preventDefault();
     e.stopPropagation();
     openExploreModal();
-    openAboutIndex();
+    scheduleAboutIndexOpen();
   });
 
-  [aboutLink, aboutIndex].forEach(el => {
-    el.addEventListener('mouseenter', cancelClose);
-    el.addEventListener('mouseleave', scheduleClose);
-  });
+  aboutWrap.addEventListener('mouseenter', cancelClose);
+  aboutWrap.addEventListener('mouseleave', scheduleClose);
 }
 
 function openExploreModal() {
@@ -900,7 +1203,9 @@ function openExploreModal() {
     requestAnimationFrame(updateAboutHeaderOffset);
   });
   updateHeaderNavState({ aboutOpen: true });
-  initAboutImageBlurOnScroll();
+  resetAboutBlowGesture();
+  initAboutGestureScrollSync();
+  window.startAboutMicDetection?.();
 }
 
 function closeExploreModal() {
@@ -909,6 +1214,8 @@ function closeExploreModal() {
   modal.style.display = 'none';
   modal.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('about-open');
+  window.stopAboutMicDetection?.();
+  resetAboutBlowGesture();
   closeAboutIndex();
   updateHeaderNavState();
 }
@@ -936,3 +1243,21 @@ window.showItemPreview = showItemPreview;
 window.clearItemPreview = clearItemPreview;
 window.showPortraitPreview = showItemPreview;
 window.clearPortraitPreview = clearItemPreview;
+window.getActiveCategory = () => activeCategory;
+window.getPortraitItems = getPortraitItems;
+window.selectPortraitByIndex = selectPortraitByIndex;
+window.advancePortraitViaGesture = advancePortraitViaGesture;
+window.getPackItems = getPackItems;
+window.selectPackByIndex = selectPackByIndex;
+window.advancePackViaGesture = advancePackViaGesture;
+window.advanceCategoryViaGesture = advanceCategoryViaGesture;
+window.prevCategoryViaGesture = prevCategoryViaGesture;
+window.resetAdsSmokingGesture = resetAdsSmokingGesture;
+window.onAdSmokingGestureStart = onAdSmokingGestureStart;
+window.onAdSmokingGestureEnd = onAdSmokingGestureEnd;
+window.getAdRevealIndex = () => adGestureIndex;
+window.onAboutBlowGestureStart = onAboutBlowGestureStart;
+window.onAboutBlowGestureEnd = onAboutBlowGestureEnd;
+window.getAboutRevealIndex = () => aboutGestureIndex;
+window.resetAboutBlowGesture = resetAboutBlowGesture;
+window.scrollContentByGesture = scrollContentByGesture;

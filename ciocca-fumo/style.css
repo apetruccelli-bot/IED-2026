@@ -154,6 +154,7 @@ header {
   z-index: 10001;
   padding: 16px 24px var(--header-fade-height);
   margin-bottom: calc(var(--header-fade-height) * -0.82);
+  overflow: visible;
   background: linear-gradient(
     180deg,
     var(--myBlack) 0%,
@@ -171,11 +172,13 @@ header {
   justify-self: end;
   position: relative;
   pointer-events: auto;
+  overflow: visible;
 }
 
-.header-about-wrap.is-index-open .about-index {
-  display: block;
+body.about-open .header-about-wrap {
+  z-index: 10004;
 }
+
 
 .header-inner {
   width: 100%;
@@ -186,6 +189,7 @@ header {
   pointer-events: auto;
   position: relative;
   z-index: 1;
+  overflow: visible;
 }
 
 .header-logo {
@@ -345,16 +349,22 @@ button {
 
 .myPhotos.layout-pubblicita .card {
   width: 100%;
-  opacity: 1;
-  transition: opacity 0.4s ease, filter 0.4s ease;
+  opacity: 0.18;
+  filter: blur(12px);
+  transition: opacity 0.55s ease, filter 0.55s ease;
 }
 
 .myPhotos.layout-pubblicita .card.ad-past {
-  opacity: 0.22;
-  filter: blur(1px);
+  opacity: 0.18;
+  filter: blur(12px);
 }
 
 .myPhotos.layout-pubblicita .card.ad-active {
+  opacity: 0.18;
+  filter: blur(12px);
+}
+
+.myPhotos.layout-pubblicita .card.ad-revealed {
   opacity: 1;
   filter: none;
 }
@@ -929,6 +939,26 @@ body.about-open #explore-modal {
   display: block;
   object-fit: contain;
   background: var(--myBlack);
+  transition: opacity 0.55s ease, filter 0.55s ease;
+  opacity: 1;
+  filter: blur(0);
+}
+
+body.about-open .about-plate img,
+body.about-open .about-grid img {
+  opacity: 0.18;
+  filter: blur(12px);
+}
+
+body.about-open .about-plate img.about-revealed,
+body.about-open .about-grid img.about-revealed {
+  opacity: 1;
+  filter: none;
+}
+
+.about-plate img.about-faded {
+  opacity: 0.22;
+  filter: blur(10px);
 }
 
 .about-plate figcaption {
@@ -948,7 +978,7 @@ body.about-open #explore-modal {
 }
 
 .about-index {
-  display: none;
+  display: block;
   position: absolute;
   top: calc(100% + 12px);
   right: 0;
@@ -957,8 +987,20 @@ body.about-open #explore-modal {
   margin: 0;
   padding: 0 0 0.5rem;
   text-align: right;
-  pointer-events: auto;
   z-index: 10003;
+  overflow: hidden;
+  clip-path: inset(0 0 100% 0);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    clip-path 1.35s cubic-bezier(0.33, 1, 0.38, 1),
+    opacity 0.5s ease;
+}
+
+.header-about-wrap.is-index-open .about-index {
+  clip-path: inset(0 0 0 0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .about-index::before {
@@ -977,6 +1019,15 @@ body.about-open #explore-modal {
   gap: 0.6em;
   margin: 0 0 2.4rem;
   font-family: 'Daily', monospace;
+  opacity: 0;
+  transform: translateY(-0.4em);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.header-about-wrap.is-index-open .about-index-title {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.12s;
 }
 
 .about-index-title .english {
@@ -992,6 +1043,26 @@ body.about-open #explore-modal {
   flex-direction: column;
   gap: 1.75rem;
 }
+
+.about-index-list li {
+  opacity: 0;
+  transform: translateY(-0.35em);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.header-about-wrap.is-index-open .about-index-list li {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.header-about-wrap.is-index-open .about-index-list li:nth-child(1) { transition-delay: 0.22s; }
+.header-about-wrap.is-index-open .about-index-list li:nth-child(2) { transition-delay: 0.34s; }
+.header-about-wrap.is-index-open .about-index-list li:nth-child(3) { transition-delay: 0.46s; }
+.header-about-wrap.is-index-open .about-index-list li:nth-child(4) { transition-delay: 0.58s; }
+.header-about-wrap.is-index-open .about-index-list li:nth-child(5) { transition-delay: 0.7s; }
+.header-about-wrap.is-index-open .about-index-list li:nth-child(6) { transition-delay: 0.82s; }
+.header-about-wrap.is-index-open .about-index-list li:nth-child(7) { transition-delay: 0.94s; }
+.header-about-wrap.is-index-open .about-index-list li:nth-child(8) { transition-delay: 1.06s; }
 
 .about-index-item {
   display: flex;
@@ -1090,6 +1161,11 @@ body.about-open #explore-modal {
   width: 180px;
   z-index: 999;
   opacity: 0.65;
+}
+
+body.about-open #gesture-camera {
+  z-index: 10005;
+  opacity: 0.85;
 }
 
 #gesture-webcam,
@@ -1328,6 +1404,10 @@ body {
 .mainLayout.has-item-selected .description-intro {
   display: none;
 }
+
+.item-preview .card-desc {
+  margin-bottom: 8px;
+} 
 
 .item-preview .card-desc {
   margin-bottom: 8px;
