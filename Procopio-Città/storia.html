@@ -18,22 +18,12 @@
       }
     </style>
     </head>
-  <body>
-    <div class="w-screen h-screen grid grid-cols-8 specialGrid">
-      <div class="col-start-1 col-end-3 p-10px bg-myBlack flex flex-col justify-between text-myWhite z-[1100]">
-        <div class="flex flex-col">
-          <a href="home.html" class="font-myTitle">Città<br>interrotte</a>
-          <p class="">di Fondazione Scorza</p>
-        </div>
-        <div class="sidebar-links flex flex-col">
-          <a href="index.html" class="font-myTitle">Archivio</a>
-          <a href="storia.html" class="font-myTitle">Storia</a>
-          <a href="stat.html" class="font-myTitle">Statistiche</a>
-        </div>
-      </div>
-    <div id="main-scroll" class="col-start-3 col-end-9 bg-myWhite h-screen overflow-y-scroll relative">
-        <div class="sticky top-0 z-20 col-span-full pt-40px pl-10px pr-10px pb-40px bg-myWhite">
-          <div class="grid grid-cols-6 mb-10px">
+  <body class="archive-page story-page">
+    <div class="w-screen min-h-screen grid grid-cols-8 specialGrid bg-myWhite">
+      <!-- Brand/navigation moved to bottom across pages -->
+    <div id="main-scroll" class="col-start-2 col-end-8 bg-transparent h-screen overflow-y-scroll relative">
+        <div class="sticky story-sticky top-0 z-20 col-span-full pt-10px bg-transparent" style="position: sticky; top: 0;" data-story-top-nav>
+          <div class="grid grid-cols-6 story-top-nav">
             <a href="#sezione_1" class="p text-justify">Fondazione Scorza</a>
             <a href="#sezione_2" class="p text-justify">Le Ricerche</a>
             <a href="#sezione_3" class="p text-justify">I Luoghi</a>
@@ -42,16 +32,19 @@
             <a href="#sezione_6" class="p text-justify">L'Archivio Oggi</a>
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-10px pt-30px pl-10px pr-10px pb-30px">
+        <button type="button" class="story-back-to-top" data-story-back-to-top aria-label="Torna all'inizio della pagina">
+          <span aria-hidden="true">↑</span>
+        </button>
+        <div class="grid grid-cols-2 ">
             <div id="sezione_1" class="sezione_1"></div>
             <div class="col-span-2 font-myTitle uppercase leading-none
-            max-w-[70ch] mr-auto">La Fondazione Scorza viene istituita nel 1992 a Reggio Calabria, un anno dopo la morte dell’antropologo Pietro Scorza (1939–1991), nato a Zagara, in Calabria.</div>
-            <div class="col-span-1 pt-30px">Il progetto nasce con l’obiettivo di raccogliere, conservare e organizzare i materiali prodotti nel corso delle ricerche condotte tra gli anni Sessanta e Ottanta in diversi centri minori dell’Italia meridionale. Le indagini documentano territori attraversati da decenni di interventi pubblici, programmi di modernizzazione e trasformazioni infrastrutturali che promettevano continuità economica e stabilità abitativa.
+            max-w-[70ch] mr-auto" style="margin: 0;">La Fondazione Scorza viene istituita nel 1992 a Reggio Calabria, un anno dopo la morte dell’antropologo Pietro Scorza (1939–1991), nato a Zagara, in Calabria.</div>
+            <div class="col-span-1">Il progetto nasce con l’obiettivo di raccogliere, conservare e organizzare i materiali prodotti nel corso delle ricerche condotte tra gli anni Sessanta e Ottanta in diversi centri minori dell’Italia meridionale. Le indagini documentano territori attraversati da decenni di interventi pubblici, programmi di modernizzazione e trasformazioni infrastrutturali che promettevano continuità economica e stabilità abitativa.
 Gran parte di queste trasformazioni resta incompleta.</div>
-            <div class="col-span-1 pt-30px">Quartieri costruiti senza servizi, infrastrutture mai pienamente attivate, spazi progettati per una crescita che non si realizza.
+            <div class="col-span-1">Quartieri costruiti senza servizi, infrastrutture mai pienamente attivate, spazi progettati per una crescita che non si realizza.
 L’archivio nasce nel tentativo di leggere queste condizioni come parte di un fenomeno unitario e viene costruito attraverso una tassonomia rigorosa che organizza fotografie, appunti e dati raccolti nel corso di oltre vent’anni di ricerca sul territorio.</div>
             <img src="img/storia/gruppo.png" alt="" class="col-span-2 w-full h-auto object-cover mt-10px" />
-            <div class="col-span-1 pt-30px"></div>
+            <div class="col-span-1"></div>
             <div class="col-span-1 italic font-myText ml-auto">Pietro Scorza (in basso al centro) e i suoi soci, 1990, Zagara, Calabria</div>
             <div class="col-span-2 pt-30px space-y-30px max-w-[70ch] mr-auto font-myTitle"> "Le case restano aperte fino all'ultimo. Non vengono lasciate, vengono consumate lentamente da chi continua ad abitarle."<br><br>  — Scorza, taccuino V, 1983 </div>
             <div class="col-span-2 h-px bg-myBlack mt-30px my-10px"></div>
@@ -81,21 +74,21 @@ L’archivio nasce nel tentativo di leggere queste condizioni come parte di un f
                   <div class="col-span-2 pt-30px space-y-30px max-w-[70ch] mr-auto font-myTitle">“Non credo che questi paesi spariranno improvvisamente. Credo che continueranno a ridursi lentamente fino a diventare impossibili da distinguere dalla loro stessa memoria.” <br><br> — ALDO FIORE, 1984</div>
                   <div class="col-span-2 h-px bg-myBlack mt-30px my-10px"></div>
             <div class="col-span-2 font-myTitle uppercase leading-none max-w-[70ch]">I luoghi documentati nell’archivio non risultano completamente abbandonati, ma non riescono più a produrre continuità. La popolazione diminuisce progressivamente nel corso delle rilevazioni.</div>
-            <div class="col-span-1 pt-30px">
+            <div class="col-span-1">
               <p>I dati raccolti tra gli anni Sessanta e Ottanta mostrano una riduzione costante della densità abitativa: le generazioni più giovani lasciano i centri documentati in modo sistematico, mentre le nascite si riducono fino a diventare quasi assenti.
 Le strutture restano, ma il ricambio si interrompe.</p> 
               <div class="col-span-1 pt-10px"></div>
               <p>Le persone che continuano ad abitare questi luoghi appartengono quasi esclusivamente a fasce di età avanzata. Gli spazi vengono mantenuti, adattati, utilizzati in forma minima, ma senza prospettiva di continuità. Le case non vengono abbandonate improvvisamente. Restano occupate fino alla morte di chi le abita.
 In molte annotazioni emerge la consapevolezza, da parte degli stessi abitanti, di vivere in luoghi destinati a scomparire nel giro di una generazione. Non come conseguenza di un evento traumatico, ma come esito lento e già visibile.</p>
             </div>
-            <div class="col-span-1 pt-30px">
+            <div class="col-span-1">
               <p>Le attività si riducono, gli spazi pubblici smettono progressivamente di funzionare, le relazioni si assottigliano. Le infrastrutture restano presenti, ma senza una popolazione sufficiente ad attivarle. Non si registra una fine improvvisa. Si registra una diminuzione continua. I materiali non mostrano il momento del collasso, ma il tempo che lo precede: un tempo lungo, statico, in cui la scomparsa è già evidente ma non ancora compiuta.</p>
               <div class="col-span-1 pt-10px"></div>
               <p>Le persone documentate nell'archivio non osservano semplicemente il degrado dei luoghi in cui vivono. Osservano la loro progressiva estinzione, senza possibilità reale di modificarne la direzione. L'archivio non documenta solo territori marginali.
 Documenta comunità che assistono, lentamente e con lucidità, alla propria fine.</p>
             </div>
             <img src="img/storia/casa.jpg" alt="" class="col-span-2 w-full h-auto object-cover mt-10px" />
-            <div class="col-span-1 pt-30px"></div>
+            <div class="col-span-1"></div>
             <div class="col-span-1 italic font-myText ml-auto">Il cortile della scuola, Rinaldo Maffei 1983, Serra Antica, Campania</div>
             <div class="col-span-2 pt-30px space-y-30px max-w-[70ch] mr-auto font-myTitle"> “Le strade sono mantenute, le luci funzionano, le finestre vengono aperte ogni mattina. Eppure il paese sembra già oltre il proprio tempo, come se continuasse a esistere senza riuscire più a produrre vita.”<br><br> — Ferri, Fonte Secca, 1981 </div>
             <div id="sezione_4" class="sezione_4"></div>
@@ -152,13 +145,27 @@ L’archivio viene organizzato secondo criteri condivisi:</p>
                     L'archivio conserva la traccia di un fallimento che non riguarda un singolo luogo, ma un'intera idea di sviluppo nazionale e di integrazione del Sud Italia.</p>
                     </div>
                     <img src="img/storia/cimitero.jpg" alt="" class="col-span-2 w-full h-auto object-cover mt-10px" />
-                    <div class="col-span-1 pt-30px"></div>
+                    <div class="col-span-1"></div>
             <div class="col-span-1 italic font-myText ml-auto">Cimitero di Colle Ombra, Aldo Fiore 1984, Colle Ombra, Sicilia</div>
             <div class="col-span-2 pt-30px space-y-30px max-w-[70ch] mr-auto font-myTitle"> “La sensazione più difficile da descrivere non è il vuoto, ma la consapevolezza. Tutti sembrano sapere che questo posto scomparirà, eppure nessuno riesce a immaginare un modo diverso di viverci.”<br><br> — Pietro Scorza, annotazione non datata</div>
           </div>
         </div>
-
-
+      </div>
    <script src="script.js"></script>
+    
+    <!-- Bottom brand + links (identical on every page) -->
+    <div class="site-bottom-brand" style="position:fixed;left:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
+      <div style="line-height:1">
+        <a href="home.html" class="font-myTitle" style="display:inline-block">Città<br>interrotte</a>
+        <p style="margin:0">di Fondazione Scorza</p>
+      </div>
+    </div>
+    <div class="sidebar-links" style="position:fixed;right:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">
+      <div style="display:flex;flex-direction:column">
+        <a href="storia.html" class="font-myTitle text-right">Storia</a>
+        <a href="index.html" class="font-myTitle text-right">Archivio</a>
+        <a href="stat.html" class="font-myTitle text-right">Dati</a>
+      </div>
+    </div>
   </body>
 </html>

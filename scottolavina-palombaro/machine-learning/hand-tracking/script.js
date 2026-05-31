@@ -44,7 +44,7 @@ const MAX_ROTATION_TIME = 400; // Maximum time window for rotation detection (ms
 let lastRotationActionTime = 0;
 
 // Gesture stabilization: require N consecutive frames with same gesture before triggering action
-const GESTURE_STABILITY_THRESHOLD = 8; // frames
+const GESTURE_STABILITY_THRESHOLD = 10; // frames (5-10 range for stable tracking)
 let lastDetectedGesture = "none";
 let gestureStabilityCount = 0;
 let stableGesture = "none";

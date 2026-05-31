@@ -118,6 +118,12 @@ function getPlacementConfig(title) {
 function renderImagesAroundLocation(map, location, items) {
   clearActiveImageMarkers();
   if (!items || items.length === 0) return;
+  
+    // Safety check: ensure map is loaded and ready
+    if (!map || typeof map.project !== 'function') {
+      console.warn('[MAP] Map not ready for image rendering');
+      return;
+    }
 
   const origin = [location.longitude, location.latitude];
   const placement = getPlacementConfig(location.title);
@@ -181,7 +187,23 @@ function renderImagesAroundLocation(map, location, items) {
         let isTooCloseToLabel = false;
         let overlapsPixel = false;
         try {
-          const pt = map.project(candidate);
+            let pt;
+            if (!map.isStyleLoaded()) {
+              isTooCloseToLabel = false;
+              overlapsPixel = false;
+            } else {
+              try {
+                pt = map.project(candidate);
+              } catch (e) {
+                console.warn('[MAP] Project failed, skipping pixel checks:', e.message);
+                pt = null;
+              }
+            }
+
+            if (!pt) {
+              isTooCloseToLabel = false;
+              overlapsPixel = false;
+            } else {
           const minLabelDistancePx = Math.max(44, (isCoastal ? 48 : 60));
           const thumbPx = isCoastal ? 64 : 96;
           const minPixelSpacing = thumbPx + 18;
@@ -212,17 +234,20 @@ function renderImagesAroundLocation(map, location, items) {
               }
             }
           }
-        } catch (e) {
+            }
+          } catch (e) {
           isTooCloseToLabel = false;
           overlapsPixel = false;
-        }
+          }
 
         if ((!isTooClose && !isTooCloseToLabel && !overlapsPixel) || attempt === 13) {
           targetLngLat = candidate;
           placedPoints.push(candidate);
           try {
-            const ptFinal = map.project(candidate);
-            placedPixelPoints.push({ x: ptFinal.x, y: ptFinal.y });
+            if (map.isStyleLoaded()) {
+              const ptFinal = map.project(candidate);
+              placedPixelPoints.push({ x: ptFinal.x, y: ptFinal.y });
+            }
           } catch (e) {
             // ignore
           }
@@ -237,6 +262,8 @@ function renderImagesAroundLocation(map, location, items) {
       markerEl.rel = 'noopener';
       markerEl.title = item.description || location.title;
       markerEl.style.setProperty('--tilt', Math.random().toFixed(2));
+      // disable pointer events on photo markers so they are not clickable
+      markerEl.style.pointerEvents = 'none';
 
       const thumb = document.createElement('img');
       thumb.src = item.src;
@@ -284,9 +311,11 @@ function renderImagesAroundLocation(map, location, items) {
     ensureImagesVisibleHandler = () => {
       if (!imageMarkersBounds || !imageMarkersMap || activeImageMarkers.length === 0) return;
       if (isAdjustingImageBounds) return;
+  if (!imageMarkersMap.isStyleLoaded()) return;
 
       const now = Date.now();
-      if (now - lastBoundsAdjustTime < 220) return;
+      // avoid very frequent adjustments which cause snapping/flicker
+      if (now - lastBoundsAdjustTime < 600) return;
 
       const mapBounds = imageMarkersMap.getBounds();
       let allVisible = true;
@@ -303,10 +332,11 @@ function renderImagesAroundLocation(map, location, items) {
         isAdjustingImageBounds = true;
         lastBoundsAdjustTime = now;
 
+        // use animated fitBounds to reduce visual snap
         imageMarkersMap.fitBounds(imageMarkersBounds, {
           padding: { top: 80, bottom: 80, left: 80, right: 80 },
           maxZoom: 7,
-          duration: 0,
+          duration: 300,
         });
 
         requestAnimationFrame(() => {
@@ -544,12 +574,13 @@ if (mapContainer && typeof mapboxgl !== "undefined") {
       center: initialMapView.center,
       zoom: initialMapView.zoom,
       scrollZoom: false,
+      interactive: false, // make the map non-interactive (no pan/zoom/click)
       projection: "mercator",
       pitch: initialMapView.pitch,
       bearing: initialMapView.bearing,
     });
 
-    map.addControl(new mapboxgl.NavigationControl(), "top-right");
+    // Navigation controls intentionally not added because map is non-interactive
 
     const bounds = new mapboxgl.LngLatBounds();
 
@@ -575,12 +606,25 @@ if (mapContainer && typeof mapboxgl !== "undefined") {
   });
 
   setTimeout(() => {
-    renderImagesAroundLocation(map, location, images);
+      // Ensure map is ready before rendering images
+      if (map && typeof map.isStyleLoaded === 'function' && map.isStyleLoaded()) {
+        renderImagesAroundLocation(map, location, images);
+      } else {
+        console.warn('[MAP] Map not ready, retrying');
+        setTimeout(() => {
+          if (map && typeof map.isStyleLoaded === 'function' && map.isStyleLoaded()) {
+            renderImagesAroundLocation(map, location, images);
+          }
+        }, 800);
+      }
   }, 1600);
 }
     function navigateMapWithHand(handX, handY, videoWidth, videoHeight, movementScale = 1) {
   // If a location detail is open, skip hand-driven panning
   if (window.locationIsOpen) return;
+
+    // Safety check: ensure map is ready
+    if (!map || typeof map.isStyleLoaded !== 'function' || !map.isStyleLoaded()) return;
 
   // Defensive defaults
   const vw = videoWidth || window.innerWidth;
@@ -605,8 +649,16 @@ if (mapContainer && typeof mapboxgl !== "undefined") {
   const panX = nx * maxPanX * 2.0 * movementScale; // increased horizontal gain
   const panY = ny * maxPanY * 1.0 * movementScale;
 
+  // Throttle rapid pan updates and use smoother duration to avoid visual jitter
+  if (!window._lastPanTime) window._lastPanTime = 0;
+  const now = Date.now();
+  if (now - window._lastPanTime < 60) return; // ~60ms throttle (~16fps)
+  window._lastPanTime = now;
+
+  // Use panBy with a slightly longer duration for smoother motion
   map.panBy([panX, panY], {
-    duration: 100,
+    duration: 260,
+    easing: (t) => t, // linear easing for predictable motion
   });
 }
 
@@ -702,15 +754,13 @@ if (mapContainer && typeof mapboxgl !== "undefined") {
       markerElement.className = "map-location-label";
       markerElement.textContent = location.title;
 
+      // ensure location labels are not clickable
+      markerElement.style.pointerEvents = 'none';
+
       new mapboxgl.Marker(markerElement)
         .setLngLat(coordinates)
         .addTo(map);
 
-      markerElement.addEventListener("click", () => {
-        const key = normalizeArea(location.title);
-        const images = areaMap[key] || [];
-        renderImagesAroundLocation(map, location, images);
-      });
 
       bounds.extend(coordinates);
     });

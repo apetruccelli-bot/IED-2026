@@ -378,6 +378,8 @@ function selectPortrait(index) {
   if (selectedCard) {
     grid.classList.add("has-selected");
     selectedCard.classList.add("selectedImg");
+    if (typeof updateActiveInfo === "function") updateActiveInfo(selectedItem);
+    if (typeof showItemPreview === "function") showItemPreview(selectedItem);
   }
 }
 

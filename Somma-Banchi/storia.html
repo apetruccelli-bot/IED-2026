@@ -51,14 +51,14 @@
 
       .page-history header a,
       .page-history header span {
-        font-size: 34px;
+        font-size: clamp(20px, 3vw, 34px);
         line-height: 1;
       }
 
       .history-wrapper {
         position: relative;
         display: grid;
-        grid-template-columns: 230px 1fr;
+        grid-template-columns: clamp(80px, 16vw, 230px) 1fr;
         min-height: 520vh;
         padding-top: 70px;
       }
@@ -67,7 +67,7 @@
         position: sticky;
         top: 70px;
         height: calc(100vh - 70px);
-        padding-left: 12px;
+        padding-left: clamp(8px, 1vw, 12px);
         z-index: 20;
         display: flex;
         align-items: center;
@@ -77,7 +77,7 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        gap: 22px;
+        gap: clamp(10px, 2vw, 22px);
         transform: translateY(-20px);
       }
 
@@ -87,7 +87,7 @@
         width: max-content;
         opacity: 0.35;
         font-family: "Prophet Regular", sans-serif;
-        font-size: 12px;
+        font-size: clamp(9px, 1.3vw, 12px);
         line-height: 1;
         font-weight: normal;
         transform: translateX(0);
@@ -101,9 +101,9 @@
       .city-item.active {
         opacity: 1;
         font-family: "Prophet Medium", sans-serif;
-        font-size: 34px;
+        font-size: clamp(12px, 2.4vw, 34px);
         font-weight: 500;
-        transform: translateX(8px);
+        transform: translateX(clamp(3px, 0.8vw, 8px));
       }
 
       .history-stage {
@@ -111,18 +111,24 @@
         top: 0;
         height: 100vh;
         display: grid;
-        grid-template-columns: minmax(320px, 590px) minmax(320px, 560px);
+        grid-template-columns:
+          minmax(140px, 0.95fr)
+          minmax(160px, 1fr);
         align-items: center;
-        gap: 36px;
-        padding: 70px 40px 40px 70px;
+        gap: 24px;
+        padding:
+          70px
+          clamp(12px, 4vw, 40px)
+          40px
+          clamp(20px, 6vw, 70px);
       }
 
       .image-frame {
-        width: 100%;
-        max-width: 450px;
+        width: min(100%, 450px);
+        max-width: clamp(130px, 32vw, 450px);
         aspect-ratio: 1 / 1;
         position: relative;
-        transform: translateX(40px);
+        transform: translateX(clamp(0px, 3vw, 40px));
       }
 
       .history-image {
@@ -142,10 +148,10 @@
       .history-text {
         max-width: 520px;
         font-family: "Prophet Regular", sans-serif;
-        font-size: 26px;
+        font-size: clamp(12px, 2.1vw, 26px);
         line-height: 0.97;
         letter-spacing: 0.01em;
-        transform: translateX(-60px);
+        transform: translateX(clamp(-60px, -4vw, 0px));
       }
 
       .story-part {
@@ -176,42 +182,42 @@
       @media (max-width: 900px) {
         .page-history header a,
         .page-history header span {
-          font-size: 36px;
+          font-size: clamp(20px, 5vw, 36px);
         }
 
         .history-wrapper {
-          grid-template-columns: 145px 1fr;
+          grid-template-columns: clamp(80px, 18vw, 145px) 1fr;
           min-height: 520vh;
         }
 
         .city-list {
-          gap: 18px;
+          gap: clamp(10px, 2vw, 18px);
         }
 
         .city-item {
-          font-size: 12px;
+          font-size: clamp(9px, 1.8vw, 12px);
         }
 
         .city-item.active {
-          font-size: 12px;
+          font-size: clamp(11px, 2.2vw, 20px);
           transform: translateX(4px);
         }
 
         .history-stage {
-          grid-template-columns: 1fr;
-          align-content: center;
+          grid-template-columns:
+            minmax(120px, 0.9fr)
+            minmax(140px, 1fr);
           gap: 24px;
-          padding: 70px 18px 30px 35px;
+          padding: 70px 18px 30px 28px;
         }
 
         .image-frame {
-          max-width: 100%;
-          aspect-ratio: 1 / 1;
+          max-width: clamp(120px, 34vw, 320px);
           transform: translateX(0);
         }
 
         .history-text {
-          font-size: 20px;
+          font-size: clamp(11px, 2.4vw, 20px);
           line-height: 1.05;
           transform: translateX(0);
         }
@@ -219,31 +225,75 @@
 
       @media (max-width: 520px) {
         .history-wrapper {
-          grid-template-columns: 115px 1fr;
+          grid-template-columns: clamp(70px, 24vw, 115px) 1fr;
+        }
+
+        .city-sidebar {
+          padding-left: 8px;
         }
 
         .city-list {
-          gap: 14px;
+          gap: clamp(8px, 3vw, 14px);
         }
 
         .city-item {
-          font-size: 24px;
+          font-size: clamp(9px, 2.8vw, 16px);
         }
 
         .city-item.active {
           opacity: 1;
-          font-size: 24px;
+          font-size: clamp(10px, 3.4vw, 18px);
           font-family: "Prophet Medium", sans-serif;
           font-weight: 500;
-          transform: translateX(8px);
+          transform: translateX(4px);
         }
 
         .history-stage {
-          padding: 70px 12px 30px 22px;
+          grid-template-columns:
+            minmax(90px, 0.85fr)
+            minmax(110px, 1fr);
+          gap: 14px;
+          padding: 70px 10px 24px 12px;
+        }
+
+        .image-frame {
+          max-width: clamp(95px, 32vw, 180px);
         }
 
         .history-text {
-          font-size: 18px;
+          font-size: clamp(9px, 3vw, 15px);
+          line-height: 1.05;
+        }
+      }
+
+      @media (max-width: 390px) {
+        .history-wrapper {
+          grid-template-columns: 68px 1fr;
+        }
+
+        .history-stage {
+          grid-template-columns:
+            minmax(82px, 0.8fr)
+            minmax(100px, 1fr);
+          gap: 14px;
+          padding: 70px 8px 22px 8px;
+        }
+
+        .image-frame {
+          max-width: 100px;
+        }
+
+        .history-text {
+          font-size: 9px;
+          line-height: 1.04;
+        }
+
+        .city-item {
+          font-size: 8px;
+        }
+
+        .city-item.active {
+          font-size: 10px;
         }
       }
     </style>
@@ -288,39 +338,47 @@
 
         <div class="history-text">
           <p class="story-part active">
-            C'è un modo di tagliare la carne che non si insegna a parole.
-            Si impara stando fermi accanto a qualcuno che lo fa da trent'anni, osservando il gesto prima ancora di capirlo.
-            Ruggiero Somma lo sapeva bene, perché quel qualcuno era suo nonno. Nato a Barletta nella seconda metà degli anni Quaranta,
-            Ruggiero cresce dentro una macelleria, la bottega del nonno è un luogo preciso: il banco di marmo bianco con le venature grigie, i ganci lungo la parete del fondo, il rumore sordo del coltello sul legno. 
-            Quello che a Barletta rimane impresso in Ruggiero non è solo la tecnica. È la consapevolezza che tutto questo: il gesto, la relazione, la fiducia accumulata anno dopo anno, potrebbe scomparire senza lasciare traccia. Ma questo pensiero all'epoca non ha ancora una forma precisa.
+            Certi mestieri si imparano solo guardando, stando fermi accanto a qualcuno che lo fa da trent'anni, osservando il gesto prima ancora di capirlo.
+            Ruggiero Somma lo sapeva bene, perché quel qualcuno era suo nonno. Nato a Barletta nella seconda metà degli anni '40,
+            Ruggiero cresce dentro una macelleria, la bottega del nonno, un luogo preciso con il suo banco di marmo bianco, i ganci lungo la parete del fondo, il rumore sordo del coltello sul legno.
+            Quello che a Barletta rimane impresso in Ruggiero non è solo la tecnica. È la consapevolezza che tutto questo: il gesto, la relazione, la fiducia accumulata anno dopo anno, potrebbe scomparire senza lasciare traccia.
+            E quindi decide di voler incominciare a preservare l'eredità trasmessa da suo nonno.
           </p>
 
           <p class="story-part">
-            Negli anni Sessanta Ruggiero si trasferisce a Bari. Porta con sé l'esperienza maturata a Barletta e apre la Macelleria Somma in un quartiere della città. Il banco è nuovo, i clienti sono nuovi, ma il lavoro è lo stesso: alzare la saracinesca, preparare il banco, cominciare la giornata.
-            È proprio a Bari, in quel rituale quotidiano ripetuto centinaia di volte, che l'idea di documentare prende corpo. Ruggiero inizia a fotografare. Non la merce, non i prezzi, non le vetrine in festa. Fotografa le cose che di solito nessuno guarda: le mani di un collega mentre disossa, il banco alla fine di una mattinata intensa, un cliente anziano che indica il pezzo che vuole con un gesto che sembra lo stesso da decenni. Fotografa la luce dei neon riflessa sul marmo bagnato, le bilance con i piatti in ottone, gli apriscatole appesi al muro insieme ai calendari delle ditte fornitrici.
-            Le immagini non osservano la macelleria come semplice luogo commerciale, ma come spazio di lavoro, di relazione, di trasmissione silenziosa. Documentano una cultura materiale fatta di manualità, fiducia e abitudine quotidiana — cose che esistono solo finché qualcuno le pratica, e che spariscono senza fare rumore quando smettono di esistere.
-            Presto Ruggiero capisce che le sue fotografie da sole non bastano a restituire la complessità di questo mondo. Comincia a parlarne con i colleghi, i macellai che incontra nelle fiere di settore, nelle cooperative, ai mercati all'ingrosso. L'idea si diffonde naturalmente, come succede con le cose che toccano qualcosa di vero. I colleghi iniziano a mandargli materiale: fotografie scattate nelle loro botteghe, ritagli di riviste specializzate, cataloghi di coltelli e attrezzature, fatture d'epoca con intestazioni dai caratteri tipografici ormai scomparsi. L'archivio smette di essere un progetto personale e diventa qualcosa di più largo, quasi senza che nessuno lo decida formalmente.
+            Negli anni Sessanta Ruggiero si trasferisce a Bari. Porta con sé l'esperienza maturata a Barletta e apre la Macelleria Somma in un quartiere della città, qui si interfaccia con un nuovo contesto e con una clientela diversa, ma la routine quotidiana è la stessa: alzare la saracinesca, preparare il banco, accogliere i clienti.
+            È proprio a Bari, in quel rituale quotidiano ripetuto centinaia di volte, che l'idea di documentare prende corpo. Ruggiero inizia a fotografare. Non la merce, non i prezzi, non le vetrine in festa. Fotografa le cose che di solito nessuno guarda: le mani di un collega mentre disossa, il banco alla fine di una mattinata intensa, un cliente anziano che indica il pezzo che vuole con un gesto che sembra lo stesso da decenni.
+            Fotografa la luce dei neon riflessa sul marmo bagnato, le bilance, i ganci appesi al muro insieme ai calendari delle ditte fornitrici.
+            Le immagini non osservano la macelleria come semplice luogo commerciale, ma come spazio di lavoro, di relazione, di trasmissione silenziosa. Documentano una cultura materiale fatta di manualità, fiducia e abitudine quotidiana.
+            Presto Ruggiero capisce che le sue fotografie da sole non bastano a restituire la complessità di questo mondo. Comincia a parlarne con i colleghi, i macellai che incontra nelle fiere di settore, nelle cooperative, ai mercati all'ingrosso. L'idea si diffonde naturalmente, come succede con le cose che toccano qualcosa di vero. I colleghi iniziano a mandargli materiale: fotografie scattate nelle loro botteghe, ritagli di riviste specializzate, cataloghi di coltelli e attrezzature. L'archivio smette di essere un progetto personale e cambia prospettiva.
           </p>
 
           <p class="story-part">
-           A Toritto, Ruggiero non aveva solo un suo caro amico, ma il suo più fidato fornitore, con cui nel tempo aveva costruito un rapporto stretto. Quest'uomo si occupava della macellazione: un passaggio che nella filiera della carne precede tutto il resto ma che, nel lavoro quotidiano di una macelleria, rimane quasi sempre fuori campo.
-           Ruggiero porta la macchina fotografica anche a Toritto. Documenta quel segmento del mestiere che le fotografie scattate dietro al banco non avevano ancora raggiunto. Quello che trova non è separato dal resto dell'archivio: è la parte a monte, il luogo in cui il lavoro del macellaio ha già cominciato a prendere forma prima ancora che la saracinesca venga alzata. Quelle immagini entrano nella raccolta e la completano in modo che nessun materiale inviato dai colleghi avrebbe potuto fare.
+            A Toritto, Ruggiero non aveva solo un suo caro amico, ma il suo più fidato fornitore, con cui nel tempo aveva costruito un rapporto stretto.
+            Quest'uomo si occupava della macellazione: un passaggio che nella filiera della carne precede tutto il resto ma che, nel lavoro quotidiano di una macelleria, rimane quasi sempre fuori campo.
+            Ruggiero porta la macchina fotografica anche a Toritto. Documenta quel segmento del mestiere che le fotografie scattate dietro al banco non avevano ancora raggiunto.
+            Quello che trova non è separato dal resto dell'archivio: è la parte a monte, il luogo in cui il lavoro del macellaio ha già cominciato a prendere forma prima ancora che la saracinesca venga alzata.
+            Quelle immagini entrano nella raccolta e la completano in un modo che nessun materiale inviato dai colleghi avrebbe potuto fare.
           </p>
 
           <p class="story-part">
-            A un certo punto Ruggiero decide che aspettare i materiali non basta. Comincia a viaggiare in modo sistematico attraverso la Puglia per visitare le macellerie di persona. Conversano è una delle tappe di quel percorso.
-            In ogni bottega che visita non si limita a fotografare. Raccoglie informazioni: il nome del titolare, l'anno di apertura, la storia del negozio così come viene raccontata da chi ci lavora. Storie spesso tramandate a voce, mai scritte, che rischiano di sparire con la chiusura dell'attività. Il metodo che affina in questo periodo trasforma l'archivio da raccolta di immagini a documentazione più ampia, che include memoria orale e materiali eterogenei.
-            È anche il periodo in cui le conversazioni nelle macellerie iniziano a segnalare qualcosa: la pressione della grande distribuzione, la difficoltà nel trovare chi voglia ereditare il mestiere, i margini che si riducono. Nessuno parla ancora di crisi, ma il quadro che emerge dai viaggi è già diverso da quello delle fotografie scattate a Bari vent'anni prima.
+            A un certo punto Ruggiero decide che aspettare i materiali non basta. Comincia a viaggiare attraverso la Puglia per visitare le macellerie di persona. Conversano è una delle tappe di quel percorso.
+            In ogni bottega che visita non si limita a fotografare. Raccoglie informazioni: il nome del titolare, l'anno di apertura, la storia del negozio così come viene raccontata da chi ci lavora. Storie spesso tramandate a voce, mai scritte, che rischiano di sparire con la chiusura dell'attività.
+            Il metodo che affina in questo periodo trasforma l'archivio da raccolta di immagini a documentazione più ampia, che include memoria orale e materiali eterogenei.
+            È anche il periodo in cui le conversazioni nelle macellerie iniziano a segnalare qualcosa: la pressione della grande distribuzione, la difficoltà nel trovare chi voglia ereditare il mestiere, i margini che si riducono.
+            Nessuno parla ancora di crisi, ma il quadro che emerge dai viaggi è già diverso da quello delle fotografie scattate a Bari vent'anni prima.
           </p>
 
           <p class="story-part">
-            Alla fine degli anni Novanta, Ruggiero è pronto. L'archivio è vasto, ordinato, stratificato su quasi trent'anni di raccolta. L'intenzione è quella di renderlo accessibile: una mostra, forse una pubblicazione, una forma qualsiasi che permetta al materiale di uscire dai raccoglitori e dai cassetti della Macelleria Somma e tornare al mondo da cui era venuto.
-            Taranto era una delle città che più lo avevano colpito durante i viaggi. Una città con una storia industriale pesante, dove le macellerie dei quartieri operai avevano avuto per decenni una funzione sociale precisa, radicata nella vita dei turni, delle famiglie numerose, dei mercati rionali che scandivano le settimane. Ruggiero le aveva visitate, fotografate, annotate. Contava di tornarci per concludere il lavoro di raccolta e dare finalmente forma pubblica all'archivio.
-            Non ci tornò nel modo in cui aveva pensato.
-            Tra la fine degli anni Novanta e i primi anni Duemila, il mondo della carne subisce in Italia una serie di colpi ravvicinati. Le nuove normative igienico-sanitarie europee impongono adeguamenti costosi, impossibili per molte piccole botteghe. Le abitudini di consumo cambiano: i supermercati sottraggono clientela, la grande distribuzione standardizza l'offerta e riduce il mestiere a una funzione logistica. Poi arriva la crisi della BSE — la cosiddetta "mucca pazza" — che sconvolge il mercato, alimenta la paura, svuota i banchi e segna definitivamente la fine di un'epoca.
-            Le macellerie che Ruggiero aveva fotografato per quasi trent'anni cominciano a chiudere. Prima quelle più piccole, poi quelle di quartiere, poi alcune che sembravano solide. I colleghi che gli avevano mandato fotografie e ritagli di riviste tirano giù le saracinesche. La Macelleria Somma, che doveva essere la custode di tutta questa memoria, è costretta a chiudere a sua volta.
-            Quello che doveva essere un archivio della vitalità di un mestiere diventa, quasi per ironia della sorte, la documentazione precisa della sua dissoluzione. Le fotografie di Barletta, Bari, Toritto, Conversano, Taranto — i banconi pieni, i gesti misurati, le insegne dipinte a mano, gli interni che odoravano di ferro e legno — non ritraggono più un presente. Ritraggono qualcosa che è già passato nel momento in cui le guardiamo.
-            È per questo che Ruggiero ha voluto che questo materiale diventasse pubblico. Non come celebrazione nostalgica, non come lamento per qualcosa che non c'è più. Ma come testimonianza precisa di cosa significa costruire qualcosa con le proprie mani per tutta una vita, intuire che potrebbe non durare, e documentarlo comunque — nella speranza che qualcuno, un giorno, abbia voglia di guardare
+            Alla fine degli anni Novanta, Ruggiero è pronto. L'archivio è vasto, ordinato e stratificato. L'intenzione è quella di renderlo accessibile:
+            una mostra, forse una pubblicazione, una forma qualsiasi che permetta al materiale di uscire dai raccoglitori e dai cassetti della Macelleria Somma.
+            Taranto era una delle città che più lo avevano colpito durante i viaggi. Una città con una storia industriale pesante, dove le macellerie dei quartieri operai avevano avuto per decenni una funzione sociale precisa, radicata nella vita dei turni, delle famiglie numerose, dei mercati rionali che scandivano le settimane.
+            Ruggiero le aveva visitate, fotografate, annotate.
+            Alla fine degli anni Novanta, le abitudini di consumo cambiano: i supermercati sottraggono clientela, la grande distribuzione standardizza l'offerta e riduce il mestiere a una funzione logistica.
+            Poi arriva la crisi della BSE, la cosiddetta "mucca pazza", che sconvolge il mercato, alimenta la paura, e impone nuove norme igenico-sanitarie.
+            Le macellerie che Ruggiero aveva fotografato per quasi trent'anni cominciano a chiudere, anche la Macelleria Somma, che doveva essere la custode di tutta questa memoria, è costretta a chiudere a sua volta.
+            Ed è così che quello che doveva essere un archivio della vitalità di un mestiere diventa, quasi per ironia della sorte, la documentazione precisa della sua dissoluzione. Le fotografie di Barletta, Bari, Toritto, Conversano, Taranto, non ritraggono più un presente. Ritraggono qualcosa che è già passato nel momento in cui le guardiamo.
+            È per questo che Ruggiero ha voluto che questo materiale diventasse pubblico. Non come celebrazione nostalgica, ma come testimonianza precisa di cosa significa costruire qualcosa con le proprie mani per tutta una vita, intuire che potrebbe non durare, e documentarlo comunque, nella speranza che qualcuno, un giorno, abbia voglia di guardare.
           </p>
         </div>
       </section>

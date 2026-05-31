@@ -20,6 +20,46 @@
 }
 
       html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+      body, [data-scroll-container], #main-scroll, * { scroll-behavior: smooth; }
+
+body.page-transition > :not(#lightbox) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+body.page-transition.page-transition-ready > :not(#lightbox) {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 720ms cubic-bezier(.77,0,.175,1),
+    transform 720ms cubic-bezier(.77,0,.175,1);
+}
+
+body.page-transition.page-transition-leaving > :not(#lightbox) {
+  opacity: 0;
+  transform: translateY(-16px);
+  transition:
+    opacity 380ms cubic-bezier(.77,0,.175,1),
+    transform 380ms cubic-bezier(.77,0,.175,1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  [data-scroll-container],
+  #main-scroll,
+  * {
+    scroll-behavior: auto !important;
+  }
+
+  body.page-transition > :not(#lightbox),
+  body.page-transition.page-transition-ready > :not(#lightbox),
+  body.page-transition.page-transition-leaving > :not(#lightbox) {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
 
     /* Ensure anchored sections are offset below the sticky header */
     [id^="sezione_"] {
@@ -81,6 +121,41 @@ body {
   text-transform: uppercase;
   line-height: 100%;
   letter-spacing: 0.02em;
+}
+
+/* Keep masthead and sidebar titles layout unchanged (no wrap).
+   Reduce only the font size responsively using clamp(). */
+.always-on-top .font-myTitle,
+.sidebar-links .font-myTitle {
+  white-space: nowrap !important;
+  display: inline-block;
+  font-size: clamp(12px, 3.2vw, var(--title-size));
+  line-height: 1;
+  overflow: visible;
+}
+
+@media (min-width: 900px) {
+  .always-on-top .font-myTitle,
+  .sidebar-links .font-myTitle {
+    font-size: var(--title-size);
+  }
+}
+
+/* Extra small screens: reduce title size further for smartphones */
+@media (max-width: 420px) {
+  .always-on-top .font-myTitle,
+  .sidebar-links .font-myTitle {
+    font-size: 12px !important;
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+}
+
+/* Keep the masthead subtitle on a single line */
+.always-on-top .flex > p {
+  white-space: nowrap;
+  font-size: clamp(10px, 2.2vw, 14px);
+  margin: 0;
 }
 
 /* Modern page spacing and image sizing */
@@ -183,6 +258,29 @@ body {
   padding-right: 8px;
 }
 
+body.archive-page #main-scroll .col-span-1 {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+body.stat-page #main-scroll .space-y-20px > * + * {
+  margin-top: 0 !important;
+}
+
+body.archive-page svg line,
+body.archive-page svg .line,
+body.archive-page svg .base,
+body.archive-page svg .value {
+  stroke-width: 1 !important;
+  vector-effect: non-scaling-stroke;
+}
+
+body.archive-page #main-scroll .col-span-2.h-px.bg-myBlack {
+  height: 0 !important;
+  background: transparent !important;
+  border-bottom: 1px solid var(--myBlack) !important;
+}
+
 @media (max-width: 900px) {
   :root { --image-max-height: 260px; --page-padding: 10px; --attach-extra: 24px; }
   .font-myTitle { font-size: 20px; }
@@ -248,10 +346,17 @@ a:hover {
   opacity: .3;
 }
 
-.sidebar-links a.is-active,
-.sidebar-links a.is-active:hover {
-  opacity: .3;
+/* Active link dimmed only on archive page */
+.archive-page .sidebar-links a.is-active,
+.archive-page .sidebar-links a.is-active:hover {
+  opacity: .3 !important;
 }
+
+.sidebar-links a:hover {
+  opacity: .3 !important;
+}
+
+/* (Archive-page) other links remain at normal opacity; active one is dimmed above */
 
 
 /* ── HEADER ── */
@@ -398,6 +503,91 @@ header {
   color: #fff;
 }
 
+/* Face preview (webcam) positioning: place centered at bottom of viewport */
+.face-preview-panel {
+  position: fixed;
+  left: calc(var(--page-padding) + 8px);
+  bottom: calc(var(--page-padding) + 10px);
+  transform: none;
+  z-index: 2200;
+  pointer-events: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: transparent;
+}
+.face-webcam-preview {
+  width: 140px;
+  height: calc(140px * 5 / 4);
+  object-fit: cover;
+  background: #000;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+@media (max-width: 900px) {
+  .face-webcam-preview { width: 100px; height: calc(100px * 5 / 4); }
+}
+
+/* Gallery image framing: enforce 4:5 frame and cover behavior */
+.gallery-image {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+/* Hover effect: dim images in the archive gallery on hover */
+#archive-gallery .group .gallery-image,
+#archive-gallery .gallery-image {
+  will-change: opacity;
+  transition: opacity 800ms cubic-bezier(.77,0,.175,1);
+}
+
+/* On hover, dim only the image so captions/text remain fully opaque */
+#archive-gallery [data-item-index]:hover .gallery-image {
+  opacity: 0.3 !important;
+  transition: opacity 800ms cubic-bezier(.77,0,.175,1) !important;
+}
+
+/* Simple fadeIn keyframes fallback used by the inline animation class */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Caption layout: year left, author+paese right */
+.gallery-caption .caption-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.gallery-caption .caption-year {
+  flex: 0 0 auto;
+  opacity: 0.95;
+}
+.gallery-caption .caption-meta {
+  flex: 1 1 auto;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .gallery-caption .caption-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .gallery-caption .caption-meta {
+    text-align: left;
+  }
+}
+
 .card-tag.highlight {
   background: var(--accent);
   color: #fff;
@@ -426,6 +616,7 @@ header {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
+  background: var(--myWhite, #FCFCFC);
 }
 
 .lightbox.open {
@@ -437,7 +628,7 @@ header {
   position: absolute;
   top: 10px;
   left: 10px;
-  color: #FCFCFC;
+  color: var(--myBlack, #1E1E1E);
   z-index: 9999;
   pointer-events: auto;
   display: flex;
@@ -445,13 +636,12 @@ header {
 }
 
 .lb-title a {
-  color: #FCFCFC;
+  color: var(--myBlack, #1E1E1E);
   text-decoration: none;
   line-height: 100%;
 }
 
 .lb-title p {
-  font-size: 12px;
   margin-top: 0px;
   line-height: 120%;
 }
@@ -462,14 +652,13 @@ header {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #1E1E1E;
+  background-color: var(--myWhite, #FCFCFC);
   opacity: 1;
 }
 
 .lb-content {
   position: relative;
   z-index: 2001;
-  background-color: #1E1E1E;
   padding: 10px;
   border-radius: 8px;
   display: grid;
@@ -493,7 +682,7 @@ header {
 .lb-close, .lb-prev, .lb-next {
   background: none;
   border: none;
-  color: #FCFCFC;
+  color: var(--myBlack, #1E1E1E);
   font-size: 30px;
   cursor: pointer;
   padding: 5px;
@@ -533,7 +722,7 @@ header {
 .lb-info {
   grid-column: 1 / -1;
   grid-row: 2;
-  color: #FCFCFC;
+  color: var(--myBlack, #1E1E1E);
   font-family: "Diatype";
   text-align: center;
   display: flex;
@@ -548,7 +737,7 @@ header {
   top: 10px;
   right: -5%;
   display: inline-block;
-  color: var(--myWhite, #FCFCFC);
+  color: var(--myBlack, #1E1E1E);
   font-family: "Diatype";
   font-size: 12px;
   letter-spacing: 0.04em;
@@ -559,12 +748,328 @@ header {
 .lb-desc {
   display: block;
   margin-top: 12px;
-  color: var(--myWhite, #FCFCFC);
+  color: var(--myBlack, #1E1E1E);
   font-family: "Diatype";
   font-size: 12px;
   letter-spacing: 0.04em;
   line-height: 1.4;
   text-align: center;
+}
+
+.lb-shell {
+  position: relative;
+  z-index: 1;
+  width: calc(100vw - 20px);
+  height: calc(100vh - 20px);
+  margin: 10px auto;
+  padding: 0;
+  background: var(--myWhite, #FCFCFC);
+  border: 1px solid rgba(30, 30, 30, 0.08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+}
+
+.lb-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.98fr) minmax(0, 1.85fr) minmax(130px, 160px);
+  gap: 20px;
+  align-items: stretch;
+  height: 100%;
+  padding: 10px 8px 8px;
+  background: var(--myWhite, #FCFCFC);
+}
+
+.lb-column {
+  min-width: 0;
+  color: var(--myBlack, #1E1E1E);
+}
+
+.lb-column--info,
+.lb-column--main,
+.lb-column--thumbs {
+  display: flex;
+  flex-direction: column;
+}
+
+.lb-column--info {
+  justify-content: space-between;
+  gap: 18px;
+  padding: 8px 0;
+}
+
+.lb-column--info,
+.lb-column--main {
+  border: none;
+  padding-right: 0;
+}
+
+.lb-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lb-brand p,
+.lb-kicker,
+.lb-product-title,
+.lb-desc,
+.lb-id {
+  margin: 0;
+}
+
+.lb-brand p,
+.lb-kicker {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.68;
+}
+
+.lb-product-title {
+  font-family: 'Diatype-Mono';
+  font-size: clamp(22px, 2.6vw, 42px);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.lb-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lb-accordion details {
+  border-top: 1px solid rgba(30, 30, 30, 0.14);
+  padding-top: 10px;
+}
+
+.lb-accordion details + details {
+  margin-top: 10px;
+}
+
+.lb-accordion summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.lb-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.lb-facts {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.lb-fact-row {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.lb-fact-row dt,
+.lb-fact-row dd {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.lb-fact-row dt {
+  opacity: 0.58;
+}
+
+.lb-fact-row dd {
+  opacity: 0.96;
+}
+
+.lb-column--main {
+  min-height: 0;
+}
+
+.lb-main-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: clamp(340px, 72vh, 860px);
+  background: linear-gradient(180deg, rgba(30, 30, 30, 0.02), rgba(30, 30, 30, 0));
+}
+
+.lb-main-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 260ms cubic-bezier(.77,0,.175,1),
+    transform 260ms cubic-bezier(.77,0,.175,1);
+}
+
+.lb-main-image.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.lb-main-image.is-fading {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.lb-main-image--next {
+  z-index: 2;
+}
+
+.lb-column--thumbs {
+  min-height: 0;
+  padding-left: 2px;
+}
+
+.lb-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.lb-thumb {
+  border: 1px solid rgba(30, 30, 30, 0.12);
+  background: rgba(30, 30, 30, 0.02);
+  padding: 0;
+  opacity: 0.58;
+  cursor: pointer;
+  transition:
+    opacity 220ms cubic-bezier(.77,0,.175,1),
+    border-color 220ms cubic-bezier(.77,0,.175,1),
+    background-color 220ms cubic-bezier(.77,0,.175,1),
+    transform 220ms cubic-bezier(.77,0,.175,1);
+}
+
+.lb-thumb:hover,
+.lb-thumb:focus-visible {
+  opacity: 0.86;
+  border-color: rgba(30, 30, 30, 0.55);
+  outline: none;
+}
+
+.lb-thumb.is-active {
+  opacity: 1;
+  border-color: rgba(30, 30, 30, 0.9);
+  background: rgba(30, 30, 30, 0.08);
+  transform: translateX(2px);
+}
+
+.lb-thumb img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.lightbox .lb-main-image {
+  filter: contrast(1.02) saturate(0.98);
+}
+
+@media (max-width: 820px) {
+  .lb-shell {
+    width: calc(100vw - 14px);
+    height: auto;
+    min-height: calc(100vh - 20px);
+    margin: 7px auto;
+    padding: 0;
+  }
+
+  .lb-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "info"
+      "main"
+      "thumbs";
+    gap: 14px;
+  }
+
+  .lb-column--info { grid-area: info; }
+  .lb-column--main { grid-area: main; }
+  .lb-column--thumbs { grid-area: thumbs; }
+
+  .lb-main-stage {
+    min-height: clamp(280px, 56vh, 680px);
+  }
+
+  .lb-thumbs {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 0 6px;
+    scroll-snap-type: x mandatory;
+  }
+
+  .lb-thumb {
+    flex: 0 0 auto;
+    min-width: 96px;
+    max-width: 120px;
+    scroll-snap-align: start;
+  }
+
+  .lb-thumb.is-active {
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 640px) {
+  .lb-shell {
+    width: calc(100vw - 10px);
+    min-height: calc(100vh - 10px);
+    margin: 5px auto;
+    padding: 0;
+  }
+
+  .lb-product-title {
+    font-size: clamp(18px, 5vw, 28px);
+  }
+
+  .lb-fact-row {
+    grid-template-columns: 84px minmax(0, 1fr);
+  }
+
+  .lb-main-stage {
+    min-height: clamp(240px, 48vh, 520px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-main-image,
+  .lb-thumb {
+    transition: none;
+  }
+}
+
+/* Lightbox-specific adjustments for the white editorial reference */
+.lightbox .lb-brand a,
+.lightbox .lb-brand p,
+.lightbox .lb-kicker,
+.lightbox .lb-product-title,
+.lightbox .lb-desc,
+.lightbox .lb-id,
+.lightbox .lb-accordion summary,
+.lightbox .lb-fact-row dt,
+.lightbox .lb-fact-row dd,
+.lightbox .lb-close,
+.lightbox .lb-prev,
+.lightbox .lb-next {
+  color: var(--myBlack, #1E1E1E);
+}
+
+.lightbox .lb-main-image {
+  mix-blend-mode: multiply;
 }
 
 /* Story page: keep the main text blocks within 70ch */
@@ -599,6 +1104,49 @@ header {
   transform: translateY(0);
 }
 
+.story-page .story-back-to-top,
+.stat-page .story-back-to-top {
+  display: none;
+}
+
+@media (max-width: 1119px) {
+  .story-page #main-scroll .story-sticky,
+  .stat-page #main-scroll .story-sticky {
+    display: none;
+  }
+
+  .story-page .story-back-to-top,
+  .stat-page .story-back-to-top {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 4200;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--myBlack, #1E1E1E);
+    background: var(--myWhite, #FCFCFC);
+    color: var(--myBlack, #1E1E1E);
+    font-family: 'Diatype-Mono';
+    font-size: 20px;
+    line-height: 1;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+
+  .story-page .story-back-to-top.is-visible,
+  .stat-page .story-back-to-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   #main-scroll .story-fade {
     opacity: 1;
@@ -608,51 +1156,171 @@ header {
 }
 
 
-#archive-rows a,
-#archive-rows span.p {
-  opacity: 0.3;
-  transition: opacity 0.3s ease;
+/* Archive filter items: default opaque, hover dims to 30% */
+#archive-rows [data-filter-key][data-filter-value] {
+  opacity: 1;
+  transition: opacity 0.2s cubic-bezier(.77,0,.175,1);
   color: var(--color-myBlack, #1E1E1E);
 }
 
-#archive-rows a:hover,
-#archive-rows span.p:hover {
-  opacity: 1;
+#archive-rows [data-filter-key][data-filter-value]:hover {
+  opacity: 0.3 !important;
+}
+
+.archive-sticky {
+  position: sticky;
+  z-index: 4001;
+  overflow: visible; /* allow the absolute filter panel to overlay without clipping */
+  background: transparent;
+}
+
+.archive-sticky::before {
+  /* removed local sticky overlay to avoid visible white block; global body overlay is used instead */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Full-screen white overlay when archive filters open/hovered */
+body.archive-overlay-open #archive-gallery .gallery-image {
+  opacity: 0.08;
+  transition: opacity 800ms cubic-bezier(.77,0,.175,1);
+}
+
+body.archive-overlay-open #archive-gallery .gallery-caption,
+body.archive-overlay-open #archive-gallery .gallery-title-wrap,
+body.archive-overlay-open #archive-gallery p {
+  opacity: 0.08;
+  transition: opacity 800ms cubic-bezier(.77,0,.175,1);
+}
+
+/* Ensure filters and archive rows sit ABOVE the full-screen overlay */
+.archive-sticky,
+.archive-rows-panel,
+#archive-rows,
+.sidebar-links {
+  z-index: 3001; /* must be greater than body::before (3000) */
+}
+
+.archive-sticky > *,
+.archive-rows-panel *,
+.sidebar-links * {
+  position: relative;
+  z-index: 3002;
+  animation: verticalReveal 800ms cubic-bezier(.77,0,.175,1) both;
+}
+
+.archive-sticky > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Keep the left masthead and right sidebar fixed at the bottom while the
+   document scrolls so labels and links remain visible. */
+.always-on-top {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  top: auto;
+  align-self: end;
+  z-index: 4000; /* above most UI elements */
+}
+
+.col-start-8 > .sidebar-links,
+.sidebar-links {
+  position: fixed;
+  top: auto;
+  bottom: 10px;
+  right: 10px;
+  z-index: 4000;
+}
+
+/* Keep the left column (site title / masthead) visible above the overlay */
+.always-on-top {
+  /* fixed behaviour is defined earlier; keep a high z-index so it sits above overlays */
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  top: auto;
+  z-index: 4000; /* above body::before (3000) and overlay elements (3001/3002) */
+}
+.always-on-top * {
+  position: relative;
+  z-index: 4001;
+}
+
+.home-page .home-brand {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1100;
+}
+
+.home-page .sidebar-links {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  top: auto;
+  z-index: 1100;
+}
+
+/* JS toggles these utility classes; ensure they have the expected effect */
+.opacity-100 {
+  opacity: 1 !important;
+}
+.opacity-50 {
+  opacity: 0.3 !important;
+}
+
+#archive-rows[hidden] {
+  display: none;
+}
+
+.archive-rows-panel {
+  position: absolute; /* overlay positioning so it doesn't push content */
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-height: none; /* allow full expansion so filters are all visible */
+  overflow: visible;
+  padding: 10px;
+  background: transparent; /* single overlay comes from .archive-sticky */
+  box-shadow: none;
+  border: none;
+  z-index: 3002; /* above sticky overlay */
+}
+
+/* Ensure no white block or card appearance in the archive rows themselves */
+.archive-rows-panel,
+.archive-rows-panel > .flex,
+.archive-rows-panel > .flex > *,
+.archive-rows-panel [data-filter-key][data-filter-value],
+.archive-rows-panel .region-group,
+.archive-rows-panel .region-towns {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 #archive-rows > .flex.flex-col {
-  max-height: 9rem;
-  overflow: scroll;
+  max-height: none;
+  overflow: visible;
   padding-bottom: 20px;
   position: relative;
 }
-#archive-rows:after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 3rem;
-  background: linear-gradient(to top, var(--myWhite), transparent);
-  z-index: 99;
-  pointer-events: none;
-}
-#archive-rows:before {
-  content: "";
-  position: absolute;
-  top: 3.5rem;
-  left: 0;
-  width: calc((100% - 50px) / 6);
-  height: 4rem;
-  background: linear-gradient(to bottom, var(--myWhite), transparent);
-  z-index: 99;
-  pointer-events: none;
-}
+
 
 #archive-gallery .archive-fade {
-  opacity: 0.18;
-  transform: translateY(18px);
-  transition: opacity 0.55s ease, transform 0.55s ease;
+  opacity: 0;
+  transform: translateY(var(--parallax-shift, 24px));
+  transition:
+    opacity 0.9s cubic-bezier(.77,0,.175,1),
+    transform 0.9s cubic-bezier(.77,0,.175,1);
+  transition-delay: var(--enter-delay, 0ms);
   will-change: opacity, transform;
 }
 
@@ -667,6 +1335,28 @@ header {
     transform: none;
     transition: none;
   }
+}
+
+/* Gallery item spacing and captions */
+#archive-gallery .group {
+  break-inside: avoid-column;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 40px; /* increased vertical spacing between images */
+}
+
+#archive-gallery .gallery-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+#archive-gallery .gallery-caption p {
+  margin-top: 10px;
+  font-style: italic;
+  color: var(--myBlack);
+  line-height: 120%;
 }
 
 
@@ -772,6 +1462,7 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
 .loading-overlay.fade-out {
   opacity: 0;
   pointer-events: none !important;
+  visibility: hidden;
 }
 
 .loading-overlay.fade-out * {
@@ -1282,6 +1973,7 @@ body:has(.mapboxgl-canvas):has(.font-myTitle:hover) .mapboxgl-canvas {
   z-index: 50;
   pointer-events: none;
   transition: opacity 0.35s ease-in-out;
+}
 
 body.stat-page {
   background: var(--bg);
@@ -1593,7 +2285,6 @@ body.stat-page {
     grid-template-columns: 1fr;
   }
 }
-}
 
 .loading-gallery.show {
   opacity: 1;
@@ -1672,7 +2363,10 @@ body.stat-page {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(30, 30, 30, 0.96);
+  /* translucent light backdrop + blur of underlying content */
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
@@ -1684,7 +2378,7 @@ body.stat-page {
 }
 
 .face-far-message {
-  color: #FCFCFC;
+  color: var(--myBlack, #1E1E1E);
   text-align: center;
   font-size: clamp(24px, 4.2vw, 56px);
   line-height: 1.05;
@@ -1695,32 +2389,32 @@ body.stat-page {
 /* ── Face/Hand preview panel ────────────────────────────────────── */
 .face-preview-panel {
   position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 1200;
+  left: calc(var(--page-padding) + 8px);
+  top: calc(var(--page-padding) + 10px);
+  bottom: auto;
+  z-index: 2200;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
   font-family: monospace;
   font-size: 11px;
-  pointer-events: none;
+  pointer-events: auto;
 }
 .face-webcam-preview {
-  width: 180px;
-  height: 135px;
+  width: 140px;
+  height: calc(140px * 5 / 4);
   object-fit: cover;
   border-radius: 6px;
   border: 1px solid rgba(0,0,0,0.15);
-  transform: scaleX(-1);
 }
 .face-status-panel {
-  text-align: right;
-  line-height: 1.7;
-  color: #333;
-  background: rgba(255,255,255,0.75);
-  padding: 4px 8px;
-  border-radius: 4px;
+  text-align: left;
+  line-height: 1.45;
+  color: #111;
+  background: rgba(255,255,255,0.85);
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 .face-status-bold {
   font-weight: bold;
@@ -1810,16 +2504,12 @@ body.home-page:has(#marker-modal.open) .home-brand {
 
 /* ── Gallery Hover Effects ────────────────────────────────────── */
 .gallery-image {
-  transition: opacity 0.3s cubic-bezier(.22, 1, .36, 1);
-}
-
-.group:hover .gallery-image {
-  opacity: 0.3;
+  transition: opacity 2400ms cubic-bezier(.77,0,.175,1);
 }
 
 .gallery-title-wrap {
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(.22, 1, .36, 1);
+  transition: opacity 2400ms cubic-bezier(.77,0,.175,1);
 }
 
 .group:hover .gallery-title-wrap {
@@ -1829,4 +2519,15 @@ body.home-page:has(#marker-modal.open) .home-brand {
 .gallery-title {
   white-space: normal;
   font-size: clamp(18px, 2vw, 25px);
+}
+
+@keyframes verticalReveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

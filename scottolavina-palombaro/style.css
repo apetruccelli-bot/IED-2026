@@ -108,14 +108,13 @@ body.lightbox-open .search-wrap {
 
 .lightbox {
   position: fixed;
-  top: var(--site-header-height);
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(90vw, 1100px);
-  height: calc(100vh - var(--site-header-height));
-  max-height: calc(100vh - var(--site-header-height));
-  z-index: 180;
+  top: var(--site-header-height); /* sit below the fixed topbar */
+  left: 260px; /* leave left sidebar visible (header width + gap) */
+  right: 280px; /* leave right area-bar visible (padding-right value) */
+  bottom: 0;
+  z-index: 190; /* above main content but below topbar/sidebar */
   display: none;
+  overflow: auto;
 }
 
 .lightbox.open {
@@ -123,22 +122,24 @@ body.lightbox-open .search-wrap {
 }
 
 .lightbox-backdrop {
-  position: absolute;
+  position: absolute; /* cover only the central lightbox area */
   inset: 0;
   background: rgba(235, 235, 235, 0.98);
+  z-index: 1;
 }
 
 .lightbox-content {
   position: relative;
-  z-index: 1;
-  width: 100%;
+  z-index: 2; /* above backdrop within the lightbox */
+  width: min(90vw, 1100px);
+  margin: 0 auto;
   padding: 24px; /* small internal padding to keep space around the image */
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   gap: 8px; /* tighter spacing between elements */
   max-height: calc(100vh - var(--site-header-height));
-  height: 100%;
+  height: calc(100vh - var(--site-header-height));
   overflow-y: auto;
 }
 
@@ -167,9 +168,9 @@ body.lightbox-open .search-wrap {
   display: block;
   width: auto;
   height: auto;
-  /* lasciare spazio ai controlli laterali dentro il modale in modo che non sovrappongano l'immagine */
-  max-width: calc(100% - 240px);
-  max-height: 100%; /* si limita all'altezza del contenitore .lightbox-main */
+  /* ensure full image visibility without cropping */
+  max-width: 100%;
+  max-height: calc(100vh - var(--site-header-height) - 120px);
   object-fit: contain;
   background: #eee;
   margin: 0 auto;
@@ -731,9 +732,9 @@ nav a {
   content: "";
   position: absolute;
   left: 0;
-  top: 0.1em;
-  width: 320px; /* larger hit area, keep inside modal */
-  height: 320px;
+  top: 0;
+  width: 100%;
+  height: 1.2em;
   background: #000;
   transform: scaleX(0);
   transform-origin: left;
@@ -1076,19 +1077,19 @@ body.map-page-body .topbar-right a:hover {
   top: 50%; /* fully centered */
   transform: translate(-50%, -50%);
   display: none; /* hidden by default to avoid an empty central bar */
-  width: min(920px, calc(100% - 1.5rem));
-  max-height: calc(100% - 2rem);
-  padding: 0.6rem 0.6rem 0.5rem; /* reduced padding */
-  background: rgba(255, 255, 255, 0.14);
+  width: min(1180px, calc(100% - 6rem));
+  max-height: calc(100% - 6rem);
+  padding: 1rem; /* larger padding for roomy layout */
+  background: rgba(255, 255, 255, 0.16);
   color: #f5f5f2;
   overflow: hidden;
   flex-shrink: 0;
-  z-index: 160;
+  z-index: 190;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 14px; /* slightly smaller radius to match lightbox */
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.14);
-  backdrop-filter: blur(12px) saturate(1.05);
-  -webkit-backdrop-filter: blur(12px) saturate(1.05);
+  border-radius: 16px;
+  box-shadow: 0 26px 56px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(14px) saturate(1.05);
+  -webkit-backdrop-filter: blur(14px) saturate(1.05);
   pointer-events: auto;
 }
 
@@ -1129,17 +1130,19 @@ body.map-page-body .topbar-right a:hover {
 }
 
 .map-gallery-viewport {
-  overflow: hidden;
+  /* allow the viewport to grow/shrink based on image aspect ratio */
+  overflow: visible;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: min(46vh, 420px); /* reduced height to limit empty vertical space */
+  height: auto;
+  max-height: 72vh; /* don't exceed this to keep modal manageable */
 }
 
 .map-gallery-strip {
   display: grid;
-  grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.8fr) minmax(0, 0.55fr);
-  gap: 8px; /* reduced gap between previews */
+  grid-template-columns: minmax(0, 0.5fr) minmax(0, 2.4fr) minmax(0, 0.5fr);
+  gap: 10px; /* slightly increased gap for breathing room */
   align-items: center;
   width: 100%;
   height: 100%;
@@ -1147,7 +1150,8 @@ body.map-page-body .topbar-right a:hover {
 
 .map-gallery-link {
   display: block;
-  overflow: hidden;
+  /* allow images to fully fit without being clipped by the link container */
+  overflow: visible;
   border-radius: 14px;
 }
 
@@ -1163,14 +1167,20 @@ body.map-page-body .topbar-right a:hover {
 /* global img rounding removed — rounded corners applied only to lightbox/gallery elements */
 
 .map-gallery-image {
-  width: 100%;
-  height: 100%;
+  /* Do not force image to fill container; preserve aspect ratio and avoid cropping */
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  /* limit height relative to viewport so tall images scale down and fit */
+  max-height: 72vh;
   object-fit: contain;
   display: block;
+  margin: 0 auto;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.22);
   transition: transform 180ms ease, opacity 180ms ease, filter 180ms ease;
+  will-change: transform, opacity, filter;
 }
 
 .map-gallery-image-prev,
@@ -1184,7 +1194,18 @@ body.map-page-body .topbar-right a:hover {
   opacity: 1;
   transform: scale(1);
   filter: saturate(1) brightness(1) blur(0px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.26);
+}
+
+/* Improve canvas/video rendering for hand-tracking overlay */
+#ml-overlay video,
+#ml-overlay canvas {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  image-rendering: auto;
 }
 
 .map-gallery-button {

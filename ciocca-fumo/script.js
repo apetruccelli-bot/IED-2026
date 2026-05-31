@@ -1,4 +1,5 @@
 const grid = document.getElementById('grid');
+const itemPreview = document.getElementById('item-preview');
 const searchInput = document.getElementById('search');
 const tagsBar = document.getElementById('tags-bar');
 const resultsInfo = document.getElementById('results-info');
@@ -33,9 +34,6 @@ const filtersByCategory = {
     { title: '色 Color', type: 'pack-color', values: ['赤 Red', '白 White', '青 Blue', '黄色 Yellow', '緑 Green'] },
     { title: '産地 Origin', type: 'origin', values: ['大阪 Osaka', '東京 Tokyo', '京都 Kyoto', '奈良 Nara'] },
     { title: '年 Year', type: 'year', values: [1985, 1986, 1987, 1988, 1989, 1990] }
-  ],
-  pubblicità: [
-    { title: '年 Year', type: 'year', values: [1960] }
   ]
 };
 
@@ -49,6 +47,8 @@ let activeCategory = 'fotografie';
 let activeFilter = null;
 let activeFilterType = null;
 let advertisingScrollBound = false;
+let lastAdvertisingIndex = -1;
+let adScrollSyncLock = false;
 
 function updateCategoryText(category) {
   const japaneseText = document.getElementById('category-japanese-text');
@@ -58,6 +58,12 @@ function updateCategoryText(category) {
   const text = categoryTexts[category] || categoryTexts.fotografie;
   japaneseText.textContent = text.japanese;
   englishText.textContent = text.english;
+}
+
+function setDescriptionIntroVisible(visible) {
+  document.querySelector('.mainLayout')?.classList.toggle('has-item-selected', !visible);
+  const intro = document.querySelector('.description-intro');
+  if (intro) intro.hidden = !visible;
 }
 
 async function loadData() {
@@ -156,12 +162,27 @@ function filteredItems() {
   });
 }
 
+function updateHeaderNavState({ aboutOpen = false, highlightCategory = null } = {}) {
+  const aboutLink = document.getElementById('header-about-link');
+  const activeCat = highlightCategory ?? activeCategory;
+
+  document.querySelectorAll('[data-category]').forEach(el => {
+    el.classList.toggle('is-active', !aboutOpen && el.dataset.category === activeCat);
+    el.style.opacity = '';
+  });
+
+  aboutLink?.classList.toggle('is-active', aboutOpen);
+}
+
 function setCategory(cat) {
   activeCategory = cat;
   activeFilter = null;
   activeFilterType = null;
   activeTags.clear();
   syncGlobalTagButtons();
+
+  clearItemPreview();
+  setDescriptionIntroVisible(true);
 
   grid?.classList.remove(
     'has-selected',
@@ -171,21 +192,31 @@ function setCategory(cat) {
     'year-filtered'
   );
 
-  document.querySelectorAll('[data-category]').forEach(el => {
-    el.style.opacity = el.dataset.category === activeCategory ? '1' : '0.35';
-  });
+  updateHeaderNavState();
+
+  document.querySelector('.mainLayout')?.classList.toggle('category-pubblicita', activeCategory === 'pubblicità');
 
   if (activeCategory === 'fotografie') {
     grid?.classList.add('layout-fotografie');
     renderPortraitFilters();
+  } else if (activeCategory === 'pubblicità') {
+    clearCategoryFilters();
   } else {
     renderCategoryFilters(activeCategory);
   }
 
   if (activeCategory === 'pacchetti') grid?.classList.add('layout-pacchetti');
-  if (activeCategory === 'pubblicità') grid?.classList.add('layout-pubblicita');
+  if (activeCategory === 'pubblicità') {
+    grid?.classList.add('layout-pubblicita');
+    lastAdvertisingIndex = -1;
+    if (grid) grid.scrollTop = 0;
+  } else {
+    resetAdvertisingScroll();
+  }
 
-  updateCategoryText(activeCategory);
+  if (activeCategory !== 'pubblicità') {
+    updateCategoryText(activeCategory);
+  }
   render();
 
   if (
@@ -233,6 +264,12 @@ function renderPortraitFilters() {
   `;
 
   bindFilterOptionClicks(panel);
+}
+
+function clearCategoryFilters() {
+  const panel = document.getElementById('filters-panel');
+  if (!panel) return;
+  panel.innerHTML = '';
 }
 
 function renderCategoryFilters(category) {
@@ -290,8 +327,10 @@ function updateActiveInfo(item) {
   const tags = getItemTags(item);
 
   document.querySelectorAll('[data-category]').forEach(el => {
-    el.style.opacity = el.dataset.category === item.category ? '1' : '0.35';
+    el.classList.toggle('is-active', el.dataset.category === item.category);
+    el.style.opacity = '';
   });
+  document.getElementById('header-about-link')?.classList.remove('is-active');
 
   document.querySelectorAll('.filter-option').forEach(el => {
     const value = el.dataset.filterValue;
@@ -316,13 +355,78 @@ function updateActiveInfo(item) {
 }
 
 function clearActiveInfo() {
-  document.querySelectorAll('[data-category]').forEach(el => {
-    el.style.opacity = el.dataset.category === activeCategory ? '1' : '0.35';
-  });
+  updateHeaderNavState();
   document.querySelectorAll('.filter-option').forEach(el => {
     el.classList.remove('active-filter');
     el.style.opacity = '1';
   });
+}
+
+function descriptionTextHtml(ja, en) {
+  return `
+    <div class="japanese">${ja || ''}</div>
+    <div class="english">${en || ''}</div>
+  `;
+}
+
+function showItemPreview(item) {
+  if (!itemPreview || !['fotografie', 'pacchetti', 'pubblicità'].includes(activeCategory)) return;
+
+  const layoutClass =
+    activeCategory === 'pacchetti' ? 'pacchetti'
+    : activeCategory === 'pubblicità' ? 'pubblicita'
+    : 'fotografie';
+
+  itemPreview.className = `item-preview open layout-${layoutClass}`;
+  setDescriptionIntroVisible(false);
+
+  let bodyHtml = '';
+  if (item.category === 'pacchetti') {
+    bodyHtml = `
+      <div class="card-tags">
+        ${(item.tags || []).map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+      </div>
+      <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
+    `;
+  } else if (item.category === 'pubblicità') {
+    bodyHtml = `
+      <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
+    `;
+  } else if (item.category === 'fotografie') {
+    const tags = getItemTags(item);
+    bodyHtml = `
+      <div class="card-tags">
+        ${tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+      </div>
+      <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
+    `;
+  } else {
+    const tags = getItemTags(item);
+    bodyHtml = `
+      <span class="card-id">#${String(item.id).padStart(2, '0')}</span>
+      <div class="card-tags">
+        ${tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+      </div>
+      <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
+    `;
+  }
+
+  itemPreview.innerHTML = `
+    <img class="card-img" src="${item.src}" alt="${item.description || `Item ${item.id}`}">
+    <div class="card-body">${bodyHtml}</div>
+  `;
+  itemPreview.setAttribute('aria-hidden', 'false');
+}
+
+function clearItemPreview() {
+  if (!itemPreview) return;
+  itemPreview.innerHTML = '';
+  itemPreview.className = 'item-preview';
+  itemPreview.setAttribute('aria-hidden', 'true');
+  setDescriptionIntroVisible(true);
+
+  if (activeCategory === 'pubblicità') updateAdvertisingScrollState();
+  else updateCategoryText(activeCategory);
 }
 
 function shuffle(arr) {
@@ -362,6 +466,7 @@ function render() {
   }
 
   grid.innerHTML = '';
+  clearItemPreview();
   grid.classList.toggle('layout-fotografie', activeCategory === 'fotografie');
   grid.classList.toggle('layout-pubblicita', activeCategory === 'pubblicità');
   grid.classList.toggle('layout-pacchetti', activeCategory === 'pacchetti');
@@ -378,7 +483,7 @@ function render() {
   visible.forEach((item, i) => {
     const card = document.createElement('article');
     card.className = 'card activeImg';
-    card.style.cursor = activeCategory === 'fotografie' || activeCategory === 'pacchetti' ? 'zoom-in' : 'default';
+    card.style.cursor = ['fotografie', 'pacchetti'].includes(activeCategory) ? 'zoom-in' : 'default';
     card.dataset.itemYear = item.year;
 
     if (item.category === 'pubblicità') {
@@ -391,6 +496,22 @@ function render() {
     img.src = item.src;
     img.alt = item.description || `Item ${item.id}`;
     img.loading = 'lazy';
+
+    if (item.category === 'pubblicità') {
+      img.addEventListener('load', () => {
+        syncAdvertisingDescHeights();
+        syncAdvertisingScrollPosition();
+        if (i === 0) initFirstAdvertisingText();
+      }, { once: true });
+      if (img.complete) {
+        requestAnimationFrame(() => {
+          syncAdvertisingDescHeights();
+          syncAdvertisingScrollPosition();
+          initFirstAdvertisingText();
+        });
+      }
+    }
+
     card.appendChild(img);
 
     const body = document.createElement('div');
@@ -401,8 +522,27 @@ function render() {
         <div class="card-tags">
           ${(item.tags || []).map(tag => `<span class="card-tag">${tag}</span>`).join('')}
         </div>
-        <p class="card-desc">${item['description-ja'] || ''}<br>${item['description-en'] || ''}</p>
+        <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
       `;
+    } else if (item.category === 'fotografie') {
+      const tagsEl = document.createElement('div');
+      tagsEl.className = 'card-tags';
+      getItemTags(item).forEach(tag => {
+        const t = document.createElement('span');
+        t.className = 'card-tag';
+        t.textContent = tag;
+        t.addEventListener('click', e => {
+          e.stopPropagation();
+          toggleTag(tag);
+        });
+        tagsEl.appendChild(t);
+      });
+      body.appendChild(tagsEl);
+
+      const descEl = document.createElement('p');
+      descEl.className = 'card-desc';
+      descEl.innerHTML = descriptionTextHtml(item['description-ja'], item['description-en']);
+      body.appendChild(descEl);
     } else {
       const idEl = document.createElement('span');
       idEl.className = 'card-id';
@@ -422,19 +562,12 @@ function render() {
         tagsEl.appendChild(t);
       });
       body.appendChild(tagsEl);
-
-      if (item.category === 'fotografie') {
-        const descEl = document.createElement('p');
-        descEl.className = 'card-desc';
-        descEl.innerHTML = `${item['description-ja'] || ''}<br>${item['description-en'] || ''}`;
-        body.appendChild(descEl);
-      }
     }
 
     card.appendChild(body);
 
     card.addEventListener('click', () => {
-      if (activeCategory !== 'fotografie' && activeCategory !== 'pacchetti') return;
+      if (!['fotografie', 'pacchetti'].includes(activeCategory)) return;
 
       const alreadyActive = card.classList.contains('selectedImg');
       grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
@@ -443,42 +576,179 @@ function render() {
       if (!alreadyActive) {
         card.classList.add('selectedImg');
         updateActiveInfo(item);
+        showItemPreview(item);
       } else {
         clearActiveInfo();
+        clearItemPreview();
       }
     });
 
     grid.appendChild(card);
   });
 
-  if (activeCategory === 'pubblicità') setupAdvertisingScrollText();
+  if (activeCategory === 'pubblicità') {
+    renderAdvertisingDescriptions(visible);
+    if (grid) grid.scrollTop = 0;
+    lastAdvertisingIndex = -1;
+    setupAdvertisingScrollText();
+    requestAnimationFrame(() => {
+      syncAdvertisingDescHeights();
+      syncAdvertisingScrollPosition();
+      updateAdvertisingScrollState();
+      initFirstAdvertisingText();
+    });
+  } else {
+    clearAdvertisingDescriptions();
+  }
+}
+
+function toggleAdvertisingDescScroll(show) {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (!scroll) return;
+  scroll.classList.toggle('is-active', show);
+  scroll.setAttribute('aria-hidden', String(!show));
+}
+
+function renderAdvertisingDescriptions(visible) {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (!scroll) return;
+
+  scroll.innerHTML = '';
+  toggleAdvertisingDescScroll(true);
+
+  visible.forEach(item => {
+    const block = document.createElement('div');
+    block.className = 'ad-desc-block';
+    block.innerHTML = `
+      <div class="ad-desc-text">
+        <div class="japanese">${item['description-ja'] || ''}</div>
+        <div class="english">${item['description-en'] || ''}</div>
+      </div>
+    `;
+    scroll.appendChild(block);
+  });
+}
+
+function clearAdvertisingDescriptions() {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (scroll) scroll.innerHTML = '';
+  toggleAdvertisingDescScroll(false);
+}
+
+function syncAdvertisingDescHeights() {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (!scroll || activeCategory !== 'pubblicità' || !grid) return;
+
+  const cards = [...grid.querySelectorAll('.card')];
+  const blocks = [...scroll.querySelectorAll('.ad-desc-block')];
+
+  cards.forEach((card, i) => {
+    const block = blocks[i];
+    if (!block) return;
+    block.style.height = `${card.offsetHeight}px`;
+  });
+
+  const lastText = blocks[blocks.length - 1]?.querySelector('.ad-desc-text');
+  scroll.style.paddingBottom = lastText ? `${lastText.offsetHeight + 40}px` : '';
+}
+
+function initFirstAdvertisingText() {
+  const firstText = document.querySelector('.ad-desc-block .ad-desc-text');
+  if (!firstText) return;
+  firstText.classList.remove('ad-desc-animate');
+  void firstText.offsetWidth;
+  firstText.classList.add('ad-desc-animate');
+  lastAdvertisingIndex = 0;
+}
+
+function syncAdvertisingScrollPosition() {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (!scroll || !grid || adScrollSyncLock) return;
+
+  adScrollSyncLock = true;
+  scroll.scrollTop = grid.scrollTop;
+  adScrollSyncLock = false;
+}
+
+function resetAdvertisingScroll() {
+  clearAdvertisingDescriptions();
+  resetAdvertisingDescriptionPosition();
+}
+
+function resetAdvertisingDescriptionPosition() {
+  const intro = document.querySelector('.description-intro');
+  if (!intro) return;
+  intro.style.position = '';
+  intro.style.left = '';
+  intro.style.top = '';
+  intro.style.width = '';
+  intro.style.bottom = '';
+  intro.style.marginBottom = '';
+  intro.classList.remove('is-positioned');
 }
 
 function setupAdvertisingScrollText() {
+  syncAdvertisingDescHeights();
+  syncAdvertisingScrollPosition();
+
   if (!grid || advertisingScrollBound) {
-    updateAdvertisingTextOnScroll();
+    updateAdvertisingScrollState();
     return;
   }
-  grid.addEventListener('scroll', updateAdvertisingTextOnScroll);
-  advertisingScrollBound = true;
-  updateAdvertisingTextOnScroll();
-}
 
-function updateAdvertisingTextOnScroll() {
-  const cards = document.querySelectorAll('.myPhotos.layout-pubblicita .card');
-  const japaneseText = document.getElementById('category-japanese-text');
-  const englishText = document.getElementById('category-english-text');
-  if (!cards.length || !japaneseText || !englishText) return;
-
-  let activeCard = cards[0];
-  cards.forEach(card => {
-    const rect = card.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.45) activeCard = card;
-    card.classList.toggle('ad-past', rect.bottom < window.innerHeight * 0.35);
+  grid.addEventListener('scroll', () => {
+    syncAdvertisingScrollPosition();
+    updateAdvertisingScrollState();
   });
 
-  japaneseText.textContent = activeCard.dataset.adJa || '';
-  englishText.textContent = activeCard.dataset.adEn || '';
+  advertisingScrollBound = true;
+  updateAdvertisingScrollState();
+}
+
+function updateAdvertisingScrollState() {
+  if (document.querySelector('.mainLayout.has-item-selected')) return;
+
+  const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
+  const blocks = [...document.querySelectorAll('.ad-desc-block')];
+  if (!cards.length) return;
+
+  const pastThreshold = window.innerHeight * 0.35;
+  const activeThreshold = window.innerHeight * 0.45;
+  let activeIndex = 0;
+
+  if (grid && grid.scrollTop < 20) {
+    activeIndex = 0;
+    cards.forEach((card, i) => {
+      card.classList.toggle('ad-past', false);
+      card.classList.toggle('ad-active', i === 0);
+    });
+    blocks.forEach((block, i) => {
+      block.classList.toggle('ad-desc-past', false);
+    });
+  } else {
+    cards.forEach((card, i) => {
+      const rect = card.getBoundingClientRect();
+      const isPast = rect.bottom < pastThreshold;
+      card.classList.toggle('ad-past', isPast);
+      card.classList.toggle('ad-active', false);
+      blocks[i]?.classList.toggle('ad-desc-past', isPast);
+      if (rect.top < activeThreshold && rect.bottom > pastThreshold) activeIndex = i;
+    });
+    cards[activeIndex]?.classList.add('ad-active');
+  }
+
+  if (activeIndex !== lastAdvertisingIndex) {
+    blocks.forEach((block, i) => {
+      const text = block.querySelector('.ad-desc-text');
+      if (!text) return;
+      text.classList.remove('ad-desc-animate');
+      if (i === activeIndex) {
+        void text.offsetWidth;
+        text.classList.add('ad-desc-animate');
+      }
+    });
+    lastAdvertisingIndex = activeIndex;
+  }
 }
 
 function openLightbox(index) {
@@ -490,7 +760,7 @@ function openLightbox(index) {
 
   lbImg.src = item.src;
   lbImg.alt = item.description || `Item ${item.id}`;
-  lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
+  lbId.textContent = item.category === 'fotografie' ? '' : `#${String(item.id).padStart(2, '0')}`;
   lbTagsEl.innerHTML = '';
 
   getItemTags(item).forEach(tag => {
@@ -541,6 +811,7 @@ document.addEventListener('keydown', e => {
 document.querySelectorAll('[data-category]').forEach(el => {
   el.addEventListener('click', event => {
     event.preventDefault();
+    closeExploreModal();
     setCategory(el.dataset.category);
   });
 });
@@ -560,11 +831,75 @@ function initAboutImageBlurOnScroll() {
   });
 }
 
+function updateAboutHeaderOffset() {
+  const header = document.querySelector('header');
+  if (!header) return;
+  document.documentElement.style.setProperty('--about-header-offset', `${header.offsetHeight}px`);
+}
+
+function openAboutIndex() {
+  document.querySelector('.header-about-wrap')?.classList.add('is-index-open');
+}
+
+function closeAboutIndex() {
+  document.querySelector('.header-about-wrap')?.classList.remove('is-index-open');
+}
+
+function initAboutIndexLinks() {
+  document.querySelectorAll('.about-index-item').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = link.getAttribute('href')?.slice(1);
+      const target = id ? document.getElementById(id) : null;
+      const modal = document.getElementById('explore-modal');
+      if (!target || !modal) return;
+      if (modal.style.display === 'none') openExploreModal();
+      updateAboutHeaderOffset();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+}
+
+function initAboutDropdown() {
+  const aboutLink = document.getElementById('header-about-link');
+  const aboutIndex = document.getElementById('about-index');
+  if (!aboutLink || !aboutIndex) return;
+
+  let closeTimer = null;
+
+  const scheduleClose = () => {
+    closeTimer = window.setTimeout(closeAboutIndex, 120);
+  };
+
+  const cancelClose = () => {
+    window.clearTimeout(closeTimer);
+  };
+
+  aboutLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openExploreModal();
+    openAboutIndex();
+  });
+
+  [aboutLink, aboutIndex].forEach(el => {
+    el.addEventListener('mouseenter', cancelClose);
+    el.addEventListener('mouseleave', scheduleClose);
+  });
+}
+
 function openExploreModal() {
   const modal = document.getElementById('explore-modal');
   if (!modal) return;
   modal.style.display = 'block';
   modal.setAttribute('aria-hidden', 'false');
+  modal.scrollTop = 0;
+  document.body.classList.add('about-open');
+  requestAnimationFrame(() => {
+    updateAboutHeaderOffset();
+    requestAnimationFrame(updateAboutHeaderOffset);
+  });
+  updateHeaderNavState({ aboutOpen: true });
   initAboutImageBlurOnScroll();
 }
 
@@ -573,12 +908,20 @@ function closeExploreModal() {
   if (!modal) return;
   modal.style.display = 'none';
   modal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('about-open');
+  closeAboutIndex();
+  updateHeaderNavState();
 }
 
 async function init() {
   try {
     await loadData();
     setCategory('fotografie');
+    initAboutIndexLinks();
+    initAboutDropdown();
+    window.addEventListener('resize', () => {
+      if (document.body.classList.contains('about-open')) updateAboutHeaderOffset();
+    });
   } catch (error) {
     console.error(error);
     if (grid) grid.innerHTML = `<div class="empty">Errore nel caricamento dei dati.</div>`;
@@ -586,3 +929,10 @@ async function init() {
 }
 
 init();
+
+window.openExploreModal = openExploreModal;
+window.closeExploreModal = closeExploreModal;
+window.showItemPreview = showItemPreview;
+window.clearItemPreview = clearItemPreview;
+window.showPortraitPreview = showItemPreview;
+window.clearPortraitPreview = clearItemPreview;

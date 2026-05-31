@@ -35,6 +35,9 @@ function openExploreModal() {
 function closeExploreModal() {
   const modal = document.getElementById('explore-modal');
   modal.style.display = 'none';
+  modal?.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('about-open');
+  document.querySelector('.header-about-wrap')?.classList.remove('is-index-open');
   exploreIsDetecting = false;
   audioDetecting = false;
   clearTimeout(reblurTimeout);
