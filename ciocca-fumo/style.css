@@ -349,16 +349,22 @@ button {
 
 .myPhotos.layout-pubblicita .card {
   width: 100%;
-  opacity: 1;
-  transition: opacity 0.4s ease, filter 0.4s ease;
+  opacity: 0.18;
+  filter: blur(12px);
+  transition: opacity 0.55s ease, filter 0.55s ease;
 }
 
 .myPhotos.layout-pubblicita .card.ad-past {
-  opacity: 0.22;
-  filter: blur(1px);
+  opacity: 0.18;
+  filter: blur(12px);
 }
 
 .myPhotos.layout-pubblicita .card.ad-active {
+  opacity: 0.18;
+  filter: blur(12px);
+}
+
+.myPhotos.layout-pubblicita .card.ad-revealed {
   opacity: 1;
   filter: none;
 }
@@ -933,9 +939,21 @@ body.about-open #explore-modal {
   display: block;
   object-fit: contain;
   background: var(--myBlack);
-  transition: opacity 0.6s ease, filter 0.6s ease;
+  transition: opacity 0.55s ease, filter 0.55s ease;
   opacity: 1;
   filter: blur(0);
+}
+
+body.about-open .about-plate img,
+body.about-open .about-grid img {
+  opacity: 0.18;
+  filter: blur(12px);
+}
+
+body.about-open .about-plate img.about-revealed,
+body.about-open .about-grid img.about-revealed {
+  opacity: 1;
+  filter: none;
 }
 
 .about-plate img.about-faded {
@@ -1143,6 +1161,11 @@ body.about-open #explore-modal {
   width: 180px;
   z-index: 999;
   opacity: 0.65;
+}
+
+body.about-open #gesture-camera {
+  z-index: 10005;
+  opacity: 0.85;
 }
 
 #gesture-webcam,

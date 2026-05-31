@@ -51,6 +51,10 @@ let lastAdvertisingIndex = -1;
 let adScrollSyncLock = false;
 let portraitGestureIndex = 0;
 let packGestureIndex = 0;
+let adGestureIndex = 0;
+let adsSmokingHeld = false;
+let aboutGestureIndex = 0;
+let aboutBlowHeld = false;
 
 function updateCategoryText(category) {
   const japaneseText = document.getElementById('category-japanese-text');
@@ -213,6 +217,8 @@ function setCategory(cat) {
     grid?.classList.add('layout-pacchetti');
   }
   if (activeCategory === 'pubblicità') {
+    adGestureIndex = 0;
+    adsSmokingHeld = false;
     grid?.classList.add('layout-pubblicita');
     lastAdvertisingIndex = -1;
     if (grid) grid.scrollTop = 0;
@@ -222,8 +228,29 @@ function setCategory(cat) {
 
   if (activeCategory !== 'pubblicità') {
     updateCategoryText(activeCategory);
+    resetAdsSmokingGesture();
   }
   render();
+}
+
+const CATEGORY_ORDER = ['fotografie', 'pacchetti', 'pubblicità'];
+
+function changeCategoryViaGesture(delta) {
+  if (document.body.classList.contains('about-open')) {
+    closeExploreModal();
+  }
+  const idx = CATEGORY_ORDER.indexOf(activeCategory);
+  if (idx === -1) return;
+  const nextIdx = (idx + delta + CATEGORY_ORDER.length) % CATEGORY_ORDER.length;
+  setCategory(CATEGORY_ORDER[nextIdx]);
+}
+
+function advanceCategoryViaGesture() {
+  changeCategoryViaGesture(1);
+}
+
+function prevCategoryViaGesture() {
+  changeCategoryViaGesture(-1);
 }
 
 function getPortraitItems() {
@@ -319,6 +346,140 @@ function syncPackSelection() {
 
 function advancePackViaGesture() {
   selectPackByIndex(packGestureIndex + 1);
+}
+
+function getAdItems() {
+  return filteredItems().filter(item => item.category === 'pubblicità');
+}
+
+function syncAdRevealState() {
+  const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
+  if (!cards.length) return;
+
+  if (adGestureIndex >= cards.length) {
+    adGestureIndex = cards.length - 1;
+  }
+
+  cards.forEach((card, i) => {
+    card.classList.toggle('ad-revealed', adsSmokingHeld && i === adGestureIndex);
+  });
+}
+
+function onAdSmokingGestureStart() {
+  if (activeCategory !== 'pubblicità') return;
+  adsSmokingHeld = true;
+  syncAdRevealState();
+}
+
+function onAdSmokingGestureEnd() {
+  if (activeCategory !== 'pubblicità') return;
+  adsSmokingHeld = false;
+  syncAdRevealState();
+}
+
+function getAboutImages() {
+  return [...document.querySelectorAll('.about-plate img, .about-grid img')];
+}
+
+function syncAboutRevealState() {
+  const images = getAboutImages();
+  if (!images.length) return;
+
+  if (aboutGestureIndex >= images.length) {
+    aboutGestureIndex = images.length - 1;
+  }
+
+  images.forEach((img, i) => {
+    img.classList.toggle('about-revealed', aboutBlowHeld && i === aboutGestureIndex);
+  });
+}
+
+function onAboutBlowGestureStart() {
+  if (!document.body.classList.contains('about-open')) return;
+  aboutBlowHeld = true;
+  syncAboutRevealState();
+}
+
+function onAboutBlowGestureEnd() {
+  if (!document.body.classList.contains('about-open')) return;
+  aboutBlowHeld = false;
+  syncAboutRevealState();
+}
+
+function syncAboutIndexToScroll() {
+  if (!document.body.classList.contains('about-open')) return;
+
+  const images = getAboutImages();
+  if (!images.length) return;
+
+  const targetY = window.innerHeight * 0.45;
+  let bestIndex = aboutGestureIndex;
+  let bestDistance = Infinity;
+
+  images.forEach((img, i) => {
+    const rect = img.getBoundingClientRect();
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.abs(centerY - targetY);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestIndex = i;
+    }
+  });
+
+  aboutGestureIndex = bestIndex;
+  syncAboutRevealState();
+}
+
+function resetAboutBlowGesture() {
+  aboutGestureIndex = 0;
+  aboutBlowHeld = false;
+  getAboutImages().forEach(img => img.classList.remove('about-revealed'));
+}
+
+function syncAdIndexToScroll() {
+  if (activeCategory !== 'pubblicità') return;
+
+  const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
+  if (!cards.length) return;
+
+  const targetY = window.innerHeight * 0.45;
+  let bestIndex = adGestureIndex;
+  let bestDistance = Infinity;
+
+  cards.forEach((card, i) => {
+    const rect = card.getBoundingClientRect();
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.abs(centerY - targetY);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestIndex = i;
+    }
+  });
+
+  adGestureIndex = bestIndex;
+  syncAdRevealState();
+}
+
+function scrollContentByGesture(direction) {
+  const modal = document.getElementById('explore-modal');
+  const grid = document.getElementById('grid');
+  const isAboutOpen = document.body.classList.contains('about-open') && modal?.style.display !== 'none';
+  const scrollEl = isAboutOpen ? modal : grid;
+
+  if (!scrollEl) return;
+
+  const amount = Math.round(scrollEl.clientHeight * 0.55);
+  scrollEl.scrollBy({
+    top: direction === 'down' ? amount : -amount,
+    behavior: 'smooth',
+  });
+
+  if (activeCategory === 'pubblicità' && !isAboutOpen) {
+    window.setTimeout(() => syncAdIndexToScroll(), 450);
+  }
+  if (isAboutOpen) {
+    window.setTimeout(() => syncAboutIndexToScroll(), 450);
+  }
 }
 
 function renderPortraitFilters() {
@@ -709,6 +870,10 @@ function render() {
   if (activeCategory === 'pacchetti') {
     syncPackSelection();
   }
+
+  if (activeCategory === 'pubblicità') {
+    syncAdRevealState();
+  }
 }
 
 function toggleAdvertisingDescScroll(show) {
@@ -925,25 +1090,22 @@ document.querySelectorAll('[data-category]').forEach(el => {
   });
 });
 
-function updateAboutImageBlur() {
-  const images = document.querySelectorAll('.about-plate img, .about-grid img');
-  images.forEach(img => {
-    const rect = img.getBoundingClientRect();
-    const progress = 1 - rect.top / window.innerHeight;
-    img.classList.toggle('about-faded', progress > 0.45);
-  });
+function initAboutGestureScrollSync() {
+  const modal = document.getElementById('explore-modal');
+  if (!modal || !getAboutImages().length) return;
+
+  if (modal.dataset.aboutGestureBound !== 'true') {
+    modal.dataset.aboutGestureBound = 'true';
+    modal.addEventListener('scroll', syncAboutIndexToScroll, { passive: true });
+  }
+  syncAboutIndexToScroll();
 }
 
-function initAboutImageBlurOnScroll() {
-  const modal = document.getElementById('explore-modal');
-  const images = document.querySelectorAll('.about-plate img, .about-grid img');
-  if (!modal || !images.length) return;
-
-  if (modal.dataset.blurBound !== 'true') {
-    modal.dataset.blurBound = 'true';
-    modal.addEventListener('scroll', updateAboutImageBlur, { passive: true });
-  }
-  updateAboutImageBlur();
+function resetAdsSmokingGesture() {
+  adGestureIndex = 0;
+  adsSmokingHeld = false;
+  document.body.classList.remove('ads-smoking-gesture');
+  syncAdRevealState();
 }
 
 function updateAboutHeaderOffset() {
@@ -1041,7 +1203,9 @@ function openExploreModal() {
     requestAnimationFrame(updateAboutHeaderOffset);
   });
   updateHeaderNavState({ aboutOpen: true });
-  initAboutImageBlurOnScroll();
+  resetAboutBlowGesture();
+  initAboutGestureScrollSync();
+  window.startAboutMicDetection?.();
 }
 
 function closeExploreModal() {
@@ -1050,6 +1214,8 @@ function closeExploreModal() {
   modal.style.display = 'none';
   modal.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('about-open');
+  window.stopAboutMicDetection?.();
+  resetAboutBlowGesture();
   closeAboutIndex();
   updateHeaderNavState();
 }
@@ -1084,3 +1250,14 @@ window.advancePortraitViaGesture = advancePortraitViaGesture;
 window.getPackItems = getPackItems;
 window.selectPackByIndex = selectPackByIndex;
 window.advancePackViaGesture = advancePackViaGesture;
+window.advanceCategoryViaGesture = advanceCategoryViaGesture;
+window.prevCategoryViaGesture = prevCategoryViaGesture;
+window.resetAdsSmokingGesture = resetAdsSmokingGesture;
+window.onAdSmokingGestureStart = onAdSmokingGestureStart;
+window.onAdSmokingGestureEnd = onAdSmokingGestureEnd;
+window.getAdRevealIndex = () => adGestureIndex;
+window.onAboutBlowGestureStart = onAboutBlowGestureStart;
+window.onAboutBlowGestureEnd = onAboutBlowGestureEnd;
+window.getAboutRevealIndex = () => aboutGestureIndex;
+window.resetAboutBlowGesture = resetAboutBlowGesture;
+window.scrollContentByGesture = scrollContentByGesture;
