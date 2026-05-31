@@ -392,6 +392,14 @@ function showItemPreview(item) {
     bodyHtml = `
       <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
     `;
+  } else if (item.category === 'fotografie') {
+    const tags = getItemTags(item);
+    bodyHtml = `
+      <div class="card-tags">
+        ${tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+      </div>
+      <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
+    `;
   } else {
     const tags = getItemTags(item);
     bodyHtml = `
@@ -516,6 +524,25 @@ function render() {
         </div>
         <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
       `;
+    } else if (item.category === 'fotografie') {
+      const tagsEl = document.createElement('div');
+      tagsEl.className = 'card-tags';
+      getItemTags(item).forEach(tag => {
+        const t = document.createElement('span');
+        t.className = 'card-tag';
+        t.textContent = tag;
+        t.addEventListener('click', e => {
+          e.stopPropagation();
+          toggleTag(tag);
+        });
+        tagsEl.appendChild(t);
+      });
+      body.appendChild(tagsEl);
+
+      const descEl = document.createElement('p');
+      descEl.className = 'card-desc';
+      descEl.innerHTML = descriptionTextHtml(item['description-ja'], item['description-en']);
+      body.appendChild(descEl);
     } else {
       const idEl = document.createElement('span');
       idEl.className = 'card-id';
@@ -535,13 +562,6 @@ function render() {
         tagsEl.appendChild(t);
       });
       body.appendChild(tagsEl);
-
-      if (item.category === 'fotografie') {
-        const descEl = document.createElement('p');
-        descEl.className = 'card-desc';
-        descEl.innerHTML = descriptionTextHtml(item['description-ja'], item['description-en']);
-        body.appendChild(descEl);
-      }
     }
 
     card.appendChild(body);
@@ -740,7 +760,7 @@ function openLightbox(index) {
 
   lbImg.src = item.src;
   lbImg.alt = item.description || `Item ${item.id}`;
-  lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
+  lbId.textContent = item.category === 'fotografie' ? '' : `#${String(item.id).padStart(2, '0')}`;
   lbTagsEl.innerHTML = '';
 
   getItemTags(item).forEach(tag => {
@@ -811,11 +831,74 @@ function initAboutImageBlurOnScroll() {
   });
 }
 
+function updateAboutHeaderOffset() {
+  const header = document.querySelector('header');
+  if (!header) return;
+  document.documentElement.style.setProperty('--about-header-offset', `${header.offsetHeight}px`);
+}
+
+function openAboutIndex() {
+  document.querySelector('.header-about-wrap')?.classList.add('is-index-open');
+}
+
+function closeAboutIndex() {
+  document.querySelector('.header-about-wrap')?.classList.remove('is-index-open');
+}
+
+function initAboutIndexLinks() {
+  document.querySelectorAll('.about-index-item').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = link.getAttribute('href')?.slice(1);
+      const target = id ? document.getElementById(id) : null;
+      const modal = document.getElementById('explore-modal');
+      if (!target || !modal) return;
+      if (modal.style.display === 'none') openExploreModal();
+      updateAboutHeaderOffset();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+}
+
+function initAboutDropdown() {
+  const aboutLink = document.getElementById('header-about-link');
+  const aboutIndex = document.getElementById('about-index');
+  if (!aboutLink || !aboutIndex) return;
+
+  let closeTimer = null;
+
+  const scheduleClose = () => {
+    closeTimer = window.setTimeout(closeAboutIndex, 120);
+  };
+
+  const cancelClose = () => {
+    window.clearTimeout(closeTimer);
+  };
+
+  aboutLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openExploreModal();
+    openAboutIndex();
+  });
+
+  [aboutLink, aboutIndex].forEach(el => {
+    el.addEventListener('mouseenter', cancelClose);
+    el.addEventListener('mouseleave', scheduleClose);
+  });
+}
+
 function openExploreModal() {
   const modal = document.getElementById('explore-modal');
   if (!modal) return;
   modal.style.display = 'block';
   modal.setAttribute('aria-hidden', 'false');
+  modal.scrollTop = 0;
+  document.body.classList.add('about-open');
+  requestAnimationFrame(() => {
+    updateAboutHeaderOffset();
+    requestAnimationFrame(updateAboutHeaderOffset);
+  });
   updateHeaderNavState({ aboutOpen: true });
   initAboutImageBlurOnScroll();
 }
@@ -825,6 +908,8 @@ function closeExploreModal() {
   if (!modal) return;
   modal.style.display = 'none';
   modal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('about-open');
+  closeAboutIndex();
   updateHeaderNavState();
 }
 
@@ -832,6 +917,11 @@ async function init() {
   try {
     await loadData();
     setCategory('fotografie');
+    initAboutIndexLinks();
+    initAboutDropdown();
+    window.addEventListener('resize', () => {
+      if (document.body.classList.contains('about-open')) updateAboutHeaderOffset();
+    });
   } catch (error) {
     console.error(error);
     if (grid) grid.innerHTML = `<div class="empty">Errore nel caricamento dei dati.</div>`;

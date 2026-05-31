@@ -1666,6 +1666,7 @@
       "id": 70,
       "src": "img/about/about1.png",
       "category": "about archive",
+      "plate": "T-01",
       "year": 1960,
       "tags": [
         "astratto",
@@ -1674,12 +1675,14 @@
         "composizione",
         "dettaglio"
       ],
-      "description": "Descrizione dell'immagine"
+      "description": "Plate T-01 — exterior, street front"
     },
     {
       "id": 6715,
       "src": "img/about/about2.jpg",
       "category": "about archive",
+      "plate": "T-02",
+      "plate-alt": "T-03",
       "year": 1960,
       "tags": [
         "astratto",
@@ -1688,12 +1691,13 @@
         "composizione",
         "dettaglio"
       ],
-      "description": "Descrizione dell'immagine"
+      "description": "Plate T-02 (work counter) · T-03 (counter album)"
     },
     {
       "id": 72,
       "src": "img/about/about3.png",
       "category": "about archive",
+      "plate": "T-07",
       "year": 1960,
       "tags": [
         "astratto",
@@ -1702,12 +1706,13 @@
         "composizione",
         "dettaglio"
       ],
-      "description": "Descrizione dell'immagine"
+      "description": "Plate T-07 — operator portrait"
     },
     {
       "id": 73,
       "src": "img/about/about4.png",
       "category": "about archive",
+      "plate": "T-04",
       "year": 1960,
       "tags": [
         "astratto",
@@ -1716,12 +1721,13 @@
         "composizione",
         "dettaglio"
       ],
-      "description": "Descrizione dell'immagine"
+      "description": "Plate T-04 — rear shelving"
     },
     {
       "id": 74,
       "src": "img/about/about5.jpg",
       "category": "about archive",
+      "plate": "T-05",
       "year": 1960,
       "tags": [
         "astratto",
@@ -1730,12 +1736,13 @@
         "composizione",
         "dettaglio"
       ],
-      "description": "Descrizione dell'immagine"
+      "description": "Plate T-05 — advertising wall"
     },
     {
       "id": 75,
       "src": "img/about/about6.png",
       "category": "about archive",
+      "plate": "T-06",
       "year": 1960,
       "tags": [
         "astratto",
@@ -1744,7 +1751,7 @@
         "composizione",
         "dettaglio"
       ],
-      "description": "Descrizione dell'immagine"
+      "description": "Plate T-06 — window display"
     }
   ]
 }
