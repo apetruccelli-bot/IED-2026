@@ -1,4 +1,5 @@
 const grid = document.getElementById('grid');
+const itemPreview = document.getElementById('item-preview');
 const searchInput = document.getElementById('search');
 const tagsBar = document.getElementById('tags-bar');
 const resultsInfo = document.getElementById('results-info');
@@ -33,9 +34,6 @@ const filtersByCategory = {
     { title: '色 Color', type: 'pack-color', values: ['赤 Red', '白 White', '青 Blue', '黄色 Yellow', '緑 Green'] },
     { title: '産地 Origin', type: 'origin', values: ['大阪 Osaka', '東京 Tokyo', '京都 Kyoto', '奈良 Nara'] },
     { title: '年 Year', type: 'year', values: [1985, 1986, 1987, 1988, 1989, 1990] }
-  ],
-  pubblicità: [
-    { title: '年 Year', type: 'year', values: [1960] }
   ]
 };
 
@@ -49,6 +47,7 @@ let activeCategory = 'fotografie';
 let activeFilter = null;
 let activeFilterType = null;
 let advertisingScrollBound = false;
+let lastAdvertisingIndex = -1;
 
 function updateCategoryText(category) {
   const japaneseText = document.getElementById('category-japanese-text');
@@ -58,6 +57,12 @@ function updateCategoryText(category) {
   const text = categoryTexts[category] || categoryTexts.fotografie;
   japaneseText.textContent = text.japanese;
   englishText.textContent = text.english;
+}
+
+function setDescriptionIntroVisible(visible) {
+  document.querySelector('.mainLayout')?.classList.toggle('has-item-selected', !visible);
+  const intro = document.querySelector('.description-intro');
+  if (intro) intro.hidden = !visible;
 }
 
 async function loadData() {
@@ -163,6 +168,9 @@ function setCategory(cat) {
   activeTags.clear();
   syncGlobalTagButtons();
 
+  clearItemPreview();
+  setDescriptionIntroVisible(true);
+
   grid?.classList.remove(
     'has-selected',
     'layout-fotografie',
@@ -175,15 +183,23 @@ function setCategory(cat) {
     el.style.opacity = el.dataset.category === activeCategory ? '1' : '0.35';
   });
 
+  document.querySelector('.mainLayout')?.classList.toggle('category-pubblicita', activeCategory === 'pubblicità');
+
   if (activeCategory === 'fotografie') {
     grid?.classList.add('layout-fotografie');
     renderPortraitFilters();
+  } else if (activeCategory === 'pubblicità') {
+    clearCategoryFilters();
   } else {
     renderCategoryFilters(activeCategory);
   }
 
   if (activeCategory === 'pacchetti') grid?.classList.add('layout-pacchetti');
-  if (activeCategory === 'pubblicità') grid?.classList.add('layout-pubblicita');
+  if (activeCategory === 'pubblicità') {
+    grid?.classList.add('layout-pubblicita');
+    lastAdvertisingIndex = -1;
+    if (grid) grid.scrollTop = 0;
+  }
 
   updateCategoryText(activeCategory);
   render();
@@ -233,6 +249,12 @@ function renderPortraitFilters() {
   `;
 
   bindFilterOptionClicks(panel);
+}
+
+function clearCategoryFilters() {
+  const panel = document.getElementById('filters-panel');
+  if (!panel) return;
+  panel.innerHTML = '';
 }
 
 function renderCategoryFilters(category) {
@@ -325,6 +347,58 @@ function clearActiveInfo() {
   });
 }
 
+function showItemPreview(item) {
+  if (!itemPreview || !['fotografie', 'pacchetti', 'pubblicità'].includes(activeCategory)) return;
+
+  const layoutClass =
+    activeCategory === 'pacchetti' ? 'pacchetti'
+    : activeCategory === 'pubblicità' ? 'pubblicita'
+    : 'fotografie';
+
+  itemPreview.className = `item-preview open layout-${layoutClass}`;
+  setDescriptionIntroVisible(false);
+
+  let bodyHtml = '';
+  if (item.category === 'pacchetti') {
+    bodyHtml = `
+      <div class="card-tags">
+        ${(item.tags || []).map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+      </div>
+      <p class="card-desc">${item['description-ja'] || ''}<br>${item['description-en'] || ''}</p>
+    `;
+  } else if (item.category === 'pubblicità') {
+    bodyHtml = `
+      <p class="card-desc">${item['description-ja'] || ''}<br>${item['description-en'] || ''}</p>
+    `;
+  } else {
+    const tags = getItemTags(item);
+    bodyHtml = `
+      <span class="card-id">#${String(item.id).padStart(2, '0')}</span>
+      <div class="card-tags">
+        ${tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+      </div>
+      <p class="card-desc">${item['description-ja'] || ''}<br>${item['description-en'] || ''}</p>
+    `;
+  }
+
+  itemPreview.innerHTML = `
+    <img class="card-img" src="${item.src}" alt="${item.description || `Item ${item.id}`}">
+    <div class="card-body">${bodyHtml}</div>
+  `;
+  itemPreview.setAttribute('aria-hidden', 'false');
+}
+
+function clearItemPreview() {
+  if (!itemPreview) return;
+  itemPreview.innerHTML = '';
+  itemPreview.className = 'item-preview';
+  itemPreview.setAttribute('aria-hidden', 'true');
+  setDescriptionIntroVisible(true);
+
+  if (activeCategory === 'pubblicità') updateAdvertisingTextOnScroll();
+  else updateCategoryText(activeCategory);
+}
+
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -362,6 +436,7 @@ function render() {
   }
 
   grid.innerHTML = '';
+  clearItemPreview();
   grid.classList.toggle('layout-fotografie', activeCategory === 'fotografie');
   grid.classList.toggle('layout-pubblicita', activeCategory === 'pubblicità');
   grid.classList.toggle('layout-pacchetti', activeCategory === 'pacchetti');
@@ -378,7 +453,7 @@ function render() {
   visible.forEach((item, i) => {
     const card = document.createElement('article');
     card.className = 'card activeImg';
-    card.style.cursor = activeCategory === 'fotografie' || activeCategory === 'pacchetti' ? 'zoom-in' : 'default';
+    card.style.cursor = ['fotografie', 'pacchetti'].includes(activeCategory) ? 'zoom-in' : 'default';
     card.dataset.itemYear = item.year;
 
     if (item.category === 'pubblicità') {
@@ -434,7 +509,7 @@ function render() {
     card.appendChild(body);
 
     card.addEventListener('click', () => {
-      if (activeCategory !== 'fotografie' && activeCategory !== 'pacchetti') return;
+      if (!['fotografie', 'pacchetti'].includes(activeCategory)) return;
 
       const alreadyActive = card.classList.contains('selectedImg');
       grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
@@ -443,15 +518,39 @@ function render() {
       if (!alreadyActive) {
         card.classList.add('selectedImg');
         updateActiveInfo(item);
+        showItemPreview(item);
       } else {
         clearActiveInfo();
+        clearItemPreview();
       }
     });
 
     grid.appendChild(card);
   });
 
-  if (activeCategory === 'pubblicità') setupAdvertisingScrollText();
+  if (activeCategory === 'pubblicità') {
+    if (grid) grid.scrollTop = 0;
+    lastAdvertisingIndex = -1;
+    setupAdvertisingScrollText();
+  }
+}
+
+function setAdvertisingDescription(ja, en, index) {
+  const intro = document.querySelector('.description-intro');
+  const japaneseText = document.getElementById('category-japanese-text');
+  const englishText = document.getElementById('category-english-text');
+  if (!intro || !japaneseText || !englishText) return;
+
+  setDescriptionIntroVisible(true);
+  japaneseText.textContent = ja;
+  englishText.textContent = en;
+
+  if (index === lastAdvertisingIndex) return;
+  lastAdvertisingIndex = index;
+
+  intro.classList.remove('ad-desc-animate');
+  void intro.offsetWidth;
+  intro.classList.add('ad-desc-animate');
 }
 
 function setupAdvertisingScrollText() {
@@ -465,20 +564,38 @@ function setupAdvertisingScrollText() {
 }
 
 function updateAdvertisingTextOnScroll() {
-  const cards = document.querySelectorAll('.myPhotos.layout-pubblicita .card');
-  const japaneseText = document.getElementById('category-japanese-text');
-  const englishText = document.getElementById('category-english-text');
-  if (!cards.length || !japaneseText || !englishText) return;
+  if (document.querySelector('.mainLayout.has-item-selected')) return;
 
-  let activeCard = cards[0];
-  cards.forEach(card => {
-    const rect = card.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.45) activeCard = card;
-    card.classList.toggle('ad-past', rect.bottom < window.innerHeight * 0.35);
-  });
+  const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
+  if (!cards.length) return;
 
-  japaneseText.textContent = activeCard.dataset.adJa || '';
-  englishText.textContent = activeCard.dataset.adEn || '';
+  const pastThreshold = window.innerHeight * 0.35;
+  const activeThreshold = window.innerHeight * 0.45;
+  let activeIndex = 0;
+
+  if (grid && grid.scrollTop < 20) {
+    activeIndex = 0;
+    cards.forEach((card, i) => {
+      card.classList.toggle('ad-past', false);
+      card.classList.toggle('ad-active', i === 0);
+    });
+  } else {
+    cards.forEach((card, i) => {
+      const rect = card.getBoundingClientRect();
+      const isPast = rect.bottom < pastThreshold;
+      card.classList.toggle('ad-past', isPast);
+      card.classList.toggle('ad-active', false);
+      if (rect.top < activeThreshold && rect.bottom > pastThreshold) activeIndex = i;
+    });
+    cards[activeIndex]?.classList.add('ad-active');
+  }
+
+  const activeCard = cards[activeIndex];
+  setAdvertisingDescription(
+    activeCard.dataset.adJa || '',
+    activeCard.dataset.adEn || '',
+    activeIndex
+  );
 }
 
 function openLightbox(index) {
@@ -586,3 +703,8 @@ async function init() {
 }
 
 init();
+
+window.showItemPreview = showItemPreview;
+window.clearItemPreview = clearItemPreview;
+window.showPortraitPreview = showItemPreview;
+window.clearPortraitPreview = clearItemPreview;
