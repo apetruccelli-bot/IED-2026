@@ -17,6 +17,15 @@
         --spacing-800px: 800px;
       }
     </style>
+    <!-- Site-wide dark mode (off-black) -->
+    <style>
+      :root{--dm-bg:#0e1113;--dm-surface:#131516;--dm-text:#ffffff;--dm-accent:#3fb0ff;--dm-border:rgba(255,255,255,0.06)}
+      html[data-theme="dark"]{background:var(--dm-bg);color:var(--dm-text)}
+      html[data-theme="dark"] a,html[data-theme="dark"] a:visited{color:var(--dm-accent)}
+      html[data-theme="dark"] img{filter:brightness(1.02)}
+      .site-dark-toggle{position:fixed;right:12px;bottom:12px;width:44px;height:44px;border-radius:8px;background:var(--dm-surface);border:1px solid var(--dm-border);display:flex;align-items:center;justify-content:center;z-index:1200;color:var(--dm-text)}
+    </style>
+    <script>(function(){try{const s=localStorage.getItem('site-theme');const prefers=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&prefers))document.documentElement.setAttribute('data-theme','dark');window.toggleSiteTheme=function(t){if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('site-theme','dark')}else{document.documentElement.removeAttribute('data-theme');localStorage.setItem('site-theme','')}};}catch(e){} })();</script>
   </head>
   <body>
     <div class="w-screen h-screen grid grid-cols-8 specialGrid">
@@ -409,5 +418,6 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="/dark-mode-loader.js"></script>
   </body>
 </html>

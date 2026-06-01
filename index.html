@@ -39,6 +39,52 @@
       font-family: 'Prophet Regular', sans-serif;
       overflow-x: hidden;
     }
+    
+      /* Dark mode styles (navy) */
+      :root {
+        --dm-bg: #071426;
+        --dm-surface: #08192b;
+        --dm-text: #e6f3ff;
+        --dm-muted: #9fb0c9;
+        --dm-accent: #4ea8ff;
+      }
+      body.theme-dark {
+        background: var(--dm-bg) !important;
+        color: var(--dm-text) !important;
+      }
+      body.theme-dark a {
+        color: var(--dm-accent) !important;
+      }
+      .theme-toggle {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: var(--dm-surface);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1200;
+        cursor: pointer;
+      }
+      .theme-toggle svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+      }
+      .theme-toggle .moon {
+        display: none;
+      }
+      body.theme-dark .theme-toggle .sun {
+        display: none;
+      }
+      body.theme-dark .theme-toggle .moon {
+        display: block;
+      }
+    </style>
 
     /* ── INTRO SECTION ── */
     .intro {
@@ -199,5 +245,20 @@
       }
     });
   </script>
+  <!-- Dark mode toggle script -->
+  <script>
+  (function(){
+    const storageKey='site-theme';
+    function apply(theme){ if(theme==='dark') document.body.classList.add('theme-dark'); else document.body.classList.remove('theme-dark'); }
+    try{ const stored=localStorage.getItem(storageKey); if(stored) apply(stored); else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) apply('dark'); }catch(e){}
+    if(!document.getElementById('theme-toggle')){
+      const btn=document.createElement('button'); btn.id='theme-toggle'; btn.className='theme-toggle'; btn.setAttribute('aria-label','Toggle theme');
+      btn.innerHTML='<svg viewBox="0 0 24 24" class="sun"><path d="M6.76 4.84l-1.8-1.79L3.17 4.84l1.79 1.8 1.8-1.8zM1 13h3v-2H1v2zm10-9h2V1h-2v3zm7.03 2.05l1.79-1.8-1.79-1.79-1.8 1.79 1.8 1.79zM17 13h3v-2h-3v2zM12 19a7 7 0 100-14 7 7 0 000 14zm4.24-2.76l1.8 1.79 1.79-1.79-1.79-1.8-1.8 1.8zM4.21 19.79l1.79-1.8-1.79-1.79-1.8 1.79 1.8 1.8zM12 23h2v-3h-2v3z"/></svg><svg viewBox="0 0 24 24" class="moon"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>';
+      document.body.appendChild(btn);
+      btn.addEventListener('click', function(){ const isDark=document.body.classList.toggle('theme-dark'); try{localStorage.setItem(storageKey,isDark?'dark':'light');}catch(e){}; });
+    }
+  })();
+  </script>
+  <script src="/dark-mode-loader.js"></script>
 </body>
 </html>
