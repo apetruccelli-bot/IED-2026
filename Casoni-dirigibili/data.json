@@ -601,7 +601,7 @@
       "country": "Germany",
       "year": "1928",
       "people": true,
-      "description": "Inspection of the Doppelkörper Mark-Nine concept; twin-envelope arrangement examined for lift distribution and structural redundancy."
+      "description": "Inspection of the Doppelkï¿½rper Mark-Nine concept; twin-envelope arrangement examined for lift distribution and structural redundancy."
     },
 
     {
@@ -645,7 +645,7 @@
       "country": "Spain",
       "year": "1928",
       "people": true,
-      "description": "Wall-mounted plans and full model of the Córdoba cargo design; side elevation compared with gondola and ballast arrangement."
+      "description": "Wall-mounted plans and full model of the Cï¿½rdoba cargo design; side elevation compared with gondola and ballast arrangement."
     },
 
     {
@@ -656,7 +656,7 @@
       "country": "Poland",
       "year": "1930",
       "people": true,
-      "description": "Review of the Kraków-P2 training model; committee notes focus on tail-plane proportion and cable suspension beneath the envelope."
+      "description": "Review of the Krakï¿½w-P2 training model; committee notes focus on tail-plane proportion and cable suspension beneath the envelope."
     },
 
     {
@@ -728,7 +728,7 @@
       "year": "1934",
       "victims": 9,
       "people": false,
-      "description": "Diario del Aire report on the Río de la Plata mail airship; electrical storm and suspected engine failure caused in-flight fire over the estuary."
+      "description": "Diario del Aire report on the Rï¿½o de la Plata mail airship; electrical storm and suspected engine failure caused in-flight fire over the estuary."
     },
 
     {
@@ -741,7 +741,7 @@
       "year": "1928",
       "people": false,
       "victims": 63,
-      "description": "ABC front page on the Cádiz aerial wreck; La Infanta caught fire before falling into the sea, with investigators examining possible gas or engine faults."
+      "description": "ABC front page on the Cï¿½diz aerial wreck; La Infanta caught fire before falling into the sea, with investigators examining possible gas or engine faults."
     },
 
     {
@@ -845,7 +845,7 @@
       "year": "1928",
       "people": false,
       "victims": 29,
-      "description": "La Vanguardia report on the Mediterráneo disaster over Barcelona; engine explosion and fire scattered wreckage across the city after the Marseille route crossing."
+      "description": "La Vanguardia report on the Mediterrï¿½neo disaster over Barcelona; engine explosion and fire scattered wreckage across the city after the Marseille route crossing."
     },
 
     {
@@ -858,7 +858,7 @@
       "year": "1928",
       "people": false,
       "victims": 40,
-      "description": "El País report on the Ícaro crash in the Pyrenees; violent wind destroyed the hull during forced landing, though all occupants survived."
+      "description": "El Paï¿½s report on the ï¿½caro crash in the Pyrenees; violent wind destroyed the hull during forced landing, though all occupants survived."
     },
 
     {
@@ -928,7 +928,7 @@
       "country": "Spain",
       "year": "1927",
       "people": false,
-      "description": "Structural plan for the Ícaro, focused on the forward hull, passenger compartment, engine fittings, and lower suspension points later examined after the Pyrenees incident."
+      "description": "Structural plan for the ï¿½caro, focused on the forward hull, passenger compartment, engine fittings, and lower suspension points later examined after the Pyrenees incident."
     },
 
     {
@@ -1038,7 +1038,7 @@
       "country": "Spain",
       "year": "1936",
       "people": false,
-      "description": "Spanish design sheet for the La Infanta, with paired side elevations, tail assembly, cabin placement, and handwritten inspection notes later attached to the Cádiz maritime accident file."
+      "description": "Spanish design sheet for the La Infanta, with paired side elevations, tail assembly, cabin placement, and handwritten inspection notes later attached to the Cï¿½diz maritime accident file."
     },
 
     {
@@ -1050,6 +1050,72 @@
       "year": "1933",
       "people": false,
       "description": "Simplified structural drawing of the Polonia II, combining a full side profile with three frontal frame sections; likely used by Adler to compare the original design with the wreckage recovered near Poznan."
+    },
+
+    {
+      "id": 90,
+      "src": "img/about/about (1).png",
+      "description": "The former Anti-Aircraft Artillery office is reorganized after World War I, beginning its transformation into a department for aerial risk analysis."
+    },
+
+    {
+      "id": 91,
+      "src": "img/about/about (2).png",
+      "description": "Friedrich Adler studies the first airship incident files assigned to him in 1926, preparing to document the risks of transoceanic navigation."
+    },
+
+    {
+      "id": 92,
+      "src": "img/about/about (3).png",
+      "description": "Officers and engineers work together inside the new AAA research section, comparing maps, photographs, and technical reports on airship incidents."
+    },
+
+    {
+      "id": 93,
+      "src": "img/about/about (4).png",
+      "description": "Maps, instruments, and route charts are used to study the dangers of long-distance airship travel across the ocean."
+    },
+
+    {
+      "id": 94,
+      "src": "img/about/about (5).png",
+      "description": "Photographs, reports, and recovered fragments are examined as part of Adlerâ€™s method for understanding technical failures."
+    },
+
+    {
+      "id": 95,
+      "src": "img/about/about (6).png",
+      "description": "Photographs, notes, and case files are organized into a growing archive dedicated to the study and memory of airship accidents."
+    },
+
+    {
+      "id": 96,
+      "src": "img/about/about (7).png",
+      "description": "The AAA team compares different airship incidents, connecting images, maps, and technical observations to identify recurring risks."
+    },
+
+    {
+      "id": 97,
+      "src": "img/about/about (8).png",
+      "description": "The Adler Archive is moved to a new institution, where its files, boxes, and technical records are formally catalogued and preserved."
+    },
+
+    {
+      "id": 98,
+      "src": "img/about/about (9).png",
+      "description": "Adler and his colleagues examine meteorological patterns, treating weather as one of the key dangers in airship navigation."
+    },
+
+    {
+      "id": 99,
+      "src": "img/about/about (10).png",
+      "description": "??"
+    },
+
+    {
+      "id": 100,
+      "src": "img/about/about (11).png",
+      "description": "??"
     }
   ]
 }
