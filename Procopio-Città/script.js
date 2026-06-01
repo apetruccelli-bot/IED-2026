@@ -19,6 +19,42 @@ const markerModalPrev = document.getElementById('marker-modal-prev');
 const markerModalNext = document.getElementById('marker-modal-next');
 const markerModalBackdrop = document.getElementById('marker-modal-backdrop');
 
+function initializePageTransition() {
+  const root = document.body;
+  root.classList.add('page-transition');
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      root.classList.add('page-transition-ready');
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href]');
+    if (!link || link.hasAttribute('download') || link.target === '_blank') return;
+
+    const href = link.getAttribute('href') || '';
+    if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+
+    let targetUrl;
+    try {
+      targetUrl = new URL(link.href, window.location.href);
+    } catch {
+      return;
+    }
+
+    if (targetUrl.protocol !== window.location.protocol) return;
+    if (targetUrl.pathname === window.location.pathname && targetUrl.hash === window.location.hash) return;
+
+    event.preventDefault();
+    root.classList.add('page-transition-leaving');
+
+    window.setTimeout(() => {
+      window.location.href = targetUrl.href;
+    }, 260);
+  });
+}
+
 const archiveRows = [
   { anno: '1964', autore: 'Scorza', regione: 'Calabria', abitanti: 'Meno di 10', documento: 'Fotografia' },
   { anno: '1965', autore: 'Varani', regione: 'Sicilia', abitanti: 'Tra 10 e 100', documento: 'Note di campo' },
@@ -32,8 +68,11 @@ let allItems = [];
 let mapItems = [];
 let activeFilters = new Set();
 let lbIndex = -1;
+let lightboxItems = [];
+let lightboxUseFilteredNavigation = true;
 let markerIndex = -1;
 let archiveFiltersVisible = false;
+let manualToggle = false;
 
 const regionGroups = {
   Calabria: ['Serra Vasta', 'Valle Cupa', 'Zagara', 'San Velio', 'Fonte Chiusa', 'Santa Rena', 'Costa Nera', 'Pietra Lenta'],
@@ -117,6 +156,15 @@ function setArchiveFiltersVisible(visible) {
 
   if (rowsHost) {
     rowsHost.hidden = !visible;
+  }
+
+  if (stickyHeader) {
+    stickyHeader.classList.toggle('is-open', visible);
+  }
+
+  // toggle full-screen overlay class on body so entire background fades to myWhite
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.classList.toggle('archive-overlay-open', visible);
   }
 
   archiveToggleButtons.forEach((button) => {
@@ -225,13 +273,16 @@ function galleryTemplate(item, index) {
   const parts = rawCaption.split(',').map((part) => part.trim()).filter(Boolean);
   const author = parts.length > 1 ? parts[parts.length - 1] : '';
   const mainTitle = parts.length > 1 ? parts.slice(0, -1).join(', ') : rawCaption;
+  const town = String(item.description || '').split(',')[0].trim();
+  const year = item.year || '';
 
   return `
-    <div data-item-index="${index}" class="group relative mb-10px inline-block w-full break-inside-avoid cursor-pointer">
-      <img src="${escapeHtml(item.src)}" alt="${escapeHtml(rawCaption)}" class="gallery-image block h-auto w-full" loading="lazy">
-      <div class="gallery-title-wrap pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div class="gallery-title font-myTitle text-myBlack text-center px-4">
-          ${escapeHtml(mainTitle)}${author ? `<br>${escapeHtml(author)}` : ''}
+    <div data-item-index="${index}" class="group relative mb-20px inline-block w-full break-inside-avoid cursor-pointer px-module-sm pt-module-sm3 pb-module-sm3 md:pb-0 flex flex-col gap-module-sm3 md:gap-module-xxl">
+      <img src="${escapeHtml(item.src)}" alt="${escapeHtml(rawCaption)}" class="gallery-image px-module-sm pt-module-sm3 pb-module-sm3 md:pb-0" loading="lazy">
+      <div class="gallery-caption mt-10px">
+        <div class="caption-row flex justify-between items-start">
+          <div class="caption-year italic font-myText text-myBlack text-left">${escapeHtml(String(year))}</div>
+          <div class="caption-meta italic font-myText text-myBlack text-right">${escapeHtml(author)}${author && town ? ` — ${escapeHtml(town)}` : (town ? escapeHtml(town) : '')}</div>
         </div>
       </div>
     </div>
@@ -250,6 +301,13 @@ function renderAll() {
 
   document.querySelectorAll('[data-item-index]').forEach((el) => {
     el.addEventListener('click', () => openLightbox(Number(el.dataset.itemIndex)));
+  });
+
+  document.querySelectorAll('#archive-gallery [data-item-index]').forEach((el) => {
+    const image = el.querySelector('.gallery-image');
+    if (image) {
+      image.style.setProperty('transition', 'opacity 800ms cubic-bezier(.77,0,.175,1)', 'important');
+    }
   });
 
   initializeArchiveScrollOpacity();
@@ -286,9 +344,11 @@ function filterVisible(term = '') {
   });
 }
 
-function openLightbox(index) {
+function openLightbox(index, items = allItems, useFilteredNavigation = true) {
   lbIndex = index;
-  const item = allItems[lbIndex];
+  lightboxItems = Array.isArray(items) ? items : allItems;
+  lightboxUseFilteredNavigation = useFilteredNavigation;
+  const item = lightboxItems[lbIndex];
 
   if (!item) return;
 
@@ -316,7 +376,10 @@ function closeLightbox() {
 }
 
 function openMarkerModal(index) {
-  if (!markerModal || !markerModalImg || !markerModalDesc) return;
+  if (!markerModal || !markerModalImg || !markerModalDesc) {
+    openLightbox(index, mapItems, false);
+    return;
+  }
 
   const item = mapItems[index];
   if (!item) return;
@@ -357,12 +420,24 @@ function navigateMarkerModal(direction) {
 }
 
 function navigateLightbox(direction) {
+  const items = lightboxItems.length ? lightboxItems : allItems;
+
+  if (!lightboxUseFilteredNavigation) {
+    if (!items.length) return;
+
+    let nextIndex = lbIndex + direction;
+    if (nextIndex >= items.length) nextIndex = 0;
+    if (nextIndex < 0) nextIndex = items.length - 1;
+    openLightbox(nextIndex, items, false);
+    return;
+  }
+
   const visible = [...document.querySelectorAll('[data-item-index]:not(.hidden)')];
   const currentPos = visible.findIndex((el) => Number(el.dataset.itemIndex) === lbIndex);
   let nextPos = currentPos + direction;
   if (nextPos >= visible.length) nextPos = 0;
   if (nextPos < 0) nextPos = visible.length - 1;
-  openLightbox(Number(visible[nextPos].dataset.itemIndex));
+  openLightbox(Number(visible[nextPos].dataset.itemIndex), allItems, true);
 }
 
 if (lbClose) lbClose.addEventListener('click', closeLightbox);
@@ -372,9 +447,27 @@ if (lbNext) lbNext.addEventListener('click', () => navigateLightbox(1));
 
 archiveToggleButtons.forEach((button) => {
   button.addEventListener('click', () => {
-    setArchiveFiltersVisible(!archiveFiltersVisible);
+    manualToggle = !manualToggle;
+    setArchiveFiltersVisible(manualToggle);
   });
 });
+
+// show filters on hover; if the user manually toggled (manualToggle), keep that state
+const stickyHeader = document.querySelector('.archive-page .sticky:not(.story-sticky)');
+if (stickyHeader) {
+  stickyHeader.addEventListener('mouseenter', () => setArchiveFiltersVisible(true));
+  stickyHeader.addEventListener('mouseleave', () => {
+    if (!manualToggle) setArchiveFiltersVisible(false);
+  });
+
+  // support basic touch toggling for mobile: tap header to toggle filters
+  stickyHeader.addEventListener('touchstart', (e) => {
+    manualToggle = !manualToggle;
+    setArchiveFiltersVisible(manualToggle);
+    // prevent immediate mouse events
+    e.preventDefault();
+  }, { passive: false });
+}
 
 /* document.addEventListener('keydown', (event) => {
   if (!lightbox.classList.contains('open')) return;
@@ -399,29 +492,24 @@ hydrateRowsWithImages()
   });
 
 function initializeArchiveScrollOpacity() {
-  const archiveScroll = document.querySelector('#archive-scroll, .col-start-3.col-end-9.bg-myWhite.h-screen.overflow-y-scroll');
   const archiveItems = Array.from(document.querySelectorAll('#archive-gallery [data-item-index]'));
 
-  if (!archiveScroll || !archiveItems.length) return;
+  if (!archiveItems.length) return;
 
-  archiveItems.forEach((item) => item.classList.add('archive-fade'));
+  archiveItems.forEach((item, index) => {
+    item.classList.add('archive-fade');
+    item.style.setProperty('--enter-delay', `${20 + Math.min(index, 12) * 12}ms`);
+    item.style.setProperty('--parallax-shift', `${12 + (index % 5) * 2}px`);
+  });
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
     archiveItems.forEach((item) => item.classList.add('archive-fade--visible'));
     return;
   }
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      entry.target.classList.toggle('archive-fade--visible', entry.isIntersecting);
-    });
-  }, {
-    root: archiveScroll,
-    threshold: 0.14,
-    rootMargin: '0px 0px -8% 0px',
-  });
-
-  archiveItems.forEach((item) => observer.observe(item));
+  window.setTimeout(() => {
+    archiveItems.forEach((item) => item.classList.add('archive-fade--visible'));
+  }, 240);
 }
 
 function normalizeNavPath(pathname) {
@@ -449,6 +537,8 @@ function applyActiveSidebarLink() {
 }
 
 document.addEventListener('DOMContentLoaded', applyActiveSidebarLink);
+document.addEventListener('DOMContentLoaded', initializePageTransition);
+document.addEventListener('DOMContentLoaded', initializeStoryBackToTop);
 
 
 // Handle smooth scrolling inside the main scroll container for section anchors
@@ -577,6 +667,70 @@ document.addEventListener('DOMContentLoaded', applyActiveSidebarLink);
     window.addEventListener('resize', requestUpdate, { passive: true });
   });
 })();
+
+function initializeStoryBackToTop() {
+  if (!document.body.classList.contains('story-page') && !document.body.classList.contains('stat-page')) return;
+
+  const mainScroll = document.getElementById('main-scroll');
+  const backToTopButton = document.querySelector('[data-story-back-to-top]');
+  if (!mainScroll || !backToTopButton) return;
+
+  const mobileQuery = window.matchMedia('(max-width: 1119px)');
+
+  const getScrollThreshold = () => {
+    const scrollableDistance = Math.max(0, mainScroll.scrollHeight - mainScroll.clientHeight);
+    return scrollableDistance * 0.5;
+  };
+
+  const updateButtonVisibility = () => {
+    const shouldShow = mobileQuery.matches && (mainScroll.scrollTop || 0) >= getScrollThreshold();
+    backToTopButton.classList.toggle('is-visible', shouldShow);
+    backToTopButton.setAttribute('aria-hidden', String(!shouldShow));
+  };
+
+  const animateScrollToTop = () => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      mainScroll.scrollTop = 0;
+      return;
+    }
+
+    const start = mainScroll.scrollTop || 0;
+    const duration = 260;
+    const startTime = performance.now();
+
+    const step = (now) => {
+      const progress = Math.min(1, (now - startTime) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      mainScroll.scrollTop = start * (1 - eased);
+
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+
+    window.requestAnimationFrame(step);
+  };
+
+  backToTopButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    animateScrollToTop();
+  });
+
+  let rafId = 0;
+  const requestUpdate = () => {
+    if (rafId) return;
+    rafId = window.requestAnimationFrame(() => {
+      rafId = 0;
+      updateButtonVisibility();
+    });
+  };
+
+  mobileQuery.addEventListener('change', requestUpdate);
+  mainScroll.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate, { passive: true });
+
+  updateButtonVisibility();
+}
 
 function initializeStatisticsPage() {
   // Use main scroll container as root for stats if explicit wrapper is not present
@@ -1006,6 +1160,11 @@ function initializeLoadingAnimation() {
         const quickFade = 350; // ms
         setTimeout(() => {
           loadingOverlay.classList.add('fade-out');
+          // Force map to resize after overlay hides so canvas renders correctly
+          if (window.procopioMap && typeof window.procopioMap.resize === 'function') {
+            // small delay to allow CSS transition to start
+            setTimeout(() => { window.procopioMap.resize(); }, 60);
+          }
           if (typeof initProcopioTracking === 'function') {
             initProcopioTracking();
           }
@@ -1019,10 +1178,12 @@ function initializeLoadingAnimation() {
     })
     .catch(err => {
       console.error('Error loading animation images:', err);
-      // Fallback: skip animation after 2 seconds
-      setTimeout(() => {
+      // Fallback: hide overlay immediately to unblock page
+      try {
         loadingOverlay.classList.add('fade-out');
-      }, 3000);
+      } catch (e) {
+        console.error('Failed to hide loading overlay in fallback:', e);
+      }
     });
 }
 
@@ -1030,9 +1191,14 @@ document.addEventListener('DOMContentLoaded', initializeLoadingAnimation);
 
 // Initialize Mapbox background on home page
 (function() {
-  document.addEventListener('DOMContentLoaded', function() {
+  function setupMap() {
     const mapEl = document.getElementById('home-map');
-    if (!mapEl || typeof mapboxgl === 'undefined') return;
+    console.log('setupMap: mapEl=', !!mapEl, 'mapboxgl=', typeof mapboxgl !== 'undefined');
+    if (!mapEl) return;
+    if (typeof mapboxgl === 'undefined') {
+      console.warn('Mapbox GL not available when setupMap called');
+      return;
+    }
 
     try {
       mapboxgl.accessToken = 'pk.eyJ1IjoibWFydGlpbmFwcm9jb3BpbyIsImEiOiJjbW93cG4wYjkwMzhuNDhzZW9nbG84NjZyIn0.AqkBWyL51ozeXHUJR2snXg';
@@ -1044,14 +1210,11 @@ document.addEventListener('DOMContentLoaded', initializeLoadingAnimation);
         [19.5, 42.5] // Northeast coordinates
       ];
 
-
       const map = new mapboxgl.Map({
         container: 'home-map',
         style: 'mapbox://styles/martiinaprocopio/cmowvc4ao001n01r5g7ad3t1i',
         center: [13, 39.5],
         zoom: 5,
-        /* maxZoom: 8,
-        minZoom: 5, */
         maxBounds: bounds
       });
       window.procopioMap = map;
@@ -1059,10 +1222,11 @@ document.addEventListener('DOMContentLoaded', initializeLoadingAnimation);
       // Handle resize
       window.addEventListener('resize', () => {
         mapEl.style.height = window.innerHeight + 'px';
-        map.resize();
+        try { map.resize(); } catch (e) { console.warn('resize failed', e); }
       });
 
-      // Logic for markers must be INSIDE the same block or passed the map variable
+      map.on('error', (err) => console.error('Mapbox map error:', err));
+
       map.on('load', async () => {
         console.log('Map loaded, fetching markers...');
         try {
@@ -1072,9 +1236,8 @@ document.addEventListener('DOMContentLoaded', initializeLoadingAnimation);
           mapItems = Array.isArray(mapData.items) ? mapData.items : [];
 
           mapItems.forEach((item, index) => {
-            // Create element
             const el = document.createElement('div');
-            el.className = 'custom-marker pointer-events-auto'; // Tailwind helper
+            el.className = 'custom-marker pointer-events-auto';
             el.innerHTML = `
               <div class="marker-content flex flex-col items-center">
                 <img src="${item.src}" alt="${item.label}" 
@@ -1083,12 +1246,10 @@ document.addEventListener('DOMContentLoaded', initializeLoadingAnimation);
               </div>
             `;
 
-            // Add to map
             new mapboxgl.Marker(el)
               .setLngLat(item.coordinates)
               .addTo(map);
 
-            // Interaction
             el.addEventListener('click', (e) => {
               e.stopPropagation();
               openMarkerModal(index);
@@ -1112,6 +1273,35 @@ document.addEventListener('DOMContentLoaded', initializeLoadingAnimation);
 
     } catch (e) {
       console.error('Mapbox initialization failed:', e);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const mapEl = document.getElementById('home-map');
+    if (!mapEl) return;
+
+    if (typeof mapboxgl === 'undefined') {
+      console.log('Mapbox GL not present, injecting script and stylesheet...');
+
+      // inject CSS if not present
+      if (!document.querySelector('link[href*="mapbox-gl-js"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
+        document.head.appendChild(link);
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
+      script.async = true;
+      script.onload = () => {
+        console.log('Mapbox GL loaded dynamically');
+        setupMap();
+      };
+      script.onerror = (e) => console.error('Failed to load Mapbox GL script', e);
+      document.head.appendChild(script);
+    } else {
+      setupMap();
     }
   });
 })();

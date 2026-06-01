@@ -15,6 +15,13 @@
         try {
           const params = new URLSearchParams(window.location.search);
           const hasFrom = params.toString() !== '' && params.has('from');
+          // If we were navigated from landing and set a session flag, honor it and do not redirect
+          try {
+            if (sessionStorage && sessionStorage.getItem && sessionStorage.getItem('fromLanding') === '1') {
+              sessionStorage.removeItem('fromLanding');
+              return; // do not redirect
+            }
+          } catch (e) { /* ignore */ }
 
           // If there is a `from` param, remove it from the URL but do not redirect.
           if (hasFrom) {
@@ -50,8 +57,8 @@
   </head>
   <body>
     <div class="archive-title">
-      <div class="line1">Dr. Whitaker’s</div>
-      <div class="line2">Aberrant Findings</div>
+  <div class="line1">Dr. Whitaker’s</div>
+      <div class="line2">aberrant findings</div>
 
       <div class="title-links">
         <a href="./about.html" class="title-btn">About</a>

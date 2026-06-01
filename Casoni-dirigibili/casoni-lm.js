@@ -25,7 +25,7 @@ const exploreArtIds = [
   'explore-art-dirigibile-17',
   'explore-art-dirigibile-18',
   'explore-art-dirigibile-16',
-  'explore-art-airship-16',
+  'explore-art-dirigibile-16',
   'explore-art-relitto-4',
   'explore-art-relitto-7',
   'explore-art-relitto-21',
@@ -66,7 +66,7 @@ function getExploreArtLabelById(id) {
     case 'explore-art-dirigibile-17': return 'dirigibile (17)';
     case 'explore-art-dirigibile-18': return 'dirigibile (18)';
     case 'explore-art-dirigibile-16': return 'dirigibile (16)';
-    case 'explore-art-airship-16': return 'airship (16)';
+    case 'explore-art-dirigibile-16': return 'airship (16)';
     case 'explore-art-relitto-4': return 'relitto (4)';
     case 'explore-art-relitto-7': return 'relitto (7)';
     case 'explore-art-relitto-21': return 'relitto (21)';
@@ -230,7 +230,7 @@ async function detectExploreHands() {
       } else if (showAirship) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        setExploreArtVisible('explore-art-airship-16');
+        setExploreArtVisible('explore-art-dirigibile-16');
       } else if (showRelitto) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';

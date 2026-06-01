@@ -18,9 +18,15 @@ let procopioFadeStepElapsedMs = 0;
 let faceSizeSamples  = [];
 let faceSizeBaseline = null;
 const FACE_CALIB_FRAMES = 50;
-const FACE_TOO_FAR_RATIO = 0.62;
+const FACE_TOO_FAR_RATIO = 0.60;
 const FACE_RETURN_RATIO = 0.68;
+const FACE_DEBOUNCE_FRAMES = 3; // consecutive frames required to change state
+const NO_FACE_DEBOUNCE_FRAMES = 3; // wait before clearing the overlay when face disappears
+
 let faceTooFar = false;
+let faceTooFarCounter = 0;
+let faceNearCounter = 0;
+let noFaceCounter = 0;
 
 // Hand calibration
 let handSizeSamples  = [];
@@ -68,6 +74,9 @@ function setFaceFarOverlayVisible(visible) {
   if (!overlayEl) return;
   overlayEl.classList.toggle('open', visible);
   overlayEl.setAttribute('aria-hidden', visible ? 'false' : 'true');
+  overlayEl.style.opacity = visible ? '1' : '0';
+  overlayEl.style.pointerEvents = visible ? 'auto' : 'none';
+  overlayEl.style.visibility = visible ? 'visible' : 'hidden';
 }
 
 function markProcopioNavigationActivity() {
@@ -180,6 +189,7 @@ function animateInitialBlur() {
 async function initProcopioTracking() {
   const statusEl = document.getElementById('face-status-label');
   if (statusEl) statusEl.textContent = 'loading models…';
+  setFaceFarOverlayVisible(false);
   
   // Start initial blur phase - gradual fade from full blur to clear
   blurInitialPhaseActive = true;
@@ -260,6 +270,7 @@ async function startProcopioCamera() {
     }, { once: true });
   } catch (err) {
     if (statusEl) statusEl.textContent = 'cam error: ' + err.message;
+    setFaceFarOverlayVisible(false);
   }
 }
 
@@ -300,11 +311,30 @@ async function detectLoop() {
         const ratio = faceWidth / faceSizeBaseline;
         if (proxEl) proxEl.textContent = `${ratio.toFixed(2)}×`;
 
-        if (faceTooFar) {
-          if (ratio > FACE_RETURN_RATIO) faceTooFar = false;
-        } else if (ratio < FACE_TOO_FAR_RATIO) {
+        // reset no-face counter when we detect a face
+        noFaceCounter = 0;
+
+        // Debounced far/near detection to avoid flicker
+        if (ratio < FACE_TOO_FAR_RATIO) {
+          faceTooFarCounter += 1;
+          faceNearCounter = 0;
+        } else if (ratio > FACE_RETURN_RATIO) {
+          faceNearCounter += 1;
+          faceTooFarCounter = 0;
+        } else {
+          // between thresholds: slowly converge to near
+          faceNearCounter = Math.min(faceNearCounter + 1, FACE_DEBOUNCE_FRAMES);
+          faceTooFarCounter = Math.max(faceTooFarCounter - 1, 0);
+        }
+
+        // Apply debounced decisions
+        if (!faceTooFar && faceTooFarCounter >= FACE_DEBOUNCE_FRAMES) {
           faceTooFar = true;
         }
+        if (faceTooFar && faceNearCounter >= FACE_DEBOUNCE_FRAMES) {
+          faceTooFar = false;
+        }
+
         setFaceFarOverlayVisible(faceTooFar);
 
         // Only apply face-based blur control if initial blur phase is complete
@@ -324,8 +354,15 @@ async function detectLoop() {
       }
     } else {
       if (statusEl) statusEl.textContent = 'no face';
-      setFaceFarOverlayVisible(false);
-      faceTooFar = false;
+      if (proxEl) proxEl.textContent = `—`;
+      // Increment no-face counter; after debounce, clear any previous far state.
+      noFaceCounter += 1;
+      faceTooFarCounter = 0; // reset face-based counter
+      faceNearCounter = 0;
+      if (noFaceCounter >= NO_FACE_DEBOUNCE_FRAMES) {
+        faceTooFar = false;
+      }
+      setFaceFarOverlayVisible(faceTooFar);
     }
   } catch (e) { 
     if (e.message && e.message.includes('WebGL')) {

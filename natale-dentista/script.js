@@ -217,9 +217,13 @@ function applyTagOpacity() {
 
 // ── Toggle a filter tag ───────────────────────────────────────────────────
 function toggleTag(tag) {
-  if (activeTags.has(tag)) {
-    activeTags.delete(tag);
+  // Single-select behavior: selecting a tag clears previous selections.
+  if (activeTags.has(tag) && activeTags.size === 1) {
+    // clicking the already-selected single tag toggles it off
+    activeTags.clear();
   } else {
+    // replace any existing active tags with the newly selected one
+    activeTags.clear();
     activeTags.add(tag);
   }
   // sync top tags bar (if present)

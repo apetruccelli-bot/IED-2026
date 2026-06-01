@@ -13,25 +13,46 @@
   /* Camera wrapper sits at top portion and does not fill the whole viewport */
   #cameraWrapper { position: absolute; left: 12px; top: 12px; display: flex; align-items: center; gap: 12px; z-index: 10002; padding: 6px; }
 
-    /* Container holds the video and canvas layers and now fills the entire viewport */
+    /* Container holds the video and canvas layers and centers a reduced interaction box */
     html, body { height: 100%; margin: 0; }
-    #container { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 0; background: #000; }
+  #container { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 0; background: var(--bg); }
 
-      /* The webcam frame now fills the viewport (no framed box) */
+      /* The webcam frame is now a centered, constrained box rather than full-screen.
+         It respects an aspect ratio and a max width for consistent layout on desktop.
+         Use min(90vw, 720px) to allow mobile scaling while keeping a good desktop size. */
       .webcam-frame {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
+        position: relative;
+        width: min(98vw, 1100px); /* increased size: slightly larger on desktop and near-full on mobile */
+        aspect-ratio: 16 / 9; /* horizontal widescreen */
         border: none;
-        border-radius: 0;
-        box-shadow: none;
+        border-radius: 10px;
+        box-shadow: 0 12px 36px rgba(0,0,0,0.6);
         overflow: hidden;
-        background: #000;
+        background: var(--bg);
         z-index: 0;
       }
 
-      /* Make video and canvas fill the full-screen frame */
+      /* Interaction page title placed above the canvas (outside the frame)
+         so it does not cover the image */
+      .interaction-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        z-index: 10003;
+      }
+      .interaction-title {
+        color: var(--text);
+        font-family: 'Serif';
+        font-size: 36px;
+        line-height: 1;
+        pointer-events: none;
+        text-align: center;
+        white-space: nowrap;
+        margin: 0;
+      }
+
+      /* Make video and canvas fill the constrained frame */
       .cam-layer { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transform: none; object-fit: cover; }
       #webcam { z-index: 0; display: block; }
       #canvas { z-index: 1; pointer-events: none; display: block; }
@@ -39,13 +60,6 @@
     #faceList, #handList, #status, .face-info, .hand-info, .feature-info, #info { display: none !important; }
   </style>
 <body>
-  <!-- hand-pose-detection (tfjs) and MediaPipe runtime for hands -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@0.0.7/dist/hand-pose-detection.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1645985860/hands.js"></script>
-</head>
-
-<body>
-<script type="module" src="natale-lm.js"></script>
 
   <!-- Minimal interaction: only the camera button is visible -->
   <div id="cameraWrapper">
@@ -55,9 +69,12 @@
   </div>
 
     <div id="container">
-      <div class="webcam-frame" id="webcamFrame">
-        <video id="webcam" class="cam-layer" autoplay muted playsinline></video>
-        <canvas id="canvas" class="cam-layer"></canvas>
+      <div class="interaction-wrapper">
+        <div class="interaction-title">Touch a point on your jaw</div>
+        <div class="webcam-frame" id="webcamFrame">
+          <video id="webcam" class="cam-layer" autoplay muted playsinline></video>
+          <canvas id="canvas" class="cam-layer"></canvas>
+        </div>
       </div>
     </div>
 
@@ -69,7 +86,8 @@
   <!-- Hand detection (optional). If unavailable, finger interactions fall back to mouse testing. -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose@0.0.7"></script>
 
-   
-  <script src="/dark-mode-loader.js"></script>
+  <!-- Load the interaction module after DOM and vendor libs are ready -->
+  <script type="module" src="natale-lm.js"></script>
+
 </body>
 </html>

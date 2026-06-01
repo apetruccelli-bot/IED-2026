@@ -1,4 +1,4 @@
-﻿{
+{
   "items": [
     {
       "id": 1,
@@ -12,6 +12,7 @@
       "people": true,
       "description": "Airship No. 456 collapsed against mooring structure; severe failure of the lower frame."
     },
+
     {
       "id": 2,
       "src": "img/dirigibili/dirigibile (2).png",
@@ -24,6 +25,7 @@
       "people": false,
       "description": "Fire during landing phase; flames concentrated near the engine area, comparable to case 4."
     },
+    
     {
       "id": 3,
       "src": "img/dirigibili/dirigibile (3).png",
@@ -214,9 +216,57 @@
       "people": true,
       "description": "Airship grounded in mountainous terrain; forward envelope torn, with visible damage along the side."    },
 
-
     {
       "id": 19,
+      "src": "img/dirigibili/dirigibile (19).png",
+      "category": "airships",
+      "tags": ["nature", "sky", "horizon"],
+      "causes": ["engine"],
+      "country": "Italy",
+      "year": "1927",
+      "victims": 0,
+      "people": false,
+      "description": "Large rigid airship positioned near a mooring mast, tilted upward during landing or docking operations."
+    },
+    {
+      "id": 20,
+      "src": "img/dirigibili/dirigibile (20).png",
+      "category": "airships",
+      "tags": ["sky", "nature", "fire", "smoke"],
+      "causes": ["engine"],
+      "country": "Spain",
+      "year": "1937",
+      "victims": 16,
+      "people": true,
+      "description": "Airship burning near the ground with heavy smoke rising from the envelope during a catastrophic landing accident."
+    },
+    {
+      "id": 21,
+      "src": "img/dirigibili/dirigibile (21).png",
+      "category": "airships",
+      "tags": ["nature", "sky", "fire", "smoke"],
+      "causes": ["engine"],
+      "country": "Poland",
+      "year": "1937",
+      "victims": 5,
+      "people": true,
+      "description": "Large airship tilted sharply downward while burning, with smoke visible near the rear section and spectators on the ground."
+    },
+    {
+      "id": 22,
+      "src": "img/dirigibili/dirigibile (22).png",
+      "category": "airships",
+      "tags": ["nature", "sky", "fire", "smoke"],
+      "causes": ["engine"],
+      "country": "Germany",
+      "year": "1937",
+      "victims": 28,
+      "people": false,
+      "description": "Burning airship collapsing in midair, with large sections of the envelope damaged and smoke escaping from multiple areas."
+    },
+
+    {
+      "id": 23,
       "src": "img/relitti/relitto (1).png",
       "category": "wreckage",
       "tags": ["structure", "nature", "sky"],
@@ -225,10 +275,12 @@
       "year": "1935",
       "victims": 49,
       "people": true,
-      "description": "Airship held at steep angle near mooring mast; instability recorded during ground handling."    },
+      "description": "Airship held at steep angle near mooring mast; instability recorded during ground handling."    
+    },
+
     {
 
-      "id": 20,
+      "id": 24,
       "src": "img/relitti/relitto (2).png",
       "category": "wreckage",
       "tags": ["structure", "nature", "sky"],
@@ -239,7 +291,7 @@
       "people": true,
       "description": "Smoke emerging from the lower forward section; probable engine-area ignition during field operation."    },
     {
-      "id": 21,
+      "id": 25,
       "src": "img/relitti/relitto (3).png",
       "category": "wreckage",
       "tags": ["sea", "horizon", "nature", "sky", "smoke"],
@@ -250,7 +302,7 @@
       "people": true,
       "description": "Airship rising at abnormal angle with smoke from lower hull; incident comparable to case 20."    },
     {
-      "id": 22,
+      "id": 26,
       "src": "img/relitti/relitto (4).png",
       "category": "wreckage",
       "tags": ["mountains", "nature", "sky"],
@@ -261,7 +313,7 @@
       "people": true,
       "description": "Mountain wreckage after impact; outer envelope lost, with the internal frame exposed along the slope."    },
     {
-      "id": 23,
+      "id": 27,
       "src": "img/relitti/relitto (5).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "nature"],
@@ -273,7 +325,7 @@
       "description": "Night fire after structural collapse; frame remains visible while the envelope is almost entirely consumed."    },
 
     {
-      "id": 24,
+      "id": 28,
       "src": "img/relitti/relitto (6).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "structure"],
@@ -285,7 +337,7 @@
       "description": "Close view of the burned framework; combustion appears to have progressed through the lower structure first."    },
 
     {
-      "id": 25,
+      "id": 29,
       "src": "img/relitti/relitto (7).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "structure", "nature", "mountains"],
@@ -297,7 +349,7 @@
       "description": "Wreckage burning on inclined terrain; impact and fire damage concentrated along the lower side."    },
 
     {
-      "id": 26,
+      "id": 30,
       "src": "img/relitti/relitto (8).png",
       "category": "wreckage",
       "tags": ["smoke", "horizon", "nature", "structure"],
@@ -309,7 +361,7 @@
       "description": "Tail frame recovered after collapse; stabilizers distorted and rear structure heavily compressed."    },
 
     {
-      "id": 27,
+      "id": 31,
       "src": "img/relitti/relitto (9).png",
       "category": "wreckage",
       "tags": ["nature", "structure"],
@@ -321,7 +373,7 @@
       "description": "Rear section under inspection; circular frame and stabilizers preserved despite severe central collapse."    },
 
     {
-      "id": 28,
+      "id": 32,
       "src": "img/relitti/relitto (10).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "structure"],
@@ -333,7 +385,7 @@
       "description": "Illuminated framework after fire; outer covering destroyed, leaving the internal structure fully exposed."    },
 
     {
-      "id": 29,
+      "id": 33,
       "src": "img/relitti/relitto (11).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "nature", "structure", "horizon"],
@@ -345,7 +397,7 @@
       "description": "Ground wreckage after fire; envelope covering destroyed and smoke still rising from the rear section."    },
 
     {
-      "id": 30,
+      "id": 34,
       "src": "img/relitti/relitto (12).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "nature", "structure", "mountains"],
@@ -357,7 +409,7 @@
       "description": "Night view of the hull burning in a mountain basin; fire spread along both lower edges of the frame."    },
 
     {
-      "id": 31,
+      "id": 35,
       "src": "img/relitti/relitto (13).png",
       "category": "wreckage",
       "tags": ["structure", "nature", "horizon"],
@@ -369,7 +421,7 @@
       "description": "Wreckage resting in wooded terrain; internal structure exposed, with no remaining envelope covering."    },
 
     {
-      "id": 32,
+      "id": 36,
       "src": "img/relitti/relitto (14).png",
       "category": "wreckage",
       "tags": ["structure", "nature"],
@@ -381,7 +433,7 @@
       "description": "Forward frame recovered among trees; deformation suggests final impact followed by structural compression."    },
 
     {
-      "id": 33,
+      "id": 37,
       "src": "img/relitti/relitto (15).png",
       "category": "wreckage",
       "tags": ["structure"],
@@ -393,7 +445,7 @@
       "description": "Close inspection of the passenger section; cabin remains partially intact within a collapsed frame."    },
 
     {
-      "id": 34,
+      "id": 38,
       "src": "img/relitti/relitto (16).png",
       "category": "wreckage",
       "tags": ["smoke", "structure", "sky"],
@@ -405,7 +457,7 @@
       "description": "Burned wreckage after impact; forward frame upright, with smoke rising from the central debris field."    },
 
     {
-      "id": 35,
+      "id": 39,
       "src": "img/relitti/relitto (17).png",
       "category": "wreckage",
       "tags": ["structure", "nature", "horizon"],
@@ -417,7 +469,7 @@
       "description": "Collapsed frame near mooring structure; tail and forward sections remain identifiable despite central failure."    },
 
     {
-      "id": 36,
+      "id": 40,
       "src": "img/relitti/relitto (18).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "nature", "structure", "mountains"],
@@ -429,7 +481,7 @@
       "description": "Mountain wreckage with residual smoke; frame broken across the central hull after ground impact."    },
 
     {
-      "id": 37,
+      "id": 41,
       "src": "img/relitti/relitto (19).png",
       "category": "wreckage",
       "tags": ["structure", "nature", "horizon"],
@@ -441,7 +493,7 @@
       "description": "Open field inspection; long frame section collapsed but preserved enough for structural comparison."    },
 
     {
-      "id": 38,
+      "id": 42,
       "src": "img/relitti/relitto (20).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "nature", "structure", "mountains"],
@@ -453,7 +505,7 @@
       "description": "Hillside wreckage still burning; forward frame intact while rear section is consumed by fire."    },
 
     {
-      "id": 39,
+      "id": 43,
       "src": "img/relitti/relitto (21).png",
       "category": "wreckage",
       "tags": ["smoke", "flames", "structure"],
@@ -465,7 +517,7 @@
       "description": "Night fire inside exposed frame; combustion concentrated along the lower structure and internal supports."    },
 
     {
-      "id": 40,
+      "id": 44,
       "src": "img/modelli/modello (1).png",
       "category": "models",
       "tags": ["light", "men", "papers"],
@@ -476,7 +528,7 @@
     },
 
     {  
-      "id": 41,
+      "id": 45,
       "src": "img/modelli/modello (2).png",
       "category": "models",
       "tags": ["men", "papers"],
@@ -487,7 +539,7 @@
     },
 
     {
-      "id": 42,
+      "id": 46,
       "src": "img/modelli/modello (3).png",
       "category": "models",
       "tags": ["men", "women", "light"],
@@ -498,7 +550,7 @@
     },
 
     {
-      "id": 43,
+      "id": 47,
       "src": "img/modelli/modello (4).png",
       "category": "models",
       "tags": ["men"],
@@ -509,7 +561,7 @@
     },
 
     {
-      "id": 44,
+      "id": 48,
       "src": "img/modelli/modello (5).png",
       "category": "models",
       "tags": ["men"],
@@ -520,7 +572,7 @@
     },
 
     {
-      "id": 45,
+      "id": 49,
       "src": "img/modelli/modello (6).png",
       "category": "models",
       "tags": ["men", "light", "women", "papers"],
@@ -531,7 +583,7 @@
     },
 
     {
-      "id": 46,
+      "id": 50,
       "src": "img/modelli/modello (7).png",
       "category": "models",
       "tags": ["men", "women"],
@@ -542,18 +594,18 @@
     },
 
     {
-      "id": 47,
+      "id": 51,
       "src": "img/modelli/modello (8).png",
       "category": "models",
       "tags": ["men", "women"],
       "country": "Germany",
       "year": "1928",
       "people": true,
-      "description": "Inspection of the Doppelkörper Mark-Nine concept; twin-envelope arrangement examined for lift distribution and structural redundancy."
+      "description": "Inspection of the Doppelk�rper Mark-Nine concept; twin-envelope arrangement examined for lift distribution and structural redundancy."
     },
 
     {
-      "id": 48,
+      "id": 52,
       "src": "img/modelli/modello (9).png",
       "category": "models",
       "tags": ["men", "demonstration"],
@@ -564,7 +616,7 @@
     },
 
     {
-      "id": 49,
+      "id": 53,
       "src": "img/modelli/modello (10).png",
       "category": "models",
       "tags": ["men", "demonstration", "women"],
@@ -575,7 +627,7 @@
     },
 
     {
-      "id": 50,
+      "id": 54,
       "src": "img/modelli/modello (11).png",
       "category": "models",
       "tags": ["men", "demonstration", "papers"],
@@ -586,29 +638,29 @@
     },
 
     {
-      "id": 51,
+      "id": 55,
       "src": "img/modelli/modello (12).png",
       "category": "models",
       "tags": ["men", "demonstration", "papers"],
       "country": "Spain",
       "year": "1928",
       "people": true,
-      "description": "Wall-mounted plans and full model of the Córdoba cargo design; side elevation compared with gondola and ballast arrangement."
+      "description": "Wall-mounted plans and full model of the C�rdoba cargo design; side elevation compared with gondola and ballast arrangement."
     },
 
     {
-      "id": 52,
+      "id": 56,
       "src": "img/modelli/modello (13).png",
       "category": "models",
       "tags": ["men", "papers", "women"],
       "country": "Poland",
       "year": "1930",
       "people": true,
-      "description": "Review of the Kraków-P2 training model; committee notes focus on tail-plane proportion and cable suspension beneath the envelope."
+      "description": "Review of the Krak�w-P2 training model; committee notes focus on tail-plane proportion and cable suspension beneath the envelope."
     },
 
     {
-      "id": 53,
+      "id": 57,
       "src": "img/modelli/modello (14).png",
       "category": "models",
       "tags": ["demonstration"],
@@ -619,7 +671,7 @@
     },
 
     {
-      "id": 54,
+      "id": 58,
       "src": "img/modelli/modello (15).png",
       "category": "models",
       "tags": ["men", "demonstration"],
@@ -630,7 +682,7 @@
     },
 
     {
-      "id": 55,
+      "id": 59,
       "src": "img/modelli/modello (16).png",
       "category": "models",
       "tags": ["men", "demonstration", "papers"],
@@ -641,7 +693,7 @@
     }, 
 
     {
-      "id": 56,
+      "id": 60,
       "src": "img/giornali/giornale (1).png",
       "category": "newspapers",
       "tags": ["flames", "explosion", "smoke", "text"],
@@ -650,11 +702,11 @@
       "year": "1934",
       "victims": 57,
       "people": false,
-      "description": "Kurier Warszawski report on the Polonia II disaster near Poznań; witness accounts describe fire, crash impact, and the still-incomplete list of victims."
+      "description": "Kurier Warszawski report on the Polonia II disaster near Poznan; witness accounts describe fire, crash impact, and the still-incomplete list of victims."
     },
 
     {
-      "id": 57,
+      "id": 61,
       "src": "img/giornali/giornale (2).png",
       "category": "newspapers",
       "tags": ["flames", "explosion", "smoke", "text"],
@@ -667,7 +719,7 @@
     },
 
     {
-      "id": 58,
+      "id": 62,
       "src": "img/giornali/giornale (3).png",
       "category": "newspapers",
       "tags": ["smoke", "text"],
@@ -676,11 +728,11 @@
       "year": "1934",
       "victims": 9,
       "people": false,
-      "description": "Diario del Aire report on the Río de la Plata mail airship; electrical storm and suspected engine failure caused in-flight fire over the estuary."
+      "description": "Diario del Aire report on the R�o de la Plata mail airship; electrical storm and suspected engine failure caused in-flight fire over the estuary."
     },
 
     {
-      "id": 59,
+      "id": 63,
       "src": "img/giornali/giornale (4).png",
       "category": "newspapers",
       "tags": ["flames", "sea", "smoke", "text"],
@@ -689,11 +741,11 @@
       "year": "1928",
       "people": false,
       "victims": 63,
-      "description": "ABC front page on the Cádiz aerial wreck; La Infanta caught fire before falling into the sea, with investigators examining possible gas or engine faults."
+      "description": "ABC front page on the C�diz aerial wreck; La Infanta caught fire before falling into the sea, with investigators examining possible gas or engine faults."
     },
 
     {
-      "id": 60,
+      "id": 64,
       "src": "img/giornali/giornale (5).png",
       "category": "newspapers",
       "tags": ["flames", "structure", "horizon", "nature", "text"],
@@ -706,7 +758,7 @@
     },
 
     {
-      "id": 61,
+      "id": 65,
       "src": "img/giornali/giornale (6).png",
       "category": "newspapers",
       "tags": ["sky", "smoke", "horizon", "nature", "text"],
@@ -719,7 +771,7 @@
     },
 
     {
-      "id": 62,
+      "id": 66,
       "src": "img/giornali/giornale (7).png",
       "category": "newspapers",
       "tags": ["flames", "sea", "smoke", "explosion", "text"],
@@ -732,7 +784,7 @@
     },
 
     {
-      "id": 63,
+      "id": 67,
       "src": "img/giornali/giornale (8).png",
       "category": "newspapers",
       "tags": ["sky", "horizon", "nature", "text"],
@@ -745,7 +797,7 @@
     },
 
     {
-      "id": 64,
+      "id": 68,
       "src": "img/giornali/giornale (9).png",
       "category": "newspapers",
       "tags": ["flames", "smoke", "text"],
@@ -758,7 +810,7 @@
     },
 
     {
-      "id": 65,
+      "id": 69,
       "src": "img/giornali/giornale (10).png",
       "category": "newspapers",
       "tags": ["flames", "smoke", "explosion", "horizon", "text"],
@@ -771,7 +823,7 @@
     },
 
     {
-      "id": 66,
+      "id": 70,
       "src": "img/giornali/giornale (11).png",
       "category": "newspapers",
       "tags": ["flames", "horizon", "smoke", "sea", "text"],
@@ -784,7 +836,7 @@
     },
 
     {
-      "id": 67,
+      "id": 71,
       "src": "img/giornali/giornale (12).png",
       "category": "newspapers",
       "tags": ["flames", "smoke", "explosion", "sky", "text"],
@@ -793,11 +845,11 @@
       "year": "1928",
       "people": false,
       "victims": 29,
-      "description": "La Vanguardia report on the Mediterráneo disaster over Barcelona; engine explosion and fire scattered wreckage across the city after the Marseille route crossing."
+      "description": "La Vanguardia report on the Mediterr�neo disaster over Barcelona; engine explosion and fire scattered wreckage across the city after the Marseille route crossing."
     },
 
     {
-      "id": 68,
+      "id": 72,
       "src": "img/giornali/giornale (13).png",
       "category": "newspapers",
       "tags": ["flames", "smoke", "explosion", "horizon", "text"],
@@ -806,11 +858,11 @@
       "year": "1928",
       "people": false,
       "victims": 40,
-      "description": "El País report on the Ícaro crash in the Pyrenees; violent wind destroyed the hull during forced landing, though all occupants survived."
+      "description": "El Pa�s report on the �caro crash in the Pyrenees; violent wind destroyed the hull during forced landing, though all occupants survived."
     },
 
     {
-      "id": 69,
+      "id": 73,
       "src": "img/giornali/giornale (14).png",
       "category": "newspapers",
       "tags": ["flames", "smoke", "text"],
@@ -823,7 +875,7 @@
     },
 
     {
-      "id": 70,
+      "id": 74,
       "src": "img/giornali/giornale (15).png",
       "category": "newspapers",
       "tags": ["flames", "smoke", "explosion", "text"],
@@ -836,7 +888,7 @@
     },
 
     {
-      "id": 71,
+      "id": 75,
       "src": "img/disegni/disegno (1).png",
       "category": "drawings",
       "tags": ["text", "side view", "details"],
@@ -847,7 +899,7 @@
     },
 
     {
-      "id": 72,
+      "id": 76,
       "src": "img/disegni/disegno (2).png",
       "category": "drawings",
       "tags": ["front view"],
@@ -858,7 +910,7 @@
     },
 
     {
-      "id": 73,
+      "id": 77,
       "src": "img/disegni/disegno (3).png",
       "category": "drawings",
       "tags": ["text", "side view", "front view", "details"],
@@ -869,18 +921,18 @@
     },
 
     {
-      "id": 74,
+      "id": 78,
       "src": "img/disegni/disegno (4).png",
       "category": "drawings",
       "tags": ["details", "side view"],
       "country": "Spain",
       "year": "1927",
       "people": false,
-      "description": "Structural plan for the Ícaro, focused on the forward hull, passenger compartment, engine fittings, and lower suspension points later examined after the Pyrenees incident."
+      "description": "Structural plan for the �caro, focused on the forward hull, passenger compartment, engine fittings, and lower suspension points later examined after the Pyrenees incident."
     },
 
     {
-      "id": 75,
+      "id": 79,
       "src": "img/disegni/disegno (5).png",
       "category": "drawings",
       "tags": ["text", "side view"],
@@ -891,7 +943,7 @@
     },
 
     {
-      "id": 76,
+      "id": 80,
       "src": "img/disegni/disegno (6).png",
       "category": "drawings",
       "tags": ["text", "side view", "front view", "details"],
@@ -902,7 +954,7 @@
     },
 
     {
-      "id": 77,
+      "id": 81,
       "src": "img/disegni/disegno (7).png",
       "category": "drawings",
       "tags": ["text", "side view", "front view", "details"],
@@ -913,29 +965,29 @@
     },
 
     {
-      "id": 78,
+      "id": 82,
       "src": "img/disegni/disegno (8).png",
       "category": "drawings",
       "tags": ["text", "side view", "details"],
       "country": "Poland",
       "year": "1926",
       "people": false,
-      "description": "Early design proposal for the Polonia II, showing a long passenger hull, lower gondola, tail surfaces, and several cross-section studies prepared before the later Poznań service trials."
+      "description": "Early design proposal for the Polonia II, showing a long passenger hull, lower gondola, tail surfaces, and several cross-section studies prepared before the later Poznan service trials."
     },
 
     {
-      "id": 79,
+      "id": 83,
       "src": "img/disegni/disegno (9).png",
       "category": "drawings",
       "tags": ["side view", "details"],
       "country": "Poland",
       "year": "1934",
       "people": false,
-      "description": "Revised Polish technical plan for the Polonia II after the Poznań catastrophe, with emphasis on gondola position, engine housings, and the lower hull areas suspected of structural weakness."
+      "description": "Revised Polish technical plan for the Polonia II after the Poznan catastrophe, with emphasis on gondola position, engine housings, and the lower hull areas suspected of structural weakness."
     },
 
     {
-      "id": 80,
+      "id": 84,
       "src": "img/disegni/disegno (10).png",
       "category": "drawings",
       "tags": ["text", "side view"],
@@ -946,7 +998,7 @@
     },
 
     {
-      "id": 81,
+      "id": 85,
       "src": "img/disegni/disegno (11).png",
       "category": "drawings",
       "tags": ["text", "side view", "front view", "details"],
@@ -957,7 +1009,7 @@
     },
 
     {
-      "id": 82,
+      "id": 86,
       "src": "img/disegni/disegno (12).png",
       "category": "drawings",
       "tags": ["side view", "text"],
@@ -968,7 +1020,7 @@
     },
 
     {
-      "id": 83,
+      "id": 87,
       "src": "img/disegni/disegno (13).png",
       "category": "drawings",
       "tags": ["text", "side view"],
@@ -979,25 +1031,25 @@
     },
 
     {
-      "id": 84,
+      "id": 88,
       "src": "img/disegni/disegno (14).png",
       "category": "drawings",
       "tags": ["text", "side view", "details"],
       "country": "Spain",
       "year": "1936",
       "people": false,
-      "description": "Spanish design sheet for the La Infanta, with paired side elevations, tail assembly, cabin placement, and handwritten inspection notes later attached to the Cádiz maritime accident file."
+      "description": "Spanish design sheet for the La Infanta, with paired side elevations, tail assembly, cabin placement, and handwritten inspection notes later attached to the C�diz maritime accident file."
     },
 
     {
-      "id": 85,
+      "id": 89,
       "src": "img/disegni/disegno (15).png",
       "category": "drawings",
       "tags": ["side view", "front view"],
       "country": "Poland",
       "year": "1933",
       "people": false,
-      "description": "Simplified structural drawing of the Polonia II, combining a full side profile with three frontal frame sections; likely used by Adler to compare the original design with the wreckage recovered near Poznań."
+      "description": "Simplified structural drawing of the Polonia II, combining a full side profile with three frontal frame sections; likely used by Adler to compare the original design with the wreckage recovered near Poznan."
     }
   ]
 }

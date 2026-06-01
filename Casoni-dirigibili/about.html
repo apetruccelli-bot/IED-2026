@@ -15,7 +15,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="about-body">
    <div class="about-page w-screen h-screen grid grid-rows-[auto_1fr_auto] bg-myBlack text-myWhite">
      <div class="about-header p-10px flex flex-row items-baseline gap-20px">
         <div class="intro-panel flex flex-col">
@@ -126,39 +126,39 @@
         const aboutLbBackdrop = document.getElementById('about-lb-backdrop');
 
 
-function updateAboutGalleryScrollState() {
-  if (!horizontalScrollContainer) return;
+        function updateAboutGalleryScrollState() {
+          if (!horizontalScrollContainer) return;
 
-    const shouldEnableScroll = window.innerWidth < 1450;
+            const shouldEnableScroll = window.innerWidth < 1450;
 
-    horizontalScrollContainer.classList.toggle('about-can-scroll', shouldEnableScroll);
-  }
+            horizontalScrollContainer.classList.toggle('about-can-scroll', shouldEnableScroll);
+          }
 
-  if (horizontalScrollContainer) {
-    updateAboutGalleryScrollState();
+          if (horizontalScrollContainer) {
+            updateAboutGalleryScrollState();
 
-    window.addEventListener('resize', updateAboutGalleryScrollState);
+            window.addEventListener('resize', updateAboutGalleryScrollState);
 
-    horizontalScrollContainer.addEventListener('wheel', (e) => {
-      const isMobileAbout = window.matchMedia('(max-width: 600px)').matches;
+            horizontalScrollContainer.addEventListener('wheel', (e) => {
+              const isMobileAbout = window.matchMedia('(max-width: 600px)').matches;
 
-      if (isMobileAbout) {
-        return;
-      }
+              if (isMobileAbout) {
+                return;
+              }
 
-      updateAboutGalleryScrollState();
+              updateAboutGalleryScrollState();
 
-      const canScrollX = horizontalScrollContainer.classList.contains('about-can-scroll');
+              const canScrollX = horizontalScrollContainer.classList.contains('about-can-scroll');
 
-      if (!canScrollX) {
-        e.preventDefault();
-        return;
-      }
+              if (!canScrollX) {
+                e.preventDefault();
+                return;
+              }
 
-      e.preventDefault();
-      horizontalScrollContainer.scrollLeft += e.deltaY;
-    }, { passive: false });
-  }
+              e.preventDefault();
+              horizontalScrollContainer.scrollLeft += e.deltaY;
+            }, { passive: false });
+          }
 
       // Load data and set up image click handlers
       let imageData = {};

@@ -16,24 +16,14 @@
       }
     </style>
     </head>
-  <body>
+  <body class="archive-page">
 
-    <div class="w-screen h-screen grid grid-cols-8 specialGrid">
-      <div class="col-start-1 col-end-3 p-10px bg-myBlack flex flex-col justify-between text-myWhite z-[2100]">
-        <div class="flex flex-col">
-          <a href="home.html" class="font-myTitle">Città<br>interrotte</a>
-          <p class="">di Fondazione Scorza</p>
-        </div>
-        <div class="sidebar-links flex flex-col">
-          <a href="index.html" class="font-myTitle">Archivio</a>
-          <a href="storia.html" class="font-myTitle">Storia</a>
-          <a href="stat.html" class="font-myTitle">Statistiche</a>
-        </div>
-      </div>
-      <div class="col-start-3 col-end-9 bg-myWhite h-screen overflow-y-scroll">
-        <div class="sticky top-0 z-20 col-span-full pt-40px pl-10px pr-10px pb-40px bg-myWhite max-h-60 overflow-hidden">
-          <div class="grid grid-cols-6 mb-10px gap-10px">
-            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Anno</button>
+    <div class="w-screen min-h-screen grid grid-cols-8 specialGrid bg-myWhite">
+      <!-- Brand moved to bottom across pages -->
+        <div class="col-start-2 col-end-8 bg-transparent">
+          <div class="sticky archive-sticky top-0 z-20 col-span-full pt-10px pl-10px pr-10px pb-10px">
+            <div class="grid grid-cols-6 bg-transparent mb-10px gap-10px ">
+              <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Anno</button>
             <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Autore</button>
             <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Regione</button>
             <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Abitanti</button>
@@ -41,20 +31,22 @@
             <form action="/" onsubmit="return false;">
               <label for="search" class="sr-only">Ricerca</label>
               <input
-                id="search"
-                type="search"
-                placeholder="Ricerca"
-                class="w-full border-b border-myBlack bg-transparent text-myBlack outline-none placeholder:text-myBlack"
+              id="search"
+              type="search"
+              placeholder="Ricerca"
+              class="w-full border-b border-myBlack bg-transparent text-myBlack outline-none placeholder:text-myBlack"
               />
-            </form>
-          </div>
-            <div id="archive-rows" hidden class="bg-myWhite grid grid-cols-6 gap-10px mt-20px"></div>
-        </div>
+              </form>
+              </div>
+                <div id="archive-rows" hidden class="archive-rows-panel grid grid-cols-6 gap-10px mt-20px"></div>
+              </div>
           <div id="archive-gallery" 
-          class="columns-2 xl:columns-3 p-10px"></div>
-      </div>
-    </div>
-
+          class="columns-2 xl:columns-2 p-10px"></div>
+        </div>
+        <div class="col-start-8 col-end-9 bg-myWhite p-10px flex flex-col justify-start items-end">
+        </div>
+        </div>
+        
     <!-- Lightbox modal -->
     <div id="lightbox" class="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
@@ -75,6 +67,20 @@
     </div>
 
     <script src="script.js"></script>
-    <script src="/dark-mode-loader.js"></script>
+    
+    <!-- Bottom brand + links (identical on every page) -->
+    <div class="site-bottom-brand" style="position:fixed;left:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
+      <div style="line-height:1">
+        <a href="home.html" class="font-myTitle" style="display:inline-block">Città<br>interrotte</a>
+        <p style="margin:0">di Fondazione Scorza</p>
+      </div>
+    </div>
+    <div class="sidebar-links" style="position:fixed;right:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">
+      <div style="display:flex;flex-direction:column">
+        <a href="storia.html" class="font-myTitle text-right">Storia</a>
+        <a href="index.html" class="font-myTitle text-right">Archivio</a>
+        <a href="stat.html" class="font-myTitle text-right">Dati</a>
+      </div>
+    </div>
   </body>
 </html>

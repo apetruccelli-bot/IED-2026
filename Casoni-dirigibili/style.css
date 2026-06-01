@@ -1163,26 +1163,48 @@ button {
 
 /* QUERY MOBILE ABOUT */
 @media (max-width: 600px) {
-    .about-page {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 42px 280px minmax(0, 1fr);
-    row-gap: 18px;
-
-    height: 100vh;
-    overflow: hidden;
+  html,
+  body.about-body {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
     background: var(--myBlack);
   }
 
-  /* Riga 1: titolo */
+  body.about-body {
+    height: auto;
+  }
+
+  .about-page {
+    display: block;
+    width: 100%;
+    min-height: 100dvh;
+    height: auto;
+    overflow: visible;
+    background: var(--myBlack);
+    color: var(--myWhite);
+    padding-top: 42px;
+  }
+
+  /* Solo la riga titolo resta fissa */
   .about-header {
-    grid-column: 1;
-    grid-row: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5000;
+
+    width: 100%;
+    height: 42px;
 
     display: flex;
     align-items: baseline;
+    gap: 20px;
+
     padding: 10px;
     overflow: hidden;
+
+    background: var(--myBlack);
   }
 
   .about-header .intro-panel {
@@ -1190,6 +1212,7 @@ button {
     min-width: 0;
     max-width: none;
     margin: 0;
+    flex: 0 0 auto;
   }
 
   .about-header .home-title {
@@ -1222,50 +1245,46 @@ button {
     display: none;
   }
 
-  /* Riga 2: testo scrollabile */
+  /* Testo dentro il flusso verticale della pagina */
   .about-main {
-    grid-column: 1;
-    grid-row: 2;
-
     display: block;
-    height: 100%;
+    width: 100%;
+    height: auto;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
     background: var(--myBlack);
   }
 
   .about-text-panel {
     display: block;
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-height: 0;
+
     padding: 10px;
 
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: visible;
   }
 
   .about-text-panel .box2 {
     width: 100%;
     max-width: none;
     margin: 0;
+    padding-bottom: 20px;
   }
 
   .about-image-panel {
     display: none;
   }
 
-  /* Riga 3: immagini verticali scrollabili */
+  /* Galleria a fine pagina: scroll orizzontale */
   .about-gallery-side {
-    grid-column: 1;
-    grid-row: 3;
-
     display: block;
     width: 100%;
-    height: 100%;
+    height: clamp(160px, 42vw, 260px);
 
     padding: 10px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
 
     background: var(--myBlack);
   }
@@ -1273,26 +1292,30 @@ button {
   .about-gallery-side .horizontal-scroll,
   .about-gallery-side .horizontal-scroll.about-can-scroll {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
 
     width: 100%;
-    height: auto;
-    min-height: 100%;
+    height: 100%;
 
-    overflow: visible !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    align-items: stretch;
+    -webkit-overflow-scrolling: touch;
   }
 
   .about-gallery-side .scroll-img {
-    width: 100%;
-    height: auto;
-    max-width: none;
-    max-height: none;
-
     flex: 0 0 auto;
-    object-fit: contain;
 
+    width: auto;
+    height: 100%;
+    max-width: none;
+    max-height: 100%;
+
+    object-fit: contain;
     opacity: 1 !important;
+    cursor: zoom-in;
   }
 }
 
@@ -1603,6 +1626,15 @@ button {
     font-weight: inherit !important;
   }
 }
+
+@media (max-width: 600px) {
+  body.about-body {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: auto !important;
+  }
+}
+
 
 /* ─────────────────────────────
    LIGHTBOX MOBILE
