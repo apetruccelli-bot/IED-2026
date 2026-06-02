@@ -15,6 +15,8 @@
 
     /* Container holds the video and canvas layers and centers a reduced interaction box */
     html, body { height: 100%; margin: 0; }
+  /* Keep container background neutral; the radiograph will be applied to the webcam frame
+    so it follows the canvas dimensions exactly. */
   #container { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 0; background: var(--bg); }
 
       /* The webcam frame is now a centered, constrained box rather than full-screen.
@@ -28,7 +30,11 @@
         border-radius: 10px;
         box-shadow: 0 12px 36px rgba(0,0,0,0.6);
         overflow: hidden;
-        background: var(--bg);
+  /* Use the base radiograph here and preserve its aspect ratio (do not stretch). */
+  background-image: url('interazione/radiografiabase.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
         z-index: 0;
       }
 
@@ -54,7 +60,17 @@
 
       /* Make video and canvas fill the constrained frame */
       .cam-layer { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transform: none; object-fit: cover; }
-      #webcam { z-index: 0; display: block; }
+      /* Use the video element as a visible holder for the base radiograph image.
+         This keeps the video tag intact (so streams are not modified) while
+         showing the radiograph as the visual background. The canvas remains
+         on top for interactions and overlays. */
+      #webcam {
+        z-index: 0;
+        display: block;
+        /* No background here — use the container's background so the image
+           appears only inside the interaction container. */
+        background: transparent;
+      }
       #canvas { z-index: 1; pointer-events: none; display: block; }
     /* Force-hide any residual textual tracking UI on this minimal page */
     #faceList, #handList, #status, .face-info, .hand-info, .feature-info, #info { display: none !important; }
