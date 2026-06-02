@@ -601,7 +601,7 @@
       "country": "Germany",
       "year": "1928",
       "people": true,
-      "description": "Inspection of the Doppelk�rper Mark-Nine concept; twin-envelope arrangement examined for lift distribution and structural redundancy."
+      "description": "Inspection of the Doppelkarper Mark-Nine concept; twin-envelope arrangement examined for lift distribution and structural redundancy."
     },
 
     {
@@ -645,7 +645,7 @@
       "country": "Spain",
       "year": "1928",
       "people": true,
-      "description": "Wall-mounted plans and full model of the C�rdoba cargo design; side elevation compared with gondola and ballast arrangement."
+      "description": "Wall-mounted plans and full model of the Cardoba cargo design; side elevation compared with gondola and ballast arrangement."
     },
 
     {
@@ -728,7 +728,7 @@
       "year": "1934",
       "victims": 9,
       "people": false,
-      "description": "Diario del Aire report on the R�o de la Plata mail airship; electrical storm and suspected engine failure caused in-flight fire over the estuary."
+      "description": "Diario del Aire report on the Rio de la Plata mail airship; electrical storm and suspected engine failure caused in-flight fire over the estuary."
     },
 
     {
@@ -741,7 +741,7 @@
       "year": "1928",
       "people": false,
       "victims": 63,
-      "description": "ABC front page on the C�diz aerial wreck; La Infanta caught fire before falling into the sea, with investigators examining possible gas or engine faults."
+      "description": "ABC front page on the Cadiz aerial wreck; La Infanta caught fire before falling into the sea, with investigators examining possible gas or engine faults."
     },
 
     {
@@ -845,7 +845,7 @@
       "year": "1928",
       "people": false,
       "victims": 29,
-      "description": "La Vanguardia report on the Mediterr�neo disaster over Barcelona; engine explosion and fire scattered wreckage across the city after the Marseille route crossing."
+      "description": "La Vanguardia report on the Mediterraneo disaster over Barcelona; engine explosion and fire scattered wreckage across the city after the Marseille route crossing."
     },
 
     {
@@ -858,7 +858,7 @@
       "year": "1928",
       "people": false,
       "victims": 40,
-      "description": "El Pa�s report on the �caro crash in the Pyrenees; violent wind destroyed the hull during forced landing, though all occupants survived."
+      "description": "El Pais report on the Icaro crash in the Pyrenees; violent wind destroyed the hull during forced landing, though all occupants survived."
     },
 
     {
@@ -928,7 +928,7 @@
       "country": "Spain",
       "year": "1927",
       "people": false,
-      "description": "Structural plan for the �caro, focused on the forward hull, passenger compartment, engine fittings, and lower suspension points later examined after the Pyrenees incident."
+      "description": "Structural plan for the Icaro, focused on the forward hull, passenger compartment, engine fittings, and lower suspension points later examined after the Pyrenees incident."
     },
 
     {
@@ -1038,7 +1038,7 @@
       "country": "Spain",
       "year": "1936",
       "people": false,
-      "description": "Spanish design sheet for the La Infanta, with paired side elevations, tail assembly, cabin placement, and handwritten inspection notes later attached to the C�diz maritime accident file."
+      "description": "Spanish design sheet for the La Infanta, with paired side elevations, tail assembly, cabin placement, and handwritten inspection notes later attached to the Cadiz maritime accident file."
     },
 
     {
@@ -1050,7 +1050,10 @@
       "year": "1933",
       "people": false,
       "description": "Simplified structural drawing of the Polonia II, combining a full side profile with three frontal frame sections; likely used by Adler to compare the original design with the wreckage recovered near Poznan."
-    },
+    }
+  ],
+
+  "aboutItems": [
 
     {
       "id": 90,
@@ -1109,13 +1112,7 @@
     {
       "id": 99,
       "src": "img/about/about (10).png",
-      "description": "??"
-    },
-
-    {
-      "id": 100,
-      "src": "img/about/about (11).png",
-      "description": "??"
+      "description": "This image is presented as the first known photograph of Friedrich Adler at the site of an airship incident."
     }
   ]
 }

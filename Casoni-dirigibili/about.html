@@ -89,8 +89,7 @@
           <img src="img/about/about (7).png" alt="" class="scroll-img" data-id="96">
           <img src="img/about/about (8).png" alt="" class="scroll-img" data-id="97">
           <img src="img/about/about (9).png" alt="" class="scroll-img" data-id="98">
-          <img src="img/dirigibili/dirigibile (11).png" alt="" class="scroll-img" data-id="11">
-          <img src="img/dirigibili/dirigibile (12).png" alt="" class="scroll-img" data-id="12">
+          <img src="img/about/about (10).png" alt="" class="scroll-img" data-id="99">
         </div>
       </div>
     </div>
@@ -345,15 +344,51 @@
         aboutLbClose?.addEventListener('click', closeAboutLightbox);
         aboutLbBackdrop?.addEventListener('click', closeAboutLightbox);
 
+        const aboutLightboxCursor = document.createElement('div');
+        aboutLightboxCursor.style.position = 'fixed';
+        aboutLightboxCursor.style.left = '0';
+        aboutLightboxCursor.style.top = '0';
+        aboutLightboxCursor.style.transform = 'translate(-50%, -50%)';
+        aboutLightboxCursor.style.zIndex = '10003';
+        aboutLightboxCursor.style.pointerEvents = 'none';
+        aboutLightboxCursor.style.display = 'none';
+        aboutLightboxCursor.style.color = '#FCFCFC';
+        aboutLightboxCursor.style.fontFamily = 'Arial, sans-serif';
+        aboutLightboxCursor.style.fontSize = '42px';
+        aboutLightboxCursor.style.fontWeight = '700';
+        aboutLightboxCursor.style.lineHeight = '1';
+        aboutLightboxCursor.style.userSelect = 'none';
+        aboutLightboxCursor.style.webkitUserSelect = 'none';
+        aboutLightboxCursor.style.textShadow = '0 0 4px rgba(0, 0, 0, 0.55)';
+        document.body.appendChild(aboutLightboxCursor);
+
+        function updateAboutLightboxCursor(e) {
+          if (!aboutLbImg || !aboutLightbox || aboutLightbox.getAttribute('aria-hidden') === 'true') return;
+
+          const rect = aboutLbImg.getBoundingClientRect();
+          if (rect.width === 0 || rect.height === 0) return;
+
+          aboutLightboxCursor.textContent = e.clientX < rect.left + rect.width / 2 ? '<' : '>';
+          aboutLightboxCursor.style.left = `${e.clientX}px`;
+          aboutLightboxCursor.style.top = `${e.clientY}px`;
+          aboutLightboxCursor.style.display = 'block';
+        }
+
+        function hideAboutLightboxCursor() {
+          aboutLightboxCursor.style.display = 'none';
+        }
+
         aboutLbImg?.addEventListener('click', e => {
           const half = e.offsetX < aboutLbImg.offsetWidth / 2;
           navigateAboutLightbox(half ? -1 : 1);
+          hideAboutLightboxCursor();
         });
 
-        aboutLbImg?.addEventListener('mousemove', e => {
-          aboutLbImg.style.cursor =
-            e.offsetX < aboutLbImg.offsetWidth / 2 ? 'w-resize' : 'e-resize';
-        });
+        aboutLbImg?.addEventListener('pointermove', updateAboutLightboxCursor);
+        aboutLbImg?.addEventListener('pointerenter', updateAboutLightboxCursor);
+        aboutLbImg?.addEventListener('pointerleave', hideAboutLightboxCursor);
+        aboutLightbox?.addEventListener('pointerleave', hideAboutLightboxCursor);
+        aboutLightbox?.addEventListener('click', hideAboutLightboxCursor);
 
         document.addEventListener('keydown', e => {
           if (!aboutLightbox || !aboutLightbox.classList.contains('open')) return;
@@ -375,7 +410,7 @@
         .then(response => response.json())
         .then(data => {
           // Create a mapping of image IDs to their descriptions
-          data.items.forEach(item => {
+          data.aboutItems.forEach(item => {
             imageData[item.id] = item;
           });
 
