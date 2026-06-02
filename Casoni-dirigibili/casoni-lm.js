@@ -25,7 +25,7 @@ const exploreArtIds = [
   'explore-art-dirigibile-17',
   'explore-art-dirigibile-18',
   'explore-art-dirigibile-16',
-  'explore-art-dirigibile-16',
+  'explore-art-dirigibile-100',
   'explore-art-relitto-4',
   'explore-art-relitto-7',
   'explore-art-relitto-21',
@@ -65,8 +65,8 @@ function getExploreArtLabelById(id) {
     case 'explore-art-dirigibile-10': return 'airship (10)';
     case 'explore-art-dirigibile-17': return 'dirigibile (17)';
     case 'explore-art-dirigibile-18': return 'dirigibile (18)';
-    case 'explore-art-dirigibile-16': return 'dirigibile (16)';
-    case 'explore-art-dirigibile-16': return 'airship (16)';
+      case 'explore-art-dirigibile-16': return 'dirigibile (16)';
+      case 'explore-art-dirigibile-100': return 'explore (3)';
     case 'explore-art-relitto-4': return 'relitto (4)';
     case 'explore-art-relitto-7': return 'relitto (7)';
     case 'explore-art-relitto-21': return 'relitto (21)';
@@ -226,7 +226,8 @@ async function detectExploreHands() {
       } else if (showDirigibile16) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        setExploreArtVisible('explore-art-dirigibile-16');
+        // For left-hand tilt between 91°–180°, show the explore image (id 100)
+        setExploreArtVisible('explore-art-dirigibile-100');
       } else if (showAirship) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
@@ -255,7 +256,7 @@ async function detectExploreHands() {
       detectLabel.textContent = '✓ ' + handedness + ' hand';
       detectLabel.style.background = 'rgba(0,220,120,0.2)';
       detectLabel.style.color = 'rgba(0,220,120,0.9)';
-      angleLabel.textContent = showDirigibile19 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (19)' : showLeftAirshipRange ? 'angle: ' + angle.toFixed(1) + '° → ' + getExploreArtLabelById(exploreLeftAirshipCurrentId) : showDirigibile17 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (17)' : showDirigibile18 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (18)' : showDirigibile16 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (16)' : showAirship ? 'angle: ' + angle.toFixed(1) + '° → airship (16)' : showRelitto ? 'angle: ' + angle.toFixed(1) + '° → relitto (4)' : showRelitto7 ? 'angle: ' + angle.toFixed(1) + '° → relitto (7)' : showRelitto21 ? 'angle: ' + angle.toFixed(1) + '° → relitto (21)' : showDirigibile9 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (9)' : 'angle: ' + angle.toFixed(1) + '° → ' + color;
+      angleLabel.textContent = showDirigibile19 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (19)' : showLeftAirshipRange ? 'angle: ' + angle.toFixed(1) + '° → ' + getExploreArtLabelById(exploreLeftAirshipCurrentId) : showDirigibile17 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (17)' : showDirigibile18 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (18)' : showDirigibile16 ? 'angle: ' + angle.toFixed(1) + '° → explore (3)' : showAirship ? 'angle: ' + angle.toFixed(1) + '° → airship (16)' : showRelitto ? 'angle: ' + angle.toFixed(1) + '° → relitto (4)' : showRelitto7 ? 'angle: ' + angle.toFixed(1) + '° → relitto (7)' : showRelitto21 ? 'angle: ' + angle.toFixed(1) + '° → relitto (21)' : showDirigibile9 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (9)' : 'angle: ' + angle.toFixed(1) + '° → ' + color;
       angleLabel.style.color = showDirigibile19 || showLeftAirshipRange || showDirigibile17 || showDirigibile18 || showDirigibile16 || showAirship || showRelitto || showRelitto7 || showRelitto21 || showDirigibile9 ? 'rgba(255,255,255,0.9)' : color;
     } else {
       status.textContent = 'show your hand to the camera';
