@@ -162,7 +162,7 @@ body {
 #main-scroll {
   padding: var(--page-padding) !important;
   padding-top: 0 !important;
-  padding-bottom: 180px !important;
+  padding-bottom: 80px !important;
 }
 
 #main-scroll .grid {
