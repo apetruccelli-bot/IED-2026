@@ -9,6 +9,8 @@ const lbImg      = document.getElementById('lbImg') || document.getElementById('
 const lbTagsEl   = document.getElementById('lbTags') || document.getElementById('lb-tags');
 const lbSimilarEl = document.getElementById('lbSimilar') || document.getElementById('lb-similar');
 const lbCaption  = document.getElementById('lbCaption') || document.getElementById('lb-caption');
+const lbDescription = document.getElementById('lb-description');
+const lbMeta = document.getElementById('lb-meta');
 const lbClose    = document.getElementById('lbClose') || document.getElementById('lb-close');
 const lbPrev     = document.getElementById('lbPrev') || document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lbNext') || document.getElementById('lb-next');
@@ -364,6 +366,8 @@ function openLightbox(index) {
   lbImg.src = item.src;
   lbImg.alt = `Item ${item.id}`;
   if (lbCaption) lbCaption.textContent = item.description || '';
+  if (lbDescription) lbDescription.textContent = item.description || '';
+  if (lbMeta) lbMeta.textContent = ((item.area && item.area.length)? (item.area + ' · ') : '') + (item.tags && item.tags.length ? item.tags.join(', ') : '');
   renderSimilarImages(item, visible);
 
   lightbox.classList.add('open');
@@ -467,6 +471,8 @@ function closeLightbox() {
     lbCaption.style.marginLeft = '';
     lbCaption.style.marginRight = '';
   }
+  if (lbDescription) lbDescription.textContent = '';
+  if (lbMeta) lbMeta.textContent = '';
 }
 
 function navigateLightbox(dir) {

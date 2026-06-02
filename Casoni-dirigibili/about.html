@@ -15,7 +15,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="about-body">
    <div class="about-page w-screen h-screen grid grid-rows-[auto_1fr_auto] bg-myBlack text-myWhite">
      <div class="about-header p-10px flex flex-row items-baseline gap-20px">
         <div class="intro-panel flex flex-col">
@@ -74,23 +74,23 @@
           </div>
         </div>
         <div class="about-image-panel flex h-full items-center justify-center overflow-hidden p-10px" style="flex-direction:column;">
-          <img src="img/dirigibili/dirigibile (2).png" alt="dirigibile 2" class="right-column-img max-h-full max-w-full object-contain">
+          <img src="img/about/about (1).png" alt="" class="right-column-img max-h-full max-w-full object-contain">
           <p class="right-column-caption"></p>
         </div>
       </div>
       <div class="about-gallery-side gallery-scroll-about bg-myBlack">
         <div class="horizontal-scroll h-full items-center">
-          <img src="img/dirigibili/dirigibile (2).png" alt="dirigibile 2" class="scroll-img" data-id="2">
-          <img src="img/dirigibili/dirigibile (3).png" alt="dirigibile 3" class="scroll-img" data-id="3">
-          <img src="img/dirigibili/dirigibile (4).png" alt="dirigibile 4" class="scroll-img" data-id="4">
-          <img src="img/dirigibili/dirigibile (5).png" alt="dirigibile 5" class="scroll-img" data-id="5">
-          <img src="img/dirigibili/dirigibile (6).png" alt="dirigibile 6" class="scroll-img" data-id="6">
-          <img src="img/dirigibili/dirigibile (7).png" alt="dirigibile 7" class="scroll-img" data-id="7">
-          <img src="img/dirigibili/dirigibile (8).png" alt="dirigibile 8" class="scroll-img" data-id="8">
-          <img src="img/dirigibili/dirigibile (9).png" alt="dirigibile 9" class="scroll-img" data-id="9">
-          <img src="img/dirigibili/dirigibile (10).png" alt="dirigibile 10" class="scroll-img" data-id="10">
-          <img src="img/dirigibili/dirigibile (11).png" alt="dirigibile 11" class="scroll-img" data-id="11">
-          <img src="img/dirigibili/dirigibile (12).png" alt="dirigibile 12" class="scroll-img" data-id="12">
+          <img src="img/about/about (1).png" alt="" class="scroll-img" data-id="90">
+          <img src="img/about/about (2).png" alt="" class="scroll-img" data-id="91">
+          <img src="img/about/about (3).png" alt="" class="scroll-img" data-id="92">
+          <img src="img/about/about (4).png" alt="" class="scroll-img" data-id="93">
+          <img src="img/about/about (5).png" alt="" class="scroll-img" data-id="94">
+          <img src="img/about/about (6).png" alt="" class="scroll-img" data-id="95">
+          <img src="img/about/about (7).png" alt="" class="scroll-img" data-id="96">
+          <img src="img/about/about (8).png" alt="" class="scroll-img" data-id="97">
+          <img src="img/about/about (9).png" alt="" class="scroll-img" data-id="98">
+          <img src="img/dirigibili/dirigibile (11).png" alt="" class="scroll-img" data-id="11">
+          <img src="img/dirigibili/dirigibile (12).png" alt="" class="scroll-img" data-id="12">
         </div>
       </div>
     </div>
@@ -126,39 +126,39 @@
         const aboutLbBackdrop = document.getElementById('about-lb-backdrop');
 
 
-function updateAboutGalleryScrollState() {
-  if (!horizontalScrollContainer) return;
+        function updateAboutGalleryScrollState() {
+          if (!horizontalScrollContainer) return;
 
-    const shouldEnableScroll = window.innerWidth < 1450;
+            const shouldEnableScroll = window.innerWidth < 1450;
 
-    horizontalScrollContainer.classList.toggle('about-can-scroll', shouldEnableScroll);
-  }
+            horizontalScrollContainer.classList.toggle('about-can-scroll', shouldEnableScroll);
+          }
 
-  if (horizontalScrollContainer) {
-    updateAboutGalleryScrollState();
+          if (horizontalScrollContainer) {
+            updateAboutGalleryScrollState();
 
-    window.addEventListener('resize', updateAboutGalleryScrollState);
+            window.addEventListener('resize', updateAboutGalleryScrollState);
 
-    horizontalScrollContainer.addEventListener('wheel', (e) => {
-      const isMobileAbout = window.matchMedia('(max-width: 600px)').matches;
+            horizontalScrollContainer.addEventListener('wheel', (e) => {
+              const isMobileAbout = window.matchMedia('(max-width: 600px)').matches;
 
-      if (isMobileAbout) {
-        return;
-      }
+              if (isMobileAbout) {
+                return;
+              }
 
-      updateAboutGalleryScrollState();
+              updateAboutGalleryScrollState();
 
-      const canScrollX = horizontalScrollContainer.classList.contains('about-can-scroll');
+              const canScrollX = horizontalScrollContainer.classList.contains('about-can-scroll');
 
-      if (!canScrollX) {
-        e.preventDefault();
-        return;
-      }
+              if (!canScrollX) {
+                e.preventDefault();
+                return;
+              }
 
-      e.preventDefault();
-      horizontalScrollContainer.scrollLeft += e.deltaY;
-    }, { passive: false });
-  }
+              e.preventDefault();
+              horizontalScrollContainer.scrollLeft += e.deltaY;
+            }, { passive: false });
+          }
 
       // Load data and set up image click handlers
       let imageData = {};
@@ -172,20 +172,29 @@ function updateAboutGalleryScrollState() {
         const rightColumnImg = document.querySelector('.right-column-img');
         const rightColumnCaption = document.querySelector('.right-column-caption');
 
-        if (item) {
-          rightColumnImg.src = item.src;
-          rightColumnCaption.textContent = item.description;
+        const activeThumb = [...scrollImages].find(scrollImg => {
+          return parseInt(scrollImg.getAttribute('data-id')) === imageId;
+        });
 
-          // Update opacity of all scroll images
-          scrollImages.forEach((scrollImg, index) => {
-            if (parseInt(scrollImg.getAttribute('data-id')) === imageId) {
-              scrollImg.style.opacity = '1';
-              currentImageIndex = index;
-            } else {
-              scrollImg.style.opacity = '0.4';
-            }
-          });
+        if (!activeThumb) return;
+
+        rightColumnImg.src = activeThumb.getAttribute('src');
+        rightColumnImg.alt = activeThumb.getAttribute('alt') || '';
+
+        if (item) {
+          rightColumnCaption.textContent = item.description || '';
+        } else {
+          rightColumnCaption.textContent = '';
         }
+
+        scrollImages.forEach((scrollImg, index) => {
+          if (parseInt(scrollImg.getAttribute('data-id')) === imageId) {
+            scrollImg.style.opacity = '1';
+            currentImageIndex = index;
+          } else {
+            scrollImg.style.opacity = '0.4';
+          }
+        });
       }
 
       function autoRotateNext() {
@@ -218,6 +227,7 @@ function updateAboutGalleryScrollState() {
 
         function renderAboutLightboxMeta(item) {
           if (!aboutLbMeta) return;
+          if (!item) return;
 
           const category = (item.category || '').toLowerCase();
 
@@ -262,27 +272,48 @@ function updateAboutGalleryScrollState() {
         function openAboutLightbox(imageId) {
           const item = imageData[imageId];
 
-          if (!item || !aboutLightbox) return;
+          if (!aboutLightbox) return;
 
           aboutLbIndex = [...scrollImages].findIndex(img => {
             return parseInt(img.getAttribute('data-id')) === imageId;
           });
 
-          aboutLbImg.src = item.src;
-          aboutLbImg.alt = `Item ${item.id}`;
-          aboutLbId.textContent = `#${String(item.id).padStart(2, '0')}`;
+          const activeThumb = [...scrollImages].find(img => {
+            return parseInt(img.getAttribute('data-id')) === imageId;
+          });
+
+          if (!activeThumb && !item) return;
+
+          aboutLbImg.src = activeThumb
+            ? activeThumb.getAttribute('src')
+            : item.src;
+
+          aboutLbImg.alt = activeThumb
+            ? activeThumb.getAttribute('alt') || ''
+            : `Item ${item.id}`;
+
+          aboutLbId.textContent = item
+            ? `#${String(item.id).padStart(2, '0')}`
+            : '';
 
           aboutLbTags.innerHTML = '';
 
-          item.tags.forEach(tag => {
-            const tagEl = document.createElement('span');
-            tagEl.className = 'card-tag';
-            tagEl.textContent = tag;
-            aboutLbTags.appendChild(tagEl);
-          });
+          if (item && Array.isArray(item.tags)) {
+            item.tags.forEach(tag => {
+              const tagEl = document.createElement('span');
+              tagEl.className = 'card-tag';
+              tagEl.textContent = tag;
+              aboutLbTags.appendChild(tagEl);
+            });
+          }
 
-          aboutLbDescription.textContent = item.description || '';
-          renderAboutLightboxMeta(item);
+          aboutLbDescription.textContent = item?.description || '';
+
+          if (item) {
+            renderAboutLightboxMeta(item);
+          } else {
+            aboutLbMeta.innerHTML = '';
+          }
 
           aboutLightbox.classList.add('open');
           aboutLightbox.setAttribute('aria-hidden', 'false');
@@ -353,7 +384,7 @@ function updateAboutGalleryScrollState() {
 
 
           // Set initial image and description (id 2)
-          updateImage(2);
+          updateImage(90);
 
           // Add click handlers to all scroll images
           scrollImages.forEach(img => {
@@ -375,5 +406,6 @@ function updateAboutGalleryScrollState() {
         })
         .catch(error => console.error('Error loading data:', error));
     </script>
+    <script src="/dark-mode-loader.js"></script>
   </body>
 </html>
