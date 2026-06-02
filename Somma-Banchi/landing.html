@@ -106,7 +106,7 @@
     .image-card:nth-child(2) {
       width: 220px;
       height: 280px;
-      background-image: url("img/a3.png");
+      background-image: url("img/ta3.png");
     }
 
     .image-card:nth-child(3) {
@@ -124,13 +124,13 @@
     .image-card:nth-child(5) {
       width: 220px;
       height: 200px;
-      background-image: url("img/tagli  (2).png");
+      background-image: url("img/ta5.png");
     }
 
     .image-card:nth-child(6) {
       width: 220px;
       height: 170px;
-      background-image: url("img/tagli  (4).png");
+      background-image: url("img/ta4.png");
     }
 
     .image-card:nth-child(7) {
@@ -252,13 +252,13 @@
     let redirected = false;
 
     const startLayout = [
-      { x: 50, y: 50, r: 0 },
-      { x: 49, y: 49, r: 0 },
-      { x: 51, y: 50, r: 0 },
-      { x: 50, y: 48, r: 0 },
-      { x: 50, y: 52, r: 0 },
-      { x: 48, y: 51, r: 0 },
-      { x: 52, y: 49, r: 0 }
+      { x: 47, y: 42, r: 0 },
+      { x: 51, y: 46, r: 0 },
+      { x: 54, y: 49, r: 0 },
+      { x: 48, y: 52, r: 0 },
+      { x: 52, y: 58, r: 0 },
+      { x: 45, y: 50, r: 0 },
+      { x: 55, y: 53, r: 0 }
     ];
 
     const endLayout = [
@@ -280,6 +280,15 @@
       { x: 82, y: 56, r: 0 },
       { x: 50, y: 80, r: 0 }
     ];
+
+    /*
+      Opacità iniziali delle immagini quando sono sovrapposte.
+      Puoi modificare questi valori per cambiare l'effetto iniziale.
+
+      Valori più bassi = immagine più trasparente
+      Valori più alti = immagine più visibile
+    */
+    const startOpacities = [0.5, 0.55, 0.6, 0.64, 0.7, 0.75, 0.8];
 
     function lerp(start, end, progress) {
       return start + (end - start) * progress;
@@ -311,15 +320,16 @@
         1. De Veciariìe appare subito al centro
         2. De Veciariìe sparisce dal centro
         3. De Veciariìe riappare direttamente in alto a sinistra
-        4. appaiono le immagini
-        5. immagini e titolo si dissolvono
-        6. sfondo chiaro e redirect ad archivio.html
+        4. appaiono le immagini sovrapposte con opacità diverse
+        5. le immagini si allargano e diventano completamente visibili
+        6. immagini e titolo si dissolvono
+        7. sfondo chiaro e redirect ad archivio.html
       */
 
       const titleFadeCenterProgress = clamp((scrollProgress - 0.34) / 0.10, 0, 1);
 
       const titleAppearCornerProgress = clamp((scrollProgress - 0.48) / 0.08, 0, 1);
-      const titleFadeCornerProgress = clamp((scrollProgress - 0.76) / 0.16, 0, 1);
+      const titleFadeCornerProgress = clamp((scrollProgress - 0.84) / 0.12, 0, 1);
 
       if (scrollProgress < 0.46) {
         archiveTitle.style.left = "50%";
@@ -336,17 +346,25 @@
         archiveTitle.style.display = "block";
       }
 
-      if (scrollProgress > 0.90) {
+      if (scrollProgress > 0.96) {
         archiveTitle.style.display = "none";
       }
 
-      const imageAppearProgress = clamp((scrollProgress - 0.46) / 0.16, 0, 1);
+      /*
+        Controlli immagini:
+        - imageAppearProgress: fa comparire il gruppo di immagini
+        - spreadProgress: fa allargare le immagini dal centro alla posizione finale
+        - fadeProgress: fa dissolvere le immagini prima del cambio pagina
+        - startOpacities: opacità diverse quando le immagini sono sovrapposte
+      */
+
+      const imageAppearProgress = clamp((scrollProgress - 0.46) / 0.10, 0, 1);
 
       const spreadProgress = easeInOutCubic(
-        clamp((scrollProgress - 0.52) / 0.20, 0, 1)
+        clamp((scrollProgress - 0.52) / 0.24, 0, 1)
       );
 
-      const fadeProgress = clamp((scrollProgress - 0.74) / 0.16, 0, 1);
+      const fadeProgress = clamp((scrollProgress - 0.90) / 0.08, 0, 1);
 
       const activeEndLayout = getEndLayout();
 
@@ -358,13 +376,22 @@
         const y = lerp(start.y, end.y, spreadProgress);
         const r = lerp(start.r, end.r, spreadProgress);
 
+        /*
+          Qui succede la cosa importante:
+          - all'inizio ogni immagine usa la sua opacità iniziale
+          - mentre si allarga, arriva gradualmente a opacità 1
+          - alla fine, prima del fade-out, tutte sono totalmente visibili
+        */
+        const startOpacity = startOpacities[index];
+        const visibleOpacity = lerp(startOpacity, 1, spreadProgress);
+
         card.style.left = `${x}%`;
         card.style.top = `${y}%`;
         card.style.transform = `translate(-50%, -50%) rotate(${r}deg)`;
-        card.style.opacity = 0.85 * imageAppearProgress * (1 - fadeProgress);
+        card.style.opacity = imageAppearProgress * visibleOpacity * (1 - fadeProgress);
       });
 
-      if (scrollProgress > 0.88) {
+      if (scrollProgress > 0.94) {
         homePreview.classList.add("visible");
       } else {
         homePreview.classList.remove("visible");

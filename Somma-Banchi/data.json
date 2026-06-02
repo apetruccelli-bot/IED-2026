@@ -364,9 +364,42 @@
       "negozi-provincia": "Brindisi",
       "negozi-specializzazione": ["bovina", "suina"],
       "negozi-stato": "aperto"    },
- 
     {
       "id": 35,
+      "src": "img/s1 (15).png",
+      "tags": ["vista frontale ravvicinata", "banco squadrato", "neon bianchi"],
+      "age": "macellaio giovane",
+      "description": "Banco di vendita di Anna, Francavilla Fontana , 1997",
+      "category": "negozi",
+      "negozi-anno": 1997,
+      "negozi-provincia": "Brindisi",
+      "negozi-specializzazione": ["bovina", "suina"],
+      "negozi-stato": "aperto"    },
+    {
+      "id": 36,
+      "src": "img/s1 (16).png",
+      "tags": ["vista frontale ravvicinata", "banco squadrato", "neon bianchi"],
+      "age": "macellaio giovane",
+      "description": "Banco di vendita di Anna, Francavilla Fontana , 1997",
+      "category": "negozi",
+      "negozi-anno": 1997,
+      "negozi-provincia": "Brindisi",
+      "negozi-specializzazione": ["bovina", "suina"],
+      "negozi-stato": "aperto"    },
+    {
+      "id": 37,
+      "src": "img/s1 (17).png",
+      "tags": ["vista frontale ravvicinata", "banco squadrato", "neon bianchi"],
+      "age": "macellaio giovane",
+      "description": "Banco di vendita di Anna, Francavilla Fontana , 1997",
+      "category": "negozi",
+      "negozi-anno": 1997,
+      "negozi-provincia": "Brindisi",
+      "negozi-specializzazione": ["bovina", "suina"],
+      "negozi-stato": "aperto"    },
+
+    {
+      "id": 38,
       "src": "img/col1.png",
       "tags-coltelli": ["manico in legno", "lama ampia e ricurva"],
       "description": "Coltello Mezzaluna utile per eseguire tagli decisi e controllati durante la lavorazione della carne,",
@@ -375,7 +408,7 @@
       "coltelli-usura": "usurato"
     },
     {
-      "id": 36,
+      "id": 39,
       "src": "img/col2.png",
       "tags-coltelli": ["manico in plastica rigida", "lama larga"],
       "description": "Mannnaia utile per dividere tagli di carne più consistenti, rompere piccole ossa, separare cartilagini e preparare porzioni da vendita con colpi decisi sul ceppo.",
@@ -384,7 +417,7 @@
       "coltelli-usura": "usurato"
     },
     {
-      "id": 37,
+      "id": 40,
       "src": "img/col3.png",
       "tags-coltelli": ["manico in plastica rigida", "lama fine"],
       "description": "Coltello da disosso usato per separare la carne dall’osso con precisione, rifinire tagli più delicati e seguire le venature della carne senza sprecarne.",
@@ -393,7 +426,7 @@
       "coltelli-usura": "nuovo"
     },
     {
-      "id": 38,
+      "id": 41,
       "src": "img/col4.png",
       "tags-coltelli": ["manico in legno", "lama curva"],
       "description": "Coltello classico usato per tagli quotidiani, per affettare pezzi di carne, preparare porzioni più piccole e svolgere lavorazioni veloci al banco.",
@@ -402,16 +435,16 @@
       "coltelli-usura": "nuovo"
     },
     {
-      "id": 39,
+      "id": 42,
       "src": "img/col5.png",
       "tags-coltelli": ["manico in legno", "lama regolare"],
-      "description": "Coltello Bobgo Park usato per lavorazioni precise e pulite, come rifilare tagli di carne, eliminare parti in eccesso, affettare porzioni sottili e seguire con controllo le linee naturali del pezzo.",
+      "description": "Coltello Bobgo Park usato per lavorazioni precise e pulite, come riaare tagli di carne, eliminare parti in eccesso, affettare porzioni sottili e seguire con controllo le linee naturali del pezzo.",
       "category": "coltelli",
       "coltelli-funzione": "tagliare e affettare",
       "coltelli-usura": "nuovo"
     },
     {
-      "id": 40,
+      "id": 43,
       "src": "img/col6.png",
       "tags-coltelli": ["manico in legno", "lama regolare con punta fine"],
       "description": "Coletello utile per tagliare e rfilare,ma anche per dare colpi netti e separare cartillagini",
@@ -420,7 +453,7 @@
       "coltelli-usura": "nuovo"
     },
     {
-      "id": 41,
+      "id": 44,
       "src": "img/col7.png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
@@ -429,7 +462,7 @@
       "coltelli-usura": "usurato"
     },
     {
-      "id": 42,
+      "id": 45,
       "src": "img/col8.png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
@@ -438,7 +471,7 @@
       "coltelli-usura": "usurato"
     },
     {
-      "id": 43,
+      "id": 46,
       "src": "img/col9.png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
@@ -447,35 +480,8 @@
       "coltelli-usura": "usurato"
     },
     {
-      "id": 44,
-      "src": "img/col11.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
-      "category": "coltelli",
-      "coltelli-funzione": "tagliare e affettare",
-      "coltelli-usura": "usurato"
-    },
-    {
-      "id": 45,
-      "src": "img/col12.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
-      "category": "coltelli",
-      "coltelli-funzione": "tagliare e affettare",
-      "coltelli-usura": "usurato"
-    },
-    {
-      "id": 46,
-      "src": "img/col13.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
-      "category": "coltelli",
-      "coltelli-funzione": "tagliare e affettare",
-      "coltelli-usura": "usurato"
-    },
-    {
       "id": 47,
-      "src": "img/col14.png",
+      "src": "img/col10.png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category": "coltelli",
@@ -484,7 +490,7 @@
     },
     {
       "id": 48,
-      "src": "img/col15.png",
+      "src": "img/col11.png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category": "coltelli",
@@ -493,16 +499,16 @@
     },
     {
       "id": 49,
-      "src": "img/col16.png",
+      "src": "img/col12.png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category": "coltelli",
-      "coltelli-funzione": "disossare",
+      "coltelli-funzione": "tagliare e affettare",
       "coltelli-usura": "usurato"
     },
     {
       "id": 50,
-      "src": "img/col17.png",
+      "src": "img/col13.png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category": "coltelli",
@@ -511,7 +517,7 @@
     },
     {
       "id": 51,
-      "src": "img/col18.png",
+      "src": "img/col14.png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category": "coltelli",
@@ -520,6 +526,42 @@
     },
     {
       "id": 52,
+      "src": "img/col15.png",
+      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
+      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "category": "coltelli",
+      "coltelli-funzione": "disossare",
+      "coltelli-usura": "usurato"
+    },
+    {
+      "id": 53,
+      "src": "img/col16.png",
+      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
+      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "category": "coltelli",
+      "coltelli-funzione": "tagliare e affettare",
+      "coltelli-usura": "usurato"
+    },
+    {
+      "id": 54,
+      "src": "img/col17.png",
+      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
+      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "category": "coltelli",
+      "coltelli-funzione": "tagliare e affettare",
+      "coltelli-usura": "usurato"
+    },
+    {
+      "id": 55,
+      "src": "img/col18.png",
+      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
+      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "category": "coltelli",
+      "coltelli-funzione": "disossare",
+      "coltelli-usura": "usurato"
+    },
+    {
+      "id": 56,
       "src": "img/col19.png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
@@ -529,8 +571,8 @@
     },
     {
 
-      "id": 53,
-      "src": "img/tagli  (1).png",
+      "id": 57,
+      "src": "img/ta1.png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category": "coltelli",
@@ -538,8 +580,8 @@
       "coltelli-usura": "usurato"
     },
     {
-      "id": 54,
-      "src": "img/tagli  (2).png",
+      "id": 58,
+      "src": "img/ta2.png",
       "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category": "coltelli",
@@ -547,88 +589,116 @@
       "coltelli-usura": "usurato"
     },
     {
-      "id": 55,
-      "src": "img/tagli  (2).png",
+      "id": 59,
+      "src": "img/ta3.png",
       "tags-tagli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category": "tagli",
       "tagli-lavorazione": "sfiletattura"
     },
     {
-      "id": 56,
-      "src": "img/tagli  (3).png",
+      "id": 60,
+      "src": "img/ta4.png",
       "tags-tagli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category": "tagli",
       "tagli-lavorazione": "separazione"
     },
     {
-      "id": 57,
-      "src": "img/tagli  (4).png",
+      "id": 61,
+      "src": "img/ta5.png",
       "tags-tagli": ["manico in legno", "lama fine", "precisione", "usurato"],
       "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
       "category":"tagli",
       "tagli-lavorazione": "prima apertura"
     },
     {
-      "id": 58,
-      "src": "img/tagli  (5).png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
-    },
-    {
-      "id": 59,
-      "src": "img/tagli  (6).png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
-    },
-    {
-      "id": 60,
-      "src": "img/tagli  (7).png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
-    },
-    {
-      "id": 61,
-      "src": "img/tagli  (8).png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
-    },
-    {
       "id": 62,
-      "src": "img/tagli  (9).png",
+      "src": "img/ta6.png",
       "tags-tagli": [],
       "description": "Tagli",
       "category": "tagli"
     },
     {
       "id": 63,
-      "src": "img/tagli  (10).png",
+      "src": "img/ta7.png",
       "tags-tagli": [],
       "description": "Tagli",
       "category": "tagli"
     },
     {
       "id": 64,
-      "src": "img/tagli  (11).png",
+      "src": "img/ta8.png",
       "tags-tagli": [],
       "description": "Tagli",
       "category": "tagli"
     },
     {
       "id": 65,
-      "src": "img/tagli  (12).png",
+      "src": "img/ta9.png",
       "tags-tagli": [],
       "description": "Tagli",
       "category": "tagli"
     },
     {
       "id": 66,
-      "src": "img/tagli  (13).png",
+      "src": "img/ta10.png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 67,
+      "src": "img/ta11.png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 68,
+      "src": "img/ta12.png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 69,
+      "src": "img/ta13.png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 70,
+      "src": "img/ta14.png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 71,
+      "src": "img/ta15.png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 72,
+      "src": "img/ta16.png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 73,
+      "src": "img/ta17.png",
+      "tags-tagli": [],
+      "description": "Tagli",
+      "category": "tagli"
+    },
+    {
+      "id": 74,
+      "src": "img/ta18.png",
       "tags-tagli": [],
       "description": "Tagli",
       "category": "tagli"
