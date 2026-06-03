@@ -48,14 +48,28 @@ let activeFilter = null;
 let activeFilterType = null;
 let advertisingScrollBound = false;
 let lastAdvertisingIndex = -1;
-let adScrollSyncLock = false;
 let portraitGestureIndex = 0;
 let packGestureIndex = 0;
 let adGestureIndex = 0;
 let categoryImagesRevealed = false;
 
+const GESTURE_CATEGORIES = ['fotografie', 'pacchetti', 'pubblicità'];
+
+function isGestureCategoryActive() {
+  return GESTURE_CATEGORIES.includes(activeCategory);
+}
+
 function isCategoryImagesRevealed() {
   return categoryImagesRevealed;
+}
+
+function usesYearDimMode() {
+  return activeFilterType === 'year'
+    && (activeCategory === 'fotografie' || activeCategory === 'pacchetti');
+}
+
+function itemMatchesYearFilter(item) {
+  return Number(item.year) === Number(activeFilter);
 }
 
 function revealCategoryImages() {
@@ -72,12 +86,7 @@ function revealCategoryImages() {
     if (grid) grid.scrollTop = 0;
     lastAdvertisingIndex = -1;
     setupAdvertisingScrollText();
-    requestAnimationFrame(() => {
-      syncAdvertisingDescHeights();
-      syncAdvertisingScrollPosition();
-      updateAdvertisingScrollState();
-      initFirstAdvertisingText();
-    });
+    requestAnimationFrame(() => updateAdvertisingScrollState());
   } else if (activeCategory === 'fotografie') {
     portraitGestureIndex = 0;
     selectPortraitByIndex(0);
@@ -115,6 +124,8 @@ function openPubblicitaViaGesture() {
   }
   if (activeCategory !== 'pubblicità') {
     setCategory('pubblicità');
+  } else {
+    window.ensureCategoryGestures?.();
   }
 }
 let aboutGestureIndex = 0;
@@ -205,7 +216,7 @@ function filteredItems() {
 
     let matchesCustomFilter = true;
 
-    if (activeFilter && activeFilterType === 'year') {
+    if (activeFilter && activeFilterType === 'year' && !usesYearDimMode()) {
       matchesCustomFilter = Number(item.year) === Number(activeFilter);
     }
 
@@ -297,6 +308,11 @@ function setCategory(cat) {
     resetAdvertisingScroll();
   }
 
+  document.body.classList.toggle(
+    'category-gesture-active',
+    activeCategory === 'fotografie' || activeCategory === 'pacchetti'
+  );
+
   updateCategoryText(activeCategory);
   render();
   syncCategoryRevealState();
@@ -304,7 +320,11 @@ function setCategory(cat) {
 }
 
 function getPortraitItems() {
-  return filteredItems().filter(item => item.category === 'fotografie');
+  let list = filteredItems().filter(item => item.category === 'fotografie');
+  if (usesYearDimMode()) {
+    list = list.filter(itemMatchesYearFilter);
+  }
+  return list;
 }
 
 function findCardForItem(item) {
@@ -361,7 +381,11 @@ function advancePortraitViaGesture() {
 }
 
 function getPackItems() {
-  return filteredItems().filter(item => item.category === 'pacchetti');
+  let list = filteredItems().filter(item => item.category === 'pacchetti');
+  if (usesYearDimMode()) {
+    list = list.filter(itemMatchesYearFilter);
+  }
+  return list;
 }
 
 function selectPackByIndex(index) {
@@ -651,6 +675,15 @@ function updateActiveInfo(item) {
   });
   document.getElementById('header-about-link')?.classList.remove('is-active');
 
+  document.querySelectorAll('.card-tag').forEach(tagEl => {
+    tagEl.classList.toggle('highlight', tags.includes(tagEl.textContent));
+  });
+
+  if (activeFilter && activeFilterType) {
+    updateFilterOpacity();
+    return;
+  }
+
   document.querySelectorAll('.filter-option').forEach(el => {
     const value = el.dataset.filterValue;
     const type = el.dataset.filterType;
@@ -667,14 +700,14 @@ function updateActiveInfo(item) {
     el.classList.toggle('active-filter', isActive);
     el.style.opacity = isActive ? '1' : '0.35';
   });
-
-  document.querySelectorAll('.card-tag').forEach(tagEl => {
-    tagEl.classList.toggle('highlight', tags.includes(tagEl.textContent));
-  });
 }
 
 function clearActiveInfo() {
   updateHeaderNavState();
+  if (activeFilter && activeFilterType) {
+    updateFilterOpacity();
+    return;
+  }
   document.querySelectorAll('.filter-option').forEach(el => {
     el.classList.remove('active-filter');
     el.style.opacity = '1';
@@ -789,6 +822,7 @@ function render() {
   grid.classList.toggle('layout-fotografie', activeCategory === 'fotografie');
   grid.classList.toggle('layout-pubblicita', activeCategory === 'pubblicità');
   grid.classList.toggle('layout-pacchetti', activeCategory === 'pacchetti');
+  grid.classList.toggle('year-filtered', usesYearDimMode());
   grid.classList.remove('has-selected');
 
   if (!visible.length) {
@@ -799,10 +833,15 @@ function render() {
     return;
   }
 
+  const yearDim = usesYearDimMode();
+
   visible.forEach((item, i) => {
+    const yearMatch = !yearDim || itemMatchesYearFilter(item);
     const card = document.createElement('article');
-    card.className = 'card activeImg';
-    card.style.cursor = ['fotografie', 'pacchetti'].includes(activeCategory) ? 'zoom-in' : 'default';
+    card.className = yearMatch ? 'card activeImg' : 'card';
+    card.style.cursor = ['fotografie', 'pacchetti'].includes(activeCategory) && yearMatch
+      ? 'zoom-in'
+      : 'default';
     card.dataset.itemYear = item.year;
 
     if (item.category === 'pubblicità') {
@@ -817,17 +856,9 @@ function render() {
     img.loading = 'lazy';
 
     if (item.category === 'pubblicità') {
-      img.addEventListener('load', () => {
-        syncAdvertisingDescHeights();
-        syncAdvertisingScrollPosition();
-        if (i === 0) initFirstAdvertisingText();
-      }, { once: true });
+      img.addEventListener('load', () => updateAdvertisingScrollState(), { once: true });
       if (img.complete) {
-        requestAnimationFrame(() => {
-          syncAdvertisingDescHeights();
-          syncAdvertisingScrollPosition();
-          initFirstAdvertisingText();
-        });
+        requestAnimationFrame(() => updateAdvertisingScrollState());
       }
     }
 
@@ -888,6 +919,7 @@ function render() {
     if (['fotografie', 'pacchetti'].includes(activeCategory)) {
       card.addEventListener('click', () => {
         if (!categoryImagesRevealed) return;
+        if (yearDim && !itemMatchesYearFilter(item)) return;
 
         const alreadyActive = card.classList.contains('selectedImg');
         grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
@@ -921,12 +953,7 @@ function render() {
     if (grid) grid.scrollTop = 0;
     lastAdvertisingIndex = -1;
     setupAdvertisingScrollText();
-    requestAnimationFrame(() => {
-      syncAdvertisingDescHeights();
-      syncAdvertisingScrollPosition();
-      updateAdvertisingScrollState();
-      initFirstAdvertisingText();
-    });
+    requestAnimationFrame(() => updateAdvertisingScrollState());
   } else {
     clearAdvertisingDescriptions();
   }
@@ -937,6 +964,10 @@ function render() {
 
   if (activeCategory === 'pacchetti' && categoryImagesRevealed) {
     syncPackSelection();
+  }
+
+  if (activeFilter && activeFilterType) {
+    updateFilterOpacity();
   }
 }
 
@@ -973,60 +1004,13 @@ function clearAdvertisingDescriptions() {
   toggleAdvertisingDescScroll(false);
 }
 
-function syncAdvertisingDescHeights() {
+function setActiveAdvertisingDescription(activeIndex) {
   const scroll = document.getElementById('advertising-desc-scroll');
-  if (!scroll || activeCategory !== 'pubblicità' || !grid) return;
+  if (!scroll || activeCategory !== 'pubblicità') return;
 
-  const cards = [...grid.querySelectorAll('.card')];
-  const blocks = [...scroll.querySelectorAll('.ad-desc-block')];
-  const atTop = grid.scrollTop < 20;
-
-  cards.forEach((card, i) => {
-    const block = blocks[i];
-    if (!block) return;
-
-    if (atTop && i === 0) {
-      block.classList.add('ad-desc-top');
-      block.style.paddingTop = '0';
-      block.style.minHeight = '0';
-      block.style.height = 'auto';
-      return;
-    }
-
-    block.classList.remove('ad-desc-top');
-    block.style.paddingTop = `${card.offsetHeight}px`;
-    block.style.minHeight = '0';
-    block.style.height = 'auto';
+  scroll.querySelectorAll('.ad-desc-block').forEach((block, i) => {
+    block.classList.toggle('is-active', i === activeIndex && activeIndex >= 0);
   });
-
-  const lastText = blocks[blocks.length - 1]?.querySelector('.ad-desc-text');
-  scroll.style.paddingBottom = lastText ? `${lastText.offsetHeight + 40}px` : '';
-}
-
-function initFirstAdvertisingText() {
-  const firstBlock = document.querySelector('.ad-desc-block');
-  const firstText = firstBlock?.querySelector('.ad-desc-text');
-  if (!firstText) return;
-
-  firstBlock?.classList.add('ad-desc-top');
-  firstText.classList.remove('ad-desc-animate');
-  lastAdvertisingIndex = 0;
-
-  const scroll = document.getElementById('advertising-desc-scroll');
-  if (scroll && grid && grid.scrollTop < 20) {
-    adScrollSyncLock = true;
-    scroll.scrollTop = 0;
-    adScrollSyncLock = false;
-  }
-}
-
-function syncAdvertisingScrollPosition() {
-  const scroll = document.getElementById('advertising-desc-scroll');
-  if (!scroll || !grid || adScrollSyncLock) return;
-
-  adScrollSyncLock = true;
-  scroll.scrollTop = grid.scrollTop;
-  adScrollSyncLock = false;
 }
 
 function resetAdvertisingScroll() {
@@ -1047,18 +1031,12 @@ function resetAdvertisingDescriptionPosition() {
 }
 
 function setupAdvertisingScrollText() {
-  syncAdvertisingDescHeights();
-  syncAdvertisingScrollPosition();
-
   if (!grid || advertisingScrollBound) {
     updateAdvertisingScrollState();
     return;
   }
 
-  grid.addEventListener('scroll', () => {
-    syncAdvertisingScrollPosition();
-    updateAdvertisingScrollState();
-  });
+  grid.addEventListener('scroll', () => updateAdvertisingScrollState(), { passive: true });
 
   advertisingScrollBound = true;
   updateAdvertisingScrollState();
@@ -1070,43 +1048,44 @@ function updateAdvertisingScrollState() {
 
   const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
   const blocks = [...document.querySelectorAll('.ad-desc-block')];
-  if (!cards.length) return;
+  if (!cards.length || !grid) return;
 
   const pastThreshold = window.innerHeight * 0.35;
   const activeThreshold = window.innerHeight * 0.45;
-  let activeIndex = 0;
+  let activeIndex = -1;
 
-  if (grid && grid.scrollTop < 20) {
+  if (grid.scrollTop < 20) {
     activeIndex = 0;
     cards.forEach((card, i) => {
       card.classList.toggle('ad-past', false);
-      card.classList.toggle('ad-active', false);
+      card.classList.toggle('ad-active', i === 0);
     });
-    blocks.forEach((block, i) => {
-      block.classList.toggle('ad-desc-past', false);
-      block.classList.toggle('ad-desc-top', i === 0);
-    });
-    syncAdvertisingDescHeights();
   } else {
-    blocks.forEach((block) => block.classList.remove('ad-desc-top'));
-    syncAdvertisingDescHeights();
     cards.forEach((card, i) => {
       const rect = card.getBoundingClientRect();
       const isPast = rect.bottom < pastThreshold;
+      const isActive = rect.top < activeThreshold && rect.bottom > pastThreshold;
       card.classList.toggle('ad-past', isPast);
-      card.classList.toggle('ad-active', false);
-      blocks[i]?.classList.toggle('ad-desc-past', isPast);
-      if (rect.top < activeThreshold && rect.bottom > pastThreshold) activeIndex = i;
+      card.classList.toggle('ad-active', isActive);
+      if (isActive) activeIndex = i;
     });
-    cards[activeIndex]?.classList.add('ad-active');
   }
+
+  setActiveAdvertisingDescription(activeIndex);
+
+  if (activeIndex < 0) {
+    lastAdvertisingIndex = -1;
+    return;
+  }
+
+  adGestureIndex = activeIndex;
 
   if (activeIndex !== lastAdvertisingIndex) {
     blocks.forEach((block, i) => {
       const text = block.querySelector('.ad-desc-text');
       if (!text) return;
       text.classList.remove('ad-desc-animate');
-      if (i === activeIndex && !(activeIndex === 0 && grid && grid.scrollTop < 20)) {
+      if (i === activeIndex) {
         void text.offsetWidth;
         text.classList.add('ad-desc-animate');
       }
@@ -1346,6 +1325,9 @@ async function init() {
     initAboutDropdown();
     window.addEventListener('resize', () => {
       if (document.body.classList.contains('about-open')) updateAboutHeaderOffset();
+      if (activeCategory === 'pubblicità' && categoryImagesRevealed) {
+        updateAdvertisingScrollState();
+      }
     });
   } catch (error) {
     console.error(error);
@@ -1372,6 +1354,7 @@ window.resetAdGestureState = resetAdGestureState;
 window.openPubblicitaViaGesture = openPubblicitaViaGesture;
 window.revealCategoryImages = revealCategoryImages;
 window.isCategoryImagesRevealed = isCategoryImagesRevealed;
+window.isGestureCategoryActive = isGestureCategoryActive;
 window.onAboutBlowGestureStart = onAboutBlowGestureStart;
 window.onAboutBlowGestureEnd = onAboutBlowGestureEnd;
 window.getAboutRevealIndex = () => aboutGestureIndex;

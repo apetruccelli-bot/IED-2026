@@ -60,6 +60,9 @@
   --header-fade-height: clamp(56px, 7vh, 72px);
   --header-nav-height: 52px;
   --header-clearance: calc(16px + var(--header-nav-height) + 12px);
+  --scrollbar-thumb: rgba(229, 229, 229, 0.32);
+  --scrollbar-thumb-hover: rgba(229, 229, 229, 0.52);
+  --scrollbar-track: transparent;
 }
 
 body {
@@ -362,8 +365,8 @@ button {
 
 @keyframes ad-desc-reveal {
   0% {
-    filter: blur(18px);
-    opacity: 1;
+    filter: blur(10px);
+    opacity: 0.35;
   }
   100% {
     filter: blur(0);
@@ -373,20 +376,14 @@ button {
 
 .advertising-desc-scroll {
   display: none;
+  position: relative;
   flex: 1 1 auto;
   min-height: 0;
   width: 100%;
   max-width: 68ch;
-  overflow-x: hidden;
-  overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  pointer-events: auto;
+  overflow: hidden;
+  pointer-events: none;
   z-index: 41;
-}
-
-.advertising-desc-scroll::-webkit-scrollbar {
-  display: none;
 }
 
 .mainLayout.category-pubblicita.category-images-revealed .descriptionAndFilters {
@@ -399,9 +396,7 @@ button {
 }
 
 .mainLayout.category-pubblicita .advertising-desc-scroll.is-active {
-  display: flex;
-  flex-direction: column;
-  gap: 80px;
+  display: block;
   padding-top: 0;
 }
 
@@ -428,43 +423,45 @@ button {
 }
 
 .ad-desc-block {
-  position: relative;
-  flex-shrink: 0;
-  transition: opacity 0.4s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
   box-sizing: border-box;
 }
 
-.ad-desc-block.ad-desc-top {
-  padding-top: 0 !important;
-  min-height: 0 !important;
-  height: auto !important;
-}
-
-.ad-desc-block.ad-desc-past {
-  opacity: 0.22;
+.ad-desc-block.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .ad-desc-text {
   position: relative;
-  margin-top: 20px;
+  margin-top: 0;
   left: 0;
   width: 100%;
+  height: auto;
+  max-height: min(52vh, calc(100vh - var(--header-clearance) - 32px));
+  overflow-y: auto;
   opacity: 1;
   filter: none;
   display: flex;
   flex-direction: column;
   gap: 0.4em;
+  box-sizing: border-box;
 }
 
 .ad-desc-text.ad-desc-animate {
-  animation: ad-desc-reveal 2s cubic-bezier(.8, 0, .2, 1) forwards;
-}
-
-.ad-desc-block.ad-desc-top .ad-desc-text {
-  margin-top: 0;
-  animation: none;
-  filter: none;
-  opacity: 1;
+  animation: ad-desc-reveal 0.5s cubic-bezier(.4, 0, .2, 1) forwards;
 }
 
 .myPhotos.layout-pubblicita .card-img {
@@ -472,6 +469,10 @@ button {
   height: auto;
   aspect-ratio: unset;
   object-fit: contain;
+}
+
+.myPhotos.layout-pubblicita .card-body {
+  display: none;
 }
 
 .myPhotos.layout-pubblicita .advertising-description {
@@ -891,7 +892,7 @@ button {
   z-index: 9999;
   background: var(--myBlack) !important;
   color: var(--myWhite);
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   align-items: unset !important;
   justify-content: unset !important;
@@ -1298,8 +1299,10 @@ body.about-open .about-grid img.about-revealed {
   opacity: 0.65;
 }
 
-body.gesture-camera-active #gesture-camera {
-  display: block;
+body.gesture-camera-active #gesture-camera,
+body.category-gesture-active #gesture-camera {
+  display: block !important;
+  z-index: 10010;
 }
 
 body.about-open #gesture-camera {
@@ -1322,9 +1325,19 @@ body.about-open #gesture-camera {
 }
 
 #gesture-status {
+  display: none;
   color: var(--myWhite);
   font-size: 10px;
   margin-top: 4px;
+}
+
+body.gesture-camera-active #gesture-status,
+body.about-open #gesture-status {
+  display: block;
+}
+
+#gesture-status[hidden] {
+  display: none !important;
 }
 
 .descriptionAndFilters {
@@ -1395,12 +1408,6 @@ body.about-open #gesture-camera {
   flex: 0 0 auto;
   max-height: min(32vh, 240px);
   overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.mainLayout.has-item-selected:not(.category-pubblicita) .item-preview .card-body::-webkit-scrollbar {
-  display: none;
 }
 
 .description-intro {
@@ -1464,6 +1471,49 @@ body.about-open #gesture-camera {
 html,
 body {
   overflow: hidden;
+}
+
+.myPhotos,
+#explore-modal,
+.ad-desc-text,
+.item-preview,
+.item-preview .card-body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+.myPhotos::-webkit-scrollbar,
+#explore-modal::-webkit-scrollbar,
+.ad-desc-text::-webkit-scrollbar,
+.item-preview::-webkit-scrollbar,
+.item-preview .card-body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.myPhotos::-webkit-scrollbar-track,
+#explore-modal::-webkit-scrollbar-track,
+.ad-desc-text::-webkit-scrollbar-track,
+.item-preview::-webkit-scrollbar-track,
+.item-preview .card-body::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+.myPhotos::-webkit-scrollbar-thumb,
+#explore-modal::-webkit-scrollbar-thumb,
+.ad-desc-text::-webkit-scrollbar-thumb,
+.item-preview::-webkit-scrollbar-thumb,
+.item-preview .card-body::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+}
+
+.myPhotos::-webkit-scrollbar-thumb:hover,
+#explore-modal::-webkit-scrollbar-thumb:hover,
+.ad-desc-text::-webkit-scrollbar-thumb:hover,
+.item-preview::-webkit-scrollbar-thumb:hover,
+.item-preview .card-body::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
 }
 
 .mainLayout {
@@ -1546,18 +1596,12 @@ body {
   max-width: 68ch;
   overflow-x: hidden;
   overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
   margin-bottom: 24px;
   padding-bottom: 8px;
   background: var(--myBlack);
   border: none;
   border-radius: 0;
   box-shadow: none;
-}
-
-.item-preview::-webkit-scrollbar {
-  display: none;
 }
 
 .item-preview.open {

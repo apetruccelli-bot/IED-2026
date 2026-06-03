@@ -5,22 +5,35 @@ let gestureStream = null;
 let gestureDetecting = false;
 let gestureSurfaceEnabled = false;
 
-const GESTURE_CATEGORIES = ['fotografie', 'pacchetti', 'pubblicità'];
+function isGestureCategoryActiveSafe() {
+  if (typeof window.isGestureCategoryActive === 'function') {
+    return window.isGestureCategoryActive();
+  }
+  const cat = getActiveCategorySafe();
+  return cat === 'fotografie' || cat === 'pacchetti' || cat === 'pubblicità';
+}
 
 function isGestureSurfaceActive() {
   if (!gestureSurfaceEnabled) return false;
   if (document.body.classList.contains('about-open')) return true;
+  return isGestureCategoryActiveSafe();
+}
+
+function shouldShowGestureCamera() {
+  if (!gestureSurfaceEnabled) return false;
+  if (document.body.classList.contains('about-open')) return true;
   const cat = getActiveCategorySafe();
-  return GESTURE_CATEGORIES.includes(cat);
+  return cat === 'fotografie' || cat === 'pacchetti';
 }
 
 function updateGestureCameraVisibility() {
   const camera = document.getElementById('gesture-camera');
-  const show = isGestureSurfaceActive();
+  const show = shouldShowGestureCamera();
   document.body.classList.toggle('gesture-camera-active', show);
   if (!camera) return;
-  camera.hidden = !show;
+  camera.removeAttribute('hidden');
   camera.setAttribute('aria-hidden', String(!show));
+  syncGestureStatusVisibility();
 }
 
 async function ensureCategoryGestures() {
@@ -282,9 +295,28 @@ const openHandSwipeDetector = {
   },
 };
 
+function shouldShowGestureStatus() {
+  return shouldShowGestureCamera();
+}
+
+function syncGestureStatusVisibility() {
+  const el = document.getElementById('gesture-status');
+  if (!el) return;
+  const show = shouldShowGestureStatus();
+  el.hidden = !show;
+  if (!show) el.textContent = '';
+}
+
 function setGestureStatus(text) {
   const el = document.getElementById('gesture-status');
-  if (el) el.textContent = text;
+  if (!el) return;
+  if (!shouldShowGestureStatus()) {
+    el.textContent = '';
+    el.hidden = true;
+    return;
+  }
+  el.hidden = false;
+  el.textContent = text;
 }
 
 function getActiveCategorySafe() {
@@ -595,7 +627,7 @@ function updateIdleGestureStatus() {
   const revealed = window.isCategoryImagesRevealed?.() ?? true;
 
   if (mode === 'pubblicità') {
-    setGestureStatus(revealed ? 'Ads' : 'Ads: fumo → apri immagini');
+    setGestureStatus('');
   } else if (mode === 'about') {
     setGestureStatus('About: soffia · fumo → ads · ↓↑ scroll');
   } else if (mode === 'fotografie') {
@@ -607,7 +639,7 @@ function updateIdleGestureStatus() {
       ? 'Packs: indice petto sx · fumo → ads'
       : 'Packs: indice petto sx → apri immagini · fumo → ads');
   } else {
-    setGestureStatus('Hand tracking attivo');
+    setGestureStatus('');
   }
 }
 
@@ -663,13 +695,12 @@ async function initCategoryGestures() {
 async function detectCategoryGestures() {
   if (!gestureDetecting) return;
 
+  updateGestureCameraVisibility();
+
   if (!isGestureSurfaceActive()) {
-    updateGestureCameraVisibility();
     requestAnimationFrame(detectCategoryGestures);
     return;
   }
-
-  updateGestureCameraVisibility();
 
   const video = document.getElementById('gesture-webcam');
   const canvas = document.getElementById('gesture-canvas');
@@ -688,6 +719,7 @@ async function detectCategoryGestures() {
         window.resetAboutBlowGesture?.();
       }
       lastGestureCategory = mode;
+      updateGestureCameraVisibility();
     }
 
     if (isPortraitGestureActive()) {
@@ -820,6 +852,7 @@ async function detectCategoryGestures() {
           }
         } else {
           openPubblicitaGestureTracker.reset();
+          updateIdleGestureStatus();
         }
       } catch (err) {
         /* ignore per-frame errors */
@@ -830,6 +863,7 @@ async function detectCategoryGestures() {
     }
   }
 
+  updateGestureCameraVisibility();
   requestAnimationFrame(detectCategoryGestures);
 }
 
@@ -837,3 +871,4 @@ window.initCategoryGestures = initCategoryGestures;
 window.ensureCategoryGestures = ensureCategoryGestures;
 window.enableGestureSurface = enableGestureSurface;
 window.updateIdleGestureStatus = updateIdleGestureStatus;
+window.updateGestureCameraVisibility = updateGestureCameraVisibility;
