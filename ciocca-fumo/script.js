@@ -1004,12 +1004,46 @@ function clearAdvertisingDescriptions() {
   toggleAdvertisingDescScroll(false);
 }
 
+function getAdImageMetrics(card, aside) {
+  const img = card.querySelector('.card-img');
+  if (!img || !aside) return null;
+
+  const imgRect = img.getBoundingClientRect();
+  const asideRect = aside.getBoundingClientRect();
+  const imageHeight = Math.round(imgRect.height);
+
+  return {
+    imageHeight,
+    top: Math.round(imgRect.bottom - asideRect.top - imageHeight),
+  };
+}
+
 function setActiveAdvertisingDescription(activeIndex) {
   const scroll = document.getElementById('advertising-desc-scroll');
-  if (!scroll || activeCategory !== 'pubblicità') return;
+  const aside = document.querySelector('.descriptionAndFilters');
+  if (!scroll || activeCategory !== 'pubblicità' || !grid) return;
 
-  scroll.querySelectorAll('.ad-desc-block').forEach((block, i) => {
-    block.classList.toggle('is-active', i === activeIndex && activeIndex >= 0);
+  const cards = [...grid.querySelectorAll('.card')];
+  const blocks = [...scroll.querySelectorAll('.ad-desc-block')];
+
+  blocks.forEach((block, i) => {
+    const isActive = i === activeIndex && activeIndex >= 0;
+    block.classList.toggle('is-active', isActive);
+
+    if (!isActive) {
+      block.style.top = '';
+      block.style.height = '';
+      block.style.minHeight = '';
+      return;
+    }
+
+    const card = cards[i];
+    const metrics = card ? getAdImageMetrics(card, aside) : null;
+    if (!metrics) return;
+
+    block.style.top = `${metrics.top}px`;
+    block.style.height = `${metrics.imageHeight}px`;
+    block.style.minHeight = `${metrics.imageHeight}px`;
   });
 }
 
