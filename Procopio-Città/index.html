@@ -16,7 +16,7 @@
       }
     </style>
     </head>
-  <body class="archive-page">
+  <body class="archive-page index-page">
 
     <div class="w-screen min-h-screen grid grid-cols-8 specialGrid bg-myWhite">
       <!-- Brand moved to bottom across pages -->
@@ -68,20 +68,6 @@
 
     <script src="script.js"></script>
     
-    <!-- Bottom brand + links (identical on every page) -->
-    <div class="site-bottom-brand" style="position:fixed;left:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
-      <div style="line-height:1">
-        <a href="home.html" class="font-myTitle" style="display:inline-block">Città<br>interrotte</a>
-        <p style="margin:0">di Fondazione Scorza</p>
-      </div>
-    </div>
-    <div class="sidebar-links" style="position:fixed;right:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">
-      <div style="display:flex;flex-direction:column">
-        <a href="storia.html" class="font-myTitle text-right">Storia</a>
-        <a href="index.html" class="font-myTitle text-right">Archivio</a>
-        <a href="stat.html" class="font-myTitle text-right">Dati</a>
-      </div>
-    </div>
     <footer class="page-footer font-myText" aria-label="Footer informazioni">
       <div class="footer-grid grid grid-cols-8 gap-10px">
         <div></div>
@@ -110,5 +96,19 @@
         <div></div>
       </div>
     </footer>
+    <!-- Bottom brand + links (identical on every page) -->
+    <div class="site-bottom-brand" style="position:fixed;left:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
+      <div style="line-height:1">
+        <a href="home.html" class="font-myTitle" style="display:inline-block">Città<br>interrotte</a>
+        <p style="margin:0">di Fondazione Scorza</p>
+      </div>
+    </div>
+    <div class="sidebar-links" style="position:fixed;right:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">
+      <div style="display:flex;flex-direction:column">
+        <a href="storia.html" class="font-myTitle text-right">Storia</a>
+        <a href="index.html" class="font-myTitle text-right">Archivio</a>
+        <a href="stat.html" class="font-myTitle text-right">Dati</a>
+      </div>
+    </div>
   </body>
 </html>
