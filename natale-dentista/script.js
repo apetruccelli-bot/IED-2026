@@ -159,6 +159,8 @@ function toggleMacro(macro) {
       const key = Object.keys(macros).find(k => k.toLowerCase() === displayName.toLowerCase());
       titleEl.classList.toggle('macro-active', Boolean(activeMacro && key && key.toLowerCase() === String(activeMacro).toLowerCase()));
     });
+    // when a macro is active, add a container-level class so we can dim other macro titles with CSS
+    container.classList.toggle('macro-dim-others', Boolean(activeMacro));
   }
 
   render();

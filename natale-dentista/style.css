@@ -584,7 +584,7 @@ button {
 .categories-list {
   display: flex;
   flex-direction: column;
-  gap: 6px; /* tightened vertical gap between category sections */
+  gap: 20px; /* increased vertical gap between category sections */
 }
 .categories-list .cat-section {
   margin: 0;
@@ -600,16 +600,23 @@ button {
 
 /* underline the macro title when selected */
 .categories-list .cat-title.macro-active {
-  text-decoration: underline;
-  text-decoration-color: var(--text);
-  text-underline-offset: 4px;
+  /* Do not show an underline for the active macro title */
+  text-decoration: none;
+}
+/* When a macro is active, dim all other macro titles to draw attention to the selected one */
+.categories-list.macro-dim-others .cat-title {
+  opacity: 0.45;
+  transition: opacity 180ms ease;
+}
+.categories-list.macro-dim-others .cat-title.macro-active {
+  opacity: 1;
 }
 .categories-list .cat-list {
   display: block;
   color: rgba(228,228,228,0.9);
 }
 .categories-list .cat-list .tag-btn {
-  margin: 2px 10px 2px 0; /* slightly larger horizontal gap between subcategory tags */
+  margin: 1px 8px 1px 0; /* reduced vertical gap between subcategory tags */
   padding: 0;
   background: transparent;
   color: rgba(228,228,228,0.85);

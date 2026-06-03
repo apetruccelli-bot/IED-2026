@@ -24,17 +24,21 @@
          Use min(90vw, 720px) to allow mobile scaling while keeping a good desktop size. */
       .webcam-frame {
         position: relative;
-        width: min(98vw, 1100px); /* increased size: slightly larger on desktop and near-full on mobile */
+        /* slightly larger interaction area while keeping it responsive */
+        width: min(96vw, 1200px);
         aspect-ratio: 16 / 9; /* horizontal widescreen */
+        max-height: 94vh; /* avoid vertical overflow on small screens */
         border: none;
         border-radius: 10px;
         box-shadow: 0 12px 36px rgba(0,0,0,0.6);
         overflow: hidden;
+        margin: auto; /* ensure centering inside the container */
   /* Use the base radiograph here and preserve its aspect ratio (do not stretch). */
   background-image: url('interazione/radiografiabase.jpg');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
+  opacity: 80%; 
         z-index: 0;
       }
 
@@ -56,6 +60,37 @@
         text-align: center;
         white-space: nowrap;
         margin: 0;
+      }
+
+      /* Text overlay inside the webcam frame for interaction instructions */
+      .interaction-text-overlay {
+        position: absolute;
+        top: 40%; /* moved slightly higher */
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 3; /* above canvas */
+        text-align: center; /* center-justified text */
+        pointer-events: none; /* do not block interactions */
+        color: var(--text);
+        width: 86%;
+        max-width: 920px;
+      }
+
+      .interaction-text-overlay .interaction-heading {
+        font-family: 'Serif';
+        font-size: 40px; /* slightly larger than other page titles */
+        line-height: 1;
+        margin: 0;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .interaction-text-overlay .interaction-subtitle {
+        font-family: 'Serif';
+        font-size: 20px; /* slightly smaller than main titles */
+        margin-top: 10px;
+        line-height: 1.2;
+        text-align: center;
       }
 
       /* Make video and canvas fill the constrained frame */
@@ -86,10 +121,14 @@
 
     <div id="container">
       <div class="interaction-wrapper">
-        <div class="interaction-title">Touch a point on your jaw</div>
         <div class="webcam-frame" id="webcamFrame">
           <video id="webcam" class="cam-layer" autoplay muted playsinline></video>
           <canvas id="canvas" class="cam-layer"></canvas>
+            <!-- Interaction text overlay: centered inside the frame and non-interactive -->
+            <div class="interaction-text-overlay" aria-hidden="true">
+              <div class="interaction-heading">You have entered Whitaker's office</div>
+              <div class="interaction-subtitle">Please indicate the affected tooth</div>
+            </div>
         </div>
       </div>
     </div>
