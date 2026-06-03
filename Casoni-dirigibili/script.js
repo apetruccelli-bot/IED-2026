@@ -1026,14 +1026,54 @@ function navigateLightbox(dir) {
 lbClose.addEventListener('click', closeLightbox);
 lbBackdrop.addEventListener('click', closeLightbox);
 
+const lightboxCursor = document.createElement('div');
+lightboxCursor.style.position = 'fixed';
+lightboxCursor.style.left = '0';
+lightboxCursor.style.top = '0';
+lightboxCursor.style.transform = 'translate(-50%, -50%)';
+lightboxCursor.style.zIndex = '10003';
+lightboxCursor.style.pointerEvents = 'none';
+lightboxCursor.style.display = 'none';
+lightboxCursor.style.color = '#FCFCFC';
+lightboxCursor.style.fontFamily = 'Arial, sans-serif';
+lightboxCursor.style.fontSize = '42px';
+lightboxCursor.style.fontWeight = '700';
+lightboxCursor.style.lineHeight = '1';
+lightboxCursor.style.userSelect = 'none';
+lightboxCursor.style.webkitUserSelect = 'none';
+lightboxCursor.style.textShadow = '0 0 4px rgba(0, 0, 0, 0.55)';
+document.body.appendChild(lightboxCursor);
+
+function updateLightboxCursor(e) {
+  if (!lbImg || lightbox.getAttribute('aria-hidden') === 'true') return;
+
+  const rect = lbImg.getBoundingClientRect();
+  if (rect.width === 0 || rect.height === 0) return;
+
+  lightboxCursor.textContent = e.clientX < rect.left + rect.width / 2 ? '<' : '>';
+  lightboxCursor.style.left = `${e.clientX}px`;
+  lightboxCursor.style.top = `${e.clientY}px`;
+  lightboxCursor.style.display = 'block';
+}
+
+function hideLightboxCursor() {
+  lightboxCursor.style.display = 'none';
+}
+
 // Navigate by clicking left/right half of the image
 //const lbImg = document.getElementById('lb-img');
 lbImg.addEventListener('click', e => {
   const half = e.offsetX < lbImg.offsetWidth / 2;
   navigateLightbox(half ? -1 : +1);
 });
-lbImg.addEventListener('mousemove', e => {
-  lbImg.style.cursor = e.offsetX < lbImg.offsetWidth / 2 ? 'w-resize' : 'e-resize';
+lbImg.addEventListener('pointermove', updateLightboxCursor);
+lbImg.addEventListener('pointerenter', updateLightboxCursor);
+lbImg.addEventListener('pointerleave', hideLightboxCursor);
+lightbox.addEventListener('pointerleave', hideLightboxCursor);
+lightbox.addEventListener('click', hideLightboxCursor);
+lbImg.addEventListener('mouseleave', hideLightboxCursor);
+lbImg.addEventListener('click', () => {
+  hideLightboxCursor();
 });
 
 document.addEventListener('keydown', e => {

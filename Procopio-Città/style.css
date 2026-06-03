@@ -22,12 +22,12 @@
       html { scroll-behavior: smooth; scroll-padding-top: 80px; }
       body, [data-scroll-container], #main-scroll, * { scroll-behavior: smooth; }
 
-body.page-transition > :not(#lightbox) {
+body.page-transition > :not(#lightbox):not(.page-footer):not(.site-bottom-brand):not(.sidebar-links) {
   opacity: 0;
   transform: translateY(24px);
 }
 
-body.page-transition.page-transition-ready > :not(#lightbox) {
+body.page-transition.page-transition-ready > :not(#lightbox):not(.page-footer):not(.site-bottom-brand):not(.sidebar-links) {
   opacity: 1;
   transform: translateY(0);
   transition:
@@ -35,7 +35,7 @@ body.page-transition.page-transition-ready > :not(#lightbox) {
     transform 720ms cubic-bezier(.77,0,.175,1);
 }
 
-body.page-transition.page-transition-leaving > :not(#lightbox) {
+body.page-transition.page-transition-leaving > :not(#lightbox):not(.page-footer):not(.site-bottom-brand):not(.sidebar-links) {
   opacity: 0;
   transform: translateY(-16px);
   transition:
@@ -159,24 +159,24 @@ body {
 }
 
 /* Modern page spacing and image sizing */
-#main-scroll {
+body.content-scroll-page #main-scroll {
   padding: var(--page-padding) !important;
   padding-top: 0 !important;
+  padding-bottom: 80px !important;
 }
 
-#main-scroll .grid {
+body.content-scroll-page #main-scroll > .content-grid {
   gap: var(--site-gap) !important;
 }
 
 /* Sticky section anchors: start at 30% opacity and animate as sections approach */
-#main-scroll .sticky a[href^="#sezione_"] {
+body.content-scroll-page #main-scroll .sticky a[href^="#sezione_"] {
   opacity: .3;
   transition: opacity .2s ease;
   will-change: opacity;
 }
 
-#main-scroll img {
-  max-height: var(--image-max-height);
+body.story-page #main-scroll img {
   width: 100%;
   object-fit: cover;
   border-radius: 0;
@@ -185,7 +185,7 @@ body {
 /* Make images inside single-column blocks sit flush with the column edge
    by compensating the .col-span-1 lateral padding. Keeps images visually closer
    to the content edge without changing global padding. */
-#main-scroll .col-span-1 > img {
+body.story-page #main-scroll .col-span-1 > img {
   display: block;
   width: calc(100% + 16px);
   margin-left: -8px;
@@ -194,7 +194,7 @@ body {
 }
 
 /* Make a selected image span full-bleed to the #main-scroll container edges */
-#main-scroll .col-span-1 > img.full-bleed {
+body.story-page #main-scroll .col-span-1 > img.full-bleed {
   display: block;
   width: calc(100% + (var(--page-padding) * 2) + 16px);
   margin-left: calc(-1 * (var(--page-padding) + 8px));
@@ -204,7 +204,7 @@ body {
 }
 
 @media (max-width: 900px) {
-  #main-scroll .col-span-1 > img.full-bleed {
+  body.story-page #main-scroll .col-span-1 > img.full-bleed {
     width: calc(100% + (var(--page-padding) * 2) + 16px);
     margin-left: calc(-1 * (var(--page-padding) + 8px));
     margin-right: calc(-1 * (var(--page-padding) + 8px));
@@ -213,13 +213,13 @@ body {
 
 /* Attach image to the right edge of the two-column grid (compensate col padding)
    Use class `attach-right` on the image. Keeps left side aligned but extends to the right */
-#main-scroll .col-start-3 > .grid, #main-scroll .grid {
+body.content-scroll-page #main-scroll .col-start-3 > .grid, body.content-scroll-page #main-scroll .grid {
   position: relative;
 }
 
 /* Revised attach-right: move the image right using relative positioning and
    expand its width by the same offset so its right edge reaches the grid edge. */
-#main-scroll .col-span-1 > img.attach-right {
+body.story-page #main-scroll .col-span-1 > img.attach-right {
   display: block !important;
   position: relative !important;
   --attach-offset: calc(var(--page-padding) + var(--site-gap) + 20px + 8px);
@@ -231,7 +231,7 @@ body {
 }
 
 @media (max-width: 900px) {
-  #main-scroll .col-span-1 > img.attach-right {
+  body.story-page #main-scroll .col-span-1 > img.attach-right {
     --attach-offset: calc(var(--page-padding) + var(--site-gap) + 12px);
     left: calc(var(--attach-offset));
     width: calc(100% + var(--attach-offset)) !important;
@@ -243,22 +243,22 @@ body {
 /* Captions follow images using default flow (same behaviour as section 1) */
 
 /* Ensure captions placed immediately after images have 10px spacing */
-#main-scroll img + .font-myText,
-#main-scroll img + .italic,
-#main-scroll .col-span-1 img + .font-myText,
-#main-scroll .col-span-1 img + .italic,
-#main-scroll img + div.font-myText,
-#main-scroll img + p {
+body.story-page #main-scroll img + .font-myText,
+body.story-page #main-scroll img + .italic,
+body.story-page #main-scroll .col-span-1 img + .font-myText,
+body.story-page #main-scroll .col-span-1 img + .italic,
+body.story-page #main-scroll img + div.font-myText,
+body.story-page #main-scroll img + p {
   margin-top: 10px !important;
 }
 
 /* Slight column gutters */
-.col-span-1 {
+body.content-scroll-page #main-scroll .col-span-1 {
   padding-left: 8px;
   padding-right: 8px;
 }
 
-body.archive-page #main-scroll .col-span-1 {
+body.content-scroll-page #main-scroll .col-span-1 {
   padding-left: 0;
   padding-right: 0;
 }
@@ -267,15 +267,15 @@ body.stat-page #main-scroll .space-y-20px > * + * {
   margin-top: 0 !important;
 }
 
-body.archive-page svg line,
-body.archive-page svg .line,
-body.archive-page svg .base,
-body.archive-page svg .value {
+body.stat-page svg line,
+body.stat-page svg .line,
+body.stat-page svg .base,
+body.stat-page svg .value {
   stroke-width: 1 !important;
   vector-effect: non-scaling-stroke;
 }
 
-body.archive-page #main-scroll .col-span-2.h-px.bg-myBlack {
+body.content-scroll-page #main-scroll .col-span-2.h-px.bg-myBlack {
   height: 0 !important;
   background: transparent !important;
   border-bottom: 1px solid var(--myBlack) !important;
@@ -288,7 +288,7 @@ body.archive-page #main-scroll .col-span-2.h-px.bg-myBlack {
 }
 
 /* More vertical white space around full-width quotes */
-#main-scroll .col-span-2.font-myTitle {
+body.content-scroll-page #main-scroll .col-span-2.font-myTitle {
   margin-top: 20px;
   margin-bottom: 20px;
   padding-top: 4px;
@@ -297,45 +297,45 @@ body.archive-page #main-scroll .col-span-2.h-px.bg-myBlack {
 
 /* Constrain line length using ch unit for better readability
    Exclude italic descriptions (they should remain full-width) */
-#main-scroll p,
-#main-scroll ul,
-#main-scroll ol,
-#main-scroll blockquote,
-#main-scroll .font-myTitle,
-#main-scroll .font-myText:not(.italic),
-#main-scroll .space-y-30px {
+body.content-scroll-page #main-scroll p,
+body.content-scroll-page #main-scroll ul,
+body.content-scroll-page #main-scroll ol,
+body.content-scroll-page #main-scroll blockquote,
+body.content-scroll-page #main-scroll .font-myTitle,
+body.content-scroll-page #main-scroll .font-myText:not(.italic),
+body.content-scroll-page #main-scroll .space-y-30px {
   max-width: 70ch;
   margin-right: auto;
 }
 
 /* Ensure list items don't exceed the ch width */
-#main-scroll li {
+body.content-scroll-page #main-scroll li {
   max-width: 70ch;
 }
 
 /* Tighten list line-height and reduce vertical gap for compact lists
    Applies to bullet/numbered lists inside the main content. */
-#main-scroll ul.list-disc,
-#main-scroll ol {
+body.content-scroll-page #main-scroll ul.list-disc,
+body.content-scroll-page #main-scroll ol {
   line-height: 1.15;
 }
-#main-scroll ul.list-disc li,
-#main-scroll ol li {
+body.content-scroll-page #main-scroll ul.list-disc li,
+body.content-scroll-page #main-scroll ol li {
   margin-top: 6px;
   margin-bottom: 6px;
 }
-#main-scroll ul.list-disc.space-y-10px > li {
+body.content-scroll-page #main-scroll ul.list-disc.space-y-10px > li {
   margin-top: 6px !important;
   margin-bottom: 6px !important;
 }
 
 /* Narrower line length for single-column (left/right) blocks */
-#main-scroll .col-span-1:not(img):not(.italic),
-#main-scroll .col-span-1:not(img) > p,
-#main-scroll .col-span-1:not(img) > ul,
-#main-scroll .col-span-1:not(img) > ol,
-#main-scroll .col-span-1:not(img) > .font-myText:not(.italic),
-#main-scroll .col-span-1:not(img) > .font-myTitle {
+body.content-scroll-page #main-scroll .col-span-1:not(img):not(.italic),
+body.content-scroll-page #main-scroll .col-span-1:not(img) > p,
+body.content-scroll-page #main-scroll .col-span-1:not(img) > ul,
+body.content-scroll-page #main-scroll .col-span-1:not(img) > ol,
+body.content-scroll-page #main-scroll .col-span-1:not(img) > .font-myText:not(.italic),
+body.content-scroll-page #main-scroll .col-span-1:not(img) > .font-myTitle {
   max-width: 55ch;
 }
 
@@ -347,13 +347,63 @@ a:hover {
 }
 
 /* Active link dimmed only on archive page */
-.archive-page .sidebar-links a.is-active,
-.archive-page .sidebar-links a.is-active:hover {
+.sidebar-links a.is-active,
+.sidebar-links a.is-active:hover {
   opacity: .3 !important;
 }
 
 .sidebar-links a:hover {
   opacity: .3 !important;
+}
+
+.page-footer {
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1000;
+  background: rgba(252,252,252,0.96);
+  border-top: 1px solid var(--myBlack);
+  padding: 14px 10px 10px;
+  backdrop-filter: blur(10px);
+}
+
+.page-footer .footer-grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+  max-width: calc(100% - 20px);
+  margin: 0 auto;
+}
+
+.page-footer .footer-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-footer .footer-item p {
+  margin: 0;
+  line-height: 1.3;
+}
+
+.page-footer .footer-item a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page-footer .footer-search {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--myBlack);
+  background: transparent;
+  color: inherit;
+  padding: 6px 0;
+  outline: none;
+}
+
+.font-myText {
+  font-family: 'Diatype';
+  text-transform: none;
 }
 
 /* (Archive-page) other links remain at normal opacity; active one is dimmed above */
@@ -1073,33 +1123,33 @@ header {
 }
 
 /* Story page: keep the main text blocks within 70ch */
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .font-myTitle,
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .font-myText,
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .space-y-30px,
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-1.pt-30px,
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-1.text-right,
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-2.pt-30px,
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-2.space-y-30px {
+body.story-page #main-scroll > .story-content-grid > .font-myTitle,
+body.story-page #main-scroll > .story-content-grid > .font-myText,
+body.story-page #main-scroll > .story-content-grid > .space-y-30px,
+body.story-page #main-scroll > .story-content-grid > .col-span-1.pt-30px,
+body.story-page #main-scroll > .story-content-grid > .col-span-1.text-right,
+body.story-page #main-scroll > .story-content-grid > .col-span-2.pt-30px,
+body.story-page #main-scroll > .story-content-grid > .col-span-2.space-y-30px {
   max-width: 70ch;
 }
 
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .font-myTitle,
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .space-y-30px,
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-1.pt-30px,
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-1.text-right,
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-2.pt-30px,
-#main-scroll .grid.grid-cols-2.gap-10px.pt-80px > .col-span-2.space-y-30px {
-  margin-right: auto;
+body.story-page #main-scroll > .story-content-grid > .font-myTitle,
+body.story-page #main-scroll > .story-content-grid > .space-y-30px,
+body.story-page #main-scroll > .story-content-grid > .col-span-1.pt-30px,
+body.story-page #main-scroll > .story-content-grid > .col-span-1.text-right,
+body.story-page #main-scroll > .story-content-grid > .col-span-2.pt-30px,
+body.story-page #main-scroll > .story-content-grid > .col-span-2.space-y-30px {
+  margin-right: 10px;
 }
 
-#main-scroll .story-fade {
+body.content-scroll-page #main-scroll .story-fade {
   opacity: 0.18;
   transform: translateY(22px);
   transition: opacity 0.55s ease, transform 0.55s ease;
   will-change: opacity, transform;
 }
 
-#main-scroll .story-fade.story-fade--visible {
+body.content-scroll-page #main-scroll .story-fade.story-fade--visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -1113,6 +1163,7 @@ header {
   .story-page #main-scroll .story-sticky,
   .stat-page #main-scroll .story-sticky {
     display: none;
+
   }
 
   .story-page .story-back-to-top,
@@ -1148,7 +1199,7 @@ header {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #main-scroll .story-fade {
+  body.content-scroll-page #main-scroll .story-fade {
     opacity: 1;
     transform: none;
     transition: none;
@@ -1979,21 +2030,21 @@ body.stat-page {
   background: var(--bg);
 }
 
-#main-scroll .stat-section {
+body.stat-page #main-scroll .stat-section {
   padding: 26px 0;
   border-top: 1px solid rgba(30, 30, 30, 0.12);
 }
 
-#main-scroll .stat-section:first-child {
+body.stat-page #main-scroll .stat-section:first-child {
   border-top: 0;
   padding-top: 0;
 }
 
-#main-scroll .stat-section--end {
+body.stat-page #main-scroll .stat-section--end {
   padding-bottom: 0;
 }
 
-#main-scroll .stat-kicker {
+body.stat-page #main-scroll .stat-kicker {
   margin-bottom: 14px;
   font-family: 'Diatype-Mono';
   font-size: 11px;
@@ -2002,21 +2053,21 @@ body.stat-page {
   opacity: 0.55;
 }
 
-#main-scroll .stat-section-head {
+body.stat-page #main-scroll .stat-section-head {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-bottom: 12px;
 }
 
-#main-scroll .stat-number {
+body.stat-page #main-scroll .stat-number {
   font-family: 'Diatype-Mono';
   font-size: 12px;
   letter-spacing: 0.12em;
   opacity: 0.55;
 }
 
-#main-scroll .stat-lead {
+body.stat-page #main-scroll .stat-lead {
   max-width: 34ch;
   font-family: 'Diatype-Mono';
   font-size: 13px;
@@ -2025,24 +2076,24 @@ body.stat-page {
   letter-spacing: 0.04em;
 }
 
-#main-scroll .stat-copy {
+body.stat-page #main-scroll .stat-copy {
   max-width: 68ch;
 }
 
-#main-scroll .stat-note {
+body.stat-page #main-scroll .stat-note {
   max-width: 54ch;
   font-size: 12px;
   opacity: 0.62;
 }
 
-#main-scroll .stat-panel {
+body.stat-page #main-scroll .stat-panel {
   margin-top: 16px;
   padding: 14px;
   border: 1px solid rgba(30, 30, 30, 0.14);
   background: linear-gradient(180deg, rgba(30, 30, 30, 0.03), transparent);
 }
 
-#main-scroll .stat-panel-label {
+body.stat-page #main-scroll .stat-panel-label {
   margin-bottom: 12px;
   font-family: 'Diatype-Mono';
   font-size: 11px;
@@ -2051,32 +2102,32 @@ body.stat-page {
   opacity: 0.55;
 }
 
-#main-scroll .stat-chart {
+body.stat-page #main-scroll .stat-chart {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-#main-scroll .stat-town,
-#main-scroll .stat-cell-label,
-#main-scroll .stat-value,
-#main-scroll .stat-service-cell,
-#main-scroll .stat-range {
+body.stat-page #main-scroll .stat-town,
+body.stat-page #main-scroll .stat-cell-label,
+body.stat-page #main-scroll .stat-value,
+body.stat-page #main-scroll .stat-service-cell,
+body.stat-page #main-scroll .stat-range {
   font-family: 'Diatype-Mono';
 }
 
-#main-scroll .stat-town {
+body.stat-page #main-scroll .stat-town {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 12px;
 }
 
-#main-scroll .stat-value {
+body.stat-page #main-scroll .stat-value {
   font-size: 12px;
   letter-spacing: 0.02em;
 }
 
-#main-scroll .stat-cell-label {
+body.stat-page #main-scroll .stat-cell-label {
   display: block;
   margin-bottom: 6px;
   font-size: 11px;
@@ -2085,7 +2136,7 @@ body.stat-page {
   opacity: 0.55;
 }
 
-#main-scroll .stat-bar-track {
+body.stat-page #main-scroll .stat-bar-track {
   position: relative;
   width: 100%;
   height: 10px;
@@ -2093,24 +2144,24 @@ body.stat-page {
   overflow: hidden;
 }
 
-#main-scroll .stat-bar-fill {
+body.stat-page #main-scroll .stat-bar-fill {
   width: 0;
   height: 100%;
   background: var(--myBlack);
   transition: width 0.8s ease;
 }
 
-#main-scroll .stat-bar-fill--today {
+body.stat-page #main-scroll .stat-bar-fill--today {
   background: rgba(30, 30, 30, 0.55);
 }
 
-#main-scroll .stat-bar-fill--light {
+body.stat-page #main-scroll .stat-bar-fill--light {
   background: rgba(30, 30, 30, 0.36);
 }
 
-#main-scroll .stat-population-row,
-#main-scroll .stat-houses-row,
-#main-scroll .stat-continuity-row {
+body.stat-page #main-scroll .stat-population-row,
+body.stat-page #main-scroll .stat-houses-row,
+body.stat-page #main-scroll .stat-continuity-row {
   display: grid;
   gap: 12px;
   align-items: center;
@@ -2118,31 +2169,31 @@ body.stat-page {
   border-top: 1px solid rgba(30, 30, 30, 0.10);
 }
 
-#main-scroll .stat-population-row:first-child,
-#main-scroll .stat-houses-row:first-child,
-#main-scroll .stat-continuity-row:first-child {
+body.stat-page #main-scroll .stat-population-row:first-child,
+body.stat-page #main-scroll .stat-houses-row:first-child,
+body.stat-page #main-scroll .stat-continuity-row:first-child {
   border-top: 0;
   padding-top: 0;
 }
 
-#main-scroll .stat-population-row {
+body.stat-page #main-scroll .stat-population-row {
   grid-template-columns: 1.1fr 1fr 1fr;
 }
 
-#main-scroll .stat-population-cell,
-#main-scroll .stat-age-bar,
-#main-scroll .stat-birth-card,
-#main-scroll .stat-house-cell,
-#main-scroll .stat-continuity-value {
+body.stat-page #main-scroll .stat-population-cell,
+body.stat-page #main-scroll .stat-age-bar,
+body.stat-page #main-scroll .stat-birth-card,
+body.stat-page #main-scroll .stat-house-cell,
+body.stat-page #main-scroll .stat-continuity-value {
   min-width: 0;
 }
 
-#main-scroll .stat-population-cell {
+body.stat-page #main-scroll .stat-population-cell {
   display: grid;
   gap: 8px;
 }
 
-#main-scroll .stat-age-row {
+body.stat-page #main-scroll .stat-age-row {
   display: grid;
   grid-template-columns: 12ch 1fr;
   gap: 12px;
@@ -2150,30 +2201,30 @@ body.stat-page {
   border-top: 1px solid rgba(30, 30, 30, 0.10);
 }
 
-#main-scroll .stat-age-row:first-child {
+body.stat-page #main-scroll .stat-age-row:first-child {
   border-top: 0;
   padding-top: 0;
 }
 
-#main-scroll .stat-age-bars {
+body.stat-page #main-scroll .stat-age-bars {
   display: grid;
   gap: 10px;
 }
 
-#main-scroll .stat-age-bar {
+body.stat-page #main-scroll .stat-age-bar {
   display: grid;
   grid-template-columns: 6ch 1fr 6ch;
   gap: 10px;
   align-items: center;
 }
 
-#main-scroll .stat-births-grid {
+body.stat-page #main-scroll .stat-births-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 10px;
 }
 
-#main-scroll .stat-birth-card {
+body.stat-page #main-scroll .stat-birth-card {
   display: grid;
   gap: 10px;
   padding: 12px;
@@ -2181,35 +2232,35 @@ body.stat-page {
   background: rgba(30, 30, 30, 0.02);
 }
 
-#main-scroll .stat-birth-values {
+body.stat-page #main-scroll .stat-birth-values {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
-#main-scroll .stat-house-row {
+body.stat-page #main-scroll .stat-house-row {
   grid-template-columns: 1.15fr repeat(3, 1fr);
 }
 
-#main-scroll .stat-house-cell {
+body.stat-page #main-scroll .stat-house-cell {
   display: grid;
   gap: 8px;
 }
 
-#main-scroll .stat-services-table {
+body.stat-page #main-scroll .stat-services-table {
   display: grid;
   gap: 8px;
 }
 
-#main-scroll .stat-services-row,
-#main-scroll .stat-services-head {
+body.stat-page #main-scroll .stat-services-row,
+body.stat-page #main-scroll .stat-services-head {
   display: grid;
   grid-template-columns: 1.1fr repeat(5, 1fr);
   gap: 8px;
   align-items: stretch;
 }
 
-#main-scroll .stat-services-head {
+body.stat-page #main-scroll .stat-services-head {
   padding-bottom: 4px;
   font-family: 'Diatype-Mono';
   font-size: 11px;
@@ -2218,7 +2269,7 @@ body.stat-page {
   opacity: 0.55;
 }
 
-#main-scroll .stat-service-cell {
+body.stat-page #main-scroll .stat-service-cell {
   min-height: 36px;
   padding: 8px 10px;
   border: 1px solid rgba(30, 30, 30, 0.12);
@@ -2229,32 +2280,32 @@ body.stat-page {
   align-items: center;
 }
 
-#main-scroll .stat-service-cell--on,
-#main-scroll .stat-service-cell--partial {
+body.stat-page #main-scroll .stat-service-cell--on,
+body.stat-page #main-scroll .stat-service-cell--partial {
   background: rgba(30, 30, 30, 0.04);
 }
 
-#main-scroll .stat-service-cell--off {
+body.stat-page #main-scroll .stat-service-cell--off {
   background: rgba(30, 30, 30, 0.10);
 }
 
-#main-scroll .stat-service-cell--empty {
+body.stat-page #main-scroll .stat-service-cell--empty {
   background: transparent;
   opacity: 0.45;
 }
 
-#main-scroll .stat-continuity-row {
+body.stat-page #main-scroll .stat-continuity-row {
   grid-template-columns: 1.1fr 1.7fr 14ch;
 }
 
-#main-scroll .stat-range {
+body.stat-page #main-scroll .stat-range {
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.62;
 }
 
-#main-scroll .stat-legend {
+body.stat-page #main-scroll .stat-legend {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -2266,22 +2317,22 @@ body.stat-page {
   opacity: 0.55;
 }
 
-#main-scroll .stat-legend span {
+body.stat-page #main-scroll .stat-legend span {
   padding: 4px 8px;
   border: 1px solid rgba(30, 30, 30, 0.12);
 }
 
 @media (max-width: 900px) {
-  #main-scroll .stat-population-row,
-  #main-scroll .stat-house-row,
-  #main-scroll .stat-continuity-row,
-  #main-scroll .stat-services-row,
-  #main-scroll .stat-services-head,
-  #main-scroll .stat-age-row {
+  body.stat-page #main-scroll .stat-population-row,
+  body.stat-page #main-scroll .stat-house-row,
+  body.stat-page #main-scroll .stat-continuity-row,
+  body.stat-page #main-scroll .stat-services-row,
+  body.stat-page #main-scroll .stat-services-head,
+  body.stat-page #main-scroll .stat-age-row {
     grid-template-columns: 1fr;
   }
 
-  #main-scroll .stat-age-bar {
+  body.stat-page #main-scroll .stat-age-bar {
     grid-template-columns: 1fr;
   }
 }
@@ -2530,4 +2581,587 @@ body.home-page:has(#marker-modal.open) .home-brand {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* =========================
+   READABILITY GRADIENT UNDER STICKY SECTION/FILTER BARS
+   Keeps the sticky section links readable while content scrolls underneath.
+========================= */
+
+body.index-page .archive-sticky,
+body.content-scroll-page .story-sticky {
+  position: sticky;
+  top: 0;
+  height: 60px;
+  isolation: isolate;
+  background: linear-gradient(
+    to bottom,
+    var(--myWhite, #FCFCFC) 0%,
+    rgba(252, 252, 252, 0.5) 80%,
+    rgba(252, 252, 252, 0.3) 90%,
+    rgba(252, 252, 252, 0) 100%
+  );
+}
+
+body.index-page .archive-sticky::after,
+body.content-scroll-page .story-sticky::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.archive-page #archive-rows > .archive-filter-column-year {
+  max-height: calc(7 * 1.2em);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 6px;
+  padding-bottom: 20px;
+}
+
+/* ===================================
+   LAYOUT STORIA + STAT
+   Layout tipo pagina editoriale
+   Non tocca header, sidebar links o titolo/nav
+=================================== */
+
+body.story-page #main-scroll > .story-content-grid,
+body.stat-page #main-scroll > .stat-content-grid {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  column-gap: var(--site-gap, 10px) !important;
+  align-items: start;
+}
+
+/* Elementi a tutta larghezza */
+body.story-page #main-scroll > .story-content-grid > .col-span-2,
+body.stat-page #main-scroll > .stat-content-grid > .col-span-2 {
+  grid-column: 1 / -1 !important;
+}
+
+/* Elementi a metà pagina */
+body.story-page #main-scroll > .story-content-grid > .col-span-1,
+body.stat-page #main-scroll > .stat-content-grid > .col-span-1 {
+  grid-column: span 3 / span 3 !important;
+}
+
+/* Immagini principali */
+body.story-page #main-scroll > .story-content-grid img,
+body.stat-page #main-scroll > .stat-content-grid img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Caption immagini */
+body.story-page #main-scroll .content-caption,
+body.stat-page #main-scroll .content-caption {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-myText, inherit);
+  font-size: 13px;
+  line-height: 1.15;
+  text-align: left;
+}
+
+/* Se nel file hai caption con classe col-span-1 italic */
+body.story-page #main-scroll > .story-content-grid > .col-span-1.italic,
+body.stat-page #main-scroll > .stat-content-grid > .col-span-1.italic {
+  grid-column: 1 / -1 !important;
+  margin-left: 0 !important;
+  text-align: left !important;
+}
+
+/* Titoli interni grandi */
+body.story-page #main-scroll > .story-content-grid > .font-myTitle.col-span-2,
+body.stat-page #main-scroll > .stat-content-grid > .font-myTitle.col-span-2 {
+  grid-column: 1 / -1 !important;
+  max-width: 70ch;
+}
+
+/* Citazioni */
+body.story-page #main-scroll .content-quote,
+body.stat-page #main-scroll .content-quote {
+  grid-column: 1 / -1 !important;
+  max-width: 70ch !important;
+  margin: 10px auto 0 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Fonte della citazione */
+body.story-page #main-scroll .content-quote cite,
+body.stat-page #main-scroll .content-quote cite {
+  display: block;
+  
+}
+
+/* Compatibilità: se la citazione è ancora un div vecchio senza content-quote */
+body.story-page #main-scroll > .story-content-grid > .col-span-2.pt-30px.space-y-30px.font-myTitle,
+body.stat-page #main-scroll > .stat-content-grid > .col-span-2.pt-30px.space-y-30px.font-myTitle {
+  grid-column: 1 / -1 !important;
+  max-width: 70ch !important;
+  margin: 10px auto 0 0 !important;
+  padding-top: 0 !important;
+  font-family: var(--font-myTitle, inherit);
+  font-size: clamp(24px, 3.2vw, 42px);
+  line-height: .95;
+  text-transform: uppercase;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  body.story-page #main-scroll > .story-content-grid,
+  body.stat-page #main-scroll > .stat-content-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.story-page #main-scroll > .story-content-grid > .col-span-1,
+  body.stat-page #main-scroll > .stat-content-grid > .col-span-1,
+  body.story-page #main-scroll > .story-content-grid > .col-span-2,
+  body.stat-page #main-scroll > .stat-content-grid > .col-span-2 {
+    grid-column: 1 / -1 !important;
+  }
+}
+/* ===================================
+   FIX ANCHOR SEZIONI
+   Evita che #sezione_1, #sezione_2 ecc.
+   occupino celle della griglia
+=================================== */
+
+body.story-page #main-scroll > .story-content-grid > div[id^="sezione_"] {
+  grid-column: 1 / -1 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+
+/* ===================================
+   SEZIONI 2 / 4 / 5
+   Layout immagine a sinistra + testo a destra
+=================================== */
+
+body.story-page #main-scroll > .story-content-grid > .story-split-media {
+  grid-column: 1 / span 3 !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  justify-self: stretch !important;
+  align-self: start !important;
+}
+
+body.story-page #main-scroll > .story-content-grid > .story-split-text {
+  grid-column: 4 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  align-self: start !important;
+}
+
+body.story-page #main-scroll > .story-content-grid > .story-split-media img {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  height: auto !important;
+  margin: 0 !important;
+  object-fit: cover;
+}
+
+body.story-page #main-scroll > .story-content-grid > .story-split-media .content-caption {
+  margin-top: 6px !important;
+  max-width: none !important;
+}
+
+
+/* Responsive */
+@media (max-width: 900px) {
+  body.story-page #main-scroll > .story-content-grid > .story-split-media,
+  body.story-page #main-scroll > .story-content-grid > .story-split-text {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+body.story-page #main-scroll > .story-content-grid > .story-split-text-left {
+  grid-column: 1 / span 3 !important;
+}
+
+body.story-page #main-scroll > .story-content-grid > .story-split-media-right {
+  grid-column: 4 / -1 !important;
+}
+
+cite {
+  font-style: normal;
+}
+
+/* ===================================
+   STAT.HTML - LAYOUT EDITORIALE
+   Stesso sistema usato in storia.html.
+   Non modifica header, sticky nav, sidebar links o footer.
+=================================== */
+
+/* Anche gli anchor di stat non devono occupare celle della griglia */
+body.stat-page #main-scroll > .stat-content-grid > div[id^="sezione_"] {
+  grid-column: 1 / -1 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Titoli sezione: sempre a tutta larghezza, come nella storia */
+body.stat-page #main-scroll > .stat-content-grid > .stat-section-title {
+  grid-column: 1 / -1 !important;
+  max-width: 70ch !important;
+  margin: 0 auto 0 0 !important;
+}
+
+/* Layout 1: sezioni 1, 3, 6 e sezioni finali.
+   Titolo sopra, testo in due colonne, grafico a tutta larghezza sotto. */
+body.stat-page #main-scroll > .stat-content-grid > .stat-layout-column {
+  grid-column: span 3 / span 3 !important;
+  width: 100% !important;
+  max-width: 55ch !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  align-self: start !important;
+}
+
+body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin-top: 20px !important;
+  padding: 0 !important;
+}
+
+/* Layout 2: sezioni 2, 4, 5.
+   Grafico/visualizzazione a sinistra, testo a destra. */
+body.stat-page #main-scroll > .stat-content-grid > .stat-split-media {
+  grid-column: 1 / span 3 !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  justify-self: stretch !important;
+  align-self: start !important;
+}
+
+body.stat-page #main-scroll > .stat-content-grid > .stat-split-text {
+  grid-column: 4 / -1 !important;
+  width: 100% !important;
+  max-width: 55ch !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  align-self: start !important;
+}
+
+/* I grafici SVG devono riempire la loro colonna, non restare centrati o stretti */
+body.stat-page #main-scroll > .stat-content-grid > .stat-split-media svg,
+body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full svg,
+body.stat-page #main-scroll > .stat-content-grid > .stat-split-media .population-chart-svg,
+body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full .population-chart-svg {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+  margin: 0 !important;
+}
+
+/* Sezione case: il grafico generato via JS deve comportarsi come media */
+body.stat-page #main-scroll > .stat-content-grid > #houses-chart.stat-split-media {
+  min-height: 260px;
+}
+
+/* Le linee divisorie restano a tutta larghezza */
+body.stat-page #main-scroll > .stat-content-grid > .h-px.bg-myBlack {
+  grid-column: 1 / -1 !important;
+}
+
+@media (max-width: 900px) {
+  body.stat-page #main-scroll > .stat-content-grid > .stat-layout-column,
+  body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full,
+  body.stat-page #main-scroll > .stat-content-grid > .stat-split-media,
+  body.stat-page #main-scroll > .stat-content-grid > .stat-split-text {
+    grid-column: 1 / -1 !important;
+    max-width: none !important;
+  }
+}
+
+
+/* ===================================
+   STAT.HTML - LAYOUT UNICO + ANIMAZIONI MIRATE
+   Titolo -> schema grande -> testi sotto a due colonne.
+=================================== */
+
+body.stat-page #main-scroll > .stat-content-grid > div[id^="sezione_"] {
+  grid-column: 1 / -1 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+body.stat-page #main-scroll > .stat-content-grid > .stat-section-title {
+  grid-column: 1 / -1 !important;
+  max-width: 70ch !important;
+  margin: 0 auto 0 0 !important;
+}
+
+body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full,
+body.stat-page #main-scroll > .stat-content-grid > .stat-animate-chart {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 20px 0 0 0 !important;
+  padding: 0 !important;
+  justify-self: stretch !important;
+}
+
+body.stat-page #main-scroll > .stat-content-grid > .stat-layout-column {
+  grid-column: span 3 / span 3 !important;
+  width: 100% !important;
+  max-width: 55ch !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  align-self: start !important;
+}
+
+body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full svg,
+body.stat-page #main-scroll > .stat-content-grid > .stat-animate-chart svg,
+body.stat-page #main-scroll > .stat-content-grid > .population-chart-wrap svg,
+body.stat-page #main-scroll > .stat-content-grid > .population-chart-svg {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+  margin: 0 !important;
+}
+
+body.stat-page #main-scroll > .stat-content-grid > .h-px.bg-myBlack {
+  grid-column: 1 / -1 !important;
+}
+
+body.stat-page .stat-animate-chart svg .line,
+body.stat-page .stat-animate-chart svg .value,
+body.stat-page .stat-animate-chart svg rect,
+body.stat-page .stat-animate-chart svg text {
+  will-change: stroke-dashoffset, width, height, y, x2, opacity;
+}
+
+body.stat-page .stat-decline-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(252, 252, 252, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+body.stat-page .stat-decline-modal.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body.stat-page .stat-decline-modal__box {
+  position: relative;
+  width: min(980px, calc(100vw - 40px));
+  max-width: none;
+  padding: 26px 58px 26px 26px;
+  border: 1px solid var(--myBlack, #1E1E1E);
+  background: var(--myWhite, #FCFCFC);
+  color: var(--myBlack, #1E1E1E);
+  box-shadow: 0 18px 55px rgba(30, 30, 30, 0.10);
+}
+
+body.stat-page .stat-decline-modal__box p {
+  margin: 0;
+  max-width: none !important;
+  font-family: 'Diatype-Mono';
+  font-size: var(--title-size, 25px);
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+body.stat-page .stat-decline-modal__close {
+  position: absolute;
+  z-index: 2;
+  top: 8px;
+  right: 10px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-family: 'Diatype-Mono';
+  font-size: 24px;
+  line-height: 1;
+}
+
+
+@media (max-width: 760px) {
+  body.stat-page .stat-decline-modal__box {
+    width: calc(100vw - 24px);
+    padding: 24px 46px 24px 20px;
+  }
+
+  body.stat-page .stat-decline-modal__box p {
+    white-space: normal;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  body.stat-page #main-scroll > .stat-content-grid > .stat-layout-column,
+  body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full,
+  body.stat-page #main-scroll > .stat-content-grid > .stat-animate-chart {
+    grid-column: 1 / -1 !important;
+    max-width: none !important;
+  }
+}
+
+
+/* ===================================
+   FIX POPUP STAT + GRAFICO 1
+=================================== */
+body.stat-page .stat-decline-modal {
+  z-index: 2147483647 !important;
+  pointer-events: none !important;
+}
+
+body.stat-page .stat-decline-modal.is-visible {
+  pointer-events: auto !important;
+}
+
+body.stat-page .stat-decline-modal__box {
+  width: min(1220px, calc(100vw - 80px)) !important;
+  pointer-events: auto !important;
+}
+
+body.stat-page .stat-decline-modal__close {
+  width: 44px !important;
+  height: 44px !important;
+  top: 0 !important;
+  right: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: auto !important;
+  z-index: 2147483647 !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+}
+
+body.stat-page .stat-decline-modal__box p {
+  white-space: nowrap !important;
+}
+
+body.stat-page [data-stat-chart="line-build"] svg polyline.line,
+body.stat-page [data-stat-chart="line-build"] svg path.line {
+  stroke-dasharray: none !important;
+  stroke-dashoffset: 0 !important;
+}
+
+@media (max-width: 760px) {
+  body.stat-page .stat-decline-modal__box {
+    width: calc(100vw - 24px) !important;
+  }
+  body.stat-page .stat-decline-modal__box p {
+    white-space: normal !important;
+  }
+}
+
+
+/* ===================================
+   FIX DEFINITIVO POPUP STAT
+   Chiusura X sopra ogni layer e display controllato
+=================================== */
+body.stat-page .stat-decline-modal {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: 2147483647 !important;
+}
+
+body.stat-page .stat-decline-modal.is-visible {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+body.stat-page .stat-decline-modal__box {
+  position: relative !important;
+  width: 800px !important;
+  pointer-events: auto !important;
+  z-index: 2147483646 !important;
+}
+
+body.stat-page .stat-decline-modal__close {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 64px !important;
+  height: 64px !important;
+  min-width: 64px !important;
+  min-height: 64px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--myBlack, #1E1E1E) !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  z-index: 2147483647 !important;
+  font-family: 'Diatype-Mono' !important;
+  font-size: 24px !important;
+  line-height: 1 !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+}
+
+body.stat-page .stat-decline-modal__close:hover {
+  opacity: .3 !important;
+}
+
+body.stat-page .stat-decline-modal__box p {
+  white-space: nowrap !important;
+  padding-right: 40px !important;
+  text-align: center !important;
+}
+
+@media (max-width: 760px) {
+  body.stat-page .stat-decline-modal__box {
+    width: calc(100vw - 24px) !important;
+  }
+
+  body.stat-page .stat-decline-modal__box p {
+    white-space: normal !important;
+  }
+}
+
+body.stat-page #main-scroll svg {
+  display: block;
+  width: 100%;
+  height: auto;
 }

@@ -4,8 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Archivio</title>
+
     <link rel="stylesheet" href="style.css" />
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
     <style type="text/tailwindcss">
       @theme {
         --color-myBlack: #090909;
@@ -15,63 +17,98 @@
         --spacing-20px: 20px;
       }
     </style>
+
     <style>
-      /* Uniform pink background like landing and transparent header */
-      body { background: #f5d7df; color: #090909; }
-      header { background: transparent; color: #090909; }
+      body {
+        background: #f5d7df;
+        color: #090909;
+      }
     </style>
   </head>
-  <body>
 
-  <!-- Dark mode styles (navy) -->
-  <style>
-  :root{--dm-bg:#071426;--dm-surface:#08192b;--dm-text:#e6f3ff;--dm-muted:#9fb0c9;--dm-accent:#4ea8ff}
-  body.theme-dark{background:var(--dm-bg)!important;color:var(--dm-text)!important}
-  body.theme-dark a{color:var(--dm-accent)!important}
-  .theme-toggle{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:var(--dm-surface);display:flex;align-items:center;justify-content:center;z-index:1200;cursor:pointer}
-  .theme-toggle svg{width:20px;height:20px;fill:currentColor}
-  .theme-toggle .moon{display:none}
-  body.theme-dark .theme-toggle .sun{display:none}
-  body.theme-dark .theme-toggle .moon{display:block}
-  </style>
-    <header>
-      <span onclick="closeExploreMode();" class="font-myTitle cursor-pointer">De veciariìe</span>
-      <div class="flex gap-20px">
-        <span id="nav-cerca-coltelli" onclick="openExploreMode()" 
-        class="font-myTitle cursor-pointer opacity-20 hover:opacity-100 transition-opacity" >Cerca coltelli</span>
-        <a href="storia.html"
-        class="font-myTitle cursor-pointer">Storia</a>
+  <header id="site-header" class="home-mode">
+  <span
+    id="nav-home"
+    onclick="closeExploreMode();"
+    class="font-myTitle nav-link"
+  >
+    De veciariìe
+  </span>
+
+  <div class="nav-group">
+    <span
+      id="nav-cerca-coltelli"
+      onclick="openExploreMode()"
+      class="font-myTitle nav-link"
+    >
+      Cerca coltelli
+    </span>
+
+    <a
+      href="storia.html"
+      class="font-myTitle nav-link"
+    >
+      Storia
+      </a>
       </div>
     </header>
-    
-    <div class="mainLayout fixed top-0 left-0 w-screen h-screen overflow-y-scroll
-    grid grid-cols-15 gap-10px">
-      <div class="descriptionAndFilters col-span-3 h-full flex flex-col justify-between pb-10px">
-        <div class="description flex flex-col gap-10px">
-          
-        </div>
 
-        <!-- Explore mode panel -->
+    <div
+      class="mainLayout fixed top-0 left-0 w-screen h-screen overflow-y-scroll grid grid-cols-15 gap-10px"
+    >
+      <div class="descriptionAndFilters col-span-3 h-full flex flex-col justify-between pb-10px">
+        <div class="description flex flex-col gap-10px"></div>
+
         <div id="explore-description-panel" class="explore-description-panel">
-          <button onclick="closeExploreMode()" class="explore-close-btn">✕ Torna all'archivio</button>
-          <video id="explore-webcam" class="explore-webcam" autoplay muted playsinline></video>
+          <button onclick="closeExploreMode()" class="explore-close-btn">
+            ✕ Torna all'archivio
+          </button>
+
+          <video
+            id="explore-webcam"
+            class="explore-webcam"
+            autoplay
+            muted
+            playsinline
+          ></video>
+
           <div class="explore-description disossare">
             <p>Disossare</p>
-            <p>Coltello che serve a separare la carne dall’osso con precisione, senza sprechi. Ha lama stretta, appuntita e resistente, spesso leggermente curva. Deve entrare bene nelle giunture e seguire l’osso.</p>
+            <p>
+              Coltello che serve a separare la carne dall’osso con precisione,
+              senza sprechi. Ha lama stretta, appuntita e resistente, spesso
+              leggermente curva. Deve entrare bene nelle giunture e seguire
+              l’osso.
+            </p>
           </div>
-          <div class="explore-description tagliare">
+
+          <div class="explore-description tagliare-e-colpire">
             <p>Tagliare e Colpire</p>
-            <p>Coltello che serve per tagli netti e decisi. Divide porzioni consistenti, rompe piccole ossa e prepara i pezzi da vendita con colpi netti e controllati sul ceppo. Ha una lama larga e un manico robusto.</p>
+            <p>
+              Coltello che serve per tagli netti e decisi. Divide porzioni
+              consistenti, rompe piccole ossa e prepara i pezzi da vendita con
+              colpi netti e controllati sul ceppo. Ha una lama larga e un manico
+              robusto.
+            </p>
           </div>
+
           <div class="explore-description tagliare-e-affettare">
             <p>Tagliare e Affettare</p>
-            <p>Coltello per lavorazioni precise e pulite. Affetta porzioni sottili, ritaglia tagli di carne e rifinisce i bordi con controllo, seguendo le linee naturali del pezzo. Ha una lama di media lunghezza, non troppo sottile.</p>
+            <p>
+              Coltello per lavorazioni precise e pulite. Affetta porzioni
+              sottili, ritaglia tagli di carne e rifinisce i bordi con
+              controllo, seguendo le linee naturali del pezzo. Ha una lama di
+              media lunghezza, non troppo sottile.
+            </p>
           </div>
         </div>
 
-        <div id="filters-container" 
-        class="filters flex flex-col gap-12 mt-auto h-fit"></div>
+        <div
+          id="filters-container"
+          class="filters flex flex-col gap-12 mt-auto h-fit"
+        ></div>
       </div>
+
       <main id="grid" class="col-span-12 wireframe">
         <div class="myColumn column-1"></div>
         <div class="myColumn column-2"></div>
@@ -85,17 +122,15 @@
       <button class="lb-close" id="lb-close">✕</button>
       <button class="lb-prev" id="lb-prev">←</button>
       <button class="lb-next" id="lb-next">→</button>
+
       <div class="lb-content">
-        <img class="lb-img" id="lb-img" src="" alt="">
+        <img class="lb-img" id="lb-img" src="" alt="" />
+
         <div class="lb-info">
           <p class="lb-description" id="lb-description"></p>
-          <!-- <span class="lb-id" id="lb-id"></span>
-          <div class="lb-tags" id="lb-tags"></div> -->
         </div>
       </div>
     </div>
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
@@ -104,20 +139,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
     <script src="somma-lm.js"></script>
     <script src="script.js"></script>
-  <!-- Dark mode toggle script -->
-  <script>
-  (function(){
-    const storageKey='site-theme';
-    function apply(theme){ if(theme==='dark') document.body.classList.add('theme-dark'); else document.body.classList.remove('theme-dark'); }
-    try{ const stored=localStorage.getItem(storageKey); if(stored) apply(stored); else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) apply('dark'); }catch(e){}
-    if(!document.getElementById('theme-toggle')){
-      const btn=document.createElement('button'); btn.id='theme-toggle'; btn.className='theme-toggle'; btn.setAttribute('aria-label','Toggle theme');
-      btn.innerHTML='<svg viewBox="0 0 24 24" class="sun"><path d="M6.76 4.84l-1.8-1.79L3.17 4.84l1.79 1.8 1.8-1.8zM1 13h3v-2H1v2zm10-9h2V1h-2v3zm7.03 2.05l1.79-1.8-1.79-1.79-1.8 1.79 1.8 1.79zM17 13h3v-2h-3v2zM12 19a7 7 0 100-14 7 7 0 000 14zm4.24-2.76l1.8 1.79 1.79-1.79-1.79-1.8-1.8 1.8zM4.21 19.79l1.79-1.8-1.79-1.79-1.8 1.79 1.8 1.8zM12 23h2v-3h-2v3z"/></svg><svg viewBox="0 0 24 24" class="moon"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>';
-      document.body.appendChild(btn);
-      btn.addEventListener('click', function(){ const isDark=document.body.classList.toggle('theme-dark'); try{localStorage.setItem(storageKey,isDark?'dark':'light');}catch(e){}; });
-    }
-  })();
-  </script>
-  <script src="/dark-mode-loader.js"></script>
   </body>
 </html>

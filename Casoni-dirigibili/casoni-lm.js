@@ -2,85 +2,128 @@ let exploreDetector = null;
 let exploreIsDetecting = false;
 let exploreStream = null;
 let exploreModelLoading = false;
+let explorePackageIndex = -1;
 
 let images_left = ['red', 'green', 'blue', 'yellow', 'cyan'];
 let images_right = ['magenta', 'orange', 'purple', 'brown', 'pink'];
-const exploreAirshipImage = 'img/dirigibili/dirigibile (16).png';
-const exploreRelittoImage = 'img/relitti/relitto (4).png';
-const exploreRelittoImage7 = 'img/relitti/relitto (7).png';
-const exploreRelittoImage21 = 'img/relitti/relitto (21).png';
-const exploreDirigibileImage9 = 'img/dirigibili/dirigibile (9).png';
-const exploreDirigibileImage19 = 'img/dirigibili/dirigibile (19).png';
-const exploreDirigibileImage1 = 'img/dirigibili/dirigibile (1).png';
-const exploreDirigibileImage17 = 'img/dirigibili/dirigibile (17).png';
-const exploreDirigibileImage18 = 'img/dirigibili/dirigibile (18).png';
-const exploreDirigibileImage16 = 'img/dirigibili/dirigibile (16).png';
 
-const exploreArtIds = [
-  'explore-art-dirigibile-19',
-  'explore-art-dirigibile-1',
-  'explore-art-dirigibile-2',
-  'explore-art-dirigibile-4',
-  'explore-art-dirigibile-10',
-  'explore-art-dirigibile-17',
-  'explore-art-dirigibile-18',
-  'explore-art-dirigibile-16',
-  'explore-art-dirigibile-16',
-  'explore-art-relitto-4',
-  'explore-art-relitto-7',
-  'explore-art-relitto-21',
-  'explore-art-dirigibile-9',
+// Each package has 5 slots per hand mapped to angle ranges:
+// [0-30, 31-50, 51-70, 71-90, 91-180]
+const explorePackages = [
+  {
+    left: [
+      'explore-art-dirigibile-19',
+      'explore-art-dirigibile-1',
+      'explore-art-dirigibile-17',
+      'explore-art-dirigibile-18',
+      'explore-art-dirigibile-100',
+    ],
+    right: [
+      'explore-art-dirigibile-16',
+      'explore-art-relitto-4',
+      'explore-art-relitto-7',
+      'explore-art-relitto-21',
+      'explore-art-dirigibile-9',
+    ],
+  },
+  {
+    left: [
+      'explore-art-dirigibile-20',
+      'explore-art-dirigibile-2',
+      'explore-art-dirigibile-11',
+      'explore-art-dirigibile-12',
+      'explore-art-explore-2',
+    ],
+    right: [
+      'explore-art-explore-5',
+      'explore-art-dirigibile-22',
+      'explore-art-dirigibile-7',
+      'explore-art-relitto-3',
+      'explore-art-dirigibile-3',
+    ],
+  },
+  {
+    left: [
+      'explore-art-explore-1',
+      'explore-art-dirigibile-21',
+      'explore-art-relitto-11',
+      'explore-art-dirigibile-6',
+      'explore-art-explore-4',
+    ],
+    right: [
+      'explore-art-explore-6',
+      'explore-art-dirigibile-4',
+      'explore-art-dirigibile-5',
+      'explore-art-relitto-2',
+      'explore-art-dirigibile-10',
+    ],
+  },
 ];
-
-const exploreLeftAirshipOptions = [
-  'explore-art-dirigibile-1',
-  'explore-art-dirigibile-2',
-  'explore-art-dirigibile-4',
-  'explore-art-dirigibile-10',
-];
-
-let exploreLeftAirshipCurrentId = null;
-let exploreLeftAirshipLastId = null;
-let exploreLeftAirshipWasActive = false;
 
 function setExploreArtVisible(activeId) {
-  exploreArtIds.forEach(id => {
-    const img = document.getElementById(id);
-    if (img) img.style.opacity = id === activeId ? '1' : '0';
+  const exploreSquare = document.getElementById('explore-square');
+  if (!exploreSquare) return;
+
+  const allImages = exploreSquare.querySelectorAll('img[id^="explore-art-"]');
+  allImages.forEach(img => {
+    img.style.opacity = img.id === activeId ? '1' : '0';
   });
 }
 
-function pickExploreAirshipId(previousId) {
-  const candidates = exploreLeftAirshipOptions.filter(id => id !== previousId);
-  const pool = candidates.length > 0 ? candidates : exploreLeftAirshipOptions;
-  return pool[Math.floor(Math.random() * pool.length)];
+// UI helpers for package selector buttons
+function updatePackButtonsUI() {
+  const selector = document.getElementById('explore-pack-selector');
+  const buttons = document.querySelectorAll('.explore-pack-btn');
+
+  if (selector) {
+    selector.classList.toggle('has-active-pack', explorePackageIndex >= 0);
+  }
+
+  buttons.forEach((btn, index) => {
+    const isActive = index === explorePackageIndex;
+
+    btn.classList.toggle('active', isActive);
+    btn.style.opacity = isActive ? '1' : '0.4';
+  });
+}
+
+function setExplorePackage(idx) {
+  const i = Number(idx);
+  if (isNaN(i) || i < 0 || i >= explorePackages.length) return;
+  explorePackageIndex = i;
+  setExploreArtVisible(null);
+  const square = document.getElementById('explore-square');
+  if (square) {
+    square.style.backgroundColor = '#333';
+    square.style.backgroundImage = 'none';
+  }
+  updatePackButtonsUI();
 }
 
 function getExploreArtLabelById(id) {
-  switch (id) {
-    case 'explore-art-dirigibile-19': return 'dirigibile (19)';
-    case 'explore-art-dirigibile-1': return 'airship (1)';
-    case 'explore-art-dirigibile-2': return 'airship (2)';
-    case 'explore-art-dirigibile-4': return 'airship (4)';
-    case 'explore-art-dirigibile-10': return 'airship (10)';
-    case 'explore-art-dirigibile-17': return 'dirigibile (17)';
-    case 'explore-art-dirigibile-18': return 'dirigibile (18)';
-    case 'explore-art-dirigibile-16': return 'dirigibile (16)';
-    case 'explore-art-dirigibile-16': return 'airship (16)';
-    case 'explore-art-relitto-4': return 'relitto (4)';
-    case 'explore-art-relitto-7': return 'relitto (7)';
-    case 'explore-art-relitto-21': return 'relitto (21)';
-    case 'explore-art-dirigibile-9': return 'dirigibile (9)';
-    default: return '';
-  }
+  const img = document.getElementById(id);
+  return img ? (img.alt || '') : '';
+}
+
+function getAngleSegmentIndex(angle) {
+  if (angle <= 30) return 0;
+  if (angle <= 50) return 1;
+  if (angle <= 70) return 2;
+  if (angle <= 90) return 3;
+  return 4;
 }
 
 function openExploreModal() {
   const modal = document.getElementById('explore-modal');
+  explorePackageIndex = (explorePackageIndex + 1) % explorePackages.length;
   setExploreArtVisible(null);
-  exploreLeftAirshipCurrentId = null;
-  exploreLeftAirshipLastId = null;
-  exploreLeftAirshipWasActive = false;
+  // ensure the square shows the default gray background each time Explore opens
+  const square = document.getElementById('explore-square');
+  if (square) {
+    square.style.backgroundColor = '#333';
+    square.style.backgroundImage = 'none';
+  }
+  updatePackButtonsUI();
   modal.style.display = 'flex';
   initExplore();
 }
@@ -90,7 +133,6 @@ function closeExploreModal() {
   modal.style.display = 'none';
   exploreIsDetecting = false;
   setExploreArtVisible(null);
-  exploreLeftAirshipWasActive = false;
   if (exploreStream) {
     exploreStream.getTracks().forEach(t => t.stop());
     exploreStream = null;
@@ -164,19 +206,7 @@ async function detectExploreHands() {
       const mcp   = hand.keypoints[9];  // Middle MCP
       // Angle from vertical: 0° = hand pointing straight up, 180° = pointing down
       const angle = Math.abs(Math.atan2(mcp.x - wrist.x, -(mcp.y - wrist.y)) * 180 / Math.PI);
-      // Map angle into explicit ranges: 0–30, 31–50, 51–70, 71–90, 91–180
-      let segmentIndex;
-      if (angle <= 30) {
-        segmentIndex = 0;
-      } else if (angle <= 50) {
-        segmentIndex = 1;
-      } else if (angle <= 70) {
-        segmentIndex = 2;
-      } else if (angle <= 90) {
-        segmentIndex = 3;
-      } else {
-        segmentIndex = 4;
-      }
+      const segmentIndex = getAngleSegmentIndex(angle);
       const handednessRaw = hand.handedness;
       const handedness = Array.isArray(handednessRaw)
         ? (handednessRaw[0] && handednessRaw[0].label) || 'Right'
@@ -187,83 +217,45 @@ async function detectExploreHands() {
       const isLeftHand = String(handedness).toLowerCase() === 'left';
       const colorArray = isLeftHand ? images_left : images_right;
       const color = colorArray[segmentIndex];
-      const showDirigibile19 = isLeftHand && segmentIndex === 0;
-      const showLeftAirshipRange = isLeftHand && segmentIndex === 1;
-      const showDirigibile17 = isLeftHand && segmentIndex === 2;
-      const showDirigibile18 = isLeftHand && segmentIndex === 3;
-      const showDirigibile16 = isLeftHand && segmentIndex === 4;
-      const showAirship = isRightHand && segmentIndex === 0;
-      const showRelitto = isRightHand && segmentIndex === 1;
-      const showRelitto7 = isRightHand && segmentIndex === 2;
-      const showRelitto21 = isRightHand && segmentIndex === 3;
-      const showDirigibile9 = isRightHand && segmentIndex === 4;
-      if (!showLeftAirshipRange && exploreLeftAirshipWasActive && exploreLeftAirshipCurrentId) {
-        exploreLeftAirshipLastId = exploreLeftAirshipCurrentId;
-      }
-      if (!showLeftAirshipRange) {
-        exploreLeftAirshipWasActive = false;
-        exploreLeftAirshipCurrentId = null;
-      }
-      if (showDirigibile19) {
+      const activePackage = explorePackages[explorePackageIndex] || explorePackages[0];
+      const packageSide = isLeftHand ? 'left' : (isRightHand ? 'right' : null);
+      const activeArtId = packageSide ? activePackage[packageSide][segmentIndex] : null;
+
+      if (activeArtId) {
         square.style.backgroundColor = 'transparent';
         square.style.backgroundImage = 'none';
-        setExploreArtVisible('explore-art-dirigibile-19');
-      } else if (showLeftAirshipRange) {
-        // Always show only 'airship (1)' when left hand angle is between 31° and 50°
-        exploreLeftAirshipCurrentId = 'explore-art-dirigibile-1';
-        exploreLeftAirshipWasActive = true;
-        square.style.backgroundColor = 'transparent';
-        square.style.backgroundImage = 'none';
-        setExploreArtVisible('explore-art-dirigibile-1');
-      } else if (showDirigibile17) {
-        square.style.backgroundColor = 'transparent';
-        square.style.backgroundImage = 'none';
-        setExploreArtVisible('explore-art-dirigibile-17');
-      } else if (showDirigibile18) {
-        square.style.backgroundColor = 'transparent';
-        square.style.backgroundImage = 'none';
-        setExploreArtVisible('explore-art-dirigibile-18');
-      } else if (showDirigibile16) {
-        square.style.backgroundColor = 'transparent';
-        square.style.backgroundImage = 'none';
-        setExploreArtVisible('explore-art-dirigibile-16');
-      } else if (showAirship) {
-        square.style.backgroundColor = 'transparent';
-        square.style.backgroundImage = 'none';
-        setExploreArtVisible('explore-art-dirigibile-16');
-      } else if (showRelitto) {
-        square.style.backgroundColor = 'transparent';
-        square.style.backgroundImage = 'none';
-        setExploreArtVisible('explore-art-relitto-4');
-      } else if (showRelitto7) {
-        square.style.backgroundColor = 'transparent';
-        square.style.backgroundImage = 'none';
-        setExploreArtVisible('explore-art-relitto-7');
-      } else if (showRelitto21) {
-        square.style.backgroundColor = 'transparent';
-        square.style.backgroundImage = 'none';
-        setExploreArtVisible('explore-art-relitto-21');
-      } else if (showDirigibile9) {
-        square.style.backgroundColor = 'transparent';
-        square.style.backgroundImage = 'none';
-        setExploreArtVisible('explore-art-dirigibile-9');
+        setExploreArtVisible(activeArtId);
       } else {
         setExploreArtVisible(null);
         square.style.backgroundColor = color;
       }
-      status.textContent = handedness.toLowerCase() + ' hand — ' + angle.toFixed(1) + '° (segment ' + (segmentIndex + 1) + '/5)';
-      detectLabel.textContent = '✓ ' + handedness + ' hand';
-      detectLabel.style.background = 'rgba(0,220,120,0.2)';
-      detectLabel.style.color = 'rgba(0,220,120,0.9)';
-      angleLabel.textContent = showDirigibile19 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (19)' : showLeftAirshipRange ? 'angle: ' + angle.toFixed(1) + '° → ' + getExploreArtLabelById(exploreLeftAirshipCurrentId) : showDirigibile17 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (17)' : showDirigibile18 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (18)' : showDirigibile16 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (16)' : showAirship ? 'angle: ' + angle.toFixed(1) + '° → airship (16)' : showRelitto ? 'angle: ' + angle.toFixed(1) + '° → relitto (4)' : showRelitto7 ? 'angle: ' + angle.toFixed(1) + '° → relitto (7)' : showRelitto21 ? 'angle: ' + angle.toFixed(1) + '° → relitto (21)' : showDirigibile9 ? 'angle: ' + angle.toFixed(1) + '° → dirigibile (9)' : 'angle: ' + angle.toFixed(1) + '° → ' + color;
-      angleLabel.style.color = showDirigibile19 || showLeftAirshipRange || showDirigibile17 || showDirigibile18 || showDirigibile16 || showAirship || showRelitto || showRelitto7 || showRelitto21 || showDirigibile9 ? 'rgba(255,255,255,0.9)' : color;
+
+      status.textContent = handedness.toLowerCase() + ' hand — ' + angle.toFixed(1) + '° (segment ' + (segmentIndex + 1) + '/5, pack ' + (explorePackageIndex + 1) + '/3)';
+      if (detectLabel) {
+        detectLabel.textContent = '✓ ' + handedness + ' hand';
+        detectLabel.style.background = 'rgba(0,220,120,0.2)';
+        detectLabel.style.color = 'rgba(0,220,120,0.9)';
+      }
+
+      if (angleLabel) {
+        angleLabel.textContent = activeArtId
+          ? 'angle: ' + angle.toFixed(1) + '° → ' + getExploreArtLabelById(activeArtId)
+          : 'angle: ' + angle.toFixed(1) + '° → ' + color;
+
+        angleLabel.style.color = activeArtId ? 'rgba(255,255,255,0.9)' : color;
+      }
     } else {
       status.textContent = 'show your hand to the camera';
-      detectLabel.textContent = 'no hand detected';
-      detectLabel.style.background = 'rgba(255,255,255,0.1)';
-      detectLabel.style.color = 'rgba(255,255,255,0.4)';
-      angleLabel.textContent = 'angle: —';
-      angleLabel.style.color = 'rgba(255,255,255,0.3)';
+      if (detectLabel) {
+        detectLabel.textContent = 'no hand detected';
+        detectLabel.style.background = 'rgba(255,255,255,0.1)';
+        detectLabel.style.color = 'rgba(255,255,255,0.4)';
+      }
+
+      if (angleLabel) {
+        angleLabel.textContent = 'angle: —';
+        angleLabel.style.color = 'rgba(255,255,255,0.3)';
+      }
     }
   } catch (e) { /* ignore per-frame errors */ }
   if (exploreIsDetecting) requestAnimationFrame(detectExploreHands);

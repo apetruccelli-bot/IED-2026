@@ -78,9 +78,9 @@ function classifyGesture(kp) {
   if (isFacingCam)
     return { funzione: 'tagliare e affettare', angle };
 
-  // Open hand sideways (30°–150°) → Tagliare
+  // Open hand sideways (30°–150°) → Tagliare e Colpire
   if (angle >= 30 && angle <= 150)
-    return { funzione: 'tagliare', angle };
+    return { funzione: 'tagliare e colpire', angle };
 
   return null; // no recognised gesture
 }
