@@ -365,6 +365,7 @@ a:hover {
   border-top: 1px solid var(--myBlack);
   padding: 14px 10px 10px;
   backdrop-filter: blur(10px);
+  padding-bottom: 80px;
 }
 
 .page-footer .footer-grid {
