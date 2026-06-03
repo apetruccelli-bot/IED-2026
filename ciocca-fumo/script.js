@@ -16,16 +16,16 @@ const lbBackdrop = document.getElementById('lb-backdrop');
 
 const categoryTexts = {
   fotografie: {
-    japanese: `ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。`,
-    english: `Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items. When he was diagnosed with lung cancer, instead of quitting, he continued to smoke and began photographing people smoking on the street to show just how normal it was.`
+    japanese: `大阪の路地、商店街やオフィス街、小さなバーの出入り口で撮影された肖像である。会社員、年配の常連、若い人々の一服は、健康上の注意喚起のあとも、なお公的な習慣として続いていた。新世界の田中博の店から持ち出された私的な映像資料である。`,
+    english: `Portraits taken in the alleys of Osaka, along shopping and business streets, and at the entrances to small bars. Office workers, older regulars, and young people caught mid-cigarette: gestures that remained a public habit even after health warnings. Private video footage from Hiroshi Tanaka's shop in Shinsekai.`
   },
   pacchetti: {
-    japanese: `タバコの箱は、色、文字、場所によって集められた小さな記憶の断片である。`,
-    english: `Cigarette packs presents the visual archive of tobacco packaging: colors, lettering and graphic details collected between Osaka, Tokyo, Kyoto and Nara.`
+    japanese: `一九八五年から一九九〇年まで、店頭と陳列窓から集められたプレミアムたばこのパッケージである。刷色—赤・白・青・黄・緑—、産地名（大阪・東京・京都・奈良）、銘柄の文字組みが、一枚ずつ、店内にあった標準品と地域色を帯びたパッケージの図形的な差を物語る。`,
+    english: `Premium cigarette packs collected from counters and windows between 1985 and 1990. The print colors: red, white, blue, yellow, and green, the place names (Osaka, Tokyo, Kyoto, Nara), and the brand lettering testify, sheet by sheet, to the graphic differences between the standard and regional packs present in the store.`
   },
   pubblicità: {
-    japanese: `広告は、喫煙が日常の中でどのように語られ、見せられていたかを記録している。`,
-    english: `Advertisements shows how cigarettes were represented through commercial images, slogans and visual culture.`
+    japanese: `店内の壁面や収集資料のなかに残された広告ポスターである。日本の銘柄は、感情の約束—仕事のあとの休息、街の夜、家庭の静けさ—を通じて喫煙を見せている。一九七〇年代後半から二〇〇年代初頭に貼られ、剥がされずに残った商業画像である。`,
+    english: `Advertising posters preserved on interior walls and among the collected material. Brands from Japan present smoking through emotional promises, after-work relief, nights on the town, domestic tranquility. Commercial images posted from the late 1970s to the early 2000s and left in place.`
   }
 };
 
@@ -89,10 +89,8 @@ function revealCategoryImages() {
     requestAnimationFrame(() => updateAdvertisingScrollState());
   } else if (activeCategory === 'fotografie') {
     portraitGestureIndex = 0;
-    selectPortraitByIndex(0);
   } else if (activeCategory === 'pacchetti') {
     packGestureIndex = 0;
-    selectPackByIndex(0);
   }
 
   window.updateIdleGestureStatus?.();
@@ -115,7 +113,7 @@ function syncCategoryRevealState() {
     return;
   }
 
-  if (intro) intro.hidden = true;
+  if (intro) intro.hidden = false;
 }
 
 function openPubblicitaViaGesture() {
@@ -142,16 +140,17 @@ function updateCategoryText(category) {
 }
 
 function setDescriptionIntroVisible(visible) {
+  const main = document.querySelector('.mainLayout');
+  const intro = document.querySelector('.description-intro');
+
   if (!categoryImagesRevealed) {
-    document.querySelector('.mainLayout')?.classList.remove('has-item-selected');
-    const intro = document.querySelector('.description-intro');
+    main?.classList.remove('has-item-selected');
     if (intro) intro.hidden = false;
     return;
   }
 
-  document.querySelector('.mainLayout')?.classList.toggle('has-item-selected', !visible);
-  const intro = document.querySelector('.description-intro');
-  if (intro) intro.hidden = true;
+  main?.classList.toggle('has-item-selected', !visible);
+  if (intro) intro.hidden = !visible;
 }
 
 async function loadData() {
@@ -267,7 +266,7 @@ function setCategory(cat) {
   activeFilter = null;
   activeFilterType = null;
   activeTags.clear();
-  categoryImagesRevealed = false;
+  categoryImagesRevealed = ['fotografie', 'pacchetti', 'pubblicità'].includes(cat);
   syncGlobalTagButtons();
 
   clearItemPreview();
@@ -317,6 +316,7 @@ function setCategory(cat) {
   render();
   syncCategoryRevealState();
   window.ensureCategoryGestures?.();
+  updateScrollToTopVisibility();
 }
 
 function getPortraitItems() {
@@ -372,9 +372,17 @@ function syncPortraitSelection() {
   selectPortraitByIndex(portraitGestureIndex);
 }
 
+function hasCategoryItemSelected() {
+  return Boolean(grid?.classList.contains('has-selected'));
+}
+
 function advancePortraitViaGesture() {
   if (activeCategory === 'fotografie' && !categoryImagesRevealed) {
     revealCategoryImages();
+    return;
+  }
+  if (!hasCategoryItemSelected()) {
+    selectPortraitByIndex(0);
     return;
   }
   selectPortraitByIndex(portraitGestureIndex + 1);
@@ -425,6 +433,10 @@ function syncPackSelection() {
 function advancePackViaGesture() {
   if (activeCategory === 'pacchetti' && !categoryImagesRevealed) {
     revealCategoryImages();
+    return;
+  }
+  if (!hasCategoryItemSelected()) {
+    selectPackByIndex(0);
     return;
   }
   selectPackByIndex(packGestureIndex + 1);
@@ -615,6 +627,15 @@ function clearCategoryFilters() {
   panel.innerHTML = '';
 }
 
+function formatFilterOptionLabel(type, value) {
+  if (type === 'year') return `${value}年`;
+  return value;
+}
+
+function formatFilterOptionValue(type, value) {
+  return type === 'year' ? String(value) : value;
+}
+
 function renderCategoryFilters(category) {
   const panel = document.getElementById('filters-panel');
   if (!panel) return;
@@ -628,7 +649,7 @@ function renderCategoryFilters(category) {
       <p>${group.title}</p>
       <p>
         ${group.values.map(value => `
-          <span class="filter-option" data-filter-type="${group.type}" data-filter-value="${value}">${value}</span>
+          <span class="filter-option" data-filter-type="${group.type}" data-filter-value="${formatFilterOptionValue(group.type, value)}">${formatFilterOptionLabel(group.type, value)}</span>
         `).join('')}
       </p>
     `;
@@ -777,8 +798,12 @@ function clearItemPreview() {
   itemPreview.setAttribute('aria-hidden', 'true');
   setDescriptionIntroVisible(true);
 
-  if (activeCategory === 'pubblicità') updateAdvertisingScrollState();
-  else updateCategoryText(activeCategory);
+  if (activeCategory === 'pubblicità') {
+    syncAdvertisingIntroVisibility();
+    updateAdvertisingScrollState();
+  } else {
+    updateCategoryText(activeCategory);
+  }
 }
 
 function shuffle(arr) {
@@ -958,14 +983,6 @@ function render() {
     clearAdvertisingDescriptions();
   }
 
-  if (activeCategory === 'fotografie' && categoryImagesRevealed) {
-    syncPortraitSelection();
-  }
-
-  if (activeCategory === 'pacchetti' && categoryImagesRevealed) {
-    syncPackSelection();
-  }
-
   if (activeFilter && activeFilterType) {
     updateFilterOpacity();
   }
@@ -1076,9 +1093,15 @@ function setupAdvertisingScrollText() {
   updateAdvertisingScrollState();
 }
 
+function syncAdvertisingIntroVisibility() {
+  const intro = document.querySelector('.description-intro');
+  if (!intro || activeCategory !== 'pubblicità' || !grid) return;
+  intro.hidden = grid.scrollTop >= 20;
+}
+
 function updateAdvertisingScrollState() {
   if (!categoryImagesRevealed) return;
-  if (document.querySelector('.mainLayout.has-item-selected')) return;
+  if (itemPreview?.classList.contains('open')) return;
 
   const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
   const blocks = [...document.querySelectorAll('.ad-desc-block')];
@@ -1106,6 +1129,7 @@ function updateAdvertisingScrollState() {
   }
 
   setActiveAdvertisingDescription(activeIndex);
+  syncAdvertisingIntroVisibility();
 
   if (activeIndex < 0) {
     lastAdvertisingIndex = -1;
@@ -1335,6 +1359,7 @@ function openExploreModal() {
   initAboutGestureScrollSync();
   window.ensureCategoryGestures?.();
   window.startAboutMicDetection?.();
+  updateScrollToTopVisibility();
 }
 
 function closeExploreModal() {
@@ -1348,6 +1373,64 @@ function closeExploreModal() {
   closeAboutIndex();
   updateHeaderNavState();
   window.ensureCategoryGestures?.();
+  updateScrollToTopVisibility();
+}
+
+function getActiveScrollContainer() {
+  if (document.body.classList.contains('about-open')) {
+    return document.getElementById('explore-modal');
+  }
+  return grid;
+}
+
+function isLandingActive() {
+  const landing = document.getElementById('landing-modal');
+  return Boolean(landing && landing.style.pointerEvents !== 'none');
+}
+
+function updateScrollToTopVisibility() {
+  const btn = document.getElementById('scroll-to-top');
+  if (!btn) return;
+
+  if (isLandingActive() || lightbox?.classList.contains('open')) {
+    btn.hidden = true;
+    return;
+  }
+
+  const container = getActiveScrollContainer();
+  const scrollTop = container?.scrollTop ?? 0;
+  btn.hidden = scrollTop < 80;
+}
+
+function scrollActiveViewToTop() {
+  const container = getActiveScrollContainer();
+  if (!container) return;
+
+  container.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (activeCategory === 'pubblicità') {
+    window.setTimeout(() => {
+      syncAdvertisingIntroVisibility();
+      updateAdvertisingScrollState();
+      updateScrollToTopVisibility();
+    }, 400);
+  } else {
+    window.setTimeout(updateScrollToTopVisibility, 400);
+  }
+}
+
+function initScrollToTop() {
+  const btn = document.getElementById('scroll-to-top');
+  const aboutModal = document.getElementById('explore-modal');
+  if (!btn) return;
+
+  btn.addEventListener('click', scrollActiveViewToTop);
+
+  const onScroll = () => updateScrollToTopVisibility();
+  grid?.addEventListener('scroll', onScroll, { passive: true });
+  aboutModal?.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  updateScrollToTopVisibility();
 }
 
 async function init() {
@@ -1357,6 +1440,7 @@ async function init() {
     ensureAboutBlowHints();
     initAboutIndexLinks();
     initAboutDropdown();
+    initScrollToTop();
     window.addEventListener('resize', () => {
       if (document.body.classList.contains('about-open')) updateAboutHeaderOffset();
       if (activeCategory === 'pubblicità' && categoryImagesRevealed) {
