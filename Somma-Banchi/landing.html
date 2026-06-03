@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html> 
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
@@ -100,43 +100,36 @@
     .image-card:nth-child(1) {
       width: 220px;
       height: 280px;
-      background-image: url("img/col19.png");
     }
 
     .image-card:nth-child(2) {
       width: 220px;
       height: 280px;
-      background-image: url("img/a3.png");
     }
 
     .image-card:nth-child(3) {
       width: 220px;
       height: 200px;
-      background-image: url("img/col9.png");
     }
 
     .image-card:nth-child(4) {
       width: 220px;
       height: 150px;
-      background-image: url("img/s1 (2).png");
     }
 
     .image-card:nth-child(5) {
       width: 220px;
       height: 200px;
-      background-image: url("img/ta5.png");
     }
 
     .image-card:nth-child(6) {
       width: 220px;
       height: 170px;
-      background-image: url("img/ta4.png");
     }
 
     .image-card:nth-child(7) {
       width: 220px;
       height: 250px;
-      background-image: url("img/col4.png");
     }
 
     .enter-home {
@@ -247,6 +240,49 @@
     const homePreview = document.querySelector(".enter-home");
     const archiveTitle = document.querySelector(".archive-title");
 
+    /*
+      Qui inserisci tutte le immagini che vuoi usare.
+      Ogni volta che ricarichi la pagina, ne verranno scelte 7 in ordine casuale.
+      Puoi aggiungerne quante vuoi.
+    */
+    const imagePool = [
+      "img/col19.png",
+      "img/a3.png",
+      "img/col9.png",
+      "img/s1 (2).png",
+      "img/ta5.png",
+      "img/ta4.png",
+      "img/col4.png",
+      "img/col13.png",
+      "img/col2.png",
+      "img/s1 (5).png",
+      "img/ta14.png",
+      "img/a4.png",
+      "img/b7.png",
+      "img/s1 (17).png"
+
+
+      /*
+      Esempio:
+      "img/nuova1.png",
+      "img/nuova2.png",
+      "img/nuova3.png"
+      */
+    ];
+
+    function shuffleArray(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function assignRandomImages() {
+      const shuffledImages = shuffleArray(imagePool);
+
+      cards.forEach((card, index) => {
+        const imageUrl = shuffledImages[index % shuffledImages.length];
+        card.style.backgroundImage = `url("${imageUrl}")`;
+      });
+    }
+
     const ANIMATION_DURATION = 7000;
     let animationStartTime = null;
     let redirected = false;
@@ -283,10 +319,8 @@
 
     /*
       Opacità iniziali delle immagini quando sono sovrapposte.
-      Puoi modificare questi valori per cambiare l'effetto iniziale.
-
-      Valori più bassi = immagine più trasparente
-      Valori più alti = immagine più visibile
+      Valori più bassi = immagine più trasparente.
+      Valori più alti = immagine più visibile.
     */
     const startOpacities = [0.5, 0.55, 0.6, 0.64, 0.7, 0.75, 0.8];
 
@@ -315,17 +349,6 @@
     function updateLanding(progress) {
       const scrollProgress = clamp(progress, 0, 1);
 
-      /*
-        Sequenza automatica:
-        1. De Veciariìe appare subito al centro
-        2. De Veciariìe sparisce dal centro
-        3. De Veciariìe riappare direttamente in alto a sinistra
-        4. appaiono le immagini sovrapposte con opacità diverse
-        5. le immagini si allargano e diventano completamente visibili
-        6. immagini e titolo si dissolvono
-        7. sfondo chiaro e redirect ad archivio.html
-      */
-
       const titleFadeCenterProgress = clamp((scrollProgress - 0.34) / 0.10, 0, 1);
 
       const titleAppearCornerProgress = clamp((scrollProgress - 0.48) / 0.08, 0, 1);
@@ -350,14 +373,6 @@
         archiveTitle.style.display = "none";
       }
 
-      /*
-        Controlli immagini:
-        - imageAppearProgress: fa comparire il gruppo di immagini
-        - spreadProgress: fa allargare le immagini dal centro alla posizione finale
-        - fadeProgress: fa dissolvere le immagini prima del cambio pagina
-        - startOpacities: opacità diverse quando le immagini sono sovrapposte
-      */
-
       const imageAppearProgress = clamp((scrollProgress - 0.46) / 0.10, 0, 1);
 
       const spreadProgress = easeInOutCubic(
@@ -376,12 +391,6 @@
         const y = lerp(start.y, end.y, spreadProgress);
         const r = lerp(start.r, end.r, spreadProgress);
 
-        /*
-          Qui succede la cosa importante:
-          - all'inizio ogni immagine usa la sua opacità iniziale
-          - mentre si allarga, arriva gradualmente a opacità 1
-          - alla fine, prima del fade-out, tutte sono totalmente visibili
-        */
         const startOpacity = startOpacities[index];
         const visibleOpacity = lerp(startOpacity, 1, spreadProgress);
 
@@ -426,6 +435,7 @@
 
     window.addEventListener("load", () => {
       window.scrollTo(0, 0);
+      assignRandomImages();
       updateLanding(0);
       requestAnimationFrame(animateLanding);
     });

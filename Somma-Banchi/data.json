@@ -401,8 +401,8 @@
     {
       "id": 38,
       "src": "img/col1.png",
-      "tags-coltelli": ["manico in legno", "lama ampia e ricurva"],
-      "description": "Coltello Mezzaluna utile per eseguire tagli decisi e controllati durante la lavorazione della carne,",
+      "tags-coltelli": ["manico in legno", "lama ampia", "lama curva"],
+      "description": "Coltello a mezzaluna con lama ampia e ricurva, adatto a eseguire tagli decisi e controllati. La forma della lama permette di accompagnare il movimento del polso e lavorare porzioni consistenti di carne.",
       "category": "coltelli",
       "coltelli-funzione": "tagliare",
       "coltelli-usura": "usurato"
@@ -410,8 +410,8 @@
     {
       "id": 39,
       "src": "img/col2.png",
-      "tags-coltelli": ["manico in plastica rigida", "lama larga"],
-      "description": "Mannnaia utile per dividere tagli di carne più consistenti, rompere piccole ossa, separare cartilagini e preparare porzioni da vendita con colpi decisi sul ceppo.",
+      "tags-coltelli": ["manico in plastica", "lama ampia"],
+      "description": "Mannaia con lama larga e pesante, utile per dividere tagli di carne consistenti, rompere piccole ossa e separare cartilagini con colpi netti sul ceppo.",
       "category": "coltelli",
       "coltelli-funzione": "tagliare",
       "coltelli-usura": "usurato"
@@ -419,8 +419,8 @@
     {
       "id": 40,
       "src": "img/col3.png",
-      "tags-coltelli": ["manico in plastica rigida", "lama fine"],
-      "description": "Coltello da disosso usato per separare la carne dall’osso con precisione, rifinire tagli più delicati e seguire le venature della carne senza sprecarne.",
+      "tags-coltelli": ["manico in plastica", "lama sottile", "punta fine"],
+      "description": "Coltello da disosso con lama fine e appuntita, usato per separare la carne dall’osso con precisione. È adatto a seguire nervature, giunture e parti più delicate senza sprecare carne.",
       "category": "coltelli",
       "coltelli-funzione": "disossare",
       "coltelli-usura": "nuovo"
@@ -429,7 +429,7 @@
       "id": 41,
       "src": "img/col4.png",
       "tags-coltelli": ["manico in legno", "lama curva"],
-      "description": "Coltello classico usato per tagli quotidiani, per affettare pezzi di carne, preparare porzioni più piccole e svolgere lavorazioni veloci al banco.",
+      "description": "Coltello classico con lama curva, usato per i tagli quotidiani al banco. Serve per affettare pezzi di carne, preparare porzioni più piccole e svolgere lavorazioni rapide.",
       "category": "coltelli",
       "coltelli-funzione": "disossare",
       "coltelli-usura": "nuovo"
@@ -437,8 +437,8 @@
     {
       "id": 42,
       "src": "img/col5.png",
-      "tags-coltelli": ["manico in legno", "lama regolare"],
-      "description": "Coltello Bobgo Park usato per lavorazioni precise e pulite, come riaare tagli di carne, eliminare parti in eccesso, affettare porzioni sottili e seguire con controllo le linee naturali del pezzo.",
+      "tags-coltelli": ["manico in legno", "lama sottile", "lama lunga"],
+      "description": "Coltello con lama regolare e allungata, usato per lavorazioni precise e pulite. È utile per rifilare tagli di carne, eliminare parti in eccesso e affettare porzioni sottili.",
       "category": "coltelli",
       "coltelli-funzione": "tagliare e affettare",
       "coltelli-usura": "nuovo"
@@ -446,8 +446,8 @@
     {
       "id": 43,
       "src": "img/col6.png",
-      "tags-coltelli": ["manico in legno", "lama regolare con punta fine"],
-      "description": "Coletello utile per tagliare e rfilare,ma anche per dare colpi netti e separare cartillagini",
+      "tags-coltelli": ["manico in legno", "lama sottile", "punta fine"],
+      "description": "Coltello con lama regolare e punta fine, utile per tagliare, rifilare e intervenire nei punti più stretti del pezzo. Può essere usato anche per separare piccole cartilagini con tagli netti.",
       "category": "coltelli",
       "coltelli-funzione": "tagliare",
       "coltelli-usura": "nuovo"
@@ -455,8 +455,8 @@
     {
       "id": 44,
       "src": "img/col7.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["manico in legno", "lama ampia", "lama curva"],
+      "description": "Coltello con lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici. Ha un aspetto robusto e artigianale, adatto a tagli decisi e lavorazioni di banco.",
       "category": "coltelli",
       "coltelli-funzione": "tagliare",
       "coltelli-usura": "usurato"
@@ -464,8 +464,8 @@
     {
       "id": 45,
       "src": "img/col8.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["manico metallico", "lama seghettata", "lama lunga"],
+      "description": "Sega per ossa con struttura rigida e lama lunga seghettata, pensata per tagliare parti dure e resistenti. È utile per dividere ossa, costole e pezzi consistenti durante la preparazione dei tagli.",
       "category": "coltelli",
       "coltelli-funzione": "tagliare",
       "coltelli-usura": "usurato"
@@ -473,8 +473,8 @@
     {
       "id": 46,
       "src": "img/col9.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["manico in plastica", "lama sottile", "punta fine"],
+      "description": "Coltello da disosso con lama sottile e appuntita, adatto a lavorare vicino all’osso e alle giunture. Serve per separare la carne con precisione, seguendo nervature e cartilagini.",
       "category": "coltelli",
       "coltelli-funzione": "disossare",
       "coltelli-usura": "usurato"
@@ -482,8 +482,8 @@
     {
       "id": 47,
       "src": "img/col10.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["manico in plastica", "lama ampia", "punta fine"],
+      "description": "Coltello con lama larga e punta leggermente rialzata, adatto a tagli ampi e controllati. È utile per dividere pezzi di carne, rifilare parti spesse e preparare porzioni con movimenti decisi.",
       "category": "coltelli",
       "coltelli-funzione": "tagliare e affettare",
       "coltelli-usura": "usurato"
@@ -491,8 +491,8 @@
     {
       "id": 48,
       "src": "img/col11.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["manico in legno", "lama curva", "lama lunga"],
+      "description": "Coltello da macellaio con lama curva e allungata, pensato per accompagnare il gesto del taglio con fluidità. È utile per affettare, rifilare e seguire la forma naturale del pezzo di carne.",
       "category": "coltelli",
       "coltelli-funzione": "tagliare e affettare",
       "coltelli-usura": "usurato"
@@ -500,17 +500,17 @@
     {
       "id": 49,
       "src": "img/col12.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["manico in legno", "lama curva", "punta fine"],
+      "description": "Coltello con lama ricurva e punta pronunciata, adatto a incidere e guidare il taglio in punti difficili. La sua forma permette di agganciare il pezzo e lavorare lungo bordi irregolari.",
       "category": "coltelli",
-      "coltelli-funzione": "tagliare e affettare",
+      "coltelli-funzione": "tagliare",
       "coltelli-usura": "usurato"
     },
     {
       "id": 50,
       "src": "img/col13.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["manico in legno", "lama ampia"],
+      "description": "Coltello con lama larga e regolare, adatto a tagli precisi e ordinati. La superficie ampia permette di affettare, tritare e spostare facilmente la carne lavorata sul banco.",
       "category": "coltelli",
       "coltelli-funzione": "tagliare e affettare",
       "coltelli-usura": "usurato"
@@ -518,26 +518,26 @@
     {
       "id": 51,
       "src": "img/col14.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["manico in legno", "lama curva", "punta fine"],
+      "description": "Utensile con lama a uncino e manico in legno, utile per trattenere o guidare il pezzo durante il taglio. Serve come supporto alla lavorazione, migliorando presa e controllo sulla carne.",
       "category": "coltelli",
-      "coltelli-funzione": "tagliare e affettare",
+      "coltelli-funzione": "tagliare",
       "coltelli-usura": "usurato"
     },
     {
       "id": 52,
       "src": "img/col15.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["strumento di protezione"],
+      "description": "Guanto protettivo in maglia metallica, usato per tenere fermo il pezzo durante la lavorazione. Non taglia direttamente, ma protegge la mano e consente di lavorare con maggiore sicurezza vicino alla lama.",
       "category": "coltelli",
-      "coltelli-funzione": "disossare",
+      "coltelli-funzione": "proteggere",
       "coltelli-usura": "usurato"
     },
     {
       "id": 53,
       "src": "img/col16.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["manico in plastica", "lama sottile", "punta fine"],
+      "description": "Coltello con lama stretta e affilata, adatto a tagli leggeri e precisi. È utile per ricavare fette regolari, rifinire porzioni e lavorare tagli delicati senza strapparli.",
       "category": "coltelli",
       "coltelli-funzione": "tagliare e affettare",
       "coltelli-usura": "usurato"
@@ -545,8 +545,8 @@
     {
       "id": 54,
       "src": "img/col17.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["manico in plastica", "lama ampia"],
+      "description": "Coltello professionale con lama ampia e manico sagomato, pensato per tagli robusti e lavorazioni di banco. È utile per dividere pezzi consistenti, rifilare e preparare porzioni prima della vendita.",
       "category": "coltelli",
       "coltelli-funzione": "tagliare e affettare",
       "coltelli-usura": "usurato"
@@ -554,156 +554,164 @@
     {
       "id": 55,
       "src": "img/col18.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["manico in legno", "lama curva", "punta fine"],
+      "description": "Coltello con lama ricurva e punta affilata, dall’aspetto artigianale. La forma curva aiuta a seguire il profilo della carne, rendendolo utile per affettare, incidere e rifinire tagli irregolari.",
       "category": "coltelli",
-      "coltelli-funzione": "disossare",
+      "coltelli-funzione": "tagliare e affettare",
       "coltelli-usura": "usurato"
     },
     {
       "id": 56,
       "src": "img/col19.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-coltelli": ["manico in legno", "lama corta", "punta fine"],
+      "description": "Coltello piccolo con lama corta e punta stretta, adatto a interventi di precisione. È utile per incidere, rifinire, pulire piccole parti e lavorare nei punti in cui una lama più grande sarebbe meno controllabile.",
       "category": "coltelli",
       "coltelli-funzione": "disossare",
       "coltelli-usura": "usurato"
     },
     {
-
       "id": 57,
       "src": "img/ta1.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
-      "category": "coltelli",
-      "coltelli-funzione": "tagliare e affettare",
-      "coltelli-usura": "usurato"
+      "tags-tagli": ["carne appesa", "taglio verticale", "taglio profondo"],
+      "description": "Prima apertura su una mezzena appesa: la lama incide la carne in verticale per creare il primo varco e avviare la lavorazione del pezzo.",
+      "category": "tagli",
+      "tagli-lavorazione": "prima apertura"
     },
     {
       "id": 58,
       "src": "img/ta2.png",
-      "tags-coltelli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
-      "category": "coltelli",
-      "coltelli-funzione": "tagliare e affettare",
-      "coltelli-usura": "usurato"
+      "tags-tagli": ["banco di lavoro", "lama inclinata", "rifinitura"],
+      "description": "Sfilettatura su banco: il coltello scorre con lama inclinata lungo la superficie della carne per pulire il pezzo e assottigliare il taglio.",
+      "category": "tagli",
+      "tagli-lavorazione": "sfilettatura"
     },
     {
       "id": 59,
       "src": "img/ta3.png",
-      "tags-tagli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-tagli": ["banco di lavoro", "lama inclinata", "rifinitura"],
+      "description": "Sfilettatura di rifinitura: la lama lavora in modo aderente alla carne per eliminare parti sottili, grasso o lembi irregolari.",
       "category": "tagli",
-      "tagli-lavorazione": "sfiletattura"
+      "tagli-lavorazione": "sfilettatura"
     },
     {
       "id": 60,
       "src": "img/ta4.png",
-      "tags-tagli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
+      "tags-tagli": ["banco di lavoro", "mano di supporto", "taglio orizzontale"],
+      "description": "Separazione di parti già aperte: la mano tiene stabile il pezzo mentre il coltello segue le linee naturali della carne per dividerla.",
       "category": "tagli",
       "tagli-lavorazione": "separazione"
     },
     {
       "id": 61,
       "src": "img/ta5.png",
-      "tags-tagli": ["manico in legno", "lama fine", "precisione", "usurato"],
-      "description": "Coltello ha una lama ampia e ricurva in acciaio, con manico in legno fissato da rivetti metallici, dall’aspetto robusto e artigianale.",
-      "category":"tagli",
+      "tags-tagli": ["banco di lavoro", "taglio profondo", "taglio orizzontale"],
+      "description": "Prima apertura di un taglio grande sul banco: il coltello incide in profondità per aprire il pezzo e prepararlo alla separazione.",
+      "category": "tagli",
       "tagli-lavorazione": "prima apertura"
     },
     {
       "id": 62,
       "src": "img/ta6.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["banco di lavoro", "taglio profondo", "mano di supporto"],
+      "description": "Separazione di un pezzo consistente: il coltello entra in profondità mentre la mano accompagna la carne, staccando una parte dalla massa principale.",
+      "category": "tagli",
+      "tagli-lavorazione": "separazione"
     },
     {
       "id": 63,
       "src": "img/ta7.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["banco di lavoro", "mano di supporto", "taglio profondo"],
+      "description": "Separazione interna del pezzo: la lama lavora tra carne e parti più dure, seguendo giunture e nervature per staccare la porzione.",
+      "category": "tagli",
+      "tagli-lavorazione": "separazione"
     },
     {
       "id": 64,
       "src": "img/ta8.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["banco di lavoro", "lama inclinata", "taglio orizzontale"],
+      "description": "Sfilettatura su un taglio disteso: il coltello scorre orizzontalmente e aderente alla carne per ottenere una superficie regolare.",
+      "category": "tagli",
+      "tagli-lavorazione": "sfilettatura"
     },
     {
       "id": 65,
       "src": "img/ta9.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["banco di lavoro", "mano di supporto", "taglio profondo"],
+      "description": "Separazione tra fasce muscolari: la lama segue le linee naturali del pezzo, dividendo le parti senza spezzarne la struttura.",
+      "category": "tagli",
+      "tagli-lavorazione": "separazione"
     },
     {
       "id": 66,
       "src": "img/ta10.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["banco di lavoro", "mano di supporto", "porzionatura"],
+      "description": "Separazione sul banco: la carne viene tenuta ferma e divisa in sezioni più gestibili attraverso tagli controllati e ripetuti.",
+      "category": "tagli",
+      "tagli-lavorazione": "separazione"
     },
     {
       "id": 67,
       "src": "img/ta11.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["banco di lavoro", "lama inclinata", "rifinitura"],
+      "description": "Sfilettatura di precisione: il coltello rimuove strati sottili e parti in eccesso, rendendo il taglio più pulito e uniforme.",
+      "category": "tagli",
+      "tagli-lavorazione": "sfilettatura"
     },
     {
       "id": 68,
       "src": "img/ta12.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["banco di lavoro", "porzionatura", "taglio orizzontale"],
+      "description": "Separazione in porzioni più piccole: il pezzo viene diviso con tagli netti per preparare la carne alla vendita o alla rifinitura.",
+      "category": "tagli",
+      "tagli-lavorazione": "separazione"
     },
     {
       "id": 69,
       "src": "img/ta13.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["ceppo", "taglio verticale", "porzionatura"],
+      "description": "Separazione su ceppo: il pezzo viene tagliato dall’alto con un gesto deciso, dividendolo in sezioni più piccole e maneggevoli.",
+      "category": "tagli",
+      "tagli-lavorazione": "separazione"
     },
     {
       "id": 70,
       "src": "img/ta14.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["banco di lavoro", "taglio orizzontale", "taglio profondo"],
+      "description": "Prima apertura di un pezzo allungato: la lama incide lungo la superficie per aprire la carne e preparare la lavorazione interna.",
+      "category": "tagli",
+      "tagli-lavorazione": "prima apertura"
     },
     {
       "id": 71,
       "src": "img/ta15.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["banco di lavoro", "lama inclinata", "rifinitura"],
+      "description": "Sfilettatura e pulizia del pezzo: il coltello elimina lembi irregolari e parti superficiali, rendendo il taglio più ordinato.",
+      "category": "tagli",
+      "tagli-lavorazione": "sfilettatura"
     },
     {
       "id": 72,
       "src": "img/ta16.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["banco di lavoro", "porzionatura", "mano di supporto"],
+      "description": "Separazione di più porzioni sul banco: il macellaio divide e sistema i pezzi con tagli controllati, mantenendo stabile la carne con la mano.",
+      "category": "tagli",
+      "tagli-lavorazione": "separazione"
     },
     {
       "id": 73,
       "src": "img/ta17.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["carne appesa", "taglio verticale", "taglio profondo"],
+      "description": "Prima apertura su carne appesa: la lama lavora in verticale per incidere il pezzo e avviare la divisione della mezzena.",
+      "category": "tagli",
+      "tagli-lavorazione": "prima apertura"
     },
     {
       "id": 74,
       "src": "img/ta18.png",
-      "tags-tagli": [],
-      "description": "Tagli",
-      "category": "tagli"
+      "tags-tagli": ["banco di lavoro", "lama inclinata", "taglio orizzontale"],
+      "description": "Sfilettatura su un taglio disteso: il coltello segue la superficie della carne con un movimento lungo, ricavando una porzione pulita e regolare.",
+      "category": "tagli",
+      "tagli-lavorazione": "sfilettatura"
     }
   ]
 }
-
-
