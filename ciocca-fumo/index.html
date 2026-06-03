@@ -54,6 +54,7 @@
                 el.classList.add('all-unblurring');
                 el.addEventListener('animationend', () => {
                   el.classList.remove('all-unblurring');
+                  window.enableGestureSurface?.();
                 }, { once: true });
               });
             }, { once: true });
@@ -106,8 +107,8 @@
               </li>
               <li>
                 <a href="#about-evening-documentation" class="about-index-item">
-                  <span class="japanese">夕刻写真記録（1985–1990）</span>
-                  <span class="english">Evening photographic documentation (1985–1990)</span>
+                  <span class="japanese">夕刻写真記録<span class="about-index-nowrap">（1985–1990）</span></span>
+                  <span class="english">Evening photographic documentation <span class="about-index-nowrap">(1985–1990)</span></span>
                 </a>
               </li>
               <li>
@@ -118,8 +119,8 @@
               </li>
               <li>
                 <a href="#about-access-after-closure" class="about-index-item">
-                  <span class="japanese">閉鎖後のアクセス（1990–2018）</span>
-                  <span class="english">Access after closure (1990–2018)</span>
+                  <span class="japanese">閉鎖後のアクセス<span class="about-index-nowrap">（1990–2018）</span></span>
+                  <span class="english">Access after closure <span class="about-index-nowrap">(1990–2018)</span></span>
                 </a>
               </li>
               <li>

@@ -31,7 +31,7 @@ function updateAboutMicBlowState(isBlow) {
         : 'Soffio — figura accesa'
     );
   } else if (document.body.classList.contains('about-open')) {
-    setAboutGestureStatus('About: soffia · ↓↑ scroll · ←→ categoria');
+    setAboutGestureStatus('About: soffia · ↓↑ scroll');
   }
 }
 
@@ -89,7 +89,7 @@ async function startAboutMicDetection() {
 
     aboutMicDetecting = true;
     aboutMicWasBlowing = false;
-    setAboutGestureStatus('About: soffia · ↓↑ scroll · ←→ categoria');
+    setAboutGestureStatus('About: soffia · ↓↑ scroll');
     loopAboutMicDetection();
   } catch (err) {
     console.warn('Mic unavailable:', err.message);
