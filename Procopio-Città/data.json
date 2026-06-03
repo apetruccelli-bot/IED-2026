@@ -1,47 +1,1217 @@
 ﻿{
   "items": [
-    { "id": 1, "src": "img/taccuini/taccuini (12).jpg", "tags": ["dettagli","note"], "category": "taccuini", "year": 1970, "description": "Note di campo, 1970, Varani", "autore": "Varani", "regione": "Campania", "abitanti": "Piu di 1000", "documento": "Note di campo" },
-    { "id": 2, "src": "img/architettura/architettura (32).jpg", "category": "architettura", "tags": ["edifici","dettagli","degrado"], "year": 1985, "description": "Serra Vasta, 1985, Ferri", "autore": "Ferri", "regione": "Calabria", "abitanti": "Piu di 1000", "documento": "Fotografia" },
-    { "id": 3, "src": "img/architettura/architettura (29).jpg", "tags": ["edifici","degrado","silenzio"], "category": "architettura", "year": 1967, "autore": "Varani", "regione": "Calabria", "abitanti": "Meno di 10", "documento": "Fotografia", "description": "Valle Cupa, 1967, Varani" },
-    { "id": 4, "src": "img/architettura/architettura (28).jpg", "tags": ["edifici","degrado","silenzio"], "category": "architettura", "year": 1976, "description": "Vallefredda, 1976, Ferri", "autore": "Ferri", "regione": "Campania", "abitanti": "Piu di 1000", "documento": "Fotografia" },
-    { "id": 5, "src": "img/persone/persone (12).jpg", "tags": ["presenza","vicoli","edifici"], "category": "persone", "year": 1966, "description": "Zagara, 1966, Scorza", "autore": "Scorza", "regione": "Calabria", "abitanti": "Piu di 1000", "documento": "Fotografia" },
-    { "id": 6, "src": "img/architettura/architettura (27).jpg", "tags": ["edifici","dettagli","degrado"], "category": "architettura", "year": 1982, "description": "Fonte Secca, 1982, Ferri", "autore": "Ferri", "regione": "Basilicata", "abitanti": "Piu di 1000", "documento": "Fotografia" },
-    { "id": 7, "src": "img/architettura/architettura (33).jpg", "tags": ["edifici","dettagli","degrado"], "category": "architettura", "year": 1971, "description": "Colle Ombra, 1971, Fiore", "autore": "Fiore", "regione": "Sicilia", "abitanti": "Piu di 1000", "documento": "Fotografia" },
-    { "id": 8, "src": "img/persone/persone (2).jpg", "tags": ["presenza","edifici","dettagli"], "category": "persone", "year": 1972, "description": "Monteferro, 1972, Fiore", "autore": "Fiore", "regione": "Basilicata", "abitanti": "Tra 10 e 100", "documento": "Fotografia" },
-    { "id": 9, "src": "img/taccuini/taccuini (18).jpg", "tags": ["dettagli","note"], "category": "taccuini", "year": 1980, "description": "Note di campo, 1980, Maffei", "autore": "Maffei", "regione": "Calabria", "abitanti": "Piu di 1000", "documento": "Note di campo" },
-    { "id": 10, "src": "img/taccuini/taccuini (14).jpg", "tags": ["dettagli","note"], "category": "taccuini", "year": 1984, "description": "Note di campo, 1984, Fiore", "autore": "Fiore", "regione": "Molise", "abitanti": "Tra 10 e 100", "documento": "Note di campo" },
-
-    { "id": 11, "src": "img/persone/persone (16).jpg", "tags": ["presenza","vicoli","edifici"], "category": "persone", "year": 1986, "description": "San Velio, 1986, Fiore", "autore": "Fiore", "regione": "Calabria", "abitanti": "Piu di 1000", "documento": "Fotografia" },
-    { "id": 12, "src": "img/architettura/architettura (9).jpg", "tags": ["edifici","degrado","silenzio"], "category": "architettura", "year": 1969, "description": "Borgo Cupo, 1969, Fiore", "autore": "Fiore", "regione": "Puglia", "abitanti": "Tra 10 e 100", "documento": "Fotografia" },
-    { "id": 13, "src": "img/architettura/architettura (4).jpg", "tags": ["edifici","degrado","dettagli"], "category": "architettura", "year": 1977, "description": "Rocca Secca, 1977, Varani", "autore": "Varani", "regione": "Campania", "abitanti": "Meno di 10", "documento": "Fotografia" },
-    { "id": 14, "src": "img/architettura/architettura (5).jpg", "tags": ["edifici","degrado","silenzio"], "category": "architettura", "year": 1982, "description": "Fonte Chiusa, 1982, Ferri", "autore": "Ferri", "regione": "Calabria", "abitanti": "Tra 10 e 100", "documento": "Fotografia" },
-    { "id": 15, "src": "img/architettura/architettura (18).jpg", "tags": ["edifici","vicoli","silenzio"], "category": "architettura", "year": 1970, "description": "Riva Spenta, 1970, Varani", "autore": "Varani", "regione": "Sicilia", "abitanti": "Tra 100 e 1000", "documento": "Fotografia" },
-    { "id": 16, "src": "img/persone/persone (22).jpg", "tags": ["presenza","edifici","degrado","dettagli"], "category": "persone", "year": 1983, "description": "Santa Rena, 1983, Scorza", "autore": "Scorza", "regione": "Calabria", "abitanti": "Meno di 10", "documento": "Fotografia" },
-    { "id": 17, "src": "img/architettura/architettura (25).jpg", "tags": ["edifici","vicoli","silenzio"], "category": "architettura", "year": 1965, "description": "Castel Ruvo, 1965, Varani", "autore": "Varani", "regione": "Puglia", "abitanti": "Meno di 10", "documento": "Fotografia" },
-    { "id": 18, "src": "img/persone/persone (4).jpg", "tags": ["presenza","vicoli","edifici"], "category": "persone", "year": 1983, "description": "Costa Nera, 1983, Fiore", "autore": "Fiore", "regione": "Calabria", "abitanti": "Tra 100 e 1000", "documento": "Fotografia" },
-    { "id": 19, "src": "img/persone/persone (18).jpg", "tags": ["presenza","edifici","dettagli"], "category": "persone", "year": 1983, "description": "Borgo Salso, 1983, Varani", "autore": "Varani", "regione": "Puglia", "abitanti": "Meno di 10", "documento": "Fotografia" },
-    { "id": 20, "src": "img/taccuini/taccuini (13).jpg", "tags": ["dettagli","note"], "category": "taccuini", "year": 1976, "description": "Note di campo, 1976, Ferri", "autore": "Ferri", "regione": "Sicilia", "abitanti": "Piu di 1000", "documento": "Note di campo" },
-
-    { "id": 21, "src": "img/persone/persone (6).jpg", "tags": ["presenza","edifici","degrado"], "category": "persone", "year": 1967, "description": "Poggio Nero, 1967, Varani", "autore": "Varani", "regione": "Basilicata", "abitanti": "Meno di 10", "documento": "Fotografia" },
-    { "id": 22, "src": "img/taccuini/taccuini (9).jpg", "tags": ["dettagli","note"], "category": "taccuini", "year": 1985, "description": "Note di campo, 1985, Varani", "autore": "Varani", "regione": "Sicilia", "abitanti": "Piu di 1000", "documento": "Note di campo" },
-    { "id": 23, "src": "img/architettura/architettura (3).jpg", "tags": ["edifici","silenzio","degrado"], "category": "architettura", "year": 1973, "description": "Pietra Lenta, 1973, Varani", "autore": "Varani", "regione": "Calabria", "abitanti": "Tra 100 e 1000", "documento": "Fotografia" },
-    { "id": 24, "src": "img/architettura/architettura (10).jpg", "tags": ["edifici","dettagli","degrado","silenzio"], "category": "architettura", "year": 1969, "description": "Piana Morta, 1969, Ferri", "autore": "Ferri", "regione": "Basilicata", "abitanti": "Meno di 10", "documento": "Fotografia" },
-    { "id": 25, "src": "img/architettura/architettura (22).jpg", "tags": ["edifici","degrado","vicoli"], "category": "architettura", "year": 1969, "description": "Serra Antica, 1969, Maffei", "autore": "Maffei", "regione": "Campania", "abitanti": "Meno di 10", "documento": "Fotografia" },
-    { "id": 26, "src": "img/taccuini/taccuini (10).jpg", "tags": ["dettagli","note"], "category": "taccuini", "year": 1982, "description": "Note di campo, 1982, Fiore", "autore": "Fiore", "regione": "Sicilia", "abitanti": "Tra 10 e 100", "documento": "Note di campo" },
-    { "id": 27, "src": "img/persone/persone (1).jpg", "tags": ["presenza","vicoli","edifici"], "category": "persone", "year": 1964, "description": "Serra Vasta, 1964, Maffei", "autore": "Maffei", "regione": "Calabria", "abitanti": "Meno di 10", "documento": "Fotografia" },
-    { "id": 28, "src": "img/taccuini/taccuini (8).jpg", "tags": ["dettagli","note"], "category": "taccuini", "year": 1972, "description": "Note di campo, 1972, Varani", "autore": "Varani", "regione": "Campania", "abitanti": "Tra 10 e 100", "documento": "Note di campo" },
-    { "id": 29, "src": "img/architettura/architettura (14).jpg", "tags": ["edifici","degrado","silenzio"], "category": "architettura", "year": 1974, "description": "Valle Cupa, 1974, Maffei", "autore": "Maffei", "regione": "Calabria", "abitanti": "Tra 100 e 1000", "documento": "Fotografia" },
-    { "id": 30, "src": "img/persone/persone (19).jpg", "tags": ["presenza","vicoli","edifici"], "category": "persone", "year": 1979, "description": "Vallefredda, 1979, Ferri", "autore": "Ferri", "regione": "Campania", "abitanti": "Meno di 10", "documento": "Fotografia" },
-
-    { "id": 31, "src": "img/architettura/architettura (12).jpg", "tags": ["edifici","degrado","silenzio"], "category": "architettura", "year": 1978, "description": "Zagara, 1978, Scorza", "autore": "Scorza", "regione": "Calabria", "abitanti": "Piu di 1000", "documento": "Fotografia" },
-    { "id": 32, "src": "img/persone/persone (13).jpg", "tags": ["presenza","edifici","dettagli","degrado"], "category": "persone", "year": 1983, "description": "Fonte Secca, 1983, Varani", "autore": "Varani", "regione": "Basilicata", "abitanti": "Tra 10 e 100", "documento": "Fotografia" },
-    { "id": 33, "src": "img/persone/persone (5).jpg", "tags": ["presenza","vicoli","silenzio"], "category": "persone", "year": 1981, "description": "Colle Ombra, 1981, Ferri", "autore": "Ferri", "regione": "Sicilia", "abitanti": "Meno di 10", "documento": "Fotografia" },
-    { "id": 34, "src": "img/taccuini/taccuini (5).jpg", "tags": ["dettagli","note"], "category": "taccuini", "year": 1972, "description": "Note di campo, 1972, Varani", "autore": "Varani", "regione": "Calabria", "abitanti": "Tra 100 e 1000", "documento": "Note di campo" },
-    { "id": 35, "src": "img/architettura/architettura (23).jpg", "tags": ["edifici","degrado","silenzio"], "category": "architettura", "year": 1972, "description": "Monteferro, 1972, Scorza", "autore": "Scorza", "regione": "Basilicata", "abitanti": "Meno di 10", "documento": "Fotografia" },
-    { "id": 36, "src": "img/taccuini/taccuini (1).jpg", "tags": ["dettagli","note"], "category": "taccuini", "year": 1978, "description": "Note di campo, 1978, Maffei", "autore": "Maffei", "regione": "Calabria", "abitanti": "Piu di 1000", "documento": "Note di campo" },
-    { "id": 37, "src": "img/persone/persone (23).jpg", "tags": ["presenza","vicoli","edifici"], "category": "persone", "year": 1985, "description": "San Velio, 1985, Ferri", "autore": "Ferri", "regione": "Calabria", "abitanti": "Piu di 1000", "documento": "Fotografia" },
-    { "id": 38, "src": "img/taccuini/taccuini (6).jpg", "tags": ["dettagli","note"], "category": "taccuini", "year": 1971, "description": "Note di campo, 1971, Scorza", "autore": "Scorza", "regione": "Puglia", "abitanti": "Tra 100 e 1000", "documento": "Note di campo" },
-    { "id": 39, "src": "img/architettura/architettura (19).jpg", "tags": ["edifici","degrado","silenzio"], "category": "architettura", "year": 1977, "description": "Borgo Cupo, 1977, Ferri", "autore": "Ferri", "regione": "Puglia", "abitanti": "Piu di 1000", "documento": "Fotografia" },
-    { "id": 40, "src": "img/architettura/architettura (13).jpg", "tags": ["edifici","degrado","dettagli"], "category": "architettura", "year": 1975, "description": "Rocca Secca, 1975, Maffei", "autore": "Maffei", "regione": "Campania", "abitanti": "Meno di 10", "documento": "Fotografia" }
+    {
+      "id": 1,
+      "src": "img/architettura/architettura (2).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1980,
+      "description": "Monteferro, 1980, Scorza",
+      "autore": "Scorza",
+      "regione": "Basilicata",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 2,
+      "src": "img/persone/persone (15).jpg",
+      "tags": [
+        "presenza",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "persone",
+      "year": 1972,
+      "description": "Colle Ombra, 1972, Ferri",
+      "autore": "Ferri",
+      "regione": "Sicilia",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 3,
+      "src": "img/architettura/architettura (22).jpg",
+      "tags": [
+        "edifici",
+        "degrado",
+        "vicoli"
+      ],
+      "category": "architettura",
+      "year": 1979,
+      "description": "Piana Morta, 1979, Fiore",
+      "autore": "Fiore",
+      "regione": "Basilicata",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 4,
+      "src": "img/taccuini/taccuini (16).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1975,
+      "description": "Note di campo, 1975, Fiore",
+      "autore": "Fiore",
+      "regione": "Calabria",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 5,
+      "src": "img/architettura/architettura (6).jpg",
+      "tags": [
+        "edifici",
+        "degrado",
+        "dettagli"
+      ],
+      "category": "architettura",
+      "year": 1973,
+      "description": "Riva Spenta, 1973, Ferri",
+      "autore": "Ferri",
+      "regione": "Sicilia",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 6,
+      "src": "img/architettura/architettura (19).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1969,
+      "description": "San Velio, 1969, Ferri",
+      "autore": "Ferri",
+      "regione": "Calabria",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 7,
+      "src": "img/persone/persone (24).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "degrado"
+      ],
+      "category": "persone",
+      "year": 1984,
+      "description": "Castel Ruvo, 1984, Fiore",
+      "autore": "Fiore",
+      "regione": "Puglia",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 8,
+      "src": "img/taccuini/taccuini (4).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1970,
+      "description": "Note di campo, 1970, Fiore",
+      "autore": "Fiore",
+      "regione": "Basilicata",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 9,
+      "src": "img/persone/persone (7).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "degrado",
+        "dettagli"
+      ],
+      "category": "persone",
+      "year": 1975,
+      "description": "Fonte Chiusa, 1975, Maffei",
+      "autore": "Maffei",
+      "regione": "Calabria",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 10,
+      "src": "img/persone/persone (11).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "degrado"
+      ],
+      "category": "persone",
+      "year": 1979,
+      "description": "Riva Spenta, 1979, Fiore",
+      "autore": "Fiore",
+      "regione": "Sicilia",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 11,
+      "src": "img/architettura/architettura (31).jpg",
+      "tags": [
+        "edifici",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1970,
+      "description": "Borgo Cupo, 1970, Varani",
+      "autore": "Varani",
+      "regione": "Puglia",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 12,
+      "src": "img/taccuini/taccuini (10).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1983,
+      "description": "Note di campo, 1983, Scorza",
+      "autore": "Scorza",
+      "regione": "Campania",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 13,
+      "src": "img/persone/persone (16).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "degrado"
+      ],
+      "category": "persone",
+      "year": 1986,
+      "description": "Costa Nera, 1986, Scorza",
+      "autore": "Scorza",
+      "regione": "Calabria",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 14,
+      "src": "img/architettura/architettura (13).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1970,
+      "description": "Colle Ombra, 1970, Varani",
+      "autore": "Varani",
+      "regione": "Sicilia",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 15,
+      "src": "img/persone/persone (5).jpg",
+      "tags": [
+        "presenza",
+        "vicoli",
+        "edifici"
+      ],
+      "category": "persone",
+      "year": 1976,
+      "description": "San Velio, 1976, Ferri",
+      "autore": "Ferri",
+      "regione": "Calabria",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 16,
+      "src": "img/taccuini/taccuini (15).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1970,
+      "description": "Note di campo, 1970, Varani",
+      "autore": "Varani",
+      "regione": "Campania",
+      "abitanti": "Piu di 1000",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 17,
+      "src": "img/architettura/architettura (11).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado"
+      ],
+      "category": "architettura",
+      "year": 1967,
+      "description": "Monteferro, 1967, Ferri",
+      "autore": "Ferri",
+      "regione": "Basilicata",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 18,
+      "src": "img/architettura/architettura (5).jpg",
+      "tags": [
+        "edifici",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1976,
+      "description": "Riva Spenta, 1976, Fiore",
+      "autore": "Fiore",
+      "regione": "Sicilia",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 19,
+      "src": "img/architettura/architettura (12).jpg",
+      "tags": [
+        "edifici",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1975,
+      "description": "Borgo Cupo, 1975, Scorza",
+      "autore": "Scorza",
+      "regione": "Puglia",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 20,
+      "src": "img/taccuini/taccuini (1).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1969,
+      "description": "Note di campo, 1969, Varani",
+      "autore": "Varani",
+      "regione": "Molise",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 21,
+      "src": "img/persone/persone (10).jpg",
+      "tags": [
+        "presenza",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "persone",
+      "year": 1970,
+      "description": "Monteferro, 1970, Fiore",
+      "autore": "Fiore",
+      "regione": "Basilicata",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 22,
+      "src": "img/architettura/architettura (21).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1974,
+      "description": "Vallefredda, 1974, Varani",
+      "autore": "Varani",
+      "regione": "Campania",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 23,
+      "src": "img/architettura/architettura (4).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1981,
+      "description": "Valle Cupa, 1981, Fiore",
+      "autore": "Fiore",
+      "regione": "Calabria",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 24,
+      "src": "img/taccuini/taccuini (2).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1977,
+      "description": "Note di campo, 1977, Varani",
+      "autore": "Varani",
+      "regione": "Molise",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 25,
+      "src": "img/persone/persone (21).jpg",
+      "tags": [
+        "presenza",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "persone",
+      "year": 1964,
+      "description": "Pietra Lenta, 1964, Scorza",
+      "autore": "Scorza",
+      "regione": "Calabria",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 26,
+      "src": "img/architettura/architettura (9).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado"
+      ],
+      "category": "architettura",
+      "year": 1967,
+      "description": "Piana Morta, 1967, Ferri",
+      "autore": "Ferri",
+      "regione": "Basilicata",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 27,
+      "src": "img/persone/persone (3).jpg",
+      "tags": [
+        "presenza",
+        "vicoli",
+        "edifici"
+      ],
+      "category": "persone",
+      "year": 1986,
+      "description": "Rocca Secca, 1986, Maffei",
+      "autore": "Maffei",
+      "regione": "Campania",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 28,
+      "src": "img/taccuini/taccuini (8).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1973,
+      "description": "Note di campo, 1973, Ferri",
+      "autore": "Ferri",
+      "regione": "Campania",
+      "abitanti": "Piu di 1000",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 29,
+      "src": "img/persone/persone (17).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "degrado"
+      ],
+      "category": "persone",
+      "year": 1975,
+      "description": "Riva Spenta, 1975, Ferri",
+      "autore": "Ferri",
+      "regione": "Sicilia",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 30,
+      "src": "img/architettura/architettura (3).jpg",
+      "tags": [
+        "edifici",
+        "degrado",
+        "vicoli"
+      ],
+      "category": "architettura",
+      "year": 1964,
+      "description": "Colle Ombra, 1964, Maffei",
+      "autore": "Maffei",
+      "regione": "Sicilia",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 31,
+      "src": "img/persone/persone (25).jpg",
+      "tags": [
+        "presenza",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "persone",
+      "year": 1969,
+      "description": "Fonte Chiusa, 1969, Scorza",
+      "autore": "Scorza",
+      "regione": "Calabria",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 32,
+      "src": "img/taccuini/taccuini (17).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1975,
+      "description": "Note di campo, 1975, Ferri",
+      "autore": "Ferri",
+      "regione": "Basilicata",
+      "abitanti": "Piu di 1000",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 33,
+      "src": "img/architettura/architettura (28).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado"
+      ],
+      "category": "architettura",
+      "year": 1980,
+      "description": "Vallefredda, 1980, Scorza",
+      "autore": "Scorza",
+      "regione": "Campania",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 34,
+      "src": "img/persone/persone (9).jpg",
+      "tags": [
+        "presenza",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "persone",
+      "year": 1975,
+      "description": "Colle Ombra, 1975, Fiore",
+      "autore": "Fiore",
+      "regione": "Sicilia",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 35,
+      "src": "img/persone/persone (23).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "degrado",
+        "dettagli"
+      ],
+      "category": "persone",
+      "year": 1984,
+      "description": "Vallefredda, 1984, Fiore",
+      "autore": "Fiore",
+      "regione": "Campania",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 36,
+      "src": "img/taccuini/taccuini (5).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1969,
+      "description": "Note di campo, 1969, Scorza",
+      "autore": "Scorza",
+      "regione": "Puglia",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 37,
+      "src": "img/persone/persone (4).jpg",
+      "tags": [
+        "presenza",
+        "vicoli",
+        "edifici"
+      ],
+      "category": "persone",
+      "year": 1974,
+      "description": "Colle Ombra, 1974, Fiore",
+      "autore": "Fiore",
+      "regione": "Sicilia",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 38,
+      "src": "img/architettura/architettura (15).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado"
+      ],
+      "category": "architettura",
+      "year": 1975,
+      "description": "Riva Spenta, 1975, Maffei",
+      "autore": "Maffei",
+      "regione": "Sicilia",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 39,
+      "src": "img/architettura/architettura (27).jpg",
+      "tags": [
+        "edifici",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1974,
+      "description": "Castel Ruvo, 1974, Varani",
+      "autore": "Varani",
+      "regione": "Puglia",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 40,
+      "src": "img/taccuini/taccuini (7).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1975,
+      "description": "Note di campo, 1975, Maffei",
+      "autore": "Maffei",
+      "regione": "Sicilia",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 41,
+      "src": "img/architettura/architettura (1).jpg",
+      "tags": [
+        "edifici",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1977,
+      "description": "Serra Antica, 1977, Fiore",
+      "autore": "Fiore",
+      "regione": "Campania",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 42,
+      "src": "img/architettura/architettura (18).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1964,
+      "description": "Fonte Secca, 1964, Fiore",
+      "autore": "Fiore",
+      "regione": "Basilicata",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 43,
+      "src": "img/persone/persone (6).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "dettagli"
+      ],
+      "category": "persone",
+      "year": 1981,
+      "description": "Castel Ruvo, 1981, Varani",
+      "autore": "Varani",
+      "regione": "Puglia",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 44,
+      "src": "img/taccuini/taccuini (9).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1968,
+      "description": "Note di campo, 1968, Maffei",
+      "autore": "Maffei",
+      "regione": "Calabria",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 45,
+      "src": "img/architettura/architettura (17).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1980,
+      "description": "Serra Antica, 1980, Maffei",
+      "autore": "Maffei",
+      "regione": "Campania",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 46,
+      "src": "img/architettura/architettura (23).jpg",
+      "tags": [
+        "edifici",
+        "degrado",
+        "dettagli"
+      ],
+      "category": "architettura",
+      "year": 1980,
+      "description": "Serra Antica, 1980, Ferri",
+      "autore": "Ferri",
+      "regione": "Campania",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 47,
+      "src": "img/persone/persone (12).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "dettagli"
+      ],
+      "category": "persone",
+      "year": 1972,
+      "description": "Poggio Nero, 1972, Maffei",
+      "autore": "Maffei",
+      "regione": "Basilicata",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 48,
+      "src": "img/taccuini/taccuini (18).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1973,
+      "description": "Note di campo, 1973, Scorza",
+      "autore": "Scorza",
+      "regione": "Sicilia",
+      "abitanti": "Piu di 1000",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 49,
+      "src": "img/architettura/architettura (25).jpg",
+      "tags": [
+        "edifici",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1977,
+      "description": "Rocca Secca, 1977, Ferri",
+      "autore": "Ferri",
+      "regione": "Campania",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 50,
+      "src": "img/persone/persone (14).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "degrado"
+      ],
+      "category": "persone",
+      "year": 1968,
+      "description": "Fonte Chiusa, 1968, Maffei",
+      "autore": "Maffei",
+      "regione": "Calabria",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 51,
+      "src": "img/architettura/architettura (7).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1972,
+      "description": "Pietra Lenta, 1972, Ferri",
+      "autore": "Ferri",
+      "regione": "Calabria",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 52,
+      "src": "img/taccuini/taccuini (11).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1979,
+      "description": "Note di campo, 1979, Maffei",
+      "autore": "Maffei",
+      "regione": "Basilicata",
+      "abitanti": "Piu di 1000",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 53,
+      "src": "img/architettura/architettura (20).jpg",
+      "tags": [
+        "edifici",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1979,
+      "description": "Pietra Lenta, 1979, Maffei",
+      "autore": "Maffei",
+      "regione": "Calabria",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 54,
+      "src": "img/architettura/architettura (32).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado"
+      ],
+      "category": "architettura",
+      "year": 1971,
+      "description": "Rocca Secca, 1971, Varani",
+      "autore": "Varani",
+      "regione": "Campania",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 55,
+      "src": "img/architettura/architettura (29).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1964,
+      "description": "Pietra Lenta, 1964, Maffei",
+      "autore": "Maffei",
+      "regione": "Calabria",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 56,
+      "src": "img/taccuini/taccuini (3).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1980,
+      "description": "Note di campo, 1980, Maffei",
+      "autore": "Maffei",
+      "regione": "Basilicata",
+      "abitanti": "Piu di 1000",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 57,
+      "src": "img/persone/persone (19).jpg",
+      "tags": [
+        "presenza",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "persone",
+      "year": 1966,
+      "description": "Fonte Chiusa, 1966, Scorza",
+      "autore": "Scorza",
+      "regione": "Calabria",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 58,
+      "src": "img/architettura/architettura (24).jpg",
+      "tags": [
+        "edifici",
+        "degrado",
+        "dettagli"
+      ],
+      "category": "architettura",
+      "year": 1981,
+      "description": "Borgo Cupo, 1981, Fiore",
+      "autore": "Fiore",
+      "regione": "Puglia",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 59,
+      "src": "img/persone/persone (8).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "dettagli"
+      ],
+      "category": "persone",
+      "year": 1979,
+      "description": "Riva Spenta, 1979, Ferri",
+      "autore": "Ferri",
+      "regione": "Sicilia",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 60,
+      "src": "img/taccuini/taccuini (12).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1964,
+      "description": "Note di campo, 1964, Maffei",
+      "autore": "Maffei",
+      "regione": "Puglia",
+      "abitanti": "Piu di 1000",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 61,
+      "src": "img/architettura/architettura (10).jpg",
+      "tags": [
+        "edifici",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1968,
+      "description": "Borgo Salso, 1968, Ferri",
+      "autore": "Ferri",
+      "regione": "Puglia",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 62,
+      "src": "img/architettura/architettura (26).jpg",
+      "tags": [
+        "edifici",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1980,
+      "description": "Vallefredda, 1980, Ferri",
+      "autore": "Ferri",
+      "regione": "Campania",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 63,
+      "src": "img/persone/persone (18).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "degrado"
+      ],
+      "category": "persone",
+      "year": 1977,
+      "description": "Fonte Secca, 1977, Maffei",
+      "autore": "Maffei",
+      "regione": "Basilicata",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 64,
+      "src": "img/taccuini/taccuini (13).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1964,
+      "description": "Note di campo, 1964, Varani",
+      "autore": "Varani",
+      "regione": "Molise",
+      "abitanti": "Meno di 10",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 65,
+      "src": "img/architettura/architettura (33).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado"
+      ],
+      "category": "architettura",
+      "year": 1985,
+      "description": "Rocca Secca, 1985, Varani",
+      "autore": "Varani",
+      "regione": "Campania",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 66,
+      "src": "img/persone/persone (13).jpg",
+      "tags": [
+        "presenza",
+        "vicoli",
+        "edifici"
+      ],
+      "category": "persone",
+      "year": 1981,
+      "description": "Castel Ruvo, 1981, Ferri",
+      "autore": "Ferri",
+      "regione": "Puglia",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 67,
+      "src": "img/architettura/architettura (8).jpg",
+      "tags": [
+        "edifici",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1978,
+      "description": "Poggio Nero, 1978, Scorza",
+      "autore": "Scorza",
+      "regione": "Basilicata",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 68,
+      "src": "img/taccuini/taccuini (6).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1975,
+      "description": "Note di campo, 1975, Varani",
+      "autore": "Varani",
+      "regione": "Puglia",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 69,
+      "src": "img/architettura/architettura (30).jpg",
+      "tags": [
+        "edifici",
+        "vicoli",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1982,
+      "description": "Zagara, 1982, Fiore",
+      "autore": "Fiore",
+      "regione": "Calabria",
+      "abitanti": "Meno di 10",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 70,
+      "src": "img/architettura/architettura (14).jpg",
+      "tags": [
+        "edifici",
+        "degrado",
+        "silenzio"
+      ],
+      "category": "architettura",
+      "year": 1976,
+      "description": "Colle Ombra, 1976, Varani",
+      "autore": "Varani",
+      "regione": "Sicilia",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 71,
+      "src": "img/persone/persone (20).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "degrado",
+        "dettagli"
+      ],
+      "category": "persone",
+      "year": 1980,
+      "description": "Poggio Nero, 1980, Maffei",
+      "autore": "Maffei",
+      "regione": "Basilicata",
+      "abitanti": "Piu di 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 72,
+      "src": "img/persone/persone (2).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "degrado",
+        "dettagli"
+      ],
+      "category": "persone",
+      "year": 1982,
+      "description": "Serra Antica, 1982, Varani",
+      "autore": "Varani",
+      "regione": "Campania",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 73,
+      "src": "img/taccuini/taccuini (14).jpg",
+      "tags": [
+        "dettagli",
+        "note"
+      ],
+      "category": "taccuini",
+      "year": 1977,
+      "description": "Note di campo, 1977, Varani",
+      "autore": "Varani",
+      "regione": "Sicilia",
+      "abitanti": "Piu di 1000",
+      "documento": "Note di campo"
+    },
+    {
+      "id": 74,
+      "src": "img/persone/persone (22).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "degrado",
+        "dettagli"
+      ],
+      "category": "persone",
+      "year": 1980,
+      "description": "Borgo Salso, 1980, Fiore",
+      "autore": "Fiore",
+      "regione": "Puglia",
+      "abitanti": "Tra 100 e 1000",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 75,
+      "src": "img/persone/persone (1).jpg",
+      "tags": [
+        "presenza",
+        "edifici",
+        "degrado",
+        "dettagli"
+      ],
+      "category": "persone",
+      "year": 1971,
+      "description": "Rocca Secca, 1971, Scorza",
+      "autore": "Scorza",
+      "regione": "Campania",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Fotografia"
+    },
+    {
+      "id": 76,
+      "src": "img/architettura/architettura (16).jpg",
+      "tags": [
+        "edifici",
+        "dettagli",
+        "degrado"
+      ],
+      "category": "architettura",
+      "year": 1971,
+      "description": "Poggio Nero, 1971, Fiore",
+      "autore": "Fiore",
+      "regione": "Basilicata",
+      "abitanti": "Tra 10 e 100",
+      "documento": "Fotografia"
+    }
   ]
 }
