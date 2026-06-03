@@ -542,87 +542,193 @@ document.addEventListener('DOMContentLoaded', initializeStoryBackToTop);
 
 
 // Handle smooth scrolling inside the main scroll container for section anchors
-(function(){
-  document.addEventListener('DOMContentLoaded', function(){
-    const container = document.getElementById('main-scroll');
-    if (!container) return;
-    const headerOffset = 80; // keep in sync with CSS
-    document.querySelectorAll('a[href^="#sezione_"]').forEach(a => {
-      a.addEventListener('click', function(e){
-        e.preventDefault();
+function getStoryScroller() {
+  const mainScroll = document.getElementById('main-scroll');
+  if (!mainScroll) return null;
+
+  const style = window.getComputedStyle(mainScroll);
+
+  const useMainScroll =
+    mainScroll.scrollHeight > mainScroll.clientHeight + 2 &&
+    /(auto|scroll)/.test(style.overflowY);
+
+  const getWindowTop = () =>
+    window.pageYOffset ||
+    document.documentElement.scrollTop ||
+    document.body.scrollTop ||
+    0;
+
+  return {
+    mainScroll,
+    useMainScroll,
+    root: useMainScroll ? mainScroll : null,
+
+    getTop() {
+      return useMainScroll ? mainScroll.scrollTop : getWindowTop();
+    },
+
+    getMaxTop() {
+      if (useMainScroll) {
+        return Math.max(0, mainScroll.scrollHeight - mainScroll.clientHeight);
+      }
+
+      return Math.max(
+        0,
+        document.documentElement.scrollHeight - window.innerHeight
+      );
+    },
+
+    scrollTo(top, behavior = 'smooth') {
+      const safeTop = Math.max(0, top);
+
+      if (useMainScroll) {
+        mainScroll.scrollTo({
+          top: safeTop,
+          behavior,
+        });
+      } else {
+        window.scrollTo({
+          top: safeTop,
+          behavior,
+        });
+      }
+    },
+
+    getViewportRect() {
+      if (useMainScroll) {
+        return mainScroll.getBoundingClientRect();
+      }
+
+      return {
+        top: 0,
+        bottom: window.innerHeight,
+      };
+    },
+
+    getTargetTop(target, headerOffset = 80) {
+      if (useMainScroll) {
+        const containerRect = mainScroll.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+
+        return (
+          mainScroll.scrollTop +
+          (targetRect.top - containerRect.top) -
+          headerOffset
+        );
+      }
+
+      return getWindowTop() + target.getBoundingClientRect().top - headerOffset;
+    },
+
+    addScrollListener(callback) {
+      const target = useMainScroll ? mainScroll : window;
+      target.addEventListener('scroll', callback, { passive: true });
+    },
+  };
+}
+
+
+// Handle smooth scrolling for section anchors
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    const scroller = getStoryScroller();
+    if (!scroller) return;
+
+    const headerOffset = 80;
+
+    document.querySelectorAll('a[href^="#sezione_"]').forEach((link) => {
+      link.addEventListener('click', function (event) {
         const id = this.getAttribute('href').slice(1);
         const target = document.getElementById(id);
+
         if (!target) return;
-        const containerRect = container.getBoundingClientRect();
-        const targetRect = target.getBoundingClientRect();
-        const scrollTop = container.scrollTop + (targetRect.top - containerRect.top) - headerOffset;
-        container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+
+        event.preventDefault();
+
+        const top = scroller.getTargetTop(target, headerOffset);
+        scroller.scrollTo(top, 'smooth');
       });
     });
   });
 })();
 
-// Fade-in sections while scrolling inside the story page container
-(function(){
-  document.addEventListener('DOMContentLoaded', function(){
-    const mainScroll = document.getElementById('main-scroll');
-    const storyGrid = mainScroll?.querySelector('div.grid.grid-cols-2.gap-10px.pt-30px.pl-10px.pr-10px.pb-30px');
-    if (!mainScroll || !storyGrid) return;
 
-    const storyItems = Array.from(storyGrid.children).filter((element) => element.nodeType === 1);
+// Fade-in sections while scrolling
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    const scroller = getStoryScroller();
+    if (!scroller) return;
+
+    const mainScroll = scroller.mainScroll;
+
+    const storyGrid =
+      mainScroll.querySelector('.story-fade-grid') ||
+      Array.from(mainScroll.children).find((el) =>
+        el.matches?.('.grid.grid-cols-2')
+      );
+
+    if (!storyGrid) return;
+
+    const storyItems = Array.from(storyGrid.children).filter((element) => {
+      return (
+        element.nodeType === 1 &&
+        !element.id?.startsWith('sezione_')
+      );
+    });
+
     if (!storyItems.length) return;
 
-    storyItems.forEach((element) => element.classList.add('story-fade'));
-    // Fallback: if IntersectionObserver is unavailable, reveal all
-    if (!('IntersectionObserver' in window)) {
-      storyItems.forEach((element) => element.classList.add('story-fade--visible'));
+    storyItems.forEach((element) => {
+      element.classList.add('story-fade');
+    });
+
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !('IntersectionObserver' in window)
+    ) {
+      storyItems.forEach((element) => {
+        element.classList.add('story-fade--visible');
+      });
       return;
     }
 
-    // Track last scroll position to detect direction
-    let lastScrollTop = mainScroll.scrollTop || 0;
-
-    // Mark items already visible on load as visible
-    const containerRect = mainScroll.getBoundingClientRect();
-    storyItems.forEach((el) => {
-      const r = el.getBoundingClientRect();
-      if (r.top < containerRect.bottom && r.bottom > containerRect.top) {
-        el.classList.add('story-fade--visible');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('story-fade--visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        root: scroller.root,
+        threshold: 0.15,
+        rootMargin: '0px 0px -10% 0px',
       }
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-      const currentScroll = mainScroll.scrollTop || 0;
-      const scrollingDown = currentScroll > lastScrollTop;
-
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && scrollingDown) {
-          entry.target.classList.add('story-fade--visible');
-          observer.unobserve(entry.target);
-        }
-      });
-
-      lastScrollTop = currentScroll;
-    }, {
-      root: mainScroll,
-      threshold: 0.18,
-      rootMargin: '0px 0px -10% 0px',
-    });
+    );
 
     storyItems.forEach((element) => {
-      if (!element.classList.contains('story-fade--visible')) observer.observe(element);
+      observer.observe(element);
     });
   });
 })();
 
-// Progressive opacity for sticky section anchors while scrolling inside the story page
-(function(){
-  document.addEventListener('DOMContentLoaded', function(){
-    const mainScroll = document.getElementById('main-scroll');
-    if (!mainScroll) return;
 
-    const navLinks = Array.from(mainScroll.querySelectorAll('.sticky a[href^="#sezione_"]'));
+// Progressive opacity for sticky section anchors
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    const scroller = getStoryScroller();
+    if (!scroller) return;
+
+    const mainScroll = scroller.mainScroll;
+
+    const navLinks = Array.from(
+      mainScroll.querySelectorAll('.sticky a[href^="#sezione_"]')
+    );
+
     if (!navLinks.length) return;
+
     const headerOffset = 80;
 
     const sectionTargets = navLinks
@@ -634,15 +740,26 @@ document.addEventListener('DOMContentLoaded', initializeStoryBackToTop);
       .filter(Boolean);
 
     const updateAnchorOpacity = () => {
-      const scrollTop = mainScroll.scrollTop || 0;
+      const scrollTop = scroller.getTop();
       const currentPosition = scrollTop + headerOffset;
-      const containerRect = mainScroll.getBoundingClientRect();
+      const containerRect = scroller.getViewportRect();
+
       let activeIndex = -1;
 
       sectionTargets.forEach(({ target }, index) => {
-        if (!target) return;
-        const sectionTop = target.getBoundingClientRect().top - containerRect.top + scrollTop;
+        let sectionTop;
+
+        if (scroller.useMainScroll) {
+          sectionTop =
+            target.getBoundingClientRect().top -
+            containerRect.top +
+            scrollTop;
+        } else {
+          sectionTop = target.getBoundingClientRect().top + scrollTop;
+        }
+
         const sectionStart = Math.max(0, sectionTop - headerOffset);
+
         if (currentPosition >= sectionStart) {
           activeIndex = index;
         }
@@ -654,8 +771,10 @@ document.addEventListener('DOMContentLoaded', initializeStoryBackToTop);
     };
 
     let rafId = 0;
+
     const requestUpdate = () => {
       if (rafId) return;
+
       rafId = window.requestAnimationFrame(() => {
         rafId = 0;
         updateAnchorOpacity();
@@ -663,11 +782,67 @@ document.addEventListener('DOMContentLoaded', initializeStoryBackToTop);
     };
 
     updateAnchorOpacity();
-    mainScroll.addEventListener('scroll', requestUpdate, { passive: true });
+
+    scroller.addScrollListener(requestUpdate);
     window.addEventListener('resize', requestUpdate, { passive: true });
   });
 })();
 
+
+function initializeStoryBackToTop() {
+  if (
+    !document.body.classList.contains('story-page') &&
+    !document.body.classList.contains('stat-page')
+  ) {
+    return;
+  }
+
+  const scroller = getStoryScroller();
+  const backToTopButton = document.querySelector('[data-story-back-to-top]');
+
+  if (!scroller || !backToTopButton) return;
+
+  const mobileQuery = window.matchMedia('(max-width: 1119px)');
+
+  const updateButtonVisibility = () => {
+    const shouldShow =
+      mobileQuery.matches &&
+      scroller.getTop() >= scroller.getMaxTop() * 0.5;
+
+    backToTopButton.classList.toggle('is-visible', shouldShow);
+    backToTopButton.setAttribute('aria-hidden', String(!shouldShow));
+  };
+
+  const scrollToTop = () => {
+    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? 'auto'
+      : 'smooth';
+
+    scroller.scrollTo(0, behavior);
+  };
+
+  backToTopButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    scrollToTop();
+  });
+
+  let rafId = 0;
+
+  const requestUpdate = () => {
+    if (rafId) return;
+
+    rafId = window.requestAnimationFrame(() => {
+      rafId = 0;
+      updateButtonVisibility();
+    });
+  };
+
+  mobileQuery.addEventListener('change', requestUpdate);
+  scroller.addScrollListener(requestUpdate);
+  window.addEventListener('resize', requestUpdate, { passive: true });
+
+  updateButtonVisibility();
+}
 function initializeStoryBackToTop() {
   if (!document.body.classList.contains('story-page') && !document.body.classList.contains('stat-page')) return;
 

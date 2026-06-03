@@ -22,7 +22,7 @@
     <div class="w-screen min-h-screen grid grid-cols-8 specialGrid bg-myWhite">
       <!-- Brand/navigation moved to bottom across pages -->
 
-      <div id="main-scroll" class="col-start-2 col-end-8 bg-transparent h-screen overflow-y-scroll relative">
+      <div id="main-scroll" class="col-start-2 col-end-8 bg-transparent min-h-screen relative">
         <div class="sticky story-sticky top-0 z-20 col-span-full pt-10px bg-transparent" style="position: sticky; top: 0;" data-story-top-nav>
           <div class="grid grid-cols-6 story-top-nav">
             <a href="#sezione_1" class="p text-justify">Introduzione</a>
@@ -37,7 +37,7 @@
           <span aria-hidden="true">↑</span>
         </button>
 
-        <div class="grid grid-cols-2 ">
+        <div class="story-fade-grid grid grid-cols-2">
           <!-- SEZIONE 1: Introduzione -->
           <div id="sezione_1" class="sezione_1"></div>
           <div class="col-span-2 font-myTitle uppercase leading-none max-w-[70ch] mr-auto" style="margin: 0;">Questa sezione raccoglie dati demografici, abitativi e infrastrutturali relativi ai territori documentati dall'Archivio Scorza tra il 1964 e il 1986.</div>
@@ -403,6 +403,35 @@
 
     <script src="script.js"></script>
     
+     
+    <footer class="page-footer font-myText" aria-label="Footer informazioni">
+      <div class="footer-grid grid grid-cols-8 gap-10px">
+        <div></div>
+        <div class="footer-item">
+          <p>Copyright © 2026</p>
+        </div>
+        <div class="footer-item">
+          <p>Contatti</p>
+          <p><a href="mailto:vittoriascorza@gmail.com">vittoriascorza@gmail.com</a></p>
+        </div>
+        <div class="footer-item">
+          <p>Indirizzo</p>
+          <p>Via XX Settembre,<br>88050 Zagara (CZ)</p>
+        </div>
+        <div class="footer-item">
+          <p>Scopri di più</p>
+          <p><a href="#">Instagram</a><br><a href="#">Facebook</a></p>
+        </div>
+        <div class="footer-item">
+          <p>Note legali</p>
+          <p><a href="#">Privacy Policy</a><br><a href="#">Cookie</a><br><a href="#">Accessibilità</a></p>
+        </div>
+        <div class="footer-item">
+          <input type="search" placeholder="Ricerca" class="footer-search" aria-label="Ricerca" />
+        </div>
+        <div></div>
+      </div>
+    </footer>
     <!-- Bottom brand + links (identical on every page) -->
     <div class="site-bottom-brand" style="position:fixed;left:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
       <div style="line-height:1">

@@ -22,12 +22,12 @@
       html { scroll-behavior: smooth; scroll-padding-top: 80px; }
       body, [data-scroll-container], #main-scroll, * { scroll-behavior: smooth; }
 
-body.page-transition > :not(#lightbox) {
+body.page-transition > :not(#lightbox):not(.page-footer):not(.site-bottom-brand):not(.sidebar-links) {
   opacity: 0;
   transform: translateY(24px);
 }
 
-body.page-transition.page-transition-ready > :not(#lightbox) {
+body.page-transition.page-transition-ready > :not(#lightbox):not(.page-footer):not(.site-bottom-brand):not(.sidebar-links) {
   opacity: 1;
   transform: translateY(0);
   transition:
@@ -35,7 +35,7 @@ body.page-transition.page-transition-ready > :not(#lightbox) {
     transform 720ms cubic-bezier(.77,0,.175,1);
 }
 
-body.page-transition.page-transition-leaving > :not(#lightbox) {
+body.page-transition.page-transition-leaving > :not(#lightbox):not(.page-footer):not(.site-bottom-brand):not(.sidebar-links) {
   opacity: 0;
   transform: translateY(-16px);
   transition:
@@ -162,6 +162,7 @@ body {
 #main-scroll {
   padding: var(--page-padding) !important;
   padding-top: 0 !important;
+  padding-bottom: 80px !important;
 }
 
 #main-scroll .grid {
@@ -354,6 +355,57 @@ a:hover {
 
 .sidebar-links a:hover {
   opacity: .3 !important;
+}
+
+.page-footer {
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1000;
+  background: rgba(252,252,252,0.96);
+  border-top: 1px solid var(--myBlack);
+  padding: 14px 10px 10px;
+  backdrop-filter: blur(10px);
+  padding-bottom: 80px;
+}
+
+.page-footer .footer-grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+  max-width: calc(100% - 20px);
+  margin: 0 auto;
+}
+
+.page-footer .footer-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-footer .footer-item p {
+  margin: 0;
+  line-height: 1.3;
+}
+
+.page-footer .footer-item a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page-footer .footer-search {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--myBlack);
+  background: transparent;
+  color: inherit;
+  padding: 6px 0;
+  outline: none;
+}
+
+.font-myText {
+  font-family: 'Diatype';
+  text-transform: none;
 }
 
 /* (Archive-page) other links remain at normal opacity; active one is dimmed above */
