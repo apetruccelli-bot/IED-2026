@@ -154,7 +154,7 @@ body {
 .scroll-to-top {
   position: fixed;
   left: 50%;
-  bottom: clamp(16px, 3vh, 28px);
+  bottom: clamp(6px, 1.2vh, 12px);
   transform: translateX(-50%);
   z-index: 10010;
   border: none;
@@ -169,6 +169,22 @@ body {
   pointer-events: auto;
   opacity: 0.92;
   transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.filters-block {
+  margin-top: auto;
+  flex-shrink: 0;
+  width: 100%;
+  pointer-events: auto;
+}
+
+.filters-block .filters {
+  margin-top: 0;
+  width: 100%;
+}
+
+.mainLayout.category-pubblicita .filters-block {
+  display: none;
 }
 
 .scroll-to-top:hover,
@@ -1414,6 +1430,7 @@ body.about-open #gesture-status {
 }
 
 .descriptionAndFilters .description-intro,
+.descriptionAndFilters .filters-block,
 .descriptionAndFilters .filters,
 .descriptionAndFilters .item-preview,
 .descriptionAndFilters .advertising-desc-scroll {
@@ -1481,9 +1498,7 @@ body.about-open #gesture-status {
   color: var(--myGrey);
 }
 
-.filters {
-  margin-top: auto;
-  flex-shrink: 0;
+.filters-block .filters {
   padding-top: 32px;
   display: flex;
   flex-direction: column;

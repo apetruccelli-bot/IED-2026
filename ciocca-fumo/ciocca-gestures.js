@@ -23,7 +23,7 @@ function shouldShowGestureCamera() {
   if (!gestureSurfaceEnabled) return false;
   if (document.body.classList.contains('about-open')) return true;
   const cat = getActiveCategorySafe();
-  return cat === 'fotografie' || cat === 'pacchetti';
+  return cat === 'fotografie' || cat === 'pacchetti' || cat === 'pubblicità';
 }
 
 function updateGestureCameraVisibility() {
@@ -546,7 +546,7 @@ function processOpenHandSwipe(hand, frameW, frameH, ctx, options = {}) {
   }
 
   if (hand && isOpenHand(hand, frameW, frameH) && options.allowScroll) {
-    setGestureStatus('Mano aperta: ↓↑ scroll');
+    setGestureStatus('Open hand: ↓↑ scroll');
   }
 
   return null;
@@ -615,6 +615,83 @@ function tryOpenPubblicitaGesture(hand, frameW, frameH) {
   return openPubblicitaGestureTracker.update(hand, frameW, frameH);
 }
 
+function isInFotografieCategory() {
+  return getActiveCategorySafe() === 'fotografie' && !document.body.classList.contains('about-open');
+}
+
+function isInPacchettiCategory() {
+  return getActiveCategorySafe() === 'pacchetti' && !document.body.classList.contains('about-open');
+}
+
+function tryOpenFotografieGesture(hand) {
+  if (isInFotografieCategory()) return false;
+
+  if (!hand) {
+    doubleDownDetector.reset();
+    return false;
+  }
+
+  if (doubleDownDetector.update(hand)) {
+    resetAllGestureDetectors();
+    window.openFotografieViaGesture?.();
+    return true;
+  }
+
+  return false;
+}
+
+function tryOpenPacchettiGesture(hand, frameW, frameH) {
+  if (isInPacchettiCategory()) return false;
+
+  if (!hand) {
+    leftChestDetector.reset();
+    return false;
+  }
+
+  if (leftChestDetector.update(hand, frameW, frameH)) {
+    resetAllGestureDetectors();
+    window.openPacchettiViaGesture?.();
+    return true;
+  }
+
+  return false;
+}
+
+function handleCategorySwitchGesture(hand, frameW, frameH, ctx) {
+  if (tryOpenPubblicitaGesture(hand, frameW, frameH)) {
+    openHandSwipeDetector.reset();
+    doubleDownDetector.reset();
+    leftChestDetector.reset();
+    if (hand) drawHandDebug(hand, ctx, 'smoking');
+    const target = getActiveCategorySafe() === 'pubblicità'
+      ? 'Images revealed'
+      : 'Advertisements — category open';
+    setGestureStatus(target);
+    setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
+    return true;
+  }
+
+  if (tryOpenFotografieGesture(hand)) {
+    openHandSwipeDetector.reset();
+    leftChestDetector.reset();
+    if (hand) drawHandDebug(hand, ctx, 'portrait');
+    setGestureStatus('Portraits — category open');
+    setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
+    return true;
+  }
+
+  if (tryOpenPacchettiGesture(hand, frameW, frameH)) {
+    openHandSwipeDetector.reset();
+    doubleDownDetector.reset();
+    if (hand) drawHandDebug(hand, ctx, 'pack');
+    setGestureStatus('Packs — category open');
+    setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
+    return true;
+  }
+
+  return false;
+}
+
 function resetAllGestureDetectors() {
   doubleDownDetector.reset();
   leftChestDetector.reset();
@@ -626,18 +703,20 @@ function updateIdleGestureStatus() {
   const mode = getGestureMode();
   const revealed = window.isCategoryImagesRevealed?.() ?? true;
 
+  const cross = '↓↓ Portraits · left chest Packs · smoking Ads';
+
   if (mode === 'pubblicità') {
-    setGestureStatus('');
+    setGestureStatus(revealed ? cross : `smoking reveal images · ${cross}`);
   } else if (mode === 'about') {
-    setGestureStatus('About: soffia · fumo → ads · ↓↑ scroll');
+    setGestureStatus(`About: blow · ↓↑ scroll · ${cross}`);
   } else if (mode === 'fotografie') {
     setGestureStatus(revealed
-      ? 'Portraits: ↓↓ indice+medio · fumo → ads'
-      : 'Portraits: ↓↓ apri immagini · fumo → ads');
+      ? `Portraits: ↓↓ next · left chest Packs · smoking Ads`
+      : `Portraits: ↓↓ reveal · left chest Packs · smoking Ads`);
   } else if (mode === 'pacchetti') {
     setGestureStatus(revealed
-      ? 'Packs: indice petto sx · fumo → ads'
-      : 'Packs: indice petto sx → apri immagini · fumo → ads');
+      ? `Packs: left chest next · ↓↓ Portraits · smoking Ads`
+      : `Packs: left chest reveal · ↓↓ Portraits · smoking Ads`);
   } else {
     setGestureStatus('');
   }
@@ -731,24 +810,20 @@ async function detectCategoryGestures() {
         if (hands.length) {
           const hand = hands[0];
 
-          if (tryOpenPubblicitaGesture(hand, frameW, frameH)) {
-            openHandSwipeDetector.reset();
-            doubleDownDetector.reset();
-            drawHandDebug(hand, ctx, 'smoking');
-            setGestureStatus('Pubblicità — categoria aperta');
-            setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
+          if (handleCategorySwitchGesture(hand, frameW, frameH, ctx)) {
+            /* category opened via shared gestures */
           } else if (isPortraitGestureBusy(hand)) {
             openHandSwipeDetector.reset();
             drawHandDebug(hand, ctx, 'portrait');
 
             if (doubleDownDetector.update(hand)) {
               setGestureStatus(window.isCategoryImagesRevealed?.()
-                ? 'Gesto ↓↓ — prossimo ritratto'
-                : 'Gesto ↓↓ — immagini aperte');
+                ? '↓↓ gesture — next portrait'
+                : '↓↓ gesture — images revealed');
               window.advancePortraitViaGesture?.();
               setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
             } else if (isIndexMiddleDown(hand)) {
-              setGestureStatus('Indice + medio ↓ — pronto per colpo');
+              setGestureStatus('Index + middle ↓ — ready for stroke');
             }
           } else {
             openHandSwipeDetector.reset();
@@ -757,7 +832,8 @@ async function detectCategoryGestures() {
         } else {
           openHandSwipeDetector.reset();
           doubleDownDetector.reset();
-          setGestureStatus('Portraits: ↓↓ indice+medio · fumo → ads');
+          leftChestDetector.reset();
+          updateIdleGestureStatus();
         }
       } catch (err) {
         /* ignore per-frame errors */
@@ -771,26 +847,22 @@ async function detectCategoryGestures() {
         if (hands.length) {
           const hand = hands[0];
 
-          if (tryOpenPubblicitaGesture(hand, frameW, frameH)) {
-            openHandSwipeDetector.reset();
-            leftChestDetector.reset();
-            drawHandDebug(hand, ctx, 'smoking');
-            setGestureStatus('Pubblicità — categoria aperta');
-            setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
+          if (handleCategorySwitchGesture(hand, frameW, frameH, ctx)) {
+            /* category opened via shared gestures */
           } else if (isPackPointingGesture(hand, frameW, frameH)) {
             openHandSwipeDetector.reset();
             drawHandDebug(hand, ctx, 'pack');
 
             if (leftChestDetector.update(hand, frameW, frameH)) {
               setGestureStatus(window.isCategoryImagesRevealed?.()
-                ? 'Petto sinistro — prossimo pack'
-                : 'Petto sinistro — immagini aperte');
+                ? 'Left chest — next pack'
+                : 'Left chest — images revealed');
               window.advancePackViaGesture?.();
               setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
             } else if (isIndexPointLeftChest(hand, frameW, frameH)) {
-              setGestureStatus('Indice sul petto sinistro…');
+              setGestureStatus('Index on left chest…');
             } else if (isIndexExtended(hand)) {
-              setGestureStatus('Punta l’indice verso il petto sinistro');
+              setGestureStatus('Point index at left chest');
             }
           } else {
             openHandSwipeDetector.reset();
@@ -799,7 +871,8 @@ async function detectCategoryGestures() {
         } else {
           openHandSwipeDetector.reset();
           leftChestDetector.reset();
-          setGestureStatus('Packs: indice petto sx · fumo → ads');
+          doubleDownDetector.reset();
+          updateIdleGestureStatus();
         }
       } catch (err) {
         /* ignore per-frame errors */
@@ -813,19 +886,19 @@ async function detectCategoryGestures() {
         if (hands.length) {
           const hand = hands[0];
 
-          if (tryOpenPubblicitaGesture(hand, frameW, frameH)) {
-            openHandSwipeDetector.reset();
-            drawHandDebug(hand, ctx, 'smoking');
-            setGestureStatus('Pubblicità — categoria aperta');
-            setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
+          if (handleCategorySwitchGesture(hand, frameW, frameH, ctx)) {
+            /* category opened via shared gestures */
           } else if (!window.isAboutMicBlowing?.()
             && !processOpenHandSwipe(hand, frameW, frameH, ctx, { allowScroll: true })) {
-            setGestureStatus('About: soffia · fumo → ads · ↓↑ scroll');
+            updateIdleGestureStatus();
           }
         } else {
           handleOpenHandSwipeLost(performance.now(), { allowScroll: true });
+          openPubblicitaGestureTracker.reset();
+          doubleDownDetector.reset();
+          leftChestDetector.reset();
           if (!window.isAboutMicBlowing?.()) {
-            setGestureStatus('About: soffia · fumo → ads · ↓↑ scroll');
+            updateIdleGestureStatus();
           }
         }
       } catch (err) {
@@ -840,18 +913,18 @@ async function detectCategoryGestures() {
         if (hands.length) {
           const hand = hands[0];
 
-          if (tryOpenPubblicitaGesture(hand, frameW, frameH)) {
-            drawHandDebug(hand, ctx, 'smoking');
-            setGestureStatus('Immagini aperte');
-            setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
+          if (handleCategorySwitchGesture(hand, frameW, frameH, ctx)) {
+            /* reveal ads or switch category */
           } else if (isSmokingGesture(hand, frameW, frameH)) {
             drawHandDebug(hand, ctx, 'smoking');
             if (!window.isCategoryImagesRevealed?.()) {
-              setGestureStatus('Fumo — apri immagini');
+              setGestureStatus('Smoking — reveal images');
             }
           }
         } else {
           openPubblicitaGestureTracker.reset();
+          doubleDownDetector.reset();
+          leftChestDetector.reset();
           updateIdleGestureStatus();
         }
       } catch (err) {

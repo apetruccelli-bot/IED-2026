@@ -116,6 +116,28 @@ function syncCategoryRevealState() {
   if (intro) intro.hidden = false;
 }
 
+function openFotografieViaGesture() {
+  if (document.body.classList.contains('about-open')) {
+    closeExploreModal();
+  }
+  if (activeCategory !== 'fotografie') {
+    setCategory('fotografie');
+  } else {
+    window.ensureCategoryGestures?.();
+  }
+}
+
+function openPacchettiViaGesture() {
+  if (document.body.classList.contains('about-open')) {
+    closeExploreModal();
+  }
+  if (activeCategory !== 'pacchetti') {
+    setCategory('pacchetti');
+  } else {
+    window.ensureCategoryGestures?.();
+  }
+}
+
 function openPubblicitaViaGesture() {
   if (document.body.classList.contains('about-open')) {
     closeExploreModal();
@@ -151,6 +173,7 @@ function setDescriptionIntroVisible(visible) {
 
   main?.classList.toggle('has-item-selected', !visible);
   if (intro) intro.hidden = !visible;
+
 }
 
 async function loadData() {
@@ -606,7 +629,7 @@ function renderPortraitFilters() {
       </p>
     </div>
 
-    <div class="filter">
+    <div class="filter filter-year">
       <p>年&nbsp;&nbsp; Year</p>
       <p>
         <span class="filter-option" data-filter-type="year" data-filter-value="1986">1986年</span>
@@ -645,6 +668,7 @@ function renderCategoryFilters(category) {
   (filtersByCategory[category] || []).forEach(group => {
     const div = document.createElement('div');
     div.className = 'filter';
+    div.className = group.type === 'year' ? 'filter filter-year' : 'filter';
     div.innerHTML = `
       <p>${group.title}</p>
       <p>
@@ -1424,6 +1448,7 @@ function initScrollToTop() {
   const aboutModal = document.getElementById('explore-modal');
   if (!btn) return;
 
+  document.body.appendChild(btn);
   btn.addEventListener('click', scrollActiveViewToTop);
 
   const onScroll = () => updateScrollToTopVisibility();
@@ -1446,6 +1471,7 @@ async function init() {
       if (activeCategory === 'pubblicità' && categoryImagesRevealed) {
         updateAdvertisingScrollState();
       }
+      updateScrollToTopVisibility();
     });
   } catch (error) {
     console.error(error);
@@ -1469,6 +1495,8 @@ window.getPackItems = getPackItems;
 window.selectPackByIndex = selectPackByIndex;
 window.advancePackViaGesture = advancePackViaGesture;
 window.resetAdGestureState = resetAdGestureState;
+window.openFotografieViaGesture = openFotografieViaGesture;
+window.openPacchettiViaGesture = openPacchettiViaGesture;
 window.openPubblicitaViaGesture = openPubblicitaViaGesture;
 window.revealCategoryImages = revealCategoryImages;
 window.isCategoryImagesRevealed = isCategoryImagesRevealed;
