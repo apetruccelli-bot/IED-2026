@@ -52,7 +52,15 @@ let adScrollSyncLock = false;
 let portraitGestureIndex = 0;
 let packGestureIndex = 0;
 let adGestureIndex = 0;
-let adsSmokingHeld = false;
+
+function openPubblicitaViaGesture() {
+  if (document.body.classList.contains('about-open')) {
+    closeExploreModal();
+  }
+  if (activeCategory !== 'pubblicità') {
+    setCategory('pubblicità');
+  }
+}
 let aboutGestureIndex = 0;
 let aboutBlowHeld = false;
 
@@ -218,7 +226,6 @@ function setCategory(cat) {
   }
   if (activeCategory === 'pubblicità') {
     adGestureIndex = 0;
-    adsSmokingHeld = false;
     grid?.classList.add('layout-pubblicita');
     lastAdvertisingIndex = -1;
     if (grid) grid.scrollTop = 0;
@@ -228,7 +235,6 @@ function setCategory(cat) {
 
   if (activeCategory !== 'pubblicità') {
     updateCategoryText(activeCategory);
-    resetAdsSmokingGesture();
   }
   render();
 }
@@ -352,29 +358,27 @@ function getAdItems() {
   return filteredItems().filter(item => item.category === 'pubblicità');
 }
 
-function syncAdRevealState() {
+function syncAdIndexToScroll() {
+  if (activeCategory !== 'pubblicità') return;
+
   const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
   if (!cards.length) return;
 
-  if (adGestureIndex >= cards.length) {
-    adGestureIndex = cards.length - 1;
-  }
+  const targetY = window.innerHeight * 0.45;
+  let bestIndex = adGestureIndex;
+  let bestDistance = Infinity;
 
   cards.forEach((card, i) => {
-    card.classList.toggle('ad-revealed', adsSmokingHeld && i === adGestureIndex);
+    const rect = card.getBoundingClientRect();
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.abs(centerY - targetY);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestIndex = i;
+    }
   });
-}
 
-function onAdSmokingGestureStart() {
-  if (activeCategory !== 'pubblicità') return;
-  adsSmokingHeld = true;
-  syncAdRevealState();
-}
-
-function onAdSmokingGestureEnd() {
-  if (activeCategory !== 'pubblicità') return;
-  adsSmokingHeld = false;
-  syncAdRevealState();
+  adGestureIndex = bestIndex;
 }
 
 function getAboutImages() {
@@ -434,30 +438,6 @@ function resetAboutBlowGesture() {
   aboutGestureIndex = 0;
   aboutBlowHeld = false;
   getAboutImages().forEach(img => img.classList.remove('about-revealed'));
-}
-
-function syncAdIndexToScroll() {
-  if (activeCategory !== 'pubblicità') return;
-
-  const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
-  if (!cards.length) return;
-
-  const targetY = window.innerHeight * 0.45;
-  let bestIndex = adGestureIndex;
-  let bestDistance = Infinity;
-
-  cards.forEach((card, i) => {
-    const rect = card.getBoundingClientRect();
-    const centerY = rect.top + rect.height / 2;
-    const distance = Math.abs(centerY - targetY);
-    if (distance < bestDistance) {
-      bestDistance = distance;
-      bestIndex = i;
-    }
-  });
-
-  adGestureIndex = bestIndex;
-  syncAdRevealState();
 }
 
 function scrollContentByGesture(direction) {
@@ -870,10 +850,6 @@ function render() {
   if (activeCategory === 'pacchetti') {
     syncPackSelection();
   }
-
-  if (activeCategory === 'pubblicità') {
-    syncAdRevealState();
-  }
 }
 
 function toggleAdvertisingDescScroll(show) {
@@ -915,11 +891,24 @@ function syncAdvertisingDescHeights() {
 
   const cards = [...grid.querySelectorAll('.card')];
   const blocks = [...scroll.querySelectorAll('.ad-desc-block')];
+  const atTop = grid.scrollTop < 20;
 
   cards.forEach((card, i) => {
     const block = blocks[i];
     if (!block) return;
-    block.style.height = `${card.offsetHeight}px`;
+
+    if (atTop && i === 0) {
+      block.classList.add('ad-desc-top');
+      block.style.paddingTop = '0';
+      block.style.minHeight = '0';
+      block.style.height = 'auto';
+      return;
+    }
+
+    block.classList.remove('ad-desc-top');
+    block.style.paddingTop = `${card.offsetHeight}px`;
+    block.style.minHeight = '0';
+    block.style.height = 'auto';
   });
 
   const lastText = blocks[blocks.length - 1]?.querySelector('.ad-desc-text');
@@ -927,12 +916,20 @@ function syncAdvertisingDescHeights() {
 }
 
 function initFirstAdvertisingText() {
-  const firstText = document.querySelector('.ad-desc-block .ad-desc-text');
+  const firstBlock = document.querySelector('.ad-desc-block');
+  const firstText = firstBlock?.querySelector('.ad-desc-text');
   if (!firstText) return;
+
+  firstBlock?.classList.add('ad-desc-top');
   firstText.classList.remove('ad-desc-animate');
-  void firstText.offsetWidth;
-  firstText.classList.add('ad-desc-animate');
   lastAdvertisingIndex = 0;
+
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (scroll && grid && grid.scrollTop < 20) {
+    adScrollSyncLock = true;
+    scroll.scrollTop = 0;
+    adScrollSyncLock = false;
+  }
 }
 
 function syncAdvertisingScrollPosition() {
@@ -994,12 +991,16 @@ function updateAdvertisingScrollState() {
     activeIndex = 0;
     cards.forEach((card, i) => {
       card.classList.toggle('ad-past', false);
-      card.classList.toggle('ad-active', i === 0);
+      card.classList.toggle('ad-active', false);
     });
     blocks.forEach((block, i) => {
       block.classList.toggle('ad-desc-past', false);
+      block.classList.toggle('ad-desc-top', i === 0);
     });
+    syncAdvertisingDescHeights();
   } else {
+    blocks.forEach((block) => block.classList.remove('ad-desc-top'));
+    syncAdvertisingDescHeights();
     cards.forEach((card, i) => {
       const rect = card.getBoundingClientRect();
       const isPast = rect.bottom < pastThreshold;
@@ -1016,7 +1017,7 @@ function updateAdvertisingScrollState() {
       const text = block.querySelector('.ad-desc-text');
       if (!text) return;
       text.classList.remove('ad-desc-animate');
-      if (i === activeIndex) {
+      if (i === activeIndex && !(activeIndex === 0 && grid && grid.scrollTop < 20)) {
         void text.offsetWidth;
         text.classList.add('ad-desc-animate');
       }
@@ -1101,11 +1102,8 @@ function initAboutGestureScrollSync() {
   syncAboutIndexToScroll();
 }
 
-function resetAdsSmokingGesture() {
+function resetAdGestureState() {
   adGestureIndex = 0;
-  adsSmokingHeld = false;
-  document.body.classList.remove('ads-smoking-gesture');
-  syncAdRevealState();
 }
 
 function updateAboutHeaderOffset() {
@@ -1252,10 +1250,8 @@ window.selectPackByIndex = selectPackByIndex;
 window.advancePackViaGesture = advancePackViaGesture;
 window.advanceCategoryViaGesture = advanceCategoryViaGesture;
 window.prevCategoryViaGesture = prevCategoryViaGesture;
-window.resetAdsSmokingGesture = resetAdsSmokingGesture;
-window.onAdSmokingGestureStart = onAdSmokingGestureStart;
-window.onAdSmokingGestureEnd = onAdSmokingGestureEnd;
-window.getAdRevealIndex = () => adGestureIndex;
+window.resetAdGestureState = resetAdGestureState;
+window.openPubblicitaViaGesture = openPubblicitaViaGesture;
 window.onAboutBlowGestureStart = onAboutBlowGestureStart;
 window.onAboutBlowGestureEnd = onAboutBlowGestureEnd;
 window.getAboutRevealIndex = () => aboutGestureIndex;

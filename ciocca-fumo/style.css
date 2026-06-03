@@ -349,21 +349,12 @@ button {
 
 .myPhotos.layout-pubblicita .card {
   width: 100%;
-  opacity: 0.18;
-  filter: blur(12px);
-  transition: opacity 0.55s ease, filter 0.55s ease;
+  opacity: 1;
+  filter: none;
 }
 
-.myPhotos.layout-pubblicita .card.ad-past {
-  opacity: 0.18;
-  filter: blur(12px);
-}
-
-.myPhotos.layout-pubblicita .card.ad-active {
-  opacity: 0.18;
-  filter: blur(12px);
-}
-
+.myPhotos.layout-pubblicita .card.ad-past,
+.myPhotos.layout-pubblicita .card.ad-active,
 .myPhotos.layout-pubblicita .card.ad-revealed {
   opacity: 1;
   filter: none;
@@ -382,21 +373,36 @@ button {
 
 .advertising-desc-scroll {
   display: none;
-  position: fixed;
-  left: 10px;
-  width: calc((100vw / 12) * 5 - 20px);
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
   max-width: 68ch;
-  height: 100vh;
-  overflow: hidden;
-  padding-top: 4rem;
-  pointer-events: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  pointer-events: auto;
   z-index: 41;
+}
+
+.advertising-desc-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.mainLayout.category-pubblicita .descriptionAndFilters {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  width: calc((100% - 20px) * 5 / 12);
+  height: 100%;
+  max-height: 100%;
 }
 
 .mainLayout.category-pubblicita .advertising-desc-scroll.is-active {
   display: flex;
   flex-direction: column;
   gap: 80px;
+  padding-top: 0;
 }
 
 .mainLayout.category-pubblicita .description-intro {
@@ -407,6 +413,13 @@ button {
   position: relative;
   flex-shrink: 0;
   transition: opacity 0.4s ease;
+  box-sizing: border-box;
+}
+
+.ad-desc-block.ad-desc-top {
+  padding-top: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
 }
 
 .ad-desc-block.ad-desc-past {
@@ -414,11 +427,12 @@ button {
 }
 
 .ad-desc-text {
-  position: absolute;
-  top: calc(100% + 20px);
+  position: relative;
+  margin-top: 20px;
   left: 0;
   width: 100%;
   opacity: 1;
+  filter: none;
   display: flex;
   flex-direction: column;
   gap: 0.4em;
@@ -426,6 +440,13 @@ button {
 
 .ad-desc-text.ad-desc-animate {
   animation: ad-desc-reveal 2s cubic-bezier(.8, 0, .2, 1) forwards;
+}
+
+.ad-desc-block.ad-desc-top .ad-desc-text {
+  margin-top: 0;
+  animation: none;
+  filter: none;
+  opacity: 1;
 }
 
 .myPhotos.layout-pubblicita .card-img {
@@ -504,6 +525,25 @@ button {
   color: var(--muted);
   cursor: pointer;
   transition: background 0.1s, color 0.1s;
+}
+
+.item-preview .card-tags {
+  gap: 4px;
+}
+
+.item-preview .card-tag {
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.3);
+  font-size: 8px;
+  letter-spacing: 0.03em;
+  color: var(--myWhite);
+  transition: background 0.15s ease;
+}
+
+.item-preview .card-tag:hover,
+.item-preview .card-tag.highlight {
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--myWhite);
 }
 
 .card-tag:hover {
@@ -775,7 +815,6 @@ button {
 
 /* Packs: stay in grid — no fixed overlay, all images full brightness */
 .myPhotos.layout-pacchetti.has-selected .card {
-  opacity: 1 !important;
   position: relative !important;
   left: auto !important;
   top: auto !important;
@@ -783,9 +822,14 @@ button {
   z-index: auto !important;
 }
 
+.myPhotos.layout-pacchetti.has-selected .card:not(.selectedImg) {
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+}
+
 .myPhotos.layout-pacchetti.has-selected .card:not(.selectedImg) .card-img {
-  opacity: 1 !important;
-  filter: none !important;
+  opacity: 1;
+  filter: none;
 }
 
 .myPhotos.layout-pacchetti.has-selected .card.selectedImg {
@@ -1211,6 +1255,59 @@ body.about-open #gesture-camera {
   pointer-events: auto;
 }
 
+/* Portraits / packs: left preview column matches gallery height when an item is open */
+.mainLayout.has-item-selected:not(.category-pubblicita) .descriptionAndFilters {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  width: calc((100% - 20px) * 5 / 12);
+  height: 100%;
+  max-height: 100%;
+}
+
+.mainLayout.has-item-selected:not(.category-pubblicita) .item-preview.open {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mainLayout.has-item-selected:not(.category-pubblicita) .item-preview .card-img {
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: none;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: top center;
+}
+
+.mainLayout.has-item-selected:not(.category-pubblicita) .item-preview.layout-pacchetti .card-img {
+  width: auto;
+  max-width: 100%;
+  max-height: none;
+  align-self: center;
+}
+
+.mainLayout.has-item-selected:not(.category-pubblicita) .item-preview.layout-pacchetti .card-body {
+  gap: 10px;
+  padding-top: 10px;
+}
+
+.mainLayout.has-item-selected:not(.category-pubblicita) .item-preview .card-body {
+  flex: 0 0 auto;
+  max-height: min(32vh, 240px);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.mainLayout.has-item-selected:not(.category-pubblicita) .item-preview .card-body::-webkit-scrollbar {
+  display: none;
+}
+
 .description-intro {
   max-width: 68ch;
   flex-shrink: 0;
@@ -1223,7 +1320,7 @@ body.about-open #gesture-camera {
   padding-top: 32px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 10px;
 }
 
 .filter {
@@ -1275,6 +1372,7 @@ body {
   box-sizing: border-box;
   overflow: hidden;
   align-items: stretch;
+  position: relative;
 }
 
 .myPhotos {
@@ -1343,13 +1441,20 @@ body {
   min-height: 0;
   width: 100%;
   max-width: 68ch;
+  overflow-x: hidden;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   margin-bottom: 24px;
   padding-bottom: 8px;
   background: var(--myBlack);
   border: none;
   border-radius: 0;
   box-shadow: none;
+}
+
+.item-preview::-webkit-scrollbar {
+  display: none;
 }
 
 .item-preview.open {
@@ -1382,19 +1487,20 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-top: 20px;
+  padding-top: 10px;
   flex-shrink: 0;
   background: var(--myBlack);
   border: none;
 }
 
 .item-preview.layout-pacchetti .card-body {
-  gap: 20px;
+  gap: 10px;
 }
 
 .mainLayout.has-item-selected .filters {
-  padding-top: 40px;
+  padding-top: 24px;
   margin-top: auto;
+  flex-shrink: 0;
 }
 
 .mainLayout.category-pubblicita .filters {
