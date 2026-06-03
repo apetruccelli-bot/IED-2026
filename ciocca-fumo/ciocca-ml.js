@@ -27,11 +27,11 @@ function updateAboutMicBlowState(isBlow) {
     const total = document.querySelectorAll('.about-plate img, .about-grid img').length;
     setAboutGestureStatus(
       typeof index === 'number'
-        ? `Soffio — figura ${index + 1}/${total}`
-        : 'Soffio — figura accesa'
+        ? `Blow — figure ${index + 1}/${total}`
+        : 'Blow — figure revealed'
     );
   } else if (document.body.classList.contains('about-open')) {
-    setAboutGestureStatus('About: soffia · ↓↑ scroll · ←→ categoria');
+    window.updateIdleGestureStatus?.();
   }
 }
 
@@ -89,11 +89,11 @@ async function startAboutMicDetection() {
 
     aboutMicDetecting = true;
     aboutMicWasBlowing = false;
-    setAboutGestureStatus('About: soffia · ↓↑ scroll · ←→ categoria');
+    window.updateIdleGestureStatus?.();
     loopAboutMicDetection();
   } catch (err) {
     console.warn('Mic unavailable:', err.message);
-    setAboutGestureStatus('Microfono non disponibile — consenti l’accesso');
+    setAboutGestureStatus('Microphone unavailable — allow access');
   }
 }
 
