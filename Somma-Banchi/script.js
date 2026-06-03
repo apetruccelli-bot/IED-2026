@@ -568,10 +568,23 @@ function openExploreMode() {
     explorePanel.style.display = 'flex';
   }
 
+  const header = document.getElementById('site-header');
   const navEl = document.getElementById('nav-cerca-coltelli');
 
+  if (header) {
+    header.classList.remove('home-mode');
+    header.classList.add('explore-mode');
+  }
+
+  document.querySelectorAll('#site-header .nav-link').forEach(el => {
+    el.classList.remove('active', 'opacity-100', 'opacity-20');
+    if (el.id !== 'nav-cerca-coltelli') {
+      el.classList.add('opacity-20');
+    }
+  });
+
   if (navEl) {
-    navEl.classList.remove('opacity-20');
+    navEl.classList.add('active');
     navEl.classList.add('opacity-100');
   }
 
@@ -583,6 +596,20 @@ function closeExploreMode() {
   isExploreMode = false;
   exploreSubcat = null;
   activeFilters.clear();
+  const header = document.getElementById('site-header');
+
+  if (header) {
+    header.classList.add('home-mode');
+    header.classList.remove('explore-mode');
+  }
+
+  document.querySelectorAll('#site-header .nav-link').forEach(el => {
+    el.classList.remove('active', 'opacity-100', 'opacity-20');
+  });
+
+  document.querySelectorAll('#site-header .nav-link').forEach(el => {
+    el.classList.remove('active', 'opacity-100', 'opacity-20');
+  });
 
   document.querySelectorAll('[data-filter-key]').forEach(el => {
     el.classList.remove('not-active-filter');

@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html> 
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
@@ -36,6 +36,23 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+    }
+
+    :root {
+      /*
+        Puoi regolare da qui l'opacità del contenitore immagini.
+        Valori più bassi = immagini più leggere.
+      */
+      --images-container-opacity-min: 0.33;
+      --images-container-opacity-max: 0.9;
+
+      /*
+        Puoi regolare da qui lo zoom delle immagini.
+        Valori più bassi = immagini meno zoomate / più piccole.
+      */
+      --image-scale-start: 0.88;
+      --image-scale-end-desktop: 1.2;
+      --image-scale-end-mobile: 0.88;
     }
 
     html,
@@ -110,39 +127,43 @@
       will-change: transform, left, top;
     }
 
+    /*
+      Immagini desktop leggermente ridotte,
+      così non risultano troppo zoomate e non si toccano troppo.
+    */
     .image-card:nth-child(1) {
-      width: 280px;
-      height: 355px;
+      width: 235px;
+      height: 300px;
     }
 
     .image-card:nth-child(2) {
-      width: 270px;
-      height: 345px;
+      width: 225px;
+      height: 288px;
     }
 
     .image-card:nth-child(3) {
-      width: 285px;
-      height: 255px;
+      width: 240px;
+      height: 215px;
     }
 
     .image-card:nth-child(4) {
-      width: 265px;
-      height: 185px;
+      width: 220px;
+      height: 155px;
     }
 
     .image-card:nth-child(5) {
-      width: 275px;
-      height: 250px;
+      width: 230px;
+      height: 210px;
     }
 
     .image-card:nth-child(6) {
-      width: 260px;
-      height: 205px;
+      width: 218px;
+      height: 172px;
     }
 
     .image-card:nth-child(7) {
-      width: 285px;
-      height: 325px;
+      width: 238px;
+      height: 272px;
     }
 
     .enter-home {
@@ -169,35 +190,35 @@
       .image-card:nth-child(5),
       .image-card:nth-child(6),
       .image-card:nth-child(7) {
-        width: 175px;
+        width: 145px;
       }
 
       .image-card:nth-child(1) {
-        height: 225px;
+        height: 188px;
       }
 
       .image-card:nth-child(2) {
-        height: 220px;
+        height: 182px;
       }
 
       .image-card:nth-child(3) {
-        height: 165px;
+        height: 136px;
       }
 
       .image-card:nth-child(4) {
-        height: 125px;
+        height: 104px;
       }
 
       .image-card:nth-child(5) {
-        height: 160px;
+        height: 132px;
       }
 
       .image-card:nth-child(6) {
-        height: 140px;
+        height: 116px;
       }
 
       .image-card:nth-child(7) {
-        height: 205px;
+        height: 172px;
       }
     }
 
@@ -209,35 +230,35 @@
       .image-card:nth-child(5),
       .image-card:nth-child(6),
       .image-card:nth-child(7) {
-        width: 132px;
+        width: 108px;
       }
 
       .image-card:nth-child(1) {
-        height: 172px;
+        height: 142px;
       }
 
       .image-card:nth-child(2) {
-        height: 168px;
+        height: 138px;
       }
 
       .image-card:nth-child(3) {
-        height: 125px;
+        height: 104px;
       }
 
       .image-card:nth-child(4) {
-        height: 96px;
+        height: 80px;
       }
 
       .image-card:nth-child(5) {
-        height: 122px;
+        height: 102px;
       }
 
       .image-card:nth-child(6) {
-        height: 108px;
+        height: 90px;
       }
 
       .image-card:nth-child(7) {
-        height: 155px;
+        height: 130px;
       }
     }
   </style>
@@ -312,41 +333,43 @@
       In questo modo l'allargamento/zoom out è sempre centrato.
     */
     const startLayout = [
+      { x: 51, y: 51 },
       { x: 50, y: 50 },
-      { x: 50, y: 50 },
-      { x: 50, y: 50 },
-      { x: 50, y: 50 },
-      { x: 50, y: 50 },
-      { x: 50, y: 50 },
-      { x: 50, y: 50 }
+      { x: 52, y: 52 },
+      { x: 53, y: 53 },
+      { x: 54, y: 54 },
+      { x: 48, y: 48 },
+      { x: 49, y: 49 }
     ];
 
     /*
       Layout finale desktop.
-      Le immagini non sono ruotate, ma sono sfasate in altezza.
+      Le immagini sono più distanziate rispetto alla versione precedente.
     */
     const endLayout = [
-      { x: 14, y: 28 },
-      { x: 36, y: 39 },
-      { x: 62, y: 26 },
-      { x: 84, y: 41 },
-      { x: 23, y: 73 },
-      { x: 53, y: 66 },
-      { x: 78, y: 76 }
+      { x: 12, y: 24 },
+      { x: 38, y: 31 },
+      { x: 64, y: 23 },
+      { x: 88, y: 34 },
+      { x: 20, y: 72 },
+      { x: 50, y: 66 },
+      { x: 80, y: 76 }
     ];
+
 
     /*
       Layout finale mobile.
-      Anche su mobile partono dal centro e si aprono senza rotazione.
+      Anche su mobile sono più aperte tra loro.
     */
+    
     const mobileEndLayout = [
-      { x: 17, y: 25 },
-      { x: 52, y: 31 },
-      { x: 83, y: 25 },
-      { x: 24, y: 58 },
-      { x: 57, y: 53 },
-      { x: 82, y: 62 },
-      { x: 48, y: 82 }
+      { x: 18, y: 22 },
+      { x: 50, y: 28 },
+      { x: 82, y: 23 },
+      { x: 18, y: 58 },
+      { x: 50, y: 53 },
+      { x: 82, y: 60 },
+      { x: 50, y: 83 }
     ];
 
     function lerp(start, end, progress) {
@@ -369,6 +392,16 @@
       }
 
       return endLayout;
+    }
+
+    function getCssNumber(variableName, fallback) {
+      const value = getComputedStyle(document.documentElement)
+        .getPropertyValue(variableName)
+        .trim();
+
+      const parsedValue = parseFloat(value);
+
+      return Number.isNaN(parsedValue) ? fallback : parsedValue;
     }
 
     function updateLanding(progress) {
@@ -410,12 +443,36 @@
 
       /*
         Opacità del gruppo intero.
-        Le singole immagini rimangono sempre a opacity: 1.
+        Ora puoi regolarla dalle variabili CSS in :root.
       */
-      const groupOpacity = lerp(0.65, 1, spreadProgress);
+      const minContainerOpacity = getCssNumber(
+        "--images-container-opacity-min",
+        0.55
+      );
+
+      const maxContainerOpacity = getCssNumber(
+        "--images-container-opacity-max",
+        0.85
+      );
+
+      const groupOpacity = lerp(
+        minContainerOpacity,
+        maxContainerOpacity,
+        spreadProgress
+      );
 
       imageOpacityContainer.style.opacity =
         imageAppearProgress * groupOpacity * (1 - fadeProgress);
+
+      /*
+        Scale delle immagini.
+        Anche questo ora è regolabile dalle variabili CSS in :root.
+      */
+      const startScale = getCssNumber("--image-scale-start", 0.88);
+
+      const endScale = window.innerWidth <= 520
+        ? getCssNumber("--image-scale-end-mobile", 0.92)
+        : getCssNumber("--image-scale-end-desktop", 0.96);
 
       cards.forEach((card, index) => {
         const start = startLayout[index];
@@ -424,12 +481,7 @@
         const x = lerp(start.x, end.x, spreadProgress);
         const y = lerp(start.y, end.y, spreadProgress);
 
-        /*
-          Lo scale parte leggermente più piccolo e arriva più grande.
-          Non c'è rotazione.
-        */
-        const endScale = window.innerWidth <= 520 ? 1.05 : 1.12;
-        const scale = lerp(0.95, endScale, spreadProgress);
+        const scale = lerp(startScale, endScale, spreadProgress);
 
         card.style.left = `${x}%`;
         card.style.top = `${y}%`;

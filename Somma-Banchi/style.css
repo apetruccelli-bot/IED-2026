@@ -1,4 +1,4 @@
-@font-face { 
+@font-face {
   font-family: 'Prophet Medium';
   src: url('font/ABCProphet-Medium-Trial.woff2') format('woff2');
   font-style: normal;
@@ -51,6 +51,7 @@ body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  margin: 0;
 }
 
 a {
@@ -67,11 +68,49 @@ header {
   position: fixed;
   width: 100vw;
   top: 0;
+  left: 0;
   z-index: 100;
-  background: var(--bg);
+  background: transparent;
   padding: 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  color: #090909;
+}
+
+header a,
+header span {
+  color: #090909;
+  text-decoration: none;
+}
+
+header .nav-group {
+  display: flex;
+  gap: 20px;
+}
+
+header.home-mode .nav-link {
+  opacity: 1 !important;
+}
+
+header.explore-mode .nav-link {
+  opacity: 0.2 !important;
+}
+
+header.explore-mode .nav-link.active,
+header.explore-mode .nav-link.opacity-100 {
+  opacity: 1 !important;
+}
+
+header .nav-link {
+  opacity: 0.2;
+  transition: opacity .3s cubic-bezier(.8, 0, .2, 1);
+}
+
+header .nav-link:hover,
+header .nav-link:focus,
+header .nav-link.active {
+  opacity: 1;
 }
 
 .header-inner {
@@ -175,21 +214,6 @@ button {
 
 /* ── GRID ── */
 
-/*
-.grid {
-  padding: 20px 24px 60px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(32%, 1fr));
-  gap: 20px;
-}
-*/
-
-/*
-.specialGrid {
-  grid-template-columns: 20rem auto;
-}
-*/
-
 .two-rows-grid {
   display: grid;
   grid-template-columns: 15rem auto;
@@ -206,14 +230,14 @@ button {
   overflow: hidden;
 }
 
-.myColumn { 
+.myColumn {
   display: flex;
   flex-direction: column;
-  gap: 10px; 
+  gap: 10px;
 }
 
 .myColumn > article:last-child {
-  padding-bottom: 10px; 
+  padding-bottom: 10px;
 }
 
 .wireframe {
@@ -257,7 +281,6 @@ button {
   margin: 0;
 }
 
-/* sicurezza extra per tutte le immagini dentro le card */
 .card img {
   display: block;
   width: 100%;
@@ -286,9 +309,15 @@ button {
 
 .card-desc {
   font-size: 13px;
-  line-height: 1.55;
+  line-height: 1.1 !important;
+  margin: 0;
   color: var(--text);
   flex: 1;
+}
+
+.explore-description p {
+  margin: 0;
+  line-height: 1.1;
 }
 
 .card-tags {
@@ -403,7 +432,6 @@ button {
   }
 }
 
-
 .lb-info {
   width: var(--caption-width);
   max-width: 90vw;
@@ -413,7 +441,7 @@ button {
   color: rgba(255, 255, 255, 0.9);
   font-size: 14px;
   text-align: center;
-  line-height: 1.4;
+  line-height: 1.1;
   margin: 0;
   width: 100%;
   white-space: normal;
@@ -492,7 +520,7 @@ button {
   cursor: default;
 }
 
-/* ── Filter dimming ─────────────────────────────────────────────────────── */
+/* ── Filter dimming ── */
 
 #grid.has-filter .card {
   opacity: 0.2;
@@ -515,7 +543,7 @@ button {
   opacity: 0;
 }
 
-/* ── Explore mode ────────────────────────────────────────────────────────── */
+/* ── Explore mode ── */
 
 #explore-description-panel {
   display: none;
