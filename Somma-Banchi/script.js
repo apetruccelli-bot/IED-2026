@@ -23,7 +23,7 @@ let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
 const activeFilters = new Map(); // subcategoryKey → value
 let isExploreMode = false;
-let exploreSubcat = null; // 'disossare' | 'tagliare' | 'tagliare e affettare' | null
+let exploreSubcat = null; // 'disossare' | 'tagliare e colpire' | 'tagliare e affettare' | null
 
 // ── Load data ──────────────────────────────────────────────────────────────
 
@@ -90,7 +90,21 @@ function toggleTag(tag) {
 
 function filteredItems() {
   if (isExploreMode) {
-    return displayItems.filter(i => i.category === 'coltelli');
+    return displayItems.filter(item => {
+      const isColtelli = String(item.category).toLowerCase() === 'coltelli';
+      if (!isColtelli) return false;
+
+      if (activeFilters.size === 0) {
+        return true;
+      }
+
+      return [...activeFilters.entries()].every(([k, v]) => {
+        const field = item[k];
+        return Array.isArray(field)
+          ? field.map(String).includes(v)
+          : String(field ?? '') === v;
+      });
+    });
   }
 
   const q = searchQuery.toLowerCase().trim();
@@ -389,7 +403,7 @@ function updateActiveImg() {
     const matches =
       !hasFilters ||
       (
-        activeCategories.has(item.category) &&
+        activeCategories.has(String(item.category).toLowerCase()) &&
         [...activeFilters.entries()].every(([k, v]) => {
           const field = item[k];
           return Array.isArray(field)
@@ -628,12 +642,13 @@ function setExploreGesture(funzione) {
       el.classList.add('active');
     }
 
-    activeFilters.set('coltelli-funzione', funzione);
+    activeFilters.set('Coltelli-funzione', funzione);
   } else {
     activeFilters.clear();
   }
 
   updateActiveImg();
+  render();
 
   const mainLayout = document.querySelector('.mainLayout');
 

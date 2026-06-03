@@ -1,4 +1,4 @@
-<!doctype html> 
+<!doctype html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
@@ -87,49 +87,62 @@
       overflow: hidden;
     }
 
+    /*
+      Contenitore unico delle immagini.
+      L'opacità viene applicata qui, non alle singole immagini.
+    */
+    .image-opacity-container {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      opacity: 0;
+      will-change: opacity;
+    }
+
     .image-card {
       position: absolute;
       background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
       background-color: transparent;
-      opacity: 0;
-      will-change: transform, opacity;
+      opacity: 1;
+      will-change: transform, left, top;
     }
 
     .image-card:nth-child(1) {
-      width: 220px;
-      height: 280px;
+      width: 280px;
+      height: 355px;
     }
 
     .image-card:nth-child(2) {
-      width: 220px;
-      height: 280px;
+      width: 270px;
+      height: 345px;
     }
 
     .image-card:nth-child(3) {
-      width: 220px;
-      height: 200px;
+      width: 285px;
+      height: 255px;
     }
 
     .image-card:nth-child(4) {
-      width: 220px;
-      height: 150px;
+      width: 265px;
+      height: 185px;
     }
 
     .image-card:nth-child(5) {
-      width: 220px;
-      height: 200px;
+      width: 275px;
+      height: 250px;
     }
 
     .image-card:nth-child(6) {
-      width: 220px;
-      height: 170px;
+      width: 260px;
+      height: 205px;
     }
 
     .image-card:nth-child(7) {
-      width: 220px;
-      height: 250px;
+      width: 285px;
+      height: 325px;
     }
 
     .enter-home {
@@ -156,29 +169,35 @@
       .image-card:nth-child(5),
       .image-card:nth-child(6),
       .image-card:nth-child(7) {
-        width: 150px;
+        width: 175px;
       }
 
-      .image-card:nth-child(1),
+      .image-card:nth-child(1) {
+        height: 225px;
+      }
+
       .image-card:nth-child(2) {
-        height: 200px;
+        height: 220px;
       }
 
-      .image-card:nth-child(3),
-      .image-card:nth-child(5) {
-        height: 145px;
+      .image-card:nth-child(3) {
+        height: 165px;
       }
 
       .image-card:nth-child(4) {
-        height: 105px;
-      }
-
-      .image-card:nth-child(6) {
         height: 125px;
       }
 
+      .image-card:nth-child(5) {
+        height: 160px;
+      }
+
+      .image-card:nth-child(6) {
+        height: 140px;
+      }
+
       .image-card:nth-child(7) {
-        height: 180px;
+        height: 205px;
       }
     }
 
@@ -190,29 +209,35 @@
       .image-card:nth-child(5),
       .image-card:nth-child(6),
       .image-card:nth-child(7) {
-        width: 118px;
+        width: 132px;
       }
 
-      .image-card:nth-child(1),
+      .image-card:nth-child(1) {
+        height: 172px;
+      }
+
       .image-card:nth-child(2) {
-        height: 155px;
+        height: 168px;
       }
 
-      .image-card:nth-child(3),
-      .image-card:nth-child(5) {
-        height: 110px;
+      .image-card:nth-child(3) {
+        height: 125px;
       }
 
       .image-card:nth-child(4) {
-        height: 85px;
+        height: 96px;
+      }
+
+      .image-card:nth-child(5) {
+        height: 122px;
       }
 
       .image-card:nth-child(6) {
-        height: 98px;
+        height: 108px;
       }
 
       .image-card:nth-child(7) {
-        height: 135px;
+        height: 155px;
       }
     }
   </style>
@@ -224,26 +249,28 @@
   </header>
 
   <main class="landing-stage">
-    <div class="image-card"></div>
-    <div class="image-card"></div>
-    <div class="image-card"></div>
-    <div class="image-card"></div>
-    <div class="image-card"></div>
-    <div class="image-card"></div>
-    <div class="image-card"></div>
+    <div class="image-opacity-container">
+      <div class="image-card"></div>
+      <div class="image-card"></div>
+      <div class="image-card"></div>
+      <div class="image-card"></div>
+      <div class="image-card"></div>
+      <div class="image-card"></div>
+      <div class="image-card"></div>
+    </div>
   </main>
 
   <section class="enter-home"></section>
 
   <script>
     const cards = document.querySelectorAll(".image-card");
+    const imageOpacityContainer = document.querySelector(".image-opacity-container");
     const homePreview = document.querySelector(".enter-home");
     const archiveTitle = document.querySelector(".archive-title");
 
     /*
       Qui inserisci tutte le immagini che vuoi usare.
       Ogni volta che ricarichi la pagina, ne verranno scelte 7 in ordine casuale.
-      Puoi aggiungerne quante vuoi.
     */
     const imagePool = [
       "img/col19.png",
@@ -260,14 +287,6 @@
       "img/a4.png",
       "img/b7.png",
       "img/s1 (17).png"
-
-
-      /*
-      Esempio:
-      "img/nuova1.png",
-      "img/nuova2.png",
-      "img/nuova3.png"
-      */
     ];
 
     function shuffleArray(array) {
@@ -287,42 +306,48 @@
     let animationStartTime = null;
     let redirected = false;
 
+    /*
+      Layout iniziale.
+      Tutte le immagini partono dal centro esatto dello schermo.
+      In questo modo l'allargamento/zoom out è sempre centrato.
+    */
     const startLayout = [
-      { x: 47, y: 42, r: 0 },
-      { x: 51, y: 46, r: 0 },
-      { x: 54, y: 49, r: 0 },
-      { x: 48, y: 52, r: 0 },
-      { x: 52, y: 58, r: 0 },
-      { x: 45, y: 50, r: 0 },
-      { x: 55, y: 53, r: 0 }
-    ];
-
-    const endLayout = [
-      { x: 15, y: 30, r: 0 },
-      { x: 38, y: 32, r: 0 },
-      { x: 63, y: 30, r: 0 },
-      { x: 84, y: 34, r: 0 },
-      { x: 24, y: 70, r: 0 },
-      { x: 52, y: 70, r: 0 },
-      { x: 78, y: 68, r: 0 }
-    ];
-
-    const mobileEndLayout = [
-      { x: 18, y: 28, r: 0 },
-      { x: 50, y: 28, r: 0 },
-      { x: 82, y: 28, r: 0 },
-      { x: 22, y: 56, r: 0 },
-      { x: 55, y: 56, r: 0 },
-      { x: 82, y: 56, r: 0 },
-      { x: 50, y: 80, r: 0 }
+      { x: 50, y: 50 },
+      { x: 50, y: 50 },
+      { x: 50, y: 50 },
+      { x: 50, y: 50 },
+      { x: 50, y: 50 },
+      { x: 50, y: 50 },
+      { x: 50, y: 50 }
     ];
 
     /*
-      Opacità iniziali delle immagini quando sono sovrapposte.
-      Valori più bassi = immagine più trasparente.
-      Valori più alti = immagine più visibile.
+      Layout finale desktop.
+      Le immagini non sono ruotate, ma sono sfasate in altezza.
     */
-    const startOpacities = [0.5, 0.55, 0.6, 0.64, 0.7, 0.75, 0.8];
+    const endLayout = [
+      { x: 14, y: 28 },
+      { x: 36, y: 39 },
+      { x: 62, y: 26 },
+      { x: 84, y: 41 },
+      { x: 23, y: 73 },
+      { x: 53, y: 66 },
+      { x: 78, y: 76 }
+    ];
+
+    /*
+      Layout finale mobile.
+      Anche su mobile partono dal centro e si aprono senza rotazione.
+    */
+    const mobileEndLayout = [
+      { x: 17, y: 25 },
+      { x: 52, y: 31 },
+      { x: 83, y: 25 },
+      { x: 24, y: 58 },
+      { x: 57, y: 53 },
+      { x: 82, y: 62 },
+      { x: 48, y: 82 }
+    ];
 
     function lerp(start, end, progress) {
       return start + (end - start) * progress;
@@ -383,21 +408,32 @@
 
       const activeEndLayout = getEndLayout();
 
+      /*
+        Opacità del gruppo intero.
+        Le singole immagini rimangono sempre a opacity: 1.
+      */
+      const groupOpacity = lerp(0.65, 1, spreadProgress);
+
+      imageOpacityContainer.style.opacity =
+        imageAppearProgress * groupOpacity * (1 - fadeProgress);
+
       cards.forEach((card, index) => {
         const start = startLayout[index];
         const end = activeEndLayout[index];
 
         const x = lerp(start.x, end.x, spreadProgress);
         const y = lerp(start.y, end.y, spreadProgress);
-        const r = lerp(start.r, end.r, spreadProgress);
 
-        const startOpacity = startOpacities[index];
-        const visibleOpacity = lerp(startOpacity, 1, spreadProgress);
+        /*
+          Lo scale parte leggermente più piccolo e arriva più grande.
+          Non c'è rotazione.
+        */
+        const endScale = window.innerWidth <= 520 ? 1.05 : 1.12;
+        const scale = lerp(0.95, endScale, spreadProgress);
 
         card.style.left = `${x}%`;
         card.style.top = `${y}%`;
-        card.style.transform = `translate(-50%, -50%) rotate(${r}deg)`;
-        card.style.opacity = imageAppearProgress * visibleOpacity * (1 - fadeProgress);
+        card.style.transform = `translate(-50%, -50%) scale(${scale})`;
       });
 
       if (scrollProgress > 0.94) {
