@@ -1,5 +1,7 @@
 // Category gesture controls — hand tracking per category
 
+const CATEGORY_GESTURE_INTERACTIONS_ENABLED = true;
+
 let handDetector = null;
 let gestureStream = null;
 let gestureDetecting = false;
@@ -15,15 +17,18 @@ function isGestureCategoryActiveSafe() {
 
 function isGestureSurfaceActive() {
   if (!gestureSurfaceEnabled) return false;
+  if (!CATEGORY_GESTURE_INTERACTIONS_ENABLED) return false;
   if (document.body.classList.contains('about-open')) return true;
-  return isGestureCategoryActiveSafe();
+  return isPortraitGestureActive() || isPackGestureActive() || isAdRevealGestureActive();
 }
 
 function shouldShowGestureCamera() {
   if (!gestureSurfaceEnabled) return false;
   if (document.body.classList.contains('about-open')) return true;
+  if (!CATEGORY_GESTURE_INTERACTIONS_ENABLED) return false;
   const cat = getActiveCategorySafe();
-  return cat === 'fotografie' || cat === 'pacchetti' || cat === 'pubblicità';
+  if (cat === 'pubblicità') return isAdRevealGestureActive();
+  return cat === 'fotografie' || cat === 'pacchetti';
 }
 
 function updateGestureCameraVisibility() {
@@ -110,6 +115,87 @@ const doubleDownDetector = {
   },
 };
 
+const TAP_ON_OTHER_HAND_NEAR_PX = 58;
+const TAP_ON_OTHER_HAND_DOUBLE_WINDOW_MS = 950;
+const TAP_ON_OTHER_HAND_MIN_GAP_MS = 70;
+
+const otherHandDoubleTapDetector = {
+  tapCount: 0,
+  lastTapTime: 0,
+  wasNear: false,
+
+  reset() {
+    this.tapCount = 0;
+    this.lastTapTime = 0;
+    this.wasNear = false;
+  },
+
+  minTapDistance(hands) {
+    let best = Infinity;
+
+    for (let i = 0; i < hands.length; i += 1) {
+      for (let j = 0; j < hands.length; j += 1) {
+        if (i === j) continue;
+        const tapper = hands[i];
+        const target = hands[j];
+        if (!isIndexMiddleTapPosture(tapper)) continue;
+
+        const targetPoints = [0, 5, 9, 13, 17];
+        [8, 12].forEach((tipIdx) => {
+          const tip = tapper.keypoints[tipIdx];
+          if (!tip) return;
+          targetPoints.forEach((idx) => {
+            const p = target.keypoints[idx];
+            if (!p) return;
+            best = Math.min(best, Math.hypot(tip.x - p.x, tip.y - p.y));
+          });
+        });
+      }
+    }
+
+    return best;
+  },
+
+  update(hands, now) {
+    if (now < gestureCooldownUntil) {
+      if (!this.isNear(hands)) this.wasNear = false;
+      return false;
+    }
+
+    const near = this.isNear(hands);
+
+    if (near && !this.wasNear) {
+      if (now - this.lastTapTime > TAP_ON_OTHER_HAND_DOUBLE_WINDOW_MS) {
+        this.tapCount = 0;
+      }
+      if (now - this.lastTapTime >= TAP_ON_OTHER_HAND_MIN_GAP_MS) {
+        this.tapCount += 1;
+        this.lastTapTime = now;
+      }
+      this.wasNear = true;
+
+      if (this.tapCount >= 2) {
+        this.reset();
+        gestureCooldownUntil = now + GESTURE_COOLDOWN_MS;
+        return true;
+      }
+      return false;
+    }
+
+    if (!near) {
+      this.wasNear = false;
+    }
+
+    return false;
+  },
+
+  isNear(hands) {
+    if (!hands || hands.length < 2) return false;
+    const dist = this.minTapDistance(hands);
+    return dist < TAP_ON_OTHER_HAND_NEAR_PX;
+  },
+};
+
 const leftChestDetector = {
   wasActive: false,
 
@@ -120,74 +206,17 @@ const leftChestDetector = {
   update(hand, frameW, frameH) {
     const now = performance.now();
     if (now < gestureCooldownUntil) {
-      if (!isIndexPointLeftChest(hand, frameW, frameH)) {
+      if (!isPackLeftChestTouch(hand, frameW, frameH)) {
         this.wasActive = false;
       }
       return false;
     }
 
-    const active = isIndexPointLeftChest(hand, frameW, frameH);
+    const active = isPackLeftChestTouch(hand, frameW, frameH);
 
     if (active && !this.wasActive) {
       this.wasActive = true;
       gestureCooldownUntil = now + GESTURE_COOLDOWN_MS;
-      return true;
-    }
-
-    if (!active) {
-      this.wasActive = false;
-    }
-
-    return false;
-  },
-};
-
-const openPubblicitaGestureTracker = {
-  wasActive: false,
-
-  reset() {
-    this.wasActive = false;
-  },
-
-  update(hand, frameW, frameH) {
-    const now = performance.now();
-    const inAds = getActiveCategorySafe() === 'pubblicità'
-      && !document.body.classList.contains('about-open');
-
-    if (now < gestureCooldownUntil) {
-      if (!hand || !isSmokingGesture(hand, frameW, frameH)) {
-        this.wasActive = false;
-      }
-      return false;
-    }
-
-    const active = hand ? isSmokingGesture(hand, frameW, frameH) : false;
-
-    if (inAds) {
-      if (window.isCategoryImagesRevealed?.()) {
-        if (!active) this.wasActive = false;
-        return false;
-      }
-
-      if (active && !this.wasActive) {
-        this.wasActive = true;
-        gestureCooldownUntil = now + GESTURE_COOLDOWN_MS;
-        window.revealCategoryImages?.();
-        return true;
-      }
-
-      if (!active) {
-        this.wasActive = false;
-      }
-
-      return false;
-    }
-
-    if (active && !this.wasActive) {
-      this.wasActive = true;
-      gestureCooldownUntil = now + GESTURE_COOLDOWN_MS;
-      categoryGestureCooldownUntil = now + CATEGORY_SWIPE_COOLDOWN_MS;
-      window.openPubblicitaViaGesture?.();
       return true;
     }
 
@@ -296,7 +325,9 @@ const openHandSwipeDetector = {
 };
 
 function shouldShowGestureStatus() {
-  return shouldShowGestureCamera();
+  return shouldShowGestureCamera()
+    || document.body.classList.contains('about-open')
+    || document.body.classList.contains('category-gesture-active');
 }
 
 function syncGestureStatusVisibility() {
@@ -332,16 +363,12 @@ function getGestureMode() {
   return getActiveCategorySafe();
 }
 
-function isAdsGestureActive() {
-  return isGestureUiActive() && getActiveCategorySafe() === 'pubblicità';
-}
-
 function isAboutScrollActive() {
   return document.body.classList.contains('about-open');
 }
 
 function isVerticalScrollActive() {
-  return isAboutScrollActive() || isAdsGestureActive();
+  return isAboutScrollActive();
 }
 
 function isCategoryNavigationActive() {
@@ -352,48 +379,172 @@ function isPortraitGestureActive() {
   return isGestureUiActive() && getActiveCategorySafe() === 'fotografie';
 }
 
+function processPortraitOtherHandTap(hands, ctx) {
+  if (otherHandDoubleTapDetector.update(hands, performance.now())) {
+    resetAllGestureDetectors();
+    hands.forEach(hand => drawHandDebug(hand, ctx, 'portrait'));
+    setGestureStatus('Next portrait');
+    window.advancePortraitViaGesture?.();
+    setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
+    return true;
+  }
+
+  if (hands.length >= 2) {
+    hands.forEach(hand => drawHandDebug(hand, ctx, 'portrait'));
+    if (otherHandDoubleTapDetector.isNear(hands)) {
+      setGestureStatus('Tap again — index+middle on other hand');
+    } else {
+      setGestureStatus('Index+middle on other hand — tap twice');
+    }
+    return false;
+  }
+
+  if (hands.length === 1) {
+    drawHandDebug(hands[0], ctx, 'portrait');
+    setGestureStatus('Show both hands in frame');
+    return false;
+  }
+
+  updateIdleGestureStatus();
+  return false;
+}
+
 function isPackGestureActive() {
   return isGestureUiActive() && getActiveCategorySafe() === 'pacchetti';
 }
 
-function keypointDistance(a, b) {
-  return Math.hypot(a.x - b.x, a.y - b.y);
+function isAdRevealGestureActive() {
+  if (!isGestureUiActive()) return false;
+  const cat = getActiveCategorySafe();
+  if (cat === 'pubblicità') return !window.isCategoryImagesRevealed?.();
+  return cat === 'fotografie' || cat === 'pacchetti';
 }
 
-function isSmokingGesture(hand, frameW, frameH) {
+function attemptAdsRevealWithHands(hands, ctx) {
+  if (!isAdRevealGestureActive() || !hands.length || !ctx) return false;
+
+  const canvas = ctx.canvas;
+  const frameW = canvas.width;
+  const frameH = canvas.height;
+  const hand = hands[0];
+  const nearMouth = isCigaretteToMouthGesture(hand, frameW, frameH);
+  const holdPending = cigaretteToMouthDetector.holdStart > 0;
+
+  if (!nearMouth && !holdPending) return false;
+
+  return processAdCigaretteGesture(hand, frameW, frameH, ctx);
+}
+
+function handScale(hand) {
   const k = hand.keypoints;
-  const thumbTip = k[4];
+  return Math.hypot(k[5].x - k[0].x, k[5].y - k[0].y) || 48;
+}
+
+function isIndexMiddleUnited(hand, scale) {
+  const k = hand.keypoints;
+  return keypointDistance(k[8], k[12]) < scale * 0.36;
+}
+
+function isCigaretteToMouthGesture(hand, frameW, frameH) {
+  if (!hand) return false;
+
+  const k = hand.keypoints;
+  const scale = handScale(hand);
   const indexTip = k[8];
   const middleTip = k[12];
-  const indexPip = k[6];
-  const middlePip = k[10];
-  const ringTip = k[16];
-  const ringPip = k[14];
-  const pinkyTip = k[20];
-  const pinkyPip = k[18];
+  const wrist = k[0];
 
-  const thumbIndexPinch = keypointDistance(thumbTip, indexTip) < 42;
-  const middleNearCigarette = keypointDistance(middleTip, indexTip) < 52;
-  const fingersGrouped = thumbIndexPinch && middleNearCigarette;
+  const indexMiddleUnited = isIndexMiddleUnited(hand, scale);
+  const indexMiddleExtended = isIndexMiddleExtended(hand);
+  const nearMouthBand =
+    indexTip.y < frameH * 0.52
+    && middleTip.y < frameH * 0.52
+    && indexTip.y > frameH * 0.1;
+  const handRaised = indexTip.y < wrist.y + scale * 0.4;
 
-  const indexTowardFace = indexTip.y < indexPip.y + 18;
-  const middleTowardFace = middleTip.y < middlePip.y + 22;
+  return indexMiddleUnited && indexMiddleExtended && nearMouthBand && handRaised;
+}
 
-  const nearMouthNose = indexTip.y < frameH * 0.56;
-  const faceCenterBand = indexTip.x > frameW * 0.18 && indexTip.x < frameW * 0.82;
+const cigaretteToMouthDetector = {
+  holdStart: 0,
+  wasTriggered: false,
 
-  const ringCurled = ringTip.y > ringPip.y + 2;
-  const pinkyCurled = pinkyTip.y > pinkyPip.y + 2;
+  reset() {
+    this.holdStart = 0;
+    this.wasTriggered = false;
+  },
 
-  return (
-    fingersGrouped &&
-    indexTowardFace &&
-    middleTowardFace &&
-    nearMouthNose &&
-    faceCenterBand &&
-    ringCurled &&
-    pinkyCurled
-  );
+  update(hand, frameW, frameH) {
+    const now = performance.now();
+    const active = isCigaretteToMouthGesture(hand, frameW, frameH);
+
+    if (now < gestureCooldownUntil) {
+      if (!active) {
+        this.holdStart = 0;
+        this.wasTriggered = false;
+      }
+      return false;
+    }
+
+    if (!active) {
+      this.holdStart = 0;
+      this.wasTriggered = false;
+      return false;
+    }
+
+    if (!this.holdStart) this.holdStart = now;
+
+    if (!this.wasTriggered && now - this.holdStart >= 320) {
+      this.wasTriggered = true;
+      gestureCooldownUntil = now + GESTURE_COOLDOWN_MS;
+      return true;
+    }
+
+    return false;
+  },
+
+  holdProgress() {
+    if (!this.holdStart) return 0;
+    return Math.min(1, (performance.now() - this.holdStart) / 320);
+  },
+};
+
+function processAdCigaretteGesture(hand, frameW, frameH, ctx) {
+  if (!hand) {
+    cigaretteToMouthDetector.reset();
+    document.body.classList.remove('ad-smoking-gesture');
+    updateIdleGestureStatus();
+    return false;
+  }
+
+  openHandSwipeDetector.reset();
+  drawHandDebug(hand, ctx, 'smoke');
+
+  const nearMouth = isCigaretteToMouthGesture(hand, frameW, frameH);
+  document.body.classList.toggle('ad-smoking-gesture', nearMouth);
+
+  if (cigaretteToMouthDetector.update(hand, frameW, frameH)) {
+    window.openAdsViaGesture?.();
+    setGestureStatus('Advertisements open');
+    setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
+    updateGestureCameraVisibility();
+    return true;
+  }
+
+  if (nearMouth) {
+    const pct = Math.round(cigaretteToMouthDetector.holdProgress() * 100);
+    setGestureStatus(pct > 0 && pct < 100
+      ? `Index and middle to mouth… ${pct}%`
+      : 'Hold index and middle together at mouth');
+    return false;
+  }
+
+  setGestureStatus('Ads: index and middle together at mouth');
+  return false;
+}
+
+function keypointDistance(a, b) {
+  return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
 function isIndexMiddleDown(hand) {
@@ -410,10 +561,26 @@ function isIndexMiddleDown(hand) {
 
   const indexDown = indexTip.y > indexPip.y + 15;
   const middleDown = middleTip.y > middlePip.y + 15;
-  //const ringNotDown = ringTip.y < ringPip.y + 30;
-  //const pinkyNotDown = pinkyTip.y < pinkyPip.y + 30;
+  const ringNotDown = ringTip.y < ringPip.y + 30;
+  const pinkyNotDown = pinkyTip.y < pinkyPip.y + 30;
 
-  return indexDown && middleDown;
+  return indexDown && middleDown && ringNotDown && pinkyNotDown;
+}
+
+function isIndexMiddleExtended(hand) {
+  const k = hand.keypoints;
+  const indexStraight = k[8].y <= k[6].y + 12;
+  const middleStraight = k[12].y <= k[10].y + 12;
+  const indexLen = Math.hypot(k[8].x - k[5].x, k[8].y - k[5].y) > 40;
+  const middleLen = Math.hypot(k[12].x - k[9].x, k[12].y - k[9].y) > 36;
+  const ringCurled = k[16].y > k[14].y + 4;
+  const pinkyCurled = k[20].y > k[18].y + 4;
+
+  return indexStraight && middleStraight && indexLen && middleLen && ringCurled && pinkyCurled;
+}
+
+function isIndexMiddleTapPosture(hand) {
+  return isIndexMiddleDown(hand) || isIndexMiddleExtended(hand);
 }
 
 function isIndexExtended(hand) {
@@ -444,7 +611,18 @@ function areOtherFingersCurled(hand) {
   );
 }
 
-function isIndexPointLeftChest(hand, frameW, frameH) {
+function isPackLeftChestTouch(hand, frameW, frameH) {
+  if (!hand) return false;
+
+  const handZone = isIndexPointLeftChestHand(hand, frameW, frameH);
+  const body = window.detectPackLeftChestTouch?.(frameW, frameH, hand);
+
+  if (body === true || handZone) return true;
+  if (body === false) return false;
+  return handZone;
+}
+
+function isIndexPointLeftChestHand(hand, frameW, frameH) {
   const k = hand.keypoints;
   const indexTip = k[8];
   const indexMcp = k[5];
@@ -502,26 +680,21 @@ function applyOpenHandSwipe(direction, { allowScroll = false } = {}) {
 }
 
 function isPackPointingGesture(hand, frameW, frameH) {
-  return isIndexPointLeftChest(hand, frameW, frameH)
+  return isPackLeftChestTouch(hand, frameW, frameH)
     || (isIndexExtended(hand) && areOtherFingersCurled(hand));
 }
 
 function isPortraitGestureBusy(hand) {
-  console.log('isPortraitGestureBusy', isIndexMiddleDown(hand));
   return isIndexMiddleDown(hand)
-    /* || doubleDownDetector.phase !== 'idle'
-    || doubleDownDetector.strokeCount > 0; */
+    || doubleDownDetector.phase !== 'idle'
+    || doubleDownDetector.strokeCount > 0;
 }
 
 function shouldBlockOpenHandSwipe(hand, frameW, frameH) {
   const mode = getGestureMode();
 
-  if (isSmokingGesture(hand, frameW, frameH) || openPubblicitaGestureTracker.wasActive) {
-    return true;
-  }
-
   if (mode === 'fotografie') {
-    return isPortraitGestureBusy(hand);
+    return true;
   }
 
   if (mode === 'pacchetti') {
@@ -555,9 +728,8 @@ function processOpenHandSwipe(hand, frameW, frameH, ctx, options = {}) {
 
 function isOpenHand(hand, frameW, frameH) {
   if (!hand) return false;
-  if (isSmokingGesture(hand, frameW, frameH)) return false;
   if (isIndexMiddleDown(hand)) return false;
-  if (isIndexPointLeftChest(hand, frameW, frameH)) return false;
+  if (isPackLeftChestTouch(hand, frameW, frameH)) return false;
 
   const k = hand.keypoints;
   const indexOpen = k[8].y < k[6].y + 8;
@@ -576,11 +748,11 @@ function drawHandDebug(hand, ctx, mode = 'portrait') {
 
   const highlight = mode === 'pack'
     ? [8, 5, 6]
-    : mode === 'smoking'
-      ? [4, 8, 12, 6, 10]
-      : mode === 'scroll'
-        ? [0, 8, 12, 16, 20]
-        : [8, 12, 6, 10];
+    : mode === 'smoke'
+      ? [8, 12, 6, 10, 0]
+    : mode === 'scroll' || mode === 'wipe'
+      ? [0, 5, 9, 13, 17]
+      : [8, 12, 6, 10];
 
   hand.keypoints.forEach((point, index) => {
     if (highlight.includes(index)) {
@@ -599,125 +771,330 @@ function drawHandDebug(hand, ctx, mode = 'portrait') {
     ctx.stroke();
   }
 
-  if (mode === 'smoking') {
-    const thumb = hand.keypoints[4];
+  if (mode === 'smoke') {
     const index = hand.keypoints[8];
     const middle = hand.keypoints[12];
     ctx.beginPath();
-    ctx.moveTo(thumb.x, thumb.y);
-    ctx.lineTo(index.x, index.y);
+    ctx.moveTo(index.x, index.y);
     ctx.lineTo(middle.x, middle.y);
     ctx.stroke();
   }
+
 }
 
-function tryOpenPubblicitaGesture(hand, frameW, frameH) {
-  if (!hand) return false;
-  return openPubblicitaGestureTracker.update(hand, frameW, frameH);
-}
-
-function isInFotografieCategory() {
-  return getActiveCategorySafe() === 'fotografie' && !document.body.classList.contains('about-open');
-}
-
-function isInPacchettiCategory() {
-  return getActiveCategorySafe() === 'pacchetti' && !document.body.classList.contains('about-open');
-}
-
-function tryOpenFotografieGesture(hand) {
-  if (isInFotografieCategory()) return false;
-
-  if (!hand) {
-    doubleDownDetector.reset();
-    return false;
-  }
-
-  if (doubleDownDetector.update(hand)) {
-    resetAllGestureDetectors();
-    window.openFotografieViaGesture?.();
-    return true;
-  }
-
-  return false;
-}
-
-function tryOpenPacchettiGesture(hand, frameW, frameH) {
-  if (isInPacchettiCategory()) return false;
-
+function processPackLeftChestGesture(hand, frameW, frameH, ctx) {
   if (!hand) {
     leftChestDetector.reset();
+    updateIdleGestureStatus();
     return false;
   }
+
+  openHandSwipeDetector.reset();
+  drawHandDebug(hand, ctx, 'pack');
 
   if (leftChestDetector.update(hand, frameW, frameH)) {
-    resetAllGestureDetectors();
-    window.openPacchettiViaGesture?.();
+    setGestureStatus('Next pack');
+    window.advancePackViaGesture?.();
+    setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
     return true;
+  }
+
+  if (isPackLeftChestTouch(hand, frameW, frameH)) {
+    setGestureStatus('Index on left chest…');
+  } else if (isIndexExtended(hand)) {
+    setGestureStatus('Point index at left chest');
+  } else {
+    updateIdleGestureStatus();
   }
 
   return false;
 }
 
-function handleCategorySwitchGesture(hand, frameW, frameH, ctx) {
-  if (tryOpenPubblicitaGesture(hand, frameW, frameH)) {
-    openHandSwipeDetector.reset();
-    doubleDownDetector.reset();
-    leftChestDetector.reset();
-    if (hand) drawHandDebug(hand, ctx, 'smoking');
-    const target = getActiveCategorySafe() === 'pubblicità'
-      ? 'Images revealed'
-      : 'Advertisements — category open';
-    setGestureStatus(target);
-    setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
-    return true;
+const ABOUT_WIPE_DISTANCE_SCALE = 720;
+
+const aboutWipeSound = {
+  ctx: null,
+  nodes: null,
+};
+
+async function ensureAboutWipeAudio() {
+  if (!aboutWipeSound.ctx) {
+    aboutWipeSound.ctx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (aboutWipeSound.ctx.state === 'suspended') {
+    await aboutWipeSound.ctx.resume();
+  }
+  return aboutWipeSound.ctx;
+}
+
+function startAboutWipeSound() {
+  if (aboutWipeSound.nodes || !aboutWipeSound.ctx) return;
+
+  const ctx = aboutWipeSound.ctx;
+  const bufferSize = Math.floor(ctx.sampleRate * 0.5);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * 0.4;
   }
 
-  if (tryOpenFotografieGesture(hand)) {
-    openHandSwipeDetector.reset();
-    leftChestDetector.reset();
-    if (hand) drawHandDebug(hand, ctx, 'portrait');
-    setGestureStatus('Portraits — category open');
-    setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
-    return true;
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+  source.loop = true;
+
+  const lowPass = ctx.createBiquadFilter();
+  lowPass.type = 'lowpass';
+  lowPass.frequency.value = 680;
+
+  const highPass = ctx.createBiquadFilter();
+  highPass.type = 'highpass';
+  highPass.frequency.value = 90;
+
+  const gain = ctx.createGain();
+  gain.gain.value = 0;
+
+  source.connect(highPass);
+  highPass.connect(lowPass);
+  lowPass.connect(gain);
+  gain.connect(ctx.destination);
+  source.start(0);
+
+  aboutWipeSound.nodes = { source, gain, lowPass };
+}
+
+function setAboutWipeSoundIntensity(intensity) {
+  if (!aboutWipeSound.nodes?.gain || !aboutWipeSound.ctx) return;
+
+  const level = Math.max(0, Math.min(1, intensity));
+  const gain = level * 0.11;
+  const { gain: gainNode, lowPass } = aboutWipeSound.nodes;
+  const ctx = aboutWipeSound.ctx;
+
+  gainNode.gain.setTargetAtTime(gain, ctx.currentTime, 0.08);
+  lowPass.frequency.setTargetAtTime(520 + level * 320, ctx.currentTime, 0.1);
+}
+
+function playClothWipeSwipe(intensity) {
+  if (!aboutWipeSound.ctx || intensity < 0.35) return;
+
+  const ctx = aboutWipeSound.ctx;
+  const len = Math.floor(ctx.sampleRate * 0.12);
+  const buffer = ctx.createBuffer(1, len, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  for (let i = 0; i < len; i++) {
+    const t = i / len;
+    const env = Math.pow(Math.sin(Math.PI * t), 1.4);
+    data[i] = (Math.random() * 2 - 1) * env * 0.7;
   }
 
-  if (tryOpenPacchettiGesture(hand, frameW, frameH)) {
-    openHandSwipeDetector.reset();
-    doubleDownDetector.reset();
-    if (hand) drawHandDebug(hand, ctx, 'pack');
-    setGestureStatus('Packs — category open');
-    setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
-    return true;
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 420 + intensity * 180;
+
+  const gain = ctx.createGain();
+  gain.gain.value = 0.05 + intensity * 0.06;
+
+  source.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+  source.start(0);
+  source.stop(ctx.currentTime + 0.12);
+}
+
+function stopAboutWipeSound() {
+  if (!aboutWipeSound.nodes?.gain || !aboutWipeSound.ctx) {
+    aboutWipeSound.nodes = null;
+    return;
   }
 
-  return false;
+  const { source, gain } = aboutWipeSound.nodes;
+  const ctx = aboutWipeSound.ctx;
+  gain.gain.setTargetAtTime(0, ctx.currentTime, 0.1);
+
+  window.setTimeout(() => {
+    try {
+      source.stop();
+    } catch {
+      /* already stopped */
+    }
+    if (aboutWipeSound.nodes?.source === source) {
+      aboutWipeSound.nodes = null;
+    }
+  }, 160);
+}
+
+async function syncAboutWipeAudio(active, wipeSpeed = 0) {
+  if (!active) {
+    stopAboutWipeSound();
+    return;
+  }
+
+  await ensureAboutWipeAudio();
+  startAboutWipeSound();
+  setAboutWipeSoundIntensity(wipeSpeed);
+}
+
+const aboutWindowWipe = {
+  lastX: null,
+  lastY: null,
+  trail: [],
+
+  reset() {
+    this.lastX = null;
+    this.lastY = null;
+    this.trail = [];
+    stopAboutWipeSound();
+  },
+
+  resetStroke() {
+    this.lastX = null;
+    this.lastY = null;
+  },
+
+  update(hand, frameW, frameH) {
+    if (!hand || !isWindowWipingHand(hand, frameW, frameH)) {
+      this.resetStroke();
+      window.setAboutWiping?.(false);
+      syncAboutWipeAudio(false);
+      return false;
+    }
+
+    window.setAboutWiping?.(true);
+    const palm = hand.keypoints[9];
+    const x = palm.x;
+    const y = palm.y;
+    let wipeSpeed = 0;
+
+    if (this.lastX !== null) {
+      const dx = x - this.lastX;
+      const dy = y - this.lastY;
+      const dist = Math.hypot(dx, dy);
+
+      if (dist > 2.5 && Math.abs(dx) >= Math.abs(dy) * 0.55) {
+        const amount = dist / ABOUT_WIPE_DISTANCE_SCALE;
+        window.addAboutWipeProgress?.(amount);
+        wipeSpeed = Math.min(1, dist / 28);
+        if (dist > 11) playClothWipeSwipe(wipeSpeed);
+        this.trail.push({ x1: this.lastX, y1: this.lastY, x2: x, y2: y });
+        if (this.trail.length > 24) this.trail.shift();
+      }
+    }
+
+    syncAboutWipeAudio(true, wipeSpeed || 0.08);
+
+    this.lastX = x;
+    this.lastY = y;
+    return true;
+  },
+};
+
+function isWindowWipingHand(hand, frameW, frameH) {
+  if (!hand || !isOpenHand(hand, frameW, frameH)) return false;
+
+  const k = hand.keypoints;
+  const palmWidth = Math.hypot(k[5].x - k[17].x, k[5].y - k[17].y);
+  const palmHeight = Math.hypot(k[0].x - k[9].x, k[0].y - k[9].y);
+
+  return palmWidth > 30 && palmHeight > 24 && palmWidth < frameW * 0.72;
+}
+
+function formatAboutWipeStatus() {
+  const index = window.getAboutRevealIndex?.();
+  const total = document.querySelectorAll('.about-plate img, .about-grid img').length;
+  const progress = typeof index === 'number' ? window.getAboutWipeProgress?.(index) ?? 0 : 0;
+
+  if (progress >= 0.92 && typeof index === 'number' && total > 0) {
+    return `Glass clear — plate ${index + 1}/${total}`;
+  }
+  if (window.isAboutWiping?.()) {
+    return `Wipe the glass — plate ${typeof index === 'number' ? index + 1 : '?'}/${total}`;
+  }
+  return 'About: wipe the glass with your hand · ↓↑ scroll';
+}
+
+function drawWindowWipeTrail(ctx) {
+  if (!aboutWindowWipe.trail.length) return;
+
+  ctx.strokeStyle = 'rgba(229, 229, 229, 0.45)';
+  ctx.lineWidth = 10;
+  ctx.lineCap = 'round';
+
+  aboutWindowWipe.trail.forEach((seg) => {
+    ctx.beginPath();
+    ctx.moveTo(seg.x1, seg.y1);
+    ctx.lineTo(seg.x2, seg.y2);
+    ctx.stroke();
+  });
+}
+
+async function processAboutInteraction(video, ctx, now) {
+  const frameW = ctx.canvas.width;
+  const frameH = ctx.canvas.height;
+
+  if (!handDetector) return;
+
+  const hands = await handDetector.estimateHands(video, { flipHorizontal: true });
+  const wipeProgress = window.getAboutWipeProgress?.() ?? 0;
+
+  if (hands.length && wipeProgress < 0.98) {
+    const hand = hands[0];
+    const wiping = aboutWindowWipe.update(hand, frameW, frameH);
+
+    if (wiping || window.isAboutWiping?.()) {
+      openHandSwipeDetector.reset();
+      drawHandDebug(hand, ctx, 'wipe');
+      drawWindowWipeTrail(ctx);
+      setGestureStatus(formatAboutWipeStatus());
+      return;
+    }
+
+    if (!processOpenHandSwipe(hand, frameW, frameH, ctx, { allowScroll: true })) {
+      updateIdleGestureStatus();
+    }
+    return;
+  }
+
+  aboutWindowWipe.resetStroke();
+  window.setAboutWiping?.(false);
+  syncAboutWipeAudio(false);
+
+  if (hands.length) {
+    if (!processOpenHandSwipe(hands[0], frameW, frameH, ctx, { allowScroll: true })) {
+      updateIdleGestureStatus();
+    }
+  } else {
+    handleOpenHandSwipeLost(now, { allowScroll: true });
+    updateIdleGestureStatus();
+  }
 }
 
 function resetAllGestureDetectors() {
   doubleDownDetector.reset();
+  otherHandDoubleTapDetector.reset();
   leftChestDetector.reset();
-  openPubblicitaGestureTracker.reset();
   openHandSwipeDetector.reset();
+  aboutWindowWipe.reset();
+  cigaretteToMouthDetector.reset();
+  document.body.classList.remove('ad-smoking-gesture');
 }
 
 function updateIdleGestureStatus() {
   const mode = getGestureMode();
-  const revealed = window.isCategoryImagesRevealed?.() ?? true;
 
-  const cross = '↓↓ Portraits · left chest Packs · smoking Ads';
-
-  if (mode === 'pubblicità') {
-    setGestureStatus(revealed ? cross : `smoking reveal images · ${cross}`);
-  } else if (mode === 'about') {
-    setGestureStatus(`About: blow · ↓↑ scroll · ${cross}`);
-  } else if (mode === 'fotografie') {
-    setGestureStatus(revealed
-      ? `Portraits: ↓↓ next · left chest Packs · smoking Ads`
-      : `Portraits: ↓↓ reveal · left chest Packs · smoking Ads`);
+  if (mode === 'fotografie') {
+    setGestureStatus('Portraits: 2× tap · index+middle to mouth → Ads');
   } else if (mode === 'pacchetti') {
-    setGestureStatus(revealed
-      ? `Packs: left chest next · ↓↓ Portraits · smoking Ads`
-      : `Packs: left chest reveal · ↓↓ Portraits · smoking Ads`);
+    setGestureStatus('Packs: left chest · index+middle to mouth → Ads');
+  } else if (mode === 'pubblicità') {
+    setGestureStatus('Ads: index and middle together at mouth');
+  } else if (mode === 'about') {
+    if (window.isAboutWiping?.()) return;
+    setGestureStatus('About: wipe the glass with your hand · ↓↑ scroll');
   } else {
     setGestureStatus('');
   }
@@ -743,7 +1120,7 @@ async function initCategoryGestures() {
         runtime: 'mediapipe',
         solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands',
         modelType: 'full',
-        maxHands: 1,
+        maxHands: 2,
       }
     );
 
@@ -762,6 +1139,7 @@ async function initCategoryGestures() {
     canvas.height = video.videoHeight;
 
     gestureDetecting = true;
+    window.initPackBodyTracking?.();
     updateIdleGestureStatus();
     detectCategoryGestures();
   } catch (err) {
@@ -796,7 +1174,8 @@ async function detectCategoryGestures() {
         window.resetAdGestureState?.();
       }
       if (lastGestureCategory === 'about' || mode === 'about') {
-        window.resetAboutBlowGesture?.();
+        aboutWindowWipe.reset();
+        window.resetAboutWipeGesture?.();
       }
       lastGestureCategory = mode;
       updateGestureCameraVisibility();
@@ -804,83 +1183,59 @@ async function detectCategoryGestures() {
 
     if (isPortraitGestureActive()) {
       try {
-        const hands = await handDetector.estimateHands(video, { flipHorizontal: false });
-        const frameW = canvas.width;
-        const frameH = canvas.height;
+        const hands = await handDetector.estimateHands(video, { flipHorizontal: true });
 
-        if (hands.length) {
-          const hand = hands[0];
+        if (attemptAdsRevealWithHands(hands, ctx)) {
+          requestAnimationFrame(detectCategoryGestures);
+          return;
+        }
 
-          if (handleCategorySwitchGesture(hand, frameW, frameH, ctx)) {
-            /* category opened via shared gestures */
-          } else if (isPortraitGestureBusy(hand)) { 
-
-            openHandSwipeDetector.reset();
-            drawHandDebug(hand, ctx, 'portrait');
-
-            console.log('SHOULD OPEN PORTRAITS');
-            setGestureStatus(window.isCategoryImagesRevealed?.()
-                ? '↓↓ gesture — next portrait'
-                : '↓↓ gesture — images revealed');
-            //setGestureStatus('Index + middle ↓ — ready for stroke');
-
-            if (doubleDownDetector.update(hand)) {
-              setGestureStatus(window.isCategoryImagesRevealed?.()
-                ? '↓↓ gesture — next portrait'
-                : '↓↓ gesture — images revealed');
-              window.advancePortraitViaGesture?.();
-              setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
-            } else if (isIndexMiddleDown(hand)) {
-              setGestureStatus('Index + middle ↓ — ready for stroke');
-            }
-          } else {
-            openHandSwipeDetector.reset();
-            drawHandDebug(hand, ctx, 'portrait');
-          }
-        } else { 
-          
-          openHandSwipeDetector.reset();
-          doubleDownDetector.reset();
-          leftChestDetector.reset();
+        if (hands.length >= 2) {
+          processPortraitOtherHandTap(hands, ctx);
+        } else {
           updateIdleGestureStatus();
         }
       } catch (err) {
         /* ignore per-frame errors */
       }
     } else if (isPackGestureActive()) {
+      window.drawPackChestZoneDebug?.(ctx);
       try {
+        const frameW = canvas.width;
+        const frameH = canvas.height;
+
+        if (isAdRevealGestureActive()) {
+          const handsForAds = await handDetector.estimateHands(video, { flipHorizontal: true });
+          if (attemptAdsRevealWithHands(handsForAds, ctx)) {
+            /* switched to Ads */
+            requestAnimationFrame(detectCategoryGestures);
+            return;
+          }
+        }
+
         const hands = await handDetector.estimateHands(video, { flipHorizontal: false });
+
+        if (hands.length) {
+          processPackLeftChestGesture(hands[0], frameW, frameH, ctx);
+        } else {
+          openHandSwipeDetector.reset();
+          leftChestDetector.reset();
+          updateIdleGestureStatus();
+        }
+      } catch (err) {
+        /* ignore per-frame errors */
+      }
+    } else if (isAdRevealGestureActive()) {
+      try {
+        const hands = await handDetector.estimateHands(video, { flipHorizontal: true });
         const frameW = canvas.width;
         const frameH = canvas.height;
 
         if (hands.length) {
-          const hand = hands[0];
-
-          if (handleCategorySwitchGesture(hand, frameW, frameH, ctx)) {
-            /* category opened via shared gestures */
-          } else if (isPackPointingGesture(hand, frameW, frameH)) {
-            openHandSwipeDetector.reset();
-            drawHandDebug(hand, ctx, 'pack');
-
-            if (leftChestDetector.update(hand, frameW, frameH)) {
-              setGestureStatus(window.isCategoryImagesRevealed?.()
-                ? 'Left chest — next pack'
-                : 'Left chest — images revealed');
-              window.advancePackViaGesture?.();
-              setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
-            } else if (isIndexPointLeftChest(hand, frameW, frameH)) {
-              setGestureStatus('Index on left chest…');
-            } else if (isIndexExtended(hand)) {
-              setGestureStatus('Point index at left chest');
-            }
-          } else {
-            openHandSwipeDetector.reset();
-            drawHandDebug(hand, ctx, 'pack');
-          }
+          processAdCigaretteGesture(hands[0], frameW, frameH, ctx);
         } else {
-          openHandSwipeDetector.reset();
-          leftChestDetector.reset();
-          doubleDownDetector.reset();
+          cigaretteToMouthDetector.reset();
+          document.body.classList.remove('ad-smoking-gesture');
           updateIdleGestureStatus();
         }
       } catch (err) {
@@ -888,54 +1243,7 @@ async function detectCategoryGestures() {
       }
     } else if (isAboutScrollActive()) {
       try {
-        const hands = await handDetector.estimateHands(video, { flipHorizontal: false });
-        const frameW = canvas.width;
-        const frameH = canvas.height;
-
-        if (hands.length) {
-          const hand = hands[0];
-
-          if (handleCategorySwitchGesture(hand, frameW, frameH, ctx)) {
-            /* category opened via shared gestures */
-          } else if (!window.isAboutMicBlowing?.()
-            && !processOpenHandSwipe(hand, frameW, frameH, ctx, { allowScroll: true })) {
-            updateIdleGestureStatus();
-          }
-        } else {
-          handleOpenHandSwipeLost(performance.now(), { allowScroll: true });
-          openPubblicitaGestureTracker.reset();
-          doubleDownDetector.reset();
-          leftChestDetector.reset();
-          if (!window.isAboutMicBlowing?.()) {
-            updateIdleGestureStatus();
-          }
-        }
-      } catch (err) {
-        /* ignore per-frame errors */
-      }
-    } else if (isAdsGestureActive()) {
-      try {
-        const hands = await handDetector.estimateHands(video, { flipHorizontal: false });
-        const frameW = canvas.width;
-        const frameH = canvas.height;
-
-        if (hands.length) {
-          const hand = hands[0];
-
-          if (handleCategorySwitchGesture(hand, frameW, frameH, ctx)) {
-            /* reveal ads or switch category */
-          } else if (isSmokingGesture(hand, frameW, frameH)) {
-            drawHandDebug(hand, ctx, 'smoking');
-            if (!window.isCategoryImagesRevealed?.()) {
-              setGestureStatus('Smoking — reveal images');
-            }
-          }
-        } else {
-          openPubblicitaGestureTracker.reset();
-          doubleDownDetector.reset();
-          leftChestDetector.reset();
-          updateIdleGestureStatus();
-        }
+        await processAboutInteraction(video, ctx, performance.now());
       } catch (err) {
         /* ignore per-frame errors */
       }
@@ -954,3 +1262,5 @@ window.ensureCategoryGestures = ensureCategoryGestures;
 window.enableGestureSurface = enableGestureSurface;
 window.updateIdleGestureStatus = updateIdleGestureStatus;
 window.updateGestureCameraVisibility = updateGestureCameraVisibility;
+window.stopAboutWipeSound = stopAboutWipeSound;
+window.aboutWindowWipeResetStroke = () => aboutWindowWipe.resetStroke();

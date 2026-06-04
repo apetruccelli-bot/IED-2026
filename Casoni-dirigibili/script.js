@@ -965,7 +965,7 @@ function openLightbox(itemId) {
     lbTagsEl.appendChild(t);
   });
 
-  lbDescription.textContent = item.description || '';
+  lbDescription.textContent = item.description + ' [evidence #' + item.id + ']' || '';
   renderLightboxMeta(item);
 
   lightbox.classList.add('open');
@@ -1043,7 +1043,6 @@ lightboxCursor.style.fontWeight = '700';
 lightboxCursor.style.lineHeight = '1';
 lightboxCursor.style.userSelect = 'none';
 lightboxCursor.style.webkitUserSelect = 'none';
-lightboxCursor.style.textShadow = '0 0 4px rgba(0, 0, 0, 0.55)';
 document.body.appendChild(lightboxCursor);
 
 function updateLightboxCursor(e) {
@@ -1057,7 +1056,7 @@ function updateLightboxCursor(e) {
   const rect = lbImg.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return;
 
-  lightboxCursor.textContent = e.clientX < rect.left + rect.width / 2 ? '←' : '→';
+  lightboxCursor.textContent = e.clientX < rect.left + rect.width / 2 ? 'Previous' : 'Next';
   lightboxCursor.style.left = `${e.clientX}px`;
   lightboxCursor.style.top = `${e.clientY}px`;
   lightboxCursor.style.display = 'block';

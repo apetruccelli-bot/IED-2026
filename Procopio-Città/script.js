@@ -715,8 +715,10 @@ function getStoryScroller() {
         if (currentPosition >= sectionStart) activeIndex = index;
       });
 
+      // CHANGE OPACOITY TO STICKY ANCHORS AS IT SCROLLS
       sectionTargets.forEach(({ link }, index) => {
-        link.style.opacity = index === activeIndex ? '1' : '.3';
+        //link.style.opacity = index === activeIndex ? '1' : '.3';
+        link.style.color = index === activeIndex ? '#000000' : '#909090';
       });
     };
 
