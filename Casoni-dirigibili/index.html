@@ -25,7 +25,7 @@
 
   <div class="landing-content">
     <div class="landing-column">
-      <span>ADLER’S</span>
+      <span>ADLER’s</span>
     </div>
     <div class="landing-column">
       <span>AIRSHIP</span>
@@ -77,7 +77,7 @@
       <div class="top-home p-10px bg-myBlack flex flex-row justify-between items-baseline text-myWhite gap-10px">
         <div class="intro-panel flex flex-col">
           <a href="./" class="font-myTitle home-title">
-            <span class="home-title-short">AAA</span><span class="home-title-full"> — Adler's Airship Archive</span>
+            <span class="home-title-short">AAA</span><span class="home-title-full"> — Adler’s Airship Archive</span>
           </a>
           <div class="box">
             <p>
@@ -165,6 +165,7 @@
         <div id="explore-image-info" style="max-width:300px; color:rgba(255,255,255,0.65); text-align:right; font-family:'SchengenA Regular', sans-serif; font-size:12px; line-height:1.25;">
           <p id="explore-description-label" style="margin:0 0 8px 0;">—</p>
           <p id="explore-causes-label" style="margin:0;"></p>
+          <p id="explore-country-label" style="margin:0;"></p>
           <p id="explore-victims-label" style="margin:0;"></p>
         </div>
       </div>
@@ -203,9 +204,9 @@
       </div>
 
       <div class="explore-pack-selector" id="explore-pack-selector">
-        <button id="explore-pack-1" class="filter-link explore-pack-btn" onclick="setExplorePackage(0)">Pack 1</button>
-        <button id="explore-pack-2" class="filter-link explore-pack-btn" onclick="setExplorePackage(1)">Pack 2</button>
-        <button id="explore-pack-3" class="filter-link explore-pack-btn" onclick="setExplorePackage(2)">Pack 3</button>
+        <button id="explore-pack-1" class="filter-link explore-pack-btn" onclick="setExplorePackage(0)">Germany</button>
+        <button id="explore-pack-2" class="filter-link explore-pack-btn" onclick="setExplorePackage(1)">USA</button>
+        <button id="explore-pack-3" class="filter-link explore-pack-btn" onclick="setExplorePackage(2)">Italy</button>
       </div>
 
       <div id="explore-status" style="color:rgba(255,255,255,0.35); font-size:12px; font-family:monospace;">Loading model...</div>
@@ -224,6 +225,7 @@
       const exploreSquare = document.getElementById('explore-square');
       const exploreDescriptionLabel = document.getElementById('explore-description-label');
       const exploreCausesLabel = document.getElementById('explore-causes-label');
+      const exploreCountryLabel = document.getElementById('explore-country-label');
       const exploreVictimsLabel = document.getElementById('explore-victims-label');
 
       let exploreItemsById = {};
@@ -271,6 +273,7 @@
         if (!visibleImg) {
           if (exploreDescriptionLabel) exploreDescriptionLabel.textContent = '—';
           if (exploreCausesLabel) exploreCausesLabel.textContent = '';
+          if (exploreCountryLabel) exploreCountryLabel.textContent = '';
           if (exploreVictimsLabel) exploreVictimsLabel.textContent = '';
           return;
         }
@@ -281,6 +284,7 @@
         if (!item) {
           if (exploreDescriptionLabel) exploreDescriptionLabel.textContent = '';
           if (exploreCausesLabel) exploreCausesLabel.textContent = '';
+          if (exploreCountryLabel) exploreCountryLabel.textContent = '';
           if (exploreVictimsLabel) exploreVictimsLabel.textContent = '';
           return;
         }
@@ -291,6 +295,10 @@
 
         if (exploreCausesLabel) {
           exploreCausesLabel.textContent = `Cause: ${formatExploreCauses(item.causes)}`;
+        }
+
+        if (exploreCountryLabel) {
+          exploreCountryLabel.textContent = `Country: ${item.country || '—'}`;
         }
 
         if (exploreVictimsLabel) {
