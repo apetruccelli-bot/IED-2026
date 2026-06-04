@@ -958,10 +958,6 @@ function openLightbox(itemId) {
     const t = document.createElement('span');
     t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
     t.textContent = tag;
-    t.addEventListener('click', () => {
-      toggleTag(tag);
-      closeLightbox();
-    });
     lbTagsEl.appendChild(t);
   });
 
@@ -973,12 +969,47 @@ function openLightbox(itemId) {
   document.body.style.overflow = 'hidden';
 
   function updateLightboxDescriptionWidth() {
-    if (!lbImg || !lbDescription) return;
+    if (!lbImg) return;
 
     const rect = lbImg.getBoundingClientRect();
 
-    if (rect.width > 0) {
-      lbDescription.style.maxWidth = Math.floor(rect.width) + 'px';
+    if (!rect.width || !rect.height || !lbImg.naturalWidth || !lbImg.naturalHeight) return;
+
+    const imageRatio = lbImg.naturalWidth / lbImg.naturalHeight;
+    const boxRatio = rect.width / rect.height;
+
+    let visibleWidth;
+
+    if (boxRatio > imageRatio) {
+      visibleWidth = rect.height * imageRatio;
+    } else {
+      visibleWidth = rect.width;
+    }
+
+    visibleWidth = Math.floor(visibleWidth);
+
+    const lbInfo = document.querySelector('#lightbox .lb-info');
+
+    if (lbInfo && visibleWidth > 0) {
+      lbInfo.style.setProperty('width', visibleWidth + 'px', 'important');
+      lbInfo.style.setProperty('max-width', visibleWidth + 'px', 'important');
+      lbInfo.style.setProperty('align-self', 'center', 'important');
+      lbInfo.style.setProperty('text-align', 'left', 'important');
+    }
+
+    if (lbTagsEl) {
+      lbTagsEl.style.setProperty('width', '100%', 'important');
+      lbTagsEl.style.setProperty('max-width', '100%', 'important');
+    }
+
+    if (lbDescription) {
+      lbDescription.style.setProperty('width', '100%', 'important');
+      lbDescription.style.setProperty('max-width', '100%', 'important');
+    }
+
+    if (lbMeta) {
+      lbMeta.style.setProperty('width', '100%', 'important');
+      lbMeta.style.setProperty('max-width', '100%', 'important');
     }
   }
 
@@ -1029,6 +1060,7 @@ lbClose.addEventListener('click', closeLightbox);
 lbBackdrop.addEventListener('click', closeLightbox);
 
 const lightboxCursor = document.createElement('div');
+lightboxCursor.className = 'lightbox-hover-cursor';
 lightboxCursor.style.position = 'fixed';
 lightboxCursor.style.left = '0';
 lightboxCursor.style.top = '0';
@@ -1036,11 +1068,6 @@ lightboxCursor.style.transform = 'translate(-50%, -50%)';
 lightboxCursor.style.zIndex = '10003';
 lightboxCursor.style.pointerEvents = 'none';
 lightboxCursor.style.display = 'none';
-lightboxCursor.style.color = '#FCFCFC';
-lightboxCursor.style.fontFamily = "'SchengenA Regular', sans-serif";
-lightboxCursor.style.fontSize = '32px';
-lightboxCursor.style.fontWeight = '700';
-lightboxCursor.style.lineHeight = '1';
 lightboxCursor.style.userSelect = 'none';
 lightboxCursor.style.webkitUserSelect = 'none';
 document.body.appendChild(lightboxCursor);
