@@ -8,9 +8,8 @@
       "category": "Negozi",
       "Negozi-anno": 1992,
       "Negozi-provincia": "Lecce",
-      "Negozi-specializzazione": ["equina"],
-      "Negozi-stato": "aperto"
-      },
+      "Negozi-specializzazione": ["equina"]
+    },
     {
       "id": 2,
       "src": "img/b2.png",
@@ -19,8 +18,7 @@
       "category": "Negozi",
       "Negozi-anno": 1995,
       "Negozi-provincia": "Foggia",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "chiuso"
+      "Negozi-specializzazione": ["bovina", "suina"]
     },
     {
       "id": 3,
@@ -30,8 +28,7 @@
       "category": "Negozi",
       "Negozi-anno": 1990,
       "Negozi-provincia": "Bari",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "chiuso"
+      "Negozi-specializzazione": ["bovina", "suina"]
     },
     {
       "id": 4,
@@ -41,8 +38,8 @@
       "category": "Negozi",
       "Negozi-anno": 1984,
       "Negozi-provincia": "Foggia",
-      "Negozi-specializzazione": ["equina"],
-      "Negozi-stato": "chiuso"},
+      "Negozi-specializzazione": ["equina"]
+    },
     {
       "id": 5,
       "src": "img/b5.png",
@@ -51,8 +48,8 @@
       "category": "Negozi",
       "Negozi-anno": 1995,
       "Negozi-provincia": "Bari",
-      "Negozi-specializzazione": ["bovina", "ovina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "ovina"]
+    },
     {
       "id": 6,
       "src": "img/b6.png",
@@ -61,8 +58,8 @@
       "category": "Negozi",
       "Negozi-anno": 1989,
       "Negozi-provincia": "Lecce",
-      "Negozi-specializzazione": ["bovina"],
-      "Negozi-stato": "chiuso"    },
+      "Negozi-specializzazione": ["bovina"]
+    },
     {
       "id": 7,
       "src": "img/b7.png",
@@ -71,8 +68,8 @@
       "category": "Negozi",
       "Negozi-anno": 1993,
       "Negozi-provincia": "Bari",
-      "Negozi-specializzazione": ["equina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["equina"]
+    },
     {
       "id": 8,
       "src": "img/b8.png",
@@ -81,8 +78,8 @@
       "category": "Negozi",
       "Negozi-anno": 1985,
       "Negozi-provincia": "Lecce",
-      "Negozi-specializzazione": ["ovina"],
-      "Negozi-stato": "chiuso"    },
+      "Negozi-specializzazione": ["ovina"]
+    },
     {
       "id": 9,
       "src": "img/b9.png",
@@ -91,8 +88,8 @@
       "category": "Negozi",
       "Negozi-anno": 1990,
       "Negozi-provincia": "Taranto",
-      "Negozi-specializzazione": ["equina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["equina"]
+    },
     {
       "id": 10,
       "src": "img/b10.png",
@@ -101,8 +98,8 @@
       "category": "Negozi",
       "Negozi-anno": 1989,
       "Negozi-provincia": "Bari",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 11,     
       "src": "img/b11.png",
@@ -111,8 +108,8 @@
       "category": "Negozi",
       "Negozi-anno": 1988,
       "Negozi-provincia": "Barletta-Andria-Trani",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "chiuso"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 12,
       "src": "img/b12.png",
@@ -121,8 +118,8 @@
       "category": "Negozi",
       "Negozi-anno": 1990,
       "Negozi-provincia": "Barletta-Andria-Trani",
-      "Negozi-specializzazione": ["bovina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina"]
+    },
     {
       "id": 13,
       "src": "img/b13.png",
@@ -131,8 +128,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Lecce",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 14,
       "src": "img/b14.png",
@@ -141,8 +138,8 @@
       "category": "Negozi",
       "Negozi-anno": 1992,
       "Negozi-provincia": "Barletta-Andria-Trani",
-      "Negozi-specializzazione": ["ovina"],
-      "Negozi-stato": "chiuso"    },
+      "Negozi-specializzazione": ["ovina"]
+    },
     {
       "id": 15,
       "src": "img/b15.png",
@@ -152,8 +149,8 @@
       "category": "Negozi",
       "Negozi-anno": 1980,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["equina"],
-      "Negozi-stato": "aperto"    }, 
+      "Negozi-specializzazione": ["equina"]
+    },
     {
       "id": 16, 
       "src": "img/b16.png",
@@ -163,8 +160,8 @@
       "category": "Negozi",
       "Negozi-anno": 1996,
       "Negozi-provincia": "Bari",
-      "Negozi-specializzazione": ["bovina"],
-      "Negozi-stato": "aperto"    },  
+      "Negozi-specializzazione": ["bovina"]
+    },
     {
       "id": 17,
       "src": "img/b17.png",
@@ -174,8 +171,8 @@
       "category": "Negozi",
       "Negozi-anno": 1989,
       "Negozi-provincia": "Taranto",
-      "Negozi-specializzazione": ["bovina", "ovina"],
-      "Negozi-stato": "chiuso"    },
+      "Negozi-specializzazione": ["bovina", "ovina"]
+    },
     {
       "id": 18,
       "src": "img/b18.png",
@@ -185,8 +182,8 @@
       "category": "Negozi",
       "Negozi-anno": 1995,
       "Negozi-provincia": "Bari",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "chiuso"    },        
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 19,
       "src": "img/b19.png",
@@ -196,8 +193,8 @@
       "category": "Negozi",
       "Negozi-anno": 1998,
       "Negozi-provincia": "Taranto",
-      "Negozi-specializzazione": ["equina"],
-      "Negozi-stato": "chiuso"    },
+      "Negozi-specializzazione": ["equina"]
+    },
     {
       "id": 20,
       "src": "img/b20.png",
@@ -207,8 +204,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 21,
       "src": "img/s1 (1).png",
@@ -218,8 +215,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 22,
       "src": "img/s1 (2).png",
@@ -229,8 +226,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 23,
       "src": "img/s1 (3).png",
@@ -240,8 +237,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 24,
       "src": "img/s1 (4).png",
@@ -251,8 +248,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 25,
       "src": "img/s1 (5).png",
@@ -262,8 +259,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 26,
       "src": "img/s1 (6).png",
@@ -273,8 +270,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 27,
       "src": "img/s1 (7).png",
@@ -284,9 +281,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
- 
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 28,
       "src": "img/s1 (8).png",
@@ -296,8 +292,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 29,
       "src": "img/s1 (9).png",
@@ -307,8 +303,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 30,
       "src": "img/s1 (10).png",
@@ -318,8 +314,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 31,
       "src": "img/s1 (11).png",
@@ -329,8 +325,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 32,
       "src": "img/s1 (12).png",
@@ -340,8 +336,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 33,
       "src": "img/s1 (13).png",
@@ -351,8 +347,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 34,
       "src": "img/s1 (14).png",
@@ -362,8 +358,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 35,
       "src": "img/s1 (15).png",
@@ -373,8 +369,8 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"    },
+      "Negozi-specializzazione": ["bovina", "suina"]
+    },
     {
       "id": 36,
       "src": "img/s1 (16).png",
@@ -384,8 +380,7 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto" 
+      "Negozi-specializzazione": ["bovina", "suina"]
     },
     {
       "id": 37,
@@ -396,8 +391,7 @@
       "category": "Negozi",
       "Negozi-anno": 1997,
       "Negozi-provincia": "Brindisi",
-      "Negozi-specializzazione": ["bovina", "suina"],
-      "Negozi-stato": "aperto"
+      "Negozi-specializzazione": ["bovina", "suina"]
     },
     {
       "id": 38,
