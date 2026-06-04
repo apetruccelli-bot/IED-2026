@@ -3,6 +3,7 @@ let exploreIsDetecting = false;
 let exploreStream = null;
 let exploreModelLoading = false;
 let explorePackageIndex = -1;
+let explorePreviewVisible = true;
 
 let images_left = ['red', 'green', 'blue', 'yellow', 'cyan'];
 let images_right = ['magenta', 'orange', 'purple', 'brown', 'pink'];
@@ -100,6 +101,25 @@ function setExplorePackage(idx) {
   updatePackButtonsUI();
 }
 
+function updateExplorePreviewUI() {
+  const panel = document.getElementById('explore-preview-panel');
+  const button = document.getElementById('explore-preview-toggle');
+
+  if (!panel || !button) return;
+
+  panel.classList.toggle('preview-hidden', !explorePreviewVisible);
+  button.textContent = explorePreviewVisible ? 'hide camera' : 'show camera';
+
+  if (!explorePreviewVisible) {
+    clearExploreHandSkeleton();
+  }
+}
+
+function toggleExplorePreview() {
+  explorePreviewVisible = !explorePreviewVisible;
+  updateExplorePreviewUI();
+}
+
 function getExploreArtLabelById(id) {
   const img = document.getElementById(id);
   return img ? (img.alt || '') : '';
@@ -124,6 +144,7 @@ function openExploreModal() {
     square.style.backgroundImage = 'none';
   }
   updatePackButtonsUI();
+  updateExplorePreviewUI();
   modal.style.display = 'flex';
   initExplore();
 }
@@ -133,6 +154,8 @@ function closeExploreModal() {
   modal.style.display = 'none';
   exploreIsDetecting = false;
   setExploreArtVisible(null);
+  clearExploreHandSkeleton();
+  
   if (exploreStream) {
     exploreStream.getTracks().forEach(t => t.stop());
     exploreStream = null;
@@ -191,6 +214,91 @@ async function startExploreCamera() {
   }
 }
 
+const exploreHandConnections = [
+  [0, 1], [1, 2], [2, 3], [3, 4],
+  [0, 5], [5, 6], [6, 7], [7, 8],
+  [0, 9], [9, 10], [10, 11], [11, 12],
+  [0, 13], [13, 14], [14, 15], [15, 16],
+  [0, 17], [17, 18], [18, 19], [19, 20],
+  [5, 9], [9, 13], [13, 17]
+];
+
+function resizeExploreCanvas() {
+  const video = document.getElementById('explore-webcam');
+  const canvas = document.getElementById('explore-hand-canvas');
+
+  if (!video || !canvas) return;
+
+  const rect = video.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+}
+
+function drawExploreHandSkeleton(hand) {
+  if (!explorePreviewVisible) {
+    clearExploreHandSkeleton();
+    return;
+  }
+
+  const video = document.getElementById('explore-webcam');
+  const canvas = document.getElementById('explore-hand-canvas');
+
+  if (!video || !canvas) return;
+
+  resizeExploreCanvas();
+
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const keypoints = hand?.keypoints;
+
+  if (!keypoints || !video.videoWidth || !video.videoHeight) return;
+
+  const scaleX = canvas.width / video.videoWidth;
+  const scaleY = canvas.height / video.videoHeight;
+
+  ctx.lineWidth = 2 * (window.devicePixelRatio || 1);
+  ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+  ctx.fillStyle = 'rgba(255,255,255,0.95)';
+
+  exploreHandConnections.forEach(([a, b]) => {
+    const p1 = keypoints[a];
+    const p2 = keypoints[b];
+
+    if (!p1 || !p2) return;
+
+    ctx.beginPath();
+    ctx.moveTo(p1.x * scaleX, p1.y * scaleY);
+    ctx.lineTo(p2.x * scaleX, p2.y * scaleY);
+    ctx.stroke();
+  });
+
+  keypoints.forEach(point => {
+    ctx.beginPath();
+    ctx.arc(
+      point.x * scaleX,
+      point.y * scaleY,
+      3.2 * (window.devicePixelRatio || 1),
+      0,
+      Math.PI * 2
+    );
+    ctx.fill();
+  });
+}
+
+function clearExploreHandSkeleton() {
+  const canvas = document.getElementById('explore-hand-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 async function detectExploreHands() {
   if (!exploreIsDetecting || !exploreDetector) return;
   const video = document.getElementById('explore-webcam');
@@ -198,6 +306,7 @@ async function detectExploreHands() {
   const status = document.getElementById('explore-status');
   try {
     const hands = await exploreDetector.estimateHands(video, { flipHorizontal: true });
+    drawExploreHandSkeleton(hands[0]);
     const detectLabel = document.getElementById('explore-detect-label');
     const angleLabel  = document.getElementById('explore-angle-label');
     if (hands.length > 0) {

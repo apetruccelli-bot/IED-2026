@@ -973,6 +973,91 @@ button {
 }
 
 
+#explore-preview-panel {
+  position: absolute;
+  top: 20px;
+  right: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  z-index: 10002;
+}
+
+#explore-preview-toggle {
+  color: rgba(255,255,255,0.65);
+  font-family: 'SchengenA Regular', sans-serif;
+  font-size: 12px;
+  line-height: 1;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+#explore-preview-toggle:hover {
+  opacity: 0.4;
+}
+
+#explore-webcam-wrap {
+  position: relative;
+  width: 200px;
+  height: 150px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.15);
+  background: #111;
+}
+
+#explore-webcam {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+#explore-hand-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#explore-image-info {
+  max-width: 300px;
+  color: rgba(255,255,255,0.65);
+  text-align: right;
+  font-family: 'SchengenA Regular', sans-serif;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+#explore-image-info p {
+  margin: 0;
+}
+
+#explore-description-label {
+  margin-bottom: 8px !important;
+}
+
+#explore-preview-panel.preview-hidden #explore-webcam-wrap {
+  display: none;
+}
+
+#explore-camera-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+#explore-preview-toggle {
+  align-self: flex-end;
+  text-align: right;
+}
+
 
 
 /* ── RESPONSIVE ── */
@@ -1864,5 +1949,60 @@ button {
     color: inherit;
     line-height: inherit;
     cursor: pointer;
+  }
+}
+
+
+/* ─────────────────────────────
+   EXPLORE PREVIEW PANEL MOBILE
+───────────────────────────── */
+@media (max-width: 600px) {
+  #explore-preview-panel {
+    position: absolute;
+    top: 46px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: block;
+    z-index: 10002;
+    pointer-events: none;
+  }
+
+  #explore-camera-box {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    pointer-events: auto;
+  }
+
+  #explore-webcam-wrap {
+    width: 112px;
+    height: 84px;
+    border-radius: 4px;
+  }
+
+  #explore-preview-toggle {
+    font-size: 10px;
+    text-align: left;
+  }
+
+  #explore-image-info {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    left: auto;
+    max-width: 170px;
+    text-align: right;
+    font-size: 10px;
+    line-height: 1.15;
+    pointer-events: none;
+  }
+
+  #explore-description-label {
+    margin-bottom: 5px !important;
   }
 }
