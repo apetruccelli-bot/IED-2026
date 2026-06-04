@@ -21,8 +21,8 @@
     <div class="w-screen min-h-screen grid grid-cols-8 specialGrid bg-myWhite">
       <!-- Brand moved to bottom across pages -->
         <div class="col-start-2 col-end-8 bg-transparent">
-          <div class="sticky archive-sticky top-0 z-20 col-span-full pt-10px pl-10px pr-10px pb-10px">
-            <div class="grid grid-cols-6 bg-transparent mb-10px gap-10px ">
+          <div class="sticky archive-sticky top-0 z-20 col-span-full pt-10px pl-10px pr-10px bg-gradient-to-b from-myWhite to-transparent from-[10%] h-18 pointer-events-none">
+            <div class="grid grid-cols-6 bg-transparent mb-10px pointer-events-auto">
               <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Anno</button>
             <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Autore</button>
             <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Regione</button>
@@ -97,14 +97,14 @@
       </div>
     </footer>
     <!-- Bottom brand + links (identical on every page) -->
-    <div class="site-bottom-brand" style="position:fixed;left:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
+    <div class="site-bottom-brand" style="position:fixed;left:10px;top:10px;bottom:auto;z-index:99999;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
       <div style="line-height:1">
         <a href="home.html" class="font-myTitle" style="display:inline-block">Città<br>interrotte</a>
         <p style="margin:0">di Fondazione Scorza</p>
       </div>
     </div>
-    <div class="sidebar-links" style="position:fixed;right:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">
-      <div style="display:flex;flex-direction:column">
+<div class="sidebar-links"
+     style="position:fixed;right:10px;top:10px;bottom:auto;z-index:99999;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">      <div style="display:flex;flex-direction:column">
         <a href="storia.html" class="font-myTitle text-right">Storia</a>
         <a href="index.html" class="font-myTitle text-right">Archivio</a>
         <a href="stat.html" class="font-myTitle text-right">Dati</a>

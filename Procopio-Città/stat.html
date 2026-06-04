@@ -24,8 +24,8 @@
 <div class="w-screen min-h-screen grid grid-cols-8 specialGrid bg-myWhite">
 <!-- Brand/navigation moved to bottom across pages -->
 <div class="col-start-2 col-end-8 bg-transparent min-h-screen relative" id="main-scroll">
-<div class="sticky story-sticky top-0 z-20 col-span-full pt-10px pb-20px bg-transparent" data-story-top-nav="" style="position: sticky; top: 0;">
-<div class="grid grid-cols-6 story-top-nav">
+<div class="sticky story-sticky top-0 z-20 col-span-full pt-10px bg-gradient-to-b from-myWhite to-transparent from-[10%] h-18 pointer-events-none" data-story-top-nav="" style="position: sticky; top: 0;">
+<div class="grid grid-cols-6 story-top-nav pointer-events-auto">
 <a class="p text-justify" href="#sezione_1">Introduzione</a>
 <a class="p text-justify" href="#sezione_2">Popolazione</a>
 <a class="p text-justify" href="#sezione_3">Età media</a>
@@ -362,13 +362,13 @@
 </div>
 </footer>
 <!-- Bottom brand + links (identical on every page) -->
-<div class="site-bottom-brand" style="position:fixed;left:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
-<div style="line-height:1">
-<a class="font-myTitle" href="home.html" style="display:inline-block">Città<br/>interrotte</a>
+<div class="site-bottom-brand"
+     style="position:fixed;left:10px;top:10px;bottom:auto;z-index:99999;pointer-events:auto;display:flex;flex-direction:column"><a class="font-myTitle" href="home.html" style="display:inline-block">Città<br/>interrotte</a>
 <p style="margin:0">di Fondazione Scorza</p>
 </div>
 </div>
-<div class="sidebar-links" style="position:fixed;right:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">
+<div class="sidebar-links"
+     style="position:fixed;right:10px;top:10px;bottom:auto;z-index:99999;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">      <div style="display:flex;flex-direction:column">
 <div style="display:flex;flex-direction:column">
 <a class="font-myTitle text-right" href="storia.html">Storia</a>
 <a class="font-myTitle text-right" href="index.html">Archivio</a>

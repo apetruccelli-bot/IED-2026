@@ -63,7 +63,142 @@ const MAP_BOUNDS = {
 const MARKER_FADE_DURATION_MS = 8 * 1000;
 const NAVIGATION_SLOWDOWN_WINDOW_MS = 8000;
 const NAVIGATION_SLOWDOWN_FACTOR = 0.25;
-const BLUR_SMOOTH_ALPHA = 0.02; // ~4-5 sec smooth fade
+const BLUR_SMOOTH_ALPHA = 0.08; // ~4-5 sec smooth fade
+
+
+
+
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+let detector = null;
+let isDetecting = false;
+let showNumbers = true;
+
+// Colors for different hands
+const handColors = [
+  "#FF0000", // Red
+  "#00FF00", // Green
+  "#0088FF", // Blue
+  "#FF00FF", // Magenta
+  "#FFFF00", // Yellow
+  "#00FFFF", // Cyan
+];
+
+// Hand landmark connections (finger bones)
+const HAND_CONNECTIONS = [
+  // Thumb
+  [0, 1],
+  [1, 2],
+  [2, 3],
+  [3, 4],
+  // Index finger
+  [0, 5],
+  [5, 6],
+  [6, 7],
+  [7, 8],
+  // Middle finger
+  [0, 9],
+  [9, 10],
+  [10, 11],
+  [11, 12],
+  // Ring finger
+  [0, 13],
+  [13, 14],
+  [14, 15],
+  [15, 16],
+  // Pinky
+  [0, 17],
+  [17, 18],
+  [18, 19],
+  [19, 20],
+];
+
+// Finger names for each landmark
+const LANDMARK_NAMES = [
+  "Wrist",
+  "Thumb CMC",
+  "Thumb MCP",
+  "Thumb IP",
+  "Thumb Tip",
+  "Index MCP",
+  "Index PIP",
+  "Index DIP",
+  "Index Tip",
+  "Middle MCP",
+  "Middle PIP",
+  "Middle DIP",
+  "Middle Tip",
+  "Ring MCP",
+  "Ring PIP",
+  "Ring DIP",
+  "Ring Tip",
+  "Pinky MCP",
+  "Pinky PIP",
+  "Pinky DIP",
+  "Pinky Tip",
+];
+// Draw hand landmarks
+function drawHandLandmarks(keypoints, color, handedness) {
+  // Draw all keypoints with numbers
+  keypoints.forEach((point, index) => {
+    // Draw the point
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.strokeStyle = "#FFFFFF";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Draw the number next to the point (if enabled)
+    if (showNumbers) {
+      ctx.fillStyle = color;
+      ctx.font = "10px Arial";
+      ctx.fillText(index, point.x + 8, point.y - 8);
+    }
+  });
+
+  // Draw hand skeleton connections
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 3;
+
+  HAND_CONNECTIONS.forEach(([start, end]) => {
+    const startPoint = keypoints[start];
+    const endPoint = keypoints[end];
+
+    ctx.beginPath();
+    ctx.moveTo(startPoint.x, startPoint.y);
+    ctx.lineTo(endPoint.x, endPoint.y);
+    ctx.stroke();
+  });
+}
+
+// Draw bounding box around hand
+function drawBoundingBox(keypoints, color, handedness) {
+  console.log('drawBoundingBox', keypoints, color, handedness);
+  const xs = keypoints.map((p) => p.x);
+  const ys = keypoints.map((p) => p.y);
+
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 3;
+  ctx.strokeRect(minX - 10, minY - 10, maxX - minX + 20, maxY - minY + 20);
+
+  // Draw hand label
+  ctx.fillStyle = color;
+  ctx.font = "bold 16px Arial";
+  ctx.fillText(handedness, minX - 10, minY - 15);
+
+  console.log('testtttt');
+}
+
+
+
 
 function dist2D(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
@@ -262,16 +397,28 @@ async function startProcopioCamera() {
       if (statusEl) statusEl.textContent = '✓ camera on — calibrating…';
       detectLoop();
     }, { once: true });
-    video.addEventListener('loadedmetadata', () => {
-      if (!procopioIsDetecting) {
-        procopioIsDetecting = true;
-        detectLoop();
-      }
-    }, { once: true });
+   video.addEventListener("loadedmetadata", () => {
+  syncCanvasToVideo();
+
+  if (!procopioIsDetecting) {
+    procopioIsDetecting = true;
+    detectLoop();
+  }
+}, { once: true });
   } catch (err) {
     if (statusEl) statusEl.textContent = 'cam error: ' + err.message;
     setFaceFarOverlayVisible(false);
   }
+}
+
+function syncCanvasToVideo() {
+  const video = document.getElementById("face-webcam");
+  const canvas = document.getElementById("canvas");
+
+  if (!video || !canvas) return;
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
 }
 
 async function detectLoop() {
@@ -371,6 +518,8 @@ async function detectLoop() {
     }
   }
 
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   // ── HAND → map zoom + center ────────────────────────────────────────────
   try {
     // Check if video is ready before processing
@@ -378,7 +527,7 @@ async function detectLoop() {
       if (procopioIsDetecting) requestAnimationFrame(detectLoop);
       return;
     }
-    const hands = await procopioHandDetector.estimateHands(video, { flipHorizontal: true });
+    const hands = await procopioHandDetector.estimateHands(video, { flipHorizontal: false });
     if (hands.length > 0) {
       const kp        = hands[0].keypoints;
       // Palm width: index MCP (5) → pinky MCP (17)
@@ -392,6 +541,19 @@ async function detectLoop() {
           handSizeBaseline = handSizeSamples.reduce((a, b) => a + b) / HAND_CALIB_FRAMES;
         }
       } else {
+        
+
+          let hand = hands[0];
+          let color = handColors[0];
+          let handedness = hand.handedness || "Unknown";
+          //console.log('hand', hand.keypoints, color, handedness);
+          //console.log('hand');
+          // Draw bounding box
+          drawBoundingBox(hand.keypoints, color, handedness);
+          // Draw hand landmarks
+          drawHandLandmarks(hand.keypoints, color, handedness);
+
+
         // ratio > 1.5 (hand close) → zoom in; ratio < 0.5 (hand far) → zoom out
         const ratio = palmWidth / handSizeBaseline;
         if (filteredHandRatio == null) filteredHandRatio = ratio;
