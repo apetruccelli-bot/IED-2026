@@ -275,7 +275,7 @@
       "year": "1935",
       "victims": 49,
       "people": true,
-      "description": "Airship held at steep angle near mooring mast; instability recorded during ground handling."    
+      "description": "The wreckage of an airship following structural collapse; the front section of the gondola is still visible, while the metal frame appears twisted and collapsed along its entire upper section."    
     },
 
     {
@@ -858,7 +858,7 @@
       "year": "1928",
       "people": false,
       "victims": 40,
-      "description": "El Pais report on the Icaro crash in the Pyrenees; violent wind destroyed the hull during forced landing, though all occupants survived."
+      "description": "El Pais report on the Icaro crash in the Pyrenees; violent wind destroyed the hull during forced landing."
     },
 
     {
@@ -1007,7 +1007,7 @@
       "country": "Germany",
       "year": "1930",
       "people": false,
-      "description": "German side-elevation study for the Hindenburg II programme, showing a streamlined rigid hull, tail planes, lower gondola modules, and notes on passenger distribution and gas-cell access."
+      "description": "Conceptual design of the Hindenburg II program, featuring an aerodynamic rigid hull, tail surfaces, lower gondola modules, and notes on passenger seating arrangements."
     },
 
     {
@@ -1114,7 +1114,7 @@
       "year": "1932",
       "victims": 43,
       "people": true,
-      "description": "Italian airship Mobile after impact near open water; fire concentrated below the forward hull, with the envelope still rising from the surface as combustion spreads upward."
+      "description": "Italian airship Nobile after impact near open water; fire concentrated below the forward hull, with the envelope still rising from the surface as combustion spreads upward."
     },
 
     {
