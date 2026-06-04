@@ -1,126 +1,59 @@
-// Get DOM elements
-const video = document.getElementById("webcam");
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-const status = document.getElementById("status");
-const startBtn = document.getElementById("startBtn");
-const keypointList = document.getElementById("keypointList");
+// Demo page — uses body-tracking-api.js (shared with ciocca-fumo Packs).
 
-let model = null;
+const video = document.getElementById('webcam');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const status = document.getElementById('status');
+const startBtn = document.getElementById('startBtn');
+const keypointList = document.getElementById('keypointList');
+
+const { IedBodyTracking } = window;
 let isDetecting = false;
 
-// Define body part connections for skeleton (including facial features)
 const connections = [
-  // Face connections
-  ["nose", "leftEye"],
-  ["nose", "rightEye"],
-  ["leftEye", "leftEar"],
-  ["rightEye", "rightEar"],
-
-  // Torso
-  ["leftShoulder", "rightShoulder"],
-  ["leftShoulder", "leftElbow"],
-  ["leftElbow", "leftWrist"],
-  ["rightShoulder", "rightElbow"],
-  ["rightElbow", "rightWrist"],
-
-  // Neck to shoulders
-  ["nose", "leftShoulder"],
-  ["nose", "rightShoulder"],
-
-  // Spine
-  ["leftShoulder", "leftHip"],
-  ["rightShoulder", "rightHip"],
-  ["leftHip", "rightHip"],
-
-  // Legs
-  ["leftHip", "leftKnee"],
-  ["leftKnee", "leftAnkle"],
-  ["rightHip", "rightKnee"],
-  ["rightKnee", "rightAnkle"],
+  ['nose', 'leftEye'],
+  ['nose', 'rightEye'],
+  ['leftEye', 'leftEar'],
+  ['rightEye', 'rightEar'],
+  ['leftShoulder', 'rightShoulder'],
+  ['leftShoulder', 'leftElbow'],
+  ['leftElbow', 'leftWrist'],
+  ['rightShoulder', 'rightElbow'],
+  ['rightElbow', 'rightWrist'],
+  ['nose', 'leftShoulder'],
+  ['nose', 'rightShoulder'],
+  ['leftShoulder', 'leftHip'],
+  ['rightShoulder', 'rightHip'],
+  ['leftHip', 'rightHip'],
+  ['leftHip', 'leftKnee'],
+  ['leftKnee', 'leftAnkle'],
+  ['rightHip', 'rightKnee'],
+  ['rightKnee', 'rightAnkle'],
 ];
 
-// Colors for different people
 const personColors = [
-  { skeleton: "#00FF00", keypoint: "#FF0000" }, // Green/Red
-  { skeleton: "#0088FF", keypoint: "#FF8800" }, // Blue/Orange
-  { skeleton: "#FF00FF", keypoint: "#FFFF00" }, // Magenta/Yellow
-  { skeleton: "#00FFFF", keypoint: "#FF0088" }, // Cyan/Pink
-  { skeleton: "#88FF00", keypoint: "#8800FF" }, // Lime/Purple
+  { skeleton: '#00FF00', keypoint: '#FF0000' },
+  { skeleton: '#0088FF', keypoint: '#FF8800' },
+  { skeleton: '#FF00FF', keypoint: '#FFFF00' },
+  { skeleton: '#00FFFF', keypoint: '#FF0088' },
+  { skeleton: '#88FF00', keypoint: '#8800FF' },
 ];
 
-// Load the PoseNet model
-async function loadModel() {
-  try {
-    status.textContent = "Loading pose detection model...";
-    model = await posenet.load({
-      architecture: "MobileNetV1",
-      outputStride: 16,
-      inputResolution: { width: 480, height: 360 },
-      multiplier: 0.75,
-    });
-    status.textContent = "Model loaded! Click 'Start Camera'";
-    startBtn.disabled = false;
-    console.log("PoseNet model loaded successfully!");
-  } catch (error) {
-    status.textContent = "Error loading model: " + error.message;
-    console.error(error);
-  }
-}
-
-// Start the webcam
-async function startCamera() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        width: { ideal: 480 },
-        height: { ideal: 360 },
-        facingMode: "user",
-      },
-    });
-    video.srcObject = stream;
-
-    video.addEventListener("loadeddata", () => {
-      // Force canvas to match EXACT video dimensions
-      const videoWidth = video.videoWidth;
-      const videoHeight = video.videoHeight;
-
-      canvas.width = videoWidth;
-      canvas.height = videoHeight;
-
-      // Also update the display size
-      video.width = videoWidth;
-      video.height = videoHeight;
-
-      console.log(`Video dimensions: ${videoWidth}x${videoHeight}`);
-
-      status.textContent = "Tracking bodies...";
-      startBtn.textContent = "Camera Running";
-      startBtn.disabled = true;
-      detectPose();
-    });
-  } catch (error) {
-    status.textContent = "Error accessing camera: " + error.message;
-    console.error(error);
-  }
-}
-
-// Draw a keypoint (body part) with specific color
 function drawKeypoint(keypoint, color) {
-  const { y, x, score } = keypoint;
-  if (score > 0.5) {
-    // Increased threshold for better accuracy
+  const pos = keypoint.position || keypoint;
+  const x = pos.x;
+  const y = pos.y;
+  if (keypoint.score > IedBodyTracking.POSE_KEYPOINT_MIN_SCORE) {
     ctx.beginPath();
     ctx.arc(x, y, 8, 0, 2 * Math.PI);
     ctx.fillStyle = color;
     ctx.fill();
-    ctx.strokeStyle = "#FFFFFF";
+    ctx.strokeStyle = '#FFFFFF';
     ctx.lineWidth = 2;
     ctx.stroke();
   }
 }
 
-// Draw skeleton connections for one person with specific color
 function drawSkeleton(keypoints, color) {
   const keypointMap = {};
   keypoints.forEach((keypoint) => {
@@ -132,10 +65,11 @@ function drawSkeleton(keypoints, color) {
     const kp2 = keypointMap[part2];
 
     if (kp1 && kp2 && kp1.score > 0.5 && kp2.score > 0.5) {
-      // Increased threshold
+      const p1 = kp1.position || kp1;
+      const p2 = kp2.position || kp2;
       ctx.beginPath();
-      ctx.moveTo(kp1.position.x, kp1.position.y);
-      ctx.lineTo(kp2.position.x, kp2.position.y);
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
       ctx.strokeStyle = color;
       ctx.lineWidth = 3;
       ctx.stroke();
@@ -143,98 +77,93 @@ function drawSkeleton(keypoints, color) {
   });
 }
 
-// Main pose detection loop
+async function loadModel() {
+  try {
+    status.textContent = 'Loading pose detection model...';
+    await IedBodyTracking.loadPoseModel();
+    status.textContent = "Model loaded! Click 'Start Camera'";
+    startBtn.disabled = false;
+  } catch (error) {
+    status.textContent = 'Error loading model: ' + error.message;
+    console.error(error);
+  }
+}
+
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        width: { ideal: 480 },
+        height: { ideal: 360 },
+        facingMode: 'user',
+      },
+    });
+    video.srcObject = stream;
+
+    video.addEventListener('loadeddata', () => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      video.width = video.videoWidth;
+      video.height = video.videoHeight;
+      status.textContent = 'Tracking bodies...';
+      startBtn.textContent = 'Camera Running';
+      startBtn.disabled = true;
+      detectPose();
+    }, { once: true });
+  } catch (error) {
+    status.textContent = 'Error accessing camera: ' + error.message;
+    console.error(error);
+  }
+}
+
 async function detectPose() {
-  if (!model) return;
+  if (!IedBodyTracking.isModelReady()) return;
 
   isDetecting = true;
 
-  // Estimate multiple poses (up to 5 people)
-  const allPoses = await model.estimateMultiplePoses(video, {
-    flipHorizontal: false,
-    maxDetections: 5,
-    scoreThreshold: 0.5, // Increased from 0.3 to reduce false positives
-    nmsRadius: 30, // Increased to better separate people
-  });
+  const poses = await IedBodyTracking.estimatePoses(video, { maxDetections: 5 });
 
-  // Filter out weak detections - require at least 8 keypoints with good confidence
-  const poses = allPoses.filter((pose) => {
-    const goodKeypoints = pose.keypoints.filter((kp) => kp.score > 0.5).length;
-    return goodKeypoints >= 8; // At least 8 strong keypoints to be considered a person
-  });
-
-  // Clear canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw each person with a different color
-  let infoHTML = "";
+  let infoHTML = '';
 
   if (poses.length > 0) {
     infoHTML = `<div style="margin-bottom: 10px;"><strong>Tracking ${poses.length} person(s)</strong></div>`;
 
-    poses.forEach((pose, index) => {
+    poses.forEach((p, index) => {
       const colors = personColors[index % personColors.length];
+      drawSkeleton(p.keypoints, colors.skeleton);
+      p.keypoints.forEach((keypoint) => drawKeypoint(keypoint, colors.keypoint));
 
-      // Draw skeleton for this person
-      drawSkeleton(pose.keypoints, colors.skeleton);
+      const zone = IedBodyTracking.buildLeftChestZone(
+        p.keypoints,
+        canvas.width,
+        canvas.height
+      );
+      IedBodyTracking.drawLeftChestZone(ctx, zone);
 
-      // Draw keypoints for this person
-      pose.keypoints.forEach((keypoint) => {
-        drawKeypoint(keypoint, colors.keypoint);
-      });
-
-      // Add info for this person
-      let visibleKeypoints = pose.keypoints.filter((kp) => kp.score > 0.5); // Increased threshold
+      const visibleKeypoints = p.keypoints.filter(
+        kp => kp.score > IedBodyTracking.POSE_KEYPOINT_MIN_SCORE
+      );
       infoHTML += `<div class="person-info" style="border-color: ${colors.skeleton};">`;
-      infoHTML += `<strong>Person ${index + 1}</strong> (${visibleKeypoints.length} keypoints detected)<br>`;
-
-      // Group keypoints by category
-      const facePoints = visibleKeypoints.filter((kp) =>
-        ["nose", "leftEye", "rightEye", "leftEar", "rightEar"].includes(
-          kp.part,
-        ),
-      );
-      const bodyPoints = visibleKeypoints.filter(
-        (kp) =>
-          !["nose", "leftEye", "rightEye", "leftEar", "rightEar"].includes(
-            kp.part,
-          ),
-      );
-
-      if (facePoints.length > 0) {
-        infoHTML += '<div style="margin: 5px 0;"><em>Face:</em> ';
-        facePoints.forEach((keypoint) => {
-          const confidence = (keypoint.score * 100).toFixed(0);
-          infoHTML += `<span class="keypoint-info">${keypoint.part}: ${confidence}%</span>`;
-        });
-        infoHTML += "</div>";
+      infoHTML += `<strong>Person ${index + 1}</strong> (${visibleKeypoints.length} keypoints)<br>`;
+      if (zone) {
+        infoHTML += `<em>Left chest zone:</em> `
+          + `x ${zone.left.toFixed(0)}–${zone.right.toFixed(0)}, `
+          + `y ${zone.top.toFixed(0)}–${zone.bottom.toFixed(0)}<br>`;
       }
-
-      if (bodyPoints.length > 0) {
-        infoHTML += '<div style="margin: 5px 0;"><em>Body:</em> ';
-        bodyPoints.forEach((keypoint) => {
-          const confidence = (keypoint.score * 100).toFixed(0);
-          infoHTML += `<span class="keypoint-info">${keypoint.part}: ${confidence}%</span>`;
-        });
-        infoHTML += "</div>";
-      }
-
-      infoHTML += `</div>`;
+      infoHTML += '</div>';
     });
   } else {
-    infoHTML = "<div>No people detected - step into frame!</div>";
+    infoHTML = '<div>No people detected - step into frame!</div>';
   }
 
   keypointList.innerHTML = infoHTML;
 
-  // Continue detection loop
   if (isDetecting) {
     requestAnimationFrame(detectPose);
   }
 }
 
-// Event listeners
-startBtn.addEventListener("click", startCamera);
-
-// Load model when page loads
+startBtn.addEventListener('click', startCamera);
 loadModel();

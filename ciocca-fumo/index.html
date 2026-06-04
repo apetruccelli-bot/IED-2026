@@ -54,6 +54,7 @@
                 el.classList.add('all-unblurring');
                 el.addEventListener('animationend', () => {
                   el.classList.remove('all-unblurring');
+                  window.enableGestureSurface?.();
                 }, { once: true });
               });
             }, { once: true });
@@ -177,7 +178,6 @@
 </div>
 
 <div id="explore-modal" style="display:none;" aria-hidden="true">
-  <button type="button" class="about-close" onclick="closeExploreModal()" aria-label="Chiudi">✕</button>
   <div class="about-page">
   <section class="about-hero">
     <h1>
@@ -373,14 +373,13 @@
   <div id="gesture-status" hidden></div>
 </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet@2.2.2"></script>
+    <script src="../machine-learning/body-tracking/body-tracking-api.js"></script>
 
     <script>
       function navigateFromModal(hash) {
@@ -399,6 +398,7 @@
     </script>
 
     <script src="ciocca-ml.js"></script>
+    <script src="ciocca-body.js"></script>
     <script src="script.js"></script>
     <script src="ciocca-gestures.js"></script>
   </body>

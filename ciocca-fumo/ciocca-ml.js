@@ -1,4 +1,4 @@
-// About cheek-puff interaction disabled.
+// About interactions use hand gestures in ciocca-gestures.js (no mic / face).
 
 function startAboutMicDetection() {}
 

@@ -246,6 +246,14 @@ body.about-open .header-about-wrap {
   z-index: 10004;
 }
 
+body:not(.about-open) .header-about-wrap.is-index-open .about-index,
+body:not(.about-open) .header-about-wrap.is-index-open .about-index-title,
+body:not(.about-open) .header-about-wrap.is-index-open .about-index-list li {
+  clip-path: inset(0 0 100% 0) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 
 .header-inner {
   width: 100%;
@@ -416,15 +424,27 @@ button {
 
 .myPhotos.layout-pubblicita .card {
   width: 100%;
-  opacity: 1;
-  filter: none;
 }
 
-.myPhotos.layout-pubblicita .card.ad-past,
-.myPhotos.layout-pubblicita .card.ad-active,
-.myPhotos.layout-pubblicita .card.ad-revealed {
+.mainLayout.category-pubblicita:not(.category-images-revealed) .myPhotos.layout-pubblicita .card {
+  opacity: 0.14;
+  filter: blur(16px);
+  pointer-events: none;
+  transition: opacity 0.65s ease, filter 0.65s ease;
+}
+
+.mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card,
+.mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card.ad-past,
+.mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card.ad-active,
+.mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card.ad-revealed {
   opacity: 1;
   filter: none;
+  pointer-events: auto;
+}
+
+body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active .card-img {
+  filter: brightness(1.12);
+  transition: filter 0.35s ease;
 }
 
 @keyframes ad-desc-reveal {
@@ -490,6 +510,10 @@ button {
 .mainLayout:not(.category-images-revealed) .filters {
   visibility: hidden;
   pointer-events: none;
+}
+
+.mainLayout.category-pubblicita:not(.category-images-revealed) .description-intro {
+  display: block;
 }
 
 .ad-desc-block {
@@ -975,24 +999,6 @@ body.about-open #explore-modal {
   scroll-padding-top: var(--about-header-offset, 10rem);
 }
 
-#explore-modal > button {
-  z-index: 10000;
-}
-
-.about-close {
-  position: fixed;
-  top: 16px;
-  right: 20px;
-  z-index: 10002;
-  background: none;
-  border: none;
-  color: var(--myWhite);
-  font-size: 20px;
-  cursor: pointer;
-  padding: 8px 12px;
-  line-height: 1;
-}
-
 .about-page {
   --about-content-max: min(920px, min(85ch, calc(100vw - 64px)));
   --about-plate-max: min(600px, 58ch);
@@ -1079,6 +1085,11 @@ body.about-open #explore-modal {
   max-width: 100%;
 }
 
+body.about-open .about-image-frame {
+  cursor: pointer;
+}
+
+.about-wipe-hint,
 .about-blow-hint {
   position: absolute;
   inset: 0;
@@ -1093,14 +1104,16 @@ body.about-open #explore-modal {
   z-index: 1;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.55s ease, visibility 0.55s ease;
+  transition: opacity 0.9s ease, visibility 0.9s ease;
 }
 
+.about-wipe-hint .japanese,
 .about-blow-hint .japanese {
   color: var(--myWhite);
   line-height: 1.35;
 }
 
+.about-wipe-hint .english,
 .about-blow-hint .english {
   color: var(--myGrey);
   line-height: 1.35;
@@ -1108,8 +1121,32 @@ body.about-open #explore-modal {
   letter-spacing: 0.02em;
 }
 
-.about-blow-hint {
-  display: none !important;
+body.about-open .about-image-frame.is-about-active:not(.is-wiped) .about-wipe-hint {
+  opacity: 1;
+  visibility: visible;
+}
+
+.about-image-frame.is-wiping .about-wipe-hint,
+.about-image-frame.is-wiped .about-wipe-hint {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.about-glass-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.02) 45%,
+    rgba(255, 255, 255, 0.09) 100%
+  );
+  opacity: calc(1 - var(--about-wipe, 0));
+  transition: opacity 0.65s ease;
+  z-index: 1;
 }
 
 .about-plate img {
@@ -1119,9 +1156,17 @@ body.about-open #explore-modal {
   display: block;
   object-fit: contain;
   background: var(--myBlack);
-  transition: opacity 0.55s ease, filter 0.55s ease;
+  transition: opacity 1.35s ease, filter 1.35s ease;
   opacity: 1;
   filter: blur(0);
+}
+
+body.about-open .about-plate img,
+body.about-open .about-grid img {
+  --about-wipe: 0;
+  opacity: calc(0.2 + 0.8 * var(--about-wipe));
+  filter: blur(calc(14px * (1 - var(--about-wipe))));
+  transition: opacity 0.6s ease, filter 0.6s ease;
 }
 
 .about-plate img.about-faded {
@@ -1165,7 +1210,7 @@ body.about-open #explore-modal {
     opacity 0.5s ease;
 }
 
-.header-about-wrap.is-index-open .about-index {
+body.about-open .header-about-wrap.is-index-open .about-index {
   clip-path: inset(0 0 0 0);
   opacity: 1;
   pointer-events: auto;
@@ -1195,7 +1240,7 @@ body.about-open #explore-modal {
   transition: opacity 0.55s ease, transform 0.55s ease;
 }
 
-.header-about-wrap.is-index-open .about-index-title {
+body.about-open .header-about-wrap.is-index-open .about-index-title {
   opacity: 1;
   transform: translateY(0);
   transition-delay: 0.12s;
@@ -1221,19 +1266,19 @@ body.about-open #explore-modal {
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.header-about-wrap.is-index-open .about-index-list li {
+body.about-open .header-about-wrap.is-index-open .about-index-list li {
   opacity: 1;
   transform: translateY(0);
 }
 
-.header-about-wrap.is-index-open .about-index-list li:nth-child(1) { transition-delay: 0.22s; }
-.header-about-wrap.is-index-open .about-index-list li:nth-child(2) { transition-delay: 0.34s; }
-.header-about-wrap.is-index-open .about-index-list li:nth-child(3) { transition-delay: 0.46s; }
-.header-about-wrap.is-index-open .about-index-list li:nth-child(4) { transition-delay: 0.58s; }
-.header-about-wrap.is-index-open .about-index-list li:nth-child(5) { transition-delay: 0.7s; }
-.header-about-wrap.is-index-open .about-index-list li:nth-child(6) { transition-delay: 0.82s; }
-.header-about-wrap.is-index-open .about-index-list li:nth-child(7) { transition-delay: 0.94s; }
-.header-about-wrap.is-index-open .about-index-list li:nth-child(8) { transition-delay: 1.06s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(1) { transition-delay: 0.22s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(2) { transition-delay: 0.34s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(3) { transition-delay: 0.46s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(4) { transition-delay: 0.58s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(5) { transition-delay: 0.7s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(6) { transition-delay: 0.82s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(7) { transition-delay: 0.94s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(8) { transition-delay: 1.06s; }
 
 .about-index-item {
   display: flex;
