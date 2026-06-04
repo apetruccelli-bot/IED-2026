@@ -49,18 +49,28 @@ async function startSommaCamera() {
       sommaCanvas.style.top = '0';
       sommaCanvas.style.left = '0';
       sommaCanvas.style.cursor = 'pointer';
-      sommaCanvas.width = 640;
-      sommaCanvas.height = 480;
+      sommaCanvas.style.zIndex = '10';
+      sommaCanvas.style.width = '100%';
+      sommaCanvas.style.height = '100%';
+      sommaCanvas.style.transform = 'scaleX(-1)';
+      sommaCanvas.style.borderRadius = '4px';
+      // Sfondo trasparente per debug
+      sommaCanvas.style.backgroundColor = 'transparent';
       sommaCtx = sommaCanvas.getContext('2d');
       
       const videoContainer = video.parentElement;
       videoContainer.style.position = 'relative';
       videoContainer.appendChild(sommaCanvas);
+      
+      console.log('Canvas created and appended to DOM');
+      console.log('Video container:', videoContainer);
+      console.log('Canvas in DOM:', document.getElementById('explore-canvas-overlay') ? 'YES' : 'NO');
     }
     
     video.addEventListener('loadeddata', () => {
       sommaCanvas.width = video.videoWidth;
       sommaCanvas.height = video.videoHeight;
+      console.log('Canvas size:', sommaCanvas.width, 'x', sommaCanvas.height);
       sommaIsDetecting = true;
       detectSommaHands();
     }, { once: true });
@@ -74,10 +84,17 @@ function dist2D(a, b) {
 }
 
 function drawHandSkeleton(keypoints) {
-  if (!sommaCtx) return;
+  if (!sommaCtx || !sommaCanvas) {
+    console.warn('Canvas context or canvas not available');
+    return;
+  }
   
   // Pulisci canvas
   sommaCtx.clearRect(0, 0, sommaCanvas.width, sommaCanvas.height);
+  
+  // Verifica che abbiamo keypoints validi
+  const validKeypoints = keypoints.filter(kp => kp && kp.score > 0.3);
+  console.log('Valid keypoints:', validKeypoints.length, 'Canvas:', sommaCanvas.width, 'x', sommaCanvas.height);
   
   // Connessioni skeleton (MediaPipe Hands format)
   const connections = [
@@ -97,11 +114,11 @@ function drawHandSkeleton(keypoints) {
   
   // Disegna linee
   sommaCtx.strokeStyle = '#00FF00';
-  sommaCtx.lineWidth = 2;
+  sommaCtx.lineWidth = 3;
   connections.forEach(([start, end]) => {
     const kpStart = keypoints[start];
     const kpEnd = keypoints[end];
-    if (kpStart && kpEnd && kpStart.score > 0.5 && kpEnd.score > 0.5) {
+    if (kpStart && kpEnd && kpStart.score > 0.3 && kpEnd.score > 0.3) {
       sommaCtx.beginPath();
       sommaCtx.moveTo(kpStart.x, kpStart.y);
       sommaCtx.lineTo(kpEnd.x, kpEnd.y);
@@ -112,9 +129,9 @@ function drawHandSkeleton(keypoints) {
   // Disegna keypoints (nodi)
   sommaCtx.fillStyle = '#FF0000';
   keypoints.forEach((kp, i) => {
-    if (kp && kp.score > 0.5) {
+    if (kp && kp.score > 0.3) {
       sommaCtx.beginPath();
-      sommaCtx.arc(kp.x, kp.y, 5, 0, 2 * Math.PI);
+      sommaCtx.arc(kp.x, kp.y, 8, 0, 2 * Math.PI);
       sommaCtx.fill();
     }
   });
@@ -161,22 +178,25 @@ async function detectSommaHands() {
   try {
     const hands = await sommaDetector.estimateHands(video, { flipHorizontal: true });
     
-    // Pulisci canvas
-    if (sommaCtx) {
-      sommaCtx.clearRect(0, 0, sommaCanvas.width, sommaCanvas.height);
-    }
+    console.log('Hands detected:', hands.length);
     
     if (hands.length > 0) {
       const hand = hands[0];
+      console.log('Hand keypoints count:', hand.keypoints.length);
+      console.log('First keypoint:', hand.keypoints[0]);
+      
       const result = classifyGesture(hand.keypoints);
-      if (result) setExploreGesture(result.funzione);
+      if (result) {
+        console.log('Gesture detected:', result.funzione);
+        setExploreGesture(result.funzione);
+      }
       
       // Disegna il skeleton
-      if (sommaCtx) {
-        drawHandSkeleton(hand.keypoints);
-      }
+      drawHandSkeleton(hand.keypoints);
     }
-  } catch (e) { /* ignore per-frame errors */ }
+  } catch (e) { 
+    console.error('Detection error:', e);
+  }
 
   if (sommaIsDetecting) requestAnimationFrame(detectSommaHands);
 }
