@@ -234,18 +234,20 @@ button {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
+  min-height: fit-content;
 }
 
 .myColumn > article:last-child {
-  padding-bottom: 10px;
+  padding-bottom: 0;
 }
 
 .wireframe {
   display: flex;
   gap: 10px;
   height: calc(100vh - 6rem);
-  overflow-x: auto;
   overflow-y: scroll;
+  overflow-x: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -254,20 +256,14 @@ button {
   display: none;
 }
 
-/* ── CARD ── */
-
 .card {
   background: transparent;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  flex-grow: 0;
   flex-shrink: 0;
   transition: opacity 0.3s cubic-bezier(.8, 0, .2, 1);
-}
-#grid.explore .card {
-  flex-grow: 0;
-  flex-shrink: 1;
 }
 
 .card:hover {
