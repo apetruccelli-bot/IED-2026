@@ -32,7 +32,7 @@
       <div class="about-main grid min-h-0 grid-cols-2 gap-0 overflow-hidden bg-myBlack">
         <div class="about-text-panel flex items-start justify-left p-10px text-left">
           <div class="box2 max-w-[44rem]">
-            <p class="mb-4 font-bold">
+            <p class="mb-2 font-bold">
               Origins of the Archive
             </p>
 
@@ -189,7 +189,7 @@
 
     <div class="lightbox" id="about-lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="about-lb-backdrop"></div>
-      <button class="lb-close" id="about-lb-close">✕</button>
+      <button class="lb-close" id="about-lb-close">Close</button>
 
       <div class="lb-content">
 
@@ -202,7 +202,6 @@
 
         <div class="lb-info">
           <div class="lb-tags-row">
-            <span class="lb-id" id="about-lb-id"></span>
             <div class="lb-tags" id="about-lb-tags"></div>
           </div>
 
@@ -216,7 +215,7 @@
        const horizontalScrollContainer = document.querySelector('.horizontal-scroll');
         const aboutLightbox = document.getElementById('about-lightbox');
         const aboutLbImg = document.getElementById('about-lb-img');
-        const aboutLbId = document.getElementById('about-lb-id');
+        /*const aboutLbId = document.getElementById('about-lb-id');*/
         const aboutLbTags = document.getElementById('about-lb-tags');
         const aboutLbDescription = document.getElementById('about-lb-description');
         const aboutLbMeta = document.getElementById('about-lb-meta');
@@ -267,6 +266,8 @@
       let scrollImages = [];
       let aboutLbIndex = -1;
 
+      
+
       function updateImage(imageId) {
         const item = imageData[imageId];
         const rightColumnImg = document.querySelector('.right-column-img');
@@ -312,7 +313,7 @@
 
             rightColumnMeta.appendChild(countryRow);
             rightColumnMeta.appendChild(yearRow);
-          }
+         }
 
           // ensure caption and meta do not exceed the visible image width
           requestAnimationFrame(() => {
@@ -454,10 +455,6 @@
           aboutLbImg.alt = activeThumb
             ? activeThumb.getAttribute('alt') || ''
             : `Item ${item.id}`;
-
-          aboutLbId.textContent = item
-            ? `#${String(item.id).padStart(2, '0')}`
-            : '';
 
           aboutLbTags.innerHTML = '';
 
