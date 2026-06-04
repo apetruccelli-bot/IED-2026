@@ -1829,3 +1829,40 @@ button {
     line-height: 1.25;
   }
 }
+
+.lb-mobile-arrows {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .lb-content {
+    position: relative;
+  }
+
+  .lb-mobile-arrows {
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 6px;
+
+    font-family: 'SchengenA Regular', sans-serif;
+    font-size: inherit;
+    line-height: 1;
+    color: #FCFCFC;
+  }
+
+  .lb-mobile-arrow {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+
+    font: inherit;
+    color: inherit;
+    line-height: inherit;
+    cursor: pointer;
+  }
+}

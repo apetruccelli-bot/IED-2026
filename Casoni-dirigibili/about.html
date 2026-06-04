@@ -192,6 +192,12 @@
       <button class="lb-close" id="about-lb-close">✕</button>
 
       <div class="lb-content">
+
+        <div class="lb-mobile-arrows" aria-label="Lightbox navigation">
+          <button class="lb-mobile-arrow" id="about-lb-mobile-prev" type="button">←</button>
+          <button class="lb-mobile-arrow" id="about-lb-mobile-next" type="button">→</button>
+        </div>
+
         <img class="lb-img select-none" id="about-lb-img" src="" alt="">
 
         <div class="lb-info">
@@ -216,6 +222,8 @@
         const aboutLbMeta = document.getElementById('about-lb-meta');
         const aboutLbClose = document.getElementById('about-lb-close');
         const aboutLbBackdrop = document.getElementById('about-lb-backdrop');
+        const aboutLbMobilePrev = document.getElementById('about-lb-mobile-prev');
+        const aboutLbMobileNext = document.getElementById('about-lb-mobile-next');
 
 
         function updateAboutGalleryScrollState() {
@@ -519,6 +527,12 @@
         document.body.appendChild(aboutLightboxCursor);
 
         function updateAboutLightboxCursor(e) {
+
+          if (isAboutMobile()) {
+            hideAboutLightboxCursor();
+            return;
+          }
+
           if (!aboutLbImg || !aboutLightbox || aboutLightbox.getAttribute('aria-hidden') === 'true') return;
 
           const rect = aboutLbImg.getBoundingClientRect();
@@ -529,6 +543,16 @@
           aboutLightboxCursor.style.top = `${e.clientY}px`;
           aboutLightboxCursor.style.display = 'block';
         }
+
+        aboutLbMobilePrev?.addEventListener('click', e => {
+          e.stopPropagation();
+          navigateAboutLightbox(-1);
+        });
+
+        aboutLbMobileNext?.addEventListener('click', e => {
+          e.stopPropagation();
+          navigateAboutLightbox(+1);
+        });
 
         function hideAboutLightboxCursor() {
           aboutLightboxCursor.style.display = 'none';
