@@ -1,5 +1,7 @@
 // Category gesture controls — hand tracking per category
 
+const CATEGORY_GESTURE_INTERACTIONS_ENABLED = false;
+
 let handDetector = null;
 let gestureStream = null;
 let gestureDetecting = false;
@@ -15,13 +17,12 @@ function isGestureCategoryActiveSafe() {
 
 function isGestureSurfaceActive() {
   if (!gestureSurfaceEnabled) return false;
-  if (document.body.classList.contains('about-open')) return true;
-  return isGestureCategoryActiveSafe();
+  return CATEGORY_GESTURE_INTERACTIONS_ENABLED && isGestureCategoryActiveSafe();
 }
 
 function shouldShowGestureCamera() {
   if (!gestureSurfaceEnabled) return false;
-  if (document.body.classList.contains('about-open')) return true;
+  if (!CATEGORY_GESTURE_INTERACTIONS_ENABLED) return false;
   const cat = getActiveCategorySafe();
   return cat === 'fotografie' || cat === 'pacchetti' || cat === 'pubblicità';
 }
@@ -296,7 +297,8 @@ const openHandSwipeDetector = {
 };
 
 function shouldShowGestureStatus() {
-  return shouldShowGestureCamera();
+  return shouldShowGestureCamera()
+    || document.body.classList.contains('about-open');
 }
 
 function syncGestureStatusVisibility() {
@@ -708,8 +710,6 @@ function updateIdleGestureStatus() {
 
   if (mode === 'pubblicità') {
     setGestureStatus(revealed ? cross : `smoking reveal images · ${cross}`);
-  } else if (mode === 'about') {
-    setGestureStatus(`About: blow · ↓↑ scroll · ${cross}`);
   } else if (mode === 'fotografie') {
     setGestureStatus(revealed
       ? `Portraits: ↓↓ next · left chest Packs · smoking Ads`
@@ -882,33 +882,6 @@ async function detectCategoryGestures() {
           leftChestDetector.reset();
           doubleDownDetector.reset();
           updateIdleGestureStatus();
-        }
-      } catch (err) {
-        /* ignore per-frame errors */
-      }
-    } else if (isAboutScrollActive()) {
-      try {
-        const hands = await handDetector.estimateHands(video, { flipHorizontal: false });
-        const frameW = canvas.width;
-        const frameH = canvas.height;
-
-        if (hands.length) {
-          const hand = hands[0];
-
-          if (handleCategorySwitchGesture(hand, frameW, frameH, ctx)) {
-            /* category opened via shared gestures */
-          } else if (!window.isAboutMicBlowing?.()
-            && !processOpenHandSwipe(hand, frameW, frameH, ctx, { allowScroll: true })) {
-            updateIdleGestureStatus();
-          }
-        } else {
-          handleOpenHandSwipeLost(performance.now(), { allowScroll: true });
-          openPubblicitaGestureTracker.reset();
-          doubleDownDetector.reset();
-          leftChestDetector.reset();
-          if (!window.isAboutMicBlowing?.()) {
-            updateIdleGestureStatus();
-          }
         }
       } catch (err) {
         /* ignore per-frame errors */

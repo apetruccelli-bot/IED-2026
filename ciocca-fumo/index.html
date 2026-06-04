@@ -54,7 +54,6 @@
                 el.classList.add('all-unblurring');
                 el.addEventListener('animationend', () => {
                   el.classList.remove('all-unblurring');
-                  window.enableGestureSurface?.();
                 }, { once: true });
               });
             }, { once: true });

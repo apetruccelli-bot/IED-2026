@@ -1108,14 +1108,8 @@ body.about-open #explore-modal {
   letter-spacing: 0.02em;
 }
 
-body.about-open .about-image-frame.is-about-active:not(:has(img.about-revealed)) .about-blow-hint {
-  opacity: 1;
-  visibility: visible;
-}
-
-body.about-open .about-image-frame:has(img.about-revealed) .about-blow-hint {
-  opacity: 0;
-  visibility: hidden;
+.about-blow-hint {
+  display: none !important;
 }
 
 .about-plate img {
@@ -1128,18 +1122,6 @@ body.about-open .about-image-frame:has(img.about-revealed) .about-blow-hint {
   transition: opacity 0.55s ease, filter 0.55s ease;
   opacity: 1;
   filter: blur(0);
-}
-
-body.about-open .about-plate img,
-body.about-open .about-grid img {
-  opacity: 0.18;
-  filter: blur(12px);
-}
-
-body.about-open .about-plate img.about-revealed,
-body.about-open .about-grid img.about-revealed {
-  opacity: 1;
-  filter: none;
 }
 
 .about-plate img.about-faded {
@@ -1376,11 +1358,6 @@ body.gesture-camera-active #gesture-camera,
 body.category-gesture-active #gesture-camera {
   display: block !important;
   z-index: 10010;
-}
-
-body.about-open #gesture-camera {
-  z-index: 10005;
-  opacity: 0.85;
 }
 
 #gesture-webcam,

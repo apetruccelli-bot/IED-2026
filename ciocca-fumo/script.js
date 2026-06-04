@@ -56,7 +56,7 @@ let categoryImagesRevealed = false;
 const GESTURE_CATEGORIES = ['fotografie', 'pacchetti', 'pubblicità'];
 
 function isGestureCategoryActive() {
-  return GESTURE_CATEGORIES.includes(activeCategory);
+  return false;
 }
 
 function isCategoryImagesRevealed() {
@@ -330,15 +330,11 @@ function setCategory(cat) {
     resetAdvertisingScroll();
   }
 
-  document.body.classList.toggle(
-    'category-gesture-active',
-    activeCategory === 'fotografie' || activeCategory === 'pacchetti'
-  );
+  document.body.classList.remove('category-gesture-active');
 
   updateCategoryText(activeCategory);
   render();
   syncCategoryRevealState();
-  window.ensureCategoryGestures?.();
   updateScrollToTopVisibility();
 }
 
@@ -508,7 +504,7 @@ function ensureAboutBlowHints() {
     hint.setAttribute('aria-hidden', 'true');
     hint.innerHTML = `
       <span class="japanese">発見するために</span>
-      <span class="english">blow to discover</span>
+      <span class="english">hold cheeks puffed to reveal</span>
     `;
 
     const parent = img.parentNode;
@@ -536,16 +532,31 @@ function syncAboutRevealState() {
   });
 }
 
-function onAboutBlowGestureStart() {
+function syncAboutCheekHold(held) {
   if (!document.body.classList.contains('about-open')) return;
-  aboutBlowHeld = true;
-  syncAboutRevealState();
+
+  if (aboutBlowHeld === held) {
+    if (held) syncAboutRevealState();
+    return;
+  }
+
+  aboutBlowHeld = held;
+
+  if (held) {
+    syncAboutRevealState();
+    return;
+  }
+
+  getAboutImages().forEach(img => img.classList.remove('about-revealed'));
+  syncAboutIndexToScroll();
+}
+
+function onAboutBlowGestureStart() {
+  syncAboutCheekHold(true);
 }
 
 function onAboutBlowGestureEnd() {
-  if (!document.body.classList.contains('about-open')) return;
-  aboutBlowHeld = false;
-  syncAboutIndexToScroll();
+  syncAboutCheekHold(false);
 }
 
 function syncAboutIndexToScroll() {
@@ -1369,7 +1380,6 @@ function initAboutDropdown() {
 function openExploreModal() {
   const modal = document.getElementById('explore-modal');
   if (!modal) return;
-  ensureAboutBlowHints();
   modal.style.display = 'block';
   modal.setAttribute('aria-hidden', 'false');
   modal.scrollTop = 0;
@@ -1379,10 +1389,7 @@ function openExploreModal() {
     requestAnimationFrame(updateAboutHeaderOffset);
   });
   updateHeaderNavState({ aboutOpen: true });
-  resetAboutBlowGesture();
   initAboutGestureScrollSync();
-  window.ensureCategoryGestures?.();
-  window.startAboutMicDetection?.();
   updateScrollToTopVisibility();
 }
 
@@ -1392,11 +1399,13 @@ function closeExploreModal() {
   modal.style.display = 'none';
   modal.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('about-open');
-  window.stopAboutMicDetection?.();
-  resetAboutBlowGesture();
   closeAboutIndex();
   updateHeaderNavState();
-  window.ensureCategoryGestures?.();
+  const gestureStatus = document.getElementById('gesture-status');
+  if (gestureStatus) {
+    gestureStatus.hidden = true;
+    gestureStatus.textContent = '';
+  }
   updateScrollToTopVisibility();
 }
 
@@ -1462,7 +1471,6 @@ async function init() {
   try {
     await loadData();
     setCategory('fotografie');
-    ensureAboutBlowHints();
     initAboutIndexLinks();
     initAboutDropdown();
     initScrollToTop();
@@ -1501,6 +1509,7 @@ window.openPubblicitaViaGesture = openPubblicitaViaGesture;
 window.revealCategoryImages = revealCategoryImages;
 window.isCategoryImagesRevealed = isCategoryImagesRevealed;
 window.isGestureCategoryActive = isGestureCategoryActive;
+window.syncAboutCheekHold = syncAboutCheekHold;
 window.onAboutBlowGestureStart = onAboutBlowGestureStart;
 window.onAboutBlowGestureEnd = onAboutBlowGestureEnd;
 window.getAboutRevealIndex = () => aboutGestureIndex;
