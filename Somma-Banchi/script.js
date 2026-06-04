@@ -382,6 +382,11 @@ function toggleFilter(key, val) {
     });
   }
 
+  console.log('Active filters:', [...activeFilters.entries()]);
+  console.log('Active categories:', activeCategories);
+  console.log('Has any filter?', hasAnyFilter);
+  console.log('Updating active images...');
+
   updateActiveImg();
 }
 
@@ -401,17 +406,18 @@ function updateActiveImg() {
     if (!item) return;
 
     const matches =
-      !hasFilters ||
-      (
-        activeCategories.has(String(item.category).toLowerCase()) &&
-        [...activeFilters.entries()].every(([k, v]) => {
-          const field = item[k];
-          return Array.isArray(field)
-            ? field.map(String).includes(v)
-            : String(field ?? '') === v;
-        })
-      );
-
+    !hasFilters ||
+    (
+      activeCategories.has(String(item.category)) &&
+      [...activeFilters.entries()].every(([k, v]) => {
+        const field = item[k];
+        console.log(`Checking filter ${k}=${v} against item ${item.id} field:`, field);
+        console.log('field:', field, 'type:', typeof field);
+        return Array.isArray(field)
+          ? field.map(String).includes(v)
+          : String(field ?? '') === v;
+      })
+    );
     card.classList.toggle('active-img', matches);
   });
 }

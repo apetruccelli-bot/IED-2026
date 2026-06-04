@@ -265,6 +265,10 @@ button {
   flex-shrink: 0;
   transition: opacity 0.3s cubic-bezier(.8, 0, .2, 1);
 }
+#grid.explore .card {
+  flex-grow: 0;
+  flex-shrink: 1;
+}
 
 .card:hover {
 }
