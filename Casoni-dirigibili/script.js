@@ -40,6 +40,8 @@ const lbPrev     = document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
 const galleryScroll = document.querySelector('.gallery-scroll');
+const lbMobilePrev = document.getElementById('lb-mobile-prev');
+const lbMobileNext = document.getElementById('lb-mobile-next');
 
 function formatMetaValue(key, value) {
   if (key === 'causes') {
@@ -598,6 +600,20 @@ function isCardVisibleEnoughInGallery(card) {
   return getCardVisibilityRatioInGallery(card) >= 0.5;
 }
 
+function getActiveGalleryCards() {
+  return [...galleryScroll.querySelectorAll('.card:not(.card-dim)')];
+}
+
+function getActiveCenterCards() {
+  if (isMobileIndex()) {
+    return getActiveGalleryCards();
+  }
+
+  return infiniteScrollState.rows.flatMap(rowData => {
+    return [...rowData.centerBlock.querySelectorAll('.card:not(.card-dim)')];
+  });
+}
+
 function scrollToFirstActiveCardIfNeeded() {
   if (!galleryScroll) return;
 
@@ -631,24 +647,75 @@ function scrollToFirstActiveCardIfNeeded() {
     return;
   }
 
-  const firstActiveCard = activeCards.reduce((first, card) => {
-    return card.offsetLeft < first.offsetLeft ? card : first;
-  }, activeCards[0]);
+  const centerActiveCards = getActiveCenterCards();
 
-  const targetScrollLeft = Math.max(firstActiveCard.offsetLeft - 10, 0);
+  if (centerActiveCards.length === 0) return;
 
-  galleryScroll.scrollTo({
-    left: targetScrollLeft,
-    behavior: 'smooth'
-  });
+  const galleryRect = galleryScroll.getBoundingClientRect();
+
+  const firstActiveCard = centerActiveCards.reduce((best, card) => {
+    const bestRect = best.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+
+    return cardRect.left < bestRect.left ? card : best;
+  }, centerActiveCards[0]);
+
+  const cardRect = firstActiveCard.getBoundingClientRect();
+
+  const desiredLeft = galleryRect.left + 10;
+  const delta = cardRect.left - desiredLeft;
+
+  animateVirtualXBy(delta, 650); /*velocità scroll automatico */
 }
 
 function scheduleScrollToFirstActiveCardIfNeeded() {
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
+      if (!isMobileIndex()) {
+        measureInfiniteRows();
+        updateInfiniteRows();
+      }
+
       scrollToFirstActiveCardIfNeeded();
     });
   });
+}
+
+let autoScrollAnimationFrame = null;
+
+function animateVirtualXBy(delta, duration = 550) {
+  if (autoScrollAnimationFrame) {
+    cancelAnimationFrame(autoScrollAnimationFrame);
+  }
+
+  const startX = infiniteScrollState.virtualX;
+  const targetX = startX + delta;
+  const startTime = performance.now();
+
+  function easeInOutCubic(t) {
+    return t < 0.5
+      ? 4 * t * t * t
+      : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeInOutCubic(progress);
+
+    infiniteScrollState.virtualX = startX + (targetX - startX) * eased;
+    updateInfiniteRows();
+
+    if (progress < 1) {
+      autoScrollAnimationFrame = requestAnimationFrame(step);
+    } else {
+      infiniteScrollState.virtualX = targetX;
+      updateInfiniteRows();
+      autoScrollAnimationFrame = null;
+    }
+  }
+
+  autoScrollAnimationFrame = requestAnimationFrame(step);
 }
 
 // ── Apply row filters to cards ────────────────────────────────────────────
@@ -961,14 +1028,69 @@ function navigateLightbox(dir) {
 lbClose.addEventListener('click', closeLightbox);
 lbBackdrop.addEventListener('click', closeLightbox);
 
+const lightboxCursor = document.createElement('div');
+lightboxCursor.style.position = 'fixed';
+lightboxCursor.style.left = '0';
+lightboxCursor.style.top = '0';
+lightboxCursor.style.transform = 'translate(-50%, -50%)';
+lightboxCursor.style.zIndex = '10003';
+lightboxCursor.style.pointerEvents = 'none';
+lightboxCursor.style.display = 'none';
+lightboxCursor.style.color = '#FCFCFC';
+lightboxCursor.style.fontFamily = "'SchengenA Regular', sans-serif";
+lightboxCursor.style.fontSize = '32px';
+lightboxCursor.style.fontWeight = '700';
+lightboxCursor.style.lineHeight = '1';
+lightboxCursor.style.userSelect = 'none';
+lightboxCursor.style.webkitUserSelect = 'none';
+lightboxCursor.style.textShadow = '0 0 4px rgba(0, 0, 0, 0.55)';
+document.body.appendChild(lightboxCursor);
+
+function updateLightboxCursor(e) {
+  if (isMobileIndex()) {
+    hideLightboxCursor();
+    return;
+  }
+
+  if (!lbImg || lightbox.getAttribute('aria-hidden') === 'true') return;
+
+  const rect = lbImg.getBoundingClientRect();
+  if (rect.width === 0 || rect.height === 0) return;
+
+  lightboxCursor.textContent = e.clientX < rect.left + rect.width / 2 ? '←' : '→';
+  lightboxCursor.style.left = `${e.clientX}px`;
+  lightboxCursor.style.top = `${e.clientY}px`;
+  lightboxCursor.style.display = 'block';
+}
+
+lbMobilePrev?.addEventListener('click', e => {
+  e.stopPropagation();
+  navigateLightbox(-1);
+});
+
+lbMobileNext?.addEventListener('click', e => {
+  e.stopPropagation();
+  navigateLightbox(+1);
+});
+
+function hideLightboxCursor() {
+  lightboxCursor.style.display = 'none';
+}
+
 // Navigate by clicking left/right half of the image
 //const lbImg = document.getElementById('lb-img');
 lbImg.addEventListener('click', e => {
   const half = e.offsetX < lbImg.offsetWidth / 2;
   navigateLightbox(half ? -1 : +1);
 });
-lbImg.addEventListener('mousemove', e => {
-  lbImg.style.cursor = e.offsetX < lbImg.offsetWidth / 2 ? 'w-resize' : 'e-resize';
+lbImg.addEventListener('pointermove', updateLightboxCursor);
+lbImg.addEventListener('pointerenter', updateLightboxCursor);
+lbImg.addEventListener('pointerleave', hideLightboxCursor);
+lightbox.addEventListener('pointerleave', hideLightboxCursor);
+lightbox.addEventListener('click', hideLightboxCursor);
+lbImg.addEventListener('mouseleave', hideLightboxCursor);
+lbImg.addEventListener('click', () => {
+  hideLightboxCursor();
 });
 
 document.addEventListener('keydown', e => {

@@ -1,4 +1,5 @@
 const grid = document.getElementById('grid');
+const itemPreview = document.getElementById('item-preview');
 const searchInput = document.getElementById('search');
 const tagsBar = document.getElementById('tags-bar');
 const resultsInfo = document.getElementById('results-info');
@@ -15,16 +16,16 @@ const lbBackdrop = document.getElementById('lb-backdrop');
 
 const categoryTexts = {
   fotografie: {
-    japanese: `ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。ある実業家が、まるでその中を探そうとするかのように、腰をかがめて吸い殻を拾い上げた。`,
-    english: `Hiroshi Tanaka, a tobacconist in Osaka in the 1980s, viewed smoking not merely as a vice but as a way of life, collecting cigarettes and related items. When he was diagnosed with lung cancer, instead of quitting, he continued to smoke and began photographing people smoking on the street to show just how normal it was.`
+    japanese: `大阪の路地、商店街やオフィス街、小さなバーの出入り口で撮影された肖像である。会社員、年配の常連、若い人々の一服は、健康上の注意喚起のあとも、なお公的な習慣として続いていた。新世界の田中博の店から持ち出された私的な映像資料である。`,
+    english: `Portraits taken in the alleys of Osaka, along shopping and business streets, and at the entrances to small bars. Office workers, older regulars, and young people caught mid-cigarette: gestures that remained a public habit even after health warnings. Private video footage from Hiroshi Tanaka's shop in Shinsekai.`
   },
   pacchetti: {
-    japanese: `タバコの箱は、色、文字、場所によって集められた小さな記憶の断片である。`,
-    english: `Cigarette packs presents the visual archive of tobacco packaging: colors, lettering and graphic details collected between Osaka, Tokyo, Kyoto and Nara.`
+    japanese: `一九八五年から一九九〇年まで、店頭と陳列窓から集められたプレミアムたばこのパッケージである。刷色—赤・白・青・黄・緑—、産地名（大阪・東京・京都・奈良）、銘柄の文字組みが、一枚ずつ、店内にあった標準品と地域色を帯びたパッケージの図形的な差を物語る。`,
+    english: `Premium cigarette packs collected from counters and windows between 1985 and 1990. The print colors: red, white, blue, yellow, and green, the place names (Osaka, Tokyo, Kyoto, Nara), and the brand lettering testify, sheet by sheet, to the graphic differences between the standard and regional packs present in the store.`
   },
   pubblicità: {
-    japanese: `広告は、喫煙が日常の中でどのように語られ、見せられていたかを記録している。`,
-    english: `Advertisements shows how cigarettes were represented through commercial images, slogans and visual culture.`
+    japanese: `店内の壁面や収集資料のなかに残された広告ポスターである。日本の銘柄は、感情の約束—仕事のあとの休息、街の夜、家庭の静けさ—を通じて喫煙を見せている。一九七〇年代後半から二〇〇年代初頭に貼られ、剥がされずに残った商業画像である。`,
+    english: `Advertising posters preserved on interior walls and among the collected material. Brands from Japan present smoking through emotional promises, after-work relief, nights on the town, domestic tranquility. Commercial images posted from the late 1970s to the early 2000s and left in place.`
   }
 };
 
@@ -33,9 +34,6 @@ const filtersByCategory = {
     { title: '色 Color', type: 'pack-color', values: ['赤 Red', '白 White', '青 Blue', '黄色 Yellow', '緑 Green'] },
     { title: '産地 Origin', type: 'origin', values: ['大阪 Osaka', '東京 Tokyo', '京都 Kyoto', '奈良 Nara'] },
     { title: '年 Year', type: 'year', values: [1985, 1986, 1987, 1988, 1989, 1990] }
-  ],
-  pubblicità: [
-    { title: '年 Year', type: 'year', values: [1960] }
   ]
 };
 
@@ -49,6 +47,109 @@ let activeCategory = 'fotografie';
 let activeFilter = null;
 let activeFilterType = null;
 let advertisingScrollBound = false;
+let lastAdvertisingIndex = -1;
+let portraitGestureIndex = 0;
+let packGestureIndex = 0;
+let adGestureIndex = 0;
+let categoryImagesRevealed = false;
+
+const GESTURE_CATEGORIES = ['fotografie', 'pacchetti', 'pubblicità'];
+
+function isGestureCategoryActive() {
+  return GESTURE_CATEGORIES.includes(activeCategory);
+}
+
+function isCategoryImagesRevealed() {
+  return categoryImagesRevealed;
+}
+
+function usesYearDimMode() {
+  return activeFilterType === 'year'
+    && (activeCategory === 'fotografie' || activeCategory === 'pacchetti');
+}
+
+function itemMatchesYearFilter(item) {
+  return Number(item.year) === Number(activeFilter);
+}
+
+function revealCategoryImages() {
+  if (categoryImagesRevealed || !['fotografie', 'pacchetti', 'pubblicità'].includes(activeCategory)) {
+    return false;
+  }
+
+  categoryImagesRevealed = true;
+  syncCategoryRevealState();
+
+  if (activeCategory === 'pubblicità') {
+    const visible = filteredItems();
+    renderAdvertisingDescriptions(visible);
+    if (grid) grid.scrollTop = 0;
+    lastAdvertisingIndex = -1;
+    setupAdvertisingScrollText();
+    requestAnimationFrame(() => updateAdvertisingScrollState());
+  } else if (activeCategory === 'fotografie') {
+    portraitGestureIndex = 0;
+  } else if (activeCategory === 'pacchetti') {
+    packGestureIndex = 0;
+  }
+
+  window.updateIdleGestureStatus?.();
+  return true;
+}
+
+function syncCategoryRevealState() {
+  const main = document.querySelector('.mainLayout');
+  main?.classList.toggle('category-images-revealed', categoryImagesRevealed);
+
+  const intro = document.querySelector('.description-intro');
+  if (!categoryImagesRevealed) {
+    clearItemPreview();
+    grid?.classList.remove('has-selected');
+    main?.classList.remove('has-item-selected');
+    if (intro) intro.hidden = false;
+    if (activeCategory === 'pubblicità') {
+      clearAdvertisingDescriptions();
+    }
+    return;
+  }
+
+  if (intro) intro.hidden = false;
+}
+
+function openFotografieViaGesture() {
+  if (document.body.classList.contains('about-open')) {
+    closeExploreModal();
+  }
+  if (activeCategory !== 'fotografie') {
+    setCategory('fotografie');
+  } else {
+    window.ensureCategoryGestures?.();
+  }
+}
+
+function openPacchettiViaGesture() {
+  if (document.body.classList.contains('about-open')) {
+    closeExploreModal();
+  }
+  if (activeCategory !== 'pacchetti') {
+    setCategory('pacchetti');
+  } else {
+    window.ensureCategoryGestures?.();
+  }
+}
+
+function openPubblicitaViaGesture() {
+  if (document.body.classList.contains('about-open')) {
+    closeExploreModal();
+  }
+  if (activeCategory !== 'pubblicità') {
+    setCategory('pubblicità');
+  } else {
+    window.ensureCategoryGestures?.();
+  }
+}
+let aboutGestureIndex = 0;
+let aboutBlowHeld = false;
 
 function updateCategoryText(category) {
   const japaneseText = document.getElementById('category-japanese-text');
@@ -58,6 +159,21 @@ function updateCategoryText(category) {
   const text = categoryTexts[category] || categoryTexts.fotografie;
   japaneseText.textContent = text.japanese;
   englishText.textContent = text.english;
+}
+
+function setDescriptionIntroVisible(visible) {
+  const main = document.querySelector('.mainLayout');
+  const intro = document.querySelector('.description-intro');
+
+  if (!categoryImagesRevealed) {
+    main?.classList.remove('has-item-selected');
+    if (intro) intro.hidden = false;
+    return;
+  }
+
+  main?.classList.toggle('has-item-selected', !visible);
+  if (intro) intro.hidden = !visible;
+
 }
 
 async function loadData() {
@@ -122,7 +238,7 @@ function filteredItems() {
 
     let matchesCustomFilter = true;
 
-    if (activeFilter && activeFilterType === 'year') {
+    if (activeFilter && activeFilterType === 'year' && !usesYearDimMode()) {
       matchesCustomFilter = Number(item.year) === Number(activeFilter);
     }
 
@@ -156,12 +272,28 @@ function filteredItems() {
   });
 }
 
+function updateHeaderNavState({ aboutOpen = false, highlightCategory = null } = {}) {
+  const aboutLink = document.getElementById('header-about-link');
+  const activeCat = highlightCategory ?? activeCategory;
+
+  document.querySelectorAll('[data-category]').forEach(el => {
+    el.classList.toggle('is-active', !aboutOpen && el.dataset.category === activeCat);
+    el.style.opacity = '';
+  });
+
+  aboutLink?.classList.toggle('is-active', aboutOpen);
+}
+
 function setCategory(cat) {
   activeCategory = cat;
   activeFilter = null;
   activeFilterType = null;
   activeTags.clear();
+  categoryImagesRevealed = ['fotografie', 'pacchetti', 'pubblicità'].includes(cat);
   syncGlobalTagButtons();
+
+  clearItemPreview();
+  setDescriptionIntroVisible(true);
 
   grid?.classList.remove(
     'has-selected',
@@ -171,30 +303,307 @@ function setCategory(cat) {
     'year-filtered'
   );
 
-  document.querySelectorAll('[data-category]').forEach(el => {
-    el.style.opacity = el.dataset.category === activeCategory ? '1' : '0.35';
-  });
+  updateHeaderNavState();
+
+  document.querySelector('.mainLayout')?.classList.toggle('category-pubblicita', activeCategory === 'pubblicità');
 
   if (activeCategory === 'fotografie') {
+    portraitGestureIndex = 0;
     grid?.classList.add('layout-fotografie');
     renderPortraitFilters();
+  } else if (activeCategory === 'pubblicità') {
+    clearCategoryFilters();
   } else {
     renderCategoryFilters(activeCategory);
   }
 
-  if (activeCategory === 'pacchetti') grid?.classList.add('layout-pacchetti');
-  if (activeCategory === 'pubblicità') grid?.classList.add('layout-pubblicita');
+  if (activeCategory === 'pacchetti') {
+    packGestureIndex = 0;
+    grid?.classList.add('layout-pacchetti');
+  }
+  if (activeCategory === 'pubblicità') {
+    adGestureIndex = 0;
+    grid?.classList.add('layout-pubblicita');
+    lastAdvertisingIndex = -1;
+    if (grid) grid.scrollTop = 0;
+  } else {
+    resetAdvertisingScroll();
+  }
+
+  document.body.classList.toggle(
+    'category-gesture-active',
+    activeCategory === 'fotografie' || activeCategory === 'pacchetti'
+  );
 
   updateCategoryText(activeCategory);
   render();
+  syncCategoryRevealState();
+  window.ensureCategoryGestures?.();
+  updateScrollToTopVisibility();
+}
 
-  if (
-    activeCategory === 'fotografie' &&
-    typeof handDetector !== 'undefined' &&
-    !handDetector &&
-    typeof initPortraitGesture === 'function'
-  ) {
-    initPortraitGesture();
+function getPortraitItems() {
+  let list = filteredItems().filter(item => item.category === 'fotografie');
+  if (usesYearDimMode()) {
+    list = list.filter(itemMatchesYearFilter);
+  }
+  return list;
+}
+
+function findCardForItem(item) {
+  if (!grid || !item) return null;
+  return [...grid.querySelectorAll('.card')].find(card => {
+    const img = card.querySelector('img');
+    if (!img) return false;
+    const itemSrc = item.src;
+    const attrSrc = img.getAttribute('src') || '';
+    return attrSrc === itemSrc || img.src.endsWith(itemSrc);
+  }) || null;
+}
+
+function selectPortraitByIndex(index) {
+  if (activeCategory !== 'fotografie' || !grid || !categoryImagesRevealed) return;
+
+  const portraits = getPortraitItems();
+  if (!portraits.length) return;
+
+  portraitGestureIndex = ((index % portraits.length) + portraits.length) % portraits.length;
+  const item = portraits[portraitGestureIndex];
+
+  grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
+  grid.classList.add('has-selected');
+
+  const card = findCardForItem(item);
+  if (card) {
+    card.classList.add('selectedImg');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  updateActiveInfo(item);
+  showItemPreview(item);
+}
+
+function syncPortraitSelection() {
+  const portraits = getPortraitItems();
+  if (!portraits.length) {
+    clearItemPreview();
+    grid?.classList.remove('has-selected');
+    return;
+  }
+
+  portraitGestureIndex = Math.min(portraitGestureIndex, portraits.length - 1);
+  selectPortraitByIndex(portraitGestureIndex);
+}
+
+function hasCategoryItemSelected() {
+  return Boolean(grid?.classList.contains('has-selected'));
+}
+
+function advancePortraitViaGesture() {
+  if (activeCategory === 'fotografie' && !categoryImagesRevealed) {
+    revealCategoryImages();
+    return;
+  }
+  if (!hasCategoryItemSelected()) {
+    selectPortraitByIndex(0);
+    return;
+  }
+  selectPortraitByIndex(portraitGestureIndex + 1);
+}
+
+function getPackItems() {
+  let list = filteredItems().filter(item => item.category === 'pacchetti');
+  if (usesYearDimMode()) {
+    list = list.filter(itemMatchesYearFilter);
+  }
+  return list;
+}
+
+function selectPackByIndex(index) {
+  if (activeCategory !== 'pacchetti' || !grid || !categoryImagesRevealed) return;
+
+  const packs = getPackItems();
+  if (!packs.length) return;
+
+  packGestureIndex = ((index % packs.length) + packs.length) % packs.length;
+  const item = packs[packGestureIndex];
+
+  grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
+  grid.classList.add('has-selected');
+
+  const card = findCardForItem(item);
+  if (card) {
+    card.classList.add('selectedImg');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  updateActiveInfo(item);
+  showItemPreview(item);
+}
+
+function syncPackSelection() {
+  const packs = getPackItems();
+  if (!packs.length) {
+    clearItemPreview();
+    grid?.classList.remove('has-selected');
+    return;
+  }
+
+  packGestureIndex = Math.min(packGestureIndex, packs.length - 1);
+  selectPackByIndex(packGestureIndex);
+}
+
+function advancePackViaGesture() {
+  if (activeCategory === 'pacchetti' && !categoryImagesRevealed) {
+    revealCategoryImages();
+    return;
+  }
+  if (!hasCategoryItemSelected()) {
+    selectPackByIndex(0);
+    return;
+  }
+  selectPackByIndex(packGestureIndex + 1);
+}
+
+function getAdItems() {
+  return filteredItems().filter(item => item.category === 'pubblicità');
+}
+
+function syncAdIndexToScroll() {
+  if (activeCategory !== 'pubblicità') return;
+
+  const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
+  if (!cards.length) return;
+
+  const targetY = window.innerHeight * 0.45;
+  let bestIndex = adGestureIndex;
+  let bestDistance = Infinity;
+
+  cards.forEach((card, i) => {
+    const rect = card.getBoundingClientRect();
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.abs(centerY - targetY);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestIndex = i;
+    }
+  });
+
+  adGestureIndex = bestIndex;
+}
+
+function getAboutImages() {
+  return [...document.querySelectorAll('.about-plate img, .about-grid img')];
+}
+
+function ensureAboutBlowHints() {
+  getAboutImages().forEach(img => {
+    if (img.closest('.about-image-frame')) return;
+
+    const frame = document.createElement('div');
+    frame.className = 'about-image-frame';
+
+    const hint = document.createElement('div');
+    hint.className = 'about-blow-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    hint.innerHTML = `
+      <span class="japanese">発見するために</span>
+      <span class="english">blow to discover</span>
+    `;
+
+    const parent = img.parentNode;
+    if (!parent) return;
+    parent.insertBefore(frame, img);
+    frame.appendChild(img);
+    frame.appendChild(hint);
+  });
+}
+
+function syncAboutRevealState() {
+  const images = getAboutImages();
+  if (!images.length) return;
+
+  if (aboutGestureIndex >= images.length) {
+    aboutGestureIndex = images.length - 1;
+  }
+
+  images.forEach((img, i) => {
+    const isActive = i === aboutGestureIndex;
+    const isRevealed = aboutBlowHeld && isActive;
+
+    img.classList.toggle('about-revealed', isRevealed);
+    img.closest('.about-image-frame')?.classList.toggle('is-about-active', isActive);
+  });
+}
+
+function onAboutBlowGestureStart() {
+  if (!document.body.classList.contains('about-open')) return;
+  aboutBlowHeld = true;
+  syncAboutRevealState();
+}
+
+function onAboutBlowGestureEnd() {
+  if (!document.body.classList.contains('about-open')) return;
+  aboutBlowHeld = false;
+  syncAboutIndexToScroll();
+}
+
+function syncAboutIndexToScroll() {
+  if (!document.body.classList.contains('about-open')) return;
+  if (aboutBlowHeld) return;
+
+  const images = getAboutImages();
+  if (!images.length) return;
+
+  const targetY = window.innerHeight * 0.45;
+  let bestIndex = aboutGestureIndex;
+  let bestDistance = Infinity;
+
+  images.forEach((img, i) => {
+    const rect = img.getBoundingClientRect();
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.abs(centerY - targetY);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestIndex = i;
+    }
+  });
+
+  aboutGestureIndex = bestIndex;
+  syncAboutRevealState();
+}
+
+function resetAboutBlowGesture() {
+  aboutGestureIndex = 0;
+  aboutBlowHeld = false;
+  getAboutImages().forEach(img => {
+    img.classList.remove('about-revealed');
+    img.closest('.about-image-frame')?.classList.remove('is-about-active');
+  });
+  if (document.body.classList.contains('about-open')) {
+    syncAboutRevealState();
+  }
+}
+
+function scrollContentByGesture(direction) {
+  const modal = document.getElementById('explore-modal');
+  const grid = document.getElementById('grid');
+  const isAboutOpen = document.body.classList.contains('about-open') && modal?.style.display !== 'none';
+  const scrollEl = isAboutOpen ? modal : grid;
+
+  if (!scrollEl) return;
+
+  const amount = Math.round(scrollEl.clientHeight * 0.55);
+  scrollEl.scrollBy({
+    top: direction === 'down' ? amount : -amount,
+    behavior: 'smooth',
+  });
+
+  if (activeCategory === 'pubblicità' && !isAboutOpen) {
+    window.setTimeout(() => syncAdIndexToScroll(), 450);
+  }
+  if (isAboutOpen) {
+    window.setTimeout(() => syncAboutIndexToScroll(), 450);
   }
 }
 
@@ -220,7 +629,7 @@ function renderPortraitFilters() {
       </p>
     </div>
 
-    <div class="filter">
+    <div class="filter filter-year">
       <p>年&nbsp;&nbsp; Year</p>
       <p>
         <span class="filter-option" data-filter-type="year" data-filter-value="1986">1986年</span>
@@ -235,6 +644,21 @@ function renderPortraitFilters() {
   bindFilterOptionClicks(panel);
 }
 
+function clearCategoryFilters() {
+  const panel = document.getElementById('filters-panel');
+  if (!panel) return;
+  panel.innerHTML = '';
+}
+
+function formatFilterOptionLabel(type, value) {
+  if (type === 'year') return `${value}年`;
+  return value;
+}
+
+function formatFilterOptionValue(type, value) {
+  return type === 'year' ? String(value) : value;
+}
+
 function renderCategoryFilters(category) {
   const panel = document.getElementById('filters-panel');
   if (!panel) return;
@@ -244,11 +668,12 @@ function renderCategoryFilters(category) {
   (filtersByCategory[category] || []).forEach(group => {
     const div = document.createElement('div');
     div.className = 'filter';
+    div.className = group.type === 'year' ? 'filter filter-year' : 'filter';
     div.innerHTML = `
       <p>${group.title}</p>
       <p>
         ${group.values.map(value => `
-          <span class="filter-option" data-filter-type="${group.type}" data-filter-value="${value}">${value}</span>
+          <span class="filter-option" data-filter-type="${group.type}" data-filter-value="${formatFilterOptionValue(group.type, value)}">${formatFilterOptionLabel(group.type, value)}</span>
         `).join('')}
       </p>
     `;
@@ -290,8 +715,19 @@ function updateActiveInfo(item) {
   const tags = getItemTags(item);
 
   document.querySelectorAll('[data-category]').forEach(el => {
-    el.style.opacity = el.dataset.category === item.category ? '1' : '0.35';
+    el.classList.toggle('is-active', el.dataset.category === item.category);
+    el.style.opacity = '';
   });
+  document.getElementById('header-about-link')?.classList.remove('is-active');
+
+  document.querySelectorAll('.card-tag').forEach(tagEl => {
+    tagEl.classList.toggle('highlight', tags.includes(tagEl.textContent));
+  });
+
+  if (activeFilter && activeFilterType) {
+    updateFilterOpacity();
+    return;
+  }
 
   document.querySelectorAll('.filter-option').forEach(el => {
     const value = el.dataset.filterValue;
@@ -309,20 +745,89 @@ function updateActiveInfo(item) {
     el.classList.toggle('active-filter', isActive);
     el.style.opacity = isActive ? '1' : '0.35';
   });
-
-  document.querySelectorAll('.card-tag').forEach(tagEl => {
-    tagEl.classList.toggle('highlight', tags.includes(tagEl.textContent));
-  });
 }
 
 function clearActiveInfo() {
-  document.querySelectorAll('[data-category]').forEach(el => {
-    el.style.opacity = el.dataset.category === activeCategory ? '1' : '0.35';
-  });
+  updateHeaderNavState();
+  if (activeFilter && activeFilterType) {
+    updateFilterOpacity();
+    return;
+  }
   document.querySelectorAll('.filter-option').forEach(el => {
     el.classList.remove('active-filter');
     el.style.opacity = '1';
   });
+}
+
+function descriptionTextHtml(ja, en) {
+  return `
+    <div class="japanese">${ja || ''}</div>
+    <div class="english">${en || ''}</div>
+  `;
+}
+
+function showItemPreview(item) {
+  if (!itemPreview || !['fotografie', 'pacchetti', 'pubblicità'].includes(activeCategory)) return;
+
+  const layoutClass =
+    activeCategory === 'pacchetti' ? 'pacchetti'
+    : activeCategory === 'pubblicità' ? 'pubblicita'
+    : 'fotografie';
+
+  itemPreview.className = `item-preview open layout-${layoutClass}`;
+  setDescriptionIntroVisible(false);
+
+  let bodyHtml = '';
+  if (item.category === 'pacchetti') {
+    bodyHtml = `
+      <div class="card-tags">
+        ${(item.tags || []).map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+      </div>
+      <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
+    `;
+  } else if (item.category === 'pubblicità') {
+    bodyHtml = `
+      <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
+    `;
+  } else if (item.category === 'fotografie') {
+    const tags = getItemTags(item);
+    bodyHtml = `
+      <div class="card-tags">
+        ${tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+      </div>
+      <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
+    `;
+  } else {
+    const tags = getItemTags(item);
+    bodyHtml = `
+      <span class="card-id">#${String(item.id).padStart(2, '0')}</span>
+      <div class="card-tags">
+        ${tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+      </div>
+      <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
+    `;
+  }
+
+  itemPreview.innerHTML = `
+    <img class="card-img" src="${item.src}" alt="${item.description || `Item ${item.id}`}">
+    <div class="card-body">${bodyHtml}</div>
+  `;
+  itemPreview.setAttribute('aria-hidden', 'false');
+}
+
+function clearItemPreview() {
+  if (!itemPreview) return;
+  itemPreview.innerHTML = '';
+  itemPreview.className = 'item-preview';
+  itemPreview.setAttribute('aria-hidden', 'true');
+  setDescriptionIntroVisible(true);
+
+  if (activeCategory === 'pubblicità') {
+    syncAdvertisingIntroVisibility();
+    updateAdvertisingScrollState();
+  } else {
+    updateCategoryText(activeCategory);
+  }
 }
 
 function shuffle(arr) {
@@ -362,9 +867,11 @@ function render() {
   }
 
   grid.innerHTML = '';
+  clearItemPreview();
   grid.classList.toggle('layout-fotografie', activeCategory === 'fotografie');
   grid.classList.toggle('layout-pubblicita', activeCategory === 'pubblicità');
   grid.classList.toggle('layout-pacchetti', activeCategory === 'pacchetti');
+  grid.classList.toggle('year-filtered', usesYearDimMode());
   grid.classList.remove('has-selected');
 
   if (!visible.length) {
@@ -375,10 +882,15 @@ function render() {
     return;
   }
 
+  const yearDim = usesYearDimMode();
+
   visible.forEach((item, i) => {
+    const yearMatch = !yearDim || itemMatchesYearFilter(item);
     const card = document.createElement('article');
-    card.className = 'card activeImg';
-    card.style.cursor = activeCategory === 'fotografie' || activeCategory === 'pacchetti' ? 'zoom-in' : 'default';
+    card.className = yearMatch ? 'card activeImg' : 'card';
+    card.style.cursor = ['fotografie', 'pacchetti'].includes(activeCategory) && yearMatch
+      ? 'zoom-in'
+      : 'default';
     card.dataset.itemYear = item.year;
 
     if (item.category === 'pubblicità') {
@@ -391,6 +903,14 @@ function render() {
     img.src = item.src;
     img.alt = item.description || `Item ${item.id}`;
     img.loading = 'lazy';
+
+    if (item.category === 'pubblicità') {
+      img.addEventListener('load', () => updateAdvertisingScrollState(), { once: true });
+      if (img.complete) {
+        requestAnimationFrame(() => updateAdvertisingScrollState());
+      }
+    }
+
     card.appendChild(img);
 
     const body = document.createElement('div');
@@ -401,8 +921,27 @@ function render() {
         <div class="card-tags">
           ${(item.tags || []).map(tag => `<span class="card-tag">${tag}</span>`).join('')}
         </div>
-        <p class="card-desc">${item['description-ja'] || ''}<br>${item['description-en'] || ''}</p>
+        <div class="card-desc">${descriptionTextHtml(item['description-ja'], item['description-en'])}</div>
       `;
+    } else if (item.category === 'fotografie') {
+      const tagsEl = document.createElement('div');
+      tagsEl.className = 'card-tags';
+      getItemTags(item).forEach(tag => {
+        const t = document.createElement('span');
+        t.className = 'card-tag';
+        t.textContent = tag;
+        t.addEventListener('click', e => {
+          e.stopPropagation();
+          toggleTag(tag);
+        });
+        tagsEl.appendChild(t);
+      });
+      body.appendChild(tagsEl);
+
+      const descEl = document.createElement('p');
+      descEl.className = 'card-desc';
+      descEl.innerHTML = descriptionTextHtml(item['description-ja'], item['description-en']);
+      body.appendChild(descEl);
     } else {
       const idEl = document.createElement('span');
       idEl.className = 'card-id';
@@ -422,63 +961,219 @@ function render() {
         tagsEl.appendChild(t);
       });
       body.appendChild(tagsEl);
-
-      if (item.category === 'fotografie') {
-        const descEl = document.createElement('p');
-        descEl.className = 'card-desc';
-        descEl.innerHTML = `${item['description-ja'] || ''}<br>${item['description-en'] || ''}`;
-        body.appendChild(descEl);
-      }
     }
 
     card.appendChild(body);
 
-    card.addEventListener('click', () => {
-      if (activeCategory !== 'fotografie' && activeCategory !== 'pacchetti') return;
+    if (['fotografie', 'pacchetti'].includes(activeCategory)) {
+      card.addEventListener('click', () => {
+        if (!categoryImagesRevealed) return;
+        if (yearDim && !itemMatchesYearFilter(item)) return;
 
-      const alreadyActive = card.classList.contains('selectedImg');
-      grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
-      grid.classList.toggle('has-selected', !alreadyActive);
+        const alreadyActive = card.classList.contains('selectedImg');
+        grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
+        grid.classList.toggle('has-selected', !alreadyActive);
 
-      if (!alreadyActive) {
-        card.classList.add('selectedImg');
-        updateActiveInfo(item);
-      } else {
-        clearActiveInfo();
-      }
-    });
+        if (!alreadyActive) {
+          card.classList.add('selectedImg');
+          updateActiveInfo(item);
+          showItemPreview(item);
+          if (activeCategory === 'fotografie') {
+            const portraits = getPortraitItems();
+            const idx = portraits.findIndex(p => p.id === item.id);
+            if (idx >= 0) portraitGestureIndex = idx;
+          } else if (activeCategory === 'pacchetti') {
+            const packs = getPackItems();
+            const idx = packs.findIndex(p => p.id === item.id);
+            if (idx >= 0) packGestureIndex = idx;
+          }
+        } else {
+          clearActiveInfo();
+          clearItemPreview();
+        }
+      });
+    }
 
     grid.appendChild(card);
   });
 
-  if (activeCategory === 'pubblicità') setupAdvertisingScrollText();
+  if (activeCategory === 'pubblicità' && categoryImagesRevealed) {
+    renderAdvertisingDescriptions(visible);
+    if (grid) grid.scrollTop = 0;
+    lastAdvertisingIndex = -1;
+    setupAdvertisingScrollText();
+    requestAnimationFrame(() => updateAdvertisingScrollState());
+  } else {
+    clearAdvertisingDescriptions();
+  }
+
+  if (activeFilter && activeFilterType) {
+    updateFilterOpacity();
+  }
+}
+
+function toggleAdvertisingDescScroll(show) {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (!scroll) return;
+  scroll.classList.toggle('is-active', show);
+  scroll.setAttribute('aria-hidden', String(!show));
+}
+
+function renderAdvertisingDescriptions(visible) {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (!scroll) return;
+
+  scroll.innerHTML = '';
+  toggleAdvertisingDescScroll(true);
+
+  visible.forEach(item => {
+    const block = document.createElement('div');
+    block.className = 'ad-desc-block';
+    block.innerHTML = `
+      <div class="ad-desc-text">
+        <div class="japanese">${item['description-ja'] || ''}</div>
+        <div class="english">${item['description-en'] || ''}</div>
+      </div>
+    `;
+    scroll.appendChild(block);
+  });
+}
+
+function clearAdvertisingDescriptions() {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  if (scroll) scroll.innerHTML = '';
+  toggleAdvertisingDescScroll(false);
+}
+
+function getAdImageMetrics(card, aside) {
+  const img = card.querySelector('.card-img');
+  if (!img || !aside) return null;
+
+  const imgRect = img.getBoundingClientRect();
+  const asideRect = aside.getBoundingClientRect();
+  const imageHeight = Math.round(imgRect.height);
+
+  return {
+    imageHeight,
+    top: Math.round(imgRect.bottom - asideRect.top - imageHeight),
+  };
+}
+
+function setActiveAdvertisingDescription(activeIndex) {
+  const scroll = document.getElementById('advertising-desc-scroll');
+  const aside = document.querySelector('.descriptionAndFilters');
+  if (!scroll || activeCategory !== 'pubblicità' || !grid) return;
+
+  const cards = [...grid.querySelectorAll('.card')];
+  const blocks = [...scroll.querySelectorAll('.ad-desc-block')];
+
+  blocks.forEach((block, i) => {
+    const isActive = i === activeIndex && activeIndex >= 0;
+    block.classList.toggle('is-active', isActive);
+
+    if (!isActive) {
+      block.style.top = '';
+      block.style.height = '';
+      block.style.minHeight = '';
+      return;
+    }
+
+    const card = cards[i];
+    const metrics = card ? getAdImageMetrics(card, aside) : null;
+    if (!metrics) return;
+
+    block.style.top = `${metrics.top}px`;
+    block.style.height = `${metrics.imageHeight}px`;
+    block.style.minHeight = `${metrics.imageHeight}px`;
+  });
+}
+
+function resetAdvertisingScroll() {
+  clearAdvertisingDescriptions();
+  resetAdvertisingDescriptionPosition();
+}
+
+function resetAdvertisingDescriptionPosition() {
+  const intro = document.querySelector('.description-intro');
+  if (!intro) return;
+  intro.style.position = '';
+  intro.style.left = '';
+  intro.style.top = '';
+  intro.style.width = '';
+  intro.style.bottom = '';
+  intro.style.marginBottom = '';
+  intro.classList.remove('is-positioned');
 }
 
 function setupAdvertisingScrollText() {
   if (!grid || advertisingScrollBound) {
-    updateAdvertisingTextOnScroll();
+    updateAdvertisingScrollState();
     return;
   }
-  grid.addEventListener('scroll', updateAdvertisingTextOnScroll);
+
+  grid.addEventListener('scroll', () => updateAdvertisingScrollState(), { passive: true });
+
   advertisingScrollBound = true;
-  updateAdvertisingTextOnScroll();
+  updateAdvertisingScrollState();
 }
 
-function updateAdvertisingTextOnScroll() {
-  const cards = document.querySelectorAll('.myPhotos.layout-pubblicita .card');
-  const japaneseText = document.getElementById('category-japanese-text');
-  const englishText = document.getElementById('category-english-text');
-  if (!cards.length || !japaneseText || !englishText) return;
+function syncAdvertisingIntroVisibility() {
+  const intro = document.querySelector('.description-intro');
+  if (!intro || activeCategory !== 'pubblicità' || !grid) return;
+  intro.hidden = grid.scrollTop >= 20;
+}
 
-  let activeCard = cards[0];
-  cards.forEach(card => {
-    const rect = card.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.45) activeCard = card;
-    card.classList.toggle('ad-past', rect.bottom < window.innerHeight * 0.35);
-  });
+function updateAdvertisingScrollState() {
+  if (!categoryImagesRevealed) return;
+  if (itemPreview?.classList.contains('open')) return;
 
-  japaneseText.textContent = activeCard.dataset.adJa || '';
-  englishText.textContent = activeCard.dataset.adEn || '';
+  const cards = [...document.querySelectorAll('.myPhotos.layout-pubblicita .card')];
+  const blocks = [...document.querySelectorAll('.ad-desc-block')];
+  if (!cards.length || !grid) return;
+
+  const pastThreshold = window.innerHeight * 0.35;
+  const activeThreshold = window.innerHeight * 0.45;
+  let activeIndex = -1;
+
+  if (grid.scrollTop < 20) {
+    activeIndex = 0;
+    cards.forEach((card, i) => {
+      card.classList.toggle('ad-past', false);
+      card.classList.toggle('ad-active', i === 0);
+    });
+  } else {
+    cards.forEach((card, i) => {
+      const rect = card.getBoundingClientRect();
+      const isPast = rect.bottom < pastThreshold;
+      const isActive = rect.top < activeThreshold && rect.bottom > pastThreshold;
+      card.classList.toggle('ad-past', isPast);
+      card.classList.toggle('ad-active', isActive);
+      if (isActive) activeIndex = i;
+    });
+  }
+
+  setActiveAdvertisingDescription(activeIndex);
+  syncAdvertisingIntroVisibility();
+
+  if (activeIndex < 0) {
+    lastAdvertisingIndex = -1;
+    return;
+  }
+
+  adGestureIndex = activeIndex;
+
+  if (activeIndex !== lastAdvertisingIndex) {
+    blocks.forEach((block, i) => {
+      const text = block.querySelector('.ad-desc-text');
+      if (!text) return;
+      text.classList.remove('ad-desc-animate');
+      if (i === activeIndex) {
+        void text.offsetWidth;
+        text.classList.add('ad-desc-animate');
+      }
+    });
+    lastAdvertisingIndex = activeIndex;
+  }
 }
 
 function openLightbox(index) {
@@ -490,7 +1185,7 @@ function openLightbox(index) {
 
   lbImg.src = item.src;
   lbImg.alt = item.description || `Item ${item.id}`;
-  lbId.textContent = `#${String(item.id).padStart(2, '0')}`;
+  lbId.textContent = item.category === 'fotografie' ? '' : `#${String(item.id).padStart(2, '0')}`;
   lbTagsEl.innerHTML = '';
 
   getItemTags(item).forEach(tag => {
@@ -541,31 +1236,154 @@ document.addEventListener('keydown', e => {
 document.querySelectorAll('[data-category]').forEach(el => {
   el.addEventListener('click', event => {
     event.preventDefault();
+    closeExploreModal();
     setCategory(el.dataset.category);
   });
 });
 
-function initAboutImageBlurOnScroll() {
+function initAboutGestureScrollSync() {
   const modal = document.getElementById('explore-modal');
-  const images = document.querySelectorAll('.about-grid img');
-  if (!modal || !images.length || modal.dataset.blurBound === 'true') return;
+  if (!modal || !getAboutImages().length) return;
 
-  modal.dataset.blurBound = 'true';
-  modal.addEventListener('scroll', () => {
-    images.forEach(img => {
-      const rect = img.getBoundingClientRect();
-      const progress = 1 - rect.top / window.innerHeight;
-      img.classList.toggle('about-faded', progress > 0.45);
+  if (modal.dataset.aboutGestureBound !== 'true') {
+    modal.dataset.aboutGestureBound = 'true';
+    modal.addEventListener('scroll', syncAboutIndexToScroll, { passive: true });
+  }
+  syncAboutIndexToScroll();
+}
+
+function resetAdGestureState() {
+  adGestureIndex = 0;
+}
+
+function updateAboutHeaderOffset() {
+  const header = document.querySelector('header');
+  if (!header) return;
+  document.documentElement.style.setProperty('--about-header-offset', `${header.offsetHeight}px`);
+}
+
+function scrollAboutSectionTo(target) {
+  const modal = document.getElementById('explore-modal');
+  if (!modal || !target) return;
+
+  updateAboutHeaderOffset();
+  const headerOffset = parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue('--about-header-offset')
+  ) || 80;
+
+  const modalRect = modal.getBoundingClientRect();
+  const targetRect = target.getBoundingClientRect();
+  const nextTop = modal.scrollTop + (targetRect.top - modalRect.top) - headerOffset + 12;
+
+  modal.scrollTo({
+    top: Math.max(0, nextTop),
+    behavior: 'smooth',
+  });
+
+  window.setTimeout(() => {
+    if (document.body.classList.contains('about-open')) {
+      syncAboutIndexToScroll();
+    }
+  }, 450);
+}
+
+function openAboutIndexPanel() {
+  document.querySelector('.header-about-wrap')?.classList.add('is-index-open');
+}
+
+function closeAboutIndexPanel() {
+  document.querySelector('.header-about-wrap')?.classList.remove('is-index-open');
+}
+
+function closeAboutIndex() {
+  closeAboutIndexPanel();
+}
+
+function initAboutIndexLinks() {
+  document.querySelectorAll('.about-index-item').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = link.getAttribute('href')?.slice(1);
+      const target = id ? document.getElementById(id) : null;
+      const modal = document.getElementById('explore-modal');
+      if (!target || !modal) return;
+
+      const goToSection = () => scrollAboutSectionTo(target);
+
+      if (modal.style.display === 'none') {
+        openExploreModal();
+        requestAnimationFrame(() => requestAnimationFrame(goToSection));
+      } else {
+        goToSection();
+      }
     });
+  });
+}
+
+function initAboutDropdown() {
+  const aboutWrap = document.querySelector('.header-about-wrap');
+  const aboutLink = document.getElementById('header-about-link');
+  const aboutIndex = document.getElementById('about-index');
+  if (!aboutWrap || !aboutLink) return;
+
+  aboutLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openExploreModal();
+  });
+
+  let indexCloseTimer = null;
+
+  const cancelIndexClose = () => {
+    window.clearTimeout(indexCloseTimer);
+    indexCloseTimer = null;
+  };
+
+  const scheduleIndexClose = () => {
+    cancelIndexClose();
+    indexCloseTimer = window.setTimeout(() => {
+      indexCloseTimer = null;
+      closeAboutIndexPanel();
+    }, 120);
+  };
+
+  aboutWrap.addEventListener('mouseenter', () => {
+    cancelIndexClose();
+    openAboutIndexPanel();
+  });
+
+  aboutWrap.addEventListener('mouseleave', (e) => {
+    const next = e.relatedTarget;
+    if (next && aboutWrap.contains(next)) return;
+    scheduleIndexClose();
+  });
+
+  aboutIndex?.addEventListener('mouseenter', cancelIndexClose);
+  aboutIndex?.addEventListener('mouseleave', (e) => {
+    const next = e.relatedTarget;
+    if (next && aboutWrap.contains(next)) return;
+    scheduleIndexClose();
   });
 }
 
 function openExploreModal() {
   const modal = document.getElementById('explore-modal');
   if (!modal) return;
+  ensureAboutBlowHints();
   modal.style.display = 'block';
   modal.setAttribute('aria-hidden', 'false');
-  initAboutImageBlurOnScroll();
+  modal.scrollTop = 0;
+  document.body.classList.add('about-open');
+  requestAnimationFrame(() => {
+    updateAboutHeaderOffset();
+    requestAnimationFrame(updateAboutHeaderOffset);
+  });
+  updateHeaderNavState({ aboutOpen: true });
+  resetAboutBlowGesture();
+  initAboutGestureScrollSync();
+  window.ensureCategoryGestures?.();
+  window.startAboutMicDetection?.();
+  updateScrollToTopVisibility();
 }
 
 function closeExploreModal() {
@@ -573,12 +1391,88 @@ function closeExploreModal() {
   if (!modal) return;
   modal.style.display = 'none';
   modal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('about-open');
+  window.stopAboutMicDetection?.();
+  resetAboutBlowGesture();
+  closeAboutIndex();
+  updateHeaderNavState();
+  window.ensureCategoryGestures?.();
+  updateScrollToTopVisibility();
+}
+
+function getActiveScrollContainer() {
+  if (document.body.classList.contains('about-open')) {
+    return document.getElementById('explore-modal');
+  }
+  return grid;
+}
+
+function isLandingActive() {
+  const landing = document.getElementById('landing-modal');
+  return Boolean(landing && landing.style.pointerEvents !== 'none');
+}
+
+function updateScrollToTopVisibility() {
+  const btn = document.getElementById('scroll-to-top');
+  if (!btn) return;
+
+  if (isLandingActive() || lightbox?.classList.contains('open')) {
+    btn.hidden = true;
+    return;
+  }
+
+  const container = getActiveScrollContainer();
+  const scrollTop = container?.scrollTop ?? 0;
+  btn.hidden = scrollTop < 80;
+}
+
+function scrollActiveViewToTop() {
+  const container = getActiveScrollContainer();
+  if (!container) return;
+
+  container.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (activeCategory === 'pubblicità') {
+    window.setTimeout(() => {
+      syncAdvertisingIntroVisibility();
+      updateAdvertisingScrollState();
+      updateScrollToTopVisibility();
+    }, 400);
+  } else {
+    window.setTimeout(updateScrollToTopVisibility, 400);
+  }
+}
+
+function initScrollToTop() {
+  const btn = document.getElementById('scroll-to-top');
+  const aboutModal = document.getElementById('explore-modal');
+  if (!btn) return;
+
+  document.body.appendChild(btn);
+  btn.addEventListener('click', scrollActiveViewToTop);
+
+  const onScroll = () => updateScrollToTopVisibility();
+  grid?.addEventListener('scroll', onScroll, { passive: true });
+  aboutModal?.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  updateScrollToTopVisibility();
 }
 
 async function init() {
   try {
     await loadData();
     setCategory('fotografie');
+    ensureAboutBlowHints();
+    initAboutIndexLinks();
+    initAboutDropdown();
+    initScrollToTop();
+    window.addEventListener('resize', () => {
+      if (document.body.classList.contains('about-open')) updateAboutHeaderOffset();
+      if (activeCategory === 'pubblicità' && categoryImagesRevealed) {
+        updateAdvertisingScrollState();
+      }
+      updateScrollToTopVisibility();
+    });
   } catch (error) {
     console.error(error);
     if (grid) grid.innerHTML = `<div class="empty">Errore nel caricamento dei dati.</div>`;
@@ -586,3 +1480,29 @@ async function init() {
 }
 
 init();
+
+window.openExploreModal = openExploreModal;
+window.closeExploreModal = closeExploreModal;
+window.showItemPreview = showItemPreview;
+window.clearItemPreview = clearItemPreview;
+window.showPortraitPreview = showItemPreview;
+window.clearPortraitPreview = clearItemPreview;
+window.getActiveCategory = () => activeCategory;
+window.getPortraitItems = getPortraitItems;
+window.selectPortraitByIndex = selectPortraitByIndex;
+window.advancePortraitViaGesture = advancePortraitViaGesture;
+window.getPackItems = getPackItems;
+window.selectPackByIndex = selectPackByIndex;
+window.advancePackViaGesture = advancePackViaGesture;
+window.resetAdGestureState = resetAdGestureState;
+window.openFotografieViaGesture = openFotografieViaGesture;
+window.openPacchettiViaGesture = openPacchettiViaGesture;
+window.openPubblicitaViaGesture = openPubblicitaViaGesture;
+window.revealCategoryImages = revealCategoryImages;
+window.isCategoryImagesRevealed = isCategoryImagesRevealed;
+window.isGestureCategoryActive = isGestureCategoryActive;
+window.onAboutBlowGestureStart = onAboutBlowGestureStart;
+window.onAboutBlowGestureEnd = onAboutBlowGestureEnd;
+window.getAboutRevealIndex = () => aboutGestureIndex;
+window.resetAboutBlowGesture = resetAboutBlowGesture;
+window.scrollContentByGesture = scrollContentByGesture;

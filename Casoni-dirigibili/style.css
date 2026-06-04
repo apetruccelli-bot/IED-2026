@@ -355,6 +355,7 @@ button {
   max-width: 100%;
   max-height: 70vh;
   object-fit: contain;
+  cursor: none;
 }
 
 .lb-close, .lb-prev, .lb-next {
@@ -394,6 +395,11 @@ button {
         flex-shrink: 0;
       }
 
+/* For the main index lightbox, show id in normal weight (not bold) */
+#lightbox .lb-id {
+  font-weight: normal;
+}
+
 .lb-tags-row {
         display: flex;
         align-items: center;
@@ -428,6 +434,14 @@ button {
 .lb-meta {
         margin-top: 10px;
       }
+
+/* Right-column meta: match lightbox meta styling, left-aligned and slightly lower */
+#right-column-meta,
+.right-column-meta {
+  margin-top: 14px;
+  align-self: flex-start;
+  text-align: left;
+}
 
 /* Horizontal scroll container about */
 .horizontal-scroll {
@@ -535,6 +549,23 @@ button {
   color: var(--myWhite);
   opacity: 0.9;
   text-align: left;
+  align-self: flex-start;
+  box-sizing: border-box;
+  font-size: clamp(12px, 1.2vw, 14px);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.right-column-meta {
+  box-sizing: border-box;
+}
+
+.right-column-caption {
+  box-sizing: border-box;
+  font-size: clamp(12px, 1.0vw, 13px);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .archive-gallery {
@@ -775,6 +806,17 @@ button {
   color: var(--myWhite);
 }
 
+.landing-content,
+.landing-aaa-track {
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.landing-modal.landing-active .landing-content,
+.landing-modal.landing-active .landing-aaa-track {
+  opacity: 1;
+}
+
 .landing-modal.landing-modal-hide {
   animation: landing-modal-fade-out 1.4s ease forwards;
   pointer-events: none;
@@ -893,7 +935,42 @@ button {
   margin-left: auto;
 }
 
+/* ─────────────────────────────
+   EXPLORE PACK SELECTOR
+───────────────────────────── */
 
+.explore-pack-selector {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+  gap: 14px;
+  z-index: 10001;
+}
+
+.explore-pack-btn {
+  color: var(--myWhite);
+  background: transparent;
+  padding: 0;
+  border: none;
+  font-family: 'SchengenA Regular', sans-serif;
+  font-size: 12px;
+  line-height: 120%;
+  cursor: pointer;
+  transition: opacity .3s cubic-bezier(.8,0,.2,1);
+}
+
+.explore-pack-btn:hover {
+  opacity: .4;
+}
+
+.explore-pack-selector.has-active-pack .explore-pack-btn:not(.active) {
+  opacity: .4;
+}
+
+.explore-pack-btn.active {
+  opacity: 1;
+}
 
 
 
@@ -911,6 +988,17 @@ button {
 /* LANDING MOBILE responsive */
 
 @media (max-width: 600px) {
+  .landing-content,
+  .landing-aaa-track {
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  .landing-modal.landing-active .landing-content,
+  .landing-modal.landing-active .landing-aaa-track {
+    opacity: 1;
+  }
+
   .landing-content {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3, 1fr);
@@ -1163,26 +1251,48 @@ button {
 
 /* QUERY MOBILE ABOUT */
 @media (max-width: 600px) {
-    .about-page {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 42px 280px minmax(0, 1fr);
-    row-gap: 18px;
-
-    height: 100vh;
-    overflow: hidden;
+  html,
+  body.about-body {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
     background: var(--myBlack);
   }
 
-  /* Riga 1: titolo */
+  body.about-body {
+    height: auto;
+  }
+
+  .about-page {
+    display: block;
+    width: 100%;
+    min-height: 100dvh;
+    height: auto;
+    overflow: visible;
+    background: var(--myBlack);
+    color: var(--myWhite);
+    padding-top: 42px;
+  }
+
+  /* Solo la riga titolo resta fissa */
   .about-header {
-    grid-column: 1;
-    grid-row: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5000;
+
+    width: 100%;
+    height: 42px;
 
     display: flex;
     align-items: baseline;
+    gap: 20px;
+
     padding: 10px;
     overflow: hidden;
+
+    background: var(--myBlack);
   }
 
   .about-header .intro-panel {
@@ -1190,6 +1300,7 @@ button {
     min-width: 0;
     max-width: none;
     margin: 0;
+    flex: 0 0 auto;
   }
 
   .about-header .home-title {
@@ -1222,50 +1333,46 @@ button {
     display: none;
   }
 
-  /* Riga 2: testo scrollabile */
+  /* Testo dentro il flusso verticale della pagina */
   .about-main {
-    grid-column: 1;
-    grid-row: 2;
-
     display: block;
-    height: 100%;
+    width: 100%;
+    height: auto;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
     background: var(--myBlack);
   }
 
   .about-text-panel {
     display: block;
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-height: 0;
+
     padding: 10px;
 
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: visible;
   }
 
   .about-text-panel .box2 {
     width: 100%;
     max-width: none;
     margin: 0;
+    padding-bottom: 20px;
   }
 
   .about-image-panel {
     display: none;
   }
 
-  /* Riga 3: immagini verticali scrollabili */
+  /* Galleria a fine pagina: scroll orizzontale */
   .about-gallery-side {
-    grid-column: 1;
-    grid-row: 3;
-
     display: block;
     width: 100%;
-    height: 100%;
+    height: clamp(160px, 42vw, 260px);
 
     padding: 10px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
 
     background: var(--myBlack);
   }
@@ -1273,26 +1380,30 @@ button {
   .about-gallery-side .horizontal-scroll,
   .about-gallery-side .horizontal-scroll.about-can-scroll {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
 
     width: 100%;
-    height: auto;
-    min-height: 100%;
+    height: 100%;
 
-    overflow: visible !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    align-items: stretch;
+    -webkit-overflow-scrolling: touch;
   }
 
   .about-gallery-side .scroll-img {
-    width: 100%;
-    height: auto;
-    max-width: none;
-    max-height: none;
-
     flex: 0 0 auto;
-    object-fit: contain;
 
+    width: auto;
+    height: 100%;
+    max-width: none;
+    max-height: 100%;
+
+    object-fit: contain;
     opacity: 1 !important;
+    cursor: zoom-in;
   }
 }
 
@@ -1602,7 +1713,26 @@ button {
   .top-home .filters-panel .filter-link.active {
     font-weight: inherit !important;
   }
+
+  .explore-pack-selector {
+    gap: 12px;
+    flex-wrap: nowrap;
+  }
+
+  .explore-pack-btn {
+    font-size: 12px;
+    white-space: nowrap;
+  }
 }
+
+@media (max-width: 600px) {
+  body.about-body {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: auto !important;
+  }
+}
+
 
 /* ─────────────────────────────
    LIGHTBOX MOBILE
@@ -1697,5 +1827,42 @@ button {
 
   .lb-meta-row {
     line-height: 1.25;
+  }
+}
+
+.lb-mobile-arrows {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .lb-content {
+    position: relative;
+  }
+
+  .lb-mobile-arrows {
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 6px;
+
+    font-family: 'SchengenA Regular', sans-serif;
+    font-size: inherit;
+    line-height: 1;
+    color: #FCFCFC;
+  }
+
+  .lb-mobile-arrow {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+
+    font: inherit;
+    color: inherit;
+    line-height: inherit;
+    cursor: pointer;
   }
 }

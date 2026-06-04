@@ -159,6 +159,8 @@ function toggleMacro(macro) {
       const key = Object.keys(macros).find(k => k.toLowerCase() === displayName.toLowerCase());
       titleEl.classList.toggle('macro-active', Boolean(activeMacro && key && key.toLowerCase() === String(activeMacro).toLowerCase()));
     });
+    // when a macro is active, add a container-level class so we can dim other macro titles with CSS
+    container.classList.toggle('macro-dim-others', Boolean(activeMacro));
   }
 
   render();
@@ -217,9 +219,13 @@ function applyTagOpacity() {
 
 // ── Toggle a filter tag ───────────────────────────────────────────────────
 function toggleTag(tag) {
-  if (activeTags.has(tag)) {
-    activeTags.delete(tag);
+  // Single-select behavior: selecting a tag clears previous selections.
+  if (activeTags.has(tag) && activeTags.size === 1) {
+    // clicking the already-selected single tag toggles it off
+    activeTags.clear();
   } else {
+    // replace any existing active tags with the newly selected one
+    activeTags.clear();
     activeTags.add(tag);
   }
   // sync top tags bar (if present)

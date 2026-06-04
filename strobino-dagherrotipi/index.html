@@ -16,6 +16,18 @@
     </style>
   </head>
   <body>
+
+  <!-- Dark mode styles (navy) -->
+  <style>
+  :root{--dm-bg:#071426;--dm-surface:#08192b;--dm-text:#e6f3ff;--dm-muted:#9fb0c9;--dm-accent:#4ea8ff}
+  body.theme-dark{background:var(--dm-bg)!important;color:var(--dm-text)!important}
+  body.theme-dark a{color:var(--dm-accent)!important}
+  .theme-toggle{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:var(--dm-surface);display:flex;align-items:center;justify-content:center;z-index:1200;cursor:pointer}
+  .theme-toggle svg{width:20px;height:20px;fill:currentColor}
+  .theme-toggle .moon{display:none}
+  body.theme-dark .theme-toggle .sun{display:none}
+  body.theme-dark .theme-toggle .moon{display:block}
+  </style>
     <header>
 
       <a href="/" class="font-myTitle">Les Secéssionistes</a>
@@ -99,6 +111,7 @@
     <!-- 3. Modifica la riga qui sotto affinché non sia commentata, in modo che il tuo file "index.html" usi il tuo file "tuocognome-lm.js" -->
     <!-- <script src="tuocognome-lm.js"></script> -->
     <script src="script.js"></script>
+    <script src="/dark-mode-loader.js"></script>
     
   </body>
 </html>

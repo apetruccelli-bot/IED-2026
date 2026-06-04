@@ -6,6 +6,74 @@
   <title>The Abyssal Descent Archive</title>
 
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Dark mode variables and toggler (deep-blue theme) -->
+  <style>
+  :root{
+    --dm-bg: #0e1113; /* off-black background */
+    --dm-surface: #131516; /* slightly lighter surface */
+    --dm-text: #ffffff; /* pure white text */
+    --dm-muted: #b0bac2;
+    --dm-accent: #3fb0ff;
+    --dm-card: rgba(20,21,22,0.88); /* off-black card */
+    --dm-border: rgba(255,255,255,0.06);
+  }
+
+  /* Apply background + default text color for dark theme */
+  html[data-theme="dark"]{background:var(--dm-bg);color:var(--dm-text)}
+  html[data-theme="dark"] body{background:var(--dm-bg);color:var(--dm-text)}
+
+  /* Ensure most text elements are white for readability */
+  html[data-theme="dark"] ,
+  html[data-theme="dark"] body,
+  html[data-theme="dark"] p,
+  html[data-theme="dark"] span,
+  html[data-theme="dark"] li,
+  html[data-theme="dark"] h1,
+  html[data-theme="dark"] h2,
+  html[data-theme="dark"] h3,
+  html[data-theme="dark"] h4,
+  html[data-theme="dark"] h5,
+  html[data-theme="dark"] h6,
+  html[data-theme="dark"] a,
+  html[data-theme="dark"] label,
+  html[data-theme="dark"] input,
+  html[data-theme="dark"] button{
+    color: var(--dm-text) !important;
+  }
+
+  /* Links and accents: bluish tone */
+  html[data-theme="dark"] a, html[data-theme="dark"] a:visited{color:var(--dm-accent)}
+
+  /* Surfaces: cards, headers, galleries use deep blue cards (not black) */
+  html[data-theme="dark"] header,
+  html[data-theme="dark"] .topbar,
+  html[data-theme="dark"] .text-box,
+  html[data-theme="dark"] .map-gallery-frame,
+  html[data-theme="dark"] .map-gallery{
+    background-color:var(--dm-card);
+    color:var(--dm-text);
+    border-color:var(--dm-border);
+  }
+
+  /* Controls */
+  html[data-theme="dark"] button, html[data-theme="dark"] input, html[data-theme="dark"] .enter-site-link{
+    color:var(--dm-text);background:transparent;border-color:var(--dm-border)
+  }
+
+  /* Slightly brighten images so they don't disappear on dark background */
+  html[data-theme="dark"] img{filter:brightness(1.02);opacity:0.99}
+  </style>
+  <script>
+  (function(){
+    try{
+      const stored=localStorage.getItem('site-theme');
+      const prefersDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if(stored==='dark'||(!stored&&prefersDark))document.documentElement.setAttribute('data-theme','dark');
+      window.toggleSiteTheme=function(t){if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('site-theme','dark')}else{document.documentElement.removeAttribute('data-theme');localStorage.setItem('site-theme','')}};
+    }catch(e){}
+  })();
+  </script>
 </head>
 
 <body class="intro-page">
@@ -33,6 +101,9 @@
   </main>
 
   <a class="enter-site-link" href="archive.html">Enter Site</a>
+  
+  <!-- Landing page audio: play once on load with fade in/out -->
+  <audio id="landing-audio" src="audio.mp3" preload="auto"></audio>
 
   <script src="script.js"></script>
   <script>
@@ -53,7 +124,112 @@
           }
         }, { once: true });
       });
+
+      // Try to play landing audio with fade-in/out and slowed playback.
+      const audio = document.getElementById('landing-audio');
+      if (audio) {
+        const slowFactor = 0.85; // playback rate (less than 1 = slower)
+        const targetGain = 0.8; // perceived volume after fade-in
+        const fadeSecs = 3.0; // fade duration (seconds)
+
+        // Web Audio setup
+        let audioCtx = null;
+        let sourceNode = null;
+        let gainNode = null;
+        let isFadingOut = false;
+
+        function setupAudioNodes() {
+          if (audioCtx) return;
+          try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            sourceNode = audioCtx.createMediaElementSource(audio);
+            gainNode = audioCtx.createGain();
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            sourceNode.connect(gainNode).connect(audioCtx.destination);
+          } catch (e) {
+            console.warn('[AUDIO] Web Audio setup failed', e);
+            audioCtx = null;
+          }
+        }
+
+        // Fade helpers
+        function fadeIn() {
+          if (!gainNode || !audioCtx) return;
+          const t = audioCtx.currentTime;
+          gainNode.gain.cancelScheduledValues(t);
+          gainNode.gain.setValueAtTime(0, t);
+          gainNode.gain.linearRampToValueAtTime(targetGain, t + fadeSecs);
+        }
+
+        function fadeOut(duration) {
+          if (!gainNode || !audioCtx) return;
+          const t = audioCtx.currentTime;
+          gainNode.gain.cancelScheduledValues(t);
+          const current = gainNode.gain.value || targetGain;
+          gainNode.gain.setValueAtTime(current, t);
+          gainNode.gain.linearRampToValueAtTime(0, t + duration);
+        }
+
+        // Attempt playback; if blocked, wait for user gesture to resume context + play
+        const tryPlay = async () => {
+          setupAudioNodes();
+          if (audioCtx && audioCtx.state === 'suspended') {
+            // try to resume automatically
+            try { await audioCtx.resume(); } catch (e) { /* ignore */ }
+          }
+
+          audio.playbackRate = slowFactor;
+
+          try {
+            // start with gain 0, then fade in
+            if (gainNode && audioCtx) gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            await audio.play();
+            if (audioCtx && gainNode) fadeIn();
+          } catch (err) {
+            // Autoplay blocked: attach one-time gesture to resume + play
+            const resumeHandler = async () => {
+              try {
+                setupAudioNodes();
+                if (audioCtx && audioCtx.state === 'suspended') await audioCtx.resume();
+                audio.playbackRate = slowFactor;
+                await audio.play();
+                if (gainNode && audioCtx) fadeIn();
+              } catch (e) {
+                console.warn('[AUDIO] Playback resume failed', e);
+              }
+              window.removeEventListener('click', resumeHandler);
+              window.removeEventListener('touchstart', resumeHandler);
+            };
+            window.addEventListener('click', resumeHandler, { once: true });
+            window.addEventListener('touchstart', resumeHandler, { once: true });
+          }
+        };
+
+        // Single-play handling: fade-out near end, then stop (no loop)
+        audio.addEventListener('timeupdate', () => {
+          if (!audio.duration || !isFinite(audio.duration)) return;
+          const remaining = audio.duration - audio.currentTime;
+          if (!isFadingOut && remaining <= fadeSecs + 0.05) {
+            isFadingOut = true;
+            if (gainNode && audioCtx) {
+              fadeOut(Math.max(0.05, remaining));
+            }
+            setTimeout(() => {
+              try {
+                audio.pause();
+              } catch (e) {
+                console.warn('[AUDIO] Pause failed', e);
+              }
+              isFadingOut = false;
+            }, Math.max(0, remaining) * 1000 + 50);
+          }
+        });
+
+        // Start attempt
+        tryPlay();
+      }
     });
   </script>
+  <script src="/dark-mode-loader.js"></script>
 </body>
 </html>

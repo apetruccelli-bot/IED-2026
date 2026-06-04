@@ -12,7 +12,17 @@ radiografiaImg.crossOrigin = 'anonymous';
 let radiografiaLoaded = false;
 radiografiaImg.onload = () => { radiografiaLoaded = true; };
 radiografiaImg.onerror = (e) => { console.error('Failed to load radiograph image:', radiografiaImg.src, e); };
-// DOM overlay element (placed above the video/canvas)
+// Canvas-based radiograph state: the base image will be drawn into the canvas
+// and act as the default overlay unless another interaction replaces it.
+let canvasRadiograph = new Image();
+canvasRadiograph.crossOrigin = 'anonymous';
+canvasRadiograph.src = radiografiaImg.src;
+let canvasRadiographLoaded = false;
+canvasRadiograph.onload = () => { canvasRadiographLoaded = true; };
+let canvasRadiographIsLandmark = null; // index or null
+let persistentOverlay = false;
+
+// Keep a DOM overlay reference only for manual debugging (not used by the main flow)
 let radiographOverlayEl = null;
 let overlayDebugEl = null;
 // proximity multiplier for trackpoint sensitivity (higher = more permissive)
@@ -107,25 +117,29 @@ function updateOverlayStatus() {
         const el = ensureOverlayStatus();
         if (!el) return;
         const inner = document.getElementById('overlayStatusInner');
-        const overlay = radiographOverlayEl;
         const lines = [];
         lines.push(`<div style="margin-bottom:6px"><em>Preload failures:</em> ${_preloadFailures.length}</div>`);
         if (_preloadFailures.length > 0) {
             _preloadFailures.slice(-3).forEach(p => lines.push(`<div style="color:#f88;">• ${p}</div>`));
         }
-        if (overlay) {
-            lines.push(`<div>overlay.src: ${overlay.src.split('/').pop()}</div>`);
-            lines.push(`<div>display: ${overlay.style.display || 'n/a'} opacity: ${overlay.style.opacity || 'n/a'}</div>`);
-            const la = overlay.dataset && overlay.dataset.landmarkActive ? overlay.dataset.landmarkActive : 'none';
-            lines.push(`<div>landmarkActive: ${la}</div>`);
-        } else {
-            lines.push('<div>overlay element: not present</div>');
+        try {
+            if (canvasRadiographLoaded && canvasRadiograph && canvasRadiograph.src) {
+                const srcName = canvasRadiograph.src.split('/').pop();
+                lines.push(`<div>canvas radiograph: ${srcName}</div>`);
+                lines.push(`<div>isLandmark: ${canvasRadiographIsLandmark !== null ? canvasRadiographIsLandmark : 'no'}</div>`);
+                lines.push(`<div>persistent: ${persistentOverlay ? 'yes' : 'no'}</div>`);
+            } else {
+                lines.push('<div>canvas radiograph: none loaded</div>');
+            }
+        } catch (e) {
+            lines.push('<div>overlay status: unknown</div>');
         }
         inner.innerHTML = lines.join('');
     } catch (e) {}
 }
 
 function createOverlayTestPanel() {
+    initDOM();
     try {
         const panel = document.createElement('div');
         panel.id = 'overlayTestPanel';
@@ -145,15 +159,14 @@ function createOverlayTestPanel() {
         const container = document.getElementById('overlayTestButtons');
         // base image
         const baseBtn = document.createElement('button');
-        baseBtn.textContent = 'Test base';
+        baseBtn.textContent = 'Test base (canvas)';
         baseBtn.style.margin = '4px';
         baseBtn.onclick = () => {
-            const overlay = ensureRadiographOverlay();
-            if (!overlay) return;
             const p = radiografiaImg.src;
             const img = new Image();
-            img.onload = () => { overlay.src = p; overlay.style.display='block'; overlay.style.opacity='0.98'; showOverlayDebug('Base loaded'); updateOverlayStatus(); };
-            img.onerror = (e) => { _preloadFailures.push(p); showOverlayDebug('Base failed'); updateOverlayStatus(); };
+            img.crossOrigin = 'anonymous';
+            img.onload = () => { canvasRadiograph = img; canvasRadiographLoaded = true; canvasRadiographIsLandmark = null; persistentOverlay = false; showOverlayDebug('Base loaded (canvas)'); updateOverlayStatus(); };
+            img.onerror = (e) => { _preloadFailures.push(p); showOverlayDebug('Base failed (canvas)'); updateOverlayStatus(); };
             img.src = p;
         };
         container.appendChild(baseBtn);
@@ -164,14 +177,9 @@ function createOverlayTestPanel() {
             b.title = path.split('/').pop();
             b.style.margin = '4px';
             b.onclick = () => {
-                const overlay = ensureRadiographOverlay();
-                if (!overlay) return;
                 const img = new Image();
-                img.onload = () => { 
-                    try { overlay.dataset.landmarkActive = String(idx); } catch (e) {}
-                    try { overlay.dataset.persistent = '1'; } catch (e) {}
-                    overlay.src = path; overlay.style.display='block'; overlay.style.opacity='0.98'; showOverlayDebug(`Loaded ${path.split('/').pop()}`); updateOverlayStatus();
-                };
+                img.crossOrigin = 'anonymous';
+                img.onload = () => { canvasRadiograph = img; canvasRadiographLoaded = true; canvasRadiographIsLandmark = Number(idx); persistentOverlay = true; showOverlayDebug(`Loaded ${path.split('/').pop()} (canvas persistent)`); updateOverlayStatus(); };
                 img.onerror = (e) => { _preloadFailures.push(path); showOverlayDebug(`Failed ${path.split('/').pop()}`); updateOverlayStatus(); };
                 img.src = path;
             };
@@ -188,8 +196,11 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 }
 
 function ensureRadiographOverlay() {
-    if (radiographOverlayEl) return radiographOverlayEl;
+    // The main flow uses canvasRadiograph and does not require a DOM <img> overlay.
+    // If a developer explicitly needs the DOM overlay for debugging, they can call
+    // ensureRadiographOverlay() from the console; otherwise the function returns null.
     try {
+        if (radiographOverlayEl) return radiographOverlayEl;
         const frame = document.getElementById('webcamFrame') || document.getElementById('container');
         if (!frame) return null;
         const img = document.createElement('img');
@@ -201,32 +212,15 @@ function ensureRadiographOverlay() {
         img.style.width = '100%';
         img.style.height = '100%';
         img.style.objectFit = 'cover';
-        // place overlay above video/canvas; debug canvas sits above it
         img.style.zIndex = '10';
         img.style.pointerEvents = 'none';
         img.style.opacity = '0';
         img.style.transition = 'opacity 220ms ease';
         img.style.display = 'none';
-        // add listeners to observe load errors and success
-    img.addEventListener('load', () => { console.log('Radiograph overlay loaded:', img.src); showOverlayDebug('Overlay image loaded'); updateOverlayStatus(); });
-    img.addEventListener('error', (e) => { console.error('Radiograph overlay failed to load:', img.src, e); showOverlayDebug('Overlay load failed: ' + img.src.split('/').pop()); _preloadFailures.push(img.src); updateOverlayStatus(); });
-
-        // Preload mapped images so 404s surface early
-        try {
-            Object.values(LANDMARK_IMAGE_MAP).forEach(p => {
-                const pre = new Image();
-                pre.src = p;
-                pre.onload = () => { console.log('Preloaded', p); updateOverlayStatus(); };
-                pre.onerror = (e) => { console.warn('Preload failed', p, e); _preloadFailures.push(p); updateOverlayStatus(); };
-            });
-            const basePre = new Image(); basePre.src = radiografiaImg.src; basePre.onload = () => {}; basePre.onerror = () => {};
-        } catch (e) {}
-
+        img.addEventListener('load', () => { console.log('Radiograph overlay loaded:', img.src); showOverlayDebug('Overlay image loaded'); updateOverlayStatus(); });
+        img.addEventListener('error', (e) => { console.error('Radiograph overlay failed to load:', img.src, e); showOverlayDebug('Overlay load failed: ' + img.src.split('/').pop()); _preloadFailures.push(img.src); updateOverlayStatus(); });
         frame.appendChild(img);
         radiographOverlayEl = img;
-    console.log('Created radiograph overlay element, initial src=', img.src);
-    showOverlayDebug('Overlay created');
-        updateOverlayStatus();
         return radiographOverlayEl;
     } catch (e) {
         return null;
@@ -240,15 +234,38 @@ try {
     }
 } catch (e) {}
  
-const video = document.getElementById("webcam");
- const canvas = document.getElementById("canvas");
- const ctx = canvas.getContext("2d");
- const status = document.getElementById("status");
- // Visible button in webinteraction.html — use let so we can create it dynamically if missing
- let startBtn = document.getElementById("startBtn") || document.getElementById("cameraToggle");
- const faceList = document.getElementById("faceList");
- const handList = document.getElementById("handList");
- const toggleNumbers = document.getElementById("toggleNumbers");
+// DOM elements (initialized lazily)
+let video = null;
+let canvas = null;
+let ctx = null;
+let status = null;
+// Visible button in webinteraction.html — will be resolved in initDOM
+let startBtn = null;
+let faceList = null;
+let handList = null;
+let toggleNumbers = null;
+
+function initDOM() {
+    try {
+        if (!video) video = document.getElementById('webcam');
+        if (!canvas) canvas = document.getElementById('canvas');
+        if (canvas && !ctx) ctx = canvas.getContext('2d');
+        if (!status) status = document.getElementById('status');
+        if (!startBtn) startBtn = document.getElementById('startBtn') || document.getElementById('cameraToggle');
+        if (!faceList) faceList = document.getElementById('faceList');
+        if (!handList) handList = document.getElementById('handList');
+        if (!toggleNumbers) toggleNumbers = document.getElementById('toggleNumbers');
+    } catch (e) {
+        // ignore
+    }
+}
+
+// ensure DOM refs are present once the document is ready
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initDOM();
+} else {
+    document.addEventListener('DOMContentLoaded', initDOM);
+}
 
 // Safe status helper — will no-op if #status is not present
 function setStatus(msg) {
@@ -366,6 +383,31 @@ function drawHandLandmarks(keypoints, color) {
     });
 }
 
+// Draw the current canvasRadiograph (if loaded) into the canvas as a background.
+function drawCanvasRadiograph() {
+    try {
+        if (!canvas || !ctx) return;
+        if (!canvasRadiographLoaded || !canvasRadiograph || !canvasRadiograph.src) return;
+        const img = canvasRadiograph;
+        const cw = canvas.width;
+        const ch = canvas.height;
+        const iw = img.naturalWidth || img.width;
+        const ih = img.naturalHeight || img.height;
+        if (!iw || !ih) return;
+        const scale = Math.max(cw / iw, ch / ih);
+        const dw = iw * scale;
+        const dh = ih * scale;
+        const dx = (cw - dw) / 2;
+        const dy = (ch - dh) / 2;
+        ctx.save();
+        ctx.globalAlpha = 1;
+        ctx.drawImage(img, dx, dy, dw, dh);
+        ctx.restore();
+    } catch (e) {
+        console.warn('drawCanvasRadiograph failed', e && e.message);
+    }
+}
+
  // Colors for different faces (made neutral to avoid red visual tracking)
  const faceColors = [
      "rgba(228,228,228,0.9)",
@@ -388,6 +430,7 @@ function drawHandLandmarks(keypoints, color) {
 
  // Load the Face Landmarks Detection model
  async function loadModel() {
+    initDOM();
      try {
          setStatus("Loading face detection model...");
          
@@ -459,6 +502,7 @@ function drawHandLandmarks(keypoints, color) {
 // camera permission. If the browser blocks autoplay or permission is denied, the page will
 // show the status message and the start button (if present) remains as a fallback.
 async function tryAutoStartCamera() {
+    initDOM();
     try {
         // small delay to ensure UI updates
         await new Promise(r => setTimeout(r, 120));
@@ -482,6 +526,7 @@ async function tryAutoStartCamera() {
 
  // Start the webcam
  async function startCamera() {
+     initDOM();
      try {
          const stream = await navigator.mediaDevices.getUserMedia({
              video: { 
@@ -536,8 +581,10 @@ async function tryAutoStartCamera() {
             }
              
              setStatus("Detecting faces...");
-             if (startBtn) startBtn.textContent = "Camera Running";
-             if (startBtn) startBtn.disabled = true;
+             // Do not show visible 'Camera Running' text on the page; keep the button disabled as a fallback.
+             if (startBtn) {
+                 try { startBtn.disabled = true; } catch (e) {}
+             }
              detectFaces();
          });
      } catch (error) {
@@ -637,6 +684,9 @@ async function tryAutoStartCamera() {
     }
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw current radiograph (base or active landmark) as canvas background
+    try { drawCanvasRadiograph(); } catch (e) {}
 
     // (overlay handling moved later so cheek-trigger and hand logic can decide the source)
 
@@ -950,6 +1000,7 @@ async function tryAutoStartCamera() {
  }
 
  // Event listeners
+initDOM();
 if (startBtn) startBtn.addEventListener("click", startCamera);
 
 if (toggleNumbers) {
@@ -1037,7 +1088,8 @@ function isSmiling(keypoints) {
     const mouthW = Math.abs(right.x - left.x);
     const ratio = mouthW / faceW;
     // tuned threshold: smile when mouth width > ~0.48 of face width
-    return ratio > 0.48;
+    // lowered threshold to make smile detection more sensitive
+    return ratio > 0.42;
 }
 
 function isFingerInsideMouth(fingerPoint, keypoints) {

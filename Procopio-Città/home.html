@@ -28,46 +28,47 @@
   </div>
   
     <div id="home-map" class="home-map" aria-hidden="false"></div>
+
     <div id="face-far-overlay" class="face-far-overlay" aria-hidden="true">
       <p class="face-far-message font-myTitle">non abbandonare quest'archivio</p>
     </div>
+    <!-- Brand and navigation moved to footer (bottom) -->
 
-    <div class="w-screen h-screen grid grid-cols-8 specialGrid fixed top-0 left-0 h-screen z-[2000]
-    pointer-events-none">
-      <div class="col-start-1 col-end-3 p-10px flex flex-col justify-between text-myBlack z-[1100]">
-        <!-- <button id="toggle-sidebar" class="toggle-btn" aria-expanded="false" aria-label="Apri menu">+</button> -->
-        <div class="home-brand flex flex-col pointer-events-auto">
-          <a href="home.html" class="font-myTitle">Città<br>interrotte</a>
-          <p class="">di Fondazione Scorza</p>
-        </div>
-        <div class="sidebar-links flex flex-col pointer-events-auto">
-          <a href="index.html" class="font-myTitle">Archivio</a>
-          <a href="storia.html" class="font-myTitle">Storia</a>
-          <a href="stat" class="font-myTitle">Statistiche</a>
-        </div>
-
-        <!-- <div class="w-screen h-screen grid grid-cols-8 specialGrid">
-          <div id="home-map" class="home-map col-span-1" aria-hidden="true"></div>
-        </div> -->
+    <!-- Lightbox modal -->
+    <div id="lightbox" class="lightbox" aria-hidden="true">
+      <div class="lb-backdrop" id="lb-backdrop"></div>
+      <div class="lb-title">
+        <a href="home.html" class="font-myTitle">Città<br>interrotte</a>
+        <p class="">di Fondazione Scorza</p>
       </div>
-    </div>
-
-    <!-- Marker modal -->
-    <div id="marker-modal" class="marker-modal" aria-hidden="true">
-      <div class="marker-modal-backdrop" id="marker-modal-backdrop"></div>
-      <button class="lb-close" id="marker-modal-close" type="button">✕</button>
-      <button class="lb-prev" id="marker-modal-prev" type="button">←</button>
-      <button class="lb-next" id="marker-modal-next" type="button">→</button>
+      <button class="lb-close" id="lb-close" type="button">✕</button>
+      <button class="lb-prev" id="lb-prev" type="button">←</button>
+      <button class="lb-next" id="lb-next" type="button">→</button>
       <div class="lb-content">
-        <img class="lb-img" id="marker-modal-img" src="" alt="">
+        <img class="lb-img" id="lb-img" src="" alt="">
         <div class="lb-info">
-          <span class="lb-id" id="marker-modal-id"></span>
-          <div class="lb-desc" id="marker-modal-desc"></div>
+          <span class="lb-id" id="lb-id"></span>
+          <div class="lb-desc" id="lb-desc"></div>
         </div>
       </div>
     </div>
 
     <script src="script.js"></script>
+
+    <!-- Bottom brand + links (identical on every page) -->
+    <div class="site-bottom-brand" style="position:fixed;left:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
+      <div style="line-height:1">
+        <a href="home.html" class="font-myTitle" style="display:inline-block">Città<br>interrotte</a>
+        <p style="margin:0">di Fondazione Scorza</p>
+      </div>
+    </div>
+    <div class="sidebar-links" style="position:fixed;right:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">
+      <div style="display:flex;flex-direction:column">
+        <a href="storia.html" class="font-myTitle text-right">Storia</a>
+        <a href="index.html" class="font-myTitle text-right">Archivio</a>
+        <a href="stat.html" class="font-myTitle text-right">Dati</a>
+      </div>
+    </div>
 
     <!-- Face + Hand preview panel -->
     <div class="face-preview-panel">
