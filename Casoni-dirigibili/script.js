@@ -40,6 +40,8 @@ const lbPrev     = document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
 const galleryScroll = document.querySelector('.gallery-scroll');
+const lbMobilePrev = document.getElementById('lb-mobile-prev');
+const lbMobileNext = document.getElementById('lb-mobile-next');
 
 function formatMetaValue(key, value) {
   if (key === 'causes') {
@@ -1035,8 +1037,8 @@ lightboxCursor.style.zIndex = '10003';
 lightboxCursor.style.pointerEvents = 'none';
 lightboxCursor.style.display = 'none';
 lightboxCursor.style.color = '#FCFCFC';
-lightboxCursor.style.fontFamily = 'Arial, sans-serif';
-lightboxCursor.style.fontSize = '42px';
+lightboxCursor.style.fontFamily = "'SchengenA Regular', sans-serif";
+lightboxCursor.style.fontSize = '32px';
 lightboxCursor.style.fontWeight = '700';
 lightboxCursor.style.lineHeight = '1';
 lightboxCursor.style.userSelect = 'none';
@@ -1045,16 +1047,31 @@ lightboxCursor.style.textShadow = '0 0 4px rgba(0, 0, 0, 0.55)';
 document.body.appendChild(lightboxCursor);
 
 function updateLightboxCursor(e) {
+  if (isMobileIndex()) {
+    hideLightboxCursor();
+    return;
+  }
+
   if (!lbImg || lightbox.getAttribute('aria-hidden') === 'true') return;
 
   const rect = lbImg.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return;
 
-  lightboxCursor.textContent = e.clientX < rect.left + rect.width / 2 ? '<' : '>';
+  lightboxCursor.textContent = e.clientX < rect.left + rect.width / 2 ? '←' : '→';
   lightboxCursor.style.left = `${e.clientX}px`;
   lightboxCursor.style.top = `${e.clientY}px`;
   lightboxCursor.style.display = 'block';
 }
+
+lbMobilePrev?.addEventListener('click', e => {
+  e.stopPropagation();
+  navigateLightbox(-1);
+});
+
+lbMobileNext?.addEventListener('click', e => {
+  e.stopPropagation();
+  navigateLightbox(+1);
+});
 
 function hideLightboxCursor() {
   lightboxCursor.style.display = 'none';

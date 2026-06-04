@@ -395,6 +395,11 @@ button {
         flex-shrink: 0;
       }
 
+/* For the main index lightbox, show id in normal weight (not bold) */
+#lightbox .lb-id {
+  font-weight: normal;
+}
+
 .lb-tags-row {
         display: flex;
         align-items: center;
@@ -429,6 +434,14 @@ button {
 .lb-meta {
         margin-top: 10px;
       }
+
+/* Right-column meta: match lightbox meta styling, left-aligned and slightly lower */
+#right-column-meta,
+.right-column-meta {
+  margin-top: 14px;
+  align-self: flex-start;
+  text-align: left;
+}
 
 /* Horizontal scroll container about */
 .horizontal-scroll {
@@ -536,6 +549,23 @@ button {
   color: var(--myWhite);
   opacity: 0.9;
   text-align: left;
+  align-self: flex-start;
+  box-sizing: border-box;
+  font-size: clamp(12px, 1.2vw, 14px);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.right-column-meta {
+  box-sizing: border-box;
+}
+
+.right-column-caption {
+  box-sizing: border-box;
+  font-size: clamp(12px, 1.0vw, 13px);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .archive-gallery {
@@ -776,6 +806,17 @@ button {
   color: var(--myWhite);
 }
 
+.landing-content,
+.landing-aaa-track {
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.landing-modal.landing-active .landing-content,
+.landing-modal.landing-active .landing-aaa-track {
+  opacity: 1;
+}
+
 .landing-modal.landing-modal-hide {
   animation: landing-modal-fade-out 1.4s ease forwards;
   pointer-events: none;
@@ -947,6 +988,17 @@ button {
 /* LANDING MOBILE responsive */
 
 @media (max-width: 600px) {
+  .landing-content,
+  .landing-aaa-track {
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  .landing-modal.landing-active .landing-content,
+  .landing-modal.landing-active .landing-aaa-track {
+    opacity: 1;
+  }
+
   .landing-content {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3, 1fr);
@@ -1775,5 +1827,42 @@ button {
 
   .lb-meta-row {
     line-height: 1.25;
+  }
+}
+
+.lb-mobile-arrows {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .lb-content {
+    position: relative;
+  }
+
+  .lb-mobile-arrows {
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 6px;
+
+    font-family: 'SchengenA Regular', sans-serif;
+    font-size: inherit;
+    line-height: 1;
+    color: #FCFCFC;
+  }
+
+  .lb-mobile-arrow {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+
+    font: inherit;
+    color: inherit;
+    line-height: inherit;
+    cursor: pointer;
   }
 }

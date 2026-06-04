@@ -3,7 +3,7 @@
     {
       "id": "1",
       "src": "img/rock1.png",
-      "tags": ["parents" , "church"],
+      "tags": ["Family" , "Church"],
       "category": "parents",
       "year": "1965",
       "description": "parents getting married"
@@ -11,7 +11,7 @@
     {
       "id": 2,
       "src": "img/rock2.png",
-      "tags": ["sister","parents"],
+      "tags": ["Family"],
       "category": "pregnancy",
       "year": "1965",
       "description": "mother pregnant"
@@ -19,7 +19,7 @@
     {
       "id": 3,
       "src": "img/rock3.png",
-      "tags": ["parents", "sister", "Abby"],
+      "tags": ["Family", "Abby"],
       "category": "birth",
       "year": "1965",
       "description": "Abby is born on august 26, 1965"
@@ -27,7 +27,7 @@
     {
       "id": 4,
       "src": "img/rock4.png",
-      "tags": ["parents", "sister", "early childhood", "family"],
+      "tags": ["Family", "Abby", "Childhood"],
       "category": "early childhood",
       "year": "1966",
       "description": "family out in the backyard"
@@ -35,7 +35,7 @@
     {
       "id": 5,
       "src": "img/rock5.png",
-      "tags": ["Abby", "parents", "family", "early childhood"],
+      "tags": ["Abby", "Family", "Childhood"],
       "category": "early childhood",
       "year": "1968",
       "description": "Abby cooking with mom"
@@ -43,228 +43,228 @@
     {
       "id": 6,
       "src": "img/rock6.png",
-      "tags": ["objects", "early childhood"],
+      "tags": ["Objects", "Childhood"],
       "year": "1967",
       "description": "childhood drawing by Abby"    },
     {
       "id": 7,
       "src": "img/rock7.png",
-      "tags": ["family","sister", "early childhood", "Abby"],
+      "tags": ["Family", "Childhood", "Abby"],
       "year": "1975",
       "description": "family at disnelyand"    },
     {
       "id": 8,
       "src": "img/rock8.png",
-      "tags": [ "dresses", "church", "family", "early childhood", "Abby"],
+      "tags": [ "Dresses", "Childhood", "Church", "Abby"],
       "year": "1973",
       "description": "Abby's first communion"    },
     {
       "id": 9,
       "src": "img/rock9.png",
-      "tags": ["freinds",  "birthday", "Abby"],
+      "tags": ["Friends",  "Birthday", "Abby"],
       "year": "1983",
       "description": "Abby's 18th birthday party"    },
     {
       "id": 10,
       "src": "img/rock10.png",
-      "tags": ["birthday", "Abby", "parents"],
+      "tags": ["Birthday", "Abby", "Family"],
       "year": "1980",
       "description": "Abby's 16th birthday party"    },
     {
       "id": 11,
       "src": "img/rock11.png",
-      "tags": ["objects" ],
+      "tags": ["Objects" ],
       "year": "1985",
       "description": "objects found in Abby's room"    },
 
     {
       "id": 12,
       "src": "img/rock12.png",
-      "tags": ["drawing","objects" ,"early childhood"],
+      "tags": ["Objects" ,"Childhood"],
       "year": "1967",
       "description": "childhood drawing by Abby"    },
 
     {
       "id": 13,
       "src": "img/rock13.png",
-      "tags": ["dresses"],
+      "tags": ["Dresses"],
       "year": "1979",  
       "description": "Abby's old dress" },
 
     {
       "id": 14,
       "src": "img/rock14.png",
-      "tags": ["objects"],
+      "tags": ["Objects"],
       "year": "1984",
       "description": "found in Abby's room" },
 
    {
       "id": 15,
       "src": "img/rock15.png",
-      "tags": ["friends", "guitar", "concerts"],
+      "tags": ["Friends", "Concerts", "Abby"],
       "year": "1986",
       "description": "Abby wiht a friend at a concert" 
      },
      {
         "id": 16,
         "src": "img/rock16.png",
-        "tags": ["family", "Abby"],
+        "tags": [ "Abby"],
         "year": "1983",
         "description": "Abby's high school graduation" 
        },
        {
           "id": 17,
           "src": "img/rock17.png",
-          "tags": ["dresses", "early childhood"],
+          "tags": ["Dresses"],
           "year": "1968",
           "description": "Abby's old dress" 
         },
         {
           "id": 18,
           "src": "img/rock18.png",
-          "tags": ["family", "early childhood", "guitar", "Abby"],
+          "tags": [ "Childhood", "Guitar", "Abby"],
           "year": "1976",
           "description": "Abby performing for her parents"  
         },
         {
           "id": 19,
           "src": "img/rock19.png",
-          "tags": ["family", "childhood", "guitar","Abby"],
+          "tags": ["Family", "Childhood", "Guitar","Abby", "Concerts"],
           "year": "1975",
           "description": "Abby performing at a school play"  
         },
         {
           "id": 20,
           "src": "img/rock20.png",
-          "tags": ["objects"],
+          "tags": ["Objects"],
           "year": "1986",
           "description": "Abby's magazine collection"  
         },
         {
           "id": 21,
           "src": "img/rock21.png",
-          "tags": ["objects"],
+          "tags": ["Objects"],
           "year": "1986",
           "description": "Abby's record player"  
         },    
   {   "id": 22,
  "src": "img/rock22.png",
- "tags": ["objects" ],
+ "tags": ["Objects" ],
   "year": "1986",
  "description": "Abby's nightstand"  },    
                     
   { "id": 23,
  "src": "img/rock23.png",
- "tags": ["Abby" ],
+ "tags": ["Abby", "Childhood" ],
  "year": "1979",
  "description": "Abby smiling at the camera"  
   },  
   {  "id": 24,
  "src": "img/rock24.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Dresses" ],
 "year": "1983",
  "description": "Abby's old dress"
   },               
      {  "id": 25,
  "src": "img/rock25.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": [ "Childhood", "Abby"],
 "year": "1970",
  "description": "Abby's old dress"
   },   
      {  "id": 26,
  "src": "img/rock26.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Family", "Abby", "Childhood" ],
 "year": "1968",
  "description": "Abby's old dress"
   },   
      {  "id": 27,
  "src": "img/rock27.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Abby", "Childhood", "Dresses" ],
 "year": "1971",
  "description": "Abby's old dress"
   }                     
   ,   
      {  "id": 28,
  "src": "img/rock28.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Family", "Childhood","Abby" ],
 "year": "1975",
  "description": "Abby's old dress"
   },   
      {  "id": 29,
  "src": "img/rock29.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Family"],
 "year": "1967",
  "description": "Abby's old dress"
   },   
      {  "id": 30,
  "src": "img/rock30.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Objects"],
 "year": "1984",
  "description": "Abby's old dress"
   },   
      {  "id": 31,
  "src": "img/rock31.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Concerts", "Abby" ],
 "year": "1986",
  "description": "Abby's old dress"
   },   
      {  "id": 32,
  "src": "img/rock32.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Abby" ],
 "year": "1985",
  "description": "Abby's old dress"
   },   
      {  "id": 33,
  "src": "img/rock33.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Family", "Abby" ],
 "year": "1983",
  "description": "Abby's old dress"
   },   
      {  "id": 34,
  "src": "img/rock34.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Dresses"],
 "year": "1970",
  "description": "Abby's old dress"
   },   
      {  "id": 35,
  "src": "img/rock35.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Objects" ],
 "year": "1972",
  "description": "Abby's old dress"
   },   
      {  "id": 36,
  "src": "img/rock36.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Church", "Childhood", "Abby" ],
 "year": "1969",
  "description": "Abby's old dress"
   },   
      {  "id": 37,
  "src": "img/rock37.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Abby", " Childhood" ],
 "year": "1969",
  "description": "Abby's old dress"
   },   
      {  "id": 38,
  "src": "img/rock38.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Abby", " Childhood" ],
 "year": "1970",
  "description": "Abby's old dress"
   },   
      {  "id": 39,
  "src": "img/rock39.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Objects" ],
 "year": "1983",
  "description": "Abby's old dress"
   },   
      {  "id": 40,
  "src": "img/rock40.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Concerts", "Guitar", "Abby" ],
 "year": "1986",
  "description": "Abby's old dress"
   } ,   
      {  "id": 41,
  "src": "img/rock41.png",
- "tags": ["dresses", "early childhood" ],
+ "tags": ["Abby", " Childhood"],
 "year": "1972",
  "description": "Abby's old dress"
   }                                                                                                                                                             

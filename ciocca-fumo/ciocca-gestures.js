@@ -410,10 +410,10 @@ function isIndexMiddleDown(hand) {
 
   const indexDown = indexTip.y > indexPip.y + 15;
   const middleDown = middleTip.y > middlePip.y + 15;
-  const ringNotDown = ringTip.y < ringPip.y + 30;
-  const pinkyNotDown = pinkyTip.y < pinkyPip.y + 30;
+  //const ringNotDown = ringTip.y < ringPip.y + 30;
+  //const pinkyNotDown = pinkyTip.y < pinkyPip.y + 30;
 
-  return indexDown && middleDown && ringNotDown && pinkyNotDown;
+  return indexDown && middleDown;
 }
 
 function isIndexExtended(hand) {
@@ -454,8 +454,8 @@ function isIndexPointLeftChest(hand, frameW, frameH) {
     return false;
   }
 
-  const chestYMin = frameH * 0.2;
-  const chestYMax = frameH * 0.78;
+  const chestYMin = frameH * 0.6;
+  const chestYMax = frameH * 1;
   const inChestBand = indexTip.y >= chestYMin && indexTip.y <= chestYMax;
 
   // Mirror view: left chest is on the left side of the frame
@@ -507,9 +507,10 @@ function isPackPointingGesture(hand, frameW, frameH) {
 }
 
 function isPortraitGestureBusy(hand) {
+  console.log('isPortraitGestureBusy', isIndexMiddleDown(hand));
   return isIndexMiddleDown(hand)
-    || doubleDownDetector.phase !== 'idle'
-    || doubleDownDetector.strokeCount > 0;
+    /* || doubleDownDetector.phase !== 'idle'
+    || doubleDownDetector.strokeCount > 0; */
 }
 
 function shouldBlockOpenHandSwipe(hand, frameW, frameH) {
@@ -803,7 +804,7 @@ async function detectCategoryGestures() {
 
     if (isPortraitGestureActive()) {
       try {
-        const hands = await handDetector.estimateHands(video, { flipHorizontal: true });
+        const hands = await handDetector.estimateHands(video, { flipHorizontal: false });
         const frameW = canvas.width;
         const frameH = canvas.height;
 
@@ -812,9 +813,16 @@ async function detectCategoryGestures() {
 
           if (handleCategorySwitchGesture(hand, frameW, frameH, ctx)) {
             /* category opened via shared gestures */
-          } else if (isPortraitGestureBusy(hand)) {
+          } else if (isPortraitGestureBusy(hand)) { 
+
             openHandSwipeDetector.reset();
             drawHandDebug(hand, ctx, 'portrait');
+
+            console.log('SHOULD OPEN PORTRAITS');
+            setGestureStatus(window.isCategoryImagesRevealed?.()
+                ? '↓↓ gesture — next portrait'
+                : '↓↓ gesture — images revealed');
+            //setGestureStatus('Index + middle ↓ — ready for stroke');
 
             if (doubleDownDetector.update(hand)) {
               setGestureStatus(window.isCategoryImagesRevealed?.()
@@ -829,7 +837,8 @@ async function detectCategoryGestures() {
             openHandSwipeDetector.reset();
             drawHandDebug(hand, ctx, 'portrait');
           }
-        } else {
+        } else { 
+          
           openHandSwipeDetector.reset();
           doubleDownDetector.reset();
           leftChestDetector.reset();
@@ -840,7 +849,7 @@ async function detectCategoryGestures() {
       }
     } else if (isPackGestureActive()) {
       try {
-        const hands = await handDetector.estimateHands(video, { flipHorizontal: true });
+        const hands = await handDetector.estimateHands(video, { flipHorizontal: false });
         const frameW = canvas.width;
         const frameH = canvas.height;
 
@@ -879,7 +888,7 @@ async function detectCategoryGestures() {
       }
     } else if (isAboutScrollActive()) {
       try {
-        const hands = await handDetector.estimateHands(video, { flipHorizontal: true });
+        const hands = await handDetector.estimateHands(video, { flipHorizontal: false });
         const frameW = canvas.width;
         const frameH = canvas.height;
 
@@ -906,7 +915,7 @@ async function detectCategoryGestures() {
       }
     } else if (isAdsGestureActive()) {
       try {
-        const hands = await handDetector.estimateHands(video, { flipHorizontal: true });
+        const hands = await handDetector.estimateHands(video, { flipHorizontal: false });
         const frameW = canvas.width;
         const frameH = canvas.height;
 

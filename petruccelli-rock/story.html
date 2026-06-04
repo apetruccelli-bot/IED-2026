@@ -135,7 +135,7 @@
 
       <div class="story-modal" id="storyModal">
         <div class="modal-card">
-          <!-- <button class="modal-close" id="modalClose">×</button> -->
+          <button class="modal-close" id="modalClose">×</button> 
 
           <div class="modal-image-wrap">
             <img src="" alt="" id="modalImage" class="modal-image" />
@@ -425,18 +425,37 @@
         margin: 0;
       }
 
-      .modal-close {
-        position: absolute;
-        top: 18px;
-        right: 24px;
-        border: none;
-        background: transparent;
-        font-size: 32px;
-        line-height: 1;
-        cursor: pointer;
-        color: #111;
-        z-index: 2;
-      }
+    .modal-close {
+  position: fixed;
+  top: 30px;
+  right: 40px;
+
+  background: white;
+  border: 1px solid #1a1a1a;
+  border-radius: 50%;
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: 'Repro', monospace;
+  font-size: 18px;
+  line-height: 1;
+
+  color: #1a1a1a;
+  cursor: pointer;
+
+  z-index: 999;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: #1a1a1a;
+  color: white;
+}
     </style>
 
     <script>
@@ -510,7 +529,7 @@
         modal.classList.remove('active');
       }
 
-      //modalClose.addEventListener('click', closeModal);
+      modalClose.addEventListener('click', closeModal);
 
       modal.addEventListener('click', (event) => {
         if (event.target === modal) {
