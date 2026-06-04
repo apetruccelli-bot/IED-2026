@@ -509,8 +509,8 @@
         aboutLightboxCursor.style.pointerEvents = 'none';
         aboutLightboxCursor.style.display = 'none';
         aboutLightboxCursor.style.color = '#FCFCFC';
-        aboutLightboxCursor.style.fontFamily = 'Arial, sans-serif';
-        aboutLightboxCursor.style.fontSize = '42px';
+        aboutLightboxCursor.style.fontFamily = "'SchengenA Regular', sans-serif";
+        aboutLightboxCursor.style.fontSize = '32px';
         aboutLightboxCursor.style.fontWeight = '700';
         aboutLightboxCursor.style.lineHeight = '1';
         aboutLightboxCursor.style.userSelect = 'none';
@@ -524,7 +524,7 @@
           const rect = aboutLbImg.getBoundingClientRect();
           if (rect.width === 0 || rect.height === 0) return;
 
-          aboutLightboxCursor.textContent = e.clientX < rect.left + rect.width / 2 ? '<' : '>';
+          aboutLightboxCursor.textContent = e.clientX < rect.left + rect.width / 2 ? '←' : '→';
           aboutLightboxCursor.style.left = `${e.clientX}px`;
           aboutLightboxCursor.style.top = `${e.clientY}px`;
           aboutLightboxCursor.style.display = 'block';

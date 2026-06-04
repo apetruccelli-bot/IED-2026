@@ -806,6 +806,17 @@ button {
   color: var(--myWhite);
 }
 
+.landing-content,
+.landing-aaa-track {
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.landing-modal.landing-active .landing-content,
+.landing-modal.landing-active .landing-aaa-track {
+  opacity: 1;
+}
+
 .landing-modal.landing-modal-hide {
   animation: landing-modal-fade-out 1.4s ease forwards;
   pointer-events: none;
@@ -977,6 +988,17 @@ button {
 /* LANDING MOBILE responsive */
 
 @media (max-width: 600px) {
+  .landing-content,
+  .landing-aaa-track {
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  .landing-modal.landing-active .landing-content,
+  .landing-modal.landing-active .landing-aaa-track {
+    opacity: 1;
+  }
+
   .landing-content {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3, 1fr);
