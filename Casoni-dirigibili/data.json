@@ -888,6 +888,19 @@
     },
 
     {
+      "id": 106,
+      "src": "img/giornali/giornale (16).png",
+      "category": "newspapers",
+      "tags": ["flames", "smoke", "explosion", "text", "side view", "front view"],
+      "causes": ["engine"],
+      "country": "Italy",
+      "year": "1934",
+      "people": false,
+      "victims": 22,
+      "description": "Gazzetta del Mattino extraordinary edition on the Italia N.7 disaster at Superga; the airship caught fire during a demonstration manoeuvre near Turin, crashed into the hillside, and left only four survivors."
+    },
+
+    {
       "id": 75,
       "src": "img/disegni/disegno (1).png",
       "category": "drawings",
@@ -1075,7 +1088,7 @@
       "year": "1931",
       "victims": 18,
       "people": true,
-      "description": "I note the Roma II at the edge of collapse; smoke rises from the lower hull while the envelope remains partially inflated, suggesting fire began before full ground contact."
+      "description": "I note the Aurelia II at the edge of collapse; smoke rises from the lower hull while the envelope remains partially inflated, suggesting fire began before full ground contact."
     },
 
     {
@@ -1114,7 +1127,7 @@
       "year": "1935",
       "victims": 22,
       "people": true,
-      "description": "Airship Empire lifting at a dangerous angle after ignition near the rear engine bay; smoke remains dense at ground level while the forward envelope is still intact."
+      "description": "Airship Atlantic Ranger lifting at a dangerous angle after ignition near the rear engine bay; smoke remains dense at ground level while the forward envelope is still intact."
     },
 
     {
@@ -1210,7 +1223,7 @@
       "src": "img/about/about (10).png",
       "country": "Poland",
       "year": "1926",
-      "description": "This image is presented as the first known photograph of Friedrich Adler at the site of an airship incident."
+      "description": "Recognized as the first photograph showing Friedrich Adler at the scene of an airship accident."
     }
   ]
 }
