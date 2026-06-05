@@ -60,7 +60,7 @@ const archiveRows = [
   { anno: '1965', autore: 'Varani', regione: 'Sicilia', abitanti: 'Tra 10 e 100', documento: 'Note di campo' },
   { anno: '1966', autore: 'Fiore', regione: 'Puglia', abitanti: 'Tra 100 e 1000', documento: '' },
   { anno: '1967', autore: 'Maffei', regione: 'Campania', abitanti: 'Piu di 1000', documento: '' },
-  { anno: '1968', autore: 'Ferri', regione: 'Molise', abitanti: '', documento: '' },
+  { anno: '1968', autore: 'Ferri', regione: '', abitanti: '', documento: '' },
 ];
 
 let enrichedRows = [];
@@ -178,41 +178,45 @@ function renderFilters() {
   const columns = buildFilterColumns();
 
   rowsHost.innerHTML = columns
-    .map(
-      ({ key, label, values }) => `
-      <div class="flex flex-col">
-        ${key === 'regione'
-          ? values
-              .map((v) => {
-                const towns = regionGroups[v] || [];
-                return `
-                  <div class="region-group">
-                    <button
-                      type="button"
-                      class="w-full text-left text-justify cursor-pointer select-none"
-                      data-filter-key="${escapeHtml(key)}"
-                      data-filter-value="${escapeHtml(v)}"
-                      data-region-toggle="${escapeHtml(v)}"
-                      aria-expanded="false"
-                    >
-                      ${escapeHtml(v)}
-                    </button>
-                    <div class="region-towns hidden pl-10px pt-10px pb-10px" data-region-town-list="${escapeHtml(v)}">
-                      ${towns.map((town) => `<p class="text-justify opacity-50 cursor-pointer select-none" data-filter-key="paese" data-filter-value="${escapeHtml(town)}">${escapeHtml(town)}</p>`).join('')}
-                    </div>
+  .map(
+    ({ key, label, values }) => `
+    <div class="flex flex-col ${key === 'year' ? 'archive-filter-column-year' : ''}">
+      ${key === 'regione'
+        ? values
+            .map((v) => {
+              const towns = regionGroups[v] || [];
+              return `
+                <div class="region-group">
+                  <button
+                    type="button"
+                    class="w-full text-left text-justify cursor-pointer select-none"
+                    data-filter-key="${escapeHtml(key)}"
+                    data-filter-value="${escapeHtml(v)}"
+                    data-region-toggle="${escapeHtml(v)}"
+                    aria-expanded="false"
+                  >
+                    ${escapeHtml(v)}
+                  </button>
+                  <div class="region-towns hidden pl-10px pt-10px pb-10px" data-region-town-list="${escapeHtml(v)}">
+                    ${towns.map((town) => `<p class="text-justify opacity-50 cursor-pointer select-none" data-filter-key="paese" data-filter-value="${escapeHtml(town)}">${escapeHtml(town)}</p>`).join('')}
                   </div>
-                `;
-              })
-              .join('')
-          : values
-              .map(
-                (v) =>
-                  `<p class="text-justify cursor-pointer select-none" data-filter-key="${escapeHtml(key)}" data-filter-value="${escapeHtml(v)}">${escapeHtml(v)}</p>`
-              )
-              .join('')}
-      </div>`
-    )
-    .join('');
+                </div>
+              `;
+            })
+            .join('')
+        : values
+            .map(
+              (v) => {
+                const year = Number(v);
+                const isScrollableYear = key === 'year' && !Number.isNaN(year) && year > 1970;
+
+                return `<p class="text-justify cursor-pointer select-none ${isScrollableYear ? 'archive-year-over-1970' : ''}" data-filter-key="${escapeHtml(key)}" data-filter-value="${escapeHtml(v)}">${escapeHtml(v)}</p>`;
+              }
+            )
+            .join('')}
+    </div>`
+  )
+  .join('');
 
   rowsHost.querySelectorAll('[data-filter-key][data-filter-value]').forEach((el) => {
     el.addEventListener('click', () => {
@@ -541,90 +545,148 @@ document.addEventListener('DOMContentLoaded', initializePageTransition);
 document.addEventListener('DOMContentLoaded', initializeStoryBackToTop);
 
 
-// Handle smooth scrolling inside the main scroll container for section anchors
-(function(){
-  document.addEventListener('DOMContentLoaded', function(){
-    const container = document.getElementById('main-scroll');
-    if (!container) return;
-    const headerOffset = 80; // keep in sync with CSS
-    document.querySelectorAll('a[href^="#sezione_"]').forEach(a => {
-      a.addEventListener('click', function(e){
-        e.preventDefault();
+function getStoryScroller() {
+  const mainScroll = document.getElementById('main-scroll');
+  if (!mainScroll) return null;
+
+  const style = window.getComputedStyle(mainScroll);
+  const useMainScroll =
+    mainScroll.scrollHeight > mainScroll.clientHeight + 2 &&
+    /(auto|scroll)/.test(style.overflowY);
+
+  const getWindowTop = () =>
+    window.pageYOffset ||
+    document.documentElement.scrollTop ||
+    document.body.scrollTop ||
+    0;
+
+  return {
+    mainScroll,
+    useMainScroll,
+    root: useMainScroll ? mainScroll : null,
+
+    getTop() {
+      return useMainScroll ? mainScroll.scrollTop : getWindowTop();
+    },
+
+    getMaxTop() {
+      if (useMainScroll) {
+        return Math.max(0, mainScroll.scrollHeight - mainScroll.clientHeight);
+      }
+
+      return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    },
+
+    scrollTo(top, behavior = 'smooth') {
+      const safeTop = Math.max(0, top);
+
+      if (useMainScroll) {
+        mainScroll.scrollTo({ top: safeTop, behavior });
+      } else {
+        window.scrollTo({ top: safeTop, behavior });
+      }
+    },
+
+    getViewportRect() {
+      if (useMainScroll) return mainScroll.getBoundingClientRect();
+      return { top: 0, bottom: window.innerHeight };
+    },
+
+    getTargetTop(target, headerOffset = 80) {
+      if (useMainScroll) {
+        const containerRect = mainScroll.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+        return mainScroll.scrollTop + (targetRect.top - containerRect.top) - headerOffset;
+      }
+
+      return getWindowTop() + target.getBoundingClientRect().top - headerOffset;
+    },
+
+    addScrollListener(callback) {
+      const target = useMainScroll ? mainScroll : window;
+      target.addEventListener('scroll', callback, { passive: true });
+    },
+  };
+}
+
+// Handle smooth scrolling for section anchors, both with body scroll and #main-scroll scroll.
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    const scroller = getStoryScroller();
+    if (!scroller) return;
+
+    const headerOffset = 80;
+
+    document.querySelectorAll('a[href^="#sezione_"]').forEach((link) => {
+      link.addEventListener('click', function (event) {
         const id = this.getAttribute('href').slice(1);
         const target = document.getElementById(id);
         if (!target) return;
-        const containerRect = container.getBoundingClientRect();
-        const targetRect = target.getBoundingClientRect();
-        const scrollTop = container.scrollTop + (targetRect.top - containerRect.top) - headerOffset;
-        container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+
+        event.preventDefault();
+        scroller.scrollTo(scroller.getTargetTop(target, headerOffset), 'smooth');
       });
     });
   });
 })();
 
-// Fade-in sections while scrolling inside the story page container
-(function(){
-  document.addEventListener('DOMContentLoaded', function(){
-    const mainScroll = document.getElementById('main-scroll');
-    const storyGrid = mainScroll?.querySelector('div.grid.grid-cols-2.gap-10px.pt-30px.pl-10px.pr-10px.pb-30px');
-    if (!mainScroll || !storyGrid) return;
+// Fade-in sections while scrolling.
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    const scroller = getStoryScroller();
+    if (!scroller) return;
+
+    const mainScroll = scroller.mainScroll;
+    const storyGrid =
+      mainScroll.querySelector('.story-fade-grid') ||
+      Array.from(mainScroll.children).find((el) => el.matches?.('.grid.grid-cols-2'));
+
+    if (!storyGrid) return;
 
     const storyItems = Array.from(storyGrid.children).filter((element) => element.nodeType === 1);
     if (!storyItems.length) return;
 
     storyItems.forEach((element) => element.classList.add('story-fade'));
-    // Fallback: if IntersectionObserver is unavailable, reveal all
-    if (!('IntersectionObserver' in window)) {
+
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !('IntersectionObserver' in window)
+    ) {
       storyItems.forEach((element) => element.classList.add('story-fade--visible'));
       return;
     }
 
-    // Track last scroll position to detect direction
-    let lastScrollTop = mainScroll.scrollTop || 0;
-
-    // Mark items already visible on load as visible
-    const containerRect = mainScroll.getBoundingClientRect();
-    storyItems.forEach((el) => {
-      const r = el.getBoundingClientRect();
-      if (r.top < containerRect.bottom && r.bottom > containerRect.top) {
-        el.classList.add('story-fade--visible');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('story-fade--visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        root: scroller.root,
+        threshold: 0.15,
+        rootMargin: '0px 0px -10% 0px',
       }
-    });
+    );
 
-    const observer = new IntersectionObserver((entries) => {
-      const currentScroll = mainScroll.scrollTop || 0;
-      const scrollingDown = currentScroll > lastScrollTop;
-
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && scrollingDown) {
-          entry.target.classList.add('story-fade--visible');
-          observer.unobserve(entry.target);
-        }
-      });
-
-      lastScrollTop = currentScroll;
-    }, {
-      root: mainScroll,
-      threshold: 0.18,
-      rootMargin: '0px 0px -10% 0px',
-    });
-
-    storyItems.forEach((element) => {
-      if (!element.classList.contains('story-fade--visible')) observer.observe(element);
-    });
+    storyItems.forEach((element) => observer.observe(element));
   });
 })();
 
-// Progressive opacity for sticky section anchors while scrolling inside the story page
-(function(){
-  document.addEventListener('DOMContentLoaded', function(){
-    const mainScroll = document.getElementById('main-scroll');
-    if (!mainScroll) return;
+// Progressive opacity for sticky section anchors.
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    const scroller = getStoryScroller();
+    if (!scroller) return;
 
+    const mainScroll = scroller.mainScroll;
     const navLinks = Array.from(mainScroll.querySelectorAll('.sticky a[href^="#sezione_"]'));
     if (!navLinks.length) return;
-    const headerOffset = 80;
 
+    const headerOffset = 80;
     const sectionTargets = navLinks
       .map((link) => {
         const targetId = link.getAttribute('href')?.slice(1);
@@ -634,28 +696,36 @@ document.addEventListener('DOMContentLoaded', initializeStoryBackToTop);
       .filter(Boolean);
 
     const updateAnchorOpacity = () => {
-      const scrollTop = mainScroll.scrollTop || 0;
+      const scrollTop = scroller.getTop();
       const currentPosition = scrollTop + headerOffset;
-      const containerRect = mainScroll.getBoundingClientRect();
+      const containerRect = scroller.getViewportRect();
+
       let activeIndex = -1;
 
       sectionTargets.forEach(({ target }, index) => {
-        if (!target) return;
-        const sectionTop = target.getBoundingClientRect().top - containerRect.top + scrollTop;
-        const sectionStart = Math.max(0, sectionTop - headerOffset);
-        if (currentPosition >= sectionStart) {
-          activeIndex = index;
+        let sectionTop;
+
+        if (scroller.useMainScroll) {
+          sectionTop = target.getBoundingClientRect().top - containerRect.top + scrollTop;
+        } else {
+          sectionTop = target.getBoundingClientRect().top + scrollTop;
         }
+
+        const sectionStart = Math.max(0, sectionTop - headerOffset);
+        if (currentPosition >= sectionStart) activeIndex = index;
       });
 
+      // CHANGE OPACOITY TO STICKY ANCHORS AS IT SCROLLS
       sectionTargets.forEach(({ link }, index) => {
-        link.style.opacity = index === activeIndex ? '1' : '.3';
+        //link.style.opacity = index === activeIndex ? '1' : '.3';
+        link.style.color = index === activeIndex ? '#000000' : '#909090';
       });
     };
 
     let rafId = 0;
     const requestUpdate = () => {
       if (rafId) return;
+
       rafId = window.requestAnimationFrame(() => {
         rafId = 0;
         updateAnchorOpacity();
@@ -663,62 +733,46 @@ document.addEventListener('DOMContentLoaded', initializeStoryBackToTop);
     };
 
     updateAnchorOpacity();
-    mainScroll.addEventListener('scroll', requestUpdate, { passive: true });
+    scroller.addScrollListener(requestUpdate);
     window.addEventListener('resize', requestUpdate, { passive: true });
   });
 })();
 
 function initializeStoryBackToTop() {
-  if (!document.body.classList.contains('story-page') && !document.body.classList.contains('stat-page')) return;
+  if (
+    !document.body.classList.contains('story-page') &&
+    !document.body.classList.contains('stat-page')
+  ) {
+    return;
+  }
 
-  const mainScroll = document.getElementById('main-scroll');
+  const scroller = getStoryScroller();
   const backToTopButton = document.querySelector('[data-story-back-to-top]');
-  if (!mainScroll || !backToTopButton) return;
+  if (!scroller || !backToTopButton) return;
 
   const mobileQuery = window.matchMedia('(max-width: 1119px)');
 
-  const getScrollThreshold = () => {
-    const scrollableDistance = Math.max(0, mainScroll.scrollHeight - mainScroll.clientHeight);
-    return scrollableDistance * 0.5;
-  };
-
   const updateButtonVisibility = () => {
-    const shouldShow = mobileQuery.matches && (mainScroll.scrollTop || 0) >= getScrollThreshold();
+    const shouldShow = mobileQuery.matches && scroller.getTop() >= scroller.getMaxTop() * 0.5;
+
     backToTopButton.classList.toggle('is-visible', shouldShow);
     backToTopButton.setAttribute('aria-hidden', String(!shouldShow));
   };
 
-  const animateScrollToTop = () => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      mainScroll.scrollTop = 0;
-      return;
-    }
-
-    const start = mainScroll.scrollTop || 0;
-    const duration = 260;
-    const startTime = performance.now();
-
-    const step = (now) => {
-      const progress = Math.min(1, (now - startTime) / duration);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      mainScroll.scrollTop = start * (1 - eased);
-
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      }
-    };
-
-    window.requestAnimationFrame(step);
+  const scrollToTop = () => {
+    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    scroller.scrollTo(0, behavior);
   };
 
   backToTopButton.addEventListener('click', (event) => {
     event.preventDefault();
-    animateScrollToTop();
+    scrollToTop();
   });
 
   let rafId = 0;
   const requestUpdate = () => {
     if (rafId) return;
+
     rafId = window.requestAnimationFrame(() => {
       rafId = 0;
       updateButtonVisibility();
@@ -726,109 +780,31 @@ function initializeStoryBackToTop() {
   };
 
   mobileQuery.addEventListener('change', requestUpdate);
-  mainScroll.addEventListener('scroll', requestUpdate, { passive: true });
+  scroller.addScrollListener(requestUpdate);
   window.addEventListener('resize', requestUpdate, { passive: true });
 
   updateButtonVisibility();
 }
 
 function initializeStatisticsPage() {
-  // Use main scroll container as root for stats if explicit wrapper is not present
+  if (!document.body.classList.contains('stat-page')) return;
+
   const statPage = document.getElementById('main-scroll') || document.body;
-
-  const formatNumber = (value) => new Intl.NumberFormat('it-IT').format(Math.round(value));
-  const clampPercentage = (value) => Math.max(4, Math.min(100, value));
-
-  const data = {
-    population: [
-      { town: 'Zagara', start: 1842, today: 312 },
-      { town: 'Santa Rena', start: 986, today: 141 },
-      { town: 'Monteferro', start: 1204, today: 226 },
-      { town: 'Serra Vasta', start: 1530, today: 318 },
-      { town: 'Valle Cupa', start: 764, today: 82 },
-      { town: 'Borgo Cupo', start: 692, today: 57 },
-      { town: 'Rocca Secca', start: 1106, today: 149 },
-    ],
-    age: [
-      { label: '0–14 anni', historic: 26, today: 3 },
-      { label: '15–35 anni', historic: 31, today: 7 },
-      { label: '36–64 anni', historic: 29, today: 28 },
-      { label: '65+ anni', historic: 14, today: 62 },
-    ],
-    births: [
-      { town: 'Zagara', start: 38, last: 1 },
-      { town: 'Santa Rena', start: 21, last: 0 },
-      { town: 'Monteferro', start: 27, last: 2 },
-      { town: 'Valle Cupa', start: 14, last: 0 },
-      { town: 'Borgo Cupo', start: 12, last: 0 },
-      { town: 'Piana Morta', start: 9, last: 0 },
-    ],
+  const formatInteger = (value) => new Intl.NumberFormat('it-IT').format(Math.max(0, Math.round(value)));
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const statData = {
     houses: [
-      { town: 'Zagara', built: 612, occupied: 189, active: 74 },
-      { town: 'Monteferro', built: 431, occupied: 102, active: 39 },
-      { town: 'Borgo Cupo', built: 288, occupied: 41, active: 12 },
-    ],
-    services: [
-      { town: 'Zagara', school: 'chiusa', postOffice: 'parziale', clinic: 'mensile', transport: 'ridotto', groceries: '1' },
-      { town: 'Santa Rena', school: 'chiusa', postOffice: 'chiuso', clinic: 'assente', transport: 'assente', groceries: '0' },
-      { town: 'Monteferro', school: 'chiusa', postOffice: 'parziale', clinic: 'assente', transport: 'ridotto', groceries: '1' },
-      { town: 'Borgo Cupo', school: 'chiusa', postOffice: 'chiuso', clinic: 'assente', transport: 'assente', groceries: '0' },
-    ],
-    continuity: [
-      { town: 'Zagara', value: 18 },
-      { town: 'Monteferro', value: 22 },
-      { town: 'Serra Vasta', value: 31 },
-      { town: 'Santa Rena', value: 12 },
-      { town: 'Borgo Cupo', value: 7 },
-      { town: 'Piana Morta', value: 4 },
+      { town: 'ZAGARA', built: 612, occupied: 189, active: 74 },
+      { town: 'MONTEFERRO', built: 431, occupied: 102, active: 39 },
+      { town: 'BORGO CUPO', built: 288, occupied: 41, active: 12 },
     ],
   };
 
-  const birthsHost = document.getElementById('births-chart');
-  if (birthsHost) {
-    birthsHost.classList.add('stat-births-grid');
-    birthsHost.innerHTML = data.births
-      .map((item) => {
-        const width = clampPercentage((item.last / item.start) * 100);
-        return `
-          <div class="stat-birth-card">
-            <div class="stat-town">${item.town}</div>
-            <div class="stat-birth-values">
-              <div>
-                <span class="stat-cell-label">1964</span>
-                <div class="stat-value">${formatNumber(item.start)}</div>
-              </div>
-              <div>
-                <span class="stat-cell-label">ultimo anno</span>
-                <div class="stat-value" data-stat-drift-type="births" data-base="${item.last}" data-current="${item.last}" data-min="0">${formatNumber(item.last)}</div>
-              </div>
-            </div>
-            <div class="stat-bar-track"><div class="stat-bar-fill stat-bar-fill--today" data-stat-fill="births" style="width:${width}%"></div></div>
-          </div>
-        `;
-      })
-      .join('');
-  }
-
   const housesHost = document.getElementById('houses-chart');
-  if (housesHost) {
+  if (housesHost && !housesHost.querySelector('svg')) {
     housesHost.innerHTML = `
-      <svg viewBox="0 0 520 360" xmlns="http://www.w3.org/2000/svg" class="block w-full h-auto" aria-labelledby="houses-chart-title houses-chart-desc" role="img" style="font-family: 'Diatype', serif;">
+      <svg viewBox="0 60 520 290" xmlns="http://www.w3.org/2000/svg" class="block w-full h-auto" aria-labelledby="houses-chart-title houses-chart-desc" role="img" style="font-family: 'Diatype', serif;">
         <style type="text/css"><![CDATA[
-          @font-face {
-            font-family: 'Diatype';
-            src: url('font/ABCDiatype-Regular-Trial.woff2') format('woff2');
-            font-style: normal;
-            font-weight: normal;
-            font-display: swap;
-          }
-          @font-face {
-            font-family: 'Diatype-Regular';
-            src: url('font/ABCDiatype-Regular-Trial.woff2') format('woff2');
-            font-style: normal;
-            font-weight: normal;
-            font-display: swap;
-          }
           text {
             font-family: 'Diatype-Mono', 'Diatype', sans-serif !important;
             font-weight: 400 !important;
@@ -838,30 +814,16 @@ function initializeStatisticsPage() {
             text-transform: none !important;
             font-size: 10px !important;
           }
-          .small {
-            font-size: 11px !important;
-          }
-          .axis {
-            stroke: #1E1E1E;
-            stroke-width: 1;
-          }
-          .b1 {
-            fill: #1E1E1E;
-          }
-          .b2 {
-            fill: #5C5C5C;
-          }
-          .b3 {
-            fill: #A0A0A0;
-          }
+          .small { font-size: 11px !important; }
+          .axis { stroke: #1E1E1E; stroke-width: 1; }
+          .b1 { fill: #1E1E1E; }
+          .b2 { fill: #5C5C5C; }
+          .b3 { fill: #A0A0A0; }
         ]]></style>
-
         <title id="houses-chart-title">Case occupate</title>
         <desc id="houses-chart-desc">Confronto tra case costruite, occupate e attive per Zagara, Monteferro e Borgo Cupo.</desc>
-
         <line x1="60" y1="300" x2="490" y2="300" class="axis"/>
         <line x1="60" y1="100" x2="60" y2="300" class="axis"/>
-
         <rect x="90" y="145" width="28" height="155" class="b1"/>
         <rect x="123" y="250" width="28" height="50" class="b2"/>
         <rect x="156" y="280" width="28" height="20" class="b3"/>
@@ -869,7 +831,6 @@ function initializeStatisticsPage() {
         <text x="120" y="243" class="small">189</text>
         <text x="155" y="273" class="small">74</text>
         <text x="90" y="325" class="small">ZAGARA</text>
-
         <rect x="240" y="190" width="28" height="110" class="b1"/>
         <rect x="273" y="270" width="28" height="30" class="b2"/>
         <rect x="306" y="290" width="28" height="10" class="b3"/>
@@ -877,7 +838,6 @@ function initializeStatisticsPage() {
         <text x="270" y="263" class="small">102</text>
         <text x="305" y="283" class="small">39</text>
         <text x="235" y="325" class="small">MONTEFERRO</text>
-
         <rect x="390" y="228" width="28" height="72" class="b1"/>
         <rect x="423" y="290" width="28" height="10" class="b2"/>
         <rect x="456" y="296" width="28" height="4" class="b3"/>
@@ -885,118 +845,424 @@ function initializeStatisticsPage() {
         <text x="423" y="283" class="small">41</text>
         <text x="455" y="290" class="small">12</text>
         <text x="390" y="325" class="small">BORGO CUPO</text>
+   <rect x="150" y="72" width="7" height="7" class="b1"/>
+<text x="165" y="80" class="small">COSTRUITE</text>
 
-        <text x="130" y="85" class="small">■ COSTRUITE</text>
-        <text x="260" y="85" class="small">■ OCCUPATE</text>
-        <text x="390" y="85" class="small">■ ATTIVE</text>
+<rect x="265" y="72" width="7" height="7" class="b2"/>
+<text x="280" y="80" class="small">OCCUPATE</text>
+
+<rect x="380" y="72" width="7" height="7" class="b3"/>
+<text x="395" y="80" class="small">ATTIVE</text>
       </svg>
     `;
   }
 
-  const servicesHost = document.getElementById('services-chart');
-  if (servicesHost) {
-    const serviceHead = `
-      <div class="stat-services-head">
-        <span>Paese</span>
-        <span>Scuola</span>
-        <span>Ufficio postale</span>
-        <span>Ambulatorio</span>
-        <span>Trasporto</span>
-        <span>Alimentari</span>
-      </div>
-    `;
+  const charts = Array.from(statPage.querySelectorAll('[data-stat-chart]'));
+  const liveNodes = [];
 
-    const serviceCell = (value) => {
-      const normalized = normalize(value);
-      let modifier = 'stat-service-cell--empty';
-      if (normalized === '1') modifier = 'stat-service-cell--on';
-      else if (normalized === '0' || normalized.includes('assente')) modifier = 'stat-service-cell--off';
-      else if (normalized.includes('chius')) modifier = 'stat-service-cell--off';
-      else if (normalized.includes('parziale') || normalized.includes('ridotto') || normalized.includes('mensile')) modifier = 'stat-service-cell--partial';
+  const getSvg = (chart) => chart.matches('svg') ? chart : chart.querySelector('svg');
+  const numberPattern = /^\s*(\d+(?:[.,]\d+)?)(%)?\s*$/;
+  const trailingNumberPattern = /^(.*?)(\d+(?:[.,]\d+)?)(%)?\s*$/;
 
-      return `<span class="stat-service-cell ${modifier}">${value || '—'}</span>`;
+  const parseNumericText = (text) => {
+    const match = String(text || '').trim().match(numberPattern);
+    if (!match) return null;
+    return {
+      value: Number(match[1].replace(',', '.')),
+      suffix: match[2] || '',
+      decimals: match[1].includes('.') || match[1].includes(',') ? 1 : 0,
+      prefix: '',
     };
+  };
 
-    servicesHost.innerHTML = `
-      <div class="stat-services-table">
-        ${serviceHead}
-        ${data.services
-          .map((item) => `
-            <div class="stat-services-row">
-              <span class="stat-town">${item.town}</span>
-              ${serviceCell(item.school)}
-              ${serviceCell(item.postOffice)}
-              ${serviceCell(item.clinic)}
-              ${serviceCell(item.transport)}
-              ${serviceCell(item.groceries)}
-            </div>
-          `)
-          .join('')}
-      </div>
-    `;
-  }
-
-  const continuityHost = document.getElementById('continuity-chart');
-  if (continuityHost) {
-    const continuityLabel = (value) => {
-      if (value >= 70) return 'continuità attiva';
-      if (value >= 40) return 'continuità fragile';
-      if (value >= 15) return 'continuità terminale';
-      return 'continuità non rilevabile';
+  const parseTrailingNumericText = (text) => {
+    const match = String(text || '').trim().match(trailingNumberPattern);
+    if (!match) return null;
+    return {
+      prefix: match[1] || '',
+      value: Number(match[2].replace(',', '.')),
+      suffix: match[3] || '',
+      decimals: match[2].includes('.') || match[2].includes(',') ? 1 : 0,
     };
+  };
 
-    continuityHost.innerHTML = `
-      ${data.continuity
-        .map((item) => {
-          const width = clampPercentage(item.value);
-          return `
-            <div class="stat-continuity-row">
-              <div class="stat-town">${item.town}</div>
-              <div class="stat-continuity-value">
-                <span class="stat-cell-label">indice</span>
-                <div class="stat-bar-track"><div class="stat-bar-fill" data-stat-fill="continuity" style="width:${width}%"></div></div>
-                <div class="stat-value" data-stat-drift-type="continuity" data-base="${item.value}" data-current="${item.value}" data-min="0">${item.value}</div>
-              </div>
-              <div class="stat-range">${continuityLabel(item.value)}</div>
-            </div>
-          `;
-        })
-        .join('')}
-      <div class="stat-legend">
-        <span>100–70 continuità attiva</span>
-        <span>69–40 continuità fragile</span>
-        <span>39–15 continuità terminale</span>
-        <span>14–0 continuità non rilevabile</span>
-      </div>
-    `;
-  }
+  const renderLiveValue = (node) => {
+    const current = Number(node.dataset.statCurrent || node.dataset.statValue || 0);
+    const decimals = Number(node.dataset.statDecimals || 0);
+    const suffix = node.dataset.statSuffix || '';
+    const prefix = node.dataset.statPrefix || '';
+    const number = decimals ? current.toFixed(decimals) : formatInteger(current);
+    node.textContent = `${prefix}${number}${suffix}`;
+  };
 
-  const driftingNodes = Array.from(statPage.querySelectorAll('[data-stat-drift-type]'));
-  if (driftingNodes.length) {
-    const updateDrift = () => {
-      driftingNodes.forEach((node) => {
-        const current = Number(node.dataset.current || node.dataset.base || 0);
-        const min = Number(node.dataset.min || 0);
-        if (current <= min) return;
+  const registerLiveNode = (node, parsed) => {
+    if (!node || node.dataset.statLive === 'true' || !parsed || !Number.isFinite(parsed.value)) return;
+    node.dataset.statLive = 'true';
+    node.dataset.statValue = String(parsed.value);
+    node.dataset.statCurrent = String(parsed.value);
+    node.dataset.statPrefix = parsed.prefix || '';
+    node.dataset.statSuffix = parsed.suffix || '';
+    node.dataset.statDecimals = String(parsed.decimals || 0);
+    liveNodes.push(node);
+  };
 
-        const next = Math.max(min, current - 1);
-        node.dataset.current = String(next);
-        node.textContent = formatNumber(next);
+  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
-        const type = node.dataset.statDriftType || '';
-        const parent = node.closest('.stat-population-cell, .stat-birth-card, .stat-continuity-value');
-        const fill = parent ? parent.querySelector(`[data-stat-fill="${type}"]`) : null;
-        const base = Number(node.dataset.base || current || 1);
-        if (fill && base > 0) {
-          const percent = Math.max(3, (next / base) * 100);
-          fill.style.width = `${Math.min(100, percent)}%`;
+  const animate = (duration, draw) => {
+    if (prefersReducedMotion) {
+      draw(1);
+      return;
+    }
+
+    const start = performance.now();
+    const frame = (now) => {
+      const progress = Math.min(1, (now - start) / duration);
+      draw(easeOutCubic(progress));
+      if (progress < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  };
+
+  const getLineRevealBox = (line) => {
+    if (!line || typeof line.getBBox !== 'function') return null;
+
+    try {
+      const box = line.getBBox();
+      return {
+        x: Math.floor(box.x) - 2,
+        y: Math.floor(box.y) - 8,
+        width: Math.ceil(box.width) + 16,
+        height: Math.ceil(box.height) + 16,
+      };
+    } catch {
+      return null;
+    }
+  };
+
+  const prepareLineRevealClip = (line, index) => {
+    const svg = line.ownerSVGElement;
+    if (!svg) return null;
+
+    let defs = svg.querySelector('defs[data-stat-line-defs="true"]');
+    if (!defs) {
+      defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+      defs.setAttribute('data-stat-line-defs', 'true');
+      svg.insertBefore(defs, svg.firstChild);
+    }
+
+    const id = `stat-line-reveal-${index}-${Math.random().toString(36).slice(2)}`;
+    const clip = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+    clip.setAttribute('id', id);
+    clip.setAttribute('clipPathUnits', 'userSpaceOnUse');
+
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    clip.appendChild(rect);
+    defs.appendChild(clip);
+
+    line.dataset.statClipId = id;
+    line.setAttribute('clip-path', `url(#${id})`);
+    line.style.strokeDasharray = 'none';
+    line.style.strokeDashoffset = '0';
+    line.style.transition = 'none';
+
+    return rect;
+  };
+
+  const resetLineBuild = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+
+    svg.querySelectorAll('polyline.line, path.line').forEach((line, index) => {
+      let rect = line.dataset.statClipId
+        ? svg.querySelector(`#${CSS.escape(line.dataset.statClipId)} rect`)
+        : null;
+
+      if (!rect) rect = prepareLineRevealClip(line, index);
+      if (!rect) return;
+
+      const box = getLineRevealBox(line);
+      if (!box) return;
+
+      rect.dataset.statTargetWidth = String(box.width);
+      rect.setAttribute('x', String(box.x));
+      rect.setAttribute('y', String(box.y));
+      rect.setAttribute('height', String(box.height));
+      rect.setAttribute('width', '0');
+    });
+  };
+
+  const playLineBuild = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+
+    svg.querySelectorAll('polyline.line, path.line').forEach((line, index) => {
+      const rect = line.dataset.statClipId
+        ? svg.querySelector(`#${CSS.escape(line.dataset.statClipId)} rect`)
+        : null;
+
+      if (!rect) return;
+
+      const targetWidth = Number(rect.dataset.statTargetWidth || 0);
+      if (!targetWidth) return;
+
+      rect.setAttribute('width', '0');
+      window.setTimeout(() => {
+        animate(950, (t) => {
+          rect.setAttribute('width', String(targetWidth * t));
+        });
+      }, index * 90);
+    });
+  };
+
+  const setupBarsRight = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('rect.bar, rect.bar2').forEach((rect) => {
+      if (!rect.dataset.statTargetWidth) rect.dataset.statTargetWidth = rect.getAttribute('width') || '0';
+      const label = rect.nextElementSibling;
+      // Percent labels in this chart are live data.
+      svg.querySelectorAll('text').forEach((text) => {
+        if ((text.textContent || '').trim().endsWith('%')) registerLiveNode(text, parseNumericText(text.textContent));
+      });
+    });
+  };
+
+  const resetBarsRight = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('rect.bar, rect.bar2').forEach((rect) => {
+      if (!rect.dataset.statTargetWidth) rect.dataset.statTargetWidth = rect.getAttribute('width') || '0';
+      rect.setAttribute('width', '0');
+    });
+  };
+
+  const playBarsRight = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('rect.bar, rect.bar2').forEach((rect, index) => {
+      const target = Number(rect.dataset.statTargetWidth || 0);
+      window.setTimeout(() => {
+        animate(780, (t) => rect.setAttribute('width', String(target * t)));
+      }, index * 45);
+    });
+  };
+
+  const setupNumberCount = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('text').forEach((text) => {
+      const raw = (text.textContent || '').trim();
+      const parsed = parseNumericText(raw);
+      if (parsed) registerLiveNode(text, parsed);
+    });
+  };
+
+  const resetNumberCount = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('text[data-stat-live="true"]').forEach((text) => {
+      const suffix = text.dataset.statSuffix || '';
+      const prefix = text.dataset.statPrefix || '';
+      text.textContent = `${prefix}0${suffix}`;
+    });
+  };
+
+  const playNumberCount = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('text[data-stat-live="true"]').forEach((text) => {
+      const target = Number(text.dataset.statCurrent || text.dataset.statValue || 0);
+      const decimals = Number(text.dataset.statDecimals || 0);
+      const suffix = text.dataset.statSuffix || '';
+      const prefix = text.dataset.statPrefix || '';
+      animate(900, (t) => {
+        const value = target * t;
+        const number = decimals ? value.toFixed(decimals) : formatInteger(value);
+        text.textContent = `${prefix}${number}${suffix}`;
+      });
+    });
+  };
+
+  const setupRectGrow = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('rect.b1, rect.b2, rect.b3').forEach((rect) => {
+      if (!rect.dataset.statTargetY) rect.dataset.statTargetY = rect.getAttribute('y') || '300';
+      if (!rect.dataset.statTargetHeight) rect.dataset.statTargetHeight = rect.getAttribute('height') || '0';
+      if (!rect.dataset.statBaseline) rect.dataset.statBaseline = String(Number(rect.dataset.statTargetY) + Number(rect.dataset.statTargetHeight));
+    });
+    svg.querySelectorAll('text.small').forEach((text) => {
+      const parsed = parseNumericText(text.textContent);
+      if (parsed) registerLiveNode(text, parsed);
+    });
+  };
+
+  const resetRectGrow = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('rect.b1, rect.b2, rect.b3').forEach((rect) => {
+      const baseline = Number(rect.dataset.statBaseline || 300);
+      rect.setAttribute('y', String(baseline));
+      rect.setAttribute('height', '0');
+    });
+  };
+
+  const playRectGrow = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('rect.b1, rect.b2, rect.b3').forEach((rect, index) => {
+      const baseline = Number(rect.dataset.statBaseline || 300);
+      const targetHeight = Number(rect.dataset.statTargetHeight || 0);
+      window.setTimeout(() => {
+        animate(760, (t) => {
+          const height = targetHeight * t;
+          rect.setAttribute('height', String(height));
+          rect.setAttribute('y', String(baseline - height));
+        });
+      }, index * 45);
+    });
+  };
+
+  const setupLinePosition = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('line.value').forEach((line) => {
+      if (!line.dataset.statTargetX2) line.dataset.statTargetX2 = line.getAttribute('x2') || line.getAttribute('x1') || '0';
+    });
+    svg.querySelectorAll('text').forEach((text) => {
+      const x = Number(text.getAttribute('x') || 0);
+      const parsed = parseNumericText(text.textContent);
+      if (parsed && x >= 390) registerLiveNode(text, parsed);
+    });
+  };
+
+  const resetLinePosition = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('line.value').forEach((line) => {
+      line.setAttribute('x2', line.getAttribute('x1') || '0');
+    });
+  };
+
+  const playLinePosition = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('line.value').forEach((line, index) => {
+      const startX = Number(line.getAttribute('x1') || 0);
+      const targetX = Number(line.dataset.statTargetX2 || startX);
+      window.setTimeout(() => {
+        animate(760, (t) => {
+          line.setAttribute('x2', String(startX + (targetX - startX) * t));
+        });
+      }, index * 60);
+    });
+  };
+
+  const setupPopulationLiveLabels = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    svg.querySelectorAll('text').forEach((text) => {
+      const x = Number(text.getAttribute('x') || 0);
+      if (x < 390) return;
+      const parsed = parseTrailingNumericText(text.textContent);
+      if (parsed) registerLiveNode(text, parsed);
+    });
+  };
+
+  const resetChart = (chart) => {
+    const type = chart.dataset.statChart;
+    if (type === 'line-build') resetLineBuild(chart);
+    if (type === 'bars-right') resetBarsRight(chart);
+    if (type === 'number-count') resetNumberCount(chart);
+    if (type === 'rect-grow') resetRectGrow(chart);
+    if (type === 'line-position') resetLinePosition(chart);
+  };
+
+  const playChart = (chart) => {
+    const type = chart.dataset.statChart;
+    resetChart(chart);
+    if (type === 'line-build') playLineBuild(chart);
+    if (type === 'bars-right') playBarsRight(chart);
+    if (type === 'number-count') playNumberCount(chart);
+    if (type === 'rect-grow') playRectGrow(chart);
+    if (type === 'line-position') playLinePosition(chart);
+  };
+
+  charts.forEach((chart) => {
+    const type = chart.dataset.statChart;
+    if (type === 'line-build') {
+      setupPopulationLiveLabels(chart);
+      resetLineBuild(chart);
+    }
+    if (type === 'bars-right') setupBarsRight(chart);
+    if (type === 'number-count') setupNumberCount(chart);
+    if (type === 'rect-grow') setupRectGrow(chart);
+    if (type === 'line-position') setupLinePosition(chart);
+    resetChart(chart);
+  });
+
+  const scroller = typeof getStoryScroller === 'function' ? getStoryScroller() : null;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const chart = entry.target;
+        if (entry.isIntersecting) {
+          playChart(chart);
+        } else {
+          resetChart(chart);
         }
       });
-    };
+    },
+    {
+      root: scroller ? scroller.root : null,
+      threshold: 0.35,
+      rootMargin: '0px 0px -10% 0px',
+    }
+  );
 
-    updateDrift();
-    window.setInterval(updateDrift, 12000);
+  charts.forEach((chart) => observer.observe(chart));
+
+  if (liveNodes.length) {
+    window.setInterval(() => {
+      liveNodes.forEach((node) => {
+        const current = Number(node.dataset.statCurrent || node.dataset.statValue || 0);
+        const next = Math.max(0, current - 1);
+        node.dataset.statCurrent = String(next);
+        renderLiveValue(node);
+      });
+    }, 10000);
   }
+
+  let statModalDismissed = false;
+
+  const closeStatDeclineModal = () => {
+    statModalDismissed = true;
+    const modal = document.getElementById('stat-decline-modal');
+    if (!modal) return;
+    modal.classList.remove('is-visible');
+    modal.setAttribute('aria-hidden', 'true');
+  };
+
+  window.closeStatDeclineModal = closeStatDeclineModal;
+
+  window.setTimeout(() => {
+    if (statModalDismissed) return;
+    const modal = document.getElementById('stat-decline-modal');
+    if (!modal) return;
+    modal.classList.add('is-visible');
+    modal.setAttribute('aria-hidden', 'false');
+  }, 30000);
+
+  const handleStatModalClose = (event) => {
+    const closeButton = event.target.closest?.('[data-stat-modal-close], .stat-decline-modal__close');
+    if (!closeButton) return;
+    event.preventDefault();
+    event.stopPropagation();
+    closeStatDeclineModal();
+  };
+
+  document.addEventListener('click', handleStatModalClose, true);
+  document.addEventListener('pointerdown', handleStatModalClose, true);
 }
 
 if (document.readyState === 'loading') {

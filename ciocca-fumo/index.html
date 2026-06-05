@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Archivio di Giorgia</title>
+    <title>Hiroshi Tanaka's archive</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
@@ -54,6 +54,7 @@
                 el.classList.add('all-unblurring');
                 el.addEventListener('animationend', () => {
                   el.classList.remove('all-unblurring');
+                  window.enableGestureSurface?.();
                 }, { once: true });
               });
             }, { once: true });
@@ -106,8 +107,8 @@
               </li>
               <li>
                 <a href="#about-evening-documentation" class="about-index-item">
-                  <span class="japanese">夕刻写真記録（1985–1990）</span>
-                  <span class="english">Evening photographic documentation (1985–1990)</span>
+                  <span class="japanese">夕刻写真記録<span class="about-index-nowrap">（1985–1990）</span></span>
+                  <span class="english">Evening photographic documentation <span class="about-index-nowrap">(1985–1990)</span></span>
                 </a>
               </li>
               <li>
@@ -118,8 +119,8 @@
               </li>
               <li>
                 <a href="#about-access-after-closure" class="about-index-item">
-                  <span class="japanese">閉鎖後のアクセス（1990–2018）</span>
-                  <span class="english">Access after closure (1990–2018)</span>
+                  <span class="japanese">閉鎖後のアクセス<span class="about-index-nowrap">（1990–2018）</span></span>
+                  <span class="english">Access after closure <span class="about-index-nowrap">(1990–2018)</span></span>
                 </a>
               </li>
               <li>
@@ -153,7 +154,9 @@
 
     <div id="item-preview" class="item-preview" aria-hidden="true"></div>
 
-    <div class="filters" id="filters-panel"></div>
+    <div class="filters-block">
+      <div class="filters" id="filters-panel"></div>
+    </div>
   </aside>
 
   <main id="grid" class="myPhotos layout-fotografie"></main>
@@ -175,7 +178,6 @@
 </div>
 
 <div id="explore-modal" style="display:none;" aria-hidden="true">
-  <button type="button" class="about-close" onclick="closeExploreModal()" aria-label="Chiudi">✕</button>
   <div class="about-page">
   <section class="about-hero">
     <h1>
@@ -363,20 +365,21 @@
   </div>
 </div>
 
+<button type="button" id="scroll-to-top" class="scroll-to-top" aria-label="Torna su" hidden>上</button>
+
 <div id="gesture-camera" aria-hidden="true">
   <video id="gesture-webcam" autoplay muted playsinline></video>
   <canvas id="gesture-canvas"></canvas>
-  <div id="gesture-status">Hand tracking…</div>
+  <div id="gesture-status" hidden></div>
 </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet@2.2.2"></script>
+    <script src="../machine-learning/body-tracking/body-tracking-api.js"></script>
 
     <script>
       function navigateFromModal(hash) {
@@ -395,6 +398,7 @@
     </script>
 
     <script src="ciocca-ml.js"></script>
+    <script src="ciocca-body.js"></script>
     <script src="script.js"></script>
     <script src="ciocca-gestures.js"></script>
   </body>

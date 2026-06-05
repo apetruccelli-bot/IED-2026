@@ -17,17 +17,6 @@
         --spacing-20px: 20px;
       }
     </style>
-    <!-- Dark mode styles (navy) -->
-    <style>
-      :root{--dm-bg:#071426;--dm-surface:#08192b;--dm-text:#e6f3ff;--dm-muted:#9fb0c9;--dm-accent:#4ea8ff}
-      body.theme-dark{background:var(--dm-bg)!important;color:var(--dm-text)!important}
-      body.theme-dark a{color:var(--dm-accent)!important}
-      .theme-toggle{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:var(--dm-surface);display:flex;align-items:center;justify-content:center;z-index:1200;cursor:pointer}
-      .theme-toggle svg{width:20px;height:20px;fill:currentColor}
-      .theme-toggle .moon{display:none}
-      body.theme-dark .theme-toggle .sun{display:none}
-      body.theme-dark .theme-toggle .moon{display:block}
-    </style>
 
     <style>
       html {
@@ -44,26 +33,6 @@
       .page-history * {
         box-sizing: border-box;
         text-transform: none;
-      }
-
-      .page-history header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 50;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 12px;
-        background: transparent;
-        color: #090909;
-      }
-
-      .page-history header a,
-      .page-history header span {
-        font-size: clamp(20px, 3vw, 34px);
-        line-height: 1;
       }
 
       .history-wrapper {
@@ -88,7 +57,7 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        gap: clamp(10px, 2vw, 22px);
+        gap: clamp(6px, 1.4vw, 14px);
         transform: translateY(-20px);
       }
 
@@ -97,24 +66,18 @@
         display: block;
         width: max-content;
         opacity: 0.35;
-        font-family: "Prophet Regular", sans-serif;
+        font-family: "Prophet Medium", sans-serif;
         font-size: clamp(9px, 1.3vw, 12px);
         line-height: 1;
         font-weight: normal;
         transform: translateX(0);
         transform-origin: left center;
-        transition:
-          opacity 0.35s ease,
-          transform 0.35s ease,
-          font-size 0.35s ease;
+        transition: opacity 0.35s ease;
       }
 
       .city-item.active {
         opacity: 1;
-        font-family: "Prophet Medium", sans-serif;
-        font-size: clamp(12px, 2.4vw, 34px);
-        font-weight: 500;
-        transform: translateX(clamp(3px, 0.8vw, 8px));
+        transform: translateX(0);
       }
 
       .history-stage {
@@ -191,18 +154,13 @@
       }
 
       @media (max-width: 900px) {
-        .page-history header a,
-        .page-history header span {
-          font-size: clamp(20px, 5vw, 36px);
-        }
-
         .history-wrapper {
           grid-template-columns: clamp(80px, 18vw, 145px) 1fr;
           min-height: 520vh;
         }
 
         .city-list {
-          gap: clamp(10px, 2vw, 18px);
+          gap: clamp(6px, 1.4vw, 12px);
         }
 
         .city-item {
@@ -210,8 +168,8 @@
         }
 
         .city-item.active {
-          font-size: clamp(11px, 2.2vw, 20px);
-          transform: translateX(4px);
+          opacity: 1;
+          transform: translateX(0);
         }
 
         .history-stage {
@@ -244,7 +202,7 @@
         }
 
         .city-list {
-          gap: clamp(8px, 3vw, 14px);
+          gap: clamp(6px, 2.2vw, 12px);
         }
 
         .city-item {
@@ -253,10 +211,7 @@
 
         .city-item.active {
           opacity: 1;
-          font-size: clamp(10px, 3.4vw, 18px);
-          font-family: "Prophet Medium", sans-serif;
-          font-weight: 500;
-          transform: translateX(4px);
+          transform: translateX(0);
         }
 
         .history-stage {
@@ -304,7 +259,8 @@
         }
 
         .city-item.active {
-          font-size: 10px;
+          opacity: 1;
+          transform: translateX(0);
         }
       }
     </style>
@@ -312,16 +268,24 @@
 
   <body class="page-history">
     <header>
-      <a href="index.html" class="font-myTitle cursor-pointer opacity-20 hover:opacity-100 transition-opacity">
+      <a
+        href="archivio.html"
+        class="font-myTitle nav-link"
+      >
         De veciariìe
       </a>
 
-      <div class="flex gap-20px">
-        <a href="index.html" class="font-myTitle cursor-pointer opacity-20 hover:opacity-100 transition-opacity">
-          Esplora
+      <div class="nav-group">
+        <a
+          href="archivio.html"
+          class="font-myTitle nav-link"
+        >
+          Cerca coltelli
         </a>
 
-        <span class="font-myTitle cursor-pointer">
+        <span
+          class="font-myTitle nav-link active"
+        >
           Storia
         </span>
       </div>
@@ -340,19 +304,43 @@
 
       <section class="history-stage">
         <div class="image-frame">
-          <img class="history-image active" src="img/a4.png" alt="Macelleria Somma a Barletta" />
-          <img class="history-image" src="img/a3.png" alt="Macelleria a Bari" />
-          <img class="history-image" src="img/a5.png" alt="Macelleria Somma a Toritto" />
-          <img class="history-image" src="img/a2.png" alt="Macelleria a Conversano" />
-          <img class="history-image" src="img/a1.png" alt="Macelleria a Taranto" />
+          <img
+            class="history-image active"
+            src="img/a4.png"
+            alt="Macelleria Somma a Barletta"
+          />
+
+          <img
+            class="history-image"
+            src="img/a3.png"
+            alt="Macelleria a Bari"
+          />
+
+          <img
+            class="history-image"
+            src="img/a5.png"
+            alt="Macelleria Somma a Toritto"
+          />
+
+          <img
+            class="history-image"
+            src="img/a2.png"
+            alt="Macelleria a Conversano"
+          />
+
+          <img
+            class="history-image"
+            src="img/a1.png"
+            alt="Macelleria a Taranto"
+          />
         </div>
 
         <div class="history-text">
           <p class="story-part active">
             Certi mestieri si imparano solo guardando, stando fermi accanto a qualcuno che lo fa da trent'anni, osservando il gesto prima ancora di capirlo.
-            Ruggiero Somma lo sapeva bene, perché quel qualcuno era suo nonno. Nato a Barletta nella seconda metà degli anni '40,
-            Ruggiero cresce dentro una macelleria, la bottega del nonno, un luogo preciso con il suo banco di marmo bianco, i ganci lungo la parete del fondo, il rumore sordo del coltello sul legno.
-            Quello che a Barletta rimane impresso in Ruggiero non è solo la tecnica. È la consapevolezza che tutto questo: il gesto, la relazione, la fiducia accumulata anno dopo anno, potrebbe scomparire senza lasciare traccia.
+            Ruggiero Somma lo sapeva bene, perché quel qualcuno era suo nonno. Nato a Barletta nella seconda metà degli anni '40, Ruggiero cresce dentro una macelleria, la bottega del nonno, un luogo preciso con il suo banco di marmo bianco, i ganci lungo la parete del fondo, il rumore sordo del coltello sul legno.
+            Il negozio era il polso della via, uno spazio dove i clienti di sempre si mescolavano ai giovani apprendisti curiosi.
+            Quello che a Barletta rimane impresso in Ruggiero non è solo la tecnica. È la consapevolezza che tutto questo, potrebbe scomparire senza lasciare traccia.
             E quindi decide di voler incominciare a preservare l'eredità trasmessa da suo nonno.
           </p>
 
@@ -361,13 +349,13 @@
             È proprio a Bari, in quel rituale quotidiano ripetuto centinaia di volte, che l'idea di documentare prende corpo. Ruggiero inizia a fotografare. Non la merce, non i prezzi, non le vetrine in festa. Fotografa le cose che di solito nessuno guarda: le mani di un collega mentre disossa, il banco alla fine di una mattinata intensa, un cliente anziano che indica il pezzo che vuole con un gesto che sembra lo stesso da decenni.
             Fotografa la luce dei neon riflessa sul marmo bagnato, le bilance, i ganci appesi al muro insieme ai calendari delle ditte fornitrici.
             Le immagini non osservano la macelleria come semplice luogo commerciale, ma come spazio di lavoro, di relazione, di trasmissione silenziosa. Documentano una cultura materiale fatta di manualità, fiducia e abitudine quotidiana.
-            Presto Ruggiero capisce che le sue fotografie da sole non bastano a restituire la complessità di questo mondo. Comincia a parlarne con i colleghi, i macellai che incontra nelle fiere di settore, nelle cooperative, ai mercati all'ingrosso. L'idea si diffonde naturalmente, come succede con le cose che toccano qualcosa di vero. I colleghi iniziano a mandargli materiale: fotografie scattate nelle loro botteghe, ritagli di riviste specializzate, cataloghi di coltelli e attrezzature. L'archivio smette di essere un progetto personale e cambia prospettiva.
+            Presto Ruggiero capisce che le sue fotografie da sole non bastano a restituire la complessità di questo mondo. Comincia a parlarne con i colleghi, i macellai che incontra nelle fiere di settore, nelle cooperative, ai mercati all'ingrosso. L'idea si diffonde naturalmente, come succede con le cose che toccano qualcosa di vero. I colleghi iniziano a mandargli materiale e l'archivio smette di essere un progetto personale.
           </p>
 
           <p class="story-part">
             A Toritto, Ruggiero non aveva solo un suo caro amico, ma il suo più fidato fornitore, con cui nel tempo aveva costruito un rapporto stretto.
             Quest'uomo si occupava della macellazione: un passaggio che nella filiera della carne precede tutto il resto ma che, nel lavoro quotidiano di una macelleria, rimane quasi sempre fuori campo.
-            Ruggiero porta la macchina fotografica anche a Toritto. Documenta quel segmento del mestiere che le fotografie scattate dietro al banco non avevano ancora raggiunto.
+            Ruggiero porta la macchina fotografica anche a Toritto e documenta quel segmento del mestiere che le fotografie scattate dietro al banco non avevano ancora raggiunto.
             Quello che trova non è separato dal resto dell'archivio: è la parte a monte, il luogo in cui il lavoro del macellaio ha già cominciato a prendere forma prima ancora che la saracinesca venga alzata.
             Quelle immagini entrano nella raccolta e la completano in un modo che nessun materiale inviato dai colleghi avrebbe potuto fare.
           </p>
@@ -381,15 +369,13 @@
           </p>
 
           <p class="story-part">
-            Alla fine degli anni Novanta, Ruggiero è pronto. L'archivio è vasto, ordinato e stratificato. L'intenzione è quella di renderlo accessibile:
-            una mostra, forse una pubblicazione, una forma qualsiasi che permetta al materiale di uscire dai raccoglitori e dai cassetti della Macelleria Somma.
-            Taranto era una delle città che più lo avevano colpito durante i viaggi. Una città con una storia industriale pesante, dove le macellerie dei quartieri operai avevano avuto per decenni una funzione sociale precisa, radicata nella vita dei turni, delle famiglie numerose, dei mercati rionali che scandivano le settimane.
+            Alla fine degli anni Novanta, Ruggiero è pronto. L'archivio è vasto, ordinato e stratificato. L'intenzione è quella di renderlo accessibile: una mostra, forse una pubblicazione, una forma qualsiasi che permetta al materiale di uscire dai raccoglitori e dai cassetti della Macelleria Somma.
+            Taranto era una delle città che più lo avevano colpito durante i viaggi. Una città con una storia industriale pesante, dove le macellerie dei quartieri operai avevano avuto per decenni una funzione sociale precisa, radicata nella vita dei turni, delle famiglie numerose, dei mercati rionali.
             Ruggiero le aveva visitate, fotografate, annotate.
-            Alla fine degli anni Novanta, le abitudini di consumo cambiano: i supermercati sottraggono clientela, la grande distribuzione standardizza l'offerta e riduce il mestiere a una funzione logistica.
-            Poi arriva la crisi della BSE, la cosiddetta "mucca pazza", che sconvolge il mercato, alimenta la paura, e impone nuove norme igenico-sanitarie.
-            Le macellerie che Ruggiero aveva fotografato per quasi trent'anni cominciano a chiudere, anche la Macelleria Somma, che doveva essere la custode di tutta questa memoria, è costretta a chiudere a sua volta.
-            Ed è così che quello che doveva essere un archivio della vitalità di un mestiere diventa, quasi per ironia della sorte, la documentazione precisa della sua dissoluzione. Le fotografie di Barletta, Bari, Toritto, Conversano, Taranto, non ritraggono più un presente. Ritraggono qualcosa che è già passato nel momento in cui le guardiamo.
-            È per questo che Ruggiero ha voluto che questo materiale diventasse pubblico. Non come celebrazione nostalgica, ma come testimonianza precisa di cosa significa costruire qualcosa con le proprie mani per tutta una vita, intuire che potrebbe non durare, e documentarlo comunque, nella speranza che qualcuno, un giorno, abbia voglia di guardare.
+            Con il passare del tempo le abitudini di consumo cambiano: i supermercati sottraggono clientela e la grande distribuzione standardizza l'offerta, riducendo il mestiere a una funzione logistica.
+            Poi arriva la crisi della BSE, la cosiddetta "mucca pazza", che sconvolge il mercato e impone nuove norme igienico-sanitarie.
+            Le macellerie che Ruggiero aveva fotografato per quasi trent'anni cominciano a chiudere, e anche la Macelleria Somma, che doveva essere la custode di tutta questa memoria, è costretta a chiudere.
+            L'archivio diventa così la documentazione precisa della dissoluzione del mestiere, non una celebrazione nostalgica ma una testimonianza di cosa significa costruire qualcosa con le proprie mani per tutta una vita.
           </p>
         </div>
       </section>
@@ -468,20 +454,5 @@
         requestUpdate();
       });
     </script>
-    <!-- Dark mode toggle script -->
-    <script>
-    (function(){
-      const storageKey='site-theme';
-      function apply(theme){ if(theme==='dark') document.body.classList.add('theme-dark'); else document.body.classList.remove('theme-dark'); }
-      try{ const stored=localStorage.getItem(storageKey); if(stored) apply(stored); else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) apply('dark'); }catch(e){}
-      if(!document.getElementById('theme-toggle')){
-        const btn=document.createElement('button'); btn.id='theme-toggle'; btn.className='theme-toggle'; btn.setAttribute('aria-label','Toggle theme');
-        btn.innerHTML='<svg viewBox="0 0 24 24" class="sun"><path d="M6.76 4.84l-1.8-1.79L3.17 4.84l1.79 1.8 1.8-1.8zM1 13h3v-2H1v2zm10-9h2V1h-2v3zm7.03 2.05l1.79-1.8-1.79-1.79-1.8 1.79 1.8 1.79zM17 13h3v-2h-3v2zM12 19a7 7 0 100-14 7 7 0 000 14zm4.24-2.76l1.8 1.79 1.79-1.79-1.79-1.8-1.8 1.8zM4.21 19.79l1.79-1.8-1.79-1.79-1.8 1.79 1.8 1.8zM12 23h2v-3h-2v3z"/></svg><svg viewBox="0 0 24 24" class="moon"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>';
-        document.body.appendChild(btn);
-        btn.addEventListener('click', function(){ const isDark=document.body.classList.toggle('theme-dark'); try{localStorage.setItem(storageKey,isDark?'dark':'light');}catch(e){}; });
-      }
-    })();
-    </script>
-    <script src="/dark-mode-loader.js"></script>
   </body>
 </html>

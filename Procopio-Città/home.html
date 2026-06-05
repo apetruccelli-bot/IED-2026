@@ -17,22 +17,36 @@
       }
     </style>
     </head>
-  <body class="home-page">
-  <!-- LANDING PAGE -->
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="loading-container">
-      <img id="loading-image" class="loading-image-center" src="" alt="" />
-      <div id="loading-coordinates" class="loading-coordinates"></div>
-      <div id="loading-gallery" class="loading-gallery"></div>
-    </div>
-  </div>
-  
+    <body class="home-page">
+      <!-- LANDING PAGE -->
+      <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-container">
+          <img id="loading-image" class="loading-image-center" src="" alt="" />
+          <div id="loading-coordinates" class="loading-coordinates"></div>
+          <div id="loading-gallery" class="loading-gallery"></div>
+          </div>
+          </div>
+          
+          <!-- Bottom brand + links (identical on every page) -->
+          <div class="site-bottom-brand" style="position:fixed;left:10px;top:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
+            <div style="line-height:1">
+              <a href="home.html" class="font-myTitle" style="display:inline-block">Città<br>interrotte</a>
+              <p style="margin:0">di Fondazione Scorza</p>
+            </div>
+          </div>
+          <div class="sidebar-links" style="position:fixed;right:10px;top:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">
+            <div style="display:flex;flex-direction:column">
+              <a href="storia.html" class="font-myTitle text-right">Storia</a>
+              <a href="index.html" class="font-myTitle text-right">Archivio</a>
+              <a href="stat.html" class="font-myTitle text-right">Dati</a>
+            </div>
+          </div>
     <div id="home-map" class="home-map" aria-hidden="false"></div>
 
     <div id="face-far-overlay" class="face-far-overlay" aria-hidden="true">
-      <p class="face-far-message font-myTitle">non abbandonare quest'archivio</p>
+      <p class="face-far-message font-myTitle">non abbandonare quest‘archivio</p>
     </div>
-    <!-- Brand and navigation moved to footer (bottom) -->
+   
 
     <!-- Lightbox modal -->
     <div id="lightbox" class="lightbox" aria-hidden="true">
@@ -55,24 +69,11 @@
 
     <script src="script.js"></script>
 
-    <!-- Bottom brand + links (identical on every page) -->
-    <div class="site-bottom-brand" style="position:fixed;left:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
-      <div style="line-height:1">
-        <a href="home.html" class="font-myTitle" style="display:inline-block">Città<br>interrotte</a>
-        <p style="margin:0">di Fondazione Scorza</p>
-      </div>
-    </div>
-    <div class="sidebar-links" style="position:fixed;right:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">
-      <div style="display:flex;flex-direction:column">
-        <a href="storia.html" class="font-myTitle text-right">Storia</a>
-        <a href="index.html" class="font-myTitle text-right">Archivio</a>
-        <a href="stat.html" class="font-myTitle text-right">Dati</a>
-      </div>
-    </div>
 
     <!-- Face + Hand preview panel -->
     <div class="face-preview-panel">
       <video id="face-webcam" class="face-webcam-preview" autoplay muted playsinline></video>
+      <canvas id="canvas" class="face-canvas-preview"></canvas>
       <div class="face-status-panel">
         <div id="face-status-label" class="face-status-bold">loading model…</div>
         <div>proximity: <span id="face-prox-label">&mdash;</span></div>
@@ -89,6 +90,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
     <script src="procopio-ml.js"></script>
-    <script src="/dark-mode-loader.js"></script>
   </body>
 </html>

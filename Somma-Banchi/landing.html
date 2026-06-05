@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html> 
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
@@ -36,6 +36,23 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+    }
+
+    :root {
+      /*
+        Puoi regolare da qui l'opacità del contenitore immagini.
+        Valori più bassi = immagini più leggere.
+      */
+      --images-container-opacity-min: 0.33;
+      --images-container-opacity-max: 0.9;
+
+      /*
+        Puoi regolare da qui lo zoom delle immagini.
+        Valori più bassi = immagini meno zoomate / più piccole.
+      */
+      --image-scale-start: 0.88;
+      --image-scale-end-desktop: 1.2;
+      --image-scale-end-mobile: 0.88;
     }
 
     html,
@@ -87,56 +104,66 @@
       overflow: hidden;
     }
 
+    /*
+      Contenitore unico delle immagini.
+      L'opacità viene applicata qui, non alle singole immagini.
+    */
+    .image-opacity-container {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      opacity: 0;
+      will-change: opacity;
+    }
+
     .image-card {
       position: absolute;
       background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
       background-color: transparent;
-      opacity: 0;
-      will-change: transform, opacity;
+      opacity: 1;
+      will-change: transform, left, top;
     }
 
+    /*
+      Immagini desktop leggermente ridotte,
+      così non risultano troppo zoomate e non si toccano troppo.
+    */
     .image-card:nth-child(1) {
-      width: 220px;
-      height: 280px;
-      background-image: url("img/col19.png");
+      width: 235px;
+      height: 300px;
     }
 
     .image-card:nth-child(2) {
-      width: 220px;
-      height: 280px;
-      background-image: url("img/a3.png");
+      width: 225px;
+      height: 288px;
     }
 
     .image-card:nth-child(3) {
-      width: 220px;
-      height: 200px;
-      background-image: url("img/col9.png");
+      width: 240px;
+      height: 215px;
     }
 
     .image-card:nth-child(4) {
       width: 220px;
-      height: 150px;
-      background-image: url("img/s1 (2).png");
+      height: 155px;
     }
 
     .image-card:nth-child(5) {
-      width: 220px;
-      height: 200px;
-      background-image: url("img/tagli  (2).png");
+      width: 230px;
+      height: 210px;
     }
 
     .image-card:nth-child(6) {
-      width: 220px;
-      height: 170px;
-      background-image: url("img/tagli  (4).png");
+      width: 218px;
+      height: 172px;
     }
 
     .image-card:nth-child(7) {
-      width: 220px;
-      height: 250px;
-      background-image: url("img/col4.png");
+      width: 238px;
+      height: 272px;
     }
 
     .enter-home {
@@ -163,29 +190,35 @@
       .image-card:nth-child(5),
       .image-card:nth-child(6),
       .image-card:nth-child(7) {
-        width: 150px;
+        width: 145px;
       }
 
-      .image-card:nth-child(1),
+      .image-card:nth-child(1) {
+        height: 188px;
+      }
+
       .image-card:nth-child(2) {
-        height: 200px;
+        height: 182px;
       }
 
-      .image-card:nth-child(3),
-      .image-card:nth-child(5) {
-        height: 145px;
+      .image-card:nth-child(3) {
+        height: 136px;
       }
 
       .image-card:nth-child(4) {
-        height: 105px;
+        height: 104px;
+      }
+
+      .image-card:nth-child(5) {
+        height: 132px;
       }
 
       .image-card:nth-child(6) {
-        height: 125px;
+        height: 116px;
       }
 
       .image-card:nth-child(7) {
-        height: 180px;
+        height: 172px;
       }
     }
 
@@ -197,29 +230,35 @@
       .image-card:nth-child(5),
       .image-card:nth-child(6),
       .image-card:nth-child(7) {
-        width: 118px;
+        width: 108px;
       }
 
-      .image-card:nth-child(1),
+      .image-card:nth-child(1) {
+        height: 142px;
+      }
+
       .image-card:nth-child(2) {
-        height: 155px;
+        height: 138px;
       }
 
-      .image-card:nth-child(3),
-      .image-card:nth-child(5) {
-        height: 110px;
+      .image-card:nth-child(3) {
+        height: 104px;
       }
 
       .image-card:nth-child(4) {
-        height: 85px;
+        height: 80px;
+      }
+
+      .image-card:nth-child(5) {
+        height: 102px;
       }
 
       .image-card:nth-child(6) {
-        height: 98px;
+        height: 90px;
       }
 
       .image-card:nth-child(7) {
-        height: 135px;
+        height: 130px;
       }
     }
   </style>
@@ -231,54 +270,106 @@
   </header>
 
   <main class="landing-stage">
-    <div class="image-card"></div>
-    <div class="image-card"></div>
-    <div class="image-card"></div>
-    <div class="image-card"></div>
-    <div class="image-card"></div>
-    <div class="image-card"></div>
-    <div class="image-card"></div>
+    <div class="image-opacity-container">
+      <div class="image-card"></div>
+      <div class="image-card"></div>
+      <div class="image-card"></div>
+      <div class="image-card"></div>
+      <div class="image-card"></div>
+      <div class="image-card"></div>
+      <div class="image-card"></div>
+    </div>
   </main>
 
   <section class="enter-home"></section>
 
   <script>
     const cards = document.querySelectorAll(".image-card");
+    const imageOpacityContainer = document.querySelector(".image-opacity-container");
     const homePreview = document.querySelector(".enter-home");
     const archiveTitle = document.querySelector(".archive-title");
+
+    /*
+      Qui inserisci tutte le immagini che vuoi usare.
+      Ogni volta che ricarichi la pagina, ne verranno scelte 7 in ordine casuale.
+    */
+    const imagePool = [
+      "img/col19.png",
+      "img/a3.png",
+      "img/col9.png",
+      "img/s1 (2).png",
+      "img/ta5.png",
+      "img/ta4.png",
+      "img/col4.png",
+      "img/col13.png",
+      "img/col2.png",
+      "img/s1 (5).png",
+      "img/ta14.png",
+      "img/a4.png",
+      "img/b7.png",
+      "img/s1 (17).png"
+    ];
+
+    function shuffleArray(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function assignRandomImages() {
+      const shuffledImages = shuffleArray(imagePool);
+
+      cards.forEach((card, index) => {
+        const imageUrl = shuffledImages[index % shuffledImages.length];
+        card.style.backgroundImage = `url("${imageUrl}")`;
+      });
+    }
 
     const ANIMATION_DURATION = 7000;
     let animationStartTime = null;
     let redirected = false;
 
+    /*
+      Layout iniziale.
+      Tutte le immagini partono dal centro esatto dello schermo.
+      In questo modo l'allargamento/zoom out è sempre centrato.
+    */
     const startLayout = [
-      { x: 50, y: 50, r: 0 },
-      { x: 49, y: 49, r: 0 },
-      { x: 51, y: 50, r: 0 },
-      { x: 50, y: 48, r: 0 },
-      { x: 50, y: 52, r: 0 },
-      { x: 48, y: 51, r: 0 },
-      { x: 52, y: 49, r: 0 }
+      { x: 51, y: 51 },
+      { x: 50, y: 50 },
+      { x: 52, y: 52 },
+      { x: 53, y: 53 },
+      { x: 54, y: 54 },
+      { x: 48, y: 48 },
+      { x: 49, y: 49 }
     ];
 
+    /*
+      Layout finale desktop.
+      Le immagini sono più distanziate rispetto alla versione precedente.
+    */
     const endLayout = [
-      { x: 15, y: 30, r: 0 },
-      { x: 38, y: 32, r: 0 },
-      { x: 63, y: 30, r: 0 },
-      { x: 84, y: 34, r: 0 },
-      { x: 24, y: 70, r: 0 },
-      { x: 52, y: 70, r: 0 },
-      { x: 78, y: 68, r: 0 }
+      { x: 12, y: 24 },
+      { x: 38, y: 31 },
+      { x: 64, y: 23 },
+      { x: 88, y: 34 },
+      { x: 20, y: 72 },
+      { x: 50, y: 66 },
+      { x: 80, y: 76 }
     ];
 
+
+    /*
+      Layout finale mobile.
+      Anche su mobile sono più aperte tra loro.
+    */
+    
     const mobileEndLayout = [
-      { x: 18, y: 28, r: 0 },
-      { x: 50, y: 28, r: 0 },
-      { x: 82, y: 28, r: 0 },
-      { x: 22, y: 56, r: 0 },
-      { x: 55, y: 56, r: 0 },
-      { x: 82, y: 56, r: 0 },
-      { x: 50, y: 80, r: 0 }
+      { x: 18, y: 22 },
+      { x: 50, y: 28 },
+      { x: 82, y: 23 },
+      { x: 18, y: 58 },
+      { x: 50, y: 53 },
+      { x: 82, y: 60 },
+      { x: 50, y: 83 }
     ];
 
     function lerp(start, end, progress) {
@@ -303,23 +394,23 @@
       return endLayout;
     }
 
+    function getCssNumber(variableName, fallback) {
+      const value = getComputedStyle(document.documentElement)
+        .getPropertyValue(variableName)
+        .trim();
+
+      const parsedValue = parseFloat(value);
+
+      return Number.isNaN(parsedValue) ? fallback : parsedValue;
+    }
+
     function updateLanding(progress) {
       const scrollProgress = clamp(progress, 0, 1);
-
-      /*
-        Sequenza automatica:
-        1. De Veciariìe appare subito al centro
-        2. De Veciariìe sparisce dal centro
-        3. De Veciariìe riappare direttamente in alto a sinistra
-        4. appaiono le immagini
-        5. immagini e titolo si dissolvono
-        6. sfondo chiaro e redirect ad archivio.html
-      */
 
       const titleFadeCenterProgress = clamp((scrollProgress - 0.34) / 0.10, 0, 1);
 
       const titleAppearCornerProgress = clamp((scrollProgress - 0.48) / 0.08, 0, 1);
-      const titleFadeCornerProgress = clamp((scrollProgress - 0.76) / 0.16, 0, 1);
+      const titleFadeCornerProgress = clamp((scrollProgress - 0.84) / 0.12, 0, 1);
 
       if (scrollProgress < 0.46) {
         archiveTitle.style.left = "50%";
@@ -336,19 +427,52 @@
         archiveTitle.style.display = "block";
       }
 
-      if (scrollProgress > 0.90) {
+      if (scrollProgress > 0.96) {
         archiveTitle.style.display = "none";
       }
 
-      const imageAppearProgress = clamp((scrollProgress - 0.46) / 0.16, 0, 1);
+      const imageAppearProgress = clamp((scrollProgress - 0.46) / 0.10, 0, 1);
 
       const spreadProgress = easeInOutCubic(
-        clamp((scrollProgress - 0.52) / 0.20, 0, 1)
+        clamp((scrollProgress - 0.52) / 0.24, 0, 1)
       );
 
-      const fadeProgress = clamp((scrollProgress - 0.74) / 0.16, 0, 1);
+      const fadeProgress = clamp((scrollProgress - 0.90) / 0.08, 0, 1);
 
       const activeEndLayout = getEndLayout();
+
+      /*
+        Opacità del gruppo intero.
+        Ora puoi regolarla dalle variabili CSS in :root.
+      */
+      const minContainerOpacity = getCssNumber(
+        "--images-container-opacity-min",
+        0.55
+      );
+
+      const maxContainerOpacity = getCssNumber(
+        "--images-container-opacity-max",
+        0.85
+      );
+
+      const groupOpacity = lerp(
+        minContainerOpacity,
+        maxContainerOpacity,
+        spreadProgress
+      );
+
+      imageOpacityContainer.style.opacity =
+        imageAppearProgress * groupOpacity * (1 - fadeProgress);
+
+      /*
+        Scale delle immagini.
+        Anche questo ora è regolabile dalle variabili CSS in :root.
+      */
+      const startScale = getCssNumber("--image-scale-start", 0.88);
+
+      const endScale = window.innerWidth <= 520
+        ? getCssNumber("--image-scale-end-mobile", 0.92)
+        : getCssNumber("--image-scale-end-desktop", 0.96);
 
       cards.forEach((card, index) => {
         const start = startLayout[index];
@@ -356,15 +480,15 @@
 
         const x = lerp(start.x, end.x, spreadProgress);
         const y = lerp(start.y, end.y, spreadProgress);
-        const r = lerp(start.r, end.r, spreadProgress);
+
+        const scale = lerp(startScale, endScale, spreadProgress);
 
         card.style.left = `${x}%`;
         card.style.top = `${y}%`;
-        card.style.transform = `translate(-50%, -50%) rotate(${r}deg)`;
-        card.style.opacity = 0.85 * imageAppearProgress * (1 - fadeProgress);
+        card.style.transform = `translate(-50%, -50%) scale(${scale})`;
       });
 
-      if (scrollProgress > 0.88) {
+      if (scrollProgress > 0.94) {
         homePreview.classList.add("visible");
       } else {
         homePreview.classList.remove("visible");
@@ -399,24 +523,10 @@
 
     window.addEventListener("load", () => {
       window.scrollTo(0, 0);
+      assignRandomImages();
       updateLanding(0);
       requestAnimationFrame(animateLanding);
     });
   </script>
-  <!-- Dark mode toggle script -->
-  <script>
-  (function(){
-    const storageKey='site-theme';
-    function apply(theme){ if(theme==='dark') document.body.classList.add('theme-dark'); else document.body.classList.remove('theme-dark'); }
-    try{ const stored=localStorage.getItem(storageKey); if(stored) apply(stored); else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) apply('dark'); }catch(e){}
-    if(!document.getElementById('theme-toggle')){
-      const btn=document.createElement('button'); btn.id='theme-toggle'; btn.className='theme-toggle'; btn.setAttribute('aria-label','Toggle theme');
-      btn.innerHTML='<svg viewBox="0 0 24 24" class="sun"><path d="M6.76 4.84l-1.8-1.79L3.17 4.84l1.79 1.8 1.8-1.8zM1 13h3v-2H1v2zm10-9h2V1h-2v3zm7.03 2.05l1.79-1.8-1.79-1.79-1.8 1.79 1.8 1.79zM17 13h3v-2h-3v2zM12 19a7 7 0 100-14 7 7 0 000 14zm4.24-2.76l1.8 1.79 1.79-1.79-1.79-1.8-1.8 1.8zM4.21 19.79l1.79-1.8-1.79-1.79-1.8 1.79 1.8 1.8zM12 23h2v-3h-2v3z"/></svg><svg viewBox="0 0 24 24" class="moon"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>';
-      document.body.appendChild(btn);
-      btn.addEventListener('click', function(){ const isDark=document.body.classList.toggle('theme-dark'); try{localStorage.setItem(storageKey,isDark?'dark':'light');}catch(e){}; });
-    }
-  })();
-  </script>
-  <script src="/dark-mode-loader.js"></script>
 </body>
 </html>

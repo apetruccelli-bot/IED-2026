@@ -1,0 +1,30 @@
+body {
+}
+
+h1 {
+  color: #333;
+}
+
+#container {
+  position: relative;
+  display: inline-block;
+}
+
+video {
+  max-width: 100%;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+
+
+#detections {
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow-y: auto;
+}

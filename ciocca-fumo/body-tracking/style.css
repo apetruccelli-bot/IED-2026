@@ -1,0 +1,44 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+#container {
+  position: relative;
+  display: inline-block;
+}
+
+video {
+  max-width: 100%;
+  display: block;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  display: block;
+}
+
+#status {
+}
+
+button {
+  margin: 10px 0px;
+}
+
+#info {
+}
+
+.person-info {
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.keypoint-info {
+  display: inline-block;
+  margin: 3px 5px;
+  padding: 3px 8px;
+  background: black;
+  color: white;
+}
