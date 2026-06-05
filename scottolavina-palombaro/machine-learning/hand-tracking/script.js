@@ -275,23 +275,22 @@ function handleMapGesture(hand) {
       window.oceanMapControls.closeLocationDetail();
       window.locationIsOpen = false;
     }
-    lastPinchTime = now;
-    galleryInteractionLockUntil = now + 420;
-    // Reset pinch counter to avoid re-trigger
-    pinchStabilityCount = 0;
-    stablePinch = false;
-    return;
+   lastPinchTime = now;
+  pinchStabilityCount = 0;
+  stablePinch = false;
+  /* NON impostare galleryInteractionLockUntil qui — blocca il fist nel frame successivo */
+  /* NON fare return — lascia continuare solo se serve, oppure usa un flag dedicato */
+  wasThumbIndexPinched = true;
+  return;
   }
   wasThumbIndexPinched = stablePinch;
 
   // ═══════════════════════════════════════════════════════════════════
   // RULE 2: CLOSED FIST (stable) → NAVIGATE map
   // ═══════════════════════════════════════════════════════════════════
-  if (stableGesture === "closedFist") {
-    // If a location is already open, the fist must not close or disturb it.
-    // Pinch stays the only gesture allowed to close the location.
-    if (window.locationIsOpen) {
-      return;
+    if (stableGesture === "closedFist") {
+    if (window.locationIsOpen || now - lastPinchTime < 500) {
+      return;  /* aspetta 500ms dal pinch prima di permettere fist */
     }
 
     // Throttle navigation to avoid excessive updates

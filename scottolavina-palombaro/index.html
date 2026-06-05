@@ -42,20 +42,41 @@
     color: var(--dm-text) !important;
   }
 
-  /* Links and accents: bluish tone */
-  html[data-theme="dark"] a, html[data-theme="dark"] a:visited{color:var(--dm-accent)}
 
   /* Surfaces: cards, headers, galleries use deep blue cards (not black) */
-  html[data-theme="dark"] header,
-  html[data-theme="dark"] .topbar,
-  html[data-theme="dark"] .text-box,
-  html[data-theme="dark"] .map-gallery-frame,
-  html[data-theme="dark"] .map-gallery{
-    background-color:var(--dm-card);
-    color:var(--dm-text);
-    border-color:var(--dm-border);
-  }
+ html[data-theme="dark"] header,
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] .text-box,
+html[data-theme="dark"] .map-gallery-frame,
+html[data-theme="dark"] .map-gallery,
+html[data-theme="dark"] button,
+html[data-theme="dark"] input,
+html[data-theme="dark"] .enter-site-link {
+  color: var(--dm-text);
+  background: transparent;
+  border-color: var(--dm-border);
+}
 
+html[data-theme="dark"] .tag-btn.active {
+  background: #ffffff !important;
+  color: #0e1113 !important;
+}
+html[data-theme="dark"] .tag-btn.active {
+  background: #ffffff !important;
+  color: #0e1113 !important;
+}
+
+/* FIX: in dark mode il bottone deve restare nascosto fino alla fine */
+html[data-theme="dark"] .enter-site-link {
+  opacity: 0;
+  pointer-events: none;
+}
+
+html[data-theme="dark"] .enter-site-link.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+  
   /* Controls */
   html[data-theme="dark"] button, html[data-theme="dark"] input, html[data-theme="dark"] .enter-site-link{
     color:var(--dm-text);background:transparent;border-color:var(--dm-border)
@@ -103,27 +124,24 @@
   <a class="enter-site-link" href="archive.html">Enter Site</a>
   
   <!-- Landing page audio: play once on load with fade in/out -->
-  <audio id="landing-audio" src="audio.mp3" preload="auto"></audio>
+  <audio id="landing-audio" src="audio_trim.mp3" preload="auto"></audio>
 
   <script src="script.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const enterLink = document.querySelector('.enter-site-link');
-      const redactWords = Array.from(document.querySelectorAll('.intro .redact'));
+ document.addEventListener('DOMContentLoaded', () => {
+  const enterLink = document.querySelector('.enter-site-link');
+  const redactWords = Array.from(document.querySelectorAll('.intro .redact'));
 
-      if (!enterLink || redactWords.length === 0) return;
+  if (!enterLink || redactWords.length === 0) return;
 
-      let completedAnimations = 0;
+  // Calcoliamo esattamente quando finirà l'animazione più lunga:
+  // Il delay maggiore è 4.8s + 1s di durata dell'animazione = 5.8 secondi totali.
+  // Aggiungiamo un piccolo margine di sicurezza (6000ms = 6 secondi)
+  setTimeout(() => {
+    enterLink.classList.add('is-visible');
+  }, 6000);
 
-      redactWords.forEach(word => {
-        word.addEventListener('animationend', () => {
-          completedAnimations += 1;
-
-          if (completedAnimations === redactWords.length) {
-            enterLink.classList.add('is-visible');
-          }
-        }, { once: true });
-      });
+  // ... (lascia pure invariato tutto il codice successivo legato alla gestione dell'audio/tryPlay)
 
       // Try to play landing audio with fade-in/out and slowed playback.
       const audio = document.getElementById('landing-audio');

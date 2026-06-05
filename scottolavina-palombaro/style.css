@@ -28,6 +28,7 @@
 }
 
 
+/* TEMA LIGHT (Default) */
 :root {
   --bg: #ffffff;
   --surface: #ffffff;
@@ -38,8 +39,22 @@
   --tag-active-text: #ffffff;
   --accent: #1a1a1a;
   --radius: 0px;
-  --global-line-height: 1.34; /* aumento addizionale richiesto */
-  --site-header-height: 82px; /* used by lightbox to avoid being covered */
+  --global-line-height: 1.34;
+  --site-header-height: 82px;
+  --redact-bg: #000000;
+}
+
+/* TEMA DARK (Si attiva con data-theme="dark") */
+html[data-theme="dark"] {
+  --bg: #0e1113;
+  --surface: #131516;
+  --text: #ffffff;
+  --muted: #b0bac2;
+  --tag-bg: #1c2023;
+  --tag-active: #ffffff;
+  --tag-active-text: #0e1113;
+  --accent: #3fb0ff;
+  --redact-bg: #ffffff; /* Le censure diventano bianche o grigie in dark mode se preferisci */
 }
 
 html,
@@ -79,14 +94,6 @@ header {
   background: var(--bg);
   padding: 16px 24px;
 }
-
-.header-inner {
-  max-width: 1200px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
 .header-row {
   display: flex;
   align-items: center;
@@ -123,7 +130,7 @@ body.lightbox-open .search-wrap {
 
 /* Archive lightbox: glass panel like the map gallery */
 .archive-lightbox {
-  top: 128px;
+  top: 82px;
   left: 260px;
   right: 280px;
   bottom: 0;
@@ -155,7 +162,7 @@ body.lightbox-open .search-wrap {
   flex-direction: column;
   box-sizing: border-box;
   gap: 8px; /* tighter spacing between elements */
-  max-height: calc(100vh - var(--site-header-height));
+  max-height: 90vh;    /* Impedisce alla lightbox di uscire dallo schermo */
   height: calc(100vh - var(--site-header-height));
   overflow-y: auto;
 }
@@ -171,8 +178,30 @@ body.lightbox-open .search-wrap {
   box-shadow: 0 26px 56px rgba(0, 0, 0, 0.22);
   backdrop-filter: blur(14px) saturate(1.05);
   -webkit-backdrop-filter: blur(14px) saturate(1.05);
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
+
+.archive-lightbox .lb-info {
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+.archive-lightbox .lb-description {
+  overflow: visible;
+  max-height: none;
+}
+
+.archive-lightbox .lb-info {
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+.archive-lightbox .lb-description {
+  overflow: visible;
+  max-height: none;
+}
+
 
 html[data-theme="dark"] .archive-lightbox .lightbox-content {
   background: rgba(255, 255, 255, 0.14);
@@ -244,10 +273,16 @@ html[data-theme="dark"] .archive-lightbox .lightbox-backdrop {
   padding: 0;
 }
 
-.archive-lightbox .lightbox-main,
-.archive-lightbox .lightbox-see-also,
-.archive-lightbox .lb-info {
+.archive-lightbox .lightbox-main {
   overflow: hidden;
+}
+
+.archive-lightbox .lightbox-see-also {
+  overflow: visible;
+}
+
+.archive-lightbox .lb-info {
+  overflow: visible;
 }
 
 .lightbox-caption {
@@ -303,11 +338,13 @@ html[data-theme="dark"] .archive-lightbox .lightbox-backdrop {
   height: auto;
   /* ensure full image visibility without cropping */
   max-width: 100%;
-  max-height: calc(100vh - var(--site-header-height) - 120px);
+  max-height: 60vh;    /* Limita l'altezza dell'immagine per dare spazio al testo */
   object-fit: contain;
   background: #eee;
   margin: 0 auto;
   border-radius: 12px;
+  
+  
 }
 
 .archive-lightbox .lightbox-img {
@@ -359,9 +396,6 @@ html:not([data-theme="dark"]) .archive-lightbox .lightbox-img {
 }
 
 .lightbox-close:hover {
-}
-
-.lightbox-close:hover {
   opacity: 1;
 }
 
@@ -392,9 +426,6 @@ html:not([data-theme="dark"]) .archive-lightbox .lightbox-img {
 }
 
 .lightbox-nav:hover {
-}
-
-.lightbox-nav:hover {
   opacity: 1;
 }
 
@@ -406,8 +437,16 @@ html:not([data-theme="dark"]) .archive-lightbox .lightbox-img {
   right: 12px; /* inside the modal, at the right side (beside the image) */
 }
 
-.lightbox-tags {
-  display: none;
+.archive-lightbox .lb-description .tag,
+.archive-lightbox .lb-description .tags,
+.archive-lightbox .lb-description .tag-btn,
+.archive-lightbox .lb-description .card-tag,
+.archive-lightbox .lb-description .lightbox-tags,
+.archive-lightbox .lb-description [data-tag],
+.archive-lightbox .lb-description + .card-tags,
+.archive-lightbox .lb-description + .tags,
+.archive-lightbox .lb-description + .tag-list {
+  display: none !important;
 }
 
 .lightbox-see-also {
@@ -556,10 +595,10 @@ body.lightbox-open .tags-bar {
 
 .area-bar {
   position: fixed;
-  top: 116px;
+  top: 102px; /* Stessa identica altezza di header e griglia */
   right: 24px;
   width: 220px;
-  max-height: calc(100vh - 136px);
+  max-height: calc(100vh - 122px);
   overflow-y: auto;
   z-index: 150;
   display: flex;
@@ -567,6 +606,11 @@ body.lightbox-open .tags-bar {
   gap: 14px;
 }
 
+/* Rimuove eventuali spaziature residue sul primo blocco di testo a destra */
+.area-bar > .area-item:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
 .area-item {
   padding: 0 2px;
   cursor: pointer;
@@ -803,7 +847,7 @@ header {
   width: 220px;
   position: fixed;
   left: 24px;
-  top: 100px;
+  top: 102px;
   z-index: 199;
   padding: 0;
   background: var(--bg);
@@ -912,7 +956,7 @@ nav a {
   top: 0;
   width: 100%;
   height: 1.2em;
-  background: #000;
+  background: var(--redact-bg);
   transform: scaleX(0);
   transform-origin: left;
   animation: redact 1s forwards;
@@ -1070,13 +1114,17 @@ body.about-page header {
 .about-section-link::before {
   content: "";
   position: absolute;
-  inset: -0.08em -0.25em -0.08em -0.25em;
-  background: #000;
+  inset: 0;
+  background: var(--redact-bg);
   transform: scaleX(1);
   transform-origin: left;
   transition: transform 0.55s ease;
   pointer-events: none;
   z-index: 2;
+}
+
+.about-section-link.is-revealed::before {
+  transform: scaleX(0);
 }
 
 .about-section-link.is-revealed::before {
@@ -1186,7 +1234,7 @@ body.map-page-body .topbar {
   align-items: center !important;
   padding: 1.2rem 2rem !important;
   border-bottom: 2px solid #333;
-  background: #ffffff !important;
+  background: var(--bg) !important; /* Sostituito #ffffff con var(--bg) */
   width: 100% !important;
   box-sizing: border-box !important;
   left: auto !important;
@@ -1196,7 +1244,7 @@ body.map-page-body .topbar {
 }
 
 body.map-page-body .topbar-left {
-  color: #1a1a1a !important;
+  color: var(--text) !important; /* Sostituito #1a1a1a con var(--text) */
   text-decoration: none !important;
   font-size: 14px !important;
   font-family: 'ABCFavoritMono', monospace !important;
@@ -1205,14 +1253,8 @@ body.map-page-body .topbar-left {
   display: block !important;
 }
 
-body.map-page-body .topbar-right {
-  display: flex !important;
-  gap: 20px !important;
-  align-items: center !important;
-}
-
 body.map-page-body .topbar-right a {
-  color: #1a1a1a !important;
+  color: var(--text) !important; /* Sostituito #1a1a1a con var(--text) */
   text-decoration: none !important;
   font-size: 12px !important;
   letter-spacing: 0.08em !important;
@@ -1489,4 +1531,326 @@ body.map-page-body .topbar-right a:hover {
   height: 100%;
   display: block;
   object-fit: cover;
+}
+html[data-theme="dark"] .map-gallery {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 26px 56px rgba(0, 0, 0, 0.22) !important;
+  backdrop-filter: blur(14px) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.05) !important;
+}
+
+/* MAP MODAL = ARCHIVE LIGHTBOX STYLE */
+
+/* base / light mode */
+.map-gallery {
+  background: rgba(255, 255, 255, 0.52) !important;
+  border: 1px solid rgba(255, 255, 255, 0.42) !important;
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.14) !important;
+  backdrop-filter: blur(14px) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.05) !important;
+}
+
+/* dark mode */
+html[data-theme="dark"] .map-gallery {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 26px 56px rgba(0, 0, 0, 0.22) !important;
+  backdrop-filter: blur(14px) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.05) !important;
+}
+
+/* niente sfondi pieni dentro il modale */
+.map-gallery-frame,
+.map-gallery-viewport,
+.map-gallery-strip,
+.map-gallery-link {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* immagini senza bordo proprio come nel modale archivio */
+.map-gallery-image {
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.results-info {
+  display: none !important;
+}
+
+/* 1. Rimuove il bordo/riquadro visivo del bottone close */
+.lightbox-close,
+.lightbox-close:hover,
+.lightbox-close:focus,
+.lightbox-close:active {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* 2. Ingrandisce le frecce di navigazione */
+.lightbox-nav {
+  font-size: 72px !important;
+}
+
+/* 3. Toglie le tag/località bianche dentro il modale */
+.archive-lightbox .lb-meta,
+.archive-lightbox .lb-description .tag,
+.archive-lightbox .lb-description .tags,
+.archive-lightbox .lb-description .tag-btn,
+.archive-lightbox .lb-description .card-tag,
+.archive-lightbox .lb-description .lightbox-tags,
+.archive-lightbox .lb-description [data-tag],
+.archive-lightbox .lb-description + .card-tags,
+.archive-lightbox .lb-description + .tags,
+.archive-lightbox .lb-description + .tag-list {
+  display: none !important;
+}
+/* 1. Rimuove il bordo/riquadro visivo del bottone close */
+.lightbox-close,
+.lightbox-close:hover,
+.lightbox-close:focus,
+.lightbox-close:active {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* 2. Ingrandisce le frecce di navigazione */
+.lightbox-nav {
+  font-size: 30px !important;
+}
+
+/* 3. Toglie le tag/località bianche dentro il modale */
+.archive-lightbox .lb-meta,
+.archive-lightbox .lb-description .tag,
+.archive-lightbox .lb-description .tags,
+.archive-lightbox .lb-description .tag-btn,
+.archive-lightbox .lb-description .card-tag,
+.archive-lightbox .lb-description .lightbox-tags,
+.archive-lightbox .lb-description [data-tag],
+.archive-lightbox .lb-description + .card-tags,
+.archive-lightbox .lb-description + .tags,
+.archive-lightbox .lb-description + .tag-list {
+  display: none !important;
+}
+/* Frecce più in alto nel modale */
+.lightbox-nav {
+  top: 38% !important;
+}
+/* Landing: rimuove box/bordi/sfondi attorno al testo */
+body.intro-page .text-box,
+body.intro-page .line,
+body.intro-page .word {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* DARK MODE — voce selezionata nel menu a sinistra */
+html[data-theme="dark"] .tags-bar .tag-btn.active,
+html[data-theme="dark"] header .tag-btn.active {
+  background: #ffffff !important;
+  color: #0e1113 !important;
+  padding: 3px 8px !important;
+  display: inline-block !important;
+  width: fit-content !important;
+  opacity: 1 !important;
+}
+
+/* forza anche eventuali testi interni */
+html[data-theme="dark"] .tags-bar .tag-btn.active *,
+html[data-theme="dark"] header .tag-btn.active * {
+  color: #0e1113 !important;
+}
+/* DARK MODE — voce attiva nel menu About a sinistra */
+html[data-theme="dark"] .about-section-nav .about-section-link.active {
+  /* background: #ffffff !important; */
+  color: white !important;
+  padding: 4px 8px !important;
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  opacity: 1 !important;
+  border-bottom: none !important;
+  text-decoration: none !important;
+}
+
+/* Disattiva la barra nera animata sopra alla voce attiva */
+html[data-theme="dark"] .about-section-nav .about-section-link.active::before {
+  background: transparent !important;
+  transform: scaleX(0) !important;
+}
+
+/* Hover della voce attiva: resta leggibile */
+html[data-theme="dark"] .about-section-nav .about-section-link.active:hover {
+  background: #ffffff !important;
+  color: #0e1113 !important;
+  opacity: 1 !important;
+}
+
+/* Le altre voci non attive restano grigie */
+html[data-theme="dark"] .about-section-nav .about-section-link:not(.active) {
+  color: var(--muted) !important;
+}
+
+/* ABOUT MENU — stato base */
+.about-section-link {
+  display: block;
+  position: relative;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  padding: 4px 8px;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.12s, opacity 0.12s, background 0.12s;
+  border-bottom: none;
+  box-sizing: border-box;
+}
+
+/* Banda di censura iniziale */
+.about-section-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--redact-bg);
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 0.55s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Quando il JS aggiunge .is-revealed, la banda si ritira */
+.about-section-link.is-revealed::before {
+  transform: scaleX(0);
+}
+
+/* Hover */
+.about-section-link:hover {
+  opacity: 0.6;
+  color: var(--muted);
+  border-bottom-color: transparent;
+}
+
+/* Voce attiva base */
+.about-section-link.active {
+  color: var(--muted);
+  opacity: 1;
+  border-bottom-color: transparent;
+}
+
+/* DARK MODE — tutte le bande di censura diventano bianche */
+html[data-theme="dark"] .about-section-link::before {
+  background: #ffffff !important;
+}
+
+/* DARK MODE — voce attiva rivelata: sfondo bianco + testo scuro */
+html[data-theme="dark"] .about-section-link.active.is-revealed {
+  /* background: #ffffff !important; */
+  /* color: #0e1113 !important; */
+  opacity: 1 !important;
+}
+
+/* DARK MODE — censura bianca, ma animata gradualmente */
+html[data-theme="dark"] .about-section-link::before {
+  background: #ffffff !important;
+  transition: transform 0.55s ease;
+}
+
+/* Non forzare transform con !important: così resta graduale */
+html[data-theme="dark"] .about-section-link.is-revealed::before {
+  transform: scaleX(0);
+}
+
+/* DARK MODE — la banda copre anche la voce attiva se non rivelata */
+html[data-theme="dark"] .about-section-link.active:not(.is-revealed)::before {
+  transform: scaleX(1) !important;
+  background: #ffffff !important;
+}
+
+/* DARK MODE — dopo la rivelazione la banda sparisce */
+html[data-theme="dark"] .about-section-link.active.is-revealed::before {
+  transform: scaleX(0) !important;
+}
+
+/* DARK MODE — hover della voce attiva */
+html[data-theme="dark"] .about-section-link.active.is-revealed:hover {
+  background: #ffffff !important;
+  color: #0e1113 !important;
+  opacity: 1 !important;
+}
+
+/* DARK MODE — voci non attive */
+/* ABOUT MENU */
+.about-section-link {
+  display: block;
+  position: relative;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  padding: 4px 8px;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.12s, opacity 0.12s;
+  border-bottom: none;
+  box-sizing: border-box;
+}
+
+.about-section-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--redact-bg);
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 0.55s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.about-section-link.is-revealed::before {
+  transform: scaleX(0);
+}
+
+.about-section-link.active {
+  color: var(--text);
+  opacity: 1;
+}
+
+.about-section-link:hover {
+  opacity: 0.6;
+}
+/* LIGHTBOX — rimuove tutti gli angoli arrotondati */
+.lightbox,
+.lightbox-content,
+.archive-lightbox,
+.archive-lightbox .lightbox-content,
+.lightbox-main,
+.lightbox-img,
+.archive-lightbox .lightbox-img,
+.lightbox-close,
+.lightbox-nav,
+.lightbox-similar-item,
+.lightbox-similar-item img,
+.map-gallery,
+.map-gallery-link,
+.map-gallery-image,
+.map-photo-marker {
+  border-radius: 0 !important;
+}
+
+.mapboxgl-ctrl-bottom-left,
+.mapboxgl-ctrl-bottom-right {
+  display: none !important;
 }
