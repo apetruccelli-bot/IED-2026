@@ -61,6 +61,8 @@
   --header-nav-height: 44px;
   --header-clearance: calc(10px + var(--header-nav-height) + 8px);
   --header-offset: var(--header-clearance);
+  --content-padding-x: 10px;
+  --content-padding-bottom: 8rem;
   --scrollbar-thumb: rgba(229, 229, 229, 0.32);
   --scrollbar-thumb-hover: rgba(229, 229, 229, 0.52);
   --scrollbar-track: transparent;
@@ -220,7 +222,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 10001;
-  padding: 10px 10px var(--header-fade-height);
+  padding: 10px var(--content-padding-x) var(--header-fade-height);
   margin-bottom: calc(var(--header-fade-height) * -0.62);
   overflow: visible;
   background: linear-gradient(
@@ -417,7 +419,7 @@ button {
   overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
-  padding-bottom: 6rem;
+  padding-bottom: var(--content-padding-bottom);
   -webkit-overflow-scrolling: touch;
 }
 
@@ -433,12 +435,24 @@ button {
   filter: blur(2px);
 }
 
-/* Advertisements: full-width stacked column */
+/* Advertisements: images in right column, same row as intro (no gap below header) */
+.mainLayout.category-pubblicita {
+  align-items: start;
+}
+
+.mainLayout.category-pubblicita > .descriptionAndFilters,
+.mainLayout.category-pubblicita > .myPhotos.layout-pubblicita {
+  grid-row: 1;
+  align-self: start;
+}
+
 .myPhotos.layout-pubblicita {
   grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding-top: 0;
+  margin-top: 0;
 }
 
 .myPhotos.layout-pubblicita .card {
@@ -511,15 +525,6 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active:not(.ad-reve
   overflow: hidden;
   pointer-events: none;
   z-index: 41;
-}
-
-.mainLayout.category-pubblicita.category-images-revealed .descriptionAndFilters {
-  position: absolute;
-  top: 0;
-  left: 10px;
-  width: calc((100% - 20px) * 5 / 12);
-  height: 100%;
-  max-height: 100%;
 }
 
 .mainLayout.category-pubblicita .advertising-desc-scroll.is-active {
@@ -725,6 +730,10 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active:not(.ad-reve
   gap: 1px;
   align-content: start;
   align-items: start;
+  height: 100%;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .myPhotos.layout-pacchetti .card {
@@ -810,7 +819,7 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active:not(.ad-reve
   }
 
   header {
-    padding: 8px 16px var(--header-fade-height);
+    padding: 8px var(--content-padding-x) var(--header-fade-height);
     margin-bottom: calc(var(--header-fade-height) * -0.62);
   }
   .results-info { padding: 12px 16px 0; }
@@ -1050,7 +1059,7 @@ body.about-open #explore-modal {
   --about-plate-max: min(600px, 58ch);
   width: 100vw;
   min-height: 100vh;
-  padding: var(--header-offset, var(--about-header-offset, 10rem)) 24px 8rem;
+  padding: var(--header-offset, var(--about-header-offset, 10rem)) var(--content-padding-x) var(--content-padding-bottom);
 }
 
 .about-hero,
@@ -1491,11 +1500,15 @@ body.about-open #gesture-status {
 }
 
 .descriptionAndFilters {
-  position: fixed;
-  left: 10px;
-  top: var(--header-offset, var(--header-clearance));
-  width: calc((100vw / 12) * 5 - 20px);
-  height: calc(100vh - var(--header-offset, var(--header-clearance)) - 10px);
+  grid-column: 1 / 6;
+  position: relative;
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: 100%;
+  align-self: stretch;
+  overflow: hidden;
 
   display: flex;
   flex-direction: column;
@@ -1518,13 +1531,8 @@ body.about-open #gesture-status {
   pointer-events: auto;
 }
 
-/* Portraits / packs: left preview column matches gallery height when an item is open */
+/* Portraits / packs: left column aligned with gallery inside mainLayout */
 .mainLayout.has-item-selected:not(.category-pubblicita) .descriptionAndFilters {
-  /* position: absolute;
-  top: 0;
-  left: 10px;
-  width: calc((100% - 20px) * 5 / 12); */
-  /* height: 100%; */
   max-height: 100%;
 }
 
@@ -1550,7 +1558,7 @@ body.about-open #gesture-status {
 .mainLayout.has-item-selected:not(.category-pubblicita) .item-preview.layout-pacchetti .card-img {
   width: auto;
   max-width: 100%;
-  max-height: none;
+  max-height: min(52vh, 400px);
   align-self: center;
 }
 
@@ -1566,7 +1574,8 @@ body.about-open #gesture-status {
 }
 
 .description-intro {
-  max-width: 68ch;
+  width: 100%;
+  max-width: none;
   flex-shrink: 0;
   margin-bottom: 24px;
   transition: opacity 0.5s cubic-bezier(.8, 0, .2, 1);
@@ -1674,8 +1683,9 @@ body {
 .mainLayout {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   gap: 10px;
-  padding: 10px;
+  padding: 0 var(--content-padding-x);
   height: calc(100vh - var(--header-offset, var(--header-nav-height)));
   box-sizing: border-box;
   overflow: hidden;
@@ -1701,7 +1711,7 @@ body {
   overflow-y: auto;
   box-sizing: border-box;
   padding-top: 0;
-  padding-bottom: 6rem;
+  padding-bottom: var(--content-padding-bottom);
   -webkit-overflow-scrolling: touch;
 }
 
@@ -1779,7 +1789,7 @@ body {
 }
 
 .item-preview.layout-pacchetti .card-img {
-  max-height: min(44vh, 320px);
+  max-height: min(52vh, 400px);
   width: auto;
   max-width: 100%;
   background: var(--myBlack);

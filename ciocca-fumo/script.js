@@ -346,15 +346,12 @@ function setCategory(cat) {
     portraitGestureIndex = 0;
     grid?.classList.add('layout-fotografie');
     renderPortraitFilters();
-  } else if (activeCategory === 'pubblicità') {
-    clearCategoryFilters();
-  } else {
-    renderCategoryFilters(activeCategory);
-  }
-
-  if (activeCategory === 'pacchetti') {
+  } else if (activeCategory === 'pacchetti') {
     packGestureIndex = 0;
     grid?.classList.add('layout-pacchetti');
+    renderPackFilters();
+  } else if (activeCategory === 'pubblicità') {
+    clearCategoryFilters();
   }
   if (activeCategory === 'pubblicità') {
     adGestureIndex = 0;
@@ -806,6 +803,48 @@ function resetAboutWipeGesture() {
     img.closest('.about-image-frame')?.classList.remove('is-about-active');
   });
   applyAboutWipeVisuals();
+}
+
+function renderPackFilters() {
+  const panel = document.getElementById('filters-panel');
+  if (!panel) return;
+
+  panel.innerHTML = `
+    <div class="filter">
+      <p>色&nbsp;&nbsp; Color</p>
+      <p>
+        <span class="filter-option" data-filter-type="pack-color" data-filter-value="赤 Red">赤 Red</span>
+        <span class="filter-option" data-filter-type="pack-color" data-filter-value="白 White">白 White</span>
+        <span class="filter-option" data-filter-type="pack-color" data-filter-value="青 Blue">青 Blue</span>
+        <span class="filter-option" data-filter-type="pack-color" data-filter-value="黄色 Yellow">黄色 Yellow</span>
+        <span class="filter-option" data-filter-type="pack-color" data-filter-value="緑 Green">緑 Green</span>
+      </p>
+    </div>
+
+    <div class="filter">
+      <p>産地&nbsp;&nbsp; Origin</p>
+      <p>
+        <span class="filter-option" data-filter-type="origin" data-filter-value="大阪 Osaka">大阪 Osaka</span>
+        <span class="filter-option" data-filter-type="origin" data-filter-value="東京 Tokyo">東京 Tokyo</span>
+        <span class="filter-option" data-filter-type="origin" data-filter-value="京都 Kyoto">京都 Kyoto</span>
+        <span class="filter-option" data-filter-type="origin" data-filter-value="奈良 Nara">奈良 Nara</span>
+      </p>
+    </div>
+
+    <div class="filter filter-year">
+      <p>年&nbsp;&nbsp; Year</p>
+      <p>
+        <span class="filter-option" data-filter-type="year" data-filter-value="1985">1985年</span>
+        <span class="filter-option" data-filter-type="year" data-filter-value="1986">1986年</span>
+        <span class="filter-option" data-filter-type="year" data-filter-value="1987">1987年</span>
+        <span class="filter-option" data-filter-type="year" data-filter-value="1988">1988年</span>
+        <span class="filter-option" data-filter-type="year" data-filter-value="1989">1989年</span>
+        <span class="filter-option" data-filter-type="year" data-filter-value="1990">1990年</span>
+      </p>
+    </div>
+  `;
+
+  bindFilterOptionClicks(panel);
 }
 
 function renderPortraitFilters() {
