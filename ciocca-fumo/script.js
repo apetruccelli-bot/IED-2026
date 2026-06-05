@@ -659,6 +659,7 @@ function revealAboutPlate(index) {
   const images = getAboutImages();
   if (index < 0 || index >= images.length) return;
 
+  aboutGestureIndex = index;
   aboutPlateWipe.set(index, 1);
   applyAboutWipeVisuals();
 }
@@ -730,6 +731,7 @@ function setAboutWiping(active) {
 
 function initAboutImageState() {
   aboutWiping = false;
+  aboutGestureIndex = 0;
   aboutPlateWipe.clear();
   getAboutImages().forEach((img) => {
     clearAboutPlateWipe(img);
@@ -1545,8 +1547,14 @@ document.querySelectorAll('[data-category]').forEach(el => {
 });
 
 function initAboutGestureScrollSync() {
-  if (!document.body.classList.contains('about-open')) return;
-  applyAboutWipeVisuals();
+  const modal = document.getElementById('explore-modal');
+  if (!modal || !getAboutImages().length) return;
+
+  if (modal.dataset.aboutGestureBound !== 'true') {
+    modal.dataset.aboutGestureBound = 'true';
+    modal.addEventListener('scroll', syncAboutIndexToScroll, { passive: true });
+  }
+  syncAboutIndexToScroll();
 }
 
 function resetAdGestureState() {
@@ -1592,7 +1600,7 @@ function scrollAboutSectionTo(target) {
 
   window.setTimeout(() => {
     if (document.body.classList.contains('about-open')) {
-      applyAboutWipeVisuals();
+      syncAboutIndexToScroll();
     }
   }, 450);
 }
