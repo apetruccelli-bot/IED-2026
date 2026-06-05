@@ -24,9 +24,10 @@
           </a>
         </div>
 
-        <a href="./about.html" class="font-myTitle about-top-link">
-          About
-        </a>
+        <div class="home-nav about-home-nav flex flex-row items-baseline gap-4">
+          <a href="./about.html" class="nav-link about-current">About</a>
+          <p onclick="openExploreModal()" class="nav-link explore-link" style="cursor:pointer;">Explore</p>
+        </div>
       </div>
 
       <div class="about-main grid min-h-0 grid-cols-2 gap-0 overflow-hidden bg-myBlack">
@@ -210,6 +211,198 @@
         </div>
       </div>
     </div>
+
+     <!-- Explore Modal --> 
+    <div id="explore-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.95); align-items:center; justify-content:center; flex-direction:column; gap:20px;">
+      <button class="lb-close" id="explore-close" onclick="closeExploreModal()">Close</button>
+
+      <!-- Webcam preview top-right -->
+      <div id="explore-preview-panel">
+        <div id="explore-camera-box">
+          <button id="explore-preview-toggle" type="button" onclick="toggleExplorePreview()">
+            hide camera
+          </button>
+
+          <div id="explore-webcam-wrap">
+            <video id="explore-webcam" autoplay muted playsinline></video>
+            <canvas id="explore-hand-canvas"></canvas>
+          </div>
+        </div>
+
+        <div id="explore-image-info">
+          <p id="explore-description-label">—</p>
+          <p id="explore-causes-label"></p>
+          <p id="explore-country-label"></p>
+          <p id="explore-victims-label"></p>
+        </div>
+      </div>
+
+      <div id="explore-square" style="width:min(60vw,80vh); height:min(60vw,80vh); background:#333; border-radius:6px; transition: background-color 0.05s ease; position:relative; overflow:hidden;">
+        <img id="explore-art-dirigibile-19" data-id="19" src="img/dirigibili/dirigibile (19).png" alt="dirigibile (19)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-1" data-id="1" src="img/dirigibili/dirigibile (1).png" alt="dirigibile (1)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-2" data-id="2" src="img/dirigibili/dirigibile (2).png" alt="airship (2)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-4" data-id="4" src="img/dirigibili/dirigibile (4).png" alt="airship (4)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-10" data-id="10" src="img/dirigibili/dirigibile (10).png" alt="airship (10)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-17" data-id="17" src="img/dirigibili/dirigibile (17).png" alt="dirigibile (17)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-18" data-id="18" src="img/dirigibili/dirigibile (18).png" alt="dirigibile (18)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-16" data-id="16" src="img/dirigibili/dirigibile (16).png" alt="dirigibile (16)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-100" data-id="100" src="img/dirigibili/explore (3).png" alt="explore (3)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-20" data-id="20" src="img/dirigibili/dirigibile (20).png" alt="dirigibile (20)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-11" data-id="11" src="img/dirigibili/dirigibile (11).png" alt="dirigibile (11)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-12" data-id="12" src="img/dirigibili/dirigibile (12).png" alt="dirigibile (12)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-explore-2" data-id="102" src="img/dirigibili/explore (2).png" alt="explore (2)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-explore-5" data-id="104" src="img/dirigibili/explore (5).png" alt="explore (5)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-22" data-id="22" src="img/dirigibili/dirigibile (22).png" alt="dirigibile (22)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-7" data-id="7" src="img/dirigibili/dirigibile (7).png" alt="dirigibile (7)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-relitto-3" data-id="25" src="img/relitti/relitto (3).png" alt="relitto (3)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-3" data-id="3" src="img/dirigibili/dirigibile (3).png" alt="dirigibile (3)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-explore-1" data-id="101" src="img/dirigibili/explore (1).png" alt="explore (1)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-21" data-id="21" src="img/dirigibili/dirigibile (21).png" alt="dirigibile (21)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-relitto-11" data-id="33" src="img/relitti/relitto (11).png" alt="relitto (11)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-6" data-id="6" src="img/dirigibili/dirigibile (6).png" alt="dirigibile (6)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-explore-4" data-id="103" src="img/dirigibili/explore (4).png" alt="explore (4)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-explore-6" data-id="105" src="img/dirigibili/explore (6).png" alt="explore (6)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-5" data-id="5" src="img/dirigibili/dirigibile (5).png" alt="dirigibile (5)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-relitto-2" data-id="24" src="img/relitti/relitto (2).png" alt="relitto (2)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-relitto-4" data-id="26" src="img/relitti/relitto (4).png" alt="relitto (4)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-relitto-7" data-id="29" src="img/relitti/relitto (7).png" alt="relitto (7)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-relitto-21" data-id="43" src="img/relitti/relitto (21).png" alt="relitto (21)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+        <img id="explore-art-dirigibile-9" data-id="9" src="img/dirigibili/dirigibile (9).png" alt="dirigibile (9)" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity 0.35s ease; pointer-events:none;">
+      </div>
+
+      <div class="explore-pack-selector" id="explore-pack-selector">
+        <button id="explore-pack-1" class="filter-link explore-pack-btn" onclick="setExplorePackage(0)">Germany</button>
+        <button id="explore-pack-2" class="filter-link explore-pack-btn" onclick="setExplorePackage(1)">USA</button>
+        <button id="explore-pack-3" class="filter-link explore-pack-btn" onclick="setExplorePackage(2)">Italy</button>
+      </div>
+
+      <div id="explore-status" style="color:rgba(255,255,255,0.35); font-size:12px; font-family:monospace;">Loading model...</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection@2.0.0"></script>
+
+    <script src="casoni-lm.js"></script>
+
+    <script>
+      const exploreSquare = document.getElementById('explore-square');
+      const exploreDescriptionLabel = document.getElementById('explore-description-label');
+      const exploreCausesLabel = document.getElementById('explore-causes-label');
+      const exploreCountryLabel = document.getElementById('explore-country-label');
+      const exploreVictimsLabel = document.getElementById('explore-victims-label');
+
+      let exploreItemsById = {};
+      let exploreInfoUpdateTimer = null;
+
+      function formatExploreCauses(causes) {
+        if (!causes) return '—';
+        if (Array.isArray(causes)) return causes.length ? causes.join(', ') : '—';
+        return String(causes);
+      }
+
+      function formatExploreVictims(victims) {
+        if (victims === undefined || victims === null || victims === '') {
+          return '—';
+        }
+
+        return String(victims);
+      }
+
+      function getVisibleExploreImage() {
+        if (!exploreSquare) return null;
+
+        const images = [...exploreSquare.querySelectorAll('img')];
+
+        let bestImage = null;
+        let bestOpacity = 0;
+
+        images.forEach(img => {
+          const opacity = parseFloat(window.getComputedStyle(img).opacity) || 0;
+
+          if (opacity > bestOpacity) {
+            bestOpacity = opacity;
+            bestImage = img;
+          }
+        });
+
+        if (bestOpacity <= 0.05) return null;
+
+        return bestImage;
+      }
+
+      function updateExploreImageInfo() {
+        const visibleImg = getVisibleExploreImage();
+
+        if (!visibleImg) {
+          if (exploreDescriptionLabel) exploreDescriptionLabel.textContent = '—';
+          if (exploreCausesLabel) exploreCausesLabel.textContent = '';
+          if (exploreCountryLabel) exploreCountryLabel.textContent = '';
+          if (exploreVictimsLabel) exploreVictimsLabel.textContent = '';
+          return;
+        }
+
+        const id = visibleImg.dataset.id;
+        const item = exploreItemsById[String(id)];
+
+        if (!item) {
+          if (exploreDescriptionLabel) exploreDescriptionLabel.textContent = '';
+          if (exploreCausesLabel) exploreCausesLabel.textContent = '';
+          if (exploreCountryLabel) exploreCountryLabel.textContent = '';
+          if (exploreVictimsLabel) exploreVictimsLabel.textContent = '';
+          return;
+        }
+
+        if (exploreDescriptionLabel) {
+          exploreDescriptionLabel.textContent = item.description || '';
+        }
+
+        if (exploreCausesLabel) {
+          exploreCausesLabel.textContent = `Cause: ${formatExploreCauses(item.causes)}`;
+        }
+
+        if (exploreCountryLabel) {
+          exploreCountryLabel.textContent = `Country: ${item.country || '—'}`;
+        }
+
+        if (exploreVictimsLabel) {
+          exploreVictimsLabel.textContent = `Victims: ${formatExploreVictims(item.victims)}`;
+        }
+      }
+
+      function scheduleExploreImageInfoUpdate() {
+        clearTimeout(exploreInfoUpdateTimer);
+
+        exploreInfoUpdateTimer = setTimeout(() => {
+          requestAnimationFrame(updateExploreImageInfo);
+        }, 380);
+      }
+
+      fetch('data.json')
+        .then(response => response.json())
+        .then(data => {
+          data.items.forEach(item => {
+            exploreItemsById[String(item.id)] = item;
+          });
+
+          updateExploreImageInfo();
+        })
+        .catch(error => {
+          console.error('Error loading explore image info:', error);
+        });
+
+      if (exploreSquare) {
+        const observer = new MutationObserver(scheduleExploreImageInfoUpdate);
+
+        observer.observe(exploreSquare, {
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['style', 'class']
+        });
+      }
+    </script>
 
     <script>
        const horizontalScrollContainer = document.querySelector('.horizontal-scroll');
