@@ -708,16 +708,36 @@ button {
   gap: 4px;
   width: 100%;
   --victims-thumb-size: 10px;
+  --victims-progress: 0%;
+  --victims-inactive-opacity: 0.4;
+  --victims-active-opacity: 1;
 }
 
 .victims-slider {
   width: 100%;
   margin: 3px 0 0 0;
-  accent-color: var(--myWhite);
-  height: 10px;
+  height: 2px;
+  align-self: center;
   -webkit-appearance: none;
   appearance: none;
-  background: transparent;
+  background: linear-gradient(
+    to right,
+    rgba(243, 243, 243, var(--victims-active-opacity)) 0%,
+    rgba(243, 243, 243, var(--victims-active-opacity)) var(--victims-progress),
+    rgba(243, 243, 243, var(--victims-inactive-opacity)) var(--victims-progress),
+    rgba(243, 243, 243, var(--victims-inactive-opacity)) 100%
+  );
+  border-radius: 999px;
+}
+
+.victims-control:not(.is-active) .victims-slider {
+  background: linear-gradient(
+    to right,
+    transparent 0,
+    transparent calc(var(--victims-thumb-size)),
+    rgba(243, 243, 243, 0.4) calc(var(--victims-thumb-size) / 2),
+    rgba(243, 243, 243, 0.4) 100%
+  );
 }
 
 .victims-slider:focus {
@@ -726,13 +746,13 @@ button {
 
 .victims-slider::-webkit-slider-runnable-track {
   height: 2px;
-  background: rgba(243, 243, 243, 0.5);
+  background: transparent;
   border-radius: 999px;
 }
 
 .victims-slider::-moz-range-track {
   height: 2px;
-  background: rgba(243, 243, 243, 0.5);
+  background: transparent;
   border: none;
   border-radius: 999px;
 }
@@ -744,7 +764,8 @@ button {
   height: 10px;
   border-radius: 50%;
   background: var(--myWhite);
-  margin-top: -5px;
+  margin-top: -4px;
+  opacity: var(--victims-inactive-opacity);
 }
 
 .victims-slider::-moz-range-thumb {
@@ -753,6 +774,20 @@ button {
   border: none;
   border-radius: 50%;
   background: var(--myWhite);
+  opacity: var(--victims-inactive-opacity);
+}
+
+.victims-control.is-active {
+  --victims-inactive-opacity: 0.4;
+  --victims-active-opacity: 1;
+}
+
+.victims-control.is-active .victims-slider::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+.victims-control.is-active .victims-slider::-moz-range-thumb {
+  opacity: 1;
 }
 
 .victims-stops {
@@ -767,12 +802,14 @@ button {
   top: 0;
   transform: translateX(-50%);
   white-space: nowrap;
-  cursor: pointer;
+  cursor: default;
+  pointer-events: none;
+  font-weight: normal;
 }
 
 .victims-stop.active {
   opacity: 1;
-  font-weight: 800;
+  font-weight: normal;
 }
 
 .filter-row.is-disabled .victims-slider,

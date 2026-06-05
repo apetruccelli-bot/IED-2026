@@ -422,7 +422,7 @@ function toggleFilter(key, val) {
       }
 
       if (isActive) {
-        el.style.fontWeight = 'bold';
+        el.style.fontWeight = 'normal';
       }
     });
   }
@@ -592,6 +592,12 @@ function fadeGrid(fn) {
 
 function openExploreMode() {
   isExploreMode = true;
+
+  const mainLayout = document.querySelector('.mainLayout');
+  if (mainLayout) {
+    mainLayout.classList.add('is-exploring');
+  }
+
   exploreSubcat = null;
   activeFilters.clear();
 
@@ -645,6 +651,12 @@ function openExploreMode() {
 
 function closeExploreMode() {
   isExploreMode = false;
+
+  const mainLayout = document.querySelector('.mainLayout');
+  if (mainLayout) {
+    mainLayout.classList.remove('is-exploring');
+  }
+
   exploreSubcat = null;
   activeFilters.clear();
   const header = document.getElementById('site-header');
