@@ -996,7 +996,7 @@ function formatAboutWipeStatus() {
   if (window.isAboutWiping?.()) {
     return `Wipe the glass — plate ${typeof index === 'number' ? index + 1 : '?'}/${total}`;
   }
-  return 'About: wipe the glass with your hand · ↓↑ scroll';
+  return 'About: wipe the glass with your hand';
 }
 
 function drawWindowWipeTrail(ctx) {
@@ -1034,25 +1034,18 @@ async function processAboutInteraction(video, ctx, now) {
       setGestureStatus(formatAboutWipeStatus());
       return;
     }
-
-    if (!processOpenHandSwipe(hand, frameW, frameH, ctx, { allowScroll: true })) {
-      updateIdleGestureStatus();
-    }
-    return;
   }
 
   aboutWindowWipe.resetStroke();
   window.setAboutWiping?.(false);
   syncAboutWipeAudio(false);
+  openHandSwipeDetector.reset();
 
   if (hands.length) {
-    if (!processOpenHandSwipe(hands[0], frameW, frameH, ctx, { allowScroll: true })) {
-      updateIdleGestureStatus();
-    }
-  } else {
-    handleOpenHandSwipeLost(now, { allowScroll: true });
-    updateIdleGestureStatus();
+    drawHandDebug(hands[0], ctx, 'wipe');
   }
+
+  updateIdleGestureStatus();
 }
 
 function resetAllGestureDetectors() {
@@ -1076,7 +1069,7 @@ function updateIdleGestureStatus() {
     setGestureStatus('Ads: index and middle at mouth → open poster');
   } else if (mode === 'about') {
     if (window.isAboutWiping?.()) return;
-    setGestureStatus('About: wipe the glass with your hand · ↓↑ scroll');
+    setGestureStatus('About: wipe the glass with your hand');
   } else {
     setGestureStatus('');
   }

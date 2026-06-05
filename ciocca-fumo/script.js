@@ -51,7 +51,7 @@ let portraitGestureIndex = 0;
 let packGestureIndex = 0;
 let adGestureIndex = 0;
 let adRevealScrollTimer = null;
-const AD_REVEAL_SCROLL_DELAY_MS = 2200;
+const AD_REVEAL_SCROLL_DELAY_MS = 1800;
 let categoryImagesRevealed = false;
 
 // Helper functions for managing multiple filters
@@ -778,8 +778,10 @@ function scrollContentByGesture(direction) {
   const modal = document.getElementById('explore-modal');
   const grid = document.getElementById('grid');
   const isAboutOpen = document.body.classList.contains('about-open') && modal?.style.display !== 'none';
-  const scrollEl = isAboutOpen ? modal : grid;
 
+  if (isAboutOpen) return;
+
+  const scrollEl = grid;
   if (!scrollEl) return;
 
   const amount = Math.round(scrollEl.clientHeight * 0.55);
@@ -788,11 +790,8 @@ function scrollContentByGesture(direction) {
     behavior: 'smooth',
   });
 
-  if (activeCategory === 'pubblicità' && !isAboutOpen) {
+  if (activeCategory === 'pubblicità') {
     window.setTimeout(() => syncAdIndexToScroll(), 450);
-  }
-  if (isAboutOpen) {
-    window.setTimeout(() => syncAboutIndexToScroll(), 450);
   }
 }
 
@@ -1546,14 +1545,8 @@ document.querySelectorAll('[data-category]').forEach(el => {
 });
 
 function initAboutGestureScrollSync() {
-  const modal = document.getElementById('explore-modal');
-  if (!modal || !getAboutImages().length) return;
-
-  if (modal.dataset.aboutGestureBound !== 'true') {
-    modal.dataset.aboutGestureBound = 'true';
-    modal.addEventListener('scroll', syncAboutIndexToScroll, { passive: true });
-  }
-  syncAboutIndexToScroll();
+  if (!document.body.classList.contains('about-open')) return;
+  applyAboutWipeVisuals();
 }
 
 function resetAdGestureState() {
@@ -1599,7 +1592,7 @@ function scrollAboutSectionTo(target) {
 
   window.setTimeout(() => {
     if (document.body.classList.contains('about-open')) {
-      syncAboutIndexToScroll();
+      applyAboutWipeVisuals();
     }
   }, 450);
 }
