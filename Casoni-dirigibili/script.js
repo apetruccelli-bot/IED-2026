@@ -367,7 +367,7 @@ function buildFilterRows() {
       slider.min = '0';
       slider.max = String(victimStops.length - 1);
       slider.step = '1';
-      slider.value = '4';
+      slider.value = '0';
       slider.setAttribute('aria-label', 'Victims filter');
 
       const stops = document.createElement('div');
@@ -381,35 +381,62 @@ function buildFilterRows() {
         stops.appendChild(stopEl);
       });
 
+
       slider.addEventListener('input', () => {
-        const stopLabel = getVictimsLabelFromIndex(Number(slider.value));
-        activeRowFilters[label] = stopLabel;
-        syncVictimsRow(row);
-        applyRowFilters({ autoScroll: true });
-        renderMobileActiveFilters();
-      });
+  const stopLabel = getVictimsLabelFromIndex(Number(slider.value));
 
-      stops.addEventListener('click', e => {
-        const stopEl = e.target.closest('.victims-stop');
-        if (!stopEl) return;
-        const index = Number(stopEl.dataset.index);
-        const stopLabel = getVictimsLabelFromIndex(index);
+  activeRowFilters[label] = stopLabel;
 
-        if (activeRowFilters[label] === stopLabel) {
-          activeRowFilters[label] = null;
-        } else {
-          slider.value = String(index);
-          activeRowFilters[label] = stopLabel;
-        }
-        syncVictimsRow(row);
-        applyRowFilters({ autoScroll: true });
-        renderMobileActiveFilters();
+  syncVictimsRow(row);
+  applyRowFilters({ autoScroll: true });
+  renderMobileActiveFilters();
+});
 
-        if (isMobileIndex()) {
-          row.classList.add('mobile-open');
-          showMobileFilterOptions(row);
-        }
-      });
+let victimsPointerStartX = 0;
+let victimsPointerStartValue = null;
+let victimsClickedThumb = false;
+
+wrap.addEventListener('pointerdown', e => {
+  if (e.target !== slider) return;
+
+  const rect = slider.getBoundingClientRect();
+  const min = Number(slider.min);
+  const max = Number(slider.max);
+  const value = Number(slider.value);
+
+  const thumbSize =
+    parseFloat(getComputedStyle(slider).getPropertyValue('--victims-thumb-size')) || 10;
+
+  const usableWidth = rect.width - thumbSize;
+  const percent = max === min ? 0 : (value - min) / (max - min);
+  const thumbCenterX = rect.left + (thumbSize / 2) + (percent * usableWidth);
+
+  const clickDistanceFromThumb = Math.abs(e.clientX - thumbCenterX);
+  const thumbHitArea = Math.max(thumbSize * 2.4, 24);
+
+  victimsClickedThumb = clickDistanceFromThumb <= thumbHitArea;
+  victimsPointerStartX = e.clientX;
+  victimsPointerStartValue = slider.value;
+}, true);
+
+slider.addEventListener('pointerup', e => {
+  if (!activeRowFilters[label]) return;
+  if (!victimsClickedThumb) return;
+
+  const movedEnough = Math.abs(e.clientX - victimsPointerStartX) > 4;
+  const valueChanged = slider.value !== victimsPointerStartValue;
+
+  if (movedEnough || valueChanged) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  activeRowFilters[label] = null;
+
+  syncVictimsRow(row);
+  applyRowFilters({ autoScroll: true });
+  renderMobileActiveFilters();
+});
 
       wrap.appendChild(slider);
       wrap.appendChild(stops);
@@ -478,10 +505,36 @@ function buildFilterRows() {
   renderMobileActiveFilters();
 }
 
+function updateVictimsSliderVisual(row) {
+  const slider =
+    row.querySelector('.victims-slider') ||
+    mobileFilterOptions?.querySelector('.victims-slider');
+
+  const control =
+    row.querySelector('.victims-control') ||
+    mobileFilterOptions?.querySelector('.victims-control');
+
+  if (!slider || !control) return;
+
+  const min = Number(slider.min);
+  const max = Number(slider.max);
+  const value = Number(slider.value);
+
+  const activeValue = activeRowFilters.Victims;
+  const isActive = !!activeValue;
+
+  const percent = max === min
+    ? 0
+    : ((value - min) / (max - min)) * 100;
+
+  control.classList.toggle('is-active', isActive);
+  control.style.setProperty('--victims-progress', isActive ? `${percent}%` : '0%');
+}
+
 function syncVictimsRow(row) {
- const slider =
-  row.querySelector('.victims-slider') ||
-  mobileFilterOptions?.querySelector('.victims-slider');
+  const slider =
+    row.querySelector('.victims-slider') ||
+    mobileFilterOptions?.querySelector('.victims-slider');
 
   const stops = row.querySelectorAll('.victims-stop').length
     ? row.querySelectorAll('.victims-stop')
@@ -491,12 +544,18 @@ function syncVictimsRow(row) {
 
   const activeValue = activeRowFilters.Victims;
   const activeIndex = activeValue ? getVictimsIndexFromLabel(activeValue) : -1;
+
   stops.forEach((stopEl, index) => {
     stopEl.classList.toggle('active', index === activeIndex);
   });
+
   if (activeIndex >= 0) {
     slider.value = String(activeIndex);
+  } else {
+    slider.value = '0';
   }
+
+  updateVictimsSliderVisual(row);
 }
 
 function isCategoryDisablingRows() {
