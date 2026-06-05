@@ -50,6 +50,8 @@ let lastAdvertisingIndex = -1;
 let portraitGestureIndex = 0;
 let packGestureIndex = 0;
 let adGestureIndex = 0;
+let adRevealScrollTimer = null;
+const AD_REVEAL_SCROLL_DELAY_MS = 2200;
 let categoryImagesRevealed = false;
 
 // Helper functions for managing multiple filters
@@ -125,7 +127,7 @@ function itemMatchesAllFilters(item) {
 function isGestureCategoryActive() {
   return activeCategory === 'fotografie'
     || activeCategory === 'pacchetti'
-    || (activeCategory === 'pubblicità' && !categoryImagesRevealed);
+    || activeCategory === 'pubblicità';
 }
 
 function isCategoryImagesRevealed() {
@@ -143,14 +145,6 @@ function itemMatchesYearFilter(item) {
   return yearFilters.some(f => Number(item.year) === Number(f.value));
 }
 
-function openAdsViaGesture() {
-  if (activeCategory !== 'pubblicità') {
-    setCategory('pubblicità');
-  }
-  revealCategoryImages();
-  window.updateGestureCameraVisibility?.();
-}
-
 function revealCategoryImages() {
   if (categoryImagesRevealed || !['fotografie', 'pacchetti', 'pubblicità'].includes(activeCategory)) {
     return false;
@@ -162,7 +156,7 @@ function revealCategoryImages() {
     'category-gesture-active',
     activeCategory === 'fotografie'
       || activeCategory === 'pacchetti'
-      || (activeCategory === 'pubblicità' && !categoryImagesRevealed)
+      || activeCategory === 'pubblicità'
   );
   window.updateGestureCameraVisibility?.();
 
@@ -316,14 +310,15 @@ function updateHeaderNavState({ aboutOpen = false, highlightCategory = null } = 
 
 function setCategory(cat) {
   closeAboutIndex();
+  window.clearTimeout(adRevealScrollTimer);
+  adRevealScrollTimer = null;
   const prevCategory = activeCategory;
   activeCategory = cat;
   clearAllFilters();
   activeTags.clear();
 
-  categoryImagesRevealed = cat === 'fotografie' || cat === 'pacchetti';
+  categoryImagesRevealed = cat === 'fotografie' || cat === 'pacchetti' || cat === 'pubblicità';
   if (cat === 'pubblicità') {
-    categoryImagesRevealed = false;
     adGestureIndex = 0;
     lastAdvertisingIndex = -1;
     document.body.classList.remove('ad-smoking-gesture');
@@ -374,13 +369,13 @@ function setCategory(cat) {
     'category-gesture-active',
     activeCategory === 'fotografie'
       || activeCategory === 'pacchetti'
-      || (activeCategory === 'pubblicità' && !categoryImagesRevealed)
+      || activeCategory === 'pubblicità'
   );
 
   updateCategoryText(activeCategory);
   syncCategoryRevealState();
   render();
-  if (activeCategory === 'pubblicità') { //categoryImagesRevealed
+  if (activeCategory === 'pubblicità') {
     revealAdsContent();
   }
   // If we left the advertising category, reset scroll and ensure description visible
@@ -553,6 +548,68 @@ function syncAdIndexToScroll() {
   });
 
   adGestureIndex = bestIndex;
+}
+
+function revealAdAtIndex(index) {
+  const ads = getAdItems();
+  if (!ads.length || index < 0 || index >= ads.length) return;
+
+  const card = findCardForItem(ads[index]);
+  if (!card) return;
+
+  card.classList.add('ad-revealed', 'ad-active');
+  card.classList.remove('ad-past');
+
+  syncAdCardDescriptionVisibility();
+
+  setActiveAdvertisingDescription(index);
+  lastAdvertisingIndex = index;
+}
+
+function scrollToAdCard(index) {
+  const ads = getAdItems();
+  if (!ads.length || !grid || index < 0 || index >= ads.length) return;
+
+  const card = findCardForItem(ads[index]);
+  if (!card) return;
+
+  const cardTop = card.offsetTop;
+  const cardHeight = card.offsetHeight;
+  const targetScroll = cardTop - (grid.clientHeight * 0.45) + (cardHeight / 2);
+
+  grid.scrollTo({
+    top: Math.max(0, targetScroll),
+    behavior: 'smooth',
+  });
+
+  window.setTimeout(() => {
+    updateAdvertisingScrollState();
+    syncAdCardDescriptionVisibility();
+  }, 450);
+}
+
+function advanceAdViaGesture() {
+  if (activeCategory !== 'pubblicità' || !categoryImagesRevealed) return;
+  if (adRevealScrollTimer) return;
+
+  const ads = getAdItems();
+  if (!ads.length) return;
+
+  syncAdIndexToScroll();
+  const openIndex = adGestureIndex;
+
+  revealAdAtIndex(openIndex);
+
+  if (ads.length === 1) return;
+
+  const nextIndex = (openIndex + 1) % ads.length;
+
+  window.clearTimeout(adRevealScrollTimer);
+  adRevealScrollTimer = window.setTimeout(() => {
+    adRevealScrollTimer = null;
+    adGestureIndex = nextIndex;
+    scrollToAdCard(nextIndex);
+  }, AD_REVEAL_SCROLL_DELAY_MS);
 }
 
 function getAboutImages() {
@@ -835,27 +892,33 @@ function bindFilterOptionClicks(panel) {
 
       toggleFilter(type, value);
 
-      console.log('Active filters:', activeFilters);
-
       updateFilterOpacity();
       applyFilterOpacityToCards();
     });
   });
 }
 
-function ifAdvertisingHideDesc(event) {
-  if (activeCategory != 'pubblicità') return
-  const myDescription = document.getElementsByClassName('description-intro')[0];
-  const photoDescriptions = Array.from(document.getElementsByClassName('card-desc'));
-  if (!myDescription) return
-  //console.log('event', event.target, event.target.scrollHeight, event.target.scrollTop);
-  if(event.target.scrollTop > 4) {
-    myDescription.classList.add('opacity-0');
-    photoDescriptions.forEach(desc => desc.classList.remove('opacity-0'));
-  } else {
-    myDescription.classList.remove('opacity-0');
-    photoDescriptions.forEach(desc => desc.classList.add('opacity-0'));
+function syncAdCardDescriptionVisibility() {
+  if (activeCategory !== 'pubblicità' || !grid) return;
+
+  const intro = document.querySelector('.description-intro');
+  const cards = [...grid.querySelectorAll('.myPhotos.layout-pubblicita .card')];
+  const scrolled = grid.scrollTop > 4;
+
+  if (intro) {
+    intro.classList.toggle('opacity-0', scrolled);
   }
+
+  cards.forEach(card => {
+    const desc = card.querySelector('.card-desc');
+    if (!desc) return;
+    desc.classList.toggle('opacity-0', !card.classList.contains('ad-revealed'));
+  });
+}
+
+function ifAdvertisingHideDesc(event) {
+  if (activeCategory !== 'pubblicità' || event.target !== grid) return;
+  syncAdCardDescriptionVisibility();
 }
 
 
@@ -1180,7 +1243,10 @@ function render() {
     if (grid) grid.scrollTop = 0;
     lastAdvertisingIndex = -1;
     setupAdvertisingScrollText();
-    requestAnimationFrame(() => updateAdvertisingScrollState());
+    requestAnimationFrame(() => {
+      updateAdvertisingScrollState();
+      syncAdCardDescriptionVisibility();
+    });
   } else {
     clearAdvertisingDescriptions();
   }
@@ -1330,7 +1396,11 @@ function updateAdvertisingScrollState() {
     });
   }
 
-  setActiveAdvertisingDescription(activeIndex);
+  if (activeIndex >= 0 && cards[activeIndex]?.classList.contains('ad-revealed')) {
+    setActiveAdvertisingDescription(activeIndex);
+  } else {
+    setActiveAdvertisingDescription(-1);
+  }
   syncAdvertisingIntroVisibility();
 
   if (activeIndex < 0) {
@@ -1338,7 +1408,9 @@ function updateAdvertisingScrollState() {
     return;
   }
 
-  adGestureIndex = activeIndex;
+  if (!adRevealScrollTimer) {
+    adGestureIndex = activeIndex;
+  }
 
   if (activeIndex !== lastAdvertisingIndex) {
     blocks.forEach((block, i) => {
@@ -1352,6 +1424,8 @@ function updateAdvertisingScrollState() {
     });
     lastAdvertisingIndex = activeIndex;
   }
+
+  syncAdCardDescriptionVisibility();
 }
 
 function openLightbox(index) {
@@ -1431,14 +1505,26 @@ function initAboutGestureScrollSync() {
 }
 
 function resetAdGestureState() {
+  window.clearTimeout(adRevealScrollTimer);
+  adRevealScrollTimer = null;
   adGestureIndex = 0;
   document.body.classList.remove('ad-smoking-gesture');
+  grid?.querySelectorAll('.myPhotos.layout-pubblicita .card').forEach(card => {
+    card.classList.remove('ad-revealed');
+    card.querySelector('.card-desc')?.classList.add('opacity-0');
+  });
+}
+
+function updateHeaderOffset() {
+  const header = document.querySelector('header');
+  if (!header) return;
+  const offset = `${header.offsetHeight}px`;
+  document.documentElement.style.setProperty('--header-offset', offset);
+  document.documentElement.style.setProperty('--about-header-offset', offset);
 }
 
 function updateAboutHeaderOffset() {
-  const header = document.querySelector('header');
-  if (!header) return;
-  document.documentElement.style.setProperty('--about-header-offset', `${header.offsetHeight}px`);
+  updateHeaderOffset();
 }
 
 function scrollAboutSectionTo(target) {
@@ -1512,48 +1598,22 @@ function initAboutDropdown() {
     openExploreModal();
   });
 
-  let indexCloseTimer = null;
-
-  const cancelIndexClose = () => {
-    window.clearTimeout(indexCloseTimer);
-    indexCloseTimer = null;
-  };
-
-  const scheduleIndexClose = () => {
-    cancelIndexClose();
-    indexCloseTimer = window.setTimeout(() => {
-      indexCloseTimer = null;
-      closeAboutIndexPanel();
-    }, 120);
-  };
-
   aboutWrap.addEventListener('mouseenter', () => {
     if (!document.body.classList.contains('about-open')) return;
-    cancelIndexClose();
     openAboutIndexPanel();
-  });
-
-  aboutWrap.addEventListener('mouseleave', (e) => {
-    const next = e.relatedTarget;
-    if (next && aboutWrap.contains(next)) return;
-    scheduleIndexClose();
-  });
-
-  aboutIndex?.addEventListener('mouseenter', cancelIndexClose);
-  aboutIndex?.addEventListener('mouseleave', (e) => {
-    const next = e.relatedTarget;
-    if (next && aboutWrap.contains(next)) return;
-    scheduleIndexClose();
   });
 }
 
 function openExploreModal() {
   const modal = document.getElementById('explore-modal');
   if (!modal) return;
+  window.clearTimeout(adRevealScrollTimer);
+  adRevealScrollTimer = null;
   modal.style.display = 'block';
   modal.setAttribute('aria-hidden', 'false');
   modal.scrollTop = 0;
   document.body.classList.add('about-open');
+  openAboutIndexPanel();
   ensureAboutWipeHints();
   initAboutImageState();
   requestAnimationFrame(() => {
@@ -1640,17 +1700,19 @@ function initScrollToTop() {
   aboutModal?.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   updateScrollToTopVisibility();
+  updateHeaderOffset();
 }
 
 async function init() {
   try {
     await loadData();
     setCategory('fotografie');
+    updateHeaderOffset();
     initAboutIndexLinks();
     initAboutDropdown();
     initScrollToTop();
     window.addEventListener('resize', () => {
-      if (document.body.classList.contains('about-open')) updateAboutHeaderOffset();
+      updateHeaderOffset();
       if (activeCategory === 'pubblicità' && categoryImagesRevealed) {
         updateAdvertisingScrollState();
       }
@@ -1678,8 +1740,8 @@ window.getPackItems = getPackItems;
 window.selectPackByIndex = selectPackByIndex;
 window.advancePackViaGesture = advancePackViaGesture;
 window.resetAdGestureState = resetAdGestureState;
+window.advanceAdViaGesture = advanceAdViaGesture;
 window.revealCategoryImages = revealCategoryImages;
-window.openAdsViaGesture = openAdsViaGesture;
 window.isCategoryImagesRevealed = isCategoryImagesRevealed;
 window.isGestureCategoryActive = isGestureCategoryActive;
 window.addAboutWipeProgress = addAboutWipeProgress;
@@ -1687,6 +1749,7 @@ window.getAboutWipeProgress = getAboutWipeProgress;
 window.setAboutWiping = setAboutWiping;
 window.isAboutWiping = () => aboutWiping;
 window.syncAboutIndexToScroll = syncAboutIndexToScroll;
+window.updateHeaderOffset = updateHeaderOffset;
 window.getAboutRevealIndex = () => aboutGestureIndex;
 window.resetAboutWipeGesture = resetAboutWipeGesture;
 //window.resetAboutBlowGesture = resetAboutBlowGesture;

@@ -19,7 +19,7 @@ function isGestureSurfaceActive() {
   if (!gestureSurfaceEnabled) return false;
   if (!CATEGORY_GESTURE_INTERACTIONS_ENABLED) return false;
   if (document.body.classList.contains('about-open')) return true;
-  return isPortraitGestureActive() || isPackGestureActive() || isAdRevealGestureActive();
+  return isPortraitGestureActive() || isPackGestureActive() || isAdGestureActive();
 }
 
 function shouldShowGestureCamera() {
@@ -27,7 +27,7 @@ function shouldShowGestureCamera() {
   if (document.body.classList.contains('about-open')) return true;
   if (!CATEGORY_GESTURE_INTERACTIONS_ENABLED) return false;
   const cat = getActiveCategorySafe();
-  if (cat === 'pubblicità') return isAdRevealGestureActive();
+  if (cat === 'pubblicità') return isGestureUiActive();
   return cat === 'fotografie' || cat === 'pacchetti';
 }
 
@@ -413,26 +413,8 @@ function isPackGestureActive() {
   return isGestureUiActive() && getActiveCategorySafe() === 'pacchetti';
 }
 
-function isAdRevealGestureActive() {
-  if (!isGestureUiActive()) return false;
-  const cat = getActiveCategorySafe();
-  if (cat === 'pubblicità') return !window.isCategoryImagesRevealed?.();
-  return cat === 'fotografie' || cat === 'pacchetti';
-}
-
-function attemptAdsRevealWithHands(hands, ctx) {
-  if (!isAdRevealGestureActive() || !hands.length || !ctx) return false;
-
-  const canvas = ctx.canvas;
-  const frameW = canvas.width;
-  const frameH = canvas.height;
-  const hand = hands[0];
-  const nearMouth = isCigaretteToMouthGesture(hand, frameW, frameH);
-  const holdPending = cigaretteToMouthDetector.holdStart > 0;
-
-  if (!nearMouth && !holdPending) return false;
-
-  return processAdCigaretteGesture(hand, frameW, frameH, ctx);
+function isAdGestureActive() {
+  return isGestureUiActive() && getActiveCategorySafe() === 'pubblicità';
 }
 
 function handScale(hand) {
@@ -524,8 +506,8 @@ function processAdCigaretteGesture(hand, frameW, frameH, ctx) {
   document.body.classList.toggle('ad-smoking-gesture', nearMouth);
 
   if (cigaretteToMouthDetector.update(hand, frameW, frameH)) {
-    window.openAdsViaGesture?.();
-    setGestureStatus('Advertisements open');
+    window.advanceAdViaGesture?.();
+    setGestureStatus('Poster open · scrolling to next');
     setTimeout(updateIdleGestureStatus, GESTURE_COOLDOWN_MS);
     updateGestureCameraVisibility();
     return true;
@@ -539,7 +521,7 @@ function processAdCigaretteGesture(hand, frameW, frameH, ctx) {
     return false;
   }
 
-  setGestureStatus('Ads: index and middle together at mouth');
+  setGestureStatus('Ads: index and middle at mouth → open poster');
   return false;
 }
 
@@ -1087,11 +1069,11 @@ function updateIdleGestureStatus() {
   const mode = getGestureMode();
 
   if (mode === 'fotografie') {
-    setGestureStatus('Portraits: 2× tap · index+middle to mouth → Ads');
+    setGestureStatus('Portraits: 2× tap index+middle on other hand');
   } else if (mode === 'pacchetti') {
-    setGestureStatus('Packs: left chest · index+middle to mouth → Ads');
+    setGestureStatus('Packs: index on left chest');
   } else if (mode === 'pubblicità') {
-    setGestureStatus('Ads: index and middle together at mouth');
+    setGestureStatus('Ads: index and middle at mouth → open poster');
   } else if (mode === 'about') {
     if (window.isAboutWiping?.()) return;
     setGestureStatus('About: wipe the glass with your hand · ↓↑ scroll');
@@ -1185,11 +1167,6 @@ async function detectCategoryGestures() {
       try {
         const hands = await handDetector.estimateHands(video, { flipHorizontal: true });
 
-        if (attemptAdsRevealWithHands(hands, ctx)) {
-          requestAnimationFrame(detectCategoryGestures);
-          return;
-        }
-
         if (hands.length >= 2) {
           processPortraitOtherHandTap(hands, ctx);
         } else {
@@ -1203,16 +1180,6 @@ async function detectCategoryGestures() {
       try {
         const frameW = canvas.width;
         const frameH = canvas.height;
-
-        if (isAdRevealGestureActive()) {
-          const handsForAds = await handDetector.estimateHands(video, { flipHorizontal: true });
-          if (attemptAdsRevealWithHands(handsForAds, ctx)) {
-            /* switched to Ads */
-            requestAnimationFrame(detectCategoryGestures);
-            return;
-          }
-        }
-
         const hands = await handDetector.estimateHands(video, { flipHorizontal: false });
 
         if (hands.length) {
@@ -1225,7 +1192,7 @@ async function detectCategoryGestures() {
       } catch (err) {
         /* ignore per-frame errors */
       }
-    } else if (isAdRevealGestureActive()) {
+    } else if (isAdGestureActive()) {
       try {
         const hands = await handDetector.estimateHands(video, { flipHorizontal: true });
         const frameW = canvas.width;

@@ -60,6 +60,7 @@
   --header-fade-height: clamp(40px, 5vh, 52px);
   --header-nav-height: 44px;
   --header-clearance: calc(10px + var(--header-nav-height) + 8px);
+  --header-offset: var(--header-clearance);
   --scrollbar-thumb: rgba(229, 229, 229, 0.32);
   --scrollbar-thumb-hover: rgba(229, 229, 229, 0.52);
   --scrollbar-track: transparent;
@@ -109,6 +110,18 @@ body {
 .all-unblurring {
   animation: body-unblur 1.4s ease-out forwards;
 }
+
+.descriptionAndFilters.landing-sidebar-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.descriptionAndFilters.all-blurred,
+.descriptionAndFilters.all-unblurring {
+  will-change: filter;
+}
+
 .smoking-gesture #status {
   color: red;
 }
@@ -451,24 +464,29 @@ button {
   transition: opacity 0.5s cubic-bezier(.8,0,.2,1);
 }
 
-/* .mainLayout.category-pubblicita:not(.category-images-revealed) .myPhotos.layout-pubblicita .card {
+.mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card {
+  pointer-events: auto;
+  transition: opacity 0.65s ease, filter 0.65s ease;
+}
+
+.mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card:not(.ad-revealed) {
   opacity: 0.14;
   filter: blur(16px);
-  pointer-events: none;
-  transition: opacity 0.65s ease, filter 0.65s ease;
-} */
+}
 
-.mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card,
-.mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card.ad-past,
-.mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card.ad-active,
 .mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card.ad-revealed {
   opacity: 1;
   filter: none;
-  pointer-events: auto;
 }
 
-body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active .card-img {
-  filter: brightness(1.12);
+.mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card.ad-revealed .card-img {
+  opacity: 1;
+  filter: none;
+  transition: opacity 0.65s ease, filter 0.65s ease;
+}
+
+body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active:not(.ad-revealed) .card-img {
+  filter: blur(14px) brightness(1.08);
   transition: filter 0.35s ease;
 }
 
@@ -532,14 +550,14 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active .card-img {
   pointer-events: auto;
 }
 
+.mainLayout.category-images-revealed .myPhotos.layout-pubblicita .card:not(.ad-revealed) {
+  opacity: 0.14;
+  filter: blur(16px);
+}
+
 .mainLayout.category-images-revealed .myPhotos .card.opacity-30 {
   opacity: 0.3;
 }
-body:not(.about-open) .mainLayout.category-images-revealed .descriptionAndFilters,
-body:not(.about-open) .mainLayout.category-pubblicita .descriptionAndFilters {
-  z-index: 90000;
-}
-
 /* .mainLayout:not(.category-images-revealed) .filters {
   visibility: hidden;
   pointer-events: none;
@@ -1024,7 +1042,7 @@ body:not(.about-open) .mainLayout.category-pubblicita .descriptionAndFilters {
 }
 
 body.about-open #explore-modal {
-  scroll-padding-top: var(--about-header-offset, 10rem);
+  scroll-padding-top: var(--header-offset, var(--about-header-offset, 10rem));
 }
 
 .about-page {
@@ -1032,14 +1050,14 @@ body.about-open #explore-modal {
   --about-plate-max: min(600px, 58ch);
   width: 100vw;
   min-height: 100vh;
-  padding: var(--about-header-offset, 10rem) 24px 8rem;
+  padding: var(--header-offset, var(--about-header-offset, 10rem)) 24px 8rem;
 }
 
 .about-hero,
 .about-section,
 .about-text-block,
 .about-grid {
-  scroll-margin-top: calc(var(--about-header-offset, 10rem) + 1rem);
+  scroll-margin-top: calc(var(--header-offset, var(--about-header-offset, 10rem)) + 1rem);
 }
 
 .about-hero {
@@ -1243,8 +1261,8 @@ body.about-open .header-about-wrap.is-index-open .about-index {
   opacity: 1;
   pointer-events: auto;
   transition:
-    clip-path 0.5s cubic-bezier(0.33, 1, 0.38, 1),
-    opacity 0.28s ease;
+    clip-path 0.32s cubic-bezier(0.33, 1, 0.38, 1),
+    opacity 0.2s ease;
 }
 
 .about-index::before {
@@ -1265,13 +1283,13 @@ body.about-open .header-about-wrap.is-index-open .about-index {
   font-family: 'Daily', monospace;
   opacity: 0;
   transform: translateY(-0.4em);
-  transition: opacity 0.55s ease, transform 0.55s ease;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 body.about-open .header-about-wrap.is-index-open .about-index-title {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 0.12s;
+  transition-delay: 0.05s;
 }
 
 .about-index-title .english {
@@ -1291,7 +1309,7 @@ body.about-open .header-about-wrap.is-index-open .about-index-title {
 .about-index-list li {
   opacity: 0;
   transform: translateY(-0.35em);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity 0.32s ease, transform 0.32s ease;
 }
 
 body.about-open .header-about-wrap.is-index-open .about-index-list li {
@@ -1299,14 +1317,14 @@ body.about-open .header-about-wrap.is-index-open .about-index-list li {
   transform: translateY(0);
 }
 
-body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(1) { transition-delay: 0.22s; }
-body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(2) { transition-delay: 0.34s; }
-body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(3) { transition-delay: 0.46s; }
-body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(4) { transition-delay: 0.58s; }
-body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(5) { transition-delay: 0.7s; }
-body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(6) { transition-delay: 0.82s; }
-body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(7) { transition-delay: 0.94s; }
-body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(8) { transition-delay: 1.06s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(1) { transition-delay: 0.08s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(2) { transition-delay: 0.13s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(3) { transition-delay: 0.18s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(4) { transition-delay: 0.23s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(5) { transition-delay: 0.28s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(6) { transition-delay: 0.33s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(7) { transition-delay: 0.38s; }
+body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(8) { transition-delay: 0.43s; }
 
 .about-index-item {
   display: flex;
@@ -1320,8 +1338,7 @@ body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(
   transition: opacity 0.2s ease;
 }
 
-.about-index-item .japanese,
-.about-index-item .english {
+.about-index-item .japanese {
   display: block;
   max-width: 100%;
   text-align: right;
@@ -1341,6 +1358,16 @@ body.about-open .header-about-wrap.is-index-open .about-index-list li:nth-child(
   color: var(--myGrey);
   text-transform: uppercase;
   letter-spacing: 0.03em;
+  display: block;
+  min-width: 12ch;
+  width: max-content;
+  max-width: 100%;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.about-index-item .english.about-index-dates {
+  letter-spacing: 0.02em;
 }
 
 .about-index-item:hover {
@@ -1466,9 +1493,9 @@ body.about-open #gesture-status {
 .descriptionAndFilters {
   position: fixed;
   left: 10px;
-  top: var(--header-clearance);
+  top: var(--header-offset, var(--header-clearance));
   width: calc((100vw / 12) * 5 - 20px);
-  height: calc(100vh - var(--header-clearance) - 10px);
+  height: calc(100vh - var(--header-offset, var(--header-clearance)) - 10px);
 
   display: flex;
   flex-direction: column;
@@ -1542,7 +1569,6 @@ body.about-open #gesture-status {
   max-width: 68ch;
   flex-shrink: 0;
   margin-bottom: 24px;
-
   transition: opacity 0.5s cubic-bezier(.8, 0, .2, 1);
 }
 
@@ -1650,7 +1676,7 @@ body {
   grid-template-columns: repeat(12, 1fr);
   gap: 10px;
   padding: 10px;
-  height: calc(100vh - var(--header-nav-height));
+  height: calc(100vh - var(--header-offset, var(--header-nav-height)));
   box-sizing: border-box;
   overflow: hidden;
   align-items: stretch;

@@ -33,15 +33,60 @@
       </div>
     </div>
 
+    <audio id="landing-smoke-sound" preload="auto" src="assets/cigarette-inhale.mp3"></audio>
+
     <script>
       (function () {
         const modal   = document.getElementById('landing-modal');
         const content = document.getElementById('landing-content');
+        const smokeSound = document.getElementById('landing-smoke-sound');
         let leaving = false;
+        let smokePlaying = false;
+
+        function startSmokeSound() {
+          if (!smokeSound || smokePlaying) return;
+          smokeSound.currentTime = 0;
+          smokeSound.play().then(() => {
+            smokePlaying = true;
+          }).catch(() => {});
+        }
+
+        function stopSmokeSound() {
+          if (!smokeSound) return;
+          smokeSound.pause();
+          smokeSound.currentTime = 0;
+          smokePlaying = false;
+        }
+
+        function finishLandingReveal() {
+          stopSmokeSound();
+          window.updateHeaderOffset?.();
+          window.enableGestureSurface?.();
+        }
+
+        function revealPortraits() {
+          const blurredEls = document.querySelectorAll('.initially-blurred');
+          if (!blurredEls.length) {
+            finishLandingReveal();
+            return;
+          }
+
+          let unblurDone = 0;
+          blurredEls.forEach(el => {
+            el.classList.remove('all-blurred', 'landing-sidebar-hidden');
+            el.classList.add('all-unblurring');
+            el.addEventListener('animationend', () => {
+              el.classList.remove('all-unblurring');
+              unblurDone += 1;
+              if (unblurDone >= blurredEls.length) finishLandingReveal();
+            }, { once: true });
+          });
+        }
 
         function startLeave() {
           if (leaving) return;
           leaving = true;
+          if (!smokePlaying) startSmokeSound();
           content.classList.remove('landing-content-enter');
           content.classList.add('landing-content-leave');
           content.addEventListener('animationend', () => {
@@ -49,19 +94,14 @@
             modal.addEventListener('animationend', () => {
               modal.style.opacity = '0';
               modal.style.pointerEvents = 'none';
-              document.querySelectorAll('.initially-blurred').forEach(el => {
-                el.classList.remove('all-blurred');
-                el.classList.add('all-unblurring');
-                el.addEventListener('animationend', () => {
-                  el.classList.remove('all-unblurring');
-                  window.enableGestureSurface?.();
-                }, { once: true });
-              });
+              revealPortraits();
             }, { once: true });
           }, { once: true });
         }
 
-        // auto-leave after 2s blur-in + 2s blur-out
+        startSmokeSound();
+
+        // auto-leave after blur-in + pause
         content.addEventListener('animationend', () => {
           if (!leaving) setTimeout(startLeave, 2000);
         }, { once: true });
@@ -90,49 +130,51 @@
               <li>
                 <a href="#about-this-archive" class="about-index-item">
                   <span class="japanese">本資料館について</span>
-                  <span class="english">About this archive</span>
+                  <span class="english">This archive</span>
                 </a>
               </li>
               <li>
                 <a href="#about-shop-shinsekai" class="about-index-item">
-                  <span class="japanese">店舗と新世界地区</span>
-                  <span class="english">The shop and the Shinsekai district</span>
+                  <span class="japanese">店舗と新世界</span>
+                  <span class="english">Store &amp; lane</span>
                 </a>
               </li>
               <li>
                 <a href="#about-tobacco-chronology" class="about-index-item">
-                  <span class="japanese">たばこ関連資料とパッケージ年代記</span>
-                  <span class="english">Tobacco objects and pack chronology</span>
+                  <span class="japanese">たばこ資料記</span>
+                  <span class="english">Pack history</span>
                 </a>
               </li>
               <li>
                 <a href="#about-evening-documentation" class="about-index-item">
-                  <span class="japanese">夕刻写真記録<span class="about-index-nowrap">（1985–1990）</span></span>
-                  <span class="english">Evening photographic documentation <span class="about-index-nowrap">(1985–1990)</span></span>
+                  <span class="japanese">夕刻写真記録</span>
+                  <span class="english">Night record</span>
+                  <span class="english about-index-dates">(1985–1990)</span>
                 </a>
               </li>
               <li>
                 <a href="#about-health-restrictions" class="about-index-item">
-                  <span class="japanese">健康上の告知と店内制限</span>
-                  <span class="english">Health notice and on-site restrictions</span>
+                  <span class="japanese">健康上の告知</span>
+                  <span class="english">Health rules</span>
                 </a>
               </li>
               <li>
                 <a href="#about-access-after-closure" class="about-index-item">
-                  <span class="japanese">閉鎖後のアクセス<span class="about-index-nowrap">（1990–2018）</span></span>
-                  <span class="english">Access after closure <span class="about-index-nowrap">(1990–2018)</span></span>
+                  <span class="japanese">閉鎖後の記録</span>
+                  <span class="english">Locked years</span>
+                  <span class="english about-index-dates">(1990–2018)</span>
                 </a>
               </li>
               <li>
                 <a href="#about-preservation" class="about-index-item">
-                  <span class="japanese">保存に関する声明</span>
-                  <span class="english">Preservation statement</span>
+                  <span class="japanese">保存に関する</span>
+                  <span class="english">Film storage</span>
                 </a>
               </li>
               <li>
                 <a href="#about-notice" class="about-index-item">
                   <span class="japanese">告知</span>
-                  <span class="english">Notice</span>
+                  <span class="english">Closing note</span>
                 </a>
               </li>
             </ol>
@@ -142,12 +184,12 @@
     </header>
 
     <!-- MAIN LAYOUT -->
-   <div class="mainLayout initially-blurred all-blurred">
+   <div class="mainLayout">
 
-  <aside class="descriptionAndFilters">
+  <aside class="descriptionAndFilters initially-blurred all-blurred landing-sidebar-hidden">
     <div class="description-intro">
-      <div class="japanese" id="category-japanese-text"></div>
-      <div class="english" id="category-english-text"></div>
+      <div class="japanese" id="category-japanese-text">大阪の路地、商店街やオフィス街、小さなバーの出入り口で撮影された肖像である。会社員、年配の常連、若い人々の一服は、健康上の注意喚起のあとも、なお公的な習慣として続いていた。新世界の田中博の店から持ち出された私的な映像資料である。</div>
+      <div class="english" id="category-english-text">Portraits taken in the alleys of Osaka, along shopping and business streets, and at the entrances to small bars. Office workers, older regulars, and young people caught mid-cigarette: gestures that remained a public habit even after health warnings. Private video footage from Hiroshi Tanaka's shop in Shinsekai.</div>
     </div>
 
     <!-- <div id="advertising-desc-scroll" class="advertising-desc-scroll" aria-hidden="false"></div> -->
@@ -159,7 +201,7 @@
     </div>
   </aside>
 
-  <main id="grid" class="myPhotos layout-fotografie"
+  <main id="grid" class="myPhotos layout-fotografie initially-blurred all-blurred"
   onscroll="ifAdvertisingHideDesc(event)"></main>
 
 </div>
@@ -190,7 +232,7 @@
   <section class="about-section" id="about-this-archive">
     <h2 class="about-section-title">
       <span class="japanese">本資料館について</span>
-      <span class="english">About this archive</span>
+      <span class="english">This archive</span>
     </h2>
     <div class="about-section-body">
       <p class="japanese">本資料群は、大阪・新世界商業地区の路地にあった田中煙草店（田中煙草店）に関する現存資料を再構成したものである。店頭表示によれば番号は 107-46。資料の蓄積期間はおおむね 1972年から1990年 までと推定される。いずれも当時の市の文化財登録、府のたばこ小売業者アーカイブ、ならびに公的な商業登録への提出を目的としたものではない。</p>
@@ -204,8 +246,8 @@
 
   <section class="about-section" id="about-shop-shinsekai">
     <h2 class="about-section-title">
-      <span class="japanese">店舗と新世界地区</span>
-      <span class="english">The shop and the Shinsekai district</span>
+      <span class="japanese">店舗と新世界</span>
+      <span class="english">Store &amp; lane</span>
     </h2>
     <div class="about-section-body">
       <p class="japanese">図版 T-01（店舗外観・路面） は、昭和後期型の tabako-ya を示す：茶色と濃色の縞模様のスカラップ庇、湿ったアスファルト上の低いコンクリート段、隣接壁の露出配線。中央に大型木枠の陳列窓、白色の機械式たばこ自動販売機が左右二基。右側機体には、大小さまざまなポスター・切り抜き・おそらく接触印画が無秩序に貼られたコラージュが見える。</p>
@@ -233,8 +275,8 @@
 
   <section class="about-section" id="about-tobacco-chronology">
     <h2 class="about-section-title">
-      <span class="japanese">たばこ関連資料とパッケージ年代記</span>
-      <span class="english">Tobacco objects and pack chronology</span>
+      <span class="japanese">たばこ資料記</span>
+      <span class="english">Pack history</span>
     </h2>
     <div class="about-section-body">
       <p class="japanese">図版 T-04（カウンター裏・棚列） — 木製棚おおよそ六段、蛍光灯一本による上方照明、下段は深い影。クリーム色・退色した青系の箱が隙間なく並ぶ。カウンター上には箱の山と、台帳または新聞と思われる紙束が商業記録と収集物の区別なく置かれている。</p>
@@ -273,8 +315,9 @@
 
   <section class="about-section" id="about-evening-documentation">
     <h2 class="about-section-title">
-      <span class="japanese">夕刻写真記録（1985–1990）</span>
-      <span class="english">Evening photographic documentation (1985–1990)</span>
+      <span class="japanese">夕刻写真記録</span>
+      <span class="english">Night record</span>
+      <span class="english about-index-dates">(1985–1990)</span>
     </h2>
     <div class="about-section-body">
       <p class="japanese">1985年、博は肺がんと診断され、喫煙中止を勧告されたが、完全には止めなかった。店業務を続け、アナログカメラ を携えて夕刻に外出した。目的は芸術や報道ではなく、同世代にとって喫煙がいかに「当たり前」であったかを記録することであったと、再構成資料に引き合わせがある。</p>
@@ -297,8 +340,8 @@
 
   <section class="about-section" id="about-health-restrictions">
     <h2 class="about-section-title">
-      <span class="japanese">健康上の告知と店内制限</span>
-      <span class="english">Health notice and on-site restrictions</span>
+      <span class="japanese">健康上の告知</span>
+      <span class="english">Health rules</span>
     </h2>
     <div class="about-section-body">
       <p class="japanese">診断 1985年；喫煙中止勧告は完全には遵守されなかった。図版 T-07 は1980年代後半と推定される店内作業を示す。</p>
@@ -314,8 +357,9 @@
 
   <section class="about-section" id="about-access-after-closure">
     <h2 class="about-section-title">
-      <span class="japanese">閉鎖後のアクセス（1990–2018）</span>
-      <span class="english">Access after closure (1990–2018)</span>
+      <span class="japanese">閉鎖後の記録</span>
+      <span class="english">Locked years</span>
+      <span class="english about-index-dates">(1990–2018)</span>
     </h2>
     <div class="about-section-body">
       <p class="japanese">1990–2018年、公的な立ち入りは事実上なし。資料は現地に留置。T-04 型の湿気・埃条件は一部紙を安定させ、T-05 の北側接着面ではカビのリスクあり。</p>
@@ -329,8 +373,8 @@
 
   <section class="about-section" id="about-preservation">
     <h2 class="about-section-title">
-      <span class="japanese">保存に関する声明</span>
-      <span class="english">Preservation statement</span>
+      <span class="japanese">保存に関する</span>
+      <span class="english">Film storage</span>
     </h2>
     <div class="about-section-body">
       <p class="japanese">T-02・T-03 — 切り抜きの酸性変色；アルバム頁の破れ；少なくとも一冊で酢酸シンドロームの恐れ（推定巻名 「駅前」、1987–88）。</p>
@@ -349,7 +393,7 @@
   <section class="about-section" id="about-notice">
     <h2 class="about-section-title">
       <span class="japanese">告知</span>
-      <span class="english">Notice</span>
+      <span class="english">Closing note</span>
     </h2>
     <div class="about-section-body">
       <p class="japanese">ファイル状況／未承認編纂</p>
