@@ -150,7 +150,7 @@
       <div class="english" id="category-english-text"></div>
     </div>
 
-    <div id="advertising-desc-scroll" class="advertising-desc-scroll" aria-hidden="true"></div>
+    <!-- <div id="advertising-desc-scroll" class="advertising-desc-scroll" aria-hidden="false"></div> -->
 
     <div id="item-preview" class="item-preview" aria-hidden="true"></div>
 
@@ -159,7 +159,8 @@
     </div>
   </aside>
 
-  <main id="grid" class="myPhotos layout-fotografie"></main>
+  <main id="grid" class="myPhotos layout-fotografie"
+  onscroll="ifAdvertisingHideDesc(event)"></main>
 
 </div>
 <div class="lightbox" id="lightbox" aria-hidden="true">

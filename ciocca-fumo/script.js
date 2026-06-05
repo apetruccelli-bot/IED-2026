@@ -40,18 +40,87 @@ const filtersByCategory = {
 let items = [];
 let displayItems = [];
 let activeTags = new Set();
+let activeFilters = [];  // Array of { type, value }
 let searchQuery = '';
 let isRandom = false;
 let lbIndex = -1;
 let activeCategory = 'fotografie';
-let activeFilter = null;
-let activeFilterType = null;
 let advertisingScrollBound = false;
 let lastAdvertisingIndex = -1;
 let portraitGestureIndex = 0;
 let packGestureIndex = 0;
 let adGestureIndex = 0;
 let categoryImagesRevealed = false;
+
+// Helper functions for managing multiple filters
+function hasActiveFilter() {
+  return activeFilters.length > 0;
+}
+
+function isFilterActive(type, value) {
+  return activeFilters.some(f => f.type === type && f.value === value);
+}
+
+function setFilterForType(type, value) {
+  // Remove any existing filter of the same type
+  activeFilters = activeFilters.filter(f => f.type !== type);
+  // Add the new filter value for this type
+  if (value !== null && value !== undefined) {
+    activeFilters.push({ type, value });
+  }
+}
+
+function toggleFilter(type, value) {
+  // If this filter is already active, remove it
+  if (isFilterActive(type, value)) {
+    activeFilters = activeFilters.filter(f => !(f.type === type && f.value === value));
+  } else {
+    // Otherwise, replace any filter of the same type with this one
+    setFilterForType(type, value);
+  }
+}
+
+function clearAllFilters() {
+  activeFilters = [];
+}
+
+function getActiveFiltersByType(type) {
+  return activeFilters.filter(f => f.type === type);
+}
+
+function itemMatchesAllFilters(item) {
+  if (activeFilters.length === 0) return true;
+
+  const tags = getItemTags(item);
+
+  // Check all active filters - item must match ALL
+  for (const filter of activeFilters) {
+    let matches = false;
+
+    if (filter.type === 'year') {
+      matches = Number(item.year) === Number(filter.value.replace('年', ''));
+    } else if (filter.type === 'tag') {
+      matches = tags.includes(filter.value);
+    } else if (filter.type === 'luogo') {
+      matches = item['luogo-pacchetti']?.toLowerCase() === filter.value.toLowerCase() ||
+        tags.some(tag => tag.toLowerCase() === filter.value.toLowerCase());
+    } else if (filter.type === 'pack-color') {
+      matches = item['pack-color'] === filter.value;
+    } else if (filter.type === 'origin') {
+      matches = item['pack-origin'] === filter.value;
+    } else if (filter.type === 'status') {
+      matches = item['portrait-status'] === filter.value;
+    } else if (filter.type === 'relationship') {
+      matches = item['portrait-relationship'] === filter.value;
+    }
+
+    if (!matches) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 function isGestureCategoryActive() {
   return activeCategory === 'fotografie'
@@ -64,12 +133,14 @@ function isCategoryImagesRevealed() {
 }
 
 function usesYearDimMode() {
-  return activeFilterType === 'year'
+  return getActiveFiltersByType('year').length > 0
     && (activeCategory === 'fotografie' || activeCategory === 'pacchetti');
 }
 
 function itemMatchesYearFilter(item) {
-  return Number(item.year) === Number(activeFilter);
+  const yearFilters = getActiveFiltersByType('year');
+  if (yearFilters.length === 0) return true;
+  return yearFilters.some(f => Number(item.year) === Number(f.value));
 }
 
 function openAdsViaGesture() {
@@ -227,39 +298,7 @@ function filteredItems() {
       .toLowerCase()
       .includes(q);
 
-    let matchesCustomFilter = true;
-
-    if (activeFilter && activeFilterType === 'year' && !usesYearDimMode()) {
-      matchesCustomFilter = Number(item.year) === Number(activeFilter);
-    }
-
-    if (activeFilter && activeFilterType === 'tag') {
-      matchesCustomFilter = tags.includes(activeFilter);
-    }
-
-    if (activeFilter && activeFilterType === 'luogo') {
-      matchesCustomFilter =
-        item['luogo-pacchetti']?.toLowerCase() === activeFilter.toLowerCase() ||
-        tags.some(tag => tag.toLowerCase() === activeFilter.toLowerCase());
-    }
-
-    if (activeFilter && activeFilterType === 'pack-color') {
-      matchesCustomFilter = item['pack-color'] === activeFilter;
-    }
-
-    if (activeFilter && activeFilterType === 'origin') {
-      matchesCustomFilter = item['pack-origin'] === activeFilter;
-    }
-
-    if (activeFilter && activeFilterType === 'status') {
-      matchesCustomFilter = item['portrait-status'] === activeFilter;
-    }
-
-    if (activeFilter && activeFilterType === 'relationship') {
-      matchesCustomFilter = item['portrait-relationship'] === activeFilter;
-    }
-
-    return matchesCategory && matchesTags && matchesSearch && matchesCustomFilter;
+    return matchesCategory && matchesTags && matchesSearch;
   });
 }
 
@@ -277,9 +316,9 @@ function updateHeaderNavState({ aboutOpen = false, highlightCategory = null } = 
 
 function setCategory(cat) {
   closeAboutIndex();
+  const prevCategory = activeCategory;
   activeCategory = cat;
-  activeFilter = null;
-  activeFilterType = null;
+  clearAllFilters();
   activeTags.clear();
 
   categoryImagesRevealed = cat === 'fotografie' || cat === 'pacchetti';
@@ -341,9 +380,24 @@ function setCategory(cat) {
   updateCategoryText(activeCategory);
   syncCategoryRevealState();
   render();
-  if (activeCategory === 'pubblicità' && categoryImagesRevealed) {
+  if (activeCategory === 'pubblicità') { //categoryImagesRevealed
     revealAdsContent();
   }
+  // If we left the advertising category, reset scroll and ensure description visible
+  if (activeCategory !== 'pubblicità') {
+    const main = document.querySelector('.mainLayout');
+    if (main) main.scrollTop = 0;
+    const intro = document.querySelector('.description-intro');
+    const photoDescriptions = Array.from(document.getElementsByClassName('card-desc'));
+    if (intro) {
+      intro.classList.remove('opacity-0');
+      intro.hidden = false;
+    }
+    if (photoDescriptions) {
+      photoDescriptions.forEach(desc => desc.classList.add('opacity-0'));
+    }
+  }
+
   window.ensureCategoryGestures?.();
   if (activeCategory === 'pacchetti') {
     window.initPackBodyTracking?.();
@@ -353,8 +407,8 @@ function setCategory(cat) {
 
 function getPortraitItems() {
   let list = filteredItems().filter(item => item.category === 'fotografie');
-  if (usesYearDimMode()) {
-    list = list.filter(itemMatchesYearFilter);
+  if (hasActiveFilter()) {
+    list = list.filter(itemMatchesAllFilters);
   }
   return list;
 }
@@ -423,8 +477,8 @@ function advancePortraitViaGesture() {
 
 function getPackItems() {
   let list = filteredItems().filter(item => item.category === 'pacchetti');
-  if (usesYearDimMode()) {
-    list = list.filter(itemMatchesYearFilter);
+  if (hasActiveFilter()) {
+    list = list.filter(itemMatchesAllFilters);
   }
   return list;
 }
@@ -779,25 +833,54 @@ function bindFilterOptionClicks(panel) {
       const value = option.dataset.filterValue;
       const type = option.dataset.filterType;
 
-      if (activeFilter === value && activeFilterType === type) {
-        activeFilter = null;
-        activeFilterType = null;
-      } else {
-        activeFilter = value;
-        activeFilterType = type;
-      }
+      toggleFilter(type, value);
+
+      console.log('Active filters:', activeFilters);
 
       updateFilterOpacity();
-      render();
+      applyFilterOpacityToCards();
     });
   });
 }
 
+function ifAdvertisingHideDesc(event) {
+  if (activeCategory != 'pubblicità') return
+  const myDescription = document.getElementsByClassName('description-intro')[0];
+  const photoDescriptions = Array.from(document.getElementsByClassName('card-desc'));
+  if (!myDescription) return
+  //console.log('event', event.target, event.target.scrollHeight, event.target.scrollTop);
+  if(event.target.scrollTop > 4) {
+    myDescription.classList.add('opacity-0');
+    photoDescriptions.forEach(desc => desc.classList.remove('opacity-0'));
+  } else {
+    myDescription.classList.remove('opacity-0');
+    photoDescriptions.forEach(desc => desc.classList.add('opacity-0'));
+  }
+}
+
+
 function updateFilterOpacity() {
   document.querySelectorAll('.filter-option').forEach(el => {
-    const active = activeFilter === el.dataset.filterValue && activeFilterType === el.dataset.filterType;
+    const active = isFilterActive(el.dataset.filterType, el.dataset.filterValue);
     el.classList.toggle('active-filter', active);
-    el.style.opacity = !activeFilter || active ? '1' : '0.35';
+    el.style.opacity = !hasActiveFilter() || active ? '1' : '0.35';
+  });
+}
+
+function applyFilterOpacityToCards() {
+  const cards = document.querySelectorAll('#grid .card');
+  cards.forEach(card => {
+    // Reconstruct item data from card
+    const img = card.querySelector('img');
+    if (!img) return;
+
+    const itemSrc = img.src;
+    const item = displayItems.find(it => it.src === itemSrc || img.src.endsWith(it.src));
+    if (!item) return;
+
+    const matches = itemMatchesAllFilters(item);
+    /* card.style.opacity = matches ? '.6' : '0.3'; */
+    card.classList.toggle('opacity-30', !matches);
   });
 }
 
@@ -814,7 +897,7 @@ function updateActiveInfo(item) {
     tagEl.classList.toggle('highlight', tags.includes(tagEl.textContent));
   });
 
-  if (activeFilter && activeFilterType) {
+  if (hasActiveFilter()) {
     updateFilterOpacity();
     return;
   }
@@ -839,7 +922,7 @@ function updateActiveInfo(item) {
 
 function clearActiveInfo() {
   updateHeaderNavState();
-  if (activeFilter && activeFilterType) {
+  if (hasActiveFilter()) {
     updateFilterOpacity();
     return;
   }
@@ -961,7 +1044,7 @@ function render() {
   grid.classList.toggle('layout-fotografie', activeCategory === 'fotografie');
   grid.classList.toggle('layout-pubblicita', activeCategory === 'pubblicità');
   grid.classList.toggle('layout-pacchetti', activeCategory === 'pacchetti');
-  grid.classList.toggle('year-filtered', usesYearDimMode());
+  grid.classList.toggle('year-filtered', hasActiveFilter());
   grid.classList.remove('has-selected');
 
   if (!visible.length) {
@@ -972,13 +1055,12 @@ function render() {
     return;
   }
 
-  const yearDim = usesYearDimMode();
-
   visible.forEach((item, i) => {
-    const yearMatch = !yearDim || itemMatchesYearFilter(item);
+    const matchesFilters = itemMatchesAllFilters(item);
     const card = document.createElement('article');
-    card.className = yearMatch ? 'card activeImg' : 'card';
-    card.style.cursor = ['fotografie', 'pacchetti'].includes(activeCategory) && yearMatch
+    card.className = 'card activeImg';
+    /* card.style.opacity = matchesFilters ? '1' : '0.3'; */
+    card.style.cursor = ['fotografie', 'pacchetti'].includes(activeCategory) && matchesFilters
       ? 'zoom-in'
       : 'default';
     card.dataset.itemYear = item.year;
@@ -999,6 +1081,12 @@ function render() {
       if (img.complete) {
         requestAnimationFrame(() => updateAdvertisingScrollState());
       }
+
+      //create a div with description and add it to card
+      const descDiv = document.createElement('div');
+      descDiv.className = 'card-desc opacity-0';
+      descDiv.innerHTML = descriptionTextHtml(item['description-ja'], item['description-en']);
+      card.appendChild(descDiv);
     }
 
     card.appendChild(img);
@@ -1058,7 +1146,7 @@ function render() {
     if (['fotografie', 'pacchetti'].includes(activeCategory)) {
       card.addEventListener('click', () => {
         if (!categoryImagesRevealed) return;
-        if (yearDim && !itemMatchesYearFilter(item)) return;
+        if (!itemMatchesAllFilters(item)) return;
 
         const alreadyActive = card.classList.contains('selectedImg');
         grid.querySelectorAll('.card').forEach(c => c.classList.remove('selectedImg'));
@@ -1097,7 +1185,7 @@ function render() {
     clearAdvertisingDescriptions();
   }
 
-  if (activeFilter && activeFilterType) {
+  if (hasActiveFilter()) {
     updateFilterOpacity();
   }
 }
@@ -1106,7 +1194,7 @@ function toggleAdvertisingDescScroll(show) {
   const scroll = document.getElementById('advertising-desc-scroll');
   if (!scroll) return;
   scroll.classList.toggle('is-active', show);
-  scroll.setAttribute('aria-hidden', String(!show));
+  //scroll.setAttribute('aria-hidden', String(!show));
 }
 
 function renderAdvertisingDescriptions(visible) {
@@ -1601,5 +1689,5 @@ window.isAboutWiping = () => aboutWiping;
 window.syncAboutIndexToScroll = syncAboutIndexToScroll;
 window.getAboutRevealIndex = () => aboutGestureIndex;
 window.resetAboutWipeGesture = resetAboutWipeGesture;
-window.resetAboutBlowGesture = resetAboutWipeGesture;
+//window.resetAboutBlowGesture = resetAboutBlowGesture;
 window.scrollContentByGesture = scrollContentByGesture;

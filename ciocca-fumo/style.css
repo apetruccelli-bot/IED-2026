@@ -129,6 +129,10 @@ body {
   flex-shrink: 0;
 }
 
+.opacity-0 {
+  opacity: 0;
+}
+
 /* Scroll reveal for horizontal movement */
 .scroll-reveal {
   --reveal-progress: 0;
@@ -203,7 +207,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 10001;
-  padding: 10px 24px var(--header-fade-height);
+  padding: 10px 10px var(--header-fade-height);
   margin-bottom: calc(var(--header-fade-height) * -0.62);
   overflow: visible;
   background: linear-gradient(
@@ -225,11 +229,12 @@ header::after {
   left: 0;
   right: 0;
   bottom: 0;
+  /* top: 4.2rem; */
   height: calc(var(--header-fade-height) * 1.1);
   pointer-events: none;
   background: linear-gradient(
     180deg,
-    rgba(58, 58, 58, 0.28) 0%,
+    rgba(58, 58, 58, 1) 0%,
     rgba(58, 58, 58, 0) 100%
   );
 }
@@ -417,21 +422,41 @@ button {
 
 /* Advertisements: full-width stacked column */
 .myPhotos.layout-pubblicita {
+  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
-  gap: 80px;
+  gap: 10px;
 }
 
 .myPhotos.layout-pubblicita .card {
   width: 100%;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 10px;
+  position: relative;
+}
+.myPhotos.layout-pubblicita .card-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: unset;
+  object-fit: contain;
+  grid-column: 6 / 13;
+}
+.myPhotos.layout-pubblicita .card-desc {
+  width: 100%;
+  height: auto;
+  grid-column: 1 / 6;
+  position: absolute;
+  bottom: 0;
+  transition: opacity 0.5s cubic-bezier(.8,0,.2,1);
 }
 
-.mainLayout.category-pubblicita:not(.category-images-revealed) .myPhotos.layout-pubblicita .card {
+/* .mainLayout.category-pubblicita:not(.category-images-revealed) .myPhotos.layout-pubblicita .card {
   opacity: 0.14;
   filter: blur(16px);
   pointer-events: none;
   transition: opacity 0.65s ease, filter 0.65s ease;
-}
+} */
 
 .mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card,
 .mainLayout.category-pubblicita.category-images-revealed .myPhotos.layout-pubblicita .card.ad-past,
@@ -459,7 +484,7 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active .card-img {
 }
 
 .advertising-desc-scroll {
-  display: none;
+  opacity: 0.5;
   position: relative;
   flex: 1 1 auto;
   min-height: 0;
@@ -480,7 +505,7 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active .card-img {
 }
 
 .mainLayout.category-pubblicita .advertising-desc-scroll.is-active {
-  display: block;
+  opacity: 1;
   padding-top: 0;
 }
 
@@ -494,12 +519,12 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active .card-img {
   min-height: 0;
 }
 
-.mainLayout:not(.category-images-revealed) .myPhotos .card {
+/* .mainLayout:not(.category-images-revealed) .myPhotos .card {
   opacity: 0.14;
   filter: blur(16px);
   pointer-events: none;
   transition: opacity 0.65s ease, filter 0.65s ease;
-}
+} */
 
 .mainLayout.category-images-revealed .myPhotos .card {
   opacity: 1;
@@ -507,14 +532,22 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active .card-img {
   pointer-events: auto;
 }
 
-.mainLayout:not(.category-images-revealed) .filters {
-  visibility: hidden;
-  pointer-events: none;
+.mainLayout.category-images-revealed .myPhotos .card.opacity-30 {
+  opacity: 0.3;
+}
+body:not(.about-open) .mainLayout.category-images-revealed .descriptionAndFilters,
+body:not(.about-open) .mainLayout.category-pubblicita .descriptionAndFilters {
+  z-index: 90000;
 }
 
-.mainLayout.category-pubblicita:not(.category-images-revealed) .description-intro {
+/* .mainLayout:not(.category-images-revealed) .filters {
+  visibility: hidden;
+  pointer-events: none;
+} */
+
+/* .mainLayout.category-pubblicita:not(.category-images-revealed) .description-intro {
   display: block;
-}
+} */
 
 .ad-desc-block {
   position: absolute;
@@ -525,8 +558,8 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active .card-img {
   align-items: flex-end;
   justify-content: flex-start;
   overflow: hidden;
-  opacity: 0;
-  visibility: hidden;
+  /* opacity: 0; */
+  /* visibility: hidden; */
   pointer-events: none;
   transition: opacity 0.2s ease, visibility 0.2s ease;
   box-sizing: border-box;
@@ -561,12 +594,7 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active .card-img {
   animation: ad-desc-reveal 0.5s cubic-bezier(.4, 0, .2, 1) forwards;
 }
 
-.myPhotos.layout-pubblicita .card-img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: unset;
-  object-fit: contain;
-}
+
 
 .myPhotos.layout-pubblicita .card-body {
   display: none;
@@ -1451,6 +1479,10 @@ body.about-open #gesture-status {
   pointer-events: none;
 }
 
+.mainLayout.category-pubblicita .descriptionAndFilters {
+  /* display: none; */
+}
+
 .descriptionAndFilters .description-intro,
 .descriptionAndFilters .filters-block,
 .descriptionAndFilters .filters,
@@ -1461,11 +1493,11 @@ body.about-open #gesture-status {
 
 /* Portraits / packs: left preview column matches gallery height when an item is open */
 .mainLayout.has-item-selected:not(.category-pubblicita) .descriptionAndFilters {
-  position: absolute;
+  /* position: absolute;
   top: 0;
   left: 10px;
-  width: calc((100% - 20px) * 5 / 12);
-  height: 100%;
+  width: calc((100% - 20px) * 5 / 12); */
+  /* height: 100%; */
   max-height: 100%;
 }
 
@@ -1485,7 +1517,7 @@ body.about-open #gesture-status {
   width: 100%;
   height: auto;
   object-fit: contain;
-  object-position: top center;
+  object-position: left;
 }
 
 .mainLayout.has-item-selected:not(.category-pubblicita) .item-preview.layout-pacchetti .card-img {
@@ -1510,6 +1542,8 @@ body.about-open #gesture-status {
   max-width: 68ch;
   flex-shrink: 0;
   margin-bottom: 24px;
+
+  transition: opacity 0.5s cubic-bezier(.8, 0, .2, 1);
 }
 
 .descriptionAndFilters .description-intro .japanese {
@@ -1524,7 +1558,7 @@ body.about-open #gesture-status {
   padding-top: 32px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  /* gap: 10px; */
 }
 
 .filter {
@@ -1547,8 +1581,9 @@ body.about-open #gesture-status {
 
 .filter p:last-child {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 14px;
+  flex-wrap: wrap;
+  column-gap: 14px;
+  row-gap: 0;
   white-space: nowrap;
 }
 
