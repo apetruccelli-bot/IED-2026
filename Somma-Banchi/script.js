@@ -245,6 +245,51 @@ function render() {
     card.appendChild(body);
     myColumns[i % myColumns.length].appendChild(card);
   });
+
+  // Equilibra le colonne per allinearle al fondo
+  balanceColumns();
+}
+
+// ── Balance columns to same height ────────────────────────────────────────
+
+function balanceColumns() {
+  // Aspetta che tutte le immagini siano caricate
+  const images = document.querySelectorAll('.card-img');
+  let loadedCount = 0;
+
+  const checkAllLoaded = () => {
+    loadedCount++;
+    if (loadedCount === images.length || images.length === 0) {
+      // Tutte le immagini caricate, ora calcola le altezze
+      setTimeout(() => {
+        const heights = [...myColumns].map(col => col.scrollHeight);
+        const maxHeight = Math.max(...heights);
+
+        [...myColumns].forEach((col, i) => {
+          const diff = maxHeight - heights[i];
+          if (diff > 0) {
+            col.style.paddingBottom = diff + 'px';
+          } else {
+            col.style.paddingBottom = '0';
+          }
+        });
+      }, 100);
+    }
+  };
+
+  if (images.length === 0) {
+    checkAllLoaded();
+    return;
+  }
+
+  images.forEach(img => {
+    if (img.complete) {
+      checkAllLoaded();
+    } else {
+      img.addEventListener('load', checkAllLoaded);
+      img.addEventListener('error', checkAllLoaded);
+    }
+  });
 }
 
 // ── Filters ───────────────────────────────────────────────────────────────

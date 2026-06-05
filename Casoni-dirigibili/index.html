@@ -18,22 +18,28 @@
   <body>
 
     <!-- LANDING PAGE -->
-  <div id="landing-modal" class="landing-modal landing-hidden">
-    <div class="landing-aaa-track">
-    <div class="landing-aaa">AAAA</div>
+  <div id="landing-modal" class="landing-modal">
+    <div class="landing-group">
+      
+      <div class="landing-aaa-track">
+        <div class="landing-aaa">AAA</div>
+      </div>
+
+      <div class="landing-content">
+        <div class="landing-column">
+          <span>ADLER’s</span>
+        </div>
+        <div class="landing-column">
+          <span>AIRSHIP</span>
+        </div>
+        <div class="landing-column">
+          <span>ARCHIVE</span>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="landing-content">
-    <div class="landing-column">
-      <span>ADLER’s</span>
-    </div>
-    <div class="landing-column">
-      <span>AIRSHIP</span>
-    </div>
-    <div class="landing-column">
-      <span>ARCHIVE</span>
-    </div>
-  </div>
+  
 </div>
 
     <header class="opacity-0 h-0 overflow-hidden hidden">
@@ -57,7 +63,7 @@
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
-      <button class="lb-close" id="lb-close">✕</button>
+      <button class="lb-close" id="lb-close">Close</button>
       <div class="lb-content">
 
         <div class="lb-mobile-arrows" aria-label="Lightbox navigation">
@@ -161,7 +167,7 @@
 
     <!-- Explore Modal -->
     <div id="explore-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.95); align-items:center; justify-content:center; flex-direction:column; gap:20px;">
-      <button onclick="closeExploreModal()" style="position:absolute; top:20px; right:20px; background:none; border:none; color:white; font-size:28px; cursor:pointer; line-height:1;">✕</button>
+      <button class="lb-close" id="explore-close" onclick="closeExploreModal()">Close</button>
 
       <!-- Webcam preview top-right -->
       <div id="explore-preview-panel">
@@ -360,17 +366,20 @@
     if (!modal || !aaaTrack) return;
 
     const navigationEntry = performance.getEntriesByType('navigation')[0];
-    const isReload = navigationEntry && navigationEntry.type === 'reload';
+    const navigationType = navigationEntry ? navigationEntry.type : 'navigate';
 
-    if (!isReload) {
+    const shouldShowLanding = navigationType === 'reload';
+
+    if (!shouldShowLanding) {
+      modal.classList.add('landing-hidden');
       modal.remove();
       return;
     }
 
-    modal.classList.remove('landing-hidden');
-
     requestAnimationFrame(() => {
-      modal.classList.add('landing-active');
+      requestAnimationFrame(() => {
+        modal.classList.add('landing-active');
+      });
     });
 
     let isLeaving = false;

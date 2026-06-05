@@ -266,10 +266,12 @@ function render() {
   const visible = filteredItems();
 
   // set the results info
+  if (resultsInfo) {
   resultsInfo.textContent =
     visible.length === items.length
       ? `${items.length} items`
       : `${visible.length} / ${items.length} items`;
+}
 
   // clear the grid
   grid.innerHTML = '';
@@ -365,9 +367,13 @@ function openLightbox(index) {
 
   lbImg.src = item.src;
   lbImg.alt = `Item ${item.id}`;
+
   if (lbCaption) lbCaption.textContent = item.description || '';
   if (lbDescription) lbDescription.textContent = item.description || '';
-  if (lbMeta) lbMeta.textContent = ((item.area && item.area.length)? (item.area + ' · ') : '') + (item.tags && item.tags.length ? item.tags.join(', ') : '');
+
+  // mostra solo l'area, senza tag
+  if (lbMeta) lbMeta.textContent = item.area || '';
+
   renderSimilarImages(item, visible);
 
   lightbox.classList.add('open');
@@ -503,5 +509,9 @@ if (lightbox) {
 
 // ── Init ──────────────────────────────────────────────────────────────────
 if (grid && tagsBar && areaBar && resultsInfo) {
+  loadData();
+}
+
+if (grid && tagsBar && areaBar) {
   loadData();
 }

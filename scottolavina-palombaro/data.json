@@ -318,7 +318,7 @@
     {
       "id": 36,
       "src": "img/fondali/fondali13.jpg",
-      "tags": ["coral","rocks"],
+      "tags": ["coral","rocks", "seabed","sand", "landscapes" ],
       "category": "sea depths",
       "subcategory": "formations",
       "description": "Prominent coral formation with branching details, set in semi-darkness.",
@@ -392,7 +392,7 @@
       "src": "img/fondali/fondali21.jpg",
       "tags": ["dust","marine creature","coral"],
       "category": "sea depths",
-      "subcategory": "sea creatures",
+      "subcategory": "sea creatures", 
       "description": "Side view of a coral reef with a sloping seabed and reduced visibility.",
       "area": "Strait of Florida, FL"
     },
