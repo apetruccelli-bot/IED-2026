@@ -245,6 +245,51 @@ function render() {
     card.appendChild(body);
     myColumns[i % myColumns.length].appendChild(card);
   });
+
+  // Equilibra le colonne per allinearle al fondo
+  balanceColumns();
+}
+
+// ── Balance columns to same height ────────────────────────────────────────
+
+function balanceColumns() {
+  // Aspetta che tutte le immagini siano caricate
+  const images = document.querySelectorAll('.card-img');
+  let loadedCount = 0;
+
+  const checkAllLoaded = () => {
+    loadedCount++;
+    if (loadedCount === images.length || images.length === 0) {
+      // Tutte le immagini caricate, ora calcola le altezze
+      setTimeout(() => {
+        const heights = [...myColumns].map(col => col.scrollHeight);
+        const maxHeight = Math.max(...heights);
+
+        [...myColumns].forEach((col, i) => {
+          const diff = maxHeight - heights[i];
+          if (diff > 0) {
+            col.style.paddingBottom = diff + 'px';
+          } else {
+            col.style.paddingBottom = '0';
+          }
+        });
+      }, 100);
+    }
+  };
+
+  if (images.length === 0) {
+    checkAllLoaded();
+    return;
+  }
+
+  images.forEach(img => {
+    if (img.complete) {
+      checkAllLoaded();
+    } else {
+      img.addEventListener('load', checkAllLoaded);
+      img.addEventListener('error', checkAllLoaded);
+    }
+  });
 }
 
 // ── Filters ───────────────────────────────────────────────────────────────
@@ -377,10 +422,15 @@ function toggleFilter(key, val) {
       }
 
       if (isActive) {
-        el.style.fontWeight = 'bold';
+        el.style.fontWeight = 'normal';
       }
     });
   }
+
+  console.log('Active filters:', [...activeFilters.entries()]);
+  console.log('Active categories:', activeCategories);
+  console.log('Has any filter?', hasAnyFilter);
+  console.log('Updating active images...');
 
   updateActiveImg();
 }
@@ -401,17 +451,18 @@ function updateActiveImg() {
     if (!item) return;
 
     const matches =
-      !hasFilters ||
-      (
-        activeCategories.has(String(item.category).toLowerCase()) &&
-        [...activeFilters.entries()].every(([k, v]) => {
-          const field = item[k];
-          return Array.isArray(field)
-            ? field.map(String).includes(v)
-            : String(field ?? '') === v;
-        })
-      );
-
+    !hasFilters ||
+    (
+      activeCategories.has(String(item.category)) &&
+      [...activeFilters.entries()].every(([k, v]) => {
+        const field = item[k];
+        console.log(`Checking filter ${k}=${v} against item ${item.id} field:`, field);
+        console.log('field:', field, 'type:', typeof field);
+        return Array.isArray(field)
+          ? field.map(String).includes(v)
+          : String(field ?? '') === v;
+      })
+    );
     card.classList.toggle('active-img', matches);
   });
 }
@@ -541,6 +592,12 @@ function fadeGrid(fn) {
 
 function openExploreMode() {
   isExploreMode = true;
+
+  const mainLayout = document.querySelector('.mainLayout');
+  if (mainLayout) {
+    mainLayout.classList.add('is-exploring');
+  }
+
   exploreSubcat = null;
   activeFilters.clear();
 
@@ -594,6 +651,12 @@ function openExploreMode() {
 
 function closeExploreMode() {
   isExploreMode = false;
+
+  const mainLayout = document.querySelector('.mainLayout');
+  if (mainLayout) {
+    mainLayout.classList.remove('is-exploring');
+  }
+
   exploreSubcat = null;
   activeFilters.clear();
   const header = document.getElementById('site-header');

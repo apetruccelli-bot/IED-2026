@@ -18,22 +18,28 @@
   <body>
 
     <!-- LANDING PAGE -->
-  <div id="landing-modal" class="landing-modal landing-hidden">
-    <div class="landing-aaa-track">
-    <div class="landing-aaa">AAAA</div>
+  <div id="landing-modal" class="landing-modal">
+    <div class="landing-group">
+      
+      <div class="landing-aaa-track">
+        <div class="landing-aaa">AAA</div>
+      </div>
+
+      <div class="landing-content">
+        <div class="landing-column">
+          <span>ADLER’s</span>
+        </div>
+        <div class="landing-column">
+          <span>AIRSHIP</span>
+        </div>
+        <div class="landing-column">
+          <span>ARCHIVE</span>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="landing-content">
-    <div class="landing-column">
-      <span>ADLER’S</span>
-    </div>
-    <div class="landing-column">
-      <span>AIRSHIP</span>
-    </div>
-    <div class="landing-column">
-      <span>ARCHIVE</span>
-    </div>
-  </div>
+  
 </div>
 
     <header class="opacity-0 h-0 overflow-hidden hidden">
@@ -57,12 +63,17 @@
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
-      <button class="lb-close" id="lb-close">✕</button>
+      <button class="lb-close" id="lb-close">Close</button>
       <div class="lb-content">
+
+        <div class="lb-mobile-arrows" aria-label="Lightbox navigation">
+          <button class="lb-mobile-arrow" id="lb-mobile-prev" type="button">Previous</button>
+          <button class="lb-mobile-arrow" id="lb-mobile-next" type="button">Next</button>
+        </div>
         <img class="lb-img select-none" id="lb-img" src="" alt="">
         <div class="lb-info">
           <div class="lb-tags-row">
-            <span class="lb-id" id="lb-id"></span>
+            <span class="lb-id !hidden" id="lb-id"></span>
             <div class="lb-tags" id="lb-tags"></div>
             <div class="lb-actions">
             </div>
@@ -77,7 +88,7 @@
       <div class="top-home p-10px bg-myBlack flex flex-row justify-between items-baseline text-myWhite gap-10px">
         <div class="intro-panel flex flex-col">
           <a href="./" class="font-myTitle home-title">
-            <span class="home-title-short">AAA</span><span class="home-title-full"> — Adler's Airship Archive</span>
+            <span class="home-title-short">AAA</span><span class="home-title-full"> — Adler’s Airship Archive</span>
           </a>
           <div class="box">
             <p>
@@ -156,16 +167,26 @@
 
     <!-- Explore Modal -->
     <div id="explore-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.95); align-items:center; justify-content:center; flex-direction:column; gap:20px;">
-      <button onclick="closeExploreModal()" style="position:absolute; top:20px; right:20px; background:none; border:none; color:white; font-size:28px; cursor:pointer; line-height:1;">✕</button>
+      <button class="lb-close" id="explore-close" onclick="closeExploreModal()">Close</button>
 
       <!-- Webcam preview top-right -->
-      <div style="position:absolute; top:20px; right:70px; display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
-        <video id="explore-webcam" autoplay muted playsinline style="display:none; width:200px; height:150px; object-fit:cover; border-radius:6px; border:2px solid rgba(255,255,255,0.15); transform:scaleX(-1);"></video>
+      <div id="explore-preview-panel">
+        <div id="explore-camera-box">
+          <button id="explore-preview-toggle" type="button" onclick="toggleExplorePreview()">
+            hide camera
+          </button>
 
-        <div id="explore-image-info" style="max-width:300px; color:rgba(255,255,255,0.65); text-align:right; font-family:'SchengenA Regular', sans-serif; font-size:12px; line-height:1.25;">
-          <p id="explore-description-label" style="margin:0 0 8px 0;">—</p>
-          <p id="explore-causes-label" style="margin:0;"></p>
-          <p id="explore-victims-label" style="margin:0;"></p>
+          <div id="explore-webcam-wrap">
+            <video id="explore-webcam" autoplay muted playsinline></video>
+            <canvas id="explore-hand-canvas"></canvas>
+          </div>
+        </div>
+
+        <div id="explore-image-info">
+          <p id="explore-description-label">—</p>
+          <p id="explore-causes-label"></p>
+          <p id="explore-country-label"></p>
+          <p id="explore-victims-label"></p>
         </div>
       </div>
 
@@ -203,9 +224,9 @@
       </div>
 
       <div class="explore-pack-selector" id="explore-pack-selector">
-        <button id="explore-pack-1" class="filter-link explore-pack-btn" onclick="setExplorePackage(0)">Pack 1</button>
-        <button id="explore-pack-2" class="filter-link explore-pack-btn" onclick="setExplorePackage(1)">Pack 2</button>
-        <button id="explore-pack-3" class="filter-link explore-pack-btn" onclick="setExplorePackage(2)">Pack 3</button>
+        <button id="explore-pack-1" class="filter-link explore-pack-btn" onclick="setExplorePackage(0)">Germany</button>
+        <button id="explore-pack-2" class="filter-link explore-pack-btn" onclick="setExplorePackage(1)">USA</button>
+        <button id="explore-pack-3" class="filter-link explore-pack-btn" onclick="setExplorePackage(2)">Italy</button>
       </div>
 
       <div id="explore-status" style="color:rgba(255,255,255,0.35); font-size:12px; font-family:monospace;">Loading model...</div>
@@ -224,6 +245,7 @@
       const exploreSquare = document.getElementById('explore-square');
       const exploreDescriptionLabel = document.getElementById('explore-description-label');
       const exploreCausesLabel = document.getElementById('explore-causes-label');
+      const exploreCountryLabel = document.getElementById('explore-country-label');
       const exploreVictimsLabel = document.getElementById('explore-victims-label');
 
       let exploreItemsById = {};
@@ -271,6 +293,7 @@
         if (!visibleImg) {
           if (exploreDescriptionLabel) exploreDescriptionLabel.textContent = '—';
           if (exploreCausesLabel) exploreCausesLabel.textContent = '';
+          if (exploreCountryLabel) exploreCountryLabel.textContent = '';
           if (exploreVictimsLabel) exploreVictimsLabel.textContent = '';
           return;
         }
@@ -281,6 +304,7 @@
         if (!item) {
           if (exploreDescriptionLabel) exploreDescriptionLabel.textContent = '';
           if (exploreCausesLabel) exploreCausesLabel.textContent = '';
+          if (exploreCountryLabel) exploreCountryLabel.textContent = '';
           if (exploreVictimsLabel) exploreVictimsLabel.textContent = '';
           return;
         }
@@ -291,6 +315,10 @@
 
         if (exploreCausesLabel) {
           exploreCausesLabel.textContent = `Cause: ${formatExploreCauses(item.causes)}`;
+        }
+
+        if (exploreCountryLabel) {
+          exploreCountryLabel.textContent = `Country: ${item.country || '—'}`;
         }
 
         if (exploreVictimsLabel) {
@@ -338,17 +366,20 @@
     if (!modal || !aaaTrack) return;
 
     const navigationEntry = performance.getEntriesByType('navigation')[0];
-    const isReload = navigationEntry && navigationEntry.type === 'reload';
+    const navigationType = navigationEntry ? navigationEntry.type : 'navigate';
 
-    if (!isReload) {
+    const shouldShowLanding = navigationType === 'reload';
+
+    if (!shouldShowLanding) {
+      modal.classList.add('landing-hidden');
       modal.remove();
       return;
     }
 
-    modal.classList.remove('landing-hidden');
-
     requestAnimationFrame(() => {
-      modal.classList.add('landing-active');
+      requestAnimationFrame(() => {
+        modal.classList.add('landing-active');
+      });
     });
 
     let isLeaving = false;

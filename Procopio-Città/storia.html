@@ -23,8 +23,10 @@
     <div class="w-screen min-h-screen grid grid-cols-8 specialGrid bg-myWhite">
       <!-- Brand/navigation moved to bottom across pages -->
     <div id="main-scroll" class="col-start-2 col-end-8 bg-transparent min-h-screen relative">
-        <div class="sticky story-sticky top-0 z-20 col-span-full pt-10px bg-transparent" style="position: sticky; top: 0;" data-story-top-nav>
-          <div class="grid grid-cols-6 story-top-nav">
+        <div class="sticky story-sticky top-0 z-20 col-span-full pt-10px 
+        bg-gradient-to-b from-myWhite to-transparent from-[10%] h-18 pointer-events-none" 
+        style="position: sticky; top: 0;" data-story-top-nav>
+          <div class="grid grid-cols-6 story-top-nav pointer-events-auto">
             <a href="#sezione_1" class="p text-justify">Fondazione Scorza</a>
             <a href="#sezione_2" class="p text-justify">Le ricerche</a>
             <a href="#sezione_3" class="p text-justify">I luoghi</a>
@@ -80,8 +82,8 @@
               <li>Pietro Scorza (1939-1991) presso Zagara, Santa Rena, Monteferro</li>
               <li>Luigi Varani (1931-1988) presso Serra Vasta, Valle Cupa, Rocca Secca, Riva Spenta, Borgo Salso, Poggio Nero, Pietra Lenta</li>
               <li>Gino Ferri (1929-1989) presso Serra Vasta, Vallefredda, Fonte Secca, Colle Ombra, Fonte Chiusa, Piana Morta, Borgo Cupo, San Velio</li>
-              <li>Aldo Fiore (1934-1993) presso Colle Ombra, Monteferro, Borgo Cupo, San Velio</li>
-              <li>Rinaldo Maffei (1932-1990) presso Serra Antica, Valle Cupa, Serra Vasta, Rocca Secca</li>
+              <li>Aldo Fiore (1934-1993) presso Santa Rena, Colle Ombra, Monteferro, Borgo Cupo, San Velio</li>
+              <li>Rinaldo Maffei (1932-1990) presso Pietra Lenta, Serra Antica, Valle Cupa, Serra Vasta, Rocca Secca</li>
             </ul>
             <p>Le ricerche non vengono concepite come denuncia esplicita, ma finiscono progressivamente per documentare una stessa condizione: territori che continuano a esistere senza riuscire a produrre una reale continuità abitativa.</p>
           </div>
@@ -96,7 +98,7 @@
           <figure class="story-hero col-span-2">
             <img src="img/storia/casa.jpg" alt="" class="w-full h-auto object-cover" />
             <figcaption class="content-caption font-myText">
-              Il cortile della scuola, Rinaldo Maffei 1983, Serra Antica, Campania
+              Il cortile della scuola, Rinaldo Maffei 1964, Pietra Lenta, Calabria
             </figcaption>
           </figure>
 
@@ -126,7 +128,7 @@
           <figure class="col-span-1 story-split-media">
             <img src="img/storia/varani.jpg" alt="" class="w-full h-auto object-cover" />
             <figcaption class="content-caption font-myText">
-              Ritratto di Luigi Varani 1978, Serra Vasta, Calabria
+            Ritratto, Aldo Fiore, 1980, Santa Rena, Calabria
             </figcaption>
           </figure>
 
@@ -164,7 +166,7 @@
           <figure class="story-hero col-span-2">
             <img src="img/storia/cimitero.jpg" alt="" class="w-full h-auto object-cover" />
             <figcaption class="content-caption font-myText">
-              Cimitero di Colle Ombra, Aldo Fiore 1984, Colle Ombra, Sicilia
+              Cimitero di Borgo Cupo, Ferri 1967, Borgo Cupo, Puglia
             </figcaption>
           </figure>
 
@@ -222,14 +224,14 @@
       </div>
     </footer>
     <!-- Bottom brand + links (identical on every page) -->
-    <div class="site-bottom-brand" style="position:fixed;left:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
-      <div style="line-height:1">
+<div class="site-bottom-brand"
+     style="position:fixed;left:10px;top:10px;bottom:auto;z-index:99999;pointer-events:auto;display:flex;flex-direction:column;gap:8px">      <div style="line-height:1">
         <a href="home.html" class="font-myTitle" style="display:inline-block">Città<br>interrotte</a>
         <p style="margin:0">di Fondazione Scorza</p>
       </div>
     </div>
-    <div class="sidebar-links" style="position:fixed;right:10px;bottom:10px;z-index:4000;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">
-      <div style="display:flex;flex-direction:column">
+<div class="sidebar-links"
+     style="position:fixed;right:10px;top:10px;bottom:auto;z-index:99999;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:0">      <div style="display:flex;flex-direction:column">
         <a href="storia.html" class="font-myTitle text-right">Storia</a>
         <a href="index.html" class="font-myTitle text-right">Archivio</a>
         <a href="stat.html" class="font-myTitle text-right">Dati</a>

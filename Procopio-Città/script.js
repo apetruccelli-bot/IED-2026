@@ -60,7 +60,7 @@ const archiveRows = [
   { anno: '1965', autore: 'Varani', regione: 'Sicilia', abitanti: 'Tra 10 e 100', documento: 'Note di campo' },
   { anno: '1966', autore: 'Fiore', regione: 'Puglia', abitanti: 'Tra 100 e 1000', documento: '' },
   { anno: '1967', autore: 'Maffei', regione: 'Campania', abitanti: 'Piu di 1000', documento: '' },
-  { anno: '1968', autore: 'Ferri', regione: 'Molise', abitanti: '', documento: '' },
+  { anno: '1968', autore: 'Ferri', regione: '', abitanti: '', documento: '' },
 ];
 
 let enrichedRows = [];
@@ -715,8 +715,10 @@ function getStoryScroller() {
         if (currentPosition >= sectionStart) activeIndex = index;
       });
 
+      // CHANGE OPACOITY TO STICKY ANCHORS AS IT SCROLLS
       sectionTargets.forEach(({ link }, index) => {
-        link.style.opacity = index === activeIndex ? '1' : '.3';
+        //link.style.opacity = index === activeIndex ? '1' : '.3';
+        link.style.color = index === activeIndex ? '#000000' : '#909090';
       });
     };
 

@@ -40,6 +40,8 @@ const lbPrev     = document.getElementById('lb-prev');
 const lbNext     = document.getElementById('lb-next');
 const lbBackdrop = document.getElementById('lb-backdrop');
 const galleryScroll = document.querySelector('.gallery-scroll');
+const lbMobilePrev = document.getElementById('lb-mobile-prev');
+const lbMobileNext = document.getElementById('lb-mobile-next');
 
 function formatMetaValue(key, value) {
   if (key === 'causes') {
@@ -365,7 +367,7 @@ function buildFilterRows() {
       slider.min = '0';
       slider.max = String(victimStops.length - 1);
       slider.step = '1';
-      slider.value = '4';
+      slider.value = '0';
       slider.setAttribute('aria-label', 'Victims filter');
 
       const stops = document.createElement('div');
@@ -379,35 +381,62 @@ function buildFilterRows() {
         stops.appendChild(stopEl);
       });
 
+
       slider.addEventListener('input', () => {
-        const stopLabel = getVictimsLabelFromIndex(Number(slider.value));
-        activeRowFilters[label] = stopLabel;
-        syncVictimsRow(row);
-        applyRowFilters({ autoScroll: true });
-        renderMobileActiveFilters();
-      });
+  const stopLabel = getVictimsLabelFromIndex(Number(slider.value));
 
-      stops.addEventListener('click', e => {
-        const stopEl = e.target.closest('.victims-stop');
-        if (!stopEl) return;
-        const index = Number(stopEl.dataset.index);
-        const stopLabel = getVictimsLabelFromIndex(index);
+  activeRowFilters[label] = stopLabel;
 
-        if (activeRowFilters[label] === stopLabel) {
-          activeRowFilters[label] = null;
-        } else {
-          slider.value = String(index);
-          activeRowFilters[label] = stopLabel;
-        }
-        syncVictimsRow(row);
-        applyRowFilters({ autoScroll: true });
-        renderMobileActiveFilters();
+  syncVictimsRow(row);
+  applyRowFilters({ autoScroll: true });
+  renderMobileActiveFilters();
+});
 
-        if (isMobileIndex()) {
-          row.classList.add('mobile-open');
-          showMobileFilterOptions(row);
-        }
-      });
+let victimsPointerStartX = 0;
+let victimsPointerStartValue = null;
+let victimsClickedThumb = false;
+
+wrap.addEventListener('pointerdown', e => {
+  if (e.target !== slider) return;
+
+  const rect = slider.getBoundingClientRect();
+  const min = Number(slider.min);
+  const max = Number(slider.max);
+  const value = Number(slider.value);
+
+  const thumbSize =
+    parseFloat(getComputedStyle(slider).getPropertyValue('--victims-thumb-size')) || 10;
+
+  const usableWidth = rect.width - thumbSize;
+  const percent = max === min ? 0 : (value - min) / (max - min);
+  const thumbCenterX = rect.left + (thumbSize / 2) + (percent * usableWidth);
+
+  const clickDistanceFromThumb = Math.abs(e.clientX - thumbCenterX);
+  const thumbHitArea = Math.max(thumbSize * 2.4, 24);
+
+  victimsClickedThumb = clickDistanceFromThumb <= thumbHitArea;
+  victimsPointerStartX = e.clientX;
+  victimsPointerStartValue = slider.value;
+}, true);
+
+slider.addEventListener('pointerup', e => {
+  if (!activeRowFilters[label]) return;
+  if (!victimsClickedThumb) return;
+
+  const movedEnough = Math.abs(e.clientX - victimsPointerStartX) > 4;
+  const valueChanged = slider.value !== victimsPointerStartValue;
+
+  if (movedEnough || valueChanged) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  activeRowFilters[label] = null;
+
+  syncVictimsRow(row);
+  applyRowFilters({ autoScroll: true });
+  renderMobileActiveFilters();
+});
 
       wrap.appendChild(slider);
       wrap.appendChild(stops);
@@ -476,10 +505,36 @@ function buildFilterRows() {
   renderMobileActiveFilters();
 }
 
+function updateVictimsSliderVisual(row) {
+  const slider =
+    row.querySelector('.victims-slider') ||
+    mobileFilterOptions?.querySelector('.victims-slider');
+
+  const control =
+    row.querySelector('.victims-control') ||
+    mobileFilterOptions?.querySelector('.victims-control');
+
+  if (!slider || !control) return;
+
+  const min = Number(slider.min);
+  const max = Number(slider.max);
+  const value = Number(slider.value);
+
+  const activeValue = activeRowFilters.Victims;
+  const isActive = !!activeValue;
+
+  const percent = max === min
+    ? 0
+    : ((value - min) / (max - min)) * 100;
+
+  control.classList.toggle('is-active', isActive);
+  control.style.setProperty('--victims-progress', isActive ? `${percent}%` : '0%');
+}
+
 function syncVictimsRow(row) {
- const slider =
-  row.querySelector('.victims-slider') ||
-  mobileFilterOptions?.querySelector('.victims-slider');
+  const slider =
+    row.querySelector('.victims-slider') ||
+    mobileFilterOptions?.querySelector('.victims-slider');
 
   const stops = row.querySelectorAll('.victims-stop').length
     ? row.querySelectorAll('.victims-stop')
@@ -489,12 +544,18 @@ function syncVictimsRow(row) {
 
   const activeValue = activeRowFilters.Victims;
   const activeIndex = activeValue ? getVictimsIndexFromLabel(activeValue) : -1;
+
   stops.forEach((stopEl, index) => {
     stopEl.classList.toggle('active', index === activeIndex);
   });
+
   if (activeIndex >= 0) {
     slider.value = String(activeIndex);
+  } else {
+    slider.value = '0';
   }
+
+  updateVictimsSliderVisual(row);
 }
 
 function isCategoryDisablingRows() {
@@ -956,14 +1017,10 @@ function openLightbox(itemId) {
     const t = document.createElement('span');
     t.className = 'card-tag' + (activeTags.has(tag) ? ' highlight' : '');
     t.textContent = tag;
-    t.addEventListener('click', () => {
-      toggleTag(tag);
-      closeLightbox();
-    });
     lbTagsEl.appendChild(t);
   });
 
-  lbDescription.textContent = item.description || '';
+  lbDescription.textContent = item.description + ' [evidence #' + item.id + ']' || '';
   renderLightboxMeta(item);
 
   lightbox.classList.add('open');
@@ -971,12 +1028,47 @@ function openLightbox(itemId) {
   document.body.style.overflow = 'hidden';
 
   function updateLightboxDescriptionWidth() {
-    if (!lbImg || !lbDescription) return;
+    if (!lbImg) return;
 
     const rect = lbImg.getBoundingClientRect();
 
-    if (rect.width > 0) {
-      lbDescription.style.maxWidth = Math.floor(rect.width) + 'px';
+    if (!rect.width || !rect.height || !lbImg.naturalWidth || !lbImg.naturalHeight) return;
+
+    const imageRatio = lbImg.naturalWidth / lbImg.naturalHeight;
+    const boxRatio = rect.width / rect.height;
+
+    let visibleWidth;
+
+    if (boxRatio > imageRatio) {
+      visibleWidth = rect.height * imageRatio;
+    } else {
+      visibleWidth = rect.width;
+    }
+
+    visibleWidth = Math.floor(visibleWidth);
+
+    const lbInfo = document.querySelector('#lightbox .lb-info');
+
+    if (lbInfo && visibleWidth > 0) {
+      lbInfo.style.setProperty('width', visibleWidth + 'px', 'important');
+      lbInfo.style.setProperty('max-width', visibleWidth + 'px', 'important');
+      lbInfo.style.setProperty('align-self', 'center', 'important');
+      lbInfo.style.setProperty('text-align', 'left', 'important');
+    }
+
+    if (lbTagsEl) {
+      lbTagsEl.style.setProperty('width', '100%', 'important');
+      lbTagsEl.style.setProperty('max-width', '100%', 'important');
+    }
+
+    if (lbDescription) {
+      lbDescription.style.setProperty('width', '100%', 'important');
+      lbDescription.style.setProperty('max-width', '100%', 'important');
+    }
+
+    if (lbMeta) {
+      lbMeta.style.setProperty('width', '100%', 'important');
+      lbMeta.style.setProperty('max-width', '100%', 'important');
     }
   }
 
@@ -1027,6 +1119,7 @@ lbClose.addEventListener('click', closeLightbox);
 lbBackdrop.addEventListener('click', closeLightbox);
 
 const lightboxCursor = document.createElement('div');
+lightboxCursor.className = 'lightbox-hover-cursor';
 lightboxCursor.style.position = 'fixed';
 lightboxCursor.style.left = '0';
 lightboxCursor.style.top = '0';
@@ -1034,27 +1127,36 @@ lightboxCursor.style.transform = 'translate(-50%, -50%)';
 lightboxCursor.style.zIndex = '10003';
 lightboxCursor.style.pointerEvents = 'none';
 lightboxCursor.style.display = 'none';
-lightboxCursor.style.color = '#FCFCFC';
-lightboxCursor.style.fontFamily = 'Arial, sans-serif';
-lightboxCursor.style.fontSize = '42px';
-lightboxCursor.style.fontWeight = '700';
-lightboxCursor.style.lineHeight = '1';
 lightboxCursor.style.userSelect = 'none';
 lightboxCursor.style.webkitUserSelect = 'none';
-lightboxCursor.style.textShadow = '0 0 4px rgba(0, 0, 0, 0.55)';
 document.body.appendChild(lightboxCursor);
 
 function updateLightboxCursor(e) {
+  if (isMobileIndex()) {
+    hideLightboxCursor();
+    return;
+  }
+
   if (!lbImg || lightbox.getAttribute('aria-hidden') === 'true') return;
 
   const rect = lbImg.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return;
 
-  lightboxCursor.textContent = e.clientX < rect.left + rect.width / 2 ? '<' : '>';
+  lightboxCursor.textContent = e.clientX < rect.left + rect.width / 2 ? 'Previous' : 'Next';
   lightboxCursor.style.left = `${e.clientX}px`;
   lightboxCursor.style.top = `${e.clientY}px`;
   lightboxCursor.style.display = 'block';
 }
+
+lbMobilePrev?.addEventListener('click', e => {
+  e.stopPropagation();
+  navigateLightbox(-1);
+});
+
+lbMobileNext?.addEventListener('click', e => {
+  e.stopPropagation();
+  navigateLightbox(+1);
+});
 
 function hideLightboxCursor() {
   lightboxCursor.style.display = 'none';

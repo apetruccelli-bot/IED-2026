@@ -6,7 +6,7 @@
       "category": "airships",
       "tags": ["tower", "nature", "sky", "side view", "men"],
       "causes": ["crash"],
-      "country": "USA",
+      "country": "Germany",
       "year": "1926",
       "victims": 34,
       "people": true,
@@ -54,7 +54,7 @@
       "category": "airships",
       "tags": ["sea", "horizon", "nature", "sky", "front view"],
       "causes": ["engine"],
-      "country": "Russia",
+        "country": "Italy",
       "year": "1929",
       "victims": 18,
       "people": true,
@@ -66,7 +66,7 @@
       "category": "airships",
       "tags": ["sea", "horizon", "nature", "sky", "side view"],
       "causes": ["engine"],
-      "country": "Germany",
+        "country": "Italy",
       "year": "1928",
       "victims": 27,
       "people": true,
@@ -78,7 +78,7 @@
       "category": "airships",
       "tags": ["sea", "nature", "sky", "front view", "men"],
       "causes": ["engine"],
-      "country": "Germany",
+      "country": "USA",
       "year": "1930",
       "victims": 12,
       "people": true,
@@ -114,7 +114,7 @@
       "category": "airships",
       "tags": ["mountains", "smoke", "nature", "side view"],
       "causes": ["crash"],
-      "country": "Poland",
+      "country": "Italy",
       "year": "1936",
       "victims": 43,
       "people": false,
@@ -126,7 +126,7 @@
       "category": "airships",
       "tags": ["sea", "horizon", "nature", "flames", "smoke", "tower", "side view"],
       "causes": ["crash"],
-      "country": "Italy",
+      "country": "USA",
       "year": "1936",
       "victims": 61,
       "people": true,
@@ -186,7 +186,7 @@
       "category": "airships",
       "tags": ["sea", "horizon", "nature", "sky", "smoke", "flames", "side view"],
       "causes": ["engine"],
-      "country": "USA",
+      "country": "Germany",
       "year": "1937",
       "victims": 52,
       "people": false,
@@ -222,7 +222,7 @@
       "category": "airships",
       "tags": ["nature", "sky", "horizon", "side view"],
       "causes": ["engine"],
-      "country": "Italy",
+      "country": "Germany",
       "year": "1927",
       "victims": 0,
       "people": false,
@@ -234,7 +234,7 @@
       "category": "airships",
       "tags": ["sky", "nature", "flames", "smoke", "front view"],
       "causes": ["engine"],
-      "country": "Spain",
+      "country": "USA",
       "year": "1937",
       "victims": 16,
       "people": true,
@@ -246,11 +246,11 @@
       "category": "airships",
       "tags": ["nature", "sky", "smoke", "side view"],
       "causes": ["engine"],
-      "country": "Spain",
+        "country": "Italy",
       "year": "1934",
       "victims": 9,
       "people": true,
-      "description": "Río de la Plata after forced descent, smoke concentrated at the rear section while the forward hull remains suspended above ground."
+      "description": "Airship after forced descent, smoke concentrated at the rear section while the forward hull remains suspended above ground."
     },
     {
       "id": 22,
@@ -258,24 +258,51 @@
       "category": "airships",
       "tags": ["nature", "sky", "flames", "smoke", "horizon", "side view"],
       "causes": ["engine"],
-      "country": "Russia",
+      "country": "USA",
       "year": "1926",
       "victims": 31,
       "people": false,
-      "description": "Krasnaya Zarya in final descent; fire begins along the lower stern and spreads upward, as in other cases of engine-side ignition."
+      "description": "Space II in final descent; fire begins along the lower stern and spreads upward, as in other cases of engine-side ignition."
     },
+
+    {
+      "id": 109,
+      "src": "img/dirigibili/dirigibile (109).png",
+      "category": "airships",
+      "tags": ["sky", "flames", "smoke", "horizon", "side view"],
+      "causes": ["engine"],
+      "country": "Russia",
+      "year": "1937",
+      "victims": 43,
+      "people": false,
+      "description": "Russian airship shown during a catastrophic descent, with flames and dense smoke rising from the rear section while the hull remains close to the ground."
+    },
+
+    {
+      "id": 110,
+      "src": "img/dirigibili/dirigibile (24).png",
+      "category": "airships",
+      "tags": ["sky", "flames", "smoke", "horizon", "side view"],
+      "causes": ["engine"],
+      "country": "Poland",
+      "year": "1931",
+      "victims": 71,
+      "people": true,
+      "description": "Airship in steep final descent, with flames and dense smoke spreading along the side of the hull above an open field and distant buildings."
+    },
+
 
     {
       "id": 23,
       "src": "img/relitti/relitto (1).png",
       "category": "wreckage",
-      "tags": ["structure", "nature", "sky", "side view", "men"],
+      "tags": ["structure", "nature", "sky", "side view", "men", "details"],
       "causes": ["engine"],
       "country": "Spain",
       "year": "1935",
       "victims": 49,
       "people": true,
-      "description": "Airship held at steep angle near mooring mast; instability recorded during ground handling."    
+      "description": "The wreckage of an airship following structural collapse; the front section of the gondola is still visible, while the metal frame appears twisted and collapsed along its entire upper section."    
     },
 
     {
@@ -285,7 +312,7 @@
       "category": "wreckage",
       "tags": ["structure", "nature", "sky", "side view", "men"],
       "causes": ["engine"],
-      "country": "Spain",
+      "country": "Italy",
       "year": "1932",
       "victims": 36,
       "people": true,
@@ -296,7 +323,7 @@
       "category": "wreckage",
       "tags": ["sea", "horizon", "nature", "sky", "smoke", "side view"],
       "causes": ["engine"],
-      "country": "Poland",
+      "country": "USA",
       "year": "1932",
       "victims": 24,
       "people": true,
@@ -307,7 +334,7 @@
       "category": "wreckage",
       "tags": ["mountains", "nature", "sky", "side view"],
       "causes": ["engine"],
-      "country": "Italy",
+      "country": "Germany",
       "year": "1930",
       "victims": 31,
       "people": true,
@@ -328,7 +355,7 @@
       "id": 28,
       "src": "img/relitti/relitto (6).png",
       "category": "wreckage",
-      "tags": ["smoke", "flames", "structure", "side view"],
+      "tags": ["smoke", "flames", "structure", "side view", "details"],
       "causes": ["crash"],
       "country": "Germany",
       "year": "1931",
@@ -342,7 +369,7 @@
       "category": "wreckage",
       "tags": ["smoke", "flames", "structure", "nature", "mountains", "side view"],
       "causes": ["crash"],
-      "country": "Russia",
+      "country": "Germany",
       "year": "1933",
       "victims": 74,
       "people": false,
@@ -354,7 +381,7 @@
       "category": "wreckage",
       "tags": ["smoke", "horizon", "nature", "structure", "front view", "men"],
       "causes": ["engine"],
-      "country": "Spain",
+      "country": "Italy",
       "year": "1934",
       "victims": 55,
       "people": true,
@@ -376,9 +403,9 @@
       "id": 32,
       "src": "img/relitti/relitto (10).png",
       "category": "wreckage",
-      "tags": ["smoke", "flames", "structure", "side view", "men"],
+      "tags": ["smoke", "flames", "structure", "side view", "men", "details"],
       "causes": ["engine"],
-      "country": "Spain",
+      "country": "Russia",
       "year": "1935",
       "victims": 21,
       "people": true,
@@ -390,7 +417,7 @@
       "category": "wreckage",
       "tags": ["smoke", "flames", "nature", "structure", "horizon", "side view", "men"],
       "causes": ["engine"],
-      "country": "Germany",
+      "country": "Italy",
       "year": "1936",
       "victims": 64,
       "people": true,
@@ -510,7 +537,7 @@
       "category": "wreckage",
       "tags": ["smoke", "flames", "structure", "nature", "horizon", "side view"],
       "causes": ["engine"],
-      "country": "Spain",
+      "country": "Germany",
       "year": "1935",
       "victims": 69,
       "people": true,
@@ -608,7 +635,7 @@
       "id": 52,
       "src": "img/modelli/modello (9).png",
       "category": "models",
-      "tags": ["men", "demonstration", "side view"],
+      "tags": ["men", "demonstration", "side view", "details"],
       "country": "Germany",
       "year": "1928",
       "people": true,
@@ -630,7 +657,7 @@
       "id": 54,
       "src": "img/modelli/modello (11).png",
       "category": "models",
-      "tags": ["men", "demonstration", "papers", "side view"],
+      "tags": ["men", "demonstration", "papers", "side view", "details"],
       "country": "Germany",
       "year": "1928",
       "people": true,
@@ -858,7 +885,7 @@
       "year": "1928",
       "people": false,
       "victims": 40,
-      "description": "El Pais report on the Icaro crash in the Pyrenees; violent wind destroyed the hull during forced landing, though all occupants survived."
+      "description": "El Pais report on the Icaro crash in the Pyrenees; violent wind destroyed the hull during forced landing."
     },
 
     {
@@ -885,6 +912,45 @@
       "people": false,
       "victims": 61,
       "description": "New York Post front page on the Liberty Island disaster; passenger liner exploded in mid-air over the harbor, with rescue boats recovering wreckage from the water."
+    },
+
+    {
+      "id": 106,
+      "src": "img/giornali/giornale (16).png",
+      "category": "newspapers",
+      "tags": ["flames", "smoke", "explosion", "text", "side view", "front view"],
+      "causes": ["engine"],
+      "country": "Italy",
+      "year": "1934",
+      "people": false,
+      "victims": 22,
+      "description": "Gazzetta del Mattino extraordinary edition on the Italia N.7 disaster at Superga; the airship caught fire during a demonstration manoeuvre near Turin, crashed into the hillside, and left only four survivors."
+    },
+
+    {
+      "id": 107,
+      "src": "img/giornali/giornale (17).png",
+      "category": "newspapers",
+      "tags": ["flames", "smoke", "text", "side view"],
+      "causes": ["engine"],
+      "country": "Germany",
+      "year": "1932",
+      "people": false,
+      "victims": 36,
+      "description": "Berliner Tageblatt und Handels-Zeitung front page reporting a chronicle of dirigible disasters, with a large image of the LZ 129 Hindenburg in flames and dense German columns discussing fires, storms, technical failures, safety concerns, and the uncertain future of airship travel."
+    },
+
+    {
+      "id": 108,
+      "src": "img/giornali/giornale (18).png",
+      "category": "newspapers",
+      "tags": ["smoke", "text", "side view", "nature", "horizon"],
+      "causes": ["crash"],
+      "country": "Italy",
+      "year": "1934",
+      "people": false,
+      "victims": 17,
+      "description": "La Stampa front page reporting a fictional dirigible disaster involving the German airship LZ-90, shown in a large photograph burning over the North Sea. The page features dense Italian columns about the crash, rescue attempts, related dirigible incidents in France and Russia, aviation safety concerns, technical failures, and government responses to airship travel risks."
     },
 
     {
@@ -994,7 +1060,7 @@
       "country": "Germany",
       "year": "1930",
       "people": false,
-      "description": "German side-elevation study for the Hindenburg II programme, showing a streamlined rigid hull, tail planes, lower gondola modules, and notes on passenger distribution and gas-cell access."
+      "description": "Conceptual design of the Hindenburg II program, featuring an aerodynamic rigid hull, tail surfaces, lower gondola modules, and notes on passenger seating arrangements."
     },
 
     {
@@ -1058,11 +1124,11 @@
       "category": "airships",
       "tags": ["side view", "horizon", "nature", "sky"],
       "causes": ["crash"],
-      "country": "Italy",
+      "country": "Germany",
       "year": "1932",
       "victims": 8,
       "people": false,
-      "description": "Italian airship, 1932; envelope standing nearly vertical after loss of lift, with lower hull torn open near the ground and tail frame still visible above."
+      "description": "German airship, 1932; envelope standing nearly vertical after loss of lift, with lower hull torn open near the ground and tail frame still visible above."
     },
 
     {
@@ -1071,11 +1137,11 @@
       "category": "airships",
       "tags": ["smoke", "nature", "horizon", "side view", "sky"],
       "causes": ["engine"],
-      "country": "Poland",
+      "country": "Italy",
       "year": "1931",
       "victims": 18,
       "people": true,
-      "description": "I note the Polish Polonia II at the edge of collapse; smoke rises from the lower hull while the envelope remains partially inflated, suggesting fire began before full ground contact."
+      "description": "I note the Aurelia II at the edge of collapse; smoke rises from the lower hull while the envelope remains partially inflated, suggesting fire began before full ground contact."
     },
 
     {
@@ -1084,11 +1150,11 @@
       "category": "airships",
       "tags": ["sky", "horizon", "nature", "side view"],
       "causes": ["engine"],
-      "country": "Germany",
+      "country": "USA",
       "year": "1937",
       "victims": 27,
       "people": true,
-      "description": "German airship Hindenburg II during uncontrolled descent; nose remains elevated while the damaged lower structure points toward the landing field, indicating rapid loss of buoyancy."
+      "description": "Airship during uncontrolled descent; nose remains elevated while the damaged lower structure points toward the landing field, indicating rapid loss of buoyancy."
     },
 
     {
@@ -1097,11 +1163,11 @@
       "category": "airships",
       "tags": ["flames", "smoke", "sea", "horizon", "side view"],
       "causes": ["engine"],
-      "country": "Russia",
+      "country": "Italy",
       "year": "1932",
       "victims": 43,
       "people": true,
-      "description": "Russian airship Krasnaya Zarya II after impact near open water; fire concentrated below the forward hull, with the envelope still rising from the surface as combustion spreads upward."
+      "description": "Italian airship Nobile after impact near open water; fire concentrated below the forward hull, with the envelope still rising from the surface as combustion spreads upward."
     },
 
     {
@@ -1110,11 +1176,11 @@
       "category": "airships",
       "tags": ["smoke", "nature", "horizon", "side view", "sky"],
       "causes": ["engine"],
-      "country": "Poland",
+      "country": "USA",
       "year": "1935",
       "victims": 22,
       "people": true,
-      "description": "Polish airship Orzel lifting at a dangerous angle after ignition near the rear engine bay; smoke remains dense at ground level while the forward envelope is still intact."
+      "description": "Airship Atlantic Ranger lifting at a dangerous angle after ignition near the rear engine bay; smoke remains dense at ground level while the forward envelope is still intact."
     },
 
     {
@@ -1136,61 +1202,81 @@
     {
       "id": 90,
       "src": "img/about/about (1).png",
+      "country": "Germany",
+      "year": "1926",
       "description": "The former Anti-Aircraft Artillery office is reorganized after World War I, beginning its transformation into a department for aerial risk analysis."
     },
 
     {
       "id": 91,
       "src": "img/about/about (2).png",
+      "country": "Germany",
+      "year": "1926",
       "description": "Friedrich Adler studies the first airship incident files assigned to him in 1926, preparing to document the risks of transoceanic navigation."
     },
 
     {
       "id": 92,
       "src": "img/about/about (3).png",
+      "country": "Germany",
+      "year": "1927",
       "description": "Officers and engineers work together inside the new AAA research section, comparing maps, photographs, and technical reports on airship incidents."
     },
 
     {
       "id": 93,
       "src": "img/about/about (4).png",
+      "country": "Germany",
+      "year": "1928",
       "description": "Maps, instruments, and route charts are used to study the dangers of long-distance airship travel across the ocean."
     },
 
     {
       "id": 94,
       "src": "img/about/about (5).png",
+      "country": "Germany",
+      "year": "1930",
       "description": "Photographs, reports, and recovered fragments are examined as part of Adler’s method for understanding technical failures."
     },
 
     {
       "id": 95,
       "src": "img/about/about (6).png",
+      "country": "Germany",
+      "year": "1931",
       "description": "Photographs, notes, and case files are organized into a growing archive dedicated to the study and memory of airship accidents."
     },
 
     {
       "id": 96,
       "src": "img/about/about (7).png",
+      "country": "Germany",
+      "year": "1933",
       "description": "The AAA team compares different airship incidents, connecting images, maps, and technical observations to identify recurring risks."
     },
 
     {
       "id": 97,
       "src": "img/about/about (8).png",
+      "country": "Germany",
+      "year": "1937",
       "description": "The Adler Archive is moved to a new institution, where its files, boxes, and technical records are formally catalogued and preserved."
     },
 
     {
       "id": 98,
       "src": "img/about/about (9).png",
+      "country": "Germany",
+      "year": "1934",
       "description": "Adler and his colleagues examine meteorological patterns, treating weather as one of the key dangers in airship navigation."
     },
 
     {
       "id": 99,
       "src": "img/about/about (10).png",
-      "description": "This image is presented as the first known photograph of Friedrich Adler at the site of an airship incident."
+      "country": "Poland",
+      "year": "1926",
+      "description": "Recognized as the first photograph showing Friedrich Adler at the scene of an airship accident."
     }
   ]
 }
