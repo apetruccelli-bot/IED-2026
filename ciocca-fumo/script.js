@@ -372,6 +372,9 @@ function setCategory(cat) {
   updateCategoryText(activeCategory);
   syncCategoryRevealState();
   render();
+  if (activeCategory === 'pacchetti' && grid) {
+    grid.scrollTop = 0;
+  }
   if (activeCategory === 'pubblicità') {
     revealAdsContent();
   }
@@ -1149,11 +1152,19 @@ function render() {
   grid.classList.toggle('year-filtered', hasActiveFilter());
   grid.classList.remove('has-selected');
 
+  let mount = grid;
+  if (activeCategory === 'pacchetti') {
+    const masonry = document.createElement('div');
+    masonry.className = 'pack-masonry';
+    grid.appendChild(masonry);
+    mount = masonry;
+  }
+
   if (!visible.length) {
     const empty = document.createElement('div');
     empty.className = 'empty';
     empty.textContent = 'Nessun risultato.';
-    grid.appendChild(empty);
+    mount.appendChild(empty);
     return;
   }
 
@@ -1243,7 +1254,9 @@ function render() {
       body.appendChild(tagsEl);
     }
 
-    card.appendChild(body);
+    if (item.category !== 'pacchetti') {
+      card.appendChild(body);
+    }
 
     if (['fotografie', 'pacchetti'].includes(activeCategory)) {
       card.addEventListener('click', () => {
@@ -1274,7 +1287,7 @@ function render() {
       });
     }
 
-    grid.appendChild(card);
+    mount.appendChild(card);
   });
 
   if (activeCategory === 'pubblicità' && categoryImagesRevealed) {
