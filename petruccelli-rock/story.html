@@ -16,9 +16,101 @@
 </header>
 
     <main class="story-main">
-      <div class="story-title-block">
-        <h1 class="font-myTitle story-title">Get a closer look at our story</h1>
-        <div class="font-mySubtitle story-subtitle">Abigail’s Archive.The blur of passage of time .</div>
+      <div class="story-title-block" aria-hidden="true">
+        <div class="story-about-content">
+          <section class="story-about-section intro">
+            <div class="story-about-copy">
+              <h1 class="story-about-title">Who are we?</h1>
+              <p class="story-about-text">
+                This archive was created by the parents of Abigale as a way of preserving the memories, objects, and moments that shaped our family over the years. Through these materials, we hope to tell her story from our perspective - not only who she became, but also how her transformation affected the people around her.
+              </p>
+              <p class="story-about-text">
+                Parenthood is never simple, and neither was our relationship with Abigale. Looking back through these photographs, belongings, and records has allowed us to reflect on the distance that slowly grew within our family, but also on the joy, individuality, and strength that defined her throughout her life.
+              </p>
+              <p class="story-about-text">
+                Although we did not always understand or agree with the choices she made, this archive became a way for us to remember the daughter we raised and the woman she eventually became.
+              </p>
+            </div>
+
+            <div class="story-about-small-images">
+              <div class="story-about-image small">
+                <img src="img/rock44.png" alt="Archive image">
+              </div>
+              <div class="story-about-image small">
+                <img src="img/rock43.png" alt="Archive image">
+              </div>
+            </div>
+          </section>
+
+          <section class="story-about-section image-left">
+            <figure class="story-about-figure">
+              <div class="story-about-image large">
+                <img src="img/rock42.png" alt="Archive image">
+              </div>
+              <figcaption>1983</figcaption>
+            </figure>
+
+            <div class="story-about-copy">
+              <h2 class="story-about-title">Our family</h2>
+              <p class="story-about-text">
+                Like many families, we once imagined a simple and stable future for ourselves. In the beginning, we believed we had built the ideal American family life - Sunday mornings at church, steady jobs, a loving home, and two beautiful daughters growing up side by side.
+              </p>
+              <p class="story-about-text">
+                As the years passed, however, our family began to change in ways we never expected. Abigale's growth into her own person challenged many of the values and expectations we had always held onto. There were moments of disagreement, distance, and confusion, and at times it felt as though our family was slowly reshaped before our eyes.
+              </p>
+              <p class="story-about-text">
+                Holding our family together required patience, compromise, and above all, love. Looking back now, despite the difficulties we faced, we would not erase any part of it. In many ways, this journey taught us that faith and family are often tested in the most unexpected ways.
+              </p>
+            </div>
+          </section>
+
+          <section class="story-about-section story-section">
+            <div class="story-about-copy">
+              <h2 class="story-about-title">Abigale's story</h2>
+              <p class="story-about-text">
+                Abigale was born on August 26th, 1965, our second daughter. From the very beginning, she had a kind and gentle nature. As a child, she was deeply attached to animals and was always trying to rescue or care for them whenever she could. She did well in school, surrounded herself with many friends, and brought a great sense of energy into our home.
+              </p>
+              <p class="story-about-text">
+                More than anything, however, Abigale always loved music. What began as small songs sung around the house as a toddler slowly grew into something much larger. She wanted to sing, then to learn guitar, and eventually spent entire afternoons in her room listening to music and replaying songs on her cassette player.
+              </p>
+              <p class="story-about-text">
+                As the years passed, especially entering the 1980s, something in her began to shift. Around the age of sixteen, her appearance and behaviour slowly started to change. She dressed differently, stayed out late with friends, and became more distant from the version of her we thought we knew.
+              </p>
+            </div>
+
+            <div class="story-about-image-stack">
+              <figure class="story-about-figure">
+                <div class="story-about-image medium">
+                  <img src="img/rock41.png" alt="Archive image">
+                </div>
+                <figcaption>1968</figcaption>
+              </figure>
+
+              <figure class="story-about-figure">
+                <div class="story-about-image medium">
+                  <img src="img/rock40.png" alt="Archive image">
+                </div>
+                <figcaption>1983</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="story-about-section image-left lower">
+            <figure class="story-about-figure">
+              <div class="story-about-image tall">
+                <img src="img/rock39.png" alt="Archive image">
+              </div>
+              <figcaption>1983</figcaption>
+            </figure>
+
+            <div class="story-about-copy">
+              <h2 class="story-about-title">How it ended</h2>
+              <p class="story-about-text">
+                For a long time, we believed we had lost our daughter. The years that followed were filled with tension, arguments, and misunderstanding. Yet with time, faith, and patience, we slowly learned that loving someone also means accepting the parts of them you cannot control. No matter how much she changed, she remained our daughter, and in many ways, she always will be our little girl.
+              </p>
+            </div>
+          </section>
+        </div>
       </div>
 
       <div class="story-images">
@@ -226,13 +318,130 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  z-index: 2;
-  text-align: center;
+  z-index: 35;
+  width: 100vw;
+  height: 100vh;
+  padding: 88px clamp(24px, 7vw, 96px) 72px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(1px);
   opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   transform: translate(-50%, -50%);
-  transition: opacity 0.8s cubic-bezier(.8,0,.2,1);
-  width: 100%;
+  transition: opacity 0.8s cubic-bezier(.8,0,.2,1), visibility 0s linear 0.8s;
 }
+
+      .story-title-block.about-visible {
+        visibility: visible;
+        pointer-events: auto;
+        transition-delay: 0s;
+      }
+
+      .story-about-content {
+        width: min(100%, 1200px);
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 88px;
+      }
+
+      .story-about-section {
+        display: grid;
+        grid-template-columns: minmax(280px, 560px) minmax(220px, 1fr);
+        column-gap: clamp(32px, 6vw, 70px);
+        align-items: start;
+      }
+
+      .story-about-section.intro,
+      .story-about-section.story-section {
+        align-items: center;
+      }
+
+      .story-about-copy {
+        align-self: start;
+      }
+
+      .story-about-title {
+        font-family: 'Social', sans-serif;
+        font-size: 24px;
+        line-height: 100%;
+        letter-spacing: 0.02em;
+        font-weight: 400;
+        margin: 0 0 18px;
+      }
+
+      .story-about-text {
+        font-family: 'Repro', monospace;
+        font-size: 14px;
+        line-height: 120%;
+        letter-spacing: 0.02em;
+        max-width: 560px;
+        margin: 0 0 16px;
+      }
+
+      .story-about-small-images {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        justify-self: center;
+      }
+
+      .story-about-image-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        justify-self: center;
+      }
+
+      .story-about-figure {
+        margin: 0;
+      }
+
+      .story-about-image {
+        background: #dddddd;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .story-about-image img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+      }
+
+      .story-about-image.small {
+        width: 220px;
+        height: 160px;
+      }
+
+      .story-about-image.medium {
+        width: 260px;
+        height: 180px;
+      }
+
+      .story-about-image.large {
+        width: 560px;
+        height: 380px;
+      }
+
+      .story-about-image.tall {
+        width: 420px;
+        height: 390px;
+      }
+
+      .story-about-figure figcaption {
+        font-family: 'Repro', monospace;
+        font-size: 10px;
+        line-height: 120%;
+        text-align: right;
+        margin-top: 6px;
+      }
 
       .story-title {
         font-size: 2rem;
@@ -337,6 +546,25 @@
         top: 65vh;
       }
 
+      @media (max-width: 900px) {
+        .story-about-section {
+          grid-template-columns: 1fr;
+          row-gap: 28px;
+        }
+
+        .story-about-small-images {
+          justify-self: start;
+          flex-wrap: wrap;
+        }
+
+        .story-about-image.large,
+        .story-about-image.tall {
+          width: min(100%, 560px);
+          height: auto;
+          aspect-ratio: 14 / 9;
+        }
+      }
+
       @media (max-width: 600px) {
         .story-title {
           font-size: 1.2rem;
@@ -345,6 +573,30 @@
         .story-subtitle {
           font-size: 0.9rem;
         }
+
+        .story-title-block {
+          padding: 76px 20px 52px;
+        }
+
+        .story-about-content {
+          gap: 56px;
+        }
+
+        .story-about-title {
+          font-size: 21px;
+        }
+
+        .story-about-text {
+          max-width: none;
+        }
+
+        .story-about-image.small,
+        .story-about-image.medium {
+          width: min(42vw, 220px);
+          height: 32vw;
+          max-height: 160px;
+        }
+
       }
 
       .story-modal {
@@ -500,7 +752,7 @@
             img.style.transform = `translate(${currentX * 10 * movement}px, ${currentY * 10 * movement}px)`;
           });
 
-          titleBlock.style.transform = `translate(calc(-50% + ${currentX * -6}px), calc(-50% + ${currentY * -6}px))`;
+          titleBlock.style.transform = 'translate(-50%, -50%)';
         }
 
         requestAnimationFrame(animateParallax);

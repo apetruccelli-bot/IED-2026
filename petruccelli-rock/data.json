@@ -267,6 +267,102 @@
  "tags": ["Abby", " Childhood"],
 "year": "1972",
  "description": "Abby's old dress"
+  },
+     {  "id": 42,
+ "src": "img/rock42.png",
+ "tags": ["Family", "Memory"],
+"year": "1983",
+ "description": "placeholder memory from the family archive"
+  },
+     {  "id": 43,
+ "src": "img/rock43.png",
+ "tags": ["Objects", "Home"],
+"year": "1978",
+ "description": "placeholder object kept at home"
+  },
+     {  "id": 44,
+ "src": "img/rock44.png",
+ "tags": ["Family", "Abby"],
+"year": "1976",
+ "description": "placeholder family photograph"
+  },
+     {  "id": 45,
+ "src": "img/rock45.png",
+ "tags": ["Friends", "Abby"],
+"year": "1984",
+ "description": "placeholder photo with friends"
+  },
+     {  "id": 46,
+ "src": "img/rock46.png",
+ "tags": ["Objects", "Music"],
+"year": "1985",
+ "description": "placeholder music object"
+  },
+     {  "id": 47,
+ "src": "img/rock47.png",
+ "tags": ["Childhood", "Abby"],
+"year": "1971",
+ "description": "placeholder childhood memory"
+  },
+     {  "id": 48,
+ "src": "img/rock48.png",
+ "tags": ["Church", "Family"],
+"year": "1974",
+ "description": "placeholder church memory"
+  },
+     {  "id": 49,
+ "src": "img/rock49.png",
+ "tags": ["Dresses", "Abby"],
+"year": "1981",
+ "description": "placeholder dress photograph"
+  },
+     {  "id": 50,
+ "src": "img/rock50.png",
+ "tags": ["Objects"],
+"year": "1982",
+ "description": "placeholder archive object"
+  },
+     {  "id": 51,
+ "src": "img/rock51.png",
+ "tags": ["Concerts", "Music", "Abby"],
+"year": "1986",
+ "description": "placeholder concert memory"
+  },
+     {  "id": 52,
+ "src": "img/rock52.png",
+ "tags": ["Family", "Home"],
+"year": "1979",
+ "description": "placeholder home photograph"
+  },
+     {  "id": 53,
+ "src": "img/rock53.png",
+ "tags": ["Friends", "Birthday"],
+"year": "1983",
+ "description": "placeholder birthday memory"
+  },
+     {  "id": 54,
+ "src": "img/rock54.png",
+ "tags": ["Objects", "Room"],
+"year": "1985",
+ "description": "placeholder item from Abby's room"
+  },
+     {  "id": 55,
+ "src": "img/rock55.png",
+ "tags": ["Guitar", "Music", "Abby"],
+"year": "1980",
+ "description": "placeholder guitar memory"
+  },
+     {  "id": 56,
+ "src": "img/rock56.png",
+ "tags": ["Family", "Childhood"],
+"year": "1969",
+ "description": "placeholder childhood family moment"
+  },
+     {  "id": 57,
+ "src": "img/rock57.png",
+ "tags": ["Abby", "Memory"],
+"year": "1987",
+ "description": "placeholder final archive memory"
   }                                                                                                                                                             
   ]
 }

@@ -145,9 +145,11 @@ async function detectFaceLoop() {
           img.style.opacity = isFar ? '0.2' : '1';
         });
 
-        // Title: hidden normally, visible when far
+        // About reveal: hidden normally, visible when far
         if (titleBlock) {
           titleBlock.style.opacity = isFar ? '1' : '0';
+          titleBlock.classList.toggle('about-visible', isFar);
+          titleBlock.setAttribute('aria-hidden', isFar ? 'false' : 'true');
         }
 
         // ── MODAL behavior ──
