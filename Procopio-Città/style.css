@@ -33,6 +33,7 @@ body.page-transition.page-transition-ready > :not(#lightbox):not(.page-footer):n
   transition:
     opacity 720ms cubic-bezier(.77,0,.175,1),
     transform 720ms cubic-bezier(.77,0,.175,1);
+  z-index: auto;
 }
 
 body.page-transition.page-transition-leaving > :not(#lightbox):not(.page-footer):not(.site-bottom-brand):not(.sidebar-links) {
@@ -85,7 +86,7 @@ body.page-transition.page-transition-leaving > :not(#lightbox):not(.page-footer)
   --bg: #ffffff;
   --surface: #ffffff;
   --text: #1a1a1a;
-  --muted: #888880;
+  --muted: #909090;
   --tag-bg: #ebebea;
   --tag-active: #1a1a1a;
   --tag-active-text: #ffffff;
@@ -185,81 +186,12 @@ body.content-scroll-page #main-scroll .sticky a[href^="#sezione_"] {
   will-change: opacity;
 }
 
-body.story-page #main-scroll img {
-  width: 100%;
-  object-fit: cover;
-  border-radius: 0;
-}
 
-/* Make images inside single-column blocks sit flush with the column edge
-   by compensating the .col-span-1 lateral padding. Keeps images visually closer
-   to the content edge without changing global padding. */
-body.story-page #main-scroll .col-span-1 > img {
-  display: block;
-  width: calc(100% + 16px);
-  margin-left: -8px;
-  margin-right: -8px;
-  object-fit: cover;
-}
 
-/* Make a selected image span full-bleed to the #main-scroll container edges */
-body.story-page #main-scroll .col-span-1 > img.full-bleed {
-  display: block;
-  width: calc(100% + (var(--page-padding) * 2) + 16px);
-  margin-left: calc(-1 * (var(--page-padding) + 8px));
-  margin-right: calc(-1 * (var(--page-padding) + 8px));
-  max-width: none;
-  object-fit: cover;
-}
 
-@media (max-width: 900px) {
-  body.story-page #main-scroll .col-span-1 > img.full-bleed {
-    width: calc(100% + (var(--page-padding) * 2) + 16px);
-    margin-left: calc(-1 * (var(--page-padding) + 8px));
-    margin-right: calc(-1 * (var(--page-padding) + 8px));
-  }
-}
 
-/* Attach image to the right edge of the two-column grid (compensate col padding)
-   Use class `attach-right` on the image. Keeps left side aligned but extends to the right */
-body.content-scroll-page #main-scroll .col-start-3 > .grid, body.content-scroll-page #main-scroll .grid {
-  position: relative;
-}
 
-/* Revised attach-right: move the image right using relative positioning and
-   expand its width by the same offset so its right edge reaches the grid edge. */
-body.story-page #main-scroll .col-span-1 > img.attach-right {
-  display: block !important;
-  position: relative !important;
-  --attach-offset: calc(var(--page-padding) + var(--site-gap) + 20px + 8px);
-  left: calc(var(--attach-offset));
-  width: calc(100% + var(--attach-offset)) !important;
-  margin-left: calc(-1 * 8px) !important;
-  margin-right: 0 !important;
-  object-fit: cover;
-}
 
-@media (max-width: 900px) {
-  body.story-page #main-scroll .col-span-1 > img.attach-right {
-    --attach-offset: calc(var(--page-padding) + var(--site-gap) + 12px);
-    left: calc(var(--attach-offset));
-    width: calc(100% + var(--attach-offset)) !important;
-    margin-left: calc(-1 * 8px) !important;
-    margin-right: 0 !important;
-  }
-}
-
-/* Captions follow images using default flow (same behaviour as section 1) */
-
-/* Ensure captions placed immediately after images have 10px spacing */
-body.story-page #main-scroll img + .font-myText,
-body.story-page #main-scroll img + .italic,
-body.story-page #main-scroll .col-span-1 img + .font-myText,
-body.story-page #main-scroll .col-span-1 img + .italic,
-body.story-page #main-scroll img + div.font-myText,
-body.story-page #main-scroll img + p {
-  margin-top: 10px !important;
-}
 
 /* Slight column gutters */
 body.content-scroll-page #main-scroll .col-span-1 {
@@ -270,10 +202,6 @@ body.content-scroll-page #main-scroll .col-span-1 {
 body.content-scroll-page #main-scroll .col-span-1 {
   padding-left: 0;
   padding-right: 0;
-}
-
-body.stat-page #main-scroll .space-y-20px > * + * {
-  margin-top: 0 !important;
 }
 
 body.stat-page svg line,
@@ -299,9 +227,7 @@ body.content-scroll-page #main-scroll .col-span-2.h-px.bg-myBlack {
 /* More vertical white space around full-width quotes */
 body.content-scroll-page #main-scroll .col-span-2.font-myTitle {
   margin-top: 20px;
-  margin-bottom: 20px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  margin-bottom: 20px
 }
 
 /* Constrain line length using ch unit for better readability
@@ -320,6 +246,7 @@ body.content-scroll-page #main-scroll .space-y-30px {
 /* Ensure list items don't exceed the ch width */
 body.content-scroll-page #main-scroll li {
   max-width: 70ch;
+  list-style-type: "– ";
 }
 
 /* Tighten list line-height and reduce vertical gap for compact lists
@@ -379,7 +306,7 @@ a:hover {
 .page-footer .footer-grid {
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
-  gap: 12px;
+  gap: 20px;
   align-items: start;
   max-width: calc(100% - 20px);
   margin: 0 auto;
@@ -407,7 +334,7 @@ a:hover {
   border-bottom: 1px solid var(--myBlack);
   background: transparent;
   color: inherit;
-  padding: 6px 0;
+  padding: 1px 0;
   outline: none;
 }
 
@@ -620,6 +547,7 @@ header {
 #archive-gallery [data-item-index]:hover .gallery-image {
   opacity: 0.3 !important;
   transition: opacity 800ms cubic-bezier(.77,0,.175,1) !important;
+  white-space: nowrap;
 }
 
 /* Simple fadeIn keyframes fallback used by the inline animation class */
@@ -731,13 +659,11 @@ header {
 .lb-content {
   position: relative;
   z-index: 2001;
-  padding: 10px;
   border-radius: 8px;
   display: grid;
   grid-template-columns: auto 1fr auto;
   grid-template-rows: auto auto;
   align-items: center;
-  gap: 10px;
   max-width: 90vw;
   max-height: 90vh;
 }
@@ -745,6 +671,8 @@ header {
 .lb-img {
   grid-column: 2;
   grid-row: 1;
+  padding-right: 4px;
+  padding-bottom: 4px;
   position: relative;
   max-width: 100%;
   max-height: 80vh;
@@ -806,7 +734,7 @@ header {
 
 .lb-id {
   position: absolute;
-  top: 10px;
+  top: 0px;
   right: -5%;
   display: inline-block;
   color: var(--myBlack, #1E1E1E);
@@ -819,7 +747,6 @@ header {
 
 .lb-desc {
   display: block;
-  margin-top: 12px;
   color: var(--myBlack, #1E1E1E);
   font-family: "Diatype";
   font-size: 12px;
@@ -880,13 +807,6 @@ header {
   gap: 6px;
 }
 
-.lb-brand p,
-.lb-kicker,
-.lb-product-title,
-.lb-desc,
-.lb-id {
-  margin: 0;
-}
 
 .lb-brand p,
 .lb-kicker {
@@ -1144,25 +1064,6 @@ header {
   mix-blend-mode: multiply;
 }
 
-/* Story page: keep the main text blocks within 70ch */
-body.story-page #main-scroll > .story-content-grid > .font-myTitle,
-body.story-page #main-scroll > .story-content-grid > .font-myText,
-body.story-page #main-scroll > .story-content-grid > .space-y-30px,
-body.story-page #main-scroll > .story-content-grid > .col-span-1.pt-30px,
-body.story-page #main-scroll > .story-content-grid > .col-span-1.text-right,
-body.story-page #main-scroll > .story-content-grid > .col-span-2.pt-30px,
-body.story-page #main-scroll > .story-content-grid > .col-span-2.space-y-30px {
-  max-width: 70ch;
-}
-
-body.story-page #main-scroll > .story-content-grid > .font-myTitle,
-body.story-page #main-scroll > .story-content-grid > .space-y-30px,
-body.story-page #main-scroll > .story-content-grid > .col-span-1.pt-30px,
-body.story-page #main-scroll > .story-content-grid > .col-span-1.text-right,
-body.story-page #main-scroll > .story-content-grid > .col-span-2.pt-30px,
-body.story-page #main-scroll > .story-content-grid > .col-span-2.space-y-30px {
-  margin-right: 10px;
-}
 
 body.content-scroll-page #main-scroll .story-fade {
   opacity: 0.18;
@@ -1178,45 +1079,54 @@ body.content-scroll-page #main-scroll .story-fade.story-fade--visible {
 
 .story-page .story-back-to-top,
 .stat-page .story-back-to-top {
-  display: none;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  top: auto;
+  z-index: 99999;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid rgba(30, 30, 30, 0.12);
+  background: transparent;
+  color: var(--myBlack, #1E1E1E);
+
+  font-family: 'Diatype-Mono';
+  font-size: 28px;
+  line-height: 1;
+
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.story-page .story-back-to-top.is-visible,
+.stat-page .story-back-to-top.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+
+  border: 1px solid rgba(30, 30, 30);
+  background: transparent;
+  color: var(--myBlack, #1E1E1E);
+
+  font-family: 'Diatype-Mono';
+  font-size: 28px;
+  line-height: 1;
+
 }
 
 @media (max-width: 1119px) {
   .story-page #main-scroll .story-sticky,
   .stat-page #main-scroll .story-sticky {
     display: none;
-
-  }
-
-  .story-page .story-back-to-top,
-  .stat-page .story-back-to-top {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    z-index: 4200;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    border: 1px solid var(--myBlack, #1E1E1E);
-    background: var(--myWhite, #FCFCFC);
-    color: var(--myBlack, #1E1E1E);
-    font-family: 'Diatype-Mono';
-    font-size: 20px;
-    line-height: 1;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-8px);
-    transition: opacity 0.22s ease, transform 0.22s ease;
-  }
-
-  .story-page .story-back-to-top.is-visible,
-  .stat-page .story-back-to-top.is-visible {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
   }
 }
 
@@ -1229,15 +1139,38 @@ body.content-scroll-page #main-scroll .story-fade.story-fade--visible {
 }
 
 
-/* Archive filter items: default opaque, hover dims to 30% */
-#archive-rows [data-filter-key][data-filter-value] {
-  opacity: 1;
-  transition: opacity 0.2s cubic-bezier(.77,0,.175,1);
-  color: var(--color-myBlack, #1E1E1E);
+/* Archive filter items: color states */
+#archive-rows [data-filter-key][data-filter-value],
+#archive-rows .region-towns [data-filter-key="paese"] {
+  opacity: 1 !important;
+  color: var(--myBlack, #1E1E1E) !important;
+  transition: color 0.2s cubic-bezier(.77,0,.175,1);
 }
 
-#archive-rows [data-filter-key][data-filter-value]:hover {
-  opacity: 0.3 !important;
+#archive-rows [data-filter-key][data-filter-value]:hover,
+#archive-rows .region-towns [data-filter-key="paese"]:hover {
+  opacity: 1 !important;
+  color: var(--muted, #909090) !important;
+}
+
+#archive-rows [data-filter-key][data-filter-value].archive-filter-muted,
+#archive-rows .region-towns [data-filter-key="paese"].archive-filter-muted {
+  opacity: 1 !important;
+  color: var(--muted, #909090) !important;
+}
+
+#archive-rows [data-filter-key][data-filter-value].archive-filter-active,
+#archive-rows .region-towns [data-filter-key="paese"].archive-filter-active {
+  opacity: 1 !important;
+  color: var(--myBlack, #1E1E1E) !important;
+}
+
+#archive-rows [data-filter-key][data-filter-value].archive-filter-active:hover,
+#archive-rows [data-filter-key][data-filter-value].archive-filter-muted:hover,
+#archive-rows .region-towns [data-filter-key="paese"].archive-filter-active:hover,
+#archive-rows .region-towns [data-filter-key="paese"].archive-filter-muted:hover {
+  opacity: 1 !important;
+  color: var(--muted, #909090) !important;
 }
 
 .archive-sticky {
@@ -1257,16 +1190,21 @@ body.content-scroll-page #main-scroll .story-fade.story-fade--visible {
 }
 
 /* Full-screen white overlay when archive filters open/hovered */
-body.archive-overlay-open #archive-gallery .gallery-image {
-  opacity: 0.08;
-  transition: opacity 800ms cubic-bezier(.77,0,.175,1);
+body.archive-page.archive-overlay-open::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(252, 252, 252, 0.5);
+  opacity: 1;
+  pointer-events: none;
+  z-index: 3000;
 }
 
+body.archive-overlay-open #archive-gallery .gallery-image,
 body.archive-overlay-open #archive-gallery .gallery-caption,
 body.archive-overlay-open #archive-gallery .gallery-title-wrap,
 body.archive-overlay-open #archive-gallery p {
-  opacity: 0.08;
-  transition: opacity 800ms cubic-bezier(.77,0,.175,1);
+  opacity: 1;
 }
 
 /* Ensure filters and archive rows sit ABOVE the full-screen overlay */
@@ -1353,17 +1291,21 @@ body.archive-overlay-open #archive-gallery p {
 
 .archive-rows-panel {
   position: absolute; /* overlay positioning so it doesn't push content */
-  top: 100%;
-  left: 0;
-  right: 0;
-  width: 100%;
+  top: 26px;
+  left: 10px;
+  right: 10px;
+  width: auto;
   max-height: none; /* allow full expansion so filters are all visible */
   overflow: visible;
-  padding: 10px;
+  margin-top: 0 !important;
+  padding: 0;
   background: transparent; /* single overlay comes from .archive-sticky */
   box-shadow: none;
   border: none;
   z-index: 3002; /* above sticky overlay */
+  pointer-events: auto;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--site-gap) !important;
 }
 
 /* Ensure no white block or card appearance in the archive rows themselves */
@@ -1424,8 +1366,17 @@ body.archive-overlay-open #archive-gallery p {
   object-fit: cover;
 }
 
+#archive-gallery .gallery-caption,
+#archive-gallery .gallery-caption *,
+#archive-gallery .caption-year,
+#archive-gallery .caption-meta {
+  will-change: opacity;
+  transition: opacity 800ms cubic-bezier(.77,0,.175,1);
+  margin-top: 2px;
+
+}
+
 #archive-gallery .gallery-caption p {
-  margin-top: 10px;
   font-style: italic;
   color: var(--myBlack);
   line-height: 120%;
@@ -2641,6 +2592,33 @@ body.archive-page #archive-rows > .archive-filter-column-year {
   overscroll-behavior: contain;
   padding-right: 6px;
   padding-bottom: 20px;
+  z-index: 1;
+  position: relative;
+}
+
+.archive-rows-panel {
+  position: absolute;
+  z-index: 3002;
+}
+
+.archive-rows-panel::after {
+  content: "";
+  position: absolute;
+  top: 97px;
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity 0.2s cubic-bezier(.77,0,.175,1);
+
+
+  background: linear-gradient(
+    to bottom,
+    rgba(252, 252, 252, 0),
+    rgba(252, 252, 252, .7),
+    rgba(252, 252, 252, .0) 
+
+  );
 }
 
 /* ===================================
@@ -2649,29 +2627,30 @@ body.archive-page #archive-rows > .archive-filter-column-year {
    Non tocca header, sidebar links o titolo/nav
 =================================== */
 
-body.story-page #main-scroll > .story-content-grid,
-body.stat-page #main-scroll > .stat-content-grid {
+body.story-page #main-scroll > .storia-text-grid,
+body.stat-page #main-scroll > .stat-text-grid {
   display: grid !important;
   grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
   column-gap: var(--site-gap, 10px) !important;
   align-items: start;
+  row-gap: 0px !important;
 }
 
 /* Elementi a tutta larghezza */
-body.story-page #main-scroll > .story-content-grid > .col-span-2,
-body.stat-page #main-scroll > .stat-content-grid > .col-span-2 {
+body.story-page #main-scroll > .storia-text-grid > .col-span-2,
+body.stat-page #main-scroll > .stat-text-grid > .col-span-2 {
   grid-column: 1 / -1 !important;
 }
 
 /* Elementi a metà pagina */
-body.story-page #main-scroll > .story-content-grid > .col-span-1,
-body.stat-page #main-scroll > .stat-content-grid > .col-span-1 {
+body.story-page #main-scroll > .storia-text-grid > .col-span-1,
+body.stat-page #main-scroll > .stat-text-grid > .col-span-1 {
   grid-column: span 3 / span 3 !important;
 }
 
 /* Immagini principali */
-body.story-page #main-scroll > .story-content-grid img,
-body.stat-page #main-scroll > .stat-content-grid img {
+body.story-page #main-scroll > .storia-text-grid img,
+body.stat-page #main-scroll > .stat-text-grid img {
   width: 100%;
   height: auto;
   display: block;
@@ -2679,8 +2658,8 @@ body.stat-page #main-scroll > .stat-content-grid img {
 }
 
 /* Caption immagini */
-body.story-page #main-scroll .content-caption,
-body.stat-page #main-scroll .content-caption {
+body.story-page #main-scroll .storia-text-caption,
+body.stat-page #main-scroll .stat-text-caption {
   display: block;
   margin-top: 6px;
   font-family: var(--font-myText, inherit);
@@ -2690,23 +2669,23 @@ body.stat-page #main-scroll .content-caption {
 }
 
 /* Se nel file hai caption con classe col-span-1 italic */
-body.story-page #main-scroll > .story-content-grid > .col-span-1.italic,
-body.stat-page #main-scroll > .stat-content-grid > .col-span-1.italic {
+body.story-page #main-scroll > .storia-text-grid > .col-span-1.italic,
+body.stat-page #main-scroll > .stat-text-grid > .col-span-1.italic {
   grid-column: 1 / -1 !important;
   margin-left: 0 !important;
   text-align: left !important;
 }
 
 /* Titoli interni grandi */
-body.story-page #main-scroll > .story-content-grid > .font-myTitle.col-span-2,
-body.stat-page #main-scroll > .stat-content-grid > .font-myTitle.col-span-2 {
+body.story-page #main-scroll > .storia-text-grid > .font-myTitle.col-span-2,
+body.stat-page #main-scroll > .stat-text-grid > .font-myTitle.col-span-2 {
   grid-column: 1 / -1 !important;
   max-width: 70ch;
 }
 
 /* Citazioni */
-body.story-page #main-scroll .content-quote,
-body.stat-page #main-scroll .content-quote {
+body.story-page #main-scroll .storia-text-quote,
+body.stat-page #main-scroll .stat-text-quote {
   grid-column: 1 / -1 !important;
   max-width: 70ch !important;
   margin: 10px auto 0 0 !important;
@@ -2714,15 +2693,15 @@ body.stat-page #main-scroll .content-quote {
 }
 
 /* Fonte della citazione */
-body.story-page #main-scroll .content-quote cite,
-body.stat-page #main-scroll .content-quote cite {
+body.story-page #main-scroll .storia-text-quote cite,
+body.stat-page #main-scroll .stat-text-quote cite {
   display: block;
   
 }
 
-/* Compatibilità: se la citazione è ancora un div vecchio senza content-quote */
-body.story-page #main-scroll > .story-content-grid > .col-span-2.pt-30px.space-y-30px.font-myTitle,
-body.stat-page #main-scroll > .stat-content-grid > .col-span-2.pt-30px.space-y-30px.font-myTitle {
+/* Compatibilità: se la citazione è ancora un div vecchio senza storia-text-quote */
+body.story-page #main-scroll > .storia-text-grid > .col-span-2.pt-30px.space-y-30px.font-myTitle,
+body.stat-page #main-scroll > .stat-text-grid > .col-span-2.pt-30px.space-y-30px.font-myTitle {
   grid-column: 1 / -1 !important;
   max-width: 70ch !important;
   margin: 10px auto 0 0 !important;
@@ -2735,15 +2714,15 @@ body.stat-page #main-scroll > .stat-content-grid > .col-span-2.pt-30px.space-y-3
 
 /* Responsive */
 @media (max-width: 900px) {
-  body.story-page #main-scroll > .story-content-grid,
-  body.stat-page #main-scroll > .stat-content-grid {
+  body.story-page #main-scroll > .storia-text-grid,
+  body.stat-page #main-scroll > .stat-text-grid {
     grid-template-columns: 1fr !important;
   }
 
-  body.story-page #main-scroll > .story-content-grid > .col-span-1,
-  body.stat-page #main-scroll > .stat-content-grid > .col-span-1,
-  body.story-page #main-scroll > .story-content-grid > .col-span-2,
-  body.stat-page #main-scroll > .stat-content-grid > .col-span-2 {
+  body.story-page #main-scroll > .storia-text-grid > .col-span-1,
+  body.stat-page #main-scroll > .stat-text-grid > .col-span-1,
+  body.story-page #main-scroll > .storia-text-grid > .col-span-2,
+  body.stat-page #main-scroll > .stat-text-grid > .col-span-2 {
     grid-column: 1 / -1 !important;
   }
 }
@@ -2753,11 +2732,11 @@ body.stat-page #main-scroll > .stat-content-grid > .col-span-2.pt-30px.space-y-3
    occupino celle della griglia
 =================================== */
 
-body.story-page #main-scroll > .story-content-grid > div[id^="sezione_"] {
-  grid-column: 1 / -1 !important;
+body.story-page #main-scroll > .storia-text-grid > div[id^="sezione_"] {
+  grid-column: 1 / 1 !important;
   height: 0 !important;
   min-height: 0 !important;
-  margin: 0 !important;
+  margin: 0px !important;
   padding: 0 !important;
   overflow: hidden !important;
 }
@@ -2768,54 +2747,46 @@ body.story-page #main-scroll > .story-content-grid > div[id^="sezione_"] {
    Layout immagine a sinistra + testo a destra
 =================================== */
 
-body.story-page #main-scroll > .story-content-grid > .story-split-media {
+body.story-page #main-scroll > .storia-text-grid > .storia-text-split-media {
   grid-column: 1 / span 3 !important;
-  width: 100% !important;
-  max-width: none !important;
   margin: 0 !important;
   padding: 0 !important;
   justify-self: stretch !important;
   align-self: start !important;
 }
 
-body.story-page #main-scroll > .story-content-grid > .story-split-text {
+body.story-page #main-scroll > .storia-text-grid > .storia-text-split {
   grid-column: 4 / -1 !important;
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
   padding: 0 !important;
   align-self: start !important;
 }
 
-body.story-page #main-scroll > .story-content-grid > .story-split-media img {
+body.story-page #main-scroll > .storia-text-grid > .storia-text-split-media img {
   display: block !important;
-  width: 100% !important;
-  max-width: none !important;
   max-height: none !important;
   height: auto !important;
   margin: 0 !important;
   object-fit: cover;
 }
 
-body.story-page #main-scroll > .story-content-grid > .story-split-media .content-caption {
+body.story-page #main-scroll > .storia-text-grid > .storia-text-split-media .storia-text-caption {
   margin-top: 6px !important;
-  max-width: none !important;
 }
 
 
 /* Responsive */
 @media (max-width: 900px) {
-  body.story-page #main-scroll > .story-content-grid > .story-split-media,
-  body.story-page #main-scroll > .story-content-grid > .story-split-text {
+  body.story-page #main-scroll > .storia-text-grid > .storia-text-split-media,
+  body.story-page #main-scroll > .storia-text-grid > .storia-text-split {
     grid-column: 1 / -1 !important;
   }
 }
 
-body.story-page #main-scroll > .story-content-grid > .story-split-text-left {
+body.story-page #main-scroll > .storia-text-grid > .storia-text-split-left {
   grid-column: 1 / span 3 !important;
 }
 
-body.story-page #main-scroll > .story-content-grid > .story-split-media-right {
+body.story-page #main-scroll > .storia-text-grid > .storia-text-split-media-right {
   grid-column: 4 / -1 !important;
 }
 
@@ -2830,7 +2801,7 @@ cite {
 =================================== */
 
 /* Anche gli anchor di stat non devono occupare celle della griglia */
-body.stat-page #main-scroll > .stat-content-grid > div[id^="sezione_"] {
+body.stat-page #main-scroll > .stat-text-grid > div[id^="sezione_"] {
   grid-column: 1 / -1 !important;
   height: 0 !important;
   min-height: 0 !important;
@@ -2840,7 +2811,7 @@ body.stat-page #main-scroll > .stat-content-grid > div[id^="sezione_"] {
 }
 
 /* Titoli sezione: sempre a tutta larghezza, come nella storia */
-body.stat-page #main-scroll > .stat-content-grid > .stat-section-title {
+body.stat-page #main-scroll > .stat-text-grid > .stat-text-section-title {
   grid-column: 1 / -1 !important;
   max-width: 70ch !important;
   margin: 0 auto 0 0 !important;
@@ -2848,7 +2819,7 @@ body.stat-page #main-scroll > .stat-content-grid > .stat-section-title {
 
 /* Layout 1: sezioni 1, 3, 6 e sezioni finali.
    Titolo sopra, testo in due colonne, grafico a tutta larghezza sotto. */
-body.stat-page #main-scroll > .stat-content-grid > .stat-layout-column {
+body.stat-page #main-scroll > .stat-text-grid > .stat-text-column {
   grid-column: span 3 / span 3 !important;
   width: 100% !important;
   max-width: 55ch !important;
@@ -2857,7 +2828,7 @@ body.stat-page #main-scroll > .stat-content-grid > .stat-layout-column {
   align-self: start !important;
 }
 
-body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full {
+body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full {
   grid-column: 1 / -1 !important;
   width: 100% !important;
   max-width: none !important;
@@ -2867,7 +2838,7 @@ body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full {
 
 /* Layout 2: sezioni 2, 4, 5.
    Grafico/visualizzazione a sinistra, testo a destra. */
-body.stat-page #main-scroll > .stat-content-grid > .stat-split-media {
+body.stat-page #main-scroll > .stat-text-grid > .stat-split-media {
   grid-column: 1 / span 3 !important;
   width: 100% !important;
   max-width: none !important;
@@ -2877,7 +2848,7 @@ body.stat-page #main-scroll > .stat-content-grid > .stat-split-media {
   align-self: start !important;
 }
 
-body.stat-page #main-scroll > .stat-content-grid > .stat-split-text {
+body.stat-page #main-scroll > .stat-text-grid > .stat-split-text {
   grid-column: 4 / -1 !important;
   width: 100% !important;
   max-width: 55ch !important;
@@ -2887,10 +2858,10 @@ body.stat-page #main-scroll > .stat-content-grid > .stat-split-text {
 }
 
 /* I grafici SVG devono riempire la loro colonna, non restare centrati o stretti */
-body.stat-page #main-scroll > .stat-content-grid > .stat-split-media svg,
-body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full svg,
-body.stat-page #main-scroll > .stat-content-grid > .stat-split-media .population-chart-svg,
-body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full .population-chart-svg {
+body.stat-page #main-scroll > .stat-text-grid > .stat-split-media svg,
+body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full svg,
+body.stat-page #main-scroll > .stat-text-grid > .stat-split-media .population-chart-svg,
+body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full .population-chart-svg {
   display: block !important;
   width: 100% !important;
   max-width: none !important;
@@ -2899,20 +2870,20 @@ body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full .popu
 }
 
 /* Sezione case: il grafico generato via JS deve comportarsi come media */
-body.stat-page #main-scroll > .stat-content-grid > #houses-chart.stat-split-media {
+body.stat-page #main-scroll > .stat-text-grid > #houses-chart.stat-split-media {
   min-height: 260px;
 }
 
 /* Le linee divisorie restano a tutta larghezza */
-body.stat-page #main-scroll > .stat-content-grid > .h-px.bg-myBlack {
+body.stat-page #main-scroll > .stat-text-grid > .h-px.bg-myBlack {
   grid-column: 1 / -1 !important;
 }
 
 @media (max-width: 900px) {
-  body.stat-page #main-scroll > .stat-content-grid > .stat-layout-column,
-  body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full,
-  body.stat-page #main-scroll > .stat-content-grid > .stat-split-media,
-  body.stat-page #main-scroll > .stat-content-grid > .stat-split-text {
+  body.stat-page #main-scroll > .stat-text-grid > .stat-text-column,
+  body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full,
+  body.stat-page #main-scroll > .stat-text-grid > .stat-split-media,
+  body.stat-page #main-scroll > .stat-text-grid > .stat-split-text {
     grid-column: 1 / -1 !important;
     max-width: none !important;
   }
@@ -2924,7 +2895,7 @@ body.stat-page #main-scroll > .stat-content-grid > .h-px.bg-myBlack {
    Titolo -> schema grande -> testi sotto a due colonne.
 =================================== */
 
-body.stat-page #main-scroll > .stat-content-grid > div[id^="sezione_"] {
+body.stat-page #main-scroll > .stat-text-grid > div[id^="sezione_"] {
   grid-column: 1 / -1 !important;
   height: 0 !important;
   min-height: 0 !important;
@@ -2933,14 +2904,21 @@ body.stat-page #main-scroll > .stat-content-grid > div[id^="sezione_"] {
   overflow: hidden !important;
 }
 
-body.stat-page #main-scroll > .stat-content-grid > .stat-section-title {
+body.stat-page #main-scroll > .stat-text-grid >  .story-fade--visible {
   grid-column: 1 / -1 !important;
   max-width: 70ch !important;
-  margin: 0 auto 0 0 !important;
+  margin:0px auto 30px 0 !important;
 }
 
-body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full,
-body.stat-page #main-scroll > .stat-content-grid > .stat-animate-chart {
+body.stat-page #main-scroll > .stat-text-grid > .stat-text-section-title {
+  grid-column: 1 / -1 !important;
+  max-width: 70ch !important;
+  margin:20px auto 30px 0 !important;
+}
+
+
+body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full,
+body.stat-page #main-scroll > .stat-text-grid > .stat-animate-chart {
   grid-column: 1 / -1 !important;
   width: 100% !important;
   max-width: none !important;
@@ -2949,7 +2927,7 @@ body.stat-page #main-scroll > .stat-content-grid > .stat-animate-chart {
   justify-self: stretch !important;
 }
 
-body.stat-page #main-scroll > .stat-content-grid > .stat-layout-column {
+body.stat-page #main-scroll > .stat-text-grid > .stat-text-column {
   grid-column: span 3 / span 3 !important;
   width: 100% !important;
   max-width: 55ch !important;
@@ -2958,10 +2936,10 @@ body.stat-page #main-scroll > .stat-content-grid > .stat-layout-column {
   align-self: start !important;
 }
 
-body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full svg,
-body.stat-page #main-scroll > .stat-content-grid > .stat-animate-chart svg,
-body.stat-page #main-scroll > .stat-content-grid > .population-chart-wrap svg,
-body.stat-page #main-scroll > .stat-content-grid > .population-chart-svg {
+body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full svg,
+body.stat-page #main-scroll > .stat-text-grid > .stat-animate-chart svg,
+body.stat-page #main-scroll > .stat-text-grid > .population-chart-wrap svg,
+body.stat-page #main-scroll > .stat-text-grid > .population-chart-svg {
   display: block !important;
   width: 100% !important;
   max-width: none !important;
@@ -2969,7 +2947,7 @@ body.stat-page #main-scroll > .stat-content-grid > .population-chart-svg {
   margin: 0 !important;
 }
 
-body.stat-page #main-scroll > .stat-content-grid > .h-px.bg-myBlack {
+body.stat-page #main-scroll > .stat-text-grid > .h-px.bg-myBlack {
   grid-column: 1 / -1 !important;
 }
 
@@ -2980,77 +2958,11 @@ body.stat-page .stat-animate-chart svg text {
   will-change: stroke-dashoffset, width, height, y, x2, opacity;
 }
 
-body.stat-page .stat-decline-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: rgba(252, 252, 252, 0.45);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 220ms ease;
-}
-
-body.stat-page .stat-decline-modal.is-visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-body.stat-page .stat-decline-modal__box {
-  position: relative;
-  width: min(980px, calc(100vw - 40px));
-  max-width: none;
-  padding: 26px 58px 26px 26px;
-  border: 1px solid var(--myBlack, #1E1E1E);
-  background: var(--myWhite, #FCFCFC);
-  color: var(--myBlack, #1E1E1E);
-  box-shadow: 0 18px 55px rgba(30, 30, 30, 0.10);
-}
-
-body.stat-page .stat-decline-modal__box p {
-  margin: 0;
-  max-width: none !important;
-  font-family: 'Diatype-Mono';
-  font-size: var(--title-size, 25px);
-  line-height: 1;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-body.stat-page .stat-decline-modal__close {
-  position: absolute;
-  z-index: 2;
-  top: 8px;
-  right: 10px;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  font-family: 'Diatype-Mono';
-  font-size: 24px;
-  line-height: 1;
-}
-
-
-@media (max-width: 760px) {
-  body.stat-page .stat-decline-modal__box {
-    width: calc(100vw - 24px);
-    padding: 24px 46px 24px 20px;
-  }
-
-  body.stat-page .stat-decline-modal__box p {
-    white-space: normal;
-    font-size: 20px;
-  }
-}
 
 @media (max-width: 900px) {
-  body.stat-page #main-scroll > .stat-content-grid > .stat-layout-column,
-  body.stat-page #main-scroll > .stat-content-grid > .stat-layout-media-full,
-  body.stat-page #main-scroll > .stat-content-grid > .stat-animate-chart {
+  body.stat-page #main-scroll > .stat-text-grid > .stat-text-column,
+  body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full,
+  body.stat-page #main-scroll > .stat-text-grid > .stat-animate-chart {
     grid-column: 1 / -1 !important;
     max-width: none !important;
   }
@@ -3184,4 +3096,2547 @@ body.stat-page #main-scroll svg {
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* Story/Stat navigation arrow button */
+.story-page .story-back-to-top,
+.stat-page .story-back-to-top {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  top: auto;
+  z-index: 99999;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: none;
+  background: transparent;
+  color: var(--myBlack, #1E1E1E);
+  font-family: 'Diatype-Mono';
+  font-size: 28px;
+  line-height: 1;
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.story-page .story-back-to-top.is-visible,
+.stat-page .story-back-to-top.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+
+/* Keep Story/Stat navigation arrow fixed to the viewport */
+body.story-page > .story-back-to-top,
+body.stat-page > .story-back-to-top,
+.story-page .story-back-to-top,
+.stat-page .story-back-to-top {
+  position: fixed !important;
+  right: 10px !important;
+  bottom: 10px !important;
+  top: auto !important;
+  left: auto !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+
+/* Story/Stat section navigation text */
+.story-page .story-back-to-top,
+.stat-page .story-back-to-top {
+  position: fixed !important;
+  right: 10px !important;
+  bottom: 10px !important;
+  top: auto !important;
+  z-index: 99999 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  color: var(--myBlack, #1E1E1E) !important;
+  font-family: 'Diatype' !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+
+.story-page .story-back-to-top.is-visible,
+.stat-page .story-back-to-top.is-visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+
+
+/* Archive grid/column view toggle */
+.archive-view-toggle {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 99999;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Diatype';
+  font-size: 14px;
+  line-height: 1;
+  color: var(--myBlack, #1E1E1E);
+}
+
+#archive-gallery.archive-grid-view {
+  display: grid !important;
+  grid-template-columns: repeat(13, 1fr);
+  gap: 10px;
+  column-count: unset !important;
+  columns: unset !important;
+}
+
+#archive-gallery.archive-grid-view [data-item-index] {
+  position: relative;
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  break-inside: auto;
+  transform-origin: center center;
+  transition: transform 760ms cubic-bezier(.16,1,.3,1);
+  will-change: transform;
+}
+
+#archive-gallery.archive-grid-view .gallery-image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  height: auto;
+  object-fit: cover;
+  transform-origin: center center;
+  transition: transform 760ms cubic-bezier(.16,1,.3,1), opacity 800ms cubic-bezier(.77,0,.175,1);
+  will-change: transform;
+}
+
+#archive-gallery.archive-grid-view .gallery-caption {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  right: 10px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity .3s cubic-bezier(.77,0,.175,1);
+}
+
+#archive-gallery.archive-grid-view [data-item-index]:hover {
+  transform: scale(2);
+  z-index: 20;
+}
+
+#archive-gallery.archive-grid-view [data-item-index]:hover .gallery-image {
+  transform: scale(2.5);
+  z-index: 20;
+}
+
+#archive-gallery.archive-grid-view [data-item-index]:hover .gallery-caption {
+  opacity: 1;
+  white-space: nowrap;
+  transform: scale(1.25);
+  transition: opacity 520ms cubic-bezier(.16,1,.3,1), transform 760ms cubic-bezier(.16,1,.3,1);
+}
+
+#archive-gallery.archive-grid-view .grid-dimmed {
+  opacity: .15;
+}
+
+/* Archive view toggle transition: same fade/parallax used by archive gallery */
+#archive-gallery.archive-grid-view [data-item-index].archive-fade,
+#archive-gallery:not(.archive-grid-view) [data-item-index].archive-fade {
+  opacity: 0;
+  transform: translateY(var(--parallax-shift, 24px));
+  transition:
+    opacity 0.9s cubic-bezier(.77,0,.175,1),
+    transform 0.9s cubic-bezier(.77,0,.175,1);
+  transition-delay: var(--enter-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+#archive-gallery.archive-grid-view [data-item-index].archive-fade.archive-fade--visible,
+#archive-gallery:not(.archive-grid-view) [data-item-index].archive-fade.archive-fade--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ===================================
+   TESTI STORIA + STAT - CLASSI ISOLATE
+   Margini richiesti: caption 4px italic, p 5px, citazioni myTitle 10px.
+=================================== */
+
+body.story-page #main-scroll .storia-text-caption,
+body.stat-page #main-scroll .stat-text-caption {
+  margin-top: 4px !important;
+  font-style: italic !important;
+}
+
+body.story-page #main-scroll .storia-text-column > p + p,
+body.story-page #main-scroll .storia-text-split > p + p,
+body.stat-page #main-scroll .stat-text-column > p + p {
+  margin-top: 5px !important;
+}
+
+body.story-page #main-scroll .storia-text-quote.font-myTitle,
+body.stat-page #main-scroll .stat-text-quote.font-myTitle {
+  margin: 20px auto 30px 0 !important;
+}
+
+body.story-page #main-scroll > .storia-text-grid > div[id^="sezione_5"]{
+  margin: 20px auto 30px 0 !important;
+}
+
+body.story-page #main-scroll > .storia-text-grid > div[id^="sezione_6"]{
+  margin: 20px auto 30px 0 !important;
+}
+
+/* Archive overlay stacking: above gallery, below filters/rows/brand/sidebar */
+body.archive-page.archive-overlay-open::before {
+  z-index: 2500 !important;
+}
+
+body.archive-page #archive-gallery {
+  position: relative;
+  z-index: 1;
+}
+
+body.archive-page .archive-sticky,
+body.archive-page .archive-rows-panel,
+body.archive-page #archive-rows,
+body.archive-page .sidebar-links,
+body.archive-page .site-bottom-brand {
+  position: relative;
+  z-index: 3001 !important;
+}
+
+body.archive-page .archive-sticky,
+body.archive-page .archive-rows-panel {
+  z-index: 3002 !important;
+}
+
+/* Archive overlay correction: keep overlay only above archive gallery, never above filters/rows/header/brand/sidebar */
+body.archive-page.archive-overlay-open::before {
+  content: none !important;
+  display: none !important;
+}
+
+body.archive-page #archive-gallery {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+body.archive-page #archive-gallery::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(252, 252, 252, 0.8);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 200;
+  transition: opacity 800ms cubic-bezier(.77,0,.175,1);
+}
+
+body.archive-page.archive-overlay-open #archive-gallery::before {
+  opacity: 1;
+}
+
+body.archive-page .archive-sticky {
+  position: sticky !important;
+  z-index: 3002 !important;
+}
+
+body.archive-page .archive-rows-panel,
+body.archive-page #archive-rows,
+body.archive-page .sidebar-links,
+body.archive-page .site-bottom-brand {
+  z-index: 3003 !important;
+}
+
+/* Archive rows alignment + overlay layer fix */
+body.archive-page .archive-rows-panel {
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 5001 !important;
+}
+
+body.archive-page .archive-sticky {
+  z-index: 5000 !important;
+  isolation: isolate;
+}
+
+body.archive-page .archive-sticky > .grid,
+body.archive-page .archive-rows-panel,
+body.archive-page #archive-rows,
+body.archive-page .archive-rows-panel * {
+  position: relative;
+  z-index: 5002 !important;
+}
+
+body.archive-page .site-bottom-brand,
+body.archive-page .sidebar-links {
+  z-index: 5003 !important;
+}
+
+body.archive-page.archive-overlay-open::before {
+  content: none !important;
+  display: none !important;
+}
+
+body.archive-page #archive-gallery {
+  position: relative !important;
+  z-index: 1 !important;
+  isolation: isolate;
+}
+
+body.archive-page #archive-gallery::before {
+  content: "";
+  position: absolute !important;
+  inset: 0 !important;
+  background: rgba(252, 252, 252, 0.8);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2 !important;
+  transition: opacity 800ms cubic-bezier(.77,0,.175,1);
+}
+
+body.archive-page.archive-overlay-open #archive-gallery::before {
+  opacity: 1;
+}
+
+/* Archive view toggle: lighter fade/parallax transition to avoid lag */
+body.archive-page #archive-gallery.archive-view-transition-out {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 180ms cubic-bezier(.77,0,.175,1),
+    transform 180ms cubic-bezier(.77,0,.175,1);
+  will-change: opacity, transform;
+}
+
+body.archive-page #archive-gallery.archive-view-transition-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 520ms cubic-bezier(.77,0,.175,1),
+    transform 520ms cubic-bezier(.77,0,.175,1);
+  will-change: opacity, transform;
+}
+
+body.archive-page #archive-gallery.archive-view-transition-in.archive-view-transition-ready {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+body.archive-page #archive-gallery.archive-view-transition-out [data-item-index],
+body.archive-page #archive-gallery.archive-view-transition-in [data-item-index] {
+  transition: none !important;
+}
+
+
+/* Parametri ridimensionamento grafici SVG */
+body.stat-page {
+  --chart-population-width: 100%;
+  --chart-population-height: auto;
+  --chart-population-gap: 20px;
+  --chart-age-width: 100%;
+  --chart-age-height: auto;
+  --chart-age-gap: 20px;
+  --chart-births-width: 100%;
+  --chart-births-height: auto;
+  --chart-births-gap: 20px;
+  --chart-houses-width: 100%;
+  --chart-houses-height: auto;
+  --chart-houses-gap: 20px;
+  --chart-services-width: 100%;
+  --chart-services-height: auto;
+  --chart-services-gap: 20px;
+  --chart-continuity-width: 100%;
+  --chart-continuity-height: auto;
+  --chart-continuity-gap: 20px;
+}
+
+body.stat-page .stat-chart--population { gap: var(--chart-population-gap) !important; }
+body.stat-page .stat-chart--age { gap: var(--chart-age-gap) !important; }
+body.stat-page .stat-chart--births { gap: var(--chart-births-gap) !important; }
+body.stat-page .stat-chart--houses { gap: var(--chart-houses-gap) !important; }
+body.stat-page .stat-chart--services { gap: var(--chart-services-gap) !important; }
+body.stat-page .stat-chart--continuity { gap: var(--chart-continuity-gap) !important; }
+
+body.stat-page .stat-svg--population {
+  width: var(--chart-population-width) !important;
+  height: var(--chart-population-height) !important;
+}
+body.stat-page .stat-svg--age {
+  width: var(--chart-age-width) !important;
+  height: var(--chart-age-height) !important;
+}
+body.stat-page .stat-svg--births {
+  width: var(--chart-births-width) !important;
+  height: var(--chart-births-height) !important;
+}
+body.stat-page .stat-svg--houses {
+  width: var(--chart-houses-width) !important;
+  height: var(--chart-houses-height) !important;
+}
+body.stat-page .stat-svg--services {
+  width: var(--chart-services-width) !important;
+  height: var(--chart-services-height) !important;
+}
+body.stat-page .stat-svg--continuity {
+  width: var(--chart-continuity-width) !important;
+  height: var(--chart-continuity-height) !important;
+}
+
+/* Animazioni SVG dati: aggiornamenti progressivi singoli */
+body.stat-page .stat-animate-chart svg .line,
+body.stat-page .stat-animate-chart svg .value,
+body.stat-page .stat-animate-chart svg rect,
+body.stat-page .stat-animate-chart svg circle,
+body.stat-page .stat-animate-chart svg text {
+  transition: opacity 760ms cubic-bezier(.77,0,.175,1);
+}
+
+body.stat-page .stat-svg--services {
+  preserve-aspect-ratio: xMidYMid meet;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+
+/* ===================================
+   MOBILE: STORIA USA LE STESSE WIDTH DI STAT
+   Nessuna width specifica diversa per storia sotto 899px.
+=================================== */
+@media (max-width: 899px) {
+  html,
+  body,
+  body.content-scroll-page {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  :root {
+    --site-gap: 12px;
+    --page-padding: 10px;
+    --title-size: 20px;
+    --text-size: 13px;
+  }
+
+  body.content-scroll-page > .specialGrid,
+  body.content-scroll-page > .w-screen {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  body.content-scroll-page #main-scroll {
+    display: block !important;
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 10px 10px 76px 10px !important;
+    overflow-x: hidden !important;
+  }
+
+  body.content-scroll-page #main-scroll .story-sticky {
+    display: none !important;
+  }
+
+  body.story-page #main-scroll > .storia-text-grid,
+  body.stat-page #main-scroll > .stat-text-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    column-gap: 0 !important;
+    row-gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.story-page #main-scroll > .storia-text-grid > *,
+  body.stat-page #main-scroll > .stat-text-grid > * {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    justify-self: stretch !important;
+    align-self: start !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  body.story-page #main-scroll > .storia-text-grid > div[id^="sezione_"],
+  body.stat-page #main-scroll > .stat-text-grid > div[id^="sezione_"] {
+    width: 0 !important;
+    max-width: 0 !important;
+    min-width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.content-scroll-page #main-scroll figure,
+  body.content-scroll-page #main-scroll blockquote,
+  body.content-scroll-page #main-scroll p,
+  body.content-scroll-page #main-scroll ul,
+  body.content-scroll-page #main-scroll ol {
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  body.story-page #main-scroll .story-hero,
+  body.story-page #main-scroll .storia-text-split-media,
+  body.story-page #main-scroll .storia-text-split-media-right,
+  body.story-page #main-scroll .storia-text-split,
+  body.story-page #main-scroll .storia-text-split-left,
+  body.story-page #main-scroll .storia-text-column,
+  body.stat-page #main-scroll .stat-layout-media-full,
+  body.stat-page #main-scroll .stat-animate-chart,
+  body.stat-page #main-scroll .stat-text-column {
+    grid-column: 1 / -1 !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body.story-page #main-scroll img,
+  body.story-page #main-scroll figure img,
+  body.stat-page #main-scroll img,
+  body.stat-page #main-scroll svg,
+  body.stat-page #main-scroll .stat-animate-chart svg,
+  body.stat-page #main-scroll .stat-layout-media-full svg {
+    display: block !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    left: auto !important;
+    transform: none !important;
+  }
+
+  body.story-page #main-scroll > .storia-text-grid > .font-myTitle:not(.storia-text-quote),
+  body.stat-page #main-scroll > .stat-text-grid > .font-myTitle:not(.stat-text-quote),
+  body.stat-page #main-scroll > .stat-text-grid > .stat-text-section-title {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 20px 0 18px 0 !important;
+    padding: 0 !important;
+    font-size: 20px !important;
+    line-height: 100% !important;
+  }
+
+  body.story-page #main-scroll .storia-text-quote,
+  body.stat-page #main-scroll .stat-text-quote {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 20px 0 22px 0 !important;
+    padding: 0 !important;
+    font-size: 20px !important;
+    line-height: 100% !important;
+  }
+
+  body.story-page #main-scroll .storia-text-column p,
+  body.story-page #main-scroll .storia-text-split p,
+  body.story-page #main-scroll .storia-text-split-left p,
+  body.stat-page #main-scroll .stat-text-column p {
+    margin-top: 0 !important;
+    margin-bottom: 5px !important;
+  }
+
+  body.story-page #main-scroll .storia-text-caption,
+  body.stat-page #main-scroll .stat-text-caption {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 4px 0 0 0 !important;
+    padding: 0 !important;
+    font-size: 12px !important;
+    line-height: 115% !important;
+  }
+
+  body.content-scroll-page #main-scroll ul {
+    padding-left: 18px !important;
+  }
+
+  body.content-scroll-page .story-back-to-top {
+    right: 10px !important;
+    bottom: 10px !important;
+    font-size: 13px !important;
+    z-index: 999999 !important;
+  }
+
+  body.content-scroll-page .page-footer .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    max-width: 100% !important;
+  }
+
+  body.content-scroll-page .page-footer .footer-grid > * {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ===================================
+   FIX FINALE STORIA MOBILE = STAT
+   Forza storia a una sola colonna sotto 899px e annulla le colonne desktop.
+=================================== */
+@media (max-width: 899px) {
+  body.story-page #main-scroll > .content-grid.storia-text-grid,
+  body.story-page #main-scroll > .storia-text-grid,
+  body.story-page #main-scroll > .storia-text-fade-grid,
+  body.story-page #main-scroll > .grid.grid-cols-2.storia-text-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-auto-flow: row !important;
+    column-gap: 0 !important;
+    row-gap: 12px !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body.story-page #main-scroll > .content-grid.storia-text-grid > *,
+  body.story-page #main-scroll > .storia-text-grid > *,
+  body.story-page #main-scroll > .storia-text-fade-grid > *,
+  body.story-page #main-scroll > .grid.grid-cols-2.storia-text-grid > *,
+  body.story-page #main-scroll > .storia-text-grid > .col-span-1,
+  body.story-page #main-scroll > .storia-text-grid > .col-span-2,
+  body.story-page #main-scroll > .storia-text-grid > .story-hero,
+  body.story-page #main-scroll > .storia-text-grid > figure,
+  body.story-page #main-scroll > .storia-text-grid > blockquote,
+  body.story-page #main-scroll > .storia-text-grid > .storia-text-column,
+  body.story-page #main-scroll > .storia-text-grid > .storia-text-split,
+  body.story-page #main-scroll > .storia-text-grid > .storia-text-split-left,
+  body.story-page #main-scroll > .storia-text-grid > .storia-text-split-media,
+  body.story-page #main-scroll > .storia-text-grid > .storia-text-split-media-right,
+  body.story-page #main-scroll > .storia-text-grid > .storia-text-quote,
+  body.story-page #main-scroll > .storia-text-grid > .font-myTitle {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    flex: none !important;
+    flex-basis: auto !important;
+    justify-self: stretch !important;
+    align-self: start !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+  }
+
+  body.story-page #main-scroll > .storia-text-grid > div[id^="sezione_"] {
+    grid-column: 1 / -1 !important;
+    width: 0 !important;
+    max-width: 0 !important;
+    min-width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.story-page #main-scroll > .storia-text-grid img,
+  body.story-page #main-scroll > .storia-text-grid figure,
+  body.story-page #main-scroll > .storia-text-grid figcaption,
+  body.story-page #main-scroll > .storia-text-grid p,
+  body.story-page #main-scroll > .storia-text-grid ul,
+  body.story-page #main-scroll > .storia-text-grid ol,
+  body.story-page #main-scroll > .storia-text-grid li,
+  body.story-page #main-scroll > .storia-text-grid cite {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* ===================================
+   HEADER COMUNE BRAND + SIDEBAR
+   Mobile sotto 899px: absolute, riga nera, hide/show su scroll.
+   Desktop: lascia invariati brand/sidebar esistenti.
+=================================== */
+.site-header {
+  display: contents;
+}
+
+.site-header.header-visible,
+.site-header.header-hidden {
+  transform: none;
+  opacity: 1;
+}
+
+@media (max-width: 899px) {
+  .site-header {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    padding: 8px 10px !important;
+    border-bottom: 1px solid var(--myBlack, #1E1E1E) !important;
+    background: var(--myWhite, #FCFCFC) !important;
+    pointer-events: none !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    transition:
+      transform 350ms cubic-bezier(.77,0,.175,1),
+      opacity 350ms cubic-bezier(.77,0,.175,1) !important;
+    will-change: transform, opacity;
+  }
+
+  .site-header.header-visible {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+  }
+
+  .site-header.header-hidden {
+    transform: translateY(-110%) !important;
+    opacity: 0 !important;
+  }
+
+  .site-header .site-bottom-brand,
+  .site-header .sidebar-links {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    z-index: auto !important;
+    display: flex !important;
+    pointer-events: auto !important;
+    max-width: calc(50% - 5px) !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .site-header .site-bottom-brand {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .site-header .sidebar-links {
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    text-align: right !important;
+    margin-left: auto !important;
+  }
+
+  .site-header .sidebar-links > div {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    max-width: 100% !important;
+  }
+
+  .site-header a,
+  .site-header p {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .site-header .site-bottom-brand .font-myTitle,
+  .site-header .sidebar-links .font-myTitle {
+    font-size: clamp(14px, 4.8vw, 18px) !important;
+    line-height: 95% !important;
+    white-space: nowrap !important;
+  }
+
+  .site-header .site-bottom-brand p {
+    font-size: clamp(10px, 3vw, 12px) !important;
+    line-height: 110% !important;
+    white-space: normal !important;
+  }
+
+  body.page-transition > .site-header,
+  body.page-transition.page-transition-ready > .site-header,
+  body.page-transition.page-transition-leaving > .site-header {
+    transition:
+      transform 350ms cubic-bezier(.77,0,.175,1),
+      opacity 350ms cubic-bezier(.77,0,.175,1) !important;
+  }
+
+  body.page-transition > .site-header.header-visible,
+  body.page-transition.page-transition-ready > .site-header.header-visible,
+  body.page-transition.page-transition-leaving > .site-header.header-visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  body.page-transition > .site-header.header-hidden,
+  body.page-transition.page-transition-ready > .site-header.header-hidden,
+  body.page-transition.page-transition-leaving > .site-header.header-hidden {
+    opacity: 0 !important;
+    transform: translateY(-110%) !important;
+  }
+}
+
+/* ===================================
+   OFFSET CONTENUTO SOTTO HEADER MOBILE
+   Evita che testi, foto, grafici e archivio finiscano sotto l'header absolute.
+=================================== */
+@media (max-width: 899px) {
+  :root {
+    --site-header-mobile-gap: 10px;
+  }
+
+  body.index-page,
+  body.archive-page,
+  body.home-page {
+    --site-header-mobile-height-index: 10px;
+    --site-header-mobile-offset-index: calc(var(--site-header-mobile-height-index) + var(--site-header-mobile-gap));
+  }
+
+  body.stat-page,
+  body.story-page {
+    --content-header-mobile-height: 30px;
+    --content-header-mobile-offset: calc(var(--content-header-mobile-height) + var(--site-header-mobile-gap));
+  }
+
+  body.index-page > .specialGrid,
+  body.archive-page > .specialGrid,
+  body.home-page > .specialGrid {
+    padding-top: var(--site-header-mobile-offset-index) !important;
+    box-sizing: border-box !important;
+  }
+
+  body.stat-page > .specialGrid,
+  body.story-page > .specialGrid {
+    padding-top: var(--content-header-mobile-offset) !important;
+    box-sizing: border-box !important;
+  }
+
+  body.stat-page.content-scroll-page #main-scroll,
+  body.story-page.content-scroll-page #main-scroll {
+    padding-top: var(--content-header-mobile-offset) !important;
+  }
+
+  body.index-page .archive-sticky,
+  body.archive-page .archive-sticky {
+    top: var(--site-header-mobile-offset-index) !important;
+  }
+
+  body.home-page #home-map,
+  body.home-page .home-map {
+    top: var(--site-header-mobile-offset-index) !important;
+    height: calc(100% - var(--site-header-mobile-offset-index)) !important;
+  }
+}
+
+/* ===================================
+   ARCHIVIO MOBILE: UNA SOLA COLONNA
+   Sotto 899px l'archivio passa sempre a una colonna.
+=================================== */
+@media (max-width: 899px) {
+  body.index-page.archive-page > .specialGrid,
+  body.archive-page > .specialGrid {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  body.index-page.archive-page > .specialGrid > .col-start-2,
+  body.archive-page > .specialGrid > .col-start-2,
+  body.index-page.archive-page > .specialGrid > .col-start-8,
+  body.archive-page > .specialGrid > .col-start-8 {
+    display: block !important;
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.index-page.archive-page #archive-gallery,
+  body.archive-page #archive-gallery,
+  body.index-page.archive-page #archive-gallery.archive-grid-view,
+  body.archive-page #archive-gallery.archive-grid-view {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    columns: 1 !important;
+    column-count: 1 !important;
+    column-width: auto !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0 !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    overflow-x: hidden !important;
+  }
+
+  body.index-page.archive-page #archive-gallery [data-item-index],
+  body.archive-page #archive-gallery [data-item-index],
+  body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index],
+  body.archive-page #archive-gallery.archive-grid-view [data-item-index] {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    break-inside: avoid !important;
+    transform: none !important;
+  }
+
+  body.index-page.archive-page #archive-gallery .gallery-image,
+  body.archive-page #archive-gallery .gallery-image,
+  body.index-page.archive-page #archive-gallery.archive-grid-view .gallery-image,
+  body.archive-page #archive-gallery.archive-grid-view .gallery-image {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    transform: none !important;
+  }
+}
+
+/* ===================================
+   FIX STORIA MOBILE: immagini non uniformate
+   Sotto 899px solo le immagini split-media mantengono la propria regola.
+   Le altre immagini della pagina storia non ereditano dimensioni dedicate agli split.
+=================================== */
+@media (max-width: 899px) {
+  body.story-page #main-scroll > .storia-text-grid > .story-hero img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    object-fit: cover !important;
+  }
+
+  body.story-page #main-scroll > .storia-text-grid > figure:not(.storia-text-split-media):not(.storia-text-split-media-right) img,
+  body.story-page #main-scroll > .storia-text-grid > div:not(.storia-text-split-media):not(.storia-text-split-media-right) > img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    object-fit: cover !important;
+  }
+
+  body.story-page #main-scroll > .storia-text-grid > .storia-text-split-media img,
+  body.story-page #main-scroll > .storia-text-grid > .storia-text-split-media-right img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    object-fit: cover !important;
+  }
+}
+
+/* Mobile archive filters overlay: only below 899px */
+.archive-mobile-controls {
+  display: contents;
+}
+
+.archive-mobile-filter-toggle,
+.archive-mobile-filter-close,
+.archive-filter-heading {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  body.index-page.archive-page > .specialGrid,
+  body.archive-page > .specialGrid {
+    padding-top: 70px !important;
+  }
+
+  body.index-page.archive-page .archive-sticky,
+  body.archive-page .archive-sticky {
+    position: static !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    z-index: 999998 !important;
+  }
+
+  body.index-page.archive-page .archive-sticky > .grid,
+  body.archive-page .archive-sticky > .grid {
+    display: none !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-controls,
+  body.archive-page .archive-mobile-controls {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    padding: 0 10px 10px 10px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    font-family: 'Diatype' !important;
+    text-transform: none !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-toggle,
+  body.archive-page .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle {
+    display: inline-block !important;
+    position: static !important;
+    inset: auto !important;
+    z-index: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: var(--text-size, 14px) !important;
+    line-height: 120% !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    cursor: pointer !important;
+  }
+
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle {
+    text-align: right !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-close,
+  body.archive-page .archive-mobile-filter-close {
+    display: none !important;
+    position: fixed !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 1000001 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: var(--text-size, 14px) !important;
+    line-height: 120% !important;
+    text-transform: none !important;
+    cursor: pointer !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open .archive-mobile-filter-close,
+  body.archive-page.archive-mobile-filters-open .archive-mobile-filter-close {
+    display: block !important;
+  }
+
+  body.index-page.archive-page #archive-rows.archive-rows-panel,
+  body.archive-page #archive-rows.archive-rows-panel {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    z-index: 1000000 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 28px !important;
+    padding: 50px 10px 30px 10px !important;
+    margin: 0 !important;
+    background: var(--myWhite, #FCFCFC) !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    grid-template-columns: none !important;
+    pointer-events: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  body.index-page.archive-page #archive-rows[hidden],
+  body.archive-page #archive-rows[hidden] {
+    display: none !important;
+  }
+
+  body.index-page.archive-page #archive-rows > .flex.flex-col,
+  body.archive-page #archive-rows > .flex.flex-col,
+  body.index-page.archive-page #archive-rows > .archive-filter-column-year,
+  body.archive-page #archive-rows > .archive-filter-column-year {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    width: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.index-page.archive-page .archive-filter-heading,
+  body.archive-page .archive-filter-heading {
+    display: block !important;
+    margin: 0 0 6px 0 !important;
+    padding: 0 !important;
+    color: var(--muted, #909090) !important;
+    font-family: 'Diatype' !important;
+    font-size: var(--text-size, 14px) !important;
+    line-height: 120% !important;
+    text-transform: none !important;
+  }
+
+  body.index-page.archive-page #archive-rows [data-filter-key][data-filter-value],
+  body.archive-page #archive-rows [data-filter-key][data-filter-value],
+  body.index-page.archive-page #archive-rows button[data-filter-key][data-filter-value],
+  body.archive-page #archive-rows button[data-filter-key][data-filter-value] {
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: clamp(22px, 7vw, 36px) !important;
+    line-height: 105% !important;
+    text-transform: none !important;
+    text-align: left !important;
+    opacity: 1 !important;
+  }
+
+  body.index-page.archive-page #archive-rows .region-towns,
+  body.archive-page #archive-rows .region-towns {
+    padding: 6px 0 8px 16px !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open,
+  body.archive-page.archive-mobile-filters-open {
+    overflow: hidden !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open #archive-gallery::before,
+  body.archive-page.archive-mobile-filters-open #archive-gallery::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  body.index-page.archive-page #archive-gallery .gallery-caption .caption-row,
+  body.archive-page #archive-gallery .gallery-caption .caption-row {
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    white-space: nowrap !important;
+  }
+
+  body.index-page.archive-page #archive-gallery .caption-year,
+  body.archive-page #archive-gallery .caption-year,
+  body.index-page.archive-page #archive-gallery .caption-meta,
+  body.archive-page #archive-gallery .caption-meta {
+    white-space: nowrap !important;
+  }
+}
+
+
+/* ===================================
+   FIX DEFINITIVO: Vedi in griglia sempre presente durante lo scroll
+   Il blocco controlli viene montato su body via JS, quindi non dipende dal layout della gallery.
+=================================== */
+body.index-page.archive-page .archive-mobile-controls,
+body.archive-page .archive-mobile-controls,
+body.index-page.archive-page .archive-controls-mounted,
+body.archive-page .archive-controls-mounted {
+  position: fixed !important;
+  left: auto !important;
+  right: 10px !important;
+  bottom: 10px !important;
+  top: auto !important;
+  z-index: 2147483646 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 20px !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+body.index-page.archive-page .archive-mobile-filter-toggle,
+body.archive-page .archive-mobile-filter-toggle,
+body.index-page.archive-page .archive-view-toggle,
+body.archive-page .archive-view-toggle,
+body.index-page.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+body.index-page.archive-page .archive-controls-mounted .archive-view-toggle,
+body.archive-page .archive-controls-mounted .archive-view-toggle {
+  display: inline-block !important;
+  position: static !important;
+  inset: auto !important;
+  z-index: auto !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--myBlack, #1E1E1E) !important;
+  font-family: 'Diatype' !important;
+  font-size: var(--text-size, 14px) !important;
+  line-height: 120% !important;
+  text-align: right !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+
+@media (min-width: 900px) {
+  body.index-page.archive-page .archive-mobile-filter-toggle,
+  body.archive-page .archive-mobile-filter-toggle {
+    display: none !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-controls,
+  body.archive-page .archive-mobile-controls,
+  body.index-page.archive-page .archive-controls-mounted,
+  body.archive-page .archive-controls-mounted {
+    right: 10px !important;
+    bottom: 10px !important;
+    top: auto !important;
+    left: auto !important;
+  }
+}
+
+@media (max-width: 899px) {
+  body.index-page.archive-page .archive-mobile-filter-toggle,
+  body.archive-page .archive-mobile-filter-toggle {
+    display: inline-block !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-controls,
+  body.archive-page .archive-mobile-controls,
+  body.index-page.archive-page .archive-controls-mounted,
+  body.archive-page .archive-controls-mounted {
+    left: 0 !important;
+    right: 0 !important;
+    top: 70px !important;
+    bottom: auto !important;
+    width: 100% !important;
+    justify-content: space-between !important;
+    padding: 0 10px 10px 10px !important;
+    background: var(--myWhite, #FCFCFC) !important;
+  }
+}
+
+/* FIX GRIGLIA: hover sui filtri non deve mostrare tutte le caption */
+body.archive-page.archive-overlay-open #archive-gallery.archive-grid-view .gallery-caption {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.archive-page.archive-overlay-open #archive-gallery.archive-grid-view [data-item-index]:hover .gallery-caption {
+  opacity: 1 !important;
+}
+
+/* FIX DESKTOP: la scritta Filtri non deve comparire sopra 899px */
+body.index-page.archive-page .archive-mobile-filter-toggle,
+body.archive-page .archive-mobile-filter-toggle,
+body.index-page.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 899px) {
+  body.index-page.archive-page .archive-mobile-filter-toggle,
+  body.archive-page .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+  body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* ===================================
+   MOBILE FINAL CLEAN 0-899px
+   Solo mobile: controlli archivio fissi sotto header, filtri overlay,
+   lightbox mobile, storia/stat mobile, svg stat leggibili.
+=================================== */
+@media (max-width: 899px) {
+  :root {
+    --mobile-header-h: 74px;
+    --archive-mobile-controls-h: 24px;
+    --archive-mobile-content-offset: calc(var(--mobile-header-h) + var(--archive-mobile-controls-h) + 18px);
+  }
+
+  /* INDEX/ARCHIVE: header resta visibile in mobile; i controlli si appoggiano sotto la sua linea. */
+  body.index-page.archive-page .site-header.header-hidden,
+  body.archive-page .site-header.header-hidden {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+  }
+
+  body.index-page.archive-page > .specialGrid,
+  body.archive-page > .specialGrid {
+    padding-top: var(--archive-mobile-content-offset) !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-controls,
+  body.archive-page .archive-mobile-controls,
+  body.index-page.archive-page .archive-controls-mounted,
+  body.archive-page .archive-controls-mounted {
+    display: flex !important;
+    position: fixed !important;
+    left: 10px !important;
+    right: 10px !important;
+    top: var(--mobile-header-h) !important;
+    bottom: auto !important;
+    width: auto !important;
+    height: var(--archive-mobile-controls-h) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    z-index: 999998 !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: none !important;
+    overflow: visible !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-toggle,
+  body.archive-page .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+  body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-view-toggle,
+  body.archive-page .archive-controls-mounted .archive-view-toggle {
+    display: inline-block !important;
+    position: static !important;
+    inset: auto !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: clamp(12px, 3.6vw, 14px) !important;
+    line-height: 120% !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+  }
+
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle {
+    text-align: right !important;
+  }
+
+  body.index-page.archive-page #archive-gallery,
+  body.archive-page #archive-gallery {
+    padding-top: 0 !important;
+  }
+
+  /* Menu filtri mobile: overlay sopra tutto, chiuso con X, contenuto in due colonne. */
+  body.index-page.archive-page #archive-rows.archive-rows-panel,
+  body.archive-page #archive-rows.archive-rows-panel {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    z-index: 2147483000 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-content: start !important;
+    column-gap: 10px !important;
+    row-gap: 24px !important;
+    padding: 54px 10px 32px 10px !important;
+    margin: 0 !important;
+    background: var(--myWhite, #FCFCFC) !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    pointer-events: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  body.index-page.archive-page #archive-rows[hidden],
+  body.archive-page #archive-rows[hidden] {
+    display: none !important;
+  }
+
+  body.index-page.archive-page #archive-rows > .flex.flex-col,
+  body.archive-page #archive-rows > .flex.flex-col,
+  body.index-page.archive-page #archive-rows > .archive-filter-column-year,
+  body.archive-page #archive-rows > .archive-filter-column-year {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    width: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.index-page.archive-page .archive-filter-heading,
+  body.archive-page .archive-filter-heading {
+    display: block !important;
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+    color: var(--muted, #909090) !important;
+    font-family: 'Diatype' !important;
+    font-size: clamp(12px, 3.4vw, 14px) !important;
+    line-height: 120% !important;
+    text-transform: none !important;
+  }
+
+  body.index-page.archive-page #archive-rows [data-filter-key][data-filter-value],
+  body.archive-page #archive-rows [data-filter-key][data-filter-value],
+  body.index-page.archive-page #archive-rows button[data-filter-key][data-filter-value],
+  body.archive-page #archive-rows button[data-filter-key][data-filter-value] {
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: clamp(13px, 3.6vw, 16px) !important;
+    line-height: 115% !important;
+    text-transform: none !important;
+    text-align: left !important;
+    opacity: 1 !important;
+    white-space: normal !important;
+  }
+
+  body.index-page.archive-page #archive-rows .region-towns,
+  body.archive-page #archive-rows .region-towns {
+    padding: 5px 0 8px 10px !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-close,
+  body.archive-page .archive-mobile-filter-close {
+    display: none !important;
+    position: fixed !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 2147483001 !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: clamp(18px, 5vw, 24px) !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open .archive-mobile-filter-close,
+  body.archive-page.archive-mobile-filters-open .archive-mobile-filter-close {
+    display: block !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open,
+  body.archive-page.archive-mobile-filters-open {
+    overflow: hidden !important;
+  }
+
+  /* Vista griglia mobile: flex a 8 colonne, niente caption hover. */
+  body.index-page.archive-page #archive-gallery.archive-grid-view,
+  body.archive-page #archive-gallery.archive-grid-view {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    columns: unset !important;
+    column-count: unset !important;
+    width: 100% !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index],
+  body.archive-page #archive-gallery.archive-grid-view [data-item-index] {
+    flex: 0 0 calc((100% - 70px) / 8) !important;
+    width: calc((100% - 70px) / 8) !important;
+    max-width: calc((100% - 70px) / 8) !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+    transition: opacity 300ms cubic-bezier(.77,0,.175,1) !important;
+  }
+
+  body.index-page.archive-page #archive-gallery.archive-grid-view .gallery-image,
+  body.archive-page #archive-gallery.archive-grid-view .gallery-image {
+    width: 100% !important;
+    aspect-ratio: 4 / 5 !important;
+    height: auto !important;
+    object-fit: cover !important;
+    transform: none !important;
+  }
+
+  body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index]:hover,
+  body.archive-page #archive-gallery.archive-grid-view [data-item-index]:hover,
+  body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index]:hover .gallery-image,
+  body.archive-page #archive-gallery.archive-grid-view [data-item-index]:hover .gallery-image {
+    transform: none !important;
+  }
+
+  body.index-page.archive-page #archive-gallery.archive-grid-view .gallery-caption,
+  body.archive-page #archive-gallery.archive-grid-view .gallery-caption,
+  body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index]:hover .gallery-caption,
+  body.archive-page #archive-gallery.archive-grid-view [data-item-index]:hover .gallery-caption {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  /* Lightbox mobile: header nascosto, X visibile, frecce scalate e staccate dall'immagine. */
+  body.lightbox-open .site-header {
+    display: none !important;
+  }
+
+  .lightbox {
+    z-index: 2147482000 !important;
+  }
+
+  .lb-content {
+    max-width: calc(100vw - 104px) !important;
+    max-height: calc(100dvh - 96px) !important;
+    padding: 56px 0 44px 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .lb-img {
+    max-width: 100% !important;
+    max-height: calc(100dvh - 160px) !important;
+    padding: 0 !important;
+  }
+
+  .lb-close {
+    display: block !important;
+    position: fixed !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 2147482500 !important;
+    font-size: clamp(20px, 6vw, 28px) !important;
+    line-height: 1 !important;
+    font-size: 24px;
+    width: 24px !important;
+    height: 24px !important;
+    padding: 0 !important;
+    cursor: pointer !important;
+  }
+
+  .lb-prev,
+  .lb-next {
+    position: fixed !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 2147482400 !important;
+    font-size: clamp(18px, 5.5vw, 24px) !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+  }
+
+  .lb-prev { left: 14px !important; }
+  .lb-next { right: 14px !important; }
+
+  .lb-title {
+    display: none !important;
+  }
+
+  .lb-info,
+  .lb-desc,
+  .lb-id {
+    font-size: clamp(11px, 3.2vw, 13px) !important;
+    top: 55px;
+    right: -25px;
+  }
+
+  /* Storia/stat: niente testo Prossima sezione / Torna in cima in mobile. */
+  body.story-page .story-back-to-top,
+  body.stat-page .story-back-to-top {
+    display: none !important;
+  }
+
+  /* Stat mobile: grafici SVG leggibili, non microscopici. */
+  body.stat-page .stat-chart-container,
+  body.stat-page .stat-layout-media-full,
+  body.stat-page .stat-animate-chart,
+  body.stat-page .population-chart-wrap {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  body.stat-page #main-scroll svg,
+  body.stat-page .stat-chart-container svg,
+  body.stat-page .stat-layout-media-full svg,
+  body.stat-page .stat-animate-chart svg,
+  body.stat-page .population-chart-svg {
+    width: 100% !important;
+    min-width: 520px !important;
+    max-width: none !important;
+    height: auto !important;
+  }
+
+  body.stat-page svg text,
+  body.stat-page svg .small,
+  body.stat-page svg .font-myText {
+    font-size: 10px !important;
+  }
+
+  body.stat-page svg .num {
+    font-size: 14px !important;
+  }
+}
+
+/* ===================================
+   ARCHIVE MOBILE FOOTER 0-899px
+   Footer archive uguale a storia/stat: una sola colonna.
+   Desktop invariato.
+=================================== */
+@media (max-width: 899px) {
+  body.index-page.archive-page .page-footer,
+  body.archive-page .page-footer {
+    width: 100% !important;
+    padding: 14px 10px 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  body.index-page.archive-page .page-footer .footer-grid,
+  body.archive-page .page-footer .footer-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  body.index-page.archive-page .page-footer .footer-grid > *,
+  body.archive-page .page-footer .footer-grid > * {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  body.index-page.archive-page .page-footer .footer-item,
+  body.archive-page .page-footer .footer-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  body.index-page.archive-page .page-footer .footer-search,
+  body.archive-page .page-footer .footer-search {
+    width: 100% !important;
+  }
+}
+
+/* ===================================
+   FIX MOBILE INDEX: tendina filtri sopra archive-gallery
+   Solo 0-899px. Desktop invariato.
+=================================== */
+@media (max-width: 899px) {
+  body.index-page.archive-page,
+  body.archive-page {
+    --archive-mobile-header-line: 74px;
+    --archive-mobile-control-top: calc(var(--archive-mobile-header-line) + 8px);
+    --archive-mobile-gallery-offset: 108px;
+  }
+
+  /* Spazio fisico sopra le immagini: i due testi restano incollati sotto header. */
+  body.index-page.archive-page > .specialGrid,
+  body.archive-page > .specialGrid {
+    padding-top: var(--archive-mobile-gallery-offset) !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-controls,
+  body.archive-page .archive-mobile-controls,
+  body.index-page.archive-page .archive-controls-mounted,
+  body.archive-page .archive-controls-mounted {
+    position: fixed !important;
+    top: var(--archive-mobile-control-top) !important;
+    left: 10px !important;
+    right: 10px !important;
+    bottom: auto !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    z-index: 2147481000 !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: none !important;
+    overflow: visible !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-toggle,
+  body.archive-page .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+  body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-view-toggle,
+  body.archive-page .archive-controls-mounted .archive-view-toggle {
+    display: inline-block !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: clamp(12px, 3.6vw, 14px) !important;
+    line-height: 120% !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    transform: none !important;
+  }
+
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle {
+    text-align: right !important;
+  }
+
+  /* Overlay filtri: sopra header, archive-gallery e immagini. */
+  body.index-page.archive-page #archive-rows.archive-rows-panel,
+  body.archive-page #archive-rows.archive-rows-panel {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    z-index: 2147483000 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-content: start !important;
+    align-items: start !important;
+    column-gap: 10px !important;
+    row-gap: 34px !important;
+    padding: 10px 44px 40px 10px !important;
+    margin: 0 !important;
+    background: var(--myWhite, #FCFCFC) !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    box-sizing: border-box !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  body.index-page.archive-page #archive-rows[hidden],
+  body.archive-page #archive-rows[hidden] {
+    display: none !important;
+  }
+
+  body.index-page.archive-page #archive-rows > .flex.flex-col,
+  body.archive-page #archive-rows > .flex.flex-col,
+  body.index-page.archive-page #archive-rows > .archive-filter-column-year,
+  body.archive-page #archive-rows > .archive-filter-column-year {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body.index-page.archive-page .archive-filter-heading,
+  body.archive-page .archive-filter-heading {
+    display: block !important;
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: clamp(12px, 3.6vw, 14px) !important;
+    line-height: 120% !important;
+    text-transform: none !important;
+    opacity: 1 !important;
+  }
+
+  body.index-page.archive-page #archive-rows [data-filter-key][data-filter-value],
+  body.archive-page #archive-rows [data-filter-key][data-filter-value],
+  body.index-page.archive-page #archive-rows button[data-filter-key][data-filter-value],
+  body.archive-page #archive-rows button[data-filter-key][data-filter-value],
+  body.index-page.archive-page #archive-rows p,
+  body.archive-page #archive-rows p {
+    font-family: 'Diatype' !important;
+    font-size: clamp(12px, 3.5vw, 14px) !important;
+    line-height: 115% !important;
+    text-align: left !important;
+    text-transform: none !important;
+    white-space: normal !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.index-page.archive-page #archive-rows [data-filter-key][data-filter-value].archive-filter-muted,
+  body.archive-page #archive-rows [data-filter-key][data-filter-value].archive-filter-muted {
+    color: #D2D2D2 !important;
+    opacity: 1 !important;
+  }
+
+  body.index-page.archive-page #archive-rows [data-filter-key][data-filter-value].archive-filter-active,
+  body.archive-page #archive-rows [data-filter-key][data-filter-value].archive-filter-active {
+    color: var(--myBlack, #1E1E1E) !important;
+    opacity: 1 !important;
+  }
+
+  body.index-page.archive-page #archive-rows .region-towns,
+  body.archive-page #archive-rows .region-towns {
+    padding: 0 0 0 12px !important;
+    margin: 0 !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-close,
+  body.archive-page .archive-mobile-filter-close {
+    display: none !important;
+    position: fixed !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 2147483001 !important;
+    width: 24px !important;
+    height: 24px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: 24px !important;
+    line-height: 20px !important;
+    text-align: center !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open .archive-mobile-filter-close,
+  body.archive-page.archive-mobile-filters-open .archive-mobile-filter-close {
+    display: block !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open,
+  body.archive-page.archive-mobile-filters-open {
+    overflow: hidden !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open::before,
+  body.archive-page.archive-mobile-filters-open::before,
+  body.index-page.archive-page.archive-mobile-filters-open #archive-gallery::before,
+  body.archive-page.archive-mobile-filters-open #archive-gallery::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open .site-header,
+  body.archive-page.archive-mobile-filters-open .site-header,
+  body.index-page.archive-page.archive-mobile-filters-open .archive-mobile-controls,
+  body.archive-page.archive-mobile-filters-open .archive-mobile-controls,
+  body.index-page.archive-page.archive-mobile-filters-open .archive-controls-mounted,
+  body.archive-page.archive-mobile-filters-open .archive-controls-mounted {
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
+/* ===================================
+   FIX DEFINITIVO MOBILE FILTERS FULLSCREEN
+   Quando i filtri sono aperti deve vedersi solo la tendina.
+   Solo 0-899px. Desktop invariato.
+=================================== */
+@media (max-width: 899px) {
+  body.index-page.archive-page.archive-mobile-filters-open,
+  body.archive-page.archive-mobile-filters-open {
+    overflow: hidden !important;
+    height: 100dvh !important;
+    touch-action: none !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open .site-header,
+  body.archive-page.archive-mobile-filters-open .site-header,
+  body.index-page.archive-page.archive-mobile-filters-open .site-bottom-brand,
+  body.archive-page.archive-mobile-filters-open .site-bottom-brand,
+  body.index-page.archive-page.archive-mobile-filters-open .sidebar-links,
+  body.archive-page.archive-mobile-filters-open .sidebar-links,
+  body.index-page.archive-page.archive-mobile-filters-open #archive-gallery,
+  body.archive-page.archive-mobile-filters-open #archive-gallery,
+  body.index-page.archive-page.archive-mobile-filters-open .page-footer,
+  body.archive-page.archive-mobile-filters-open .page-footer,
+  body.index-page.archive-page.archive-mobile-filters-open .archive-mobile-controls,
+  body.archive-page.archive-mobile-filters-open .archive-mobile-controls,
+  body.index-page.archive-page.archive-mobile-filters-open .archive-controls-mounted,
+  body.archive-page.archive-mobile-filters-open .archive-controls-mounted {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open::before,
+  body.archive-page.archive-mobile-filters-open::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open #archive-rows.archive-rows-panel,
+  body.archive-page.archive-mobile-filters-open #archive-rows.archive-rows-panel {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-width: none !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-content: start !important;
+    align-items: start !important;
+    column-gap: 10px !important;
+    row-gap: 34px !important;
+    padding: 10px 44px 48px 10px !important;
+    margin: 0 !important;
+    background: var(--myWhite, #FCFCFC) !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    z-index: 2147483646 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    isolation: isolate !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open #archive-rows[hidden],
+  body.archive-page.archive-mobile-filters-open #archive-rows[hidden] {
+    display: none !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open .archive-mobile-filter-close,
+  body.archive-page.archive-mobile-filters-open .archive-mobile-filter-close {
+       position: fixed !important;
+    top: 10px !important;
+    right: 10px !important;
+    font-size: clamp(20px, 6vw, 28px) !important;
+    line-height: 1 !important;
+    font-size: 24px;
+    width: 24px !important;
+    height: 24px !important;
+    padding: 0 !important;
+    cursor: pointer !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+
+  }
+}
+
+/* ===================================
+   FIX RICHIESTA: MOBILE ARCHIVE CONTROLS + FILTRI FUNZIONANTI
+   Solo 0-899px. Desktop invariato.
+=================================== */
+@media (max-width: 899px) {
+  /* Le due scritte tornano nel flusso della pagina: scorrono con le foto. */
+  body.index-page.archive-page > .specialGrid,
+  body.archive-page > .specialGrid {
+    padding-top: 74px !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-controls,
+  body.archive-page .archive-mobile-controls,
+  body.index-page.archive-page .archive-controls-mounted,
+  body.archive-page .archive-controls-mounted {
+    display: flex !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 10px 12px 10px !important;
+    margin: 0 !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    z-index: 1 !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    overflow: visible !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-toggle,
+  body.archive-page .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+  body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-view-toggle,
+  body.archive-page .archive-controls-mounted .archive-view-toggle {
+    display: inline-block !important;
+    position: static !important;
+    inset: auto !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: clamp(12px, 3.6vw, 14px) !important;
+    line-height: 120% !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+  }
+
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle {
+    margin-left: auto !important;
+    text-align: right !important;
+  }
+
+  /* La tendina resta fullscreen sopra tutto quando aperta. */
+  body.index-page.archive-page.archive-mobile-filters-open,
+  body.archive-page.archive-mobile-filters-open {
+    overflow: hidden !important;
+    height: 100dvh !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open .site-header,
+  body.archive-page.archive-mobile-filters-open .site-header,
+  body.index-page.archive-page.archive-mobile-filters-open .site-bottom-brand,
+  body.archive-page.archive-mobile-filters-open .site-bottom-brand,
+  body.index-page.archive-page.archive-mobile-filters-open .sidebar-links,
+  body.archive-page.archive-mobile-filters-open .sidebar-links,
+  body.index-page.archive-page.archive-mobile-filters-open #archive-gallery,
+  body.archive-page.archive-mobile-filters-open #archive-gallery,
+  body.index-page.archive-page.archive-mobile-filters-open .page-footer,
+  body.archive-page.archive-mobile-filters-open .page-footer,
+  body.index-page.archive-page.archive-mobile-filters-open .archive-mobile-controls,
+  body.archive-page.archive-mobile-filters-open .archive-mobile-controls,
+  body.index-page.archive-page.archive-mobile-filters-open .archive-controls-mounted,
+  body.archive-page.archive-mobile-filters-open .archive-controls-mounted {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open #archive-rows.archive-rows-panel,
+  body.archive-page.archive-mobile-filters-open #archive-rows.archive-rows-panel {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-width: none !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-content: start !important;
+    align-items: start !important;
+    column-gap: 10px !important;
+    row-gap: 34px !important;
+    padding: 10px 44px 48px 10px !important;
+    margin: 0 !important;
+    background: var(--myWhite, #FCFCFC) !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    z-index: 2147483646 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open .archive-mobile-filter-close,
+  body.archive-page.archive-mobile-filters-open .archive-mobile-filter-close {
+    position: fixed !important;
+    top: 10px !important;
+    right: 10px !important;
+    font-size: clamp(20px, 6vw, 28px) !important;
+    line-height: 1 !important;
+    font-size: 24px;
+    width: 24px !important;
+    height: 24px !important;
+    padding: 0 !important;
+    cursor: pointer !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+
+  }
+
+  /* In mobile i filtri nascondono davvero le immagini non corrispondenti, anche in vista griglia. */
+  body.index-page.archive-page #archive-gallery [data-item-index].hidden,
+  body.archive-page #archive-gallery [data-item-index].hidden,
+  body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index].hidden,
+  body.archive-page #archive-gallery.archive-grid-view [data-item-index].hidden {
+    display: none !important;
+  }
+
+  /* Footer archive a una colonna come storia/stat. */
+  body.index-page.archive-page .page-footer,
+  body.archive-page .page-footer {
+    width: 100% !important;
+    padding: 14px 10px 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  body.index-page.archive-page .page-footer .footer-grid,
+  body.archive-page .page-footer .footer-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  body.index-page.archive-page .page-footer .footer-grid > *,
+  body.archive-page .page-footer .footer-grid > *,
+  body.index-page.archive-page .page-footer .footer-item,
+  body.archive-page .page-footer .footer-item {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+  }
+}
+
+/* ===================================
+   ARCHIVE MOBILE CAPTION GAP
+   Solo mobile 0-899px: caption separata come desktop,
+   year a sinistra e meta a destra con gap maggiore.
+=================================== */
+@media (max-width: 899px) {
+  body.index-page.archive-page #archive-gallery:not(.archive-grid-view) .gallery-caption,
+  body.archive-page #archive-gallery:not(.archive-grid-view) .gallery-caption {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  body.index-page.archive-page #archive-gallery:not(.archive-grid-view) .gallery-caption .caption-row,
+  body.archive-page #archive-gallery:not(.archive-grid-view) .gallery-caption .caption-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    gap: clamp(32px, 14vw, 96px) !important;
+    white-space: nowrap !important;
+  }
+
+  body.index-page.archive-page #archive-gallery:not(.archive-grid-view) .caption-year,
+  body.archive-page #archive-gallery:not(.archive-grid-view) .caption-year {
+    flex: 0 0 auto !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+  }
+
+  body.index-page.archive-page #archive-gallery:not(.archive-grid-view) .caption-meta,
+  body.archive-page #archive-gallery:not(.archive-grid-view) .caption-meta {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    margin-left: auto !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* ===================================
+   FIX MOBILE ARCHIVE: controls visible + filter close like lightbox
+   Solo 0-899px. Desktop invariato.
+=================================== */
+@media (max-width: 899px) {
+  body.index-page.archive-page,
+  body.archive-page {
+    --archive-mobile-top-space: 74px;
+  }
+
+  body.index-page.archive-page > .specialGrid,
+  body.archive-page > .specialGrid {
+    padding-top: var(--archive-mobile-top-space) !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-controls,
+  body.archive-page .archive-mobile-controls,
+  body.index-page.archive-page .archive-controls-mounted,
+  body.archive-page .archive-controls-mounted {
+    display: flex !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 10px 12px 10px !important;
+    margin: 0 !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    overflow: visible !important;
+    z-index: 2 !important;
+    box-sizing: border-box !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-toggle,
+  body.archive-page .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+  body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-view-toggle,
+  body.archive-page .archive-controls-mounted .archive-view-toggle {
+    display: inline-block !important;
+    position: static !important;
+    inset: auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: clamp(12px, 3.6vw, 14px) !important;
+    font-weight: 400 !important;
+    line-height: 120% !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    cursor: pointer !important;
+    overflow: visible !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+  }
+
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-view-toggle,
+  body.archive-page .archive-controls-mounted .archive-view-toggle {
+    margin-left: auto !important;
+    text-align: right !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open .archive-mobile-controls,
+  body.archive-page.archive-mobile-filters-open .archive-mobile-controls,
+  body.index-page.archive-page.archive-mobile-filters-open .archive-controls-mounted,
+  body.archive-page.archive-mobile-filters-open .archive-controls-mounted {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-close,
+  body.archive-page .archive-mobile-filter-close,
+  body.index-page.archive-page.archive-mobile-filters-open .archive-mobile-filter-close,
+  body.archive-page.archive-mobile-filters-open .archive-mobile-filter-close {
+    display: none !important;
+    position: fixed !important;
+    top: 10px !important;
+    z-index: 2147483647 !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: none !important;
+    box-shadow: none !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: 24px !important;
+    font-weight: 400 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -webkit-text-stroke: 0 !important;
+    text-shadow: none !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open .archive-mobile-filter-close,
+  body.archive-page.archive-mobile-filters-open .archive-mobile-filter-close {
+    display: block !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-close:hover,
+  body.archive-page .archive-mobile-filter-close:hover {
+    opacity: .3 !important;
+  }
+}
+
+/* ===================================
+   FIX MIRATO: desktop fixed bottom + mobile controls restored
+   Desktop: Vedi in griglia fisso in basso a destra.
+   Mobile: Filtri / Vedi in griglia visibili nel flusso sopra la gallery.
+=================================== */
+@media (min-width: 900px) {
+  body.index-page.archive-page .archive-mobile-controls,
+  body.archive-page .archive-mobile-controls,
+  body.index-page.archive-page .archive-controls-mounted,
+  body.archive-page .archive-controls-mounted {
+    position: fixed !important;
+    right: 10px !important;
+    bottom: 10px !important;
+    top: auto !important;
+    left: auto !important;
+    width: auto !important;
+    height: auto !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    z-index: 999999 !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-view-toggle,
+  body.archive-page .archive-controls-mounted .archive-view-toggle {
+    display: inline-block !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: var(--text-size, 14px) !important;
+    line-height: 120% !important;
+    text-align: right !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-toggle,
+  body.archive-page .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+  body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
+@media (max-width: 899px) {
+  body.index-page.archive-page .archive-mobile-controls,
+  body.archive-page .archive-mobile-controls {
+    display: flex !important;
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 10px 12px 10px !important;
+    margin: 0 !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    z-index: 2 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-toggle,
+  body.archive-page .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle {
+    display: inline-block !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: clamp(12px, 3.6vw, 14px) !important;
+    font-weight: 400 !important;
+    line-height: 120% !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    cursor: pointer !important;
+  }
+
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle {
+    margin-left: auto !important;
+    text-align: right !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open .archive-mobile-controls,
+  body.archive-page.archive-mobile-filters-open .archive-mobile-controls {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
 }
