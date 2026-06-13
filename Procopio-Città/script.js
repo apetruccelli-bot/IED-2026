@@ -344,34 +344,9 @@ function renderAll() {
   initializeArchiveScrollOpacity();
 }
 
-
-function syncArchiveControlsPlacement() {
-  const controls = document.querySelector('.archive-mobile-controls');
-  const gallery = document.getElementById('archive-gallery');
-  if (!controls || !gallery || !gallery.parentElement) return;
-
-  const isDesktop = window.matchMedia('(min-width: 900px)').matches;
-
-  if (isDesktop) {
-    if (controls.parentElement !== document.body) {
-      controls.classList.add('archive-controls-mounted');
-      document.body.appendChild(controls);
-    }
-    return;
-  }
-
-  if (controls.parentElement !== gallery.parentElement || controls.nextElementSibling !== gallery) {
-    controls.classList.remove('archive-controls-mounted');
-    gallery.parentElement.insertBefore(controls, gallery);
-  }
-}
-
 function initializeArchiveViewToggle() {
   const button = document.getElementById('archive-view-toggle');
   if (!button || !galleryHost) return;
-
-  syncArchiveControlsPlacement();
-
   if (button.dataset.archiveViewToggleReady === 'true') return;
   button.dataset.archiveViewToggleReady = 'true';
 
@@ -856,14 +831,33 @@ function initializeStoryBackToTop() {
   }
 
   const headerOffset = 80;
+  const sectionTolerance = 44;
 
-  const getSections = () =>
-    [...document.querySelectorAll('[id^="sezione_"]')]
+  const getSectionTop = (section) => scroller.getTargetTop(section, headerOffset);
+
+  const getSections = () => {
+    const navLinks = Array.from(document.querySelectorAll('[data-story-top-nav] a[href^="#sezione_"]'));
+    const navSections = navLinks
+      .map((link) => {
+        const id = link.getAttribute('href')?.slice(1);
+        return id ? document.getElementById(id) : null;
+      })
+      .filter(Boolean);
+
+    if (navSections.length) {
+      return navSections.filter((section, index, sections) => sections.indexOf(section) === index);
+    }
+
+    return [...document.querySelectorAll('[id^="sezione_"]')]
+      .filter((section) => section.id !== 'sezione_8')
       .sort((a, b) => {
         const aNumber = Number((a.id.match(/\d+$/) || ['0'])[0]);
         const bNumber = Number((b.id.match(/\d+$/) || ['0'])[0]);
         return aNumber - bNumber;
       });
+  };
+
+  const isAtBottom = () => scroller.getTop() >= scroller.getMaxTop() - 8;
 
   const getCurrentSectionIndex = () => {
     const sections = getSections();
@@ -871,21 +865,30 @@ function initializeStoryBackToTop() {
     let currentIndex = 0;
 
     sections.forEach((section, index) => {
-      const top = scroller.getTargetTop(section, headerOffset);
+      const top = getSectionTop(section);
 
-      if (currentScroll >= top - 40) {
+      if (currentScroll >= top - sectionTolerance) {
         currentIndex = index;
       }
     });
 
+    if (isAtBottom()) return Math.max(0, sections.length - 1);
     return currentIndex;
+  };
+
+  const getNextSection = () => {
+    const sections = getSections();
+    const currentScroll = scroller.getTop();
+    const next = sections.find((section) => getSectionTop(section) > currentScroll + sectionTolerance);
+    return next || null;
   };
 
   const updateButtonLabel = () => {
     const sections = getSections();
     const currentIndex = getCurrentSectionIndex();
+    const isLastSection = sections.length > 0 && currentIndex >= sections.length - 1;
 
-    backToTopButton.textContent = currentIndex >= sections.length - 1
+    backToTopButton.textContent = isLastSection
       ? 'Torna in cima'
       : 'Prossima sezione';
 
@@ -893,7 +896,7 @@ function initializeStoryBackToTop() {
     backToTopButton.setAttribute('aria-hidden', 'false');
     backToTopButton.setAttribute(
       'aria-label',
-      currentIndex >= sections.length - 1 ? 'Torna in cima' : 'Vai alla sezione successiva'
+      isLastSection ? 'Torna in cima' : 'Vai alla sezione successiva'
     );
   };
 
@@ -901,21 +904,27 @@ function initializeStoryBackToTop() {
     const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
     const sections = getSections();
     const currentIndex = getCurrentSectionIndex();
+    const isLastSection = sections.length > 0 && currentIndex >= sections.length - 1;
 
-    if (currentIndex >= sections.length - 1) {
+    if (isLastSection) {
       scroller.scrollTo(0, behavior);
       return;
     }
 
-    const nextSection = sections[currentIndex + 1];
-    if (!nextSection) return;
+    const nextSection = getNextSection();
+    if (!nextSection) {
+      scroller.scrollTo(0, behavior);
+      return;
+    }
 
-    scroller.scrollTo(scroller.getTargetTop(nextSection, headerOffset), behavior);
+    scroller.scrollTo(getSectionTop(nextSection), behavior);
   };
 
   backToTopButton.addEventListener('click', (event) => {
     event.preventDefault();
     scrollNavigation();
+    window.setTimeout(updateButtonLabel, 260);
+    window.setTimeout(updateButtonLabel, 720);
   });
 
   let rafId = 0;
@@ -956,7 +965,7 @@ function initializeStatisticsPage() {
             text-transform: none !important;
             font-size: 10px !important;
           }
-          .small { font-size: 11px !important; }
+          .small { font-size: 10px !important; }
           .axis { stroke: #1E1E1E; stroke-width: 1; }
           .b1, .legend-b1 { fill: #1E1E1E; }
           .b2, .legend-b2 { fill: #5C5C5C; }
@@ -964,35 +973,37 @@ function initializeStatisticsPage() {
         ]]></style>
         <title id="houses-chart-title">Case occupate</title>
         <desc id="houses-chart-desc">Confronto tra case costruite, occupate e attive per Zagara, Monteferro e Borgo Cupo.</desc>
+        <g class="houses-chart-inner" transform="translate(-30 0)">
         <line x1="60" y1="240" x2="490" y2="240" class="axis"/>
         <line x1="60" y1="40" x2="60" y2="240" class="axis"/>
         <rect x="90" y="85" width="28" height="155" class="b1"/>
         <rect x="123" y="190" width="28" height="50" class="b2"/>
         <rect x="156" y="220" width="28" height="20" class="b3"/>
-        <text x="88" y="78" class="small">612</text>
-        <text x="120" y="183" class="small">189</text>
-        <text x="155" y="213" class="small">74</text>
-        <text x="90" y="265" class="small">ZAGARA</text>
+        <text x="104" y="78" class="small" text-anchor="middle">612</text>
+        <text x="137" y="183" class="small" text-anchor="middle">189</text>
+        <text x="170" y="213" class="small" text-anchor="middle">74</text>
+        <text x="137" y="265" class="small" text-anchor="middle">ZAGARA</text>
         <rect x="240" y="130" width="28" height="110" class="b1"/>
         <rect x="273" y="210" width="28" height="30" class="b2"/>
         <rect x="306" y="230" width="28" height="10" class="b3"/>
-        <text x="238" y="123" class="small">431</text>
-        <text x="270" y="203" class="small">102</text>
-        <text x="305" y="223" class="small">39</text>
-        <text x="235" y="265" class="small">MONTEFERRO</text>
+        <text x="254" y="123" class="small" text-anchor="middle">431</text>
+        <text x="287" y="203" class="small" text-anchor="middle">102</text>
+        <text x="320" y="223" class="small" text-anchor="middle">39</text>
+        <text x="287" y="265" class="small" text-anchor="middle">MONTEFERRO</text>
         <rect x="390" y="168" width="28" height="72" class="b1"/>
         <rect x="423" y="230" width="28" height="10" class="b2"/>
         <rect x="456" y="236" width="28" height="4" class="b3"/>
-        <text x="388" y="161" class="small">288</text>
-        <text x="423" y="223" class="small">41</text>
-        <text x="455" y="230" class="small">12</text>
-        <text x="390" y="265" class="small">BORGO CUPO</text>
+        <text x="404" y="161" class="small" text-anchor="middle">288</text>
+        <text x="437" y="223" class="small" text-anchor="middle">41</text>
+        <text x="470" y="230" class="small" text-anchor="middle">12</text>
+        <text x="437" y="265" class="small" text-anchor="middle">BORGO CUPO</text>
         <rect x="150" y="12" width="7" height="7" class="legend-b1"/>
         <text x="165" y="20" class="small">COSTRUITE</text>
         <rect x="265" y="12" width="7" height="7" class="legend-b2"/>
         <text x="280" y="20" class="small">OCCUPATE</text>
         <rect x="380" y="12" width="7" height="7" class="legend-b3"/>
         <text x="395" y="20" class="small">ATTIVE</text>
+        </g>
       </svg>
     `;
   }
@@ -1159,6 +1170,36 @@ function initializeStatisticsPage() {
     });
   };
 
+  const ageBarLabelGap = 10;
+
+  const syncAgeBarLabel = (rect, width = null) => {
+    if (!rect) return;
+    const label = rect.nextElementSibling;
+    if (!label || label.tagName.toLowerCase() !== 'text') return;
+    const x = Number(rect.getAttribute('x') || 0);
+    const currentWidth = width == null ? Number(rect.getAttribute('width') || 0) : Number(width);
+    if (!Number.isFinite(x) || !Number.isFinite(currentWidth)) return;
+    label.setAttribute('x', String(x + currentWidth + ageBarLabelGap));
+  };
+
+  const syncHouseBarLabel = (rect, y = null) => {
+    if (!rect) return;
+    const svg = rect.ownerSVGElement;
+    if (!svg) return;
+    const dataRects = Array.from(svg.querySelectorAll('rect.b1, rect.b2, rect.b3'));
+    const index = dataRects.indexOf(rect);
+    if (index < 0) return;
+    const label = Array.from(svg.querySelectorAll('text.small[data-stat-live="true"]'))[index];
+    if (!label) return;
+    const rectX = Number(rect.getAttribute('x') || 0);
+    const rectWidth = Number(rect.getAttribute('width') || 0);
+    const currentY = y == null ? Number(rect.getAttribute('y') || 0) : Number(y);
+    if (!Number.isFinite(rectX) || !Number.isFinite(rectWidth) || !Number.isFinite(currentY)) return;
+    label.setAttribute('x', String(rectX + rectWidth / 2));
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('y', String(currentY - 7));
+  };
+
   const setupBarsRight = (chart) => {
     const svg = getSvg(chart);
     if (!svg) return;
@@ -1173,17 +1214,19 @@ function initializeStatisticsPage() {
 
     rightRows.forEach(({ rect, label, value, scale, y }) => {
       let current = value;
-      if (y === 125) current = 36;
-      if (y === 170) current = 54;
+      if (y === 98) current = 36;
+      if (y === 130) current = 54;
       rect.dataset.statScale = String(scale || 3);
       rect.dataset.statCurrent = String(current);
       rect.dataset.statTargetWidth = String(current * (scale || 3));
       rect.setAttribute('width', String(current * (scale || 3)));
       registerLiveNode(label, { value: current, suffix: '%', prefix: '', decimals: 0 }, { current, decimals: 0 });
+      syncAgeBarLabel(rect, current * (scale || 3));
     });
 
     svg.querySelectorAll('rect.bar2').forEach((rect) => {
       if (!rect.dataset.statTargetWidth) rect.dataset.statTargetWidth = rect.getAttribute('width') || '0';
+      syncAgeBarLabel(rect, Number(rect.dataset.statTargetWidth || rect.getAttribute('width') || 0));
     });
   };
 
@@ -1193,6 +1236,7 @@ function initializeStatisticsPage() {
     svg.querySelectorAll('rect.bar, rect.bar2').forEach((rect) => {
       if (!rect.dataset.statTargetWidth) rect.dataset.statTargetWidth = rect.getAttribute('width') || '0';
       rect.setAttribute('width', '0');
+      syncAgeBarLabel(rect, 0);
     });
   };
 
@@ -1201,7 +1245,15 @@ function initializeStatisticsPage() {
     if (!svg) return;
     svg.querySelectorAll('rect.bar, rect.bar2').forEach((rect, index) => {
       const target = Number(rect.dataset.statTargetWidth || rect.getAttribute('width') || 0);
-      window.setTimeout(() => animate(780, (t) => rect.setAttribute('width', String(target * t))), index * 45);
+      const label = rect.nextElementSibling;
+      window.setTimeout(() => {
+        fadePulse(label, rect);
+        animate(780, (t) => {
+          const width = target * t;
+          rect.setAttribute('width', String(width));
+          syncAgeBarLabel(rect, width);
+        });
+      }, index * 45);
     });
   };
 
@@ -1254,6 +1306,7 @@ function initializeStatisticsPage() {
       const baseline = Number(rect.dataset.statBaseline || 300);
       rect.setAttribute('y', String(baseline));
       rect.setAttribute('height', '0');
+      syncHouseBarLabel(rect, baseline);
     });
   };
 
@@ -1264,10 +1317,14 @@ function initializeStatisticsPage() {
       const baseline = Number(rect.dataset.statBaseline || 300);
       const targetHeight = Number(rect.dataset.statTargetHeight || 0);
       window.setTimeout(() => {
-        animate(760, (t) => {
+        const label = Array.from(svg.querySelectorAll('text.small[data-stat-live="true"]'))[index];
+        fadePulse(rect, label);
+        animate(900, (t) => {
           const height = targetHeight * t;
+          const y = baseline - height;
           rect.setAttribute('height', String(height));
-          rect.setAttribute('y', String(baseline - height));
+          rect.setAttribute('y', String(y));
+          syncHouseBarLabel(rect, y);
         });
       }, index * 45);
     });
@@ -1278,7 +1335,7 @@ function initializeStatisticsPage() {
     if (!svg) return;
     svg.querySelectorAll('line.value').forEach((line) => {
       if (!line.dataset.statTargetX2) line.dataset.statTargetX2 = line.getAttribute('x2') || line.getAttribute('x1') || '0';
-      line.dataset.statScale = String((370 - 140) / 100);
+      line.dataset.statScale = String((Number(line.previousElementSibling?.getAttribute('x2') || line.getAttribute('x2') || 430) - Number(line.getAttribute('x1') || 125)) / 100);
     });
     svg.querySelectorAll('text').forEach((text) => {
       const x = Number(text.getAttribute('x') || 0);
@@ -1411,8 +1468,8 @@ function initializeStatisticsPage() {
   const updateAge = (chart) => {
     const svg = getSvg(chart);
     if (!svg) return;
-    const row36 = Array.from(svg.querySelectorAll('rect.bar')).find((rect) => Number(rect.getAttribute('y') || 0) === 125);
-    const row65 = Array.from(svg.querySelectorAll('rect.bar')).find((rect) => Number(rect.getAttribute('y') || 0) === 170);
+    const row36 = Array.from(svg.querySelectorAll('rect.bar')).find((rect) => Number(rect.getAttribute('y') || 0) === 98);
+    const row65 = Array.from(svg.querySelectorAll('rect.bar')).find((rect) => Number(rect.getAttribute('y') || 0) === 130);
     if (!row36 || !row65) return;
 
     const label36 = row36.nextElementSibling;
@@ -1435,9 +1492,21 @@ function initializeStatisticsPage() {
 
     renderLiveValue(label65);
     renderLiveValue(label36);
-    row65.setAttribute('width', String(next65 * scale65));
-    row36.setAttribute('width', String(next36 * scale36));
+
+    const start65Width = Number(row65.getAttribute('width') || 0);
+    const start36Width = Number(row36.getAttribute('width') || 0);
+    const target65Width = next65 * scale65;
+    const target36Width = next36 * scale36;
+
     fadePulse(label65, label36, row65, row36);
+    animate(900, (t) => {
+      const width65 = start65Width + (target65Width - start65Width) * t;
+      const width36 = start36Width + (target36Width - start36Width) * t;
+      row65.setAttribute('width', String(width65));
+      row36.setAttribute('width', String(width36));
+      syncAgeBarLabel(row65, width65);
+      syncAgeBarLabel(row36, width36);
+    });
   };
 
   const updateBirths = (chart) => {
@@ -1475,15 +1544,23 @@ function initializeStatisticsPage() {
     rect.dataset.statCurrent = String(next);
     rect.dataset.statTargetHeight = String(nextHeight);
     rect.dataset.statTargetY = String(nextY);
-    rect.setAttribute('height', String(nextHeight));
-    rect.setAttribute('y', String(nextY));
 
     if (label) {
       label.dataset.statCurrent = String(next);
       renderLiveValue(label);
-      label.setAttribute('y', String(nextY - 7));
     }
+
+    const startHeight = Number(rect.getAttribute('height') || 0);
+    const startY = Number(rect.getAttribute('y') || baseline);
+
     fadePulse(rect, label);
+    animate(900, (t) => {
+      const height = startHeight + (nextHeight - startHeight) * t;
+      const y = startY + (nextY - startY) * t;
+      rect.setAttribute('height', String(height));
+      rect.setAttribute('y', String(y));
+      syncHouseBarLabel(rect, y);
+    });
   };
 
   const updateContinuity = (chart) => {
@@ -1993,8 +2070,3 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeSiteHeaderScroll();
   }
 })();
-
-
-window.addEventListener('resize', syncArchiveControlsPlacement);
-window.addEventListener('orientationchange', syncArchiveControlsPlacement);
-window.addEventListener('DOMContentLoaded', syncArchiveControlsPlacement);

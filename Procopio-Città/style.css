@@ -1123,12 +1123,6 @@ body.content-scroll-page #main-scroll .story-fade.story-fade--visible {
 
 }
 
-@media (max-width: 1119px) {
-  .story-page #main-scroll .story-sticky,
-  .stat-page #main-scroll .story-sticky {
-    display: none;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   body.content-scroll-page #main-scroll .story-fade {
@@ -3943,7 +3937,7 @@ body.stat-page .stat-svg--services {
 
   body.stat-page,
   body.story-page {
-    --content-header-mobile-height: 30px;
+    --content-header-mobile-height: 20px;
     --content-header-mobile-offset: calc(var(--content-header-mobile-height) + var(--site-header-mobile-gap));
   }
 
@@ -4067,7 +4061,7 @@ body.stat-page .stat-svg--services {
   body.story-page #main-scroll > .storia-text-grid > div:not(.storia-text-split-media):not(.storia-text-split-media-right) > img {
     width: 100% !important;
     max-width: 100% !important;
-    height: auto !important;
+    height: 394.4px !important;
     min-height: 0 !important;
     max-height: none !important;
     aspect-ratio: auto !important;
@@ -4280,8 +4274,246 @@ body.stat-page .stat-svg--services {
   }
 }
 
+/* ===================================
+   STAT SVG: centratura pagina + allineamenti interni
+   Solo pagina stat. Animazioni JS invariate.
+=================================== */
+body.stat-page #main-scroll > .stat-text-grid > .stat-animate-chart,
+body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full.stat-animate-chart {
+  grid-column: 1 / -1 !important;
+  width: calc(100vw - 20px) !important;
+  max-width: calc(100vw - 20px) !important;
+  margin-left: calc(50% - 50vw + 10px) !important;
+  margin-right: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  transform: none !important;
+  box-sizing: border-box !important;
+}
+
+body.stat-page #main-scroll .stat-animate-chart svg,
+body.stat-page #main-scroll .stat-animate-chart .population-chart-svg,
+body.stat-page #main-scroll #houses-chart svg {
+  display: block !important;
+  width: min(100%, 900px) !important;
+  max-width: 900px !important;
+  height: auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  overflow: visible !important;
+}
+
+body.stat-page #main-scroll .stat-svg--population,
+body.stat-page #main-scroll .stat-svg--age,
+body.stat-page #main-scroll .stat-svg--births,
+body.stat-page #main-scroll .stat-svg--services,
+body.stat-page #main-scroll .stat-svg--continuity,
+body.stat-page #main-scroll .stat-svg--houses {
+  text-align: left !important;
+}
+
+body.stat-page #main-scroll .stat-animate-chart svg text {
+  dominant-baseline: middle;
+  line-height: 1 !important;
+}
+
+@media (max-width: 899px) {
+  body.stat-page #main-scroll > .stat-text-grid > .stat-animate-chart,
+  body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full.stat-animate-chart {
+    width: calc(100vw - 20px) !important;
+    max-width: calc(100vw - 20px) !important;
+    margin-left: calc(50% - 50vw + 10px) !important;
+  }
+
+  body.stat-page #main-scroll .stat-animate-chart svg,
+  body.stat-page #main-scroll #houses-chart svg {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
 
 /* ===================================
+   STAT SVG: dimensioni totali come immagini storia
+   Solo width/height complessivi dei grafici. Animazioni e contenuti invariati.
+=================================== */
+body.stat-page #main-scroll > .stat-text-grid > .stat-animate-chart,
+body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full.stat-animate-chart,
+body.stat-page #main-scroll > .stat-text-grid > .stat-chart-container.stat-animate-chart {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  justify-self: stretch !important;
+  align-self: start !important;
+  display: block !important;
+  box-sizing: border-box !important;
+}
+
+body.stat-page #main-scroll .stat-animate-chart svg,
+body.stat-page #main-scroll .stat-animate-chart .population-chart-svg,
+body.stat-page #main-scroll #houses-chart svg,
+body.stat-page #main-scroll .stat-svg--population,
+body.stat-page #main-scroll .stat-svg--age,
+body.stat-page #main-scroll .stat-svg--births,
+body.stat-page #main-scroll .stat-svg--houses,
+body.stat-page #main-scroll .stat-svg--services,
+body.stat-page #main-scroll .stat-svg--continuity {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  object-fit: cover !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 899px) {
+  body.stat-page #main-scroll > .stat-text-grid > .stat-animate-chart,
+  body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full.stat-animate-chart,
+  body.stat-page #main-scroll > .stat-text-grid > .stat-chart-container.stat-animate-chart {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  body.stat-page #main-scroll .stat-animate-chart svg,
+  body.stat-page #main-scroll #houses-chart svg {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* ===================================
+   STAT GRAFICO 2: numeri agganciati ai rect + fade morbido
+   Solo grafico età, animazioni JS intatte.
+=================================== */
+body.stat-page .stat-chart--age svg rect.bar,
+body.stat-page .stat-chart--age svg rect.bar2,
+body.stat-page .stat-chart--age svg text.small {
+  transition: opacity 760ms cubic-bezier(.77,0,.175,1) !important;
+}
+
+/* ===================================
+   STAT GRAFICI A BARRE: fade fluido su variazioni
+   Solo rect/testi dei grafici a barre. Animazioni JS mantenute.
+=================================== */
+body.stat-page .stat-chart--houses svg rect.b1,
+body.stat-page .stat-chart--houses svg rect.b2,
+body.stat-page .stat-chart--houses svg rect.b3,
+body.stat-page .stat-chart--houses svg text.small {
+  transition: opacity 760ms cubic-bezier(.77,0,.175,1) !important;
+}
+
+/* ===================================
+   STAT SVG: centratura nella griglia + scala mobile
+   Solo dimensioni complessive dei grafici.
+=================================== */
+body.stat-page {
+  --stat-svg-grid-width: min(100%, 1040px);
+  --stat-svg-mobile-width: min(100%, 720px);
+}
+
+body.stat-page #main-scroll > .stat-text-grid > .stat-animate-chart,
+body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full.stat-animate-chart,
+body.stat-page #main-scroll > .stat-text-grid > .stat-chart-container.stat-animate-chart {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  justify-self: stretch !important;
+  box-sizing: border-box !important;
+}
+
+body.stat-page #main-scroll .stat-animate-chart svg,
+body.stat-page #main-scroll .stat-animate-chart .population-chart-svg,
+body.stat-page #main-scroll #houses-chart svg,
+body.stat-page #main-scroll .stat-svg--population,
+body.stat-page #main-scroll .stat-svg--age,
+body.stat-page #main-scroll .stat-svg--births,
+body.stat-page #main-scroll .stat-svg--houses,
+body.stat-page #main-scroll .stat-svg--services,
+body.stat-page #main-scroll .stat-svg--continuity {
+  display: block !important;
+  width: var(--stat-svg-grid-width) !important;
+  max-width: var(--stat-svg-grid-width) !important;
+  min-width: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  object-fit: cover !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 899px) {
+  body.stat-page {
+    --stat-svg-grid-width: var(--stat-svg-mobile-width);
+  }
+
+  body.stat-page #main-scroll > .stat-text-grid > .stat-animate-chart,
+  body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full.stat-animate-chart,
+  body.stat-page #main-scroll > .stat-text-grid > .stat-chart-container.stat-animate-chart {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  body.stat-page #main-scroll .stat-animate-chart svg,
+  body.stat-page #main-scroll .stat-animate-chart .population-chart-svg,
+  body.stat-page #main-scroll #houses-chart svg,
+  body.stat-page #main-scroll .stat-svg--population,
+  body.stat-page #main-scroll .stat-svg--age,
+  body.stat-page #main-scroll .stat-svg--births,
+  body.stat-page #main-scroll .stat-svg--houses,
+  body.stat-page #main-scroll .stat-svg--services,
+  body.stat-page #main-scroll .stat-svg--continuity {
+    width: var(--stat-svg-grid-width) !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* ===================================
+   MOBILE 0-899px: rimuove Prossima sezione / Torna in cima
+   Solo mobile. Desktop invariato.
+=================================== */
+@media (max-width: 899px) {
+  body.story-page .story-back-to-top,
+  body.stat-page .story-back-to-top {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+/* ===================================
+   INTEGRAZIONE INDEX: tab Filtri + Vedi in griglia
+   Regole importate dal file di testo e applicate solo alla pagina archivio/index.
+
    FIX DEFINITIVO: Vedi in griglia sempre presente durante lo scroll
    Il blocco controlli viene montato su body via JS, quindi non dipende dal layout della gallery.
 =================================== */
@@ -4763,9 +4995,6 @@ body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle {
     font-size: 10px !important;
   }
 
-  body.stat-page svg .num {
-    font-size: 14px !important;
-  }
 }
 
 /* ===================================
@@ -5637,6 +5866,107 @@ body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle {
   body.archive-page.archive-mobile-filters-open .archive-mobile-controls {
     opacity: 0 !important;
     visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
+/* ===================================
+   FIX DESKTOP REALE: Vedi in griglia fixed viewport
+   Solo >=900px.
+   Nota: la page-transition metteva transform sul contenitore pagina,
+   creando un containing block che faceva finire il fixed in fondo alla gallery.
+=================================== */
+@media (min-width: 900px) {
+  body.index-page.archive-page.page-transition > .specialGrid:has(.archive-view-toggle),
+  body.archive-page.page-transition > .specialGrid:has(.archive-view-toggle),
+  body.index-page.archive-page > .specialGrid:has(.archive-view-toggle),
+  body.archive-page > .specialGrid:has(.archive-view-toggle) {
+    transform: none !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-controls,
+  body.archive-page .archive-mobile-controls,
+  body.index-page.archive-page .archive-controls-mounted,
+  body.archive-page .archive-controls-mounted {
+    display: block !important;
+    position: fixed !important;
+    right: 10px !important;
+    bottom: 10px !important;
+    top: auto !important;
+    left: auto !important;
+    inset: auto 10px 10px auto !important;
+    z-index: 2147483647 !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: none !important;
+    transform: none !important;
+    overflow: visible !important;
+    contain: none !important;
+  }
+
+  body.index-page.archive-page #archive-view-toggle.archive-view-toggle,
+  body.archive-page #archive-view-toggle.archive-view-toggle,
+  body.index-page.archive-page .archive-view-toggle,
+  body.archive-page .archive-view-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-view-toggle,
+  body.archive-page .archive-controls-mounted .archive-view-toggle {
+    display: block !important;
+    position: fixed !important;
+    right: 10px !important;
+    bottom: 10px !important;
+    top: auto !important;
+    left: auto !important;
+    inset: auto 10px 10px auto !important;
+    z-index: 2147483647 !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: var(--myBlack, #1E1E1E) !important;
+    font-family: 'Diatype' !important;
+    font-size: var(--text-size, 14px) !important;
+    font-weight: 400 !important;
+    line-height: 120% !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    cursor: pointer !important;
+    contain: none !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-toggle,
+  body.archive-page .archive-mobile-filter-toggle,
+  body.index-page.archive-page .archive-controls-mounted .archive-mobile-filter-toggle,
+  body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
     pointer-events: none !important;
   }
 }
