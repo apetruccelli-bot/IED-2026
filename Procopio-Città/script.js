@@ -979,30 +979,30 @@ function initializeStatisticsPage() {
         <rect x="90" y="85" width="28" height="155" class="b1"/>
         <rect x="123" y="190" width="28" height="50" class="b2"/>
         <rect x="156" y="220" width="28" height="20" class="b3"/>
-        <text x="104" y="78" class="small" text-anchor="middle">612</text>
-        <text x="137" y="183" class="small" text-anchor="middle">189</text>
-        <text x="170" y="213" class="small" text-anchor="middle">74</text>
-        <text x="137" y="265" class="small" text-anchor="middle">ZAGARA</text>
+        <text x="104" y="78" class="small" text-anchor="middle" dominant-baseline="middle">612</text>
+        <text x="137" y="183" class="small" text-anchor="middle" dominant-baseline="middle">189</text>
+        <text x="170" y="213" class="small" text-anchor="middle" dominant-baseline="middle">74</text>
+        <text x="137" y="265" class="small" text-anchor="middle" dominant-baseline="middle">ZAGARA</text>
         <rect x="240" y="130" width="28" height="110" class="b1"/>
         <rect x="273" y="210" width="28" height="30" class="b2"/>
         <rect x="306" y="230" width="28" height="10" class="b3"/>
-        <text x="254" y="123" class="small" text-anchor="middle">431</text>
-        <text x="287" y="203" class="small" text-anchor="middle">102</text>
-        <text x="320" y="223" class="small" text-anchor="middle">39</text>
-        <text x="287" y="265" class="small" text-anchor="middle">MONTEFERRO</text>
+        <text x="254" y="123" class="small" text-anchor="middle" dominant-baseline="middle">431</text>
+        <text x="287" y="203" class="small" text-anchor="middle" dominant-baseline="middle">102</text>
+        <text x="320" y="223" class="small" text-anchor="middle" dominant-baseline="middle">39</text>
+        <text x="287" y="265" class="small" text-anchor="middle" dominant-baseline="middle">MONTEFERRO</text>
         <rect x="390" y="168" width="28" height="72" class="b1"/>
         <rect x="423" y="230" width="28" height="10" class="b2"/>
         <rect x="456" y="236" width="28" height="4" class="b3"/>
-        <text x="404" y="161" class="small" text-anchor="middle">288</text>
-        <text x="437" y="223" class="small" text-anchor="middle">41</text>
-        <text x="470" y="230" class="small" text-anchor="middle">12</text>
-        <text x="437" y="265" class="small" text-anchor="middle">BORGO CUPO</text>
+        <text x="404" y="161" class="small" text-anchor="middle" dominant-baseline="middle">288</text>
+        <text x="437" y="223" class="small" text-anchor="middle" dominant-baseline="middle">41</text>
+        <text x="470" y="230" class="small" text-anchor="middle" dominant-baseline="middle">12</text>
+        <text x="437" y="265" class="small" text-anchor="middle" dominant-baseline="middle">BORGO CUPO</text>
         <rect x="150" y="12" width="7" height="7" class="legend-b1"/>
-        <text x="165" y="20" class="small">COSTRUITE</text>
+        <text x="165" y="16" class="small" dominant-baseline="middle">COSTRUITE</text>
         <rect x="265" y="12" width="7" height="7" class="legend-b2"/>
-        <text x="280" y="20" class="small">OCCUPATE</text>
+        <text x="280" y="16" class="small" dominant-baseline="middle">OCCUPATE</text>
         <rect x="380" y="12" width="7" height="7" class="legend-b3"/>
-        <text x="395" y="20" class="small">ATTIVE</text>
+        <text x="395" y="16" class="small" dominant-baseline="middle">ATTIVE</text>
         </g>
       </svg>
     `;
