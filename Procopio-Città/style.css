@@ -5970,3 +5970,245 @@ body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle {
     pointer-events: none !important;
   }
 }
+
+/* ===================================
+   ARCHIVIO: FILTRI ATTIVI IN VISTA GRIGLIA
+   Le immagini non corrispondenti restano visibili ma opacizzate.
+=================================== */
+body.archive-page #archive-gallery.archive-grid-view [data-item-index].grid-dimmed,
+body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index].grid-dimmed {
+  opacity: 0.15 !important;
+}
+
+body.archive-page #archive-gallery.archive-grid-view [data-item-index]:not(.grid-dimmed),
+body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index]:not(.grid-dimmed) {
+  opacity: 1 !important;
+}
+
+/* ===================================
+   LIGHTBOX/MODALI: ID A 3PX DALL'IMMAGINE
+   L'ID resta agganciato al bordo destro dell'immagine, anche se cambia dimensione.
+=================================== */
+.lightbox .lb-content {
+  display: grid !important;
+  grid-template-columns: minmax(0, auto) max-content !important;
+  grid-template-rows: auto auto !important;
+  align-items: start !important;
+  justify-content: center !important;
+  column-gap: 0 !important;
+  row-gap: 10px !important;
+}
+
+.lightbox .lb-img {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  padding: 0 !important;
+  display: block !important;
+}
+
+.lightbox .lb-info {
+  display: contents !important;
+}
+
+.lightbox .lb-id {
+  position: static !important;
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  align-self: start !important;
+  justify-self: start !important;
+  margin-left: 3px !important;
+  margin-top: 0 !important;
+  right: auto !important;
+  top: auto !important;
+  transform: none !important;
+  white-space: nowrap !important;
+}
+
+.lightbox .lb-desc {
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+  justify-self: center !important;
+}
+
+.marker-modal-content {
+  display: grid !important;
+  grid-template-columns: minmax(0, auto) max-content !important;
+  grid-template-rows: auto auto !important;
+  align-items: start !important;
+  justify-content: center !important;
+  column-gap: 0 !important;
+  row-gap: 10px !important;
+}
+
+.marker-modal-img {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  display: block !important;
+}
+
+.marker-modal-id,
+#marker-modal-id {
+  position: static !important;
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  align-self: start !important;
+  justify-self: start !important;
+  margin-left: 3px !important;
+  margin-top: 0 !important;
+  right: auto !important;
+  top: auto !important;
+  transform: none !important;
+  white-space: nowrap !important;
+  color: var(--myWhite, #FCFCFC) !important;
+  font-family: 'Diatype' !important;
+  font-size: 12px !important;
+  letter-spacing: 0.04em !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+}
+
+.marker-modal-desc {
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+  justify-self: center !important;
+}
+
+@media (max-width: 899px) {
+  .lightbox .lb-content {
+    max-width: calc(100vw - 48px) !important;
+    max-height: calc(100dvh - 96px) !important;
+    padding: 56px 0 44px 0 !important;
+  }
+
+  .lightbox .lb-id {
+    margin-left: 3px !important;
+    top: auto !important;
+    right: auto !important;
+  }
+
+  .marker-modal-content {
+    max-width: calc(100vw - 48px) !important;
+  }
+
+  .marker-modal-id,
+  #marker-modal-id {
+    margin-left: 3px !important;
+  }
+}
+
+/* ===================================
+   LIGHTBOX/MODALI: IMMAGINE SEMPRE CENTRALE
+   L'ID resta a 3px dall'immagine ma non partecipa alla larghezza del modal.
+=================================== */
+.lightbox .lb-content {
+  display: block !important;
+  position: relative !important;
+  width: fit-content !important;
+  max-width: calc(100vw - 96px) !important;
+  max-height: calc(100vh - 80px) !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  transform: none !important;
+}
+
+.lightbox .lb-img {
+  display: block !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  max-width: calc(100vw - 96px) !important;
+  max-height: 80vh !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  object-fit: contain !important;
+}
+
+.lightbox .lb-info {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+}
+
+.lightbox .lb-id {
+  position: absolute !important;
+  top: 0 !important;
+  left: calc(100% + 3px) !important;
+  right: auto !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  margin: 0 !important;
+  transform: none !important;
+  white-space: nowrap !important;
+  pointer-events: none !important;
+}
+
+.lightbox .lb-desc {
+  display: block !important;
+  position: static !important;
+  width: 100% !important;
+  margin-top: 10px !important;
+  text-align: center !important;
+  transform: none !important;
+}
+
+.marker-modal-content {
+  display: block !important;
+  position: relative !important;
+  width: fit-content !important;
+  max-width: calc(100vw - 96px) !important;
+  max-height: calc(100vh - 80px) !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  transform: none !important;
+  background: transparent !important;
+}
+
+.marker-modal-img {
+  display: block !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  max-width: calc(100vw - 96px) !important;
+  max-height: 80vh !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 auto !important;
+  object-fit: contain !important;
+}
+
+.marker-modal-id,
+#marker-modal-id {
+  position: absolute !important;
+  top: 0 !important;
+  left: calc(100% + 3px) !important;
+  right: auto !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  margin: 0 !important;
+  transform: none !important;
+  white-space: nowrap !important;
+  pointer-events: none !important;
+}
+
+.marker-modal-desc {
+  display: block !important;
+  position: static !important;
+  width: 100% !important;
+  margin-top: 10px !important;
+  text-align: center !important;
+}
+
+@media (max-width: 899px) {
+  .lightbox .lb-content,
+  .marker-modal-content {
+    max-width: calc(100vw - 56px) !important;
+    max-height: calc(100dvh - 96px) !important;
+    padding: 0 !important;
+  }
+
+  .lightbox .lb-img,
+  .marker-modal-img {
+    max-width: calc(100vw - 56px) !important;
+    max-height: 74dvh !important;
+  }
+}
