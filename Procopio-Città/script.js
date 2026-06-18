@@ -69,6 +69,7 @@ let enrichedRows = [];
 let allItems = [];
 let mapItems = [];
 let activeFilters = new Set();
+let activeFilterLabels = new Map();
 let lbIndex = -1;
 let lightboxItems = [];
 let lightboxUseFilteredNavigation = true;
@@ -180,6 +181,30 @@ function setArchiveFiltersVisible(visible) {
   }
 }
 
+function updateArchiveMobileFilterLabel() {
+  if (!archiveMobileFilterToggle) return;
+
+  const selectedLabels = [...activeFilterLabels.values()];
+  archiveMobileFilterToggle.textContent = '';
+
+  const label = document.createElement('span');
+  label.className = 'archive-mobile-filter-label';
+  label.textContent = 'Filtri';
+  archiveMobileFilterToggle.appendChild(label);
+
+  if (selectedLabels.length) {
+    const summary = document.createElement('span');
+    summary.className = 'archive-mobile-filter-summary';
+    summary.textContent = selectedLabels.join(', ');
+    archiveMobileFilterToggle.appendChild(summary);
+  }
+
+  archiveMobileFilterToggle.setAttribute(
+    'aria-label',
+    selectedLabels.length ? `Filtri: ${selectedLabels.join(', ')}` : 'Filtri'
+  );
+}
+
 function renderFilters() {
   if (!rowsHost) return;
 
@@ -188,7 +213,7 @@ function renderFilters() {
   rowsHost.innerHTML = columns
   .map(
     ({ key, label, values }) => `
-    <div class="flex flex-col ${key === 'year' ? 'archive-filter-column-year' : ''}">
+    <div class="flex flex-col archive-filter-column archive-filter-column-${escapeHtml(key)} ${key === 'year' ? 'archive-filter-column-year' : ''}">
       <div class="archive-filter-heading">${escapeHtml(label.charAt(0).toUpperCase() + label.slice(1))}</div>
       ${key === 'regione'
         ? values
@@ -236,6 +261,7 @@ function renderFilters() {
   });
 
   setArchiveFiltersVisible(archiveFiltersVisible);
+  updateArchiveMobileFilterLabel();
 }
 
 function toggleFilter(key, value) {
@@ -245,15 +271,19 @@ function toggleFilter(key, value) {
 
   if (activeFilters.has(token)) {
     activeFilters.delete(token);
+    activeFilterLabels.delete(token);
   } else {
     [...activeFilters].forEach((activeToken) => {
       if (activeToken.startsWith(`${key}::`)) {
         activeFilters.delete(activeToken);
+        activeFilterLabels.delete(activeToken);
       }
     });
     activeFilters.add(token);
+    activeFilterLabels.set(token, value);
   }
   updateArchiveFilterColorState();
+  updateArchiveMobileFilterLabel();
   syncRegionExpansion();
   filterVisible(searchInput?.value || '');
 }
@@ -387,6 +417,8 @@ function initializeArchiveViewToggle() {
 
 function filterVisible(term = '') {
   const query = normalize(term.trim());
+  const isMobileArchive = typeof window !== 'undefined' &&
+    window.matchMedia('(max-width: 899px)').matches;
 
   document.querySelectorAll('[data-item-index]').forEach((el) => {
     const item = allItems[Number(el.dataset.itemIndex)];
@@ -412,7 +444,7 @@ function filterVisible(term = '') {
       });
     const shouldHide = !matchesSearch || !matchesTags;
 
-    if (archiveGridView) {
+    if (archiveGridView && !isMobileArchive) {
       el.classList.toggle('grid-dimmed', shouldHide);
       el.classList.remove('hidden');
       el.style.display = '';
@@ -586,6 +618,15 @@ if (stickyHeader) {
 
   // support basic touch toggling for mobile: tap header to toggle filters
   stickyHeader.addEventListener('touchstart', (e) => {
+    if (
+      e.target.closest('#archive-rows') ||
+      e.target.closest('.archive-mobile-controls') ||
+      e.target.closest('.archive-mobile-filter-close') ||
+      e.target.closest('[data-filter-key][data-filter-value]')
+    ) {
+      return;
+    }
+
     manualToggle = !manualToggle;
     setArchiveFiltersVisible(manualToggle);
     // prevent immediate mouse events

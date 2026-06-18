@@ -44,6 +44,27 @@ body.page-transition.page-transition-leaving > :not(#lightbox):not(.page-footer)
     transform 380ms cubic-bezier(.77,0,.175,1);
 }
 
+body.page-transition .sidebar-links a {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+body.page-transition.page-transition-ready .sidebar-links a {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 720ms cubic-bezier(.77,0,.175,1),
+    transform 720ms cubic-bezier(.77,0,.175,1);
+}
+
+body.page-transition.page-transition-leaving .sidebar-links a {
+  opacity: 0;
+  transform: translateY(-12px);
+  transition:
+    opacity 380ms cubic-bezier(.77,0,.175,1),
+    transform 380ms cubic-bezier(.77,0,.175,1);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html,
   body,
@@ -56,6 +77,14 @@ body.page-transition.page-transition-leaving > :not(#lightbox):not(.page-footer)
   body.page-transition > :not(#lightbox),
   body.page-transition.page-transition-ready > :not(#lightbox),
   body.page-transition.page-transition-leaving > :not(#lightbox) {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  body.page-transition .sidebar-links a,
+  body.page-transition.page-transition-ready .sidebar-links a,
+  body.page-transition.page-transition-leaving .sidebar-links a {
     opacity: 1;
     transform: none;
     transition: none;
@@ -1210,8 +1239,7 @@ body.archive-overlay-open #archive-gallery p {
 }
 
 .archive-sticky > *,
-.archive-rows-panel *,
-.sidebar-links * {
+.archive-rows-panel * {
   position: relative;
   z-index: 3002;
   animation: verticalReveal 800ms cubic-bezier(.77,0,.175,1) both;
@@ -3553,7 +3581,7 @@ body.stat-page .stat-svg--services {
     min-width: 0 !important;
     min-height: auto !important;
     margin: 0 !important;
-    padding: 10px 10px 76px 10px !important;
+    padding: 10px 10px 10px 10px !important;
     overflow-x: hidden !important;
   }
 
@@ -3935,10 +3963,18 @@ body.stat-page .stat-svg--services {
     --site-header-mobile-offset-index: calc(var(--site-header-mobile-height-index) + var(--site-header-mobile-gap));
   }
 
-  body.stat-page,
+  body.stat-page {
+    --stat-content-header-mobile-height: 20px;
+    --stat-content-header-mobile-offset: calc(var(--stat-content-header-mobile-height) + var(--site-header-mobile-gap));
+    --content-header-mobile-height: var(--stat-content-header-mobile-height);
+    --content-header-mobile-offset: var(--stat-content-header-mobile-offset);
+  }
+
   body.story-page {
-    --content-header-mobile-height: 20px;
-    --content-header-mobile-offset: calc(var(--content-header-mobile-height) + var(--site-header-mobile-gap));
+    --story-content-header-mobile-height: 30px;
+    --story-content-header-mobile-offset: calc(var(--story-content-header-mobile-height) + var(--site-header-mobile-gap));
+    --content-header-mobile-height: var(--story-content-header-mobile-height);
+    --content-header-mobile-offset: var(--story-content-header-mobile-offset);
   }
 
   body.index-page > .specialGrid,
@@ -3948,15 +3984,22 @@ body.stat-page .stat-svg--services {
     box-sizing: border-box !important;
   }
 
-  body.stat-page > .specialGrid,
-  body.story-page > .specialGrid {
-    padding-top: var(--content-header-mobile-offset) !important;
+  body.stat-page > .specialGrid {
+    padding-top: var(--stat-content-header-mobile-offset) !important;
     box-sizing: border-box !important;
   }
 
-  body.stat-page.content-scroll-page #main-scroll,
+  body.story-page > .specialGrid {
+    padding-top: var(--story-content-header-mobile-offset) !important;
+    box-sizing: border-box !important;
+  }
+
+  body.stat-page.content-scroll-page #main-scroll {
+    padding-top: var(--stat-content-header-mobile-offset) !important;
+  }
+
   body.story-page.content-scroll-page #main-scroll {
-    padding-top: var(--content-header-mobile-offset) !important;
+    padding-top: var(--story-content-header-mobile-offset) !important;
   }
 
   body.index-page .archive-sticky,
@@ -6210,5 +6253,250 @@ body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index
   .marker-modal-img {
     max-width: calc(100vw - 56px) !important;
     max-height: 74dvh !important;
+  }
+}
+
+/* Home mobile <=799px: map stays visible behind header, no Mapbox info button. */
+@media (max-width: 799px) {
+  body.home-page .site-header {
+    background: transparent !important;
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  body.home-page:has(#loading-overlay:not(.fade-out)) .site-header {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translateY(-110%) !important;
+  }
+
+  body.home-page #home-map,
+  body.home-page .home-map {
+    top: 0 !important;
+    height: 100% !important;
+  }
+
+  body.home-page .loading-image-center {
+    width: clamp(150px, 42vw, 280px) !important;
+    height: clamp(188px, 52.5vw, 350px) !important;
+  }
+
+  body.home-page .face-preview-panel {
+    left: 10px !important;
+    bottom: 10px !important;
+    width: 80px !important;
+    height: 120px !important;
+  }
+
+  body.home-page .face-webcam-preview,
+  body.home-page .face-canvas-preview {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  body.home-page .mapboxgl-ctrl-attrib,
+  body.home-page .mapboxgl-ctrl-attrib-button {
+    display: none !important;
+  }
+}
+
+/* Stat mobile <=799px: SVG charts larger and easier to read. */
+@media (max-width: 799px) {
+  body.stat-page .stat-chart-container,
+  body.stat-page .stat-layout-media-full,
+  body.stat-page .stat-animate-chart,
+  body.stat-page .population-chart-wrap {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  body.stat-page #main-scroll svg,
+  body.stat-page .stat-chart-container svg,
+  body.stat-page .stat-layout-media-full svg,
+  body.stat-page .stat-animate-chart svg,
+  body.stat-page .population-chart-svg,
+  body.stat-page #houses-chart svg {
+    width: 900px !important;
+    min-width: 900px !important;
+    max-width: none !important;
+    height: auto !important;
+  }
+
+  body.stat-page svg text,
+  body.stat-page svg .small,
+  body.stat-page svg .font-myText {
+    font-size: 12px !important;
+  }
+}
+
+/* Archive mobile <=899px: filter taps and scrollable years. */
+@media (max-width: 899px) {
+  body.index-page.archive-page.archive-mobile-filters-open #archive-rows.archive-rows-panel,
+  body.archive-page.archive-mobile-filters-open #archive-rows.archive-rows-panel {
+    pointer-events: auto !important;
+    touch-action: pan-y !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  body.index-page.archive-page #archive-rows.archive-rows-panel::after,
+  body.archive-page #archive-rows.archive-rows-panel::after {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open #archive-rows [data-filter-key][data-filter-value],
+  body.archive-page.archive-mobile-filters-open #archive-rows [data-filter-key][data-filter-value],
+  body.index-page.archive-page.archive-mobile-filters-open #archive-rows button[data-filter-key][data-filter-value],
+  body.archive-page.archive-mobile-filters-open #archive-rows button[data-filter-key][data-filter-value] {
+    position: relative !important;
+    z-index: 1 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+  }
+
+  body.index-page.archive-page.archive-mobile-filters-open #archive-rows > .archive-filter-column-year,
+  body.archive-page.archive-mobile-filters-open #archive-rows > .archive-filter-column-year {
+    max-height: calc(100dvh - 74px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-right: 8px !important;
+    touch-action: pan-y !important;
+  }
+
+  body.index-page.archive-page #archive-rows > .archive-filter-column-year,
+  body.archive-page #archive-rows > .archive-filter-column-year {
+    order: 1 !important;
+  }
+
+  body.index-page.archive-page #archive-rows > .archive-filter-column-autore,
+  body.archive-page #archive-rows > .archive-filter-column-autore {
+    order: 3 !important;
+  }
+
+  body.index-page.archive-page #archive-rows > .archive-filter-column-regione,
+  body.archive-page #archive-rows > .archive-filter-column-regione {
+    order: 2 !important;
+  }
+
+  body.index-page.archive-page #archive-rows > .archive-filter-column-abitanti,
+  body.archive-page #archive-rows > .archive-filter-column-abitanti {
+    order: 4 !important;
+  }
+
+  body.index-page.archive-page #archive-rows > .archive-filter-column-documento,
+  body.archive-page #archive-rows > .archive-filter-column-documento {
+    order: 5 !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-toggle,
+  body.archive-page .archive-mobile-filter-toggle {
+    display: inline-flex !important;
+    align-items: baseline !important;
+    gap: 6px !important;
+    max-width: 62vw !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  body.index-page.archive-page .archive-mobile-filter-summary,
+  body.archive-page .archive-mobile-filter-summary {
+    display: inline-block !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    color: var(--muted, #909090) !important;
+  }
+}
+
+/* Lightbox mobile <=899px: keep arrows outside the photo area. */
+@media (max-width: 899px) {
+  .lightbox .lb-content {
+    max-width: 100vw !important;
+    max-height: calc(100dvh - 96px) !important;
+    padding: 0 54px !important;
+    box-sizing: border-box !important;
+  }
+
+  .lightbox .lb-img {
+    max-width: calc(100vw - 108px) !important;
+    max-height: calc(100dvh - 150px) !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .lightbox .lb-prev,
+  .lightbox .lb-next {
+    position: fixed !important;
+    top: 50% !important;
+    z-index: 2147482400 !important;
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transform: translateY(-50%) !important;
+  }
+
+  .lightbox .lb-prev {
+    left: 6px !important;
+  }
+
+  .lightbox .lb-next {
+    right: 6px !important;
+  }
+}
+
+/* Stat mobile <=899px: larger SVG chart width and height. */
+@media (max-width: 899px) {
+  body.stat-page .stat-chart-container,
+  body.stat-page .stat-layout-media-full,
+  body.stat-page .stat-animate-chart,
+  body.stat-page .population-chart-wrap {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  body.stat-page #main-scroll svg,
+  body.stat-page .stat-chart-container svg,
+  body.stat-page .stat-layout-media-full svg,
+  body.stat-page .stat-animate-chart svg,
+  body.stat-page .population-chart-svg,
+  body.stat-page #houses-chart svg {
+    width: 1040px !important;
+    min-width: 1040px !important;
+    max-width: none !important;
+  }
+
+  body.stat-page .stat-svg--population,
+  body.stat-page .stat-svg--houses,
+  body.stat-page #houses-chart svg {
+    height: 580px !important;
+  }
+
+  body.stat-page .stat-svg--age {
+    height: 330px !important;
+  }
+
+  body.stat-page .stat-svg--births {
+    height: 408px !important;
+  }
+
+  body.stat-page .stat-svg--services {
+    height: 470px !important;
+  }
+
+  body.stat-page .stat-svg--continuity {
+    height: 560px !important;
   }
 }
