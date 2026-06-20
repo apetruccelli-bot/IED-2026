@@ -22,12 +22,12 @@
       html { scroll-behavior: smooth; scroll-padding-top: 80px; }
       body, [data-scroll-container], #main-scroll, * { scroll-behavior: smooth; }
 
-body.page-transition > :not(#lightbox):not(.page-footer):not(.site-bottom-brand):not(.sidebar-links) {
+body.page-transition > :not(#lightbox):not(.page-footer):not(.site-header):not(.site-bottom-brand):not(.sidebar-links) {
   opacity: 0;
   transform: translateY(24px);
 }
 
-body.page-transition.page-transition-ready > :not(#lightbox):not(.page-footer):not(.site-bottom-brand):not(.sidebar-links) {
+body.page-transition.page-transition-ready > :not(#lightbox):not(.page-footer):not(.site-header):not(.site-bottom-brand):not(.sidebar-links) {
   opacity: 1;
   transform: translateY(0);
   transition:
@@ -36,7 +36,7 @@ body.page-transition.page-transition-ready > :not(#lightbox):not(.page-footer):n
   z-index: auto;
 }
 
-body.page-transition.page-transition-leaving > :not(#lightbox):not(.page-footer):not(.site-bottom-brand):not(.sidebar-links) {
+body.page-transition.page-transition-leaving > :not(#lightbox):not(.page-footer):not(.site-header):not(.site-bottom-brand):not(.sidebar-links) {
   opacity: 0;
   transform: translateY(-16px);
   transition:
@@ -44,25 +44,11 @@ body.page-transition.page-transition-leaving > :not(#lightbox):not(.page-footer)
     transform 380ms cubic-bezier(.77,0,.175,1);
 }
 
-body.page-transition .sidebar-links a {
-  opacity: 0;
-  transform: translateY(16px);
-}
-
+body.page-transition .sidebar-links a,
 body.page-transition.page-transition-ready .sidebar-links a {
   opacity: 1;
-  transform: translateY(0);
-  transition:
-    opacity 720ms cubic-bezier(.77,0,.175,1),
-    transform 720ms cubic-bezier(.77,0,.175,1);
-}
-
-body.page-transition.page-transition-leaving .sidebar-links a {
-  opacity: 0;
-  transform: translateY(-12px);
-  transition:
-    opacity 380ms cubic-bezier(.77,0,.175,1),
-    transform 380ms cubic-bezier(.77,0,.175,1);
+  transform: none;
+  transition: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3919,9 +3905,10 @@ body.stat-page .stat-svg--services {
   }
 
   .site-header .site-bottom-brand p {
+    margin-top: -4px !important;
     font-size: clamp(10px, 3vw, 12px) !important;
     line-height: 110% !important;
-    white-space: normal !important;
+    white-space: nowrap !important;
   }
 
   body.page-transition > .site-header,
@@ -5870,6 +5857,7 @@ body.archive-page .archive-controls-mounted .archive-mobile-filter-toggle {
     pointer-events: auto !important;
     transform: none !important;
     box-sizing: border-box !important;
+  
   }
 
   body.index-page.archive-page .archive-mobile-filter-toggle,
@@ -6190,7 +6178,6 @@ body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index
   display: block !important;
   position: static !important;
   width: 100% !important;
-  margin-top: 10px !important;
   text-align: center !important;
   transform: none !important;
 }
@@ -6420,10 +6407,12 @@ body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index
 /* Lightbox mobile <=899px: keep arrows outside the photo area. */
 @media (max-width: 899px) {
   .lightbox .lb-content {
-    max-width: 100vw !important;
+    width: fit-content !important;
+    max-width: calc(100vw - 108px) !important;
     max-height: calc(100dvh - 96px) !important;
-    padding: 0 54px !important;
+    padding: 0 !important;
     box-sizing: border-box !important;
+    overflow: visible !important;
   }
 
   .lightbox .lb-img {
@@ -6454,49 +6443,77 @@ body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index
   .lightbox .lb-next {
     right: 6px !important;
   }
+
+  .lightbox .lb-id {
+    display: inline-block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: calc(100% + 3px) !important;
+    right: auto !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    white-space: nowrap !important;
+    z-index: 2147482300 !important;
+  }
 }
 
-/* Stat mobile <=899px: larger SVG chart width and height. */
+/* Stat mobile <=899px: larger, scrollable SVG charts. */
 @media (max-width: 899px) {
-  body.stat-page .stat-chart-container,
-  body.stat-page .stat-layout-media-full,
-  body.stat-page .stat-animate-chart,
-  body.stat-page .population-chart-wrap {
+  body.stat-page #main-scroll > .stat-text-grid > .stat-animate-chart,
+  body.stat-page #main-scroll > .stat-text-grid > .stat-layout-media-full.stat-animate-chart,
+  body.stat-page #main-scroll > .stat-text-grid > .stat-chart-container.stat-animate-chart,
+  body.stat-page #main-scroll .stat-chart-container,
+  body.stat-page #main-scroll .stat-layout-media-full,
+  body.stat-page #main-scroll .stat-animate-chart,
+  body.stat-page #main-scroll .population-chart-wrap {
     overflow-x: auto !important;
     overflow-y: hidden !important;
     -webkit-overflow-scrolling: touch !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
   }
 
-  body.stat-page #main-scroll svg,
-  body.stat-page .stat-chart-container svg,
-  body.stat-page .stat-layout-media-full svg,
-  body.stat-page .stat-animate-chart svg,
-  body.stat-page .population-chart-svg,
-  body.stat-page #houses-chart svg {
-    width: 1040px !important;
-    min-width: 1040px !important;
+  body.stat-page #main-scroll .stat-animate-chart svg,
+  body.stat-page #main-scroll .stat-animate-chart .population-chart-svg,
+  body.stat-page #main-scroll #houses-chart svg,
+  body.stat-page #main-scroll .stat-svg--population,
+  body.stat-page #main-scroll .stat-svg--age,
+  body.stat-page #main-scroll .stat-svg--births,
+  body.stat-page #main-scroll .stat-svg--houses,
+  body.stat-page #main-scroll .stat-svg--services,
+  body.stat-page #main-scroll .stat-svg--continuity {
+    display: block !important;
+    width: min(calc(100vw - 20px), 920px) !important;
+    min-width: min(calc(100vw - 20px), 920px) !important;
     max-width: none !important;
+    flex: 0 0 auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    height: auto !important;
   }
 
-  body.stat-page .stat-svg--population,
-  body.stat-page .stat-svg--houses,
-  body.stat-page #houses-chart svg {
-    height: 580px !important;
+  body.stat-page #main-scroll .stat-svg--population,
+  body.stat-page #main-scroll .stat-svg--houses,
+  body.stat-page #main-scroll #houses-chart svg {
+    height: auto !important;
   }
 
-  body.stat-page .stat-svg--age {
-    height: 330px !important;
+  body.stat-page #main-scroll .stat-svg--age {
+    height: auto !important;
   }
 
-  body.stat-page .stat-svg--births {
-    height: 408px !important;
+  body.stat-page #main-scroll .stat-svg--births {
+    height: auto !important;
   }
 
-  body.stat-page .stat-svg--services {
-    height: 470px !important;
+  body.stat-page #main-scroll .stat-svg--services {
+    height: auto !important;
   }
 
-  body.stat-page .stat-svg--continuity {
-    height: 560px !important;
+  body.stat-page #main-scroll .stat-svg--continuity {
+    height: auto !important;
   }
 }
