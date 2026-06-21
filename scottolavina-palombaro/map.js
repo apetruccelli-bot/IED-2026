@@ -551,7 +551,7 @@ function createMapInstructionsOverlay() {
       .map-instructions-panel p { margin:0 0 10px 0; opacity:0.95; }
       .map-instructions-panel ul { margin:8px 0 12px 18px; padding:0; }
       .map-instructions-panel li { margin:8px 0; line-height:1.35; }
-      .map-instructions-close { appearance:none; border:0; background:#fff; color:#0b0b0b; padding:8px 14px; border-radius:10px; cursor:pointer; font-weight:600; }
+      .map-instructions-close { appearance:none; border:0; background:#fff; color:#0b0b0b; padding:8px 14px; border-radius:var(--radius); cursor:pointer; font-weight:600; }
 
       .map-gestures-help-button {
         position: fixed;
@@ -562,13 +562,15 @@ function createMapInstructionsOverlay() {
         font-size: 12px;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: var(--text);
-        background: var(--bg);
-        border: 1px solid var(--text);
+        color: #1a1a1a;
+        background: #ffffff;
+        border: none;
+        border: none;
         padding: 8px 12px;
+        border-radius: var(--radius);
         cursor: pointer;
       }
-      .map-gestures-help-button:hover { opacity: 0.65; }
+      html[data-theme="dark"] .map-gestures-help-button { background: #0e1113 !important; color: #ffffff !important; border: none !important; }
       @media (max-width:520px){ .map-instructions-panel{ padding:16px; border-radius:12px; } }
     `;
     try {
