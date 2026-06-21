@@ -562,14 +562,72 @@ function getLightboxFrame() {
   };
 }
 
+function getLightboxBackdropFrame() {
+  const grid = document.getElementById('grid');
+  const columns = [...document.querySelectorAll('#grid .myColumn')];
+  const gridRect = grid?.getBoundingClientRect();
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  if (!gridRect) {
+    return {
+      left: 0,
+      top: 0,
+      width: viewportWidth,
+      height: viewportHeight
+    };
+  }
+
+  if (viewportWidth <= 600 || columns.length === 0) {
+    return {
+      left: gridRect.left,
+      top: gridRect.top,
+      width: gridRect.width,
+      height: gridRect.height
+    };
+  }
+
+  const visibleColumnRects = columns
+    .map(col => col.getBoundingClientRect())
+    .filter(rect => rect.width > 0 && rect.height > 0);
+
+  if (visibleColumnRects.length === 0) {
+    return {
+      left: gridRect.left,
+      top: gridRect.top,
+      width: gridRect.width,
+      height: gridRect.height
+    };
+  }
+
+  const left = Math.min(...visibleColumnRects.map(rect => rect.left));
+  const right = Math.max(...visibleColumnRects.map(rect => rect.right));
+  const top = Math.min(...visibleColumnRects.map(rect => rect.top));
+  const bottom = Math.max(...visibleColumnRects.map(rect => rect.bottom));
+
+  return {
+    left,
+    top,
+    width: right - left,
+    height: bottom - top
+  };
+}
+
 function updateLightboxFrame() {
   if (!lightbox) return null;
 
   const frame = getLightboxFrame();
+  const backdropFrame = getLightboxBackdropFrame();
+
   lightbox.style.setProperty('--lb-frame-left', `${frame.left}px`);
   lightbox.style.setProperty('--lb-frame-top', `${frame.top}px`);
   lightbox.style.setProperty('--lb-frame-width', `${frame.width}px`);
   lightbox.style.setProperty('--lb-frame-height', `${frame.height}px`);
+
+  lightbox.style.setProperty('--lb-backdrop-left', `${backdropFrame.left}px`);
+  lightbox.style.setProperty('--lb-backdrop-top', `${backdropFrame.top}px`);
+  lightbox.style.setProperty('--lb-backdrop-width', `${backdropFrame.width}px`);
+  lightbox.style.setProperty('--lb-backdrop-height', `${backdropFrame.height}px`);
 
   return frame;
 }
@@ -709,12 +767,10 @@ lbNext?.addEventListener('click', () => navigateLightbox(+1));
 lightbox?.addEventListener('mousemove', updateLightboxNavVisibility);
 lightbox?.addEventListener('mouseleave', resetLightboxNavVisibility);
 
-window.addEventListener('resize', () => {
-  updateMobileArchiveLayout();
-  resetLightboxNavVisibility();
-  if (lightbox.classList.contains('open')) {
-    updateCaptionWidth();
-  }
+window.addEventListener("load", () => {
+  initCustomCursor();
+  setActiveStep(0);
+  requestUpdate();
 });
 
 document.addEventListener('keydown', e => {
@@ -906,6 +962,33 @@ function setExploreGesture(funzione) {
   }
 }
 
+// ── Custom cursor: puntino nero ─────────────────────────────────────────────
+
+function initCustomCursor() {
+  if (window.matchMedia("(pointer: coarse)").matches) return;
+  if (document.querySelector(".site-cursor")) return;
+
+  const cursor = document.createElement("div");
+  cursor.className = "site-cursor";
+  document.body.appendChild(cursor);
+
+  const moveCursor = e => {
+    cursor.style.left = `${e.clientX}px`;
+    cursor.style.top = `${e.clientY}px`;
+    cursor.classList.add("is-visible");
+  };
+
+  document.addEventListener("mousemove", moveCursor);
+  document.addEventListener("mouseleave", () => {
+    cursor.classList.remove("is-visible");
+  });
+
+  document.addEventListener("mouseenter", () => {
+    cursor.classList.add("is-visible");
+  });
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────
 
+initCustomCursor();
 loadData();

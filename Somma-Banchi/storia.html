@@ -15,6 +15,52 @@
         --color-lightGrey: #EBEBEA;
         --spacing-10px: 10px;
         --spacing-20px: 20px;
+        /* CURSORE PUNTINO NERO - STORIA */
+        html,
+        body,
+        body *,
+        a,
+        button,
+        input,
+        textarea,
+        select {
+          cursor: none !important;
+        }
+
+        .site-cursor {
+          position: fixed;
+          left: 0;
+          top: 0;
+          width: 7px;
+          height: 7px;
+          background: #090909;
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+          z-index: 2147483647;
+          opacity: 0;
+        }
+
+        .site-cursor.is-visible {
+          opacity: 1;
+        }
+
+        @media (pointer: coarse) {
+          html,
+          body,
+          body *,
+          a,
+          button,
+          input,
+          textarea,
+          select {
+            cursor: auto !important;
+          }
+
+          .site-cursor {
+            display: none;
+          }
+        }
       }
     </style>
 
@@ -466,6 +512,34 @@
         currentStep = -1;
         requestUpdate();
       });
+
+      function initCustomCursor() {
+        if (window.matchMedia("(pointer: coarse)").matches) return;
+
+        let cursor = document.querySelector(".site-cursor");
+
+        if (!cursor) {
+          cursor = document.createElement("div");
+          cursor.className = "site-cursor";
+          document.body.appendChild(cursor);
+        }
+
+        document.addEventListener("mousemove", e => {
+          cursor.style.left = `${e.clientX}px`;
+          cursor.style.top = `${e.clientY}px`;
+          cursor.classList.add("is-visible");
+        });
+
+        document.addEventListener("mouseleave", () => {
+          cursor.classList.remove("is-visible");
+        });
+
+        document.addEventListener("mouseenter", () => {
+          cursor.classList.add("is-visible");
+        });
+      }
+
+      initCustomCursor();
 
       window.addEventListener("load", () => {
         setActiveStep(0);
