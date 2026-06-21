@@ -51,7 +51,7 @@ let portraitGestureIndex = 0;
 let packGestureIndex = 0;
 let adGestureIndex = 0;
 let adRevealScrollTimer = null;
-const AD_REVEAL_SCROLL_DELAY_MS = 2200;
+const AD_REVEAL_SCROLL_DELAY_MS = 1800;
 let categoryImagesRevealed = false;
 
 // Helper functions for managing multiple filters
@@ -372,6 +372,9 @@ function setCategory(cat) {
   updateCategoryText(activeCategory);
   syncCategoryRevealState();
   render();
+  if (activeCategory === 'pacchetti' && grid) {
+    grid.scrollTop = 0;
+  }
   if (activeCategory === 'pubblicità') {
     revealAdsContent();
   }
@@ -656,6 +659,7 @@ function revealAboutPlate(index) {
   const images = getAboutImages();
   if (index < 0 || index >= images.length) return;
 
+  aboutGestureIndex = index;
   aboutPlateWipe.set(index, 1);
   applyAboutWipeVisuals();
 }
@@ -727,6 +731,7 @@ function setAboutWiping(active) {
 
 function initAboutImageState() {
   aboutWiping = false;
+  aboutGestureIndex = 0;
   aboutPlateWipe.clear();
   getAboutImages().forEach((img) => {
     clearAboutPlateWipe(img);
@@ -775,8 +780,10 @@ function scrollContentByGesture(direction) {
   const modal = document.getElementById('explore-modal');
   const grid = document.getElementById('grid');
   const isAboutOpen = document.body.classList.contains('about-open') && modal?.style.display !== 'none';
-  const scrollEl = isAboutOpen ? modal : grid;
 
+  if (isAboutOpen) return;
+
+  const scrollEl = grid;
   if (!scrollEl) return;
 
   const amount = Math.round(scrollEl.clientHeight * 0.55);
@@ -785,11 +792,8 @@ function scrollContentByGesture(direction) {
     behavior: 'smooth',
   });
 
-  if (activeCategory === 'pubblicità' && !isAboutOpen) {
+  if (activeCategory === 'pubblicità') {
     window.setTimeout(() => syncAdIndexToScroll(), 450);
-  }
-  if (isAboutOpen) {
-    window.setTimeout(() => syncAboutIndexToScroll(), 450);
   }
 }
 
@@ -1149,11 +1153,19 @@ function render() {
   grid.classList.toggle('year-filtered', hasActiveFilter());
   grid.classList.remove('has-selected');
 
+  let mount = grid;
+  if (activeCategory === 'pacchetti') {
+    const masonry = document.createElement('div');
+    masonry.className = 'pack-masonry';
+    grid.appendChild(masonry);
+    mount = masonry;
+  }
+
   if (!visible.length) {
     const empty = document.createElement('div');
     empty.className = 'empty';
     empty.textContent = 'Nessun risultato.';
-    grid.appendChild(empty);
+    mount.appendChild(empty);
     return;
   }
 
@@ -1243,7 +1255,9 @@ function render() {
       body.appendChild(tagsEl);
     }
 
-    card.appendChild(body);
+    if (item.category !== 'pacchetti') {
+      card.appendChild(body);
+    }
 
     if (['fotografie', 'pacchetti'].includes(activeCategory)) {
       card.addEventListener('click', () => {
@@ -1274,7 +1288,7 @@ function render() {
       });
     }
 
-    grid.appendChild(card);
+    mount.appendChild(card);
   });
 
   if (activeCategory === 'pubblicità' && categoryImagesRevealed) {

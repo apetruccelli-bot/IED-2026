@@ -723,17 +723,24 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active:not(.ad-reve
   color: #fff;
 }
 
-/* Cigarette packs — dense 7-column grid */
+/* Cigarette packs — 5 columns, vertically nested (masonry), vertical scroll */
 .myPhotos.layout-pacchetti {
-  display: grid !important;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 1px;
-  align-content: start;
-  align-items: start;
+  display: block !important;
   height: 100%;
   min-height: 0;
   max-height: 100%;
+  overflow-x: hidden;
   overflow-y: auto;
+  padding-bottom: var(--content-padding-bottom);
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.myPhotos.layout-pacchetti .pack-masonry {
+  column-count: 5;
+  column-gap: 0;
+  column-fill: balance;
+  width: 100%;
 }
 
 .myPhotos.layout-pacchetti .card {
@@ -747,16 +754,20 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active:not(.ad-reve
   overflow: visible;
   border-radius: 0;
   opacity: 1;
+  line-height: 0;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
 }
 
 .myPhotos.layout-pacchetti .card-img {
   display: block;
   width: 100% !important;
-  height: auto;
+  height: auto !important;
   max-width: 100% !important;
   aspect-ratio: unset;
   object-fit: contain;
-  object-position: center;
+  object-position: center top;
   background: transparent !important;
   opacity: 1;
   filter: none;
@@ -777,22 +788,16 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active:not(.ad-reve
 }
 
 .myPhotos.layout-pacchetti.has-selected {
-  display: grid !important;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 1px;
+  display: block !important;
 }
 
-@media (max-width: 1500px) {
-  .myPhotos.layout-pacchetti,
-  .myPhotos.layout-pacchetti.has-selected {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
+.myPhotos.layout-pacchetti .empty {
+  column-span: all;
 }
 
 @media (max-width: 1100px) {
-  .myPhotos.layout-pacchetti,
-  .myPhotos.layout-pacchetti.has-selected {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .myPhotos.layout-pacchetti .pack-masonry {
+    column-count: 3;
   }
 }
 
@@ -1020,10 +1025,11 @@ body.ad-smoking-gesture .myPhotos.layout-pubblicita .card.ad-active:not(.ad-reve
 .myPhotos.layout-pacchetti.has-selected .card.selectedImg .card-img {
   width: 100% !important;
   max-width: 100% !important;
-  height: auto;
-  max-height: none;
+  height: auto !important;
+  max-height: none !important;
   aspect-ratio: unset;
   object-fit: contain;
+  object-position: center top;
   opacity: 1 !important;
   filter: none !important;
 }
@@ -1577,6 +1583,7 @@ body.about-open #gesture-status {
   width: 100%;
   max-width: none;
   flex-shrink: 0;
+  margin-top: 16px;
   margin-bottom: 24px;
   transition: opacity 0.5s cubic-bezier(.8, 0, .2, 1);
 }

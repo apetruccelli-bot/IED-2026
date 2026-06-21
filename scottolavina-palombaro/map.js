@@ -612,7 +612,7 @@ function createGesturesHelpButton() {
   button.id = 'map-gestures-help-button';
   button.className = 'map-gestures-help-button';
   button.type = 'button';
-  button.textContent = 'GESTURES';
+  button.textContent = 'HOW TO';
   button.setAttribute('aria-label', 'Show gesture instructions');
 
   button.addEventListener('click', () => {
