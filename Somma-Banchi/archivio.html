@@ -75,13 +75,17 @@
             ✕ Torna all'archivio
           </button>
 
-          <video
-            id="explore-webcam"
-            class="explore-webcam"
-            autoplay
-            muted
-            playsinline
-          ></video>
+          <div class="explore-hand-guide">
+            <div class="explore-webcam-wrap">
+              <video
+                id="explore-webcam"
+                class="explore-webcam"
+                autoplay
+                muted
+                playsinline
+              ></video>
+            </div>
+          </div>
 
           <div class="explore-description disossare">
             <p>Disossare</p>
@@ -130,11 +134,11 @@
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
-      <button class="lb-close" id="lb-close">✕</button>
       <button class="lb-prev" id="lb-prev">←</button>
       <button class="lb-next" id="lb-next">→</button>
 
       <div class="lb-content">
+        <button class="lb-close" id="lb-close">Chiudi</button>
         <img class="lb-img" id="lb-img" src="" alt="" />
 
         <div class="lb-info">

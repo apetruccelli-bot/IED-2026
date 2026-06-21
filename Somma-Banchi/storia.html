@@ -192,82 +192,95 @@
         }
       }
 
-      @media (max-width: 520px) {
+      @media (max-width: 600px) {
         .history-wrapper {
-          grid-template-columns: clamp(70px, 24vw, 115px) 1fr;
+          grid-template-columns: 48px 1fr;
+          min-height: 520vh;
+          padding-top: 52px;
+          column-gap: 4px;
         }
 
         .city-sidebar {
-          padding-left: 8px;
+          top: 52px;
+          height: calc(100vh - 52px);
+          padding-left: 6px;
+          padding-top: 6px;
+          align-self: start;
         }
 
         .city-list {
-          gap: clamp(6px, 2.2vw, 12px);
+          gap: 8px;
+          transform: none;
         }
 
         .city-item {
-          font-size: clamp(9px, 2.8vw, 16px);
-        }
-
-        .city-item.active {
-          opacity: 1;
-          transform: translateX(0);
+          font-size: 11px;
+          line-height: 1.05;
         }
 
         .history-stage {
-          grid-template-columns:
-            minmax(90px, 0.85fr)
-            minmax(110px, 1fr);
-          gap: 14px;
-          padding: 70px 10px 24px 12px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          grid-template-columns: unset;
+          align-content: unset;
+          gap: 8px;
+          top: 52px;
+          height: calc(100vh - 52px);
+          padding: 4px 10px 12px 2px;
+          overflow: hidden;
+          align-self: start;
+          --history-image-width: min(74vw, 252px);
+          --history-text-width: min(60vw, 204px);
         }
 
         .image-frame {
-          max-width: clamp(95px, 32vw, 180px);
+          width: var(--history-image-width);
+          max-width: var(--history-image-width);
+          flex-shrink: 0;
+          transform: none;
+          aspect-ratio: 1 / 1;
         }
 
         .history-text {
-          font-size: clamp(9px, 3vw, 15px);
-          line-height: 1.05;
+          flex: 1;
+          min-height: 0;
+          width: var(--history-text-width);
+          max-width: var(--history-text-width);
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior: contain;
+          font-size: 11px;
+          line-height: 1.15;
+          transform: none;
+          padding-right: 0;
+        }
+
+        .story-part.active {
+          animation: none;
         }
       }
 
       @media (max-width: 390px) {
         .history-wrapper {
-          grid-template-columns: 68px 1fr;
+          grid-template-columns: 44px 1fr;
         }
 
         .history-stage {
-          grid-template-columns:
-            minmax(82px, 0.8fr)
-            minmax(100px, 1fr);
-          gap: 14px;
-          padding: 70px 8px 22px 8px;
-        }
-
-        .image-frame {
-          max-width: 100px;
+          --history-image-width: min(72vw, 228px);
+          --history-text-width: min(58vw, 184px);
         }
 
         .history-text {
-          font-size: 9px;
-          line-height: 1.04;
-        }
-
-        .city-item {
-          font-size: 8px;
-        }
-
-        .city-item.active {
-          opacity: 1;
-          transform: translateX(0);
+          font-size: 10px;
         }
       }
     </style>
   </head>
 
   <body class="page-history">
-    <header>
+    <header id="site-header">
       <a
         href="archivio.html"
         class="font-myTitle nav-link"
@@ -410,6 +423,11 @@
         images.forEach((img, index) => {
           img.classList.toggle("active", index === step);
         });
+
+        const historyText = document.querySelector(".history-text");
+        if (historyText) {
+          historyText.scrollTop = 0;
+        }
       }
 
       function getStepFromScroll() {

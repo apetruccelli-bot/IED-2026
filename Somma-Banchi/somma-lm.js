@@ -79,7 +79,10 @@ function createSommaInstructionElement(video) {
     </p>
   `;
 
-  video.parentElement.insertBefore(sommaInstructionEl, video);
+  const guide = video.closest('.explore-hand-guide');
+  const webcamWrap = video.closest('.explore-webcam-wrap') || video.parentElement;
+  const host = guide || video.parentElement;
+  host.insertBefore(sommaInstructionEl, webcamWrap);
 }
 
 function updateSommaInstruction(funzione) {
@@ -117,10 +120,10 @@ async function startSommaCamera() {
     video.style.transform = 'scaleX(-1)';
     video.style.transformOrigin = 'center center';
 
-    const videoContainer = video.parentElement;
-    videoContainer.style.position = 'relative';
+  const videoContainer = video.closest('.explore-webcam-wrap') || video.parentElement;
+  videoContainer.style.position = 'relative';
 
-    createSommaInstructionElement(video);
+  createSommaInstructionElement(video);
 
     if (!sommaCanvas) {
       sommaCanvas = document.createElement('canvas');
@@ -148,6 +151,10 @@ async function startSommaCamera() {
 
     video.addEventListener('loadeddata', () => {
       resizeSommaCanvasToVideo(video);
+
+      if (typeof updateMobileArchiveLayout === 'function') {
+        requestAnimationFrame(updateMobileArchiveLayout);
+      }
 
       sommaIsDetecting = true;
       detectSommaHands();

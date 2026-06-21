@@ -293,6 +293,16 @@
     @media (max-width: 520px) {
       :root {
         --image-hover-scale: 1.18;
+        --image-zoom-scale: 2.05;
+      }
+
+      .image-card.is-zooming::before {
+        transform: scale(var(--image-zoom-scale));
+        filter: contrast(1.05) saturate(1.04);
+      }
+
+      .image-card.is-zooming {
+        transform: translate(-50%, -50%) scale(1.14);
       }
 
       html,
@@ -309,9 +319,9 @@
         padding: 8px;
       }
 
-      .archive-title {
-        font-size: 20px;
-      }
+    .archive-title {
+      font-size: 18px;
+    }
 
       .landing-viewer-image {
         width: 88vw;
@@ -427,18 +437,18 @@
     ];
 
     const mobilePhotoLayout = [
-      { x: 18, y: 24, w: "62px", h: "86px", z: 2 },
-      { x: 50, y: 24, w: "70px", h: "78px", z: 4 },
-      { x: 82, y: 24, w: "82px", h: "50px", z: 3 },
-      { x: 18, y: 45, w: "82px", h: "62px", z: 2 },
-      { x: 50, y: 45, w: "82px", h: "64px", z: 1 },
-      { x: 82, y: 45, w: "80px", h: "62px", z: 3 },
-      { x: 18, y: 66, w: "82px", h: "62px", z: 2 },
-      { x: 50, y: 66, w: "78px", h: "58px", z: 4 },
-      { x: 82, y: 66, w: "78px", h: "72px", z: 1 },
-      { x: 18, y: 86, w: "62px", h: "74px", z: 2 },
-      { x: 50, y: 86, w: "72px", h: "72px", z: 3 },
-      { x: 82, y: 86, w: "80px", h: "60px", z: 1 }
+      { x: 19, y: 23, w: "56px", h: "78px", z: 2 },
+      { x: 50, y: 23, w: "62px", h: "70px", z: 4 },
+      { x: 81, y: 23, w: "74px", h: "46px", z: 3 },
+      { x: 19, y: 43, w: "74px", h: "56px", z: 2 },
+      { x: 50, y: 43, w: "74px", h: "58px", z: 1 },
+      { x: 81, y: 43, w: "72px", h: "56px", z: 3 },
+      { x: 19, y: 63, w: "74px", h: "56px", z: 2 },
+      { x: 50, y: 63, w: "70px", h: "52px", z: 4 },
+      { x: 81, y: 63, w: "70px", h: "64px", z: 1 },
+      { x: 19, y: 83, w: "56px", h: "66px", z: 2 },
+      { x: 50, y: 83, w: "64px", h: "64px", z: 3 },
+      { x: 81, y: 83, w: "72px", h: "54px", z: 1 }
     ];
 
     const ANIMATION_DURATION = 13000;
