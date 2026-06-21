@@ -6517,3 +6517,20 @@ body.index-page.archive-page #archive-gallery.archive-grid-view [data-item-index
     height: auto !important;
   }
 }
+
+/* Archive mobile <=899px: nessun hover sulle immagini della gallery. */
+@media (max-width: 899px) {
+  body.index-page.archive-page #archive-gallery [data-item-index]:hover,
+  body.archive-page #archive-gallery [data-item-index]:hover,
+  body.index-page.archive-page #archive-gallery [data-item-index]:hover .gallery-image,
+  body.archive-page #archive-gallery [data-item-index]:hover .gallery-image {
+    opacity: 1 !important;
+    transform: none !important;
+    z-index: auto !important;
+  }
+
+  body.index-page.archive-page #archive-gallery .group:hover .gallery-title-wrap,
+  body.archive-page #archive-gallery .group:hover .gallery-title-wrap {
+    opacity: 0 !important;
+  }
+}
