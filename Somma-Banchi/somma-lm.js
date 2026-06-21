@@ -8,6 +8,8 @@ let sommaCtx = null;
 let sommaLastGesture = null;
 let sommaInstructionEl = null;
 
+const SOMMA_SHOW_TRACKING_OVERLAY = false;
+
 const sommaGestureInstructions = {
   'tagliare e affettare':
     'Punta i polpastrelli verso lo schermo, come la lama di un coltello che taglia un pezzo di carne.',
@@ -280,6 +282,8 @@ function drawHandSkeleton(keypoints) {
   }
 
   clearSommaCanvas();
+
+  if (!SOMMA_SHOW_TRACKING_OVERLAY) return;
 
   const connections = [
     // Palmo

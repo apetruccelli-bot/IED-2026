@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Archivio</title>
 
+    <script>
+      const navigationEntry = performance.getEntriesByType("navigation")[0];
+      const isReload = navigationEntry
+        ? navigationEntry.type === "reload"
+        : performance.navigation && performance.navigation.type === 1;
+
+      if (isReload) {
+        window.location.replace("landing.html");
+      }
+    </script>
+
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
