@@ -1891,3 +1891,211 @@ html[data-theme="dark"] .about-section-link.active.is-revealed:hover {
 .mapboxgl-ctrl-bottom-right {
   display: none !important;
 }
+/* ══════════════════════════════════════════════
+   MOBILE OVERRIDES  (≤ 768px)
+   ══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── ARCHIVE: sidebar sx fissa + grid a destra ── */
+
+  /* rimuovi padding-right desktop */
+  body:not(.about-page):not(.map-page-body):not(.intro-page) {
+    padding-right: 0;
+  }
+
+  /* header (tags/filtri): rimane fixed a sx, larghezza ridotta */
+  body:not(.about-page):not(.map-page-body):not(.intro-page) header {
+    width: 110px;
+    left: 0;
+    top: 82px;
+    padding: 0 8px;
+    /* l'altezza dipende dal contenuto — usiamo max-height per tenerlo compatto */
+    max-height: 40vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
+  /* area-bar: fixed sotto l'header (stimiamo ~40vh), stessa colonna sx */
+  .area-bar {
+    position: fixed;
+    top: calc(82px + 48vh);
+    bottom: 0;
+    left: 0;
+    right: auto;
+    width: 110px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 8px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* grid: affiancato alla sidebar sx */
+  .results-info,
+  .grid {
+    margin-left: 118px;
+  }
+
+  /* ── ARCHIVE LIGHTBOX ── */
+
+  /* nascondi sidebar quando lightbox è aperta */
+  body.lightbox-open header,
+  body.lightbox-open .area-bar {
+    display: none;
+  }
+
+  /* lightbox: fullscreen, è il containing block per i nav */
+  .archive-lightbox {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+    /* blur spostato qui così .lightbox-content non crea containing block */
+    backdrop-filter: blur(18px) saturate(1.05) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.05) !important;
+  }
+
+  .archive-lightbox .lightbox-content {
+    border-radius: 0;
+    padding: 48px 12px 16px;
+    gap: 10px;
+    height: 100%;
+    max-height: 100%;
+    /* rimuovi backdrop-filter che creerebbe un containing block separato */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* foto principale grande */
+  .archive-lightbox .lightbox-img {
+    max-height: 52vh;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  .archive-lightbox .lightbox-main {
+    position: relative;
+    flex: 0 0 auto;
+    min-height: 0;
+  }
+
+  /* bottoni prev/next: absolute rispetto a .archive-lightbox (è position:fixed senza transform) */
+  .archive-lightbox .lightbox-nav {
+    position: absolute !important;
+    top: 38% !important;
+    transform: translateY(-50%) !important;
+    font-size: 32px !important;
+    width: 44px !important;
+    height: 44px !important;
+    z-index: 400 !important;
+    opacity: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: var(--text) !important;
+  }
+
+  .archive-lightbox .lightbox-prev {
+    left: 4px !important;
+    right: auto !important;
+  }
+
+  .archive-lightbox .lightbox-next {
+    right: 4px !important;
+    left: auto !important;
+  }
+
+  /* see also: occupa tutto lo spazio rimanente fino al fondo */
+  .archive-lightbox .lightbox-see-also {
+    margin-top: 8px;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .archive-lightbox .lightbox-similar-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    flex: 1 1 auto;
+    align-items: stretch;
+  }
+
+  .archive-lightbox .lightbox-similar-item {
+    height: 100%;
+    min-height: 80px;
+  }
+
+  .archive-lightbox .lightbox-similar-item img {
+    border-radius: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  /* close button */
+  .archive-lightbox .lightbox-close {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 22px;
+    width: 36px;
+    height: 36px;
+    z-index: 300;
+  }
+
+  /* ── ABOUT: nav fixed a sx 90px, testo a destra ── */
+  body.about-page {
+    padding-left: 98px; /* 90px nav + 8px gap */
+    padding-right: 12px;
+  }
+
+  body.about-page .about-section-nav {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    width: 90px;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+    margin: 0;
+    padding: 8px 6px;
+    box-sizing: border-box;
+  }
+
+  /* testo about: font ridotto per stare nella colonna destra */
+  body.about-page .about-main p,
+  body.about-page .about-main h1,
+  body.about-page .about-main h2,
+  body.about-page .about-main figcaption {
+    font-size: 10px !important;
+  }
+
+  body.about-page .about-main h1 {
+    font-size: 13px !important;
+  }
+
+  body.about-page .about-main h2 {
+    font-size: 11px !important;
+  }
+
+  body.about-page .about-main {
+    margin: 0;
+    padding-top: 12px;
+    padding-bottom: 20vh;
+    max-width: none;
+  }
+
+  .about-main img,
+  .about-main figure {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  /* about-site-links fuori dal flusso, nascosto */
+  body.about-page .about-site-links {
+    display: none;
+  }
+}
