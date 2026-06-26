@@ -21,7 +21,7 @@
     {
       "id": 3,
       "src": "img/palombari/palombaro4.jpg",
-      "tags": ["dust","seabed","seaweed"],
+      "tags": ["dust","seabed","seaweed", "immersion"],
       "category": "missions",
       "area": "Monterey submarine Canyon, CA",
       "subcategory": "immersions",
@@ -57,7 +57,7 @@
     {
       "id": 7,
       "src": "img/palombari/palombaro8.jpg",
-      "tags": ["seabed","dust","rocks"],
+      "tags": ["seabed","dust","rocks", "immersion"],
       "category": "missions",
       "subcategory": "immersions",
       "description": "A diver moves underwater with a tank on his shoulders and a safety line attached. He advances close to the seabed.",
@@ -66,7 +66,7 @@
     {
       "id": 8,
       "src": "img/palombari/palombaro9.jpg",
-      "tags": ["findings","seabed","dust"],
+      "tags": ["findings","seabed","dust", "immersion"],
       "category": "missions",
       "subcategory": "immersions",
       "description": "A diver explores a large submerged structure, likely part of a wreck or machinery. The object is covered in marine encrustations, indicating long submersion.",
@@ -84,7 +84,7 @@
     {
       "id": 10,
       "src": "img/palombari/palombaro11.jpg",
-      "tags": ["seabed","dust","seaweed"],
+      "tags": ["seabed","dust","seaweed", "immersion"],
       "category": "missions",
       "subcategory": "immersions",
       "description": "A diver in a heavy suit explores the seabed using an underwater torch. The beam of light cuts through murky water as air bubbles rise toward the surface.",
@@ -120,7 +120,7 @@
     {
       "id": 14,
       "src": "img/palombari/palombaro15.jpg",
-      "tags": ["seabed","dust","rocks","seaweed"],
+      "tags": ["seabed","dust","rocks","seaweed", "immersion"],
       "category": "missions",
       "subcategory": "immersions",
       "description": "A diver walks slowly on the seabed near rock or coral formations, with air bubbles rising from the helmet.",
@@ -129,7 +129,7 @@
     {
       "id": 15,
       "src": "img/palombari/palombaro16.jpg",
-      "tags": ["seabed","underwater canyon","rocks"],
+      "tags": ["seabed","underwater canyon","rocks", "immersion"],
       "category": "missions",
       "subcategory": "immersions",
       "description": "A diver moves along the seabed among rock formations, with a cable connected to the surface trailing his movements.",
@@ -165,7 +165,7 @@
     {
       "id": 19,
       "src": "img/palombari/palombaro20.jpg",
-      "tags": ["seabed","findings"],
+      "tags": ["seabed","findings","rocks", "immersion"],
       "category": "missions",
       "subcategory": "immersions",
       "description": "A diver examines an artifact on the seabed, surrounded by sediment and marine debris.",
@@ -174,7 +174,7 @@
     {
       "id": 20,
       "src": "img/palombari/palombaro21.jpg",
-      "tags": ["seabed","dust","rocks"],
+      "tags": ["seabed","dust","rocks", "immersion"],
       "category": "missions",
       "subcategory": "immersions",
       "description": "A diver moves along the seabed while manipulating a pipe or instrument, engaged in a technical underwater task.",
@@ -183,7 +183,7 @@
     {
       "id": 21,
       "src": "img/palombari/palombaro22.jpg",
-      "tags": ["seabed","findings","marine creature"],
+      "tags": ["seabed","findings","marine creature", "immersion"],
       "category": "missions",
       "subcategory": "immersions",
       "description": "A deep-sea diver inspecting a creature on the seabed.",
@@ -192,7 +192,7 @@
     {
       "id": 22,
       "src": "img/palombari/palombaro23.jpg",
-      "tags": ["seabed","rocks","findings"],
+      "tags": ["seabed","rocks","findings", "immersion"],
       "category": "missions",
       "subcategory": "immersions",
       "description": "A diver moves along the seabed with a cable attached to the surface, while air bubbles rise from the helmet.",
@@ -228,7 +228,7 @@
     {
       "id": 26,
       "src": "img/fondali/fondali3.jpg",
-      "tags": ["coral","rocks"],
+      "tags": ["coral","rocks", "formations","underwater canyon"],
       "category": "sea depths",
       "subcategory": "landscapes",
       "description": "Close-up of dense, rounded coral formations with detailed texture and pronounced depth.",
@@ -246,7 +246,7 @@
     {
       "id": 28,
       "src": "img/fondali/fondali5.jpg",
-      "tags": ["marine creature","seabed","rocks"],
+      "tags": ["marine creature","seabed","rocks", "formations"],
       "category": "sea depths",
       "subcategory": "sea creatures",
       "description": "Close-up view of the body of a large marine creature.",
@@ -363,7 +363,7 @@
     {
       "id": 41,
       "src": "img/fondali/fondali18.jpg",
-      "tags": ["seaweed","dust","underwater canyon","rocks"],
+      "tags": ["seaweed","dust","underwater canyon","rocks", "acoustic data"],
       "category": "sea depths",
       "subcategory": "formations",
       "description": "Coral landscape with heavy suspended particles and grain, creating an almost snowy effect.",
@@ -372,7 +372,7 @@
     {
       "id": 42,
       "src": "img/fondali/fondali19.jpg",
-      "tags": ["rocks","underwater canyon","coral","seabed"],
+      "tags": ["rocks","underwater canyon","coral","seabed", "formations"],
       "category": "sea depths",
       "subcategory": "formations",
       "description": "Silhouette of a marine creature swimming above a coral reef, with diffuse light in the background.",
@@ -381,7 +381,7 @@
     {
       "id": 43,
       "src": "img/fondali/fondali20.jpg",
-      "tags": ["coral","dust","sediments","seabed"],
+      "tags": ["coral","dust","sediments","seabed", "formations"],
       "category": "sea depths",
       "subcategory": "landscapes",
       "description": "Prominent coral formation with branching details, set in semi-darkness.",
@@ -643,7 +643,7 @@
       "src": "img/Sonar/sonarDati27.jpg",
       "tags": ["topographic maps","waveforms"],
       "category": "Documents",
-      "subcategory": "topography maps",
+      "subcategory": "research papers",
       "description": "A topographic map showing underwater terrain of the Aleutian Trench and surrounding areas with detailed contour lines.",
       "area": "Aleutian Trench, AK"
     },
@@ -715,7 +715,7 @@
       "src": "img/Sonar/sonarDati35.jpg",
       "tags": ["topographic maps","waveforms"],
       "category": "Documents",
-      "subcategory": "topography maps",
+      "subcategory": "research papers",
       "description": "A topographic map showing underwater terrain of the Strait of Florida.",
       "area": "Strait of Florida, FL"
     }
