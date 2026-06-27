@@ -10,7 +10,12 @@
     window.scrollTo(0, 0);
 
     window.addEventListener("pageshow", (e) => {
-      if (e.persisted) window.scrollTo(0, 0);
+      if (e.persisted) {
+        window.location.reload();
+        return;
+      }
+
+      window.scrollTo(0, 0);
     });
 
     window.addEventListener("beforeunload", () => {
@@ -39,27 +44,15 @@
     }
 
     :root {
-      /*
-        Puoi regolare da qui l'opacità del contenitore immagini.
-        Valori più bassi = immagini più leggere.
-      */
-      --images-container-opacity-min: 0.33;
-      --images-container-opacity-max: 0.9;
-
-      /*
-        Puoi regolare da qui lo zoom delle immagini.
-        Valori più bassi = immagini meno zoomate / più piccole.
-      */
-      --image-scale-start: 0.88;
-      --image-scale-end-desktop: 1.2;
-      --image-scale-end-mobile: 0.88;
+      --landing-bg: #f5d7df;
+      --image-hover-scale: 1.5;
     }
 
     html,
     body {
       width: 100%;
       min-height: 100%;
-      background: #f5d7df;
+      background: var(--landing-bg);
       overflow: hidden;
     }
 
@@ -81,10 +74,7 @@
 
     .archive-title {
       position: fixed;
-      left: 50%;
-      top: 50%;
       z-index: 120;
-      transform: translate(-50%, -50%);
       line-height: inherit;
       font-weight: inherit;
       letter-spacing: inherit;
@@ -92,7 +82,7 @@
       color: #090909;
       white-space: nowrap;
       opacity: 1;
-      will-change: transform, left, top, opacity;
+      will-change: left, top, opacity;
     }
 
     .landing-stage {
@@ -100,70 +90,118 @@
       inset: 0;
       width: 100vw;
       height: 100vh;
-      background: #f5d7df;
+      background: var(--landing-bg);
       overflow: hidden;
     }
 
-    /*
-      Contenitore unico delle immagini.
-      L'opacità viene applicata qui, non alle singole immagini.
-    */
     .image-opacity-container {
       position: fixed;
       inset: 0;
       width: 100vw;
       height: 100vh;
-      opacity: 0;
-      will-change: opacity;
+      z-index: 80;
+      pointer-events: none;
     }
 
     .image-card {
       position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--w);
+      height: var(--h);
       background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
       background-color: transparent;
-      opacity: 1;
-      will-change: transform, left, top;
+      cursor: zoom-in;
+      border: 0;
+      padding: 0;
+      opacity: 0;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+      transform-origin: center;
+      will-change: transform, opacity;
+      z-index: var(--z);
     }
 
-    /*
-      Immagini desktop leggermente ridotte,
-      così non risultano troppo zoomate e non si toccano troppo.
-    */
-    .image-card:nth-child(1) {
-      width: 235px;
-      height: 300px;
+    .image-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--image-url);
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      transform: scale(1);
+      transform-origin: center;
+      transition:
+        transform 420ms cubic-bezier(.16, 1, .3, 1),
+        filter 420ms cubic-bezier(.16, 1, .3, 1);
+      will-change: transform;
     }
 
-    .image-card:nth-child(2) {
-      width: 225px;
-      height: 288px;
+    .image-card:hover {
+      z-index: 180;
     }
 
-    .image-card:nth-child(3) {
-      width: 240px;
-      height: 215px;
+    .image-card:hover::before {
+      transform: scale(var(--image-hover-scale));
+      filter: contrast(1.04) saturate(1.03);
     }
 
-    .image-card:nth-child(4) {
-      width: 220px;
-      height: 155px;
+    .image-card:focus-visible {
+      outline: none;
     }
 
-    .image-card:nth-child(5) {
-      width: 230px;
-      height: 210px;
+    .image-card:focus-visible::before {
+      transform: scale(var(--image-hover-scale));
+      filter: contrast(1.04) saturate(1.03);
     }
 
-    .image-card:nth-child(6) {
-      width: 218px;
-      height: 172px;
+    body.landing-ready .image-card {
+      animation: photoAppear 4200ms cubic-bezier(.16, 1, .3, 1) var(--delay) both;
     }
 
-    .image-card:nth-child(7) {
-      width: 238px;
-      height: 272px;
+    /* Use transitions on the pseudo element for smoother Ken-Burns style zoom+pan */
+    .image-card.zoom-animate::before {
+      transition: transform 2000ms cubic-bezier(.16, 1, .3, 1),
+                  filter 2000ms cubic-bezier(.16, 1, .3, 1),
+                  background-position 2000ms cubic-bezier(.16, 1, .3, 1);
+      will-change: transform, background-position, filter;
+      transform: scale(1);
+      background-position: center;
+    }
+
+    .image-card.is-zooming::before {
+      transform: scale(var(--image-hover-scale));
+      filter: contrast(1.04) saturate(1.03);
+      background-position: var(--bg-pos, center);
+    }
+
+    /* When a photo is actively zooming, scale the host element smoothly
+       so the transformation looks consistent with the ::before animation */
+    .image-card.is-zooming {
+      transform: translate(-50%, -50%) scale(var(--image-hover-scale));
+      z-index: 999 !important;
+      transition: transform 220ms cubic-bezier(.16, 1, .3, 1);
+      will-change: transform;
+    }
+
+    /* Nearby cards get a subtle offset while another photo zooms */
+    .image-card.nearby-moved {
+      transition: transform 260ms cubic-bezier(.16, 1, .3, 1);
+    }
+
+    @keyframes photoAppear {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
     }
 
     .enter-home {
@@ -182,83 +220,131 @@
       opacity: 1;
     }
 
-    @media (max-width: 900px) {
-      .image-card:nth-child(1),
-      .image-card:nth-child(2),
-      .image-card:nth-child(3),
-      .image-card:nth-child(4),
-      .image-card:nth-child(5),
-      .image-card:nth-child(6),
-      .image-card:nth-child(7) {
-        width: 145px;
-      }
+    .landing-viewer {
+      position: fixed;
+      inset: 0;
+      z-index: 190;
+      display: grid;
+      place-items: center;
+      background: rgba(245, 215, 223, 0.92);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 240ms cubic-bezier(.16, 1, .3, 1);
+    }
 
-      .image-card:nth-child(1) {
-        height: 188px;
-      }
+    .landing-viewer.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
-      .image-card:nth-child(2) {
-        height: 182px;
-      }
+    .landing-viewer-image {
+      width: min(62vw, 720px);
+      height: min(72vh, 680px);
+      object-fit: contain;
+      display: block;
+    }
 
-      .image-card:nth-child(3) {
-        height: 136px;
-      }
+    .landing-viewer-btn {
+      position: fixed;
+      z-index: 191;
+      width: 42px;
+      height: 42px;
+      color: #090909;
+      font-family: inherit;
+      font-size: 28px;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+      opacity: 0.82;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
 
-      .image-card:nth-child(4) {
-        height: 104px;
-      }
+    .landing-viewer-btn:hover,
+    .landing-viewer-btn:focus-visible {
+      opacity: 1;
+      transform: scale(1.08);
+      outline: none;
+    }
 
-      .image-card:nth-child(5) {
-        height: 132px;
-      }
+    .landing-viewer-close {
+      top: 10px;
+      right: 10px;
+    }
 
-      .image-card:nth-child(6) {
-        height: 116px;
-      }
+    .landing-viewer-prev {
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
 
-      .image-card:nth-child(7) {
-        height: 172px;
-      }
+    .landing-viewer-next {
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .landing-viewer-prev:hover,
+    .landing-viewer-prev:focus-visible,
+    .landing-viewer-next:hover,
+    .landing-viewer-next:focus-visible {
+      transform: translateY(-50%) scale(1.08);
     }
 
     @media (max-width: 520px) {
-      .image-card:nth-child(1),
-      .image-card:nth-child(2),
-      .image-card:nth-child(3),
-      .image-card:nth-child(4),
-      .image-card:nth-child(5),
-      .image-card:nth-child(6),
-      .image-card:nth-child(7) {
-        width: 108px;
+      :root {
+        --image-hover-scale: 1.18;
+        --image-zoom-scale: 2.05;
       }
 
-      .image-card:nth-child(1) {
-        height: 142px;
+      .image-card.is-zooming::before {
+        transform: scale(var(--image-zoom-scale));
+        filter: contrast(1.05) saturate(1.04);
       }
 
-      .image-card:nth-child(2) {
-        height: 138px;
+      .image-card.is-zooming {
+        transform: translate(-50%, -50%) scale(1.14);
       }
 
-      .image-card:nth-child(3) {
-        height: 104px;
+      html,
+      body,
+      .landing-stage,
+      .image-opacity-container,
+      .landing-viewer,
+      .enter-home {
+        min-height: 100dvh;
+        height: 100dvh;
       }
 
-      .image-card:nth-child(4) {
-        height: 80px;
+      .landing-header {
+        padding: 8px;
       }
 
-      .image-card:nth-child(5) {
-        height: 102px;
+    .archive-title {
+      font-size: 18px;
+    }
+
+      .landing-viewer-image {
+        width: 88vw;
+        height: 64vh;
       }
 
-      .image-card:nth-child(6) {
-        height: 90px;
+      .landing-viewer-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 24px;
       }
 
-      .image-card:nth-child(7) {
-        height: 130px;
+      .landing-viewer-close {
+        top: 8px;
+        right: 8px;
+      }
+
+      .landing-viewer-prev {
+        left: 8px;
+      }
+
+      .landing-viewer-next {
+        right: 8px;
       }
     }
   </style>
@@ -271,228 +357,226 @@
 
   <main class="landing-stage">
     <div class="image-opacity-container">
-      <div class="image-card"></div>
-      <div class="image-card"></div>
-      <div class="image-card"></div>
-      <div class="image-card"></div>
-      <div class="image-card"></div>
-      <div class="image-card"></div>
-      <div class="image-card"></div>
+      <button class="image-card" type="button" aria-label="Apri foto 1"></button>
+      <button class="image-card" type="button" aria-label="Apri foto 2"></button>
+      <button class="image-card" type="button" aria-label="Apri foto 3"></button>
+      <button class="image-card" type="button" aria-label="Apri foto 4"></button>
+      <button class="image-card" type="button" aria-label="Apri foto 5"></button>
+      <button class="image-card" type="button" aria-label="Apri foto 6"></button>
+      <button class="image-card" type="button" aria-label="Apri foto 7"></button>
+      <button class="image-card" type="button" aria-label="Apri foto 8"></button>
+      <button class="image-card" type="button" aria-label="Apri foto 9"></button>
+      <button class="image-card" type="button" aria-label="Apri foto 10"></button>
+      <button class="image-card" type="button" aria-label="Apri foto 11"></button>
+      <button class="image-card" type="button" aria-label="Apri foto 12"></button>
     </div>
   </main>
+
+  <div class="landing-viewer" id="landing-viewer" aria-hidden="true">
+    <img class="landing-viewer-image" id="landing-viewer-image" src="" alt="" />
+    <button class="landing-viewer-btn landing-viewer-close" type="button" aria-label="Chiudi">×</button>
+    <button class="landing-viewer-btn landing-viewer-prev" type="button" aria-label="Foto precedente">←</button>
+    <button class="landing-viewer-btn landing-viewer-next" type="button" aria-label="Foto successiva">→</button>
+  </div>
 
   <section class="enter-home"></section>
 
   <script>
-    const cards = document.querySelectorAll(".image-card");
-    const imageOpacityContainer = document.querySelector(".image-opacity-container");
+    const cards = Array.from(document.querySelectorAll(".image-card"));
     const homePreview = document.querySelector(".enter-home");
     const archiveTitle = document.querySelector(".archive-title");
+    const viewer = document.getElementById("landing-viewer");
+    const viewerImage = document.getElementById("landing-viewer-image");
+    const viewerClose = document.querySelector(".landing-viewer-close");
+    const viewerPrev = document.querySelector(".landing-viewer-prev");
+    const viewerNext = document.querySelector(".landing-viewer-next");
 
-    /*
-      Qui inserisci tutte le immagini che vuoi usare.
-      Ogni volta che ricarichi la pagina, ne verranno scelte 7 in ordine casuale.
-    */
-    const imagePool = [
+    const orderedImages = [
       "img/col19.png",
       "img/a3.png",
       "img/col9.png",
       "img/s1 (2).png",
       "img/ta5.png",
       "img/ta4.png",
-      "img/col4.png",
       "img/col13.png",
       "img/col2.png",
       "img/s1 (5).png",
       "img/ta14.png",
       "img/a4.png",
-      "img/b7.png",
-      "img/s1 (17).png"
+      "img/b7.png"
     ];
 
-    function shuffleArray(array) {
-      return [...array].sort(() => Math.random() - 0.5);
+    const desktopPhotoLayout = [
+      { x: 12, y: 34, w: "clamp(104px, 8.8vw, 168px)", h: "clamp(144px, 12.2vw, 232px)", z: 2 },
+      { x: 33, y: 31, w: "clamp(108px, 8.9vw, 170px)", h: "clamp(122px, 10vw, 192px)", z: 4 },
+      { x: 55, y: 33, w: "clamp(150px, 11.5vw, 220px)", h: "clamp(94px, 7.1vw, 136px)", z: 3 },
+      { x: 80, y: 31, w: "clamp(145px, 11.3vw, 218px)", h: "clamp(110px, 8.5vw, 164px)", z: 2 },
+      { x: 21, y: 58, w: "clamp(145px, 11.5vw, 220px)", h: "clamp(112px, 8.9vw, 170px)", z: 1 },
+      { x: 45, y: 58, w: "clamp(140px, 11.2vw, 215px)", h: "clamp(109px, 8.7vw, 168px)", z: 3 },
+      { x: 70, y: 58, w: "clamp(150px, 11.8vw, 225px)", h: "clamp(112px, 8.8vw, 168px)", z: 2 },
+      { x: 90, y: 58, w: "clamp(135px, 10.7vw, 205px)", h: "clamp(101px, 8vw, 154px)", z: 4 },
+      { x: 13, y: 82, w: "clamp(126px, 10.5vw, 205px)", h: "clamp(116px, 9.7vw, 188px)", z: 2 },
+      { x: 36, y: 82, w: "clamp(96px, 8.4vw, 160px)", h: "clamp(115px, 10vw, 190px)", z: 1 },
+      { x: 61, y: 82, w: "clamp(118px, 10vw, 190px)", h: "clamp(118px, 10vw, 190px)", z: 3 },
+      { x: 84, y: 82, w: "clamp(130px, 10.4vw, 200px)", h: "clamp(98px, 7.8vw, 150px)", z: 2 }
+    ];
+
+    const tabletPhotoLayout = [
+      { x: 14, y: 31, w: "96px", h: "136px", z: 2 },
+      { x: 38, y: 31, w: "98px", h: "112px", z: 4 },
+      { x: 62, y: 31, w: "126px", h: "78px", z: 3 },
+      { x: 86, y: 31, w: "124px", h: "96px", z: 2 },
+      { x: 16, y: 58, w: "126px", h: "98px", z: 1 },
+      { x: 40, y: 58, w: "124px", h: "96px", z: 3 },
+      { x: 64, y: 58, w: "132px", h: "98px", z: 2 },
+      { x: 88, y: 58, w: "118px", h: "88px", z: 4 },
+      { x: 16, y: 80, w: "112px", h: "104px", z: 2 },
+      { x: 39, y: 80, w: "90px", h: "108px", z: 1 },
+      { x: 63, y: 80, w: "108px", h: "108px", z: 3 },
+      { x: 86, y: 80, w: "116px", h: "88px", z: 1 }
+    ];
+
+    const mobilePhotoLayout = [
+      { x: 19, y: 23, w: "56px", h: "78px", z: 2 },
+      { x: 50, y: 23, w: "62px", h: "70px", z: 4 },
+      { x: 81, y: 23, w: "74px", h: "46px", z: 3 },
+      { x: 19, y: 43, w: "74px", h: "56px", z: 2 },
+      { x: 50, y: 43, w: "74px", h: "58px", z: 1 },
+      { x: 81, y: 43, w: "72px", h: "56px", z: 3 },
+      { x: 19, y: 63, w: "74px", h: "56px", z: 2 },
+      { x: 50, y: 63, w: "70px", h: "52px", z: 4 },
+      { x: 81, y: 63, w: "70px", h: "64px", z: 1 },
+      { x: 19, y: 83, w: "56px", h: "66px", z: 2 },
+      { x: 50, y: 83, w: "64px", h: "64px", z: 3 },
+      { x: 81, y: 83, w: "72px", h: "54px", z: 1 }
+    ];
+
+    const ANIMATION_DURATION = 13000;
+    let animationStartTime = null;
+    let redirected = false;
+    let hoveringCard = false;
+    let waitingForHoverEnd = false;
+    let viewerOpen = false;
+    let userIsNavigating = false;
+    let activeImageIndex = 0;
+
+    function selectRandomPhotosForZoom() {
+      const indices = [];
+      while (indices.length < 7) {
+        const random = Math.floor(Math.random() * cards.length);
+        if (!indices.includes(random)) {
+          indices.push(random);
+        }
+      }
+      return indices;
     }
 
-    function assignRandomImages() {
-      const shuffledImages = shuffleArray(imagePool);
+    function getPhotoLayout() {
+      if (window.innerWidth <= 520) {
+        return mobilePhotoLayout;
+      }
 
+      if (window.innerWidth <= 900) {
+        return tabletPhotoLayout;
+      }
+
+      return desktopPhotoLayout;
+    }
+
+    function assignOrderedImages() {
       cards.forEach((card, index) => {
-        const imageUrl = shuffledImages[index % shuffledImages.length];
-        card.style.backgroundImage = `url("${imageUrl}")`;
+        card.style.setProperty("--image-url", `url("${orderedImages[index]}")`);
       });
     }
 
-    const ANIMATION_DURATION = 7000;
-    let animationStartTime = null;
-    let redirected = false;
+    function applyPhotoLayout() {
+      const layout = getPhotoLayout();
+      cards.forEach((card, index) => {
+        const item = layout[index];
 
-    /*
-      Layout iniziale.
-      Tutte le immagini partono dal centro esatto dello schermo.
-      In questo modo l'allargamento/zoom out è sempre centrato.
-    */
-    const startLayout = [
-      { x: 51, y: 51 },
-      { x: 50, y: 50 },
-      { x: 52, y: 52 },
-      { x: 53, y: 53 },
-      { x: 54, y: 54 },
-      { x: 48, y: 48 },
-      { x: 49, y: 49 }
-    ];
-
-    /*
-      Layout finale desktop.
-      Le immagini sono più distanziate rispetto alla versione precedente.
-    */
-    const endLayout = [
-      { x: 14, y: 35},
-      { x: 38, y: 32 },
-      { x: 64, y: 30 },
-      { x: 88, y: 34 },
-      { x: 20, y: 72 },
-      { x: 50, y: 66 },
-      { x: 80, y: 76 }
-    ];
-
-
-    /*
-      Layout finale mobile.
-      Anche su mobile sono più aperte tra loro.
-    */
-    
-    const mobileEndLayout = [
-      { x: 18, y: 22 },
-      { x: 50, y: 28 },
-      { x: 82, y: 23 },
-      { x: 18, y: 58 },
-      { x: 50, y: 53 },
-      { x: 82, y: 60 },
-      { x: 50, y: 83 }
-    ];
-
-    function lerp(start, end, progress) {
-      return start + (end - start) * progress;
+        card.style.setProperty("--x", `${item.x}%`);
+        card.style.setProperty("--y", `${item.y}%`);
+        card.style.setProperty("--w", item.w);
+        card.style.setProperty("--h", item.h);
+        const imageDelay = (ANIMATION_DURATION * 0.52) / 1000;
+        card.style.setProperty("--delay", `${imageDelay}s`);
+        card.style.setProperty("--z", item.z);
+        // expose numeric positions for JS proximity calculations
+        card.dataset.cx = item.x;
+        card.dataset.cy = item.y;
+      });
     }
 
     function clamp(value, min, max) {
       return Math.min(Math.max(value, min), max);
     }
 
-    function easeInOutCubic(t) {
-      return t < 0.5
-        ? 4 * t * t * t
-        : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    }
-
-    function getEndLayout() {
-      if (window.innerWidth <= 520) {
-        return mobileEndLayout;
-      }
-
-      return endLayout;
-    }
-
-    function getCssNumber(variableName, fallback) {
-      const value = getComputedStyle(document.documentElement)
-        .getPropertyValue(variableName)
-        .trim();
-
-      const parsedValue = parseFloat(value);
-
-      return Number.isNaN(parsedValue) ? fallback : parsedValue;
-    }
-
-    function updateLanding(progress) {
+    function updateTitle(progress) {
       const scrollProgress = clamp(progress, 0, 1);
 
-      const titleFadeCenterProgress = clamp((scrollProgress - 0.34) / 0.10, 0, 1);
+      const titleFadeCenterProgress = clamp((scrollProgress - 0.34) / 0.025, 0, 1);
 
-      const titleAppearCornerProgress = clamp((scrollProgress - 0.48) / 0.08, 0, 1);
-      const titleFadeCornerProgress = clamp((scrollProgress - 0.84) / 0.12, 0, 1);
+      const titleAppearCornerProgress = clamp((scrollProgress - 0.42) / 0.035, 0, 1);
 
       if (scrollProgress < 0.46) {
         archiveTitle.style.left = "50%";
         archiveTitle.style.top = "50%";
         archiveTitle.style.transform = "translate(-50%, -50%)";
         archiveTitle.style.opacity = 1 - titleFadeCenterProgress;
-        archiveTitle.style.display = "block";
       } else {
-        archiveTitle.style.left = "0";
-        archiveTitle.style.top = "0";
-        archiveTitle.style.transform = "translate(10px, 10px)";
-        archiveTitle.style.opacity =
-          titleAppearCornerProgress * (1 - titleFadeCornerProgress);
-        archiveTitle.style.display = "block";
+        archiveTitle.style.left = "10px";
+        archiveTitle.style.top = "10px";
+        archiveTitle.style.transform = "none";
+        archiveTitle.style.opacity = 1;
+      }
+    }
+
+    function enterArchive() {
+      if (redirected) return;
+      redirected = true;
+      homePreview.classList.add("visible");
+      window.setTimeout(() => {
+        window.location.href = "archivio.html";
+      }, 320);
+    }
+
+    function requestArchiveEntry() {
+      if (hoveringCard || viewerOpen || userIsNavigating) {
+        waitingForHoverEnd = true;
+        return;
       }
 
-      if (scrollProgress > 0.96) {
-        archiveTitle.style.display = "none";
-      }
+      enterArchive();
+    }
 
-      const imageAppearProgress = clamp((scrollProgress - 0.46) / 0.10, 0, 1);
+    function showViewerImage(index) {
+      activeImageIndex = (index + orderedImages.length) % orderedImages.length;
+      viewerImage.src = orderedImages[activeImageIndex];
+      viewerImage.alt = `Foto ${activeImageIndex + 1}`;
+    }
 
-      const spreadProgress = easeInOutCubic(
-        clamp((scrollProgress - 0.52) / 0.24, 0, 1)
-      );
+    function openViewer(index) {
+      userIsNavigating = true;
+      viewerOpen = true;
+      showViewerImage(index);
+      viewer.classList.add("open");
+      viewer.setAttribute("aria-hidden", "false");
+      viewerClose.focus();
+    }
 
-      const fadeProgress = clamp((scrollProgress - 0.90) / 0.08, 0, 1);
+    function closeViewer() {
+      viewerOpen = false;
+      viewer.classList.remove("open");
+      viewer.setAttribute("aria-hidden", "true");
+      cards[activeImageIndex].focus();
+    }
 
-      const activeEndLayout = getEndLayout();
+    function showPreviousImage() {
+      showViewerImage(activeImageIndex - 1);
+    }
 
-      /*
-        Opacità del gruppo intero.
-        Ora puoi regolarla dalle variabili CSS in :root.
-      */
-      const minContainerOpacity = getCssNumber(
-        "--images-container-opacity-min",
-        0.55
-      );
-
-      const maxContainerOpacity = getCssNumber(
-        "--images-container-opacity-max",
-        0.85
-      );
-
-      const groupOpacity = lerp(
-        minContainerOpacity,
-        maxContainerOpacity,
-        spreadProgress
-      );
-
-      imageOpacityContainer.style.opacity =
-        imageAppearProgress * groupOpacity * (1 - fadeProgress);
-
-      /*
-        Scale delle immagini.
-        Anche questo ora è regolabile dalle variabili CSS in :root.
-      */
-      const startScale = getCssNumber("--image-scale-start", 0.88);
-
-      const endScale = window.innerWidth <= 520
-        ? getCssNumber("--image-scale-end-mobile", 0.92)
-        : getCssNumber("--image-scale-end-desktop", 0.96);
-
-      cards.forEach((card, index) => {
-        const start = startLayout[index];
-        const end = activeEndLayout[index];
-
-        const x = lerp(start.x, end.x, spreadProgress);
-        const y = lerp(start.y, end.y, spreadProgress);
-
-        const scale = lerp(startScale, endScale, spreadProgress);
-
-        card.style.left = `${x}%`;
-        card.style.top = `${y}%`;
-        card.style.transform = `translate(-50%, -50%) scale(${scale})`;
-      });
-
-      if (scrollProgress > 0.94) {
-        homePreview.classList.add("visible");
-      } else {
-        homePreview.classList.remove("visible");
-      }
+    function showNextImage() {
+      showViewerImage(activeImageIndex + 1);
     }
 
     function animateLanding(timestamp) {
@@ -503,28 +587,132 @@
       const elapsed = timestamp - animationStartTime;
       const progress = clamp(elapsed / ANIMATION_DURATION, 0, 1);
 
-      updateLanding(progress);
+      updateTitle(progress);
 
       if (progress < 1) {
         requestAnimationFrame(animateLanding);
-      } else if (!redirected) {
-        redirected = true;
-        window.location.href = "archivio.html";
+      } else {
+        requestArchiveEntry();
       }
     }
 
     window.addEventListener("resize", () => {
+      applyPhotoLayout();
+
       if (animationStartTime) {
         const elapsed = performance.now() - animationStartTime;
         const progress = clamp(elapsed / ANIMATION_DURATION, 0, 1);
-        updateLanding(progress);
+        updateTitle(progress);
       }
     });
 
     window.addEventListener("load", () => {
       window.scrollTo(0, 0);
-      assignRandomImages();
-      updateLanding(0);
+      assignOrderedImages();
+      applyPhotoLayout();
+      updateTitle(0);
+
+      // Seleziona 5 foto casuali per l'animazione di zoom
+      const zoomIndices = selectRandomPhotosForZoom();
+      cards.forEach((card, index) => {
+        if (zoomIndices.includes(index)) {
+          card.classList.add("zoom-animate");
+        }
+      });
+
+      // schedule auto-zoom sequence (JS-driven for smoother control)
+      const zoomDuration = 2000; // ms per zoom
+      const zoomGap = 1200; // ms between zoom starts
+      const startOffset = 5600; // ms after load to start first zoom
+
+      function triggerZoom(card) {
+        // randomize a subtle background pan direction
+        const bgX = 50 + (Math.random() * 12 - 6);
+        const bgY = 50 + (Math.random() * 12 - 6);
+        card.style.setProperty('--bg-pos', `${bgX}% ${bgY}%`);
+        card.classList.add('is-zooming');
+        card.style.zIndex = 999;
+
+        // move nearby cards
+        const tx = parseFloat(card.dataset.cx || 0);
+        const ty = parseFloat(card.dataset.cy || 0);
+        cards.forEach(other => {
+          if (other === card) return;
+          const ox = parseFloat(other.dataset.cx || 0);
+          const oy = parseFloat(other.dataset.cy || 0);
+          const dx = ox - tx;
+          const dy = oy - ty;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 40) {
+            const px = (dx / 100) * window.innerWidth * 0.06; // larger shift
+            const py = (dy / 100) * window.innerHeight * 0.06;
+            other.classList.add('nearby-moved');
+            other.style.transform = `translate(calc(-50% + ${px}px), calc(-50% + ${py}px)) scale(0.96)`;
+          }
+        });
+
+        setTimeout(() => {
+          // end zoom
+          card.classList.remove('is-zooming');
+          card.style.zIndex = '';
+          cards.forEach(other => {
+            if (other === card) return;
+            other.classList.remove('nearby-moved');
+            other.style.transform = 'translate(-50%, -50%) scale(1)';
+          });
+        }, zoomDuration);
+      }
+
+      zoomIndices.forEach((idx, i) => {
+        setTimeout(() => triggerZoom(cards[idx]), startOffset + i * zoomGap);
+      });
+
+      cards.forEach((card, index) => {
+        card.addEventListener("mouseenter", () => {
+          hoveringCard = true;
+        });
+
+        card.addEventListener("mouseleave", () => {
+          hoveringCard = false;
+          if (waitingForHoverEnd) {
+            waitingForHoverEnd = false;
+            window.setTimeout(enterArchive, 700);
+          }
+        });
+
+        card.addEventListener("click", () => {
+          openViewer(index);
+        });
+      });
+
+      
+
+      viewerClose.addEventListener("click", closeViewer);
+      viewerPrev.addEventListener("click", showPreviousImage);
+      viewerNext.addEventListener("click", showNextImage);
+
+      viewer.addEventListener("click", (event) => {
+        if (event.target === viewer) {
+          closeViewer();
+        }
+      });
+
+      window.addEventListener("keydown", (event) => {
+        if (!viewerOpen) return;
+
+        if (event.key === "Escape") {
+          closeViewer();
+        } else if (event.key === "ArrowLeft") {
+          showPreviousImage();
+        } else if (event.key === "ArrowRight") {
+          showNextImage();
+        }
+      });
+
+      requestAnimationFrame(() => {
+        document.body.classList.add("landing-ready");
+      });
+
       requestAnimationFrame(animateLanding);
     });
   </script>

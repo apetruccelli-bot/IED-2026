@@ -10,6 +10,7 @@ const toggleNumbers = document.getElementById("toggleNumbers");
 let detector = null;
 let isDetecting = false;
 let showNumbers = true;
+const SHOW_HAND_TRACKING_OVERLAY = false;
 
 // Colors for different hands
 const handColors = [
@@ -237,11 +238,13 @@ async function detectHands() {
         }
       }
 
-      // Draw bounding box
-      drawBoundingBox(hand.keypoints, color, handedness);
+      if (SHOW_HAND_TRACKING_OVERLAY) {
+        // Draw bounding box
+        drawBoundingBox(hand.keypoints, color, handedness);
 
-      // Draw hand landmarks
-      drawHandLandmarks(hand.keypoints, color, handedness);
+        // Draw hand landmarks
+        drawHandLandmarks(hand.keypoints, color, handedness);
+      }
 
       // Add info for this hand
       const confidence = hand.score

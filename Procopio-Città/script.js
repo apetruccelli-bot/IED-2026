@@ -2,6 +2,8 @@ const rowsHost = document.getElementById('archive-rows');
 const galleryHost = document.getElementById('archive-gallery');
 const searchInput = document.getElementById('search');
 const archiveToggleButtons = document.querySelectorAll('[data-archive-toggle]');
+const archiveMobileFilterToggle = document.getElementById('archive-mobile-filter-toggle');
+const archiveMobileFilterClose = document.getElementById('archive-mobile-filter-close');
 const lightbox = document.getElementById('lightbox');
 const lbImg = document.getElementById('lb-img');
 const lbId = document.getElementById('lb-id');
@@ -67,12 +69,14 @@ let enrichedRows = [];
 let allItems = [];
 let mapItems = [];
 let activeFilters = new Set();
+let activeFilterLabels = new Map();
 let lbIndex = -1;
 let lightboxItems = [];
 let lightboxUseFilteredNavigation = true;
 let markerIndex = -1;
 let archiveFiltersVisible = false;
 let manualToggle = false;
+let archiveGridView = false;
 
 const regionGroups = {
   Calabria: ['Serra Vasta', 'Valle Cupa', 'Zagara', 'San Velio', 'Fonte Chiusa', 'Santa Rena', 'Costa Nera', 'Pietra Lenta'],
@@ -165,11 +169,40 @@ function setArchiveFiltersVisible(visible) {
   // toggle full-screen overlay class on body so entire background fades to myWhite
   if (typeof document !== 'undefined' && document.body) {
     document.body.classList.toggle('archive-overlay-open', visible);
+    document.body.classList.toggle('archive-mobile-filters-open', visible);
   }
 
   archiveToggleButtons.forEach((button) => {
     button.setAttribute('aria-expanded', String(visible));
   });
+
+  if (archiveMobileFilterToggle) {
+    archiveMobileFilterToggle.setAttribute('aria-expanded', String(visible));
+  }
+}
+
+function updateArchiveMobileFilterLabel() {
+  if (!archiveMobileFilterToggle) return;
+
+  const selectedLabels = [...activeFilterLabels.values()];
+  archiveMobileFilterToggle.textContent = '';
+
+  const label = document.createElement('span');
+  label.className = 'archive-mobile-filter-label';
+  label.textContent = 'Filtri';
+  archiveMobileFilterToggle.appendChild(label);
+
+  if (selectedLabels.length) {
+    const summary = document.createElement('span');
+    summary.className = 'archive-mobile-filter-summary';
+    summary.textContent = selectedLabels.join(', ');
+    archiveMobileFilterToggle.appendChild(summary);
+  }
+
+  archiveMobileFilterToggle.setAttribute(
+    'aria-label',
+    selectedLabels.length ? `Filtri: ${selectedLabels.join(', ')}` : 'Filtri'
+  );
 }
 
 function renderFilters() {
@@ -180,7 +213,8 @@ function renderFilters() {
   rowsHost.innerHTML = columns
   .map(
     ({ key, label, values }) => `
-    <div class="flex flex-col ${key === 'year' ? 'archive-filter-column-year' : ''}">
+    <div class="flex flex-col archive-filter-column archive-filter-column-${escapeHtml(key)} ${key === 'year' ? 'archive-filter-column-year' : ''}">
+      <div class="archive-filter-heading">${escapeHtml(label.charAt(0).toUpperCase() + label.slice(1))}</div>
       ${key === 'regione'
         ? values
             .map((v) => {
@@ -198,7 +232,7 @@ function renderFilters() {
                     ${escapeHtml(v)}
                   </button>
                   <div class="region-towns hidden pl-10px pt-10px pb-10px" data-region-town-list="${escapeHtml(v)}">
-                    ${towns.map((town) => `<p class="text-justify opacity-50 cursor-pointer select-none" data-filter-key="paese" data-filter-value="${escapeHtml(town)}">${escapeHtml(town)}</p>`).join('')}
+                    ${towns.map((town) => `<p class="text-justify cursor-pointer select-none" data-filter-key="paese" data-filter-value="${escapeHtml(town)}">${escapeHtml(town)}</p>`).join('')}
                   </div>
                 </div>
               `;
@@ -227,35 +261,58 @@ function renderFilters() {
   });
 
   setArchiveFiltersVisible(archiveFiltersVisible);
+  updateArchiveMobileFilterLabel();
 }
 
 function toggleFilter(key, value) {
   const token = `${key}::${normalizeComparable(value)}`;
 
+  
+
   if (activeFilters.has(token)) {
     activeFilters.delete(token);
+    activeFilterLabels.delete(token);
   } else {
     [...activeFilters].forEach((activeToken) => {
       if (activeToken.startsWith(`${key}::`)) {
         activeFilters.delete(activeToken);
+        activeFilterLabels.delete(activeToken);
       }
     });
     activeFilters.add(token);
+    activeFilterLabels.set(token, value);
   }
-  // update visual state: if any tags active, dim unselected and highlight selected
-  document.querySelectorAll('[data-filter-key][data-filter-value]').forEach((el) => {
-    const currentToken = `${el.dataset.filterKey}::${normalizeComparable(el.dataset.filterValue)}`;
-
-    if (activeFilters.size === 0) {
-      el.classList.remove('opacity-50', 'opacity-100');
-    } else {
-      const isActive = activeFilters.has(currentToken);
-      el.classList.toggle('opacity-100', isActive);
-      el.classList.toggle('opacity-50', !isActive);
-    }
-  });
+  updateArchiveFilterColorState();
+  updateArchiveMobileFilterLabel();
   syncRegionExpansion();
   filterVisible(searchInput?.value || '');
+}
+
+function updateArchiveFilterColorState() {
+  document.querySelectorAll('[data-filter-key][data-filter-value]').forEach((el) => {
+    const key = el.dataset.filterKey || '';
+    const value = el.dataset.filterValue || '';
+    const currentToken = `${key}::${normalizeComparable(value)}`;
+
+    el.classList.remove('opacity-50', 'opacity-100', 'archive-filter-muted', 'archive-filter-active');
+
+    if (activeFilters.size === 0) {
+      el.classList.add('archive-filter-active');
+      return;
+    }
+
+    const activePaeseToken = [...activeFilters].find((token) => token.startsWith('paese::'));
+    const isTown = key === 'paese';
+
+    if (isTown && !activePaeseToken) {
+      el.classList.add('archive-filter-active');
+      return;
+    }
+
+    const isActive = activeFilters.has(currentToken);
+    el.classList.toggle('archive-filter-active', isActive);
+    el.classList.toggle('archive-filter-muted', !isActive);
+  });
 }
 
 function syncRegionExpansion() {
@@ -317,8 +374,51 @@ function renderAll() {
   initializeArchiveScrollOpacity();
 }
 
+function initializeArchiveViewToggle() {
+  const button = document.getElementById('archive-view-toggle');
+  if (!button || !galleryHost) return;
+  if (button.dataset.archiveViewToggleReady === 'true') return;
+  button.dataset.archiveViewToggleReady = 'true';
+
+  let isArchiveViewAnimating = false;
+
+  button.addEventListener('click', () => {
+    if (isArchiveViewAnimating) return;
+    isArchiveViewAnimating = true;
+
+    const nextGridView = !archiveGridView;
+
+    galleryHost.classList.add('archive-view-transition-out');
+
+    window.setTimeout(() => {
+      archiveGridView = nextGridView;
+
+      galleryHost.classList.toggle('archive-grid-view', archiveGridView);
+      button.textContent = archiveGridView
+        ? 'Vedi in colonna'
+        : 'Vedi in griglia';
+
+      filterVisible(searchInput?.value || '');
+
+      galleryHost.classList.remove('archive-view-transition-out');
+      galleryHost.classList.add('archive-view-transition-in');
+
+      window.requestAnimationFrame(() => {
+        galleryHost.classList.add('archive-view-transition-ready');
+      });
+
+      window.setTimeout(() => {
+        galleryHost.classList.remove('archive-view-transition-in', 'archive-view-transition-ready');
+        isArchiveViewAnimating = false;
+      }, 620);
+    }, 180);
+  });
+}
+
 function filterVisible(term = '') {
   const query = normalize(term.trim());
+  const isMobileArchive = typeof window !== 'undefined' &&
+    window.matchMedia('(max-width: 899px)').matches;
 
   document.querySelectorAll('[data-item-index]').forEach((el) => {
     const item = allItems[Number(el.dataset.itemIndex)];
@@ -343,8 +443,16 @@ function filterVisible(term = '') {
         return normalizeComparable(field) === value;
       });
     const shouldHide = !matchesSearch || !matchesTags;
-    el.classList.toggle('hidden', shouldHide);
-    el.style.display = shouldHide ? 'none' : '';
+
+    if (archiveGridView && !isMobileArchive) {
+      el.classList.toggle('grid-dimmed', shouldHide);
+      el.classList.remove('hidden');
+      el.style.display = '';
+    } else {
+      el.classList.remove('grid-dimmed');
+      el.classList.toggle('hidden', shouldHide);
+      el.style.display = shouldHide ? 'none' : '';
+    }
   });
 }
 
@@ -451,21 +559,74 @@ if (lbNext) lbNext.addEventListener('click', () => navigateLightbox(1));
 
 archiveToggleButtons.forEach((button) => {
   button.addEventListener('click', () => {
-    manualToggle = !manualToggle;
-    setArchiveFiltersVisible(manualToggle);
+    setArchiveFiltersVisible(true);
   });
 });
 
-// show filters on hover; if the user manually toggled (manualToggle), keep that state
+if (archiveMobileFilterToggle) {
+  archiveMobileFilterToggle.addEventListener('click', () => {
+    manualToggle = true;
+    setArchiveFiltersVisible(true);
+  });
+}
+
+if (archiveMobileFilterClose) {
+  archiveMobileFilterClose.addEventListener('click', () => {
+    manualToggle = false;
+    setArchiveFiltersVisible(false);
+  });
+}
+// show filters on hover; keep the panel open while moving between header and archive rows
 const stickyHeader = document.querySelector('.archive-page .sticky:not(.story-sticky)');
 if (stickyHeader) {
-  stickyHeader.addEventListener('mouseenter', () => setArchiveFiltersVisible(true));
-  stickyHeader.addEventListener('mouseleave', () => {
-    if (!manualToggle) setArchiveFiltersVisible(false);
+  let archiveFiltersCloseTimer = 0;
+
+  const cancelArchiveFiltersClose = () => {
+    if (archiveFiltersCloseTimer) {
+      window.clearTimeout(archiveFiltersCloseTimer);
+      archiveFiltersCloseTimer = 0;
+    }
+  };
+
+  const scheduleArchiveFiltersClose = () => {
+    cancelArchiveFiltersClose();
+    archiveFiltersCloseTimer = window.setTimeout(() => {
+      const headerHovered = stickyHeader.matches(':hover');
+      const rowsHovered = rowsHost && rowsHost.matches(':hover');
+
+      if (!headerHovered && !rowsHovered) {
+        setArchiveFiltersVisible(false);
+      }
+    }, 180);
+  };
+
+  stickyHeader.addEventListener('mouseenter', () => {
+    cancelArchiveFiltersClose();
+    setArchiveFiltersVisible(true);
   });
+
+  stickyHeader.addEventListener('mouseleave', scheduleArchiveFiltersClose);
+
+  if (rowsHost) {
+    rowsHost.addEventListener('mouseenter', () => {
+      cancelArchiveFiltersClose();
+      setArchiveFiltersVisible(true);
+    });
+
+    rowsHost.addEventListener('mouseleave', scheduleArchiveFiltersClose);
+  }
 
   // support basic touch toggling for mobile: tap header to toggle filters
   stickyHeader.addEventListener('touchstart', (e) => {
+    if (
+      e.target.closest('#archive-rows') ||
+      e.target.closest('.archive-mobile-controls') ||
+      e.target.closest('.archive-mobile-filter-close') ||
+      e.target.closest('[data-filter-key][data-filter-value]')
+    ) {
+      return;
+    }
+
     manualToggle = !manualToggle;
     setArchiveFiltersVisible(manualToggle);
     // prevent immediate mouse events
@@ -489,10 +650,14 @@ if (searchInput) {
 setArchiveFiltersVisible(false);
 
 hydrateRowsWithImages()
-  .then(() => renderAll())
+  .then(() => {
+    renderAll();
+    initializeArchiveViewToggle();
+  })
   .catch(() => {
     enrichedRows = [...archiveRows];
     renderAll();
+    initializeArchiveViewToggle();
   });
 
 function initializeArchiveScrollOpacity() {
@@ -540,9 +705,6 @@ function applyActiveSidebarLink() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', applyActiveSidebarLink);
-document.addEventListener('DOMContentLoaded', initializePageTransition);
-document.addEventListener('DOMContentLoaded', initializeStoryBackToTop);
 
 
 function getStoryScroller() {
@@ -630,51 +792,6 @@ function getStoryScroller() {
   });
 })();
 
-// Fade-in sections while scrolling.
-(function () {
-  document.addEventListener('DOMContentLoaded', function () {
-    const scroller = getStoryScroller();
-    if (!scroller) return;
-
-    const mainScroll = scroller.mainScroll;
-    const storyGrid =
-      mainScroll.querySelector('.story-fade-grid') ||
-      Array.from(mainScroll.children).find((el) => el.matches?.('.grid.grid-cols-2'));
-
-    if (!storyGrid) return;
-
-    const storyItems = Array.from(storyGrid.children).filter((element) => element.nodeType === 1);
-    if (!storyItems.length) return;
-
-    storyItems.forEach((element) => element.classList.add('story-fade'));
-
-    if (
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-      !('IntersectionObserver' in window)
-    ) {
-      storyItems.forEach((element) => element.classList.add('story-fade--visible'));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('story-fade--visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        root: scroller.root,
-        threshold: 0.15,
-        rootMargin: '0px 0px -10% 0px',
-      }
-    );
-
-    storyItems.forEach((element) => observer.observe(element));
-  });
-})();
 
 // Progressive opacity for sticky section anchors.
 (function () {
@@ -750,23 +867,105 @@ function initializeStoryBackToTop() {
   const backToTopButton = document.querySelector('[data-story-back-to-top]');
   if (!scroller || !backToTopButton) return;
 
-  const mobileQuery = window.matchMedia('(max-width: 1119px)');
+  if (backToTopButton.parentElement !== document.body) {
+    document.body.appendChild(backToTopButton);
+  }
 
-  const updateButtonVisibility = () => {
-    const shouldShow = mobileQuery.matches && scroller.getTop() >= scroller.getMaxTop() * 0.5;
+  const headerOffset = 80;
+  const sectionTolerance = 44;
 
-    backToTopButton.classList.toggle('is-visible', shouldShow);
-    backToTopButton.setAttribute('aria-hidden', String(!shouldShow));
+  const getSectionTop = (section) => scroller.getTargetTop(section, headerOffset);
+
+  const getSections = () => {
+    const navLinks = Array.from(document.querySelectorAll('[data-story-top-nav] a[href^="#sezione_"]'));
+    const navSections = navLinks
+      .map((link) => {
+        const id = link.getAttribute('href')?.slice(1);
+        return id ? document.getElementById(id) : null;
+      })
+      .filter(Boolean);
+
+    if (navSections.length) {
+      return navSections.filter((section, index, sections) => sections.indexOf(section) === index);
+    }
+
+    return [...document.querySelectorAll('[id^="sezione_"]')]
+      .filter((section) => section.id !== 'sezione_8')
+      .sort((a, b) => {
+        const aNumber = Number((a.id.match(/\d+$/) || ['0'])[0]);
+        const bNumber = Number((b.id.match(/\d+$/) || ['0'])[0]);
+        return aNumber - bNumber;
+      });
   };
 
-  const scrollToTop = () => {
+  const isAtBottom = () => scroller.getTop() >= scroller.getMaxTop() - 8;
+
+  const getCurrentSectionIndex = () => {
+    const sections = getSections();
+    const currentScroll = scroller.getTop();
+    let currentIndex = 0;
+
+    sections.forEach((section, index) => {
+      const top = getSectionTop(section);
+
+      if (currentScroll >= top - sectionTolerance) {
+        currentIndex = index;
+      }
+    });
+
+    if (isAtBottom()) return Math.max(0, sections.length - 1);
+    return currentIndex;
+  };
+
+  const getNextSection = () => {
+    const sections = getSections();
+    const currentScroll = scroller.getTop();
+    const next = sections.find((section) => getSectionTop(section) > currentScroll + sectionTolerance);
+    return next || null;
+  };
+
+  const updateButtonLabel = () => {
+    const sections = getSections();
+    const currentIndex = getCurrentSectionIndex();
+    const isLastSection = sections.length > 0 && currentIndex >= sections.length - 1;
+
+    backToTopButton.textContent = isLastSection
+      ? 'Torna in cima'
+      : 'Prossima sezione';
+
+    backToTopButton.classList.add('is-visible');
+    backToTopButton.setAttribute('aria-hidden', 'false');
+    backToTopButton.setAttribute(
+      'aria-label',
+      isLastSection ? 'Torna in cima' : 'Vai alla sezione successiva'
+    );
+  };
+
+  const scrollNavigation = () => {
     const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
-    scroller.scrollTo(0, behavior);
+    const sections = getSections();
+    const currentIndex = getCurrentSectionIndex();
+    const isLastSection = sections.length > 0 && currentIndex >= sections.length - 1;
+
+    if (isLastSection) {
+      scroller.scrollTo(0, behavior);
+      return;
+    }
+
+    const nextSection = getNextSection();
+    if (!nextSection) {
+      scroller.scrollTo(0, behavior);
+      return;
+    }
+
+    scroller.scrollTo(getSectionTop(nextSection), behavior);
   };
 
   backToTopButton.addEventListener('click', (event) => {
     event.preventDefault();
-    scrollToTop();
+    scrollNavigation();
+    window.setTimeout(updateButtonLabel, 260);
+    window.setTimeout(updateButtonLabel, 720);
   });
 
   let rafId = 0;
@@ -775,15 +974,14 @@ function initializeStoryBackToTop() {
 
     rafId = window.requestAnimationFrame(() => {
       rafId = 0;
-      updateButtonVisibility();
+      updateButtonLabel();
     });
   };
 
-  mobileQuery.addEventListener('change', requestUpdate);
   scroller.addScrollListener(requestUpdate);
   window.addEventListener('resize', requestUpdate, { passive: true });
 
-  updateButtonVisibility();
+  updateButtonLabel();
 }
 
 function initializeStatisticsPage() {
@@ -792,18 +990,12 @@ function initializeStatisticsPage() {
   const statPage = document.getElementById('main-scroll') || document.body;
   const formatInteger = (value) => new Intl.NumberFormat('it-IT').format(Math.max(0, Math.round(value)));
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const statData = {
-    houses: [
-      { town: 'ZAGARA', built: 612, occupied: 189, active: 74 },
-      { town: 'MONTEFERRO', built: 431, occupied: 102, active: 39 },
-      { town: 'BORGO CUPO', built: 288, occupied: 41, active: 12 },
-    ],
-  };
 
   const housesHost = document.getElementById('houses-chart');
   if (housesHost && !housesHost.querySelector('svg')) {
+    housesHost.classList.add('stat-chart--houses');
     housesHost.innerHTML = `
-      <svg viewBox="0 60 520 290" xmlns="http://www.w3.org/2000/svg" class="block w-full h-auto" aria-labelledby="houses-chart-title houses-chart-desc" role="img" style="font-family: 'Diatype', serif;">
+      <svg viewBox="0 0 520 290" xmlns="http://www.w3.org/2000/svg" class="block w-full h-auto stat-svg--houses" aria-labelledby="houses-chart-title houses-chart-desc" role="img" style="font-family: 'Diatype', serif;">
         <style type="text/css"><![CDATA[
           text {
             font-family: 'Diatype-Mono', 'Diatype', sans-serif !important;
@@ -814,55 +1006,55 @@ function initializeStatisticsPage() {
             text-transform: none !important;
             font-size: 10px !important;
           }
-          .small { font-size: 11px !important; }
+          .small { font-size: 10px !important; }
           .axis { stroke: #1E1E1E; stroke-width: 1; }
-          .b1 { fill: #1E1E1E; }
-          .b2 { fill: #5C5C5C; }
-          .b3 { fill: #A0A0A0; }
+          .b1, .legend-b1 { fill: #1E1E1E; }
+          .b2, .legend-b2 { fill: #5C5C5C; }
+          .b3, .legend-b3 { fill: #A0A0A0; }
         ]]></style>
         <title id="houses-chart-title">Case occupate</title>
         <desc id="houses-chart-desc">Confronto tra case costruite, occupate e attive per Zagara, Monteferro e Borgo Cupo.</desc>
-        <line x1="60" y1="300" x2="490" y2="300" class="axis"/>
-        <line x1="60" y1="100" x2="60" y2="300" class="axis"/>
-        <rect x="90" y="145" width="28" height="155" class="b1"/>
-        <rect x="123" y="250" width="28" height="50" class="b2"/>
-        <rect x="156" y="280" width="28" height="20" class="b3"/>
-        <text x="88" y="138" class="small">612</text>
-        <text x="120" y="243" class="small">189</text>
-        <text x="155" y="273" class="small">74</text>
-        <text x="90" y="325" class="small">ZAGARA</text>
-        <rect x="240" y="190" width="28" height="110" class="b1"/>
-        <rect x="273" y="270" width="28" height="30" class="b2"/>
-        <rect x="306" y="290" width="28" height="10" class="b3"/>
-        <text x="238" y="183" class="small">431</text>
-        <text x="270" y="263" class="small">102</text>
-        <text x="305" y="283" class="small">39</text>
-        <text x="235" y="325" class="small">MONTEFERRO</text>
-        <rect x="390" y="228" width="28" height="72" class="b1"/>
-        <rect x="423" y="290" width="28" height="10" class="b2"/>
-        <rect x="456" y="296" width="28" height="4" class="b3"/>
-        <text x="388" y="221" class="small">288</text>
-        <text x="423" y="283" class="small">41</text>
-        <text x="455" y="290" class="small">12</text>
-        <text x="390" y="325" class="small">BORGO CUPO</text>
-   <rect x="150" y="72" width="7" height="7" class="b1"/>
-<text x="165" y="80" class="small">COSTRUITE</text>
-
-<rect x="265" y="72" width="7" height="7" class="b2"/>
-<text x="280" y="80" class="small">OCCUPATE</text>
-
-<rect x="380" y="72" width="7" height="7" class="b3"/>
-<text x="395" y="80" class="small">ATTIVE</text>
+        <g class="houses-chart-inner" transform="translate(-30 0)">
+        <line x1="60" y1="240" x2="490" y2="240" class="axis"/>
+        <line x1="60" y1="40" x2="60" y2="240" class="axis"/>
+        <rect x="90" y="85" width="28" height="155" class="b1"/>
+        <rect x="123" y="190" width="28" height="50" class="b2"/>
+        <rect x="156" y="220" width="28" height="20" class="b3"/>
+        <text x="104" y="78" class="small" text-anchor="middle" dominant-baseline="middle">612</text>
+        <text x="137" y="183" class="small" text-anchor="middle" dominant-baseline="middle">189</text>
+        <text x="170" y="213" class="small" text-anchor="middle" dominant-baseline="middle">74</text>
+        <text x="137" y="265" class="small" text-anchor="middle" dominant-baseline="middle">ZAGARA</text>
+        <rect x="240" y="130" width="28" height="110" class="b1"/>
+        <rect x="273" y="210" width="28" height="30" class="b2"/>
+        <rect x="306" y="230" width="28" height="10" class="b3"/>
+        <text x="254" y="123" class="small" text-anchor="middle" dominant-baseline="middle">431</text>
+        <text x="287" y="203" class="small" text-anchor="middle" dominant-baseline="middle">102</text>
+        <text x="320" y="223" class="small" text-anchor="middle" dominant-baseline="middle">39</text>
+        <text x="287" y="265" class="small" text-anchor="middle" dominant-baseline="middle">MONTEFERRO</text>
+        <rect x="390" y="168" width="28" height="72" class="b1"/>
+        <rect x="423" y="230" width="28" height="10" class="b2"/>
+        <rect x="456" y="236" width="28" height="4" class="b3"/>
+        <text x="404" y="161" class="small" text-anchor="middle" dominant-baseline="middle">288</text>
+        <text x="437" y="223" class="small" text-anchor="middle" dominant-baseline="middle">41</text>
+        <text x="470" y="230" class="small" text-anchor="middle" dominant-baseline="middle">12</text>
+        <text x="437" y="265" class="small" text-anchor="middle" dominant-baseline="middle">BORGO CUPO</text>
+        <rect x="150" y="12" width="7" height="7" class="legend-b1"/>
+        <text x="165" y="16" class="small" dominant-baseline="middle">COSTRUITE</text>
+        <rect x="265" y="12" width="7" height="7" class="legend-b2"/>
+        <text x="280" y="16" class="small" dominant-baseline="middle">OCCUPATE</text>
+        <rect x="380" y="12" width="7" height="7" class="legend-b3"/>
+        <text x="395" y="16" class="small" dominant-baseline="middle">ATTIVE</text>
+        </g>
       </svg>
     `;
   }
 
   const charts = Array.from(statPage.querySelectorAll('[data-stat-chart]'));
-  const liveNodes = [];
-
   const getSvg = (chart) => chart.matches('svg') ? chart : chart.querySelector('svg');
   const numberPattern = /^\s*(\d+(?:[.,]\d+)?)(%)?\s*$/;
   const trailingNumberPattern = /^(.*?)(\d+(?:[.,]\d+)?)(%)?\s*$/;
+  const randomDelay = () => 5000 + Math.random() * 5000;
+  const randomItem = (items) => items[Math.floor(Math.random() * items.length)];
 
   const parseNumericText = (text) => {
     const match = String(text || '').trim().match(numberPattern);
@@ -895,15 +1087,15 @@ function initializeStatisticsPage() {
     node.textContent = `${prefix}${number}${suffix}`;
   };
 
-  const registerLiveNode = (node, parsed) => {
-    if (!node || node.dataset.statLive === 'true' || !parsed || !Number.isFinite(parsed.value)) return;
+  const registerLiveNode = (node, parsed, options = {}) => {
+    if (!node || !parsed || !Number.isFinite(parsed.value)) return;
     node.dataset.statLive = 'true';
     node.dataset.statValue = String(parsed.value);
-    node.dataset.statCurrent = String(parsed.value);
+    node.dataset.statCurrent = String(options.current ?? parsed.value);
     node.dataset.statPrefix = parsed.prefix || '';
     node.dataset.statSuffix = parsed.suffix || '';
-    node.dataset.statDecimals = String(parsed.decimals || 0);
-    liveNodes.push(node);
+    node.dataset.statDecimals = String(options.decimals ?? parsed.decimals ?? 0);
+    renderLiveValue(node);
   };
 
   const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
@@ -923,9 +1115,18 @@ function initializeStatisticsPage() {
     requestAnimationFrame(frame);
   };
 
+  const fadePulse = (...nodes) => {
+    nodes.filter(Boolean).forEach((node) => {
+      node.style.transition = 'opacity 760ms cubic-bezier(.77,0,.175,1)';
+      node.style.opacity = '.35';
+      window.setTimeout(() => {
+        node.style.opacity = '1';
+      }, 80);
+    });
+  };
+
   const getLineRevealBox = (line) => {
     if (!line || typeof line.getBBox !== 'function') return null;
-
     try {
       const box = line.getBBox();
       return {
@@ -968,7 +1169,7 @@ function initializeStatisticsPage() {
     return rect;
   };
 
-  const resetLineBuild = (chart) => {
+  const setupLineBuild = (chart) => {
     const svg = getSvg(chart);
     if (!svg) return;
 
@@ -976,7 +1177,6 @@ function initializeStatisticsPage() {
       let rect = line.dataset.statClipId
         ? svg.querySelector(`#${CSS.escape(line.dataset.statClipId)} rect`)
         : null;
-
       if (!rect) rect = prepareLineRevealClip(line, index);
       if (!rect) return;
 
@@ -999,7 +1199,6 @@ function initializeStatisticsPage() {
       const rect = line.dataset.statClipId
         ? svg.querySelector(`#${CSS.escape(line.dataset.statClipId)} rect`)
         : null;
-
       if (!rect) return;
 
       const targetWidth = Number(rect.dataset.statTargetWidth || 0);
@@ -1007,23 +1206,68 @@ function initializeStatisticsPage() {
 
       rect.setAttribute('width', '0');
       window.setTimeout(() => {
-        animate(950, (t) => {
-          rect.setAttribute('width', String(targetWidth * t));
-        });
+        animate(950, (t) => rect.setAttribute('width', String(targetWidth * t)));
       }, index * 90);
     });
+  };
+
+  const ageBarLabelGap = 10;
+
+  const syncAgeBarLabel = (rect, width = null) => {
+    if (!rect) return;
+    const label = rect.nextElementSibling;
+    if (!label || label.tagName.toLowerCase() !== 'text') return;
+    const x = Number(rect.getAttribute('x') || 0);
+    const currentWidth = width == null ? Number(rect.getAttribute('width') || 0) : Number(width);
+    if (!Number.isFinite(x) || !Number.isFinite(currentWidth)) return;
+    label.setAttribute('x', String(x + currentWidth + ageBarLabelGap));
+  };
+
+  const syncHouseBarLabel = (rect, y = null) => {
+    if (!rect) return;
+    const svg = rect.ownerSVGElement;
+    if (!svg) return;
+    const dataRects = Array.from(svg.querySelectorAll('rect.b1, rect.b2, rect.b3'));
+    const index = dataRects.indexOf(rect);
+    if (index < 0) return;
+    const label = Array.from(svg.querySelectorAll('text.small[data-stat-live="true"]'))[index];
+    if (!label) return;
+    const rectX = Number(rect.getAttribute('x') || 0);
+    const rectWidth = Number(rect.getAttribute('width') || 0);
+    const currentY = y == null ? Number(rect.getAttribute('y') || 0) : Number(y);
+    if (!Number.isFinite(rectX) || !Number.isFinite(rectWidth) || !Number.isFinite(currentY)) return;
+    label.setAttribute('x', String(rectX + rectWidth / 2));
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('y', String(currentY - 7));
   };
 
   const setupBarsRight = (chart) => {
     const svg = getSvg(chart);
     if (!svg) return;
-    svg.querySelectorAll('rect.bar, rect.bar2').forEach((rect) => {
-      if (!rect.dataset.statTargetWidth) rect.dataset.statTargetWidth = rect.getAttribute('width') || '0';
+
+    const rightRows = Array.from(svg.querySelectorAll('rect.bar')).map((rect) => {
       const label = rect.nextElementSibling;
-      // Percent labels in this chart are live data.
-      svg.querySelectorAll('text').forEach((text) => {
-        if ((text.textContent || '').trim().endsWith('%')) registerLiveNode(text, parseNumericText(text.textContent));
-      });
+      const parsed = label ? parseNumericText(label.textContent) : null;
+      const y = Number(rect.getAttribute('y') || 0);
+      if (!parsed || !Number.isFinite(parsed.value)) return null;
+      return { rect, label, y, value: parsed.value, scale: Number(rect.getAttribute('width') || 0) / parsed.value };
+    }).filter(Boolean);
+
+    rightRows.forEach(({ rect, label, value, scale, y }) => {
+      let current = value;
+      if (y === 98) current = 36;
+      if (y === 130) current = 54;
+      rect.dataset.statScale = String(scale || 3);
+      rect.dataset.statCurrent = String(current);
+      rect.dataset.statTargetWidth = String(current * (scale || 3));
+      rect.setAttribute('width', String(current * (scale || 3)));
+      registerLiveNode(label, { value: current, suffix: '%', prefix: '', decimals: 0 }, { current, decimals: 0 });
+      syncAgeBarLabel(rect, current * (scale || 3));
+    });
+
+    svg.querySelectorAll('rect.bar2').forEach((rect) => {
+      if (!rect.dataset.statTargetWidth) rect.dataset.statTargetWidth = rect.getAttribute('width') || '0';
+      syncAgeBarLabel(rect, Number(rect.dataset.statTargetWidth || rect.getAttribute('width') || 0));
     });
   };
 
@@ -1033,6 +1277,7 @@ function initializeStatisticsPage() {
     svg.querySelectorAll('rect.bar, rect.bar2').forEach((rect) => {
       if (!rect.dataset.statTargetWidth) rect.dataset.statTargetWidth = rect.getAttribute('width') || '0';
       rect.setAttribute('width', '0');
+      syncAgeBarLabel(rect, 0);
     });
   };
 
@@ -1040,60 +1285,58 @@ function initializeStatisticsPage() {
     const svg = getSvg(chart);
     if (!svg) return;
     svg.querySelectorAll('rect.bar, rect.bar2').forEach((rect, index) => {
-      const target = Number(rect.dataset.statTargetWidth || 0);
+      const target = Number(rect.dataset.statTargetWidth || rect.getAttribute('width') || 0);
+      const label = rect.nextElementSibling;
       window.setTimeout(() => {
-        animate(780, (t) => rect.setAttribute('width', String(target * t)));
+        fadePulse(label, rect);
+        animate(780, (t) => {
+          const width = target * t;
+          rect.setAttribute('width', String(width));
+          syncAgeBarLabel(rect, width);
+        });
       }, index * 45);
     });
   };
 
-  const setupNumberCount = (chart) => {
+  const setupBirths = (chart) => {
     const svg = getSvg(chart);
     if (!svg) return;
-    svg.querySelectorAll('text').forEach((text) => {
-      const raw = (text.textContent || '').trim();
-      const parsed = parseNumericText(raw);
-      if (parsed) registerLiveNode(text, parsed);
+    svg.querySelectorAll('text.num').forEach((text) => {
+      const x = Number(text.getAttribute('x') || 0);
+      const parsed = parseNumericText(text.textContent);
+      if (parsed && x >= 430) registerLiveNode(text, parsed, { decimals: 0 });
     });
   };
 
-  const resetNumberCount = (chart) => {
+  const setupServices = (chart) => {
     const svg = getSvg(chart);
     if (!svg) return;
-    svg.querySelectorAll('text[data-stat-live="true"]').forEach((text) => {
-      const suffix = text.dataset.statSuffix || '';
-      const prefix = text.dataset.statPrefix || '';
-      text.textContent = `${prefix}0${suffix}`;
-    });
-  };
-
-  const playNumberCount = (chart) => {
-    const svg = getSvg(chart);
-    if (!svg) return;
-    svg.querySelectorAll('text[data-stat-live="true"]').forEach((text) => {
-      const target = Number(text.dataset.statCurrent || text.dataset.statValue || 0);
-      const decimals = Number(text.dataset.statDecimals || 0);
-      const suffix = text.dataset.statSuffix || '';
-      const prefix = text.dataset.statPrefix || '';
-      animate(900, (t) => {
-        const value = target * t;
-        const number = decimals ? value.toFixed(decimals) : formatInteger(value);
-        text.textContent = `${prefix}${number}${suffix}`;
-      });
-    });
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
   };
 
   const setupRectGrow = (chart) => {
     const svg = getSvg(chart);
     if (!svg) return;
-    svg.querySelectorAll('rect.b1, rect.b2, rect.b3').forEach((rect) => {
+
+    const dataRects = Array.from(svg.querySelectorAll('rect.b1, rect.b2, rect.b3'));
+    const numericTexts = Array.from(svg.querySelectorAll('text.small')).filter((text) => parseNumericText(text.textContent));
+
+    dataRects.forEach((rect, index) => {
       if (!rect.dataset.statTargetY) rect.dataset.statTargetY = rect.getAttribute('y') || '300';
       if (!rect.dataset.statTargetHeight) rect.dataset.statTargetHeight = rect.getAttribute('height') || '0';
       if (!rect.dataset.statBaseline) rect.dataset.statBaseline = String(Number(rect.dataset.statTargetY) + Number(rect.dataset.statTargetHeight));
-    });
-    svg.querySelectorAll('text.small').forEach((text) => {
-      const parsed = parseNumericText(text.textContent);
-      if (parsed) registerLiveNode(text, parsed);
+
+      const text = numericTexts[index];
+      const parsed = text ? parseNumericText(text.textContent) : null;
+      if (!parsed) return;
+
+      const kind = rect.classList.contains('b1') ? 'built' : rect.classList.contains('b2') ? 'occupied' : 'active';
+      rect.dataset.statHouseKind = kind;
+      rect.dataset.statCurrent = String(parsed.value);
+      rect.dataset.statScale = String(Number(rect.dataset.statTargetHeight || 0) / parsed.value || 1);
+      text.dataset.statHouseKind = kind;
+      text.dataset.statHouseRectIndex = String(index);
+      registerLiveNode(text, parsed, { decimals: 0 });
     });
   };
 
@@ -1104,6 +1347,7 @@ function initializeStatisticsPage() {
       const baseline = Number(rect.dataset.statBaseline || 300);
       rect.setAttribute('y', String(baseline));
       rect.setAttribute('height', '0');
+      syncHouseBarLabel(rect, baseline);
     });
   };
 
@@ -1114,10 +1358,14 @@ function initializeStatisticsPage() {
       const baseline = Number(rect.dataset.statBaseline || 300);
       const targetHeight = Number(rect.dataset.statTargetHeight || 0);
       window.setTimeout(() => {
-        animate(760, (t) => {
+        const label = Array.from(svg.querySelectorAll('text.small[data-stat-live="true"]'))[index];
+        fadePulse(rect, label);
+        animate(900, (t) => {
           const height = targetHeight * t;
+          const y = baseline - height;
           rect.setAttribute('height', String(height));
-          rect.setAttribute('y', String(baseline - height));
+          rect.setAttribute('y', String(y));
+          syncHouseBarLabel(rect, y);
         });
       }, index * 45);
     });
@@ -1128,20 +1376,19 @@ function initializeStatisticsPage() {
     if (!svg) return;
     svg.querySelectorAll('line.value').forEach((line) => {
       if (!line.dataset.statTargetX2) line.dataset.statTargetX2 = line.getAttribute('x2') || line.getAttribute('x1') || '0';
+      line.dataset.statScale = String((Number(line.previousElementSibling?.getAttribute('x2') || line.getAttribute('x2') || 430) - Number(line.getAttribute('x1') || 125)) / 100);
     });
     svg.querySelectorAll('text').forEach((text) => {
       const x = Number(text.getAttribute('x') || 0);
       const parsed = parseNumericText(text.textContent);
-      if (parsed && x >= 390) registerLiveNode(text, parsed);
+      if (parsed && x >= 390) registerLiveNode(text, parsed, { decimals: 0 });
     });
   };
 
   const resetLinePosition = (chart) => {
     const svg = getSvg(chart);
     if (!svg) return;
-    svg.querySelectorAll('line.value').forEach((line) => {
-      line.setAttribute('x2', line.getAttribute('x1') || '0');
-    });
+    svg.querySelectorAll('line.value').forEach((line) => line.setAttribute('x2', line.getAttribute('x1') || '0'));
   };
 
   const playLinePosition = (chart) => {
@@ -1150,40 +1397,27 @@ function initializeStatisticsPage() {
     svg.querySelectorAll('line.value').forEach((line, index) => {
       const startX = Number(line.getAttribute('x1') || 0);
       const targetX = Number(line.dataset.statTargetX2 || startX);
-      window.setTimeout(() => {
-        animate(760, (t) => {
-          line.setAttribute('x2', String(startX + (targetX - startX) * t));
-        });
-      }, index * 60);
+      window.setTimeout(() => animate(760, (t) => line.setAttribute('x2', String(startX + (targetX - startX) * t))), index * 60);
     });
   };
 
   const setupPopulationLiveLabels = (chart) => {
     const svg = getSvg(chart);
     if (!svg) return;
-    svg.querySelectorAll('text').forEach((text) => {
+    svg.querySelectorAll('text').forEach((text, index) => {
       const x = Number(text.getAttribute('x') || 0);
       if (x < 390) return;
       const parsed = parseTrailingNumericText(text.textContent);
-      if (parsed) registerLiveNode(text, parsed);
+      if (!parsed) return;
+      registerLiveNode(text, parsed, { decimals: 0 });
+      text.dataset.statPopulationIndex = String(index);
     });
-  };
-
-  const resetChart = (chart) => {
-    const type = chart.dataset.statChart;
-    if (type === 'line-build') resetLineBuild(chart);
-    if (type === 'bars-right') resetBarsRight(chart);
-    if (type === 'number-count') resetNumberCount(chart);
-    if (type === 'rect-grow') resetRectGrow(chart);
-    if (type === 'line-position') resetLinePosition(chart);
   };
 
   const playChart = (chart) => {
     const type = chart.dataset.statChart;
-    resetChart(chart);
     if (type === 'line-build') playLineBuild(chart);
     if (type === 'bars-right') playBarsRight(chart);
-    if (type === 'number-count') playNumberCount(chart);
     if (type === 'rect-grow') playRectGrow(chart);
     if (type === 'line-position') playLinePosition(chart);
   };
@@ -1192,24 +1426,33 @@ function initializeStatisticsPage() {
     const type = chart.dataset.statChart;
     if (type === 'line-build') {
       setupPopulationLiveLabels(chart);
-      resetLineBuild(chart);
+      setupLineBuild(chart);
     }
     if (type === 'bars-right') setupBarsRight(chart);
-    if (type === 'number-count') setupNumberCount(chart);
+    if (type === 'number-count' && chart.classList.contains('stat-chart--births')) setupBirths(chart);
+    if (type === 'number-count' && chart.classList.contains('stat-chart--services')) setupServices(chart);
     if (type === 'rect-grow') setupRectGrow(chart);
     if (type === 'line-position') setupLinePosition(chart);
-    resetChart(chart);
+    if (type === 'bars-right') resetBarsRight(chart);
+    if (type === 'rect-grow') resetRectGrow(chart);
+    if (type === 'line-position') resetLinePosition(chart);
   });
 
+  const activeCharts = new WeakSet();
+  const playedCharts = new WeakSet();
   const scroller = typeof getStoryScroller === 'function' ? getStoryScroller() : null;
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         const chart = entry.target;
         if (entry.isIntersecting) {
-          playChart(chart);
+          activeCharts.add(chart);
+          if (!playedCharts.has(chart)) {
+            playedCharts.add(chart);
+            playChart(chart);
+          }
         } else {
-          resetChart(chart);
+          activeCharts.delete(chart);
         }
       });
     },
@@ -1222,47 +1465,182 @@ function initializeStatisticsPage() {
 
   charts.forEach((chart) => observer.observe(chart));
 
-  if (liveNodes.length) {
-    window.setInterval(() => {
-      liveNodes.forEach((node) => {
-        const current = Number(node.dataset.statCurrent || node.dataset.statValue || 0);
-        const next = Math.max(0, current - 1);
-        node.dataset.statCurrent = String(next);
-        renderLiveValue(node);
-      });
-    }, 10000);
-  }
-
-  let statModalDismissed = false;
-
-  const closeStatDeclineModal = () => {
-    statModalDismissed = true;
-    const modal = document.getElementById('stat-decline-modal');
-    if (!modal) return;
-    modal.classList.remove('is-visible');
-    modal.setAttribute('aria-hidden', 'true');
+  const scheduleRandomLoop = (chart, callback) => {
+    const run = () => {
+      window.setTimeout(() => {
+        if (activeCharts.has(chart)) callback();
+        run();
+      }, randomDelay());
+    };
+    run();
   };
 
-  window.closeStatDeclineModal = closeStatDeclineModal;
+  const updatePopulation = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    const labels = Array.from(svg.querySelectorAll('text[data-stat-live="true"]')).filter((text) => Number(text.getAttribute('x') || 0) >= 390);
+    const lines = Array.from(svg.querySelectorAll('polyline.line'));
+    if (!labels.length || !lines.length) return;
 
-  window.setTimeout(() => {
-    if (statModalDismissed) return;
-    const modal = document.getElementById('stat-decline-modal');
-    if (!modal) return;
-    modal.classList.add('is-visible');
-    modal.setAttribute('aria-hidden', 'false');
-  }, 30000);
+    const index = Math.floor(Math.random() * Math.min(labels.length, lines.length));
+    const label = labels[index];
+    const line = lines[index];
+    const current = Number(label.dataset.statCurrent || label.dataset.statValue || 0);
+    if (!Number.isFinite(current) || current <= 0) return;
 
-  const handleStatModalClose = (event) => {
-    const closeButton = event.target.closest?.('[data-stat-modal-close], .stat-decline-modal__close');
-    if (!closeButton) return;
-    event.preventDefault();
-    event.stopPropagation();
-    closeStatDeclineModal();
+    label.dataset.statCurrent = String(current - 1);
+    renderLiveValue(label);
+
+    const points = (line.getAttribute('points') || '').trim().split(/\s+/).filter(Boolean).map((pair) => {
+      const [x, y] = pair.split(',').map(Number);
+      if (!Number.isFinite(x) || !Number.isFinite(y)) return pair;
+      return `${x},${y + 1}`;
+    }).join(' ');
+    if (points) line.setAttribute('points', points);
+
+    const dots = Array.from(svg.querySelectorAll('circle.dot')).slice(index * 6, index * 6 + 6);
+    dots.forEach((dot) => {
+      const cy = Number(dot.getAttribute('cy') || 0);
+      if (Number.isFinite(cy)) dot.setAttribute('cy', String(cy + 1));
+    });
+    fadePulse(label, line, ...dots);
   };
 
-  document.addEventListener('click', handleStatModalClose, true);
-  document.addEventListener('pointerdown', handleStatModalClose, true);
+  const updateAge = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    const row36 = Array.from(svg.querySelectorAll('rect.bar')).find((rect) => Number(rect.getAttribute('y') || 0) === 98);
+    const row65 = Array.from(svg.querySelectorAll('rect.bar')).find((rect) => Number(rect.getAttribute('y') || 0) === 130);
+    if (!row36 || !row65) return;
+
+    const label36 = row36.nextElementSibling;
+    const label65 = row65.nextElementSibling;
+    const current65 = Number(label65?.dataset.statCurrent || 54);
+    const current36 = Number(label36?.dataset.statCurrent || 36);
+    if (current65 >= 62) return;
+
+    const next65 = current65 + 1;
+    const next36 = Math.max(0, current36 - 1);
+    const scale65 = Number(row65.dataset.statScale || 3);
+    const scale36 = Number(row36.dataset.statScale || 3);
+
+    label65.dataset.statCurrent = String(next65);
+    label36.dataset.statCurrent = String(next36);
+    row65.dataset.statCurrent = String(next65);
+    row36.dataset.statCurrent = String(next36);
+    row65.dataset.statTargetWidth = String(next65 * scale65);
+    row36.dataset.statTargetWidth = String(next36 * scale36);
+
+    renderLiveValue(label65);
+    renderLiveValue(label36);
+
+    const start65Width = Number(row65.getAttribute('width') || 0);
+    const start36Width = Number(row36.getAttribute('width') || 0);
+    const target65Width = next65 * scale65;
+    const target36Width = next36 * scale36;
+
+    fadePulse(label65, label36, row65, row36);
+    animate(900, (t) => {
+      const width65 = start65Width + (target65Width - start65Width) * t;
+      const width36 = start36Width + (target36Width - start36Width) * t;
+      row65.setAttribute('width', String(width65));
+      row36.setAttribute('width', String(width36));
+      syncAgeBarLabel(row65, width65);
+      syncAgeBarLabel(row36, width36);
+    });
+  };
+
+  const updateBirths = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    const labels = Array.from(svg.querySelectorAll('text.num[data-stat-live="true"]')).filter((text) => Number(text.getAttribute('x') || 0) >= 430);
+    const label = randomItem(labels);
+    if (!label) return;
+    const current = Number(label.dataset.statCurrent || label.dataset.statValue || 0);
+    label.dataset.statCurrent = String(current + 1);
+    renderLiveValue(label);
+    fadePulse(label);
+  };
+
+  const updateHouses = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    const rects = Array.from(svg.querySelectorAll('rect.b2, rect.b3')).filter((rect) => Number(rect.dataset.statCurrent || 0) > 0);
+    const rect = randomItem(rects);
+    if (!rect) return;
+
+    const dataRects = Array.from(svg.querySelectorAll('rect.b1, rect.b2, rect.b3'));
+    const index = dataRects.indexOf(rect);
+    const texts = Array.from(svg.querySelectorAll('text.small[data-stat-live="true"]'));
+    const label = texts[index];
+    const current = Number(rect.dataset.statCurrent || label?.dataset.statCurrent || 0);
+    if (!Number.isFinite(current) || current <= 0) return;
+
+    const next = current - 1;
+    const scale = Number(rect.dataset.statScale || 1);
+    const baseline = Number(rect.dataset.statBaseline || 240);
+    const nextHeight = Math.max(0, next * scale);
+    const nextY = baseline - nextHeight;
+
+    rect.dataset.statCurrent = String(next);
+    rect.dataset.statTargetHeight = String(nextHeight);
+    rect.dataset.statTargetY = String(nextY);
+
+    if (label) {
+      label.dataset.statCurrent = String(next);
+      renderLiveValue(label);
+    }
+
+    const startHeight = Number(rect.getAttribute('height') || 0);
+    const startY = Number(rect.getAttribute('y') || baseline);
+
+    fadePulse(rect, label);
+    animate(900, (t) => {
+      const height = startHeight + (nextHeight - startHeight) * t;
+      const y = startY + (nextY - startY) * t;
+      rect.setAttribute('height', String(height));
+      rect.setAttribute('y', String(y));
+      syncHouseBarLabel(rect, y);
+    });
+  };
+
+  const updateContinuity = (chart) => {
+    const svg = getSvg(chart);
+    if (!svg) return;
+    const labels = Array.from(svg.querySelectorAll('text[data-stat-live="true"]')).filter((text) => Number(text.dataset.statCurrent || 0) > 0);
+    const label = randomItem(labels);
+    if (!label) return;
+
+    const labelsInOrder = Array.from(svg.querySelectorAll('text[data-stat-live="true"]'));
+    const lines = Array.from(svg.querySelectorAll('line.value'));
+    const index = labelsInOrder.indexOf(label);
+    const line = lines[index];
+    const current = Number(label.dataset.statCurrent || label.dataset.statValue || 0);
+    if (!Number.isFinite(current) || current <= 0) return;
+
+    const next = current - 1;
+    label.dataset.statCurrent = String(next);
+    renderLiveValue(label);
+
+    if (line) {
+      const x1 = Number(line.getAttribute('x1') || 140);
+      const scale = Number(line.dataset.statScale || 2.3);
+      const nextX2 = x1 + next * scale;
+      line.setAttribute('x2', String(nextX2));
+      line.dataset.statTargetX2 = String(nextX2);
+      fadePulse(label, line);
+    } else {
+      fadePulse(label);
+    }
+  };
+
+  charts.forEach((chart) => {
+    if (chart.classList.contains('stat-chart--population')) scheduleRandomLoop(chart, () => updatePopulation(chart));
+    if (chart.classList.contains('stat-chart--age')) scheduleRandomLoop(chart, () => updateAge(chart));
+    if (chart.classList.contains('stat-chart--births')) scheduleRandomLoop(chart, () => updateBirths(chart));
+    if (chart.classList.contains('stat-chart--houses')) scheduleRandomLoop(chart, () => updateHouses(chart));
+    if (chart.classList.contains('stat-chart--continuity')) scheduleRandomLoop(chart, () => updateContinuity(chart));
+  });
 }
 
 if (document.readyState === 'loading') {
@@ -1570,4 +1948,166 @@ document.addEventListener('DOMContentLoaded', initializeLoadingAnimation);
       setupMap();
     }
   });
+  document.addEventListener('DOMContentLoaded', applyActiveSidebarLink);
+document.addEventListener('DOMContentLoaded', initializeStoryBackToTop);
+document.addEventListener('DOMContentLoaded', function () {
+  if (document.body.classList.contains('home-page')) return;
+  initializePageTransition();
+});
+
+})();
+// Fade-in sections while scrolling.
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    const scroller = getStoryScroller();
+    if (!scroller) return;
+
+    const mainScroll = scroller.mainScroll;
+    const storyGrid =
+      mainScroll.querySelector('.storia-text-fade-grid, .stat-text-fade-grid') ||
+      Array.from(mainScroll.children).find((el) => el.matches?.('.grid.grid-cols-2'));
+
+    if (!storyGrid) return;
+
+    const storyItems = Array.from(storyGrid.children).filter((element) => element.nodeType === 1);
+    if (!storyItems.length) return;
+
+    storyItems.forEach((element) => element.classList.add('story-fade'));
+
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !('IntersectionObserver' in window)
+    ) {
+      storyItems.forEach((element) => element.classList.add('story-fade--visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('story-fade--visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        root: scroller.root,
+        threshold: 0.15,
+        rootMargin: '0px 0px -10% 0px',
+      }
+    );
+
+    storyItems.forEach((element) => observer.observe(element));
+  });
+})();
+
+// Header comune mobile: mostra in scroll-up, nasconde in scroll-down sotto 899px.
+(function () {
+  function initializeSiteHeaderScroll() {
+    const header = document.querySelector('[data-site-header], .site-header');
+    if (!header || header.dataset.siteHeaderScrollReady === 'true') return;
+    header.dataset.siteHeaderScrollReady = 'true';
+
+    const mobileQuery = window.matchMedia('(max-width: 899px)');
+    const mainScroll = document.getElementById('main-scroll');
+    const HIDE_AFTER_Y = 80;
+    const DIRECTION_THRESHOLD = 24;
+
+    const getWindowScrollY = () => window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
+    const getActiveScrollY = () => {
+      if (mainScroll) {
+        const style = window.getComputedStyle(mainScroll);
+        const useMainScroll = mainScroll.scrollHeight > mainScroll.clientHeight + 2 && /(auto|scroll)/.test(style.overflowY);
+        if (useMainScroll) return mainScroll.scrollTop || 0;
+      }
+      return getWindowScrollY();
+    };
+
+    let lastScrollY = getActiveScrollY();
+    let ticking = false;
+    let headerState = header.classList.contains('header-hidden') ? 'hidden' : 'visible';
+
+    const setHeaderVisible = () => {
+      if (headerState === 'visible') return;
+      headerState = 'visible';
+      header.classList.add('header-visible');
+      header.classList.remove('header-hidden');
+    };
+
+    const setHeaderHidden = () => {
+      if (headerState === 'hidden') return;
+      headerState = 'hidden';
+      header.classList.add('header-hidden');
+      header.classList.remove('header-visible');
+    };
+
+    const resetDesktopHeader = () => {
+      header.style.top = '';
+      headerState = 'visible';
+      header.classList.add('header-visible');
+      header.classList.remove('header-hidden');
+    };
+
+    const updateHeader = (scrollY) => {
+      if (!mobileQuery.matches) {
+        resetDesktopHeader();
+        lastScrollY = scrollY;
+        return;
+      }
+
+      header.style.top = '';
+      const currentScrollY = Math.max(0, scrollY);
+      const delta = currentScrollY - lastScrollY;
+
+      if (delta > DIRECTION_THRESHOLD && currentScrollY > HIDE_AFTER_Y) {
+        setHeaderHidden();
+      } else if (delta < -DIRECTION_THRESHOLD || currentScrollY <= HIDE_AFTER_Y) {
+        setHeaderVisible();
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    const requestUpdate = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        ticking = false;
+        updateHeader(getActiveScrollY());
+      });
+    };
+
+    headerState = 'visible';
+    header.style.top = '';
+    header.classList.add('header-visible');
+    header.classList.remove('header-hidden');
+
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+
+    if (mainScroll) {
+      mainScroll.addEventListener('scroll', requestUpdate, { passive: true });
+    }
+
+    window.addEventListener('resize', () => {
+      lastScrollY = getActiveScrollY();
+      if (mobileQuery.matches) setHeaderVisible();
+      else resetDesktopHeader();
+    }, { passive: true });
+
+    if (typeof mobileQuery.addEventListener === 'function') {
+      mobileQuery.addEventListener('change', () => {
+        lastScrollY = getActiveScrollY();
+        if (mobileQuery.matches) setHeaderVisible();
+        else resetDesktopHeader();
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeSiteHeaderScroll);
+  } else {
+    initializeSiteHeaderScroll();
+  }
 })();

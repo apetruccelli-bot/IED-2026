@@ -42,6 +42,7 @@
   --global-line-height: 1.34;
   --site-header-height: 82px;
   --redact-bg: #000000;
+  --radius: 8px; /* Imposta qui il valore unico per tutta la pagina */
 }
 
 /* TEMA DARK (Si attiva con data-theme="dark") */
@@ -55,6 +56,7 @@ html[data-theme="dark"] {
   --tag-active-text: #0e1113;
   --accent: #3fb0ff;
   --redact-bg: #ffffff; /* Le censure diventano bianche o grigie in dark mode se preferisci */
+  
 }
 
 html,
@@ -173,7 +175,7 @@ body.lightbox-open .search-wrap {
   max-height: 100%;
   padding: 1rem 1rem 1.25rem;
   background: rgba(255, 255, 255, 0.36);
-  border: 1px solid rgba(255, 255, 255, 0.34);
+  /* border: 1px solid rgba(255, 255, 255, 0.34); */
   border-radius: 28px;
   box-shadow: 0 26px 56px rgba(0, 0, 0, 0.22);
   backdrop-filter: blur(14px) saturate(1.05);
@@ -205,13 +207,13 @@ body.lightbox-open .search-wrap {
 
 html[data-theme="dark"] .archive-lightbox .lightbox-content {
   background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: none !important; /* Rimosso il bordo */
 }
 
 html:not([data-theme="dark"]) .archive-lightbox .lightbox-content {
   background: rgba(255, 255, 255, 0.52);
-  border: 1px solid rgba(255, 255, 255, 0.42);
-  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.14);
+  /* border: 1px solid rgba(255, 255, 255, 0.42); */
+  box-shadow: inset 0px 0px 20px 20px rgb(255 255 255);
 }
 
 body:not(.map-page-body) header {
@@ -260,6 +262,7 @@ html[data-theme="dark"] .archive-lightbox .lightbox-backdrop {
 .lightbox-main {
   display: flex;
   justify-content: center;
+  flex-grow: 1;
   align-items: center; /* vertical center image and nav inside modal */
   overflow: visible; /* allow nav buttons to sit beside the image inside the modal */
   border-radius: 12px;
@@ -269,7 +272,7 @@ html[data-theme="dark"] .archive-lightbox .lightbox-backdrop {
 }
 
 .archive-lightbox .lightbox-main {
-  flex: 0 0 auto;
+  /* flex: 0 0 auto; */
   padding: 0;
 }
 
@@ -312,7 +315,7 @@ html[data-theme="dark"] .archive-lightbox .lightbox-backdrop {
 .archive-lightbox .lb-info {
   align-items: flex-start;
   width: 100%;
-  margin-top: 14px;
+  margin-top: 0;
   gap: 4px;
 }
 .lb-description {
@@ -338,7 +341,7 @@ html[data-theme="dark"] .archive-lightbox .lightbox-backdrop {
   height: auto;
   /* ensure full image visibility without cropping */
   max-width: 100%;
-  max-height: 60vh;    /* Limita l'altezza dell'immagine per dare spazio al testo */
+  max-height: 100%; /* 60vh; */    /* Limita l'altezza dell'immagine per dare spazio al testo */
   object-fit: contain;
   background: #eee;
   margin: 0 auto;
@@ -348,10 +351,10 @@ html[data-theme="dark"] .archive-lightbox .lightbox-backdrop {
 }
 
 .archive-lightbox .lightbox-img {
-  max-height: calc(100vh - 380px);
+  /* max-height: calc(100vh - 380px); */
   background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  /* border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18); */
 }
 
 html[data-theme="dark"] .archive-lightbox .lightbox-img {
@@ -383,8 +386,8 @@ html:not([data-theme="dark"]) .archive-lightbox .lightbox-img {
   width: 64px;
   height: 64px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: start;
+  justify-content: end;
   line-height: 1;
   cursor: pointer;
   font-family: monospace;
@@ -399,42 +402,75 @@ html:not([data-theme="dark"]) .archive-lightbox .lightbox-img {
   opacity: 1;
 }
 
+/* ── LIGHTBOX NAVIGATION (Forzatura e cambio colore Light/Dark) ── */
 .lightbox-nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  border: 0;
-  background: rgba(255,255,255,0.02);
-  color: var(--text);
-  /* large, but not so wide to overlap the image; glyph sized for visibility */
-  font-size: 48px;
-  width: 96px; /* hit area kept comfortable for desktop and touch */
-  height: 96px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  cursor: pointer;
-  font-family: monospace;
-  z-index: 3;
-  opacity: 1;
-  padding: 0;
-  border-radius: 999px;
-  transition: none; /* remove transitions to avoid jank */
-  touch-action: manipulation; /* improve touch responsiveness */
-  -webkit-tap-highlight-color: transparent;
+  
+  /* Reset totale per eliminare cerchi, bordi di Tailwind e del JS */
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  
+  /* Colore di base per la versione LIGHT (Nero) */
+  color: #000000 !important;
+  
+  /* Dimensioni e stile identici alla mappa */
+  font-size: 16px !important;
+  width: 36px !important;
+  height: 36px !important;            
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  font-family: monospace !important;
+  z-index: 195 !important;
+  opacity: 1 !important;
+  transition: opacity 0.12s ease !important;
 }
 
+/* Colore per la versione DARK (Bianco) */
+html[data-theme="dark"] .lightbox-nav {
+  color: #ffffff !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Comportamento Hover (cala l'opacità come nella mappa) */
 .lightbox-nav:hover {
-  opacity: 1;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  opacity: 0.62 !important;
 }
 
-.lightbox-prev {
-  left: 12px; /* inside the modal, at the left side (beside the image) */
-}
+.lightbox-prev { left: 12px !important; }
+.lightbox-next { right: 12px !important; }
 
-.lightbox-next {
-  right: 12px; /* inside the modal, at the right side (beside the image) */
+/* Mobile responsive (Annulla i vecchi ingrandimenti a fondo pagina) */
+@media (max-width: 800px) {
+  .lightbox-nav {
+    font-size: 16px !important;
+    width: 36px !important;
+    height: 36px !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+  .lightbox-prev { left: 8px !important; }
+  .lightbox-next { right: 8px !important; }
 }
 
 .archive-lightbox .lb-description .tag,
@@ -702,7 +738,8 @@ button {
   padding: 20px 24px 60px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(32%, 1fr));
-  gap: 20px;
+  column-gap: 12px;
+  row-gap: 11px;
 }
 
 /* ── CARD ── */
@@ -714,7 +751,7 @@ button {
 }
 
 .card:hover {
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
 }
 
 .card:hover .card-img {
@@ -873,7 +910,7 @@ header {
 }
 
 .tag-btn.active {
-  padding: 2px 6px;
+  padding: 0px 6px;
 }
 
 .results-info,
@@ -1305,7 +1342,7 @@ body.map-page-body .topbar-right a:hover {
   flex-shrink: 0;
   z-index: 190;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 16px;
+  border-radius: 28px;
   box-shadow: 0 26px 56px rgba(0, 0, 0, 0.18);
   backdrop-filter: blur(14px) saturate(1.05);
   -webkit-backdrop-filter: blur(14px) saturate(1.05);
@@ -1371,7 +1408,7 @@ body.map-page-body .topbar-right a:hover {
   display: block;
   /* allow images to fully fit without being clipped by the link container */
   overflow: visible;
-  border-radius: 14px;
+  border-radius: 28px;
 }
 
 /* Ensure images inside gallery and lightbox inherit the same rounding */
@@ -1430,10 +1467,10 @@ body.map-page-body .topbar-right a:hover {
 .map-gallery-button {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0;
+  border: none;
   color: #fff;
-  background: rgba(255, 255, 255, 0.08);
+  background: transparent;
   cursor: pointer;
   line-height: 1;
 }
@@ -1545,7 +1582,7 @@ html[data-theme="dark"] .map-gallery {
 /* base / light mode */
 .map-gallery {
   background: rgba(255, 255, 255, 0.52) !important;
-  border: 1px solid rgba(255, 255, 255, 0.42) !important;
+  border: 0 !important;
   box-shadow: 0 28px 64px rgba(0, 0, 0, 0.14) !important;
   backdrop-filter: blur(14px) saturate(1.05) !important;
   -webkit-backdrop-filter: blur(14px) saturate(1.05) !important;
@@ -1657,7 +1694,7 @@ html[data-theme="dark"] .tags-bar .tag-btn.active,
 html[data-theme="dark"] header .tag-btn.active {
   background: #ffffff !important;
   color: #0e1113 !important;
-  padding: 3px 8px !important;
+  padding: 0px 6px !important;
   display: inline-block !important;
   width: fit-content !important;
   opacity: 1 !important;
@@ -1853,4 +1890,212 @@ html[data-theme="dark"] .about-section-link.active.is-revealed:hover {
 .mapboxgl-ctrl-bottom-left,
 .mapboxgl-ctrl-bottom-right {
   display: none !important;
+}
+/* ══════════════════════════════════════════════
+   MOBILE OVERRIDES  (≤ 768px)
+   ══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── ARCHIVE: sidebar sx fissa + grid a destra ── */
+
+  /* rimuovi padding-right desktop */
+  body:not(.about-page):not(.map-page-body):not(.intro-page) {
+    padding-right: 0;
+  }
+
+  /* header (tags/filtri): rimane fixed a sx, larghezza ridotta */
+  body:not(.about-page):not(.map-page-body):not(.intro-page) header {
+    width: 110px;
+    left: 0;
+    top: 82px;
+    padding: 0 8px;
+    /* l'altezza dipende dal contenuto — usiamo max-height per tenerlo compatto */
+    max-height: 40vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
+  /* area-bar: fixed sotto l'header (stimiamo ~40vh), stessa colonna sx */
+  .area-bar {
+    position: fixed;
+    top: calc(82px + 48vh);
+    bottom: 0;
+    left: 0;
+    right: auto;
+    width: 110px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 8px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* grid: affiancato alla sidebar sx */
+  .results-info,
+  .grid {
+    margin-left: 118px;
+  }
+
+  /* ── ARCHIVE LIGHTBOX ── */
+
+  /* nascondi sidebar quando lightbox è aperta */
+  body.lightbox-open header,
+  body.lightbox-open .area-bar {
+    display: none;
+  }
+
+  /* lightbox: fullscreen, è il containing block per i nav */
+  .archive-lightbox {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+    /* blur spostato qui così .lightbox-content non crea containing block */
+    backdrop-filter: blur(18px) saturate(1.05) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.05) !important;
+  }
+
+  .archive-lightbox .lightbox-content {
+    border-radius: 0;
+    padding: 48px 12px 16px;
+    gap: 10px;
+    height: 100%;
+    max-height: 100%;
+    /* rimuovi backdrop-filter che creerebbe un containing block separato */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* foto principale grande */
+  .archive-lightbox .lightbox-img {
+    max-height: 52vh;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  .archive-lightbox .lightbox-main {
+    position: relative;
+    flex: 0 0 auto;
+    min-height: 0;
+  }
+
+  /* bottoni prev/next: absolute rispetto a .archive-lightbox (è position:fixed senza transform) */
+  .archive-lightbox .lightbox-nav {
+    position: absolute !important;
+    top: 38% !important;
+    transform: translateY(-50%) !important;
+    font-size: 32px !important;
+    width: 44px !important;
+    height: 44px !important;
+    z-index: 400 !important;
+    opacity: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: var(--text) !important;
+  }
+
+  .archive-lightbox .lightbox-prev {
+    left: 4px !important;
+    right: auto !important;
+  }
+
+  .archive-lightbox .lightbox-next {
+    right: 4px !important;
+    left: auto !important;
+  }
+
+  /* see also: occupa tutto lo spazio rimanente fino al fondo */
+  .archive-lightbox .lightbox-see-also {
+    margin-top: 8px;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .archive-lightbox .lightbox-similar-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    flex: 1 1 auto;
+    align-items: stretch;
+  }
+
+  .archive-lightbox .lightbox-similar-item {
+    height: 100%;
+    min-height: 80px;
+  }
+
+  .archive-lightbox .lightbox-similar-item img {
+    border-radius: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  /* close button */
+  .archive-lightbox .lightbox-close {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 22px;
+    width: 36px;
+    height: 36px;
+    z-index: 300;
+  }
+
+  /* ── ABOUT: nav fixed a sx 90px, testo a destra ── */
+  body.about-page {
+    padding-left: 98px; /* 90px nav + 8px gap */
+    padding-right: 12px;
+  }
+
+  body.about-page .about-section-nav {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    width: 90px;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+    margin: 0;
+    padding: 8px 6px;
+    box-sizing: border-box;
+  }
+
+  /* testo about: font ridotto per stare nella colonna destra */
+  body.about-page .about-main p,
+  body.about-page .about-main h1,
+  body.about-page .about-main h2,
+  body.about-page .about-main figcaption {
+    font-size: 10px !important;
+  }
+
+  body.about-page .about-main h1 {
+    font-size: 13px !important;
+  }
+
+  body.about-page .about-main h2 {
+    font-size: 11px !important;
+  }
+
+  body.about-page .about-main {
+    margin: 0;
+    padding-top: 12px;
+    padding-bottom: 20vh;
+    max-width: none;
+  }
+
+  .about-main img,
+  .about-main figure {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  /* about-site-links fuori dal flusso, nascosto */
+  body.about-page .about-site-links {
+    display: none;
+  }
 }

@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Archivio</title>
 
+    <script>
+      const navigationEntry = performance.getEntriesByType("navigation")[0];
+      const isReload = navigationEntry
+        ? navigationEntry.type === "reload"
+        : performance.navigation && performance.navigation.type === 1;
+
+      if (isReload) {
+        window.location.replace("landing.html");
+      }
+    </script>
+
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
@@ -64,13 +75,17 @@
             ✕ Torna all'archivio
           </button>
 
-          <video
-            id="explore-webcam"
-            class="explore-webcam"
-            autoplay
-            muted
-            playsinline
-          ></video>
+          <div class="explore-hand-guide">
+            <div class="explore-webcam-wrap">
+              <video
+                id="explore-webcam"
+                class="explore-webcam"
+                autoplay
+                muted
+                playsinline
+              ></video>
+            </div>
+          </div>
 
           <div class="explore-description disossare">
             <p>Disossare</p>
@@ -119,11 +134,11 @@
 
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <div class="lb-backdrop" id="lb-backdrop"></div>
-      <button class="lb-close" id="lb-close">✕</button>
       <button class="lb-prev" id="lb-prev">←</button>
       <button class="lb-next" id="lb-next">→</button>
 
       <div class="lb-content">
+        <button id="lb-close" class="lb-close" aria-label="Chiudi">×</button>
         <img class="lb-img" id="lb-img" src="" alt="" />
 
         <div class="lb-info">

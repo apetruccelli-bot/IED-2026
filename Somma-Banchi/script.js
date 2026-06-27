@@ -21,6 +21,7 @@ let activeTags = new Set();
 let searchQuery = '';
 let isRandom = false;
 let lbIndex = -1;        // current index in filteredItems() array
+let lightboxItems = [];
 const activeFilters = new Map(); // subcategoryKey → value
 let isExploreMode = false;
 let exploreSubcat = null; // 'disossare' | 'tagliare e colpire' | 'tagliare e affettare' | null
@@ -347,7 +348,7 @@ function buildFilters() {
       subEl.appendChild(label);
 
       const valuesEl = document.createElement('p');
-      valuesEl.className = 'col-span-full flex flex-wrap gap-x-10px';
+      valuesEl.className = 'col-span-full flex flex-wrap gap-x-10px filter-values';
 
       values.forEach(val => {
         const span = document.createElement('span');
@@ -365,6 +366,24 @@ function buildFilters() {
 
     container.appendChild(catEl);
   });
+
+  updateMobileArchiveLayout();
+}
+
+function updateMobileArchiveLayout() {
+  const panel = document.querySelector('.descriptionAndFilters');
+  const grid = document.getElementById('grid');
+  if (!panel || !grid || window.innerWidth > 600) {
+    if (grid) {
+      grid.style.top = '';
+      grid.style.height = '';
+    }
+    return;
+  }
+
+  const top = Math.ceil(panel.getBoundingClientRect().bottom);
+  grid.style.top = `${top}px`;
+  grid.style.height = `calc(100vh - ${top}px)`;
 }
 
 function toggleFilter(key, val) {
@@ -469,29 +488,211 @@ function updateActiveImg() {
 
 // ── Lightbox caption width ────────────────────────────────────────────────
 
+const LB_EDGE_THRESHOLD = 88;
+const LB_IMAGE_SCALE = 0.68;
+const LB_MOBILE_IMAGE_SCALE = 0.82;
+
+function updateLightboxNavVisibility(e) {
+  if (!lightbox?.classList.contains('open')) return;
+
+  if (window.innerWidth <= 600) {
+    lightbox.classList.remove('show-nav-prev', 'show-nav-next');
+    return;
+  }
+
+  if (!e) return;
+
+  const x = e.clientX;
+  const w = window.innerWidth;
+  lightbox.classList.toggle('show-nav-prev', x <= LB_EDGE_THRESHOLD);
+  lightbox.classList.toggle('show-nav-next', x >= w - LB_EDGE_THRESHOLD);
+}
+
+function resetLightboxNavVisibility() {
+  lightbox?.classList.remove('show-nav-prev', 'show-nav-next');
+}
+
+function clampNumber(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function getLightboxFrame() {
+  const grid = document.getElementById('grid');
+  const columns = [...document.querySelectorAll('#grid .myColumn')];
+  const gridRect = grid?.getBoundingClientRect();
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  const margin = viewportWidth <= 600 ? 10 : 0;
+
+  let left = margin;
+  let right = viewportWidth - margin;
+
+  if (viewportWidth > 600 && columns.length >= 3) {
+    const firstCentralColumn = columns[1].getBoundingClientRect();
+    const secondCentralColumn = columns[2].getBoundingClientRect();
+
+    if (firstCentralColumn.width > 0 && secondCentralColumn.width > 0) {
+      left = firstCentralColumn.left;
+      right = secondCentralColumn.right;
+    } else if (gridRect?.width) {
+      left = gridRect.left + gridRect.width * 0.25;
+      right = gridRect.left + gridRect.width * 0.75;
+    }
+  } else if (gridRect?.width) {
+    left = gridRect.left + 10;
+    right = gridRect.right - 10;
+  }
+
+  const minWidth = Math.min(160, viewportWidth - 20);
+  left = clampNumber(left, 10, Math.max(10, viewportWidth - 10 - minWidth));
+  right = clampNumber(right, left + minWidth, viewportWidth - 10);
+
+  const frameTop = gridRect?.height
+    ? clampNumber(gridRect.top, 10, viewportHeight - 160)
+    : 10;
+  const frameBottom = gridRect?.height
+    ? clampNumber(gridRect.bottom, frameTop + 220, viewportHeight - 10)
+    : viewportHeight - 10;
+
+  return {
+    left,
+    top: frameTop,
+    width: right - left,
+    height: Math.max(220, frameBottom - frameTop)
+  };
+}
+
+function getLightboxBackdropFrame() {
+  const grid = document.getElementById('grid');
+  const columns = [...document.querySelectorAll('#grid .myColumn')];
+  const gridRect = grid?.getBoundingClientRect();
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  if (!gridRect) {
+    return {
+      left: 0,
+      top: 0,
+      width: viewportWidth,
+      height: viewportHeight
+    };
+  }
+
+  if (viewportWidth <= 600 || columns.length === 0) {
+    return {
+      left: gridRect.left,
+      top: gridRect.top,
+      width: gridRect.width,
+      height: gridRect.height
+    };
+  }
+
+  const visibleColumnRects = columns
+    .map(col => col.getBoundingClientRect())
+    .filter(rect => rect.width > 0 && rect.height > 0);
+
+  if (visibleColumnRects.length === 0) {
+    return {
+      left: gridRect.left,
+      top: gridRect.top,
+      width: gridRect.width,
+      height: gridRect.height
+    };
+  }
+
+  const left = Math.min(...visibleColumnRects.map(rect => rect.left));
+  const right = Math.max(...visibleColumnRects.map(rect => rect.right));
+  const top = Math.min(...visibleColumnRects.map(rect => rect.top));
+  const bottom = Math.max(...visibleColumnRects.map(rect => rect.bottom));
+
+  return {
+    left,
+    top,
+    width: right - left,
+    height: bottom - top
+  };
+}
+
+function updateLightboxFrame() {
+  if (!lightbox) return null;
+
+  const frame = getLightboxFrame();
+  const backdropFrame = getLightboxBackdropFrame();
+
+  lightbox.style.setProperty('--lb-frame-left', `${frame.left}px`);
+  lightbox.style.setProperty('--lb-frame-top', `${frame.top}px`);
+  lightbox.style.setProperty('--lb-frame-width', `${frame.width}px`);
+  lightbox.style.setProperty('--lb-frame-height', `${frame.height}px`);
+
+  lightbox.style.setProperty('--lb-backdrop-left', `${backdropFrame.left}px`);
+  lightbox.style.setProperty('--lb-backdrop-top', `${backdropFrame.top}px`);
+  lightbox.style.setProperty('--lb-backdrop-width', `${backdropFrame.width}px`);
+  lightbox.style.setProperty('--lb-backdrop-height', `${backdropFrame.height}px`);
+
+  return frame;
+}
+
 function updateCaptionWidth() {
   if (!lbImg) return;
 
   const lbInfo = document.querySelector('.lb-info');
   if (!lbInfo) return;
 
-  const imgWidth = lbImg.getBoundingClientRect().width;
+  const frame = updateLightboxFrame();
+  if (!frame) return;
+
+  lbInfo.style.width = `${frame.width}px`;
+  lbInfo.style.maxWidth = `${frame.width}px`;
+
+  const closeHeight = lbClose?.getBoundingClientRect().height || 0;
+  const captionHeight = lbInfo.getBoundingClientRect().height || 0;
+  const availableImageHeight = Math.max(
+    160,
+    frame.height - closeHeight - captionHeight - 28
+  );
+  const imageScale = window.innerWidth <= 600
+    ? LB_MOBILE_IMAGE_SCALE
+    : LB_IMAGE_SCALE;
+  const targetImageWidth = frame.width * imageScale;
+  const naturalWidth = lbImg.naturalWidth || frame.width;
+  const naturalHeight = lbImg.naturalHeight || availableImageHeight;
+  const ratio = naturalWidth / naturalHeight || 1;
+
+  let imgWidth = targetImageWidth;
+  let imgHeight = imgWidth / ratio;
+
+  if (imgHeight > availableImageHeight) {
+    imgHeight = availableImageHeight;
+    imgWidth = imgHeight * ratio;
+  }
+
+  imgWidth = Math.min(imgWidth, targetImageWidth);
 
   if (imgWidth > 0) {
-    lbInfo.style.width = `${imgWidth}px`;
-    lbInfo.style.maxWidth = `${imgWidth}px`;
+    lbImg.style.width = `${Math.round(imgWidth)}px`;
+    lbImg.style.height = `${Math.round(imgHeight)}px`;
+    lbImg.style.maxHeight = `${Math.round(availableImageHeight)}px`;
+    lbInfo.style.width = `${Math.round(imgWidth)}px`;
+    lbInfo.style.maxWidth = `${Math.round(imgWidth)}px`;
+    if (lbClose) {
+      lbClose.style.width = `${Math.round(imgWidth)}px`;
+    }
   }
 }
 
 // ── Lightbox ──────────────────────────────────────────────────────────────
 
-function openLightbox(index) {
-  const visible = filteredItems();
+function openLightbox(index, sourceItems = filteredItems()) {
+  lightboxItems = sourceItems;
 
   lbIndex = index;
 
-  const item = visible[lbIndex];
+  const item = lightboxItems[lbIndex];
   if (!item) return;
+
+  lbImg.onload = () => {
+    requestAnimationFrame(updateCaptionWidth);
+  };
 
   lbImg.src = item.src;
   lbImg.alt = `Item ${item.id}`;
@@ -518,10 +719,7 @@ function openLightbox(index) {
   lightbox.classList.add('open');
   lightbox.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
-
-  lbImg.onload = () => {
-    updateCaptionWidth();
-  };
+  updateLightboxFrame();
 
   if (lbImg.complete) {
     requestAnimationFrame(updateCaptionWidth);
@@ -532,7 +730,15 @@ function closeLightbox() {
   lightbox.classList.remove('open');
   lightbox.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
+  resetLightboxNavVisibility();
+  lightboxItems = [];
   lbImg.src = '';
+  lbImg.style.width = '';
+  lbImg.style.height = '';
+  lbImg.style.maxHeight = '';
+  if (lbClose) {
+    lbClose.style.width = '';
+  }
 
   const lbInfo = document.querySelector('.lb-info');
   if (lbInfo) {
@@ -542,25 +748,29 @@ function closeLightbox() {
 }
 
 function navigateLightbox(dir) {
-  const visible = filteredItems();
+  if (lightboxItems.length === 0) {
+    lightboxItems = filteredItems();
+  }
 
   let next = lbIndex + dir;
 
-  if (next >= visible.length) next = 0;
-  if (next < 0) next = visible.length - 1;
+  if (next >= lightboxItems.length) next = 0;
+  if (next < 0) next = lightboxItems.length - 1;
 
-  openLightbox(next);
+  openLightbox(next, lightboxItems);
 }
 
 lbClose?.addEventListener('click', closeLightbox);
 lbBackdrop?.addEventListener('click', closeLightbox);
 lbPrev?.addEventListener('click', () => navigateLightbox(-1));
 lbNext?.addEventListener('click', () => navigateLightbox(+1));
+lightbox?.addEventListener('mousemove', updateLightboxNavVisibility);
+lightbox?.addEventListener('mouseleave', resetLightboxNavVisibility);
 
-window.addEventListener('resize', () => {
-  if (lightbox.classList.contains('open')) {
-    updateCaptionWidth();
-  }
+window.addEventListener("load", () => {
+  initCustomCursor();
+  setActiveStep(0);
+  requestUpdate();
 });
 
 document.addEventListener('keydown', e => {
@@ -647,6 +857,9 @@ function openExploreMode() {
 
   fadeGrid(() => render());
   initSommaExplore();
+  requestAnimationFrame(() => {
+    requestAnimationFrame(updateMobileArchiveLayout);
+  });
 }
 
 function closeExploreMode() {
@@ -713,6 +926,8 @@ function closeExploreMode() {
     sommaStream.getTracks().forEach(t => t.stop());
     sommaStream = null;
   }
+
+  requestAnimationFrame(updateMobileArchiveLayout);
 }
 
 function setExploreGesture(funzione) {
@@ -747,6 +962,33 @@ function setExploreGesture(funzione) {
   }
 }
 
+// ── Custom cursor: puntino nero ─────────────────────────────────────────────
+
+function initCustomCursor() {
+  if (window.matchMedia("(pointer: coarse)").matches) return;
+  if (document.querySelector(".site-cursor")) return;
+
+  const cursor = document.createElement("div");
+  cursor.className = "site-cursor";
+  document.body.appendChild(cursor);
+
+  const moveCursor = e => {
+    cursor.style.left = `${e.clientX}px`;
+    cursor.style.top = `${e.clientY}px`;
+    cursor.classList.add("is-visible");
+  };
+
+  document.addEventListener("mousemove", moveCursor);
+  document.addEventListener("mouseleave", () => {
+    cursor.classList.remove("is-visible");
+  });
+
+  document.addEventListener("mouseenter", () => {
+    cursor.classList.add("is-visible");
+  });
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────
 
+initCustomCursor();
 loadData();

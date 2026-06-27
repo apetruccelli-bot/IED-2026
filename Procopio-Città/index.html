@@ -23,25 +23,30 @@
         <div class="col-start-2 col-end-8 bg-transparent">
           <div class="sticky archive-sticky top-0 z-20 col-span-full pt-10px pl-10px pr-10px bg-gradient-to-b from-myWhite to-transparent from-[10%] h-18 pointer-events-none">
             <div class="grid grid-cols-6 bg-transparent mb-10px pointer-events-auto">
-              <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Anno</button>
-            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Autore</button>
-            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Regione</button>
-            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Abitanti</button>
-            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="false">Documento</button>
+              <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="true">Anno</button>
+            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="true">Autore</button>
+            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="true">Regione</button>
+            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="true">Abitanti</button>
+            <button type="button" class="p text-justify bg-transparent border-0 p-0 cursor-pointer select-none" data-archive-toggle aria-controls="archive-rows" aria-expanded="true">Documento</button>
             <form action="/" onsubmit="return false;">
               <label for="search" class="sr-only">Ricerca</label>
               <input
               id="search"
               type="search"
               placeholder="Ricerca"
-              class="w-full border-b border-myBlack bg-transparent text-myBlack outline-none placeholder:text-myBlack"
+              class="w-full border-b border-myBlack bg-transparent text-myBlack outline-none placeholder:text-muted"
               />
               </form>
               </div>
+                <button id="archive-mobile-filter-close" class="archive-mobile-filter-close" type="button" aria-label="Chiudi filtri">✕</button>
                 <div id="archive-rows" hidden class="archive-rows-panel grid grid-cols-6 gap-10px mt-20px"></div>
               </div>
+          <div class="archive-mobile-controls">
+            <button id="archive-mobile-filter-toggle" class="archive-mobile-filter-toggle" type="button" aria-controls="archive-rows" aria-expanded="false">Filtri</button>
+            <button id="archive-view-toggle" class="archive-view-toggle" type="button">Vedi in griglia</button>
+          </div>
           <div id="archive-gallery" 
-          class="columns-2 xl:columns-2 p-10px"></div>
+          class="columns-2 xl:columns-2 pl-10px pr-10px"></div>
         </div>
         <div class="col-start-8 col-end-9 bg-myWhite p-10px flex flex-col justify-start items-end">
         </div>
@@ -52,7 +57,7 @@
       <div class="lb-backdrop" id="lb-backdrop"></div>
       <div class="lb-title">
         <a href="home.html" class="font-myTitle">Città<br>interrotte</a>
-        <p>di Fondazione Scorza</p>
+        <p style="margin-top: -4px; ">di Fondazione Scorza</p>
       </div>
       <button class="lb-close" id="lb-close" type="button">✕</button>
       <button class="lb-prev" id="lb-prev" type="button">←</button>
@@ -68,39 +73,33 @@
 
     <script src="script.js"></script>
     
-    <footer class="page-footer font-myText" aria-label="Footer informazioni">
-      <div class="footer-grid grid grid-cols-8 gap-10px">
-        <div></div>
-        <div class="footer-item">
-          <p>Copyright © 2026</p>
-        </div>
-        <div class="footer-item">
-          <p>Contatti</p>
-          <p><a href="mailto:vittoriascorza@gmail.com">vittoriascorza@gmail.com</a></p>
-        </div>
-        <div class="footer-item">
-          <p>Indirizzo</p>
-          <p>Via XX Settembre,<br>88050 Zagara (CZ)</p>
-        </div>
-        <div class="footer-item">
-          <p>Scopri di più</p>
-          <p><a href="#">Instagram</a><br><a href="#">Facebook</a></p>
-        </div>
-        <div class="footer-item">
-          <p>Note legali</p>
-          <p><a href="#">Privacy Policy</a><br><a href="#">Cookie</a><br><a href="#">Accessibilità</a></p>
-        </div>
-        <div class="footer-item">
-          <input type="search" placeholder="Ricerca" class="footer-search" aria-label="Ricerca" />
-        </div>
-        <div></div>
-      </div>
-    </footer>
+   <footer aria-label="Footer informazioni" class="page-footer font-myText">
+<div class="footer-grid grid grid-cols-8 gap-10px">
+<div></div>
+<div class="footer-item grid-cols-8 col-start-2 col-end-4">
+<p>Copyright © 2026 <br/>Tutti i diritti riservati a Fondazione Scorza</p>
+</div>
+<div class="footer-item">
+<p>Via XX Settembre,<br/>88050 Zagara (CZ)</p>
+</div>
+<div class="footer-item">
+<p><a href="#">Instagram</a><br/><a href="#">Facebook</a><br/><a href="#">Contattaci</a></p>
+</div>
+<div class="footer-item">
+<p><a href="#">Privacy Policy</a><br/><a href="#">Cookie</a><br/><a href="#">Accessibilità</a></p>
+</div>
+<div class="footer-item">
+<input aria-label="Ricerca" class="footer-search" placeholder="Ricerca" type="search"/>
+</div>
+<div></div>
+</div>
+</footer>
     <!-- Bottom brand + links (identical on every page) -->
-    <div class="site-bottom-brand" style="position:fixed;left:10px;top:10px;bottom:auto;z-index:99999;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
+    <header class="site-header header-visible" data-site-header>
+<div class="site-bottom-brand" style="position:fixed;left:10px;top:10px;bottom:auto;z-index:99999;pointer-events:auto;display:flex;flex-direction:column;gap:8px">
       <div style="line-height:1">
         <a href="home.html" class="font-myTitle" style="display:inline-block">Città<br>interrotte</a>
-        <p style="margin:0">di Fondazione Scorza</p>
+        <p style="margin-top: -4px; ">di Fondazione Scorza</p>
       </div>
     </div>
 <div class="sidebar-links"
@@ -110,5 +109,6 @@
         <a href="stat.html" class="font-myTitle text-right">Dati</a>
       </div>
     </div>
+</header>
   </body>
 </html>

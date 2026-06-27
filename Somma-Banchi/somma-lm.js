@@ -8,6 +8,8 @@ let sommaCtx = null;
 let sommaLastGesture = null;
 let sommaInstructionEl = null;
 
+const SOMMA_SHOW_TRACKING_OVERLAY = false;
+
 const sommaGestureInstructions = {
   'tagliare e affettare':
     'Punta i polpastrelli verso lo schermo, come la lama di un coltello che taglia un pezzo di carne.',
@@ -77,7 +79,10 @@ function createSommaInstructionElement(video) {
     </p>
   `;
 
-  video.parentElement.insertBefore(sommaInstructionEl, video);
+  const guide = video.closest('.explore-hand-guide');
+  const webcamWrap = video.closest('.explore-webcam-wrap') || video.parentElement;
+  const host = guide || video.parentElement;
+  host.insertBefore(sommaInstructionEl, webcamWrap);
 }
 
 function updateSommaInstruction(funzione) {
@@ -115,10 +120,10 @@ async function startSommaCamera() {
     video.style.transform = 'scaleX(-1)';
     video.style.transformOrigin = 'center center';
 
-    const videoContainer = video.parentElement;
-    videoContainer.style.position = 'relative';
+  const videoContainer = video.closest('.explore-webcam-wrap') || video.parentElement;
+  videoContainer.style.position = 'relative';
 
-    createSommaInstructionElement(video);
+  createSommaInstructionElement(video);
 
     if (!sommaCanvas) {
       sommaCanvas = document.createElement('canvas');
@@ -146,6 +151,10 @@ async function startSommaCamera() {
 
     video.addEventListener('loadeddata', () => {
       resizeSommaCanvasToVideo(video);
+
+      if (typeof updateMobileArchiveLayout === 'function') {
+        requestAnimationFrame(updateMobileArchiveLayout);
+      }
 
       sommaIsDetecting = true;
       detectSommaHands();
@@ -280,6 +289,8 @@ function drawHandSkeleton(keypoints) {
   }
 
   clearSommaCanvas();
+
+  if (!SOMMA_SHOW_TRACKING_OVERLAY) return;
 
   const connections = [
     // Palmo
